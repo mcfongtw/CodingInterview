@@ -1,3 +1,62 @@
 # Literature
 
 Here is a review of existing methods.
+
+## Two Sum IV - Input is a BST / LeetCode 653 / Easy
+
+### Description
+Given a Binary Search Tree and a target number, return true if there exist two elements in the BST such that their sum
+is equal to the given target.
+
+### Example
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
+\begin{tikzpicture}[
+level 1/.style={sibling distance=10em},
+level 2/.style={sibling distance=5em},
+level 3/.style={sibling distance=5em},
+level distance=2.5em,
+]
+\node {5}
+    child { node {3}
+        child {  node {2} }
+        child {  node {4} }
+    }
+    child { node {6}
+        child {  node {7} }
+    }
+;
+\end{tikzpicture}
+```
+\\Target = 9, Output = True.
+
+### Solution}
+#### Walkthrough}\\
+Use a HashSet to store value of current node, that is (node.val). Then check if answer = (target - node.val)
+and return true if existed; otherwise, recursively call the same function for its left and right children.
+
+#### Analysis
+Time complexity is O(n) since every node is visited. Auxiliary Space is O(1)
+
+#### Algorithm
+recursive
+
+### Java Code
+```java
+public boolean findTarget(TreeNode root, int target) {
+    Set<Integer> set = new HashSet<>();
+    return findTarget(root, target, set);
+}
+
+public boolean findTarget(TreeNode node, int target, Set<Integer> set) {
+    if(node == null) {
+        return false;
+    } else if(set.contains(target - node.val)) {
+        return true;
+    } else {
+        //recursively calling
+        set.add(node.val);
+        return findTarget(node.right, target, set) || findTarget(node.left, target, set);
+    }
+
+}
+```
