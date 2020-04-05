@@ -1,0 +1,807 @@
+# Advanced Data Structure
+
+
+
+## Design a LRU Cache / LeetCode 146 / Medium
+
+### Description
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following
+operations: get and put.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it
+should invalidate the least recently used item before inserting a new item.
+
+The cache is initialized with a positive capacity.
+### Example
+```java
+LRUCache cache = new LRUCache( 2 /* capacity */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // returns 1
+cache.put(3, 3);    // evicts key 2
+cache.get(2);       // returns -1 (not found)
+cache.put(4, 4);    // evicts key 1
+cache.get(1);       // returns -1 (not found)
+cache.get(3);       // returns 3
+cache.get(4);       // returns 4
+```
+
+### Solution - Naive
+#### Walkthrough\\
+Have a internal map to store cache data and doubly linked list to keep track history of data usage. The head
+node indicate it was recently used where the tail node represents data that were \textbf{most recently used}.
+That is, get(4) would change the cache:
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+draw, rectangle split horizontal}, >=stealth, start chain]
+
+\node[list,on chain] (1) {$(3, v_1)$};
+\node[list,on chain] (2) {$(2, v_1)$};
+\node[list,on chain] (3) {$(4, v_1)$};
+\node[on chain,draw,inner sep=3pt] (X) {};
+\node[list,on chain] (ph)[below= of 1] {h};
+
+\draw (X.north east) -- (X.south west);
+\draw (X.north west) -- (X.south east);
+
+\draw[*->] let \p1 = (1.two), \p2 = (1.center) in (\x1,\y2) -- (2);
+\draw[*->, dashed] let \p1 = (2.two), \p2 = (2.center) in (\x1,\y2) -- (3);
+\draw[*->] let \p1 = (2.two), \p2 = (2.center) in (\x1,\y2) [out=120, in=120]to (X);
+\draw[*->, dashed] let \p1 = (3.two), \p2 = (3.center) in (\x1,\y2) -- (X);
+\draw[*->] let \p1 = (3.two), \p2 = (3.center) in (\x1,\y2) [out=120, in=120]to (1);
+\draw[*->, dashed] (ph) -- (1);
+\draw[*->] (ph) -- (3);
+\end{tikzpicture}
+```
+In addition, put$(4, v_2)$ would change the cache:
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+draw, rectangle split horizontal}, >=stealth, start chain]
+
+\node[list,on chain] (1) {$(3, v_1)$};
+\node[list,on chain] (2) {$(2, v_1)$};
+\node[list,on chain] (3) {$(4, v_2)$};
+\node[on chain,draw,inner sep=3pt] (X) {};
+\node[list,on chain] (ph)[below= of 1] {h};
+
+\draw (X.north east) -- (X.south west);
+\draw (X.north west) -- (X.south east);
+
+\draw[*->] let \p1 = (1.two), \p2 = (1.center) in (\x1,\y2) -- (2);
+\draw[*->, dashed] let \p1 = (2.two), \p2 = (2.center) in (\x1,\y2) -- (3);
+\draw[*->] let \p1 = (2.two), \p2 = (2.center) in (\x1,\y2) [out=120, in=120]to (X);
+\draw[*->, dashed] let \p1 = (3.two), \p2 = (3.center) in (\x1,\y2) -- (X);
+\draw[*->] let \p1 = (3.two), \p2 = (3.center) in (\x1,\y2) [out=120, in=120]to (1);
+\draw[*->, dashed] (ph) -- (1);
+\draw[*->] (ph) -- (3);
+\end{tikzpicture}
+```
+
+#### Analysis\\
+There is a Map used as internal cache and each public method will leverage this internal cache as storage, and thus
+each public method cost O(1) overhead. The Auxiliary Space is O(n)
+
+#### Algorithm\\
+
+### Java Code - Naive
+```java
+class LRUCache {
+
+    // Doubly Linked List
+    class Node {
+        int key;
+
+        int data;
+
+        private Node prev;
+
+        private Node next;
+
+        public Node(int key, int data) {
+            this.key = key;
+            this.data = data;
+        }
+    }
+
+    private int capacity;
+
+    // internal cache
+    private Map<Integer, Node> cache = new HashMap<>();
+
+    private Node head;
+
+    private Node tail;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int get(int key) {
+        if (cache.containsKey(key)) {
+            Node node = cache.get(key);
+
+            //Reset the node to head position
+            remove(node);
+            setHead(node);
+
+            return node.data;
+        }
+
+        return -1;
+    }
+
+    public void put(int key, int value) {
+        if (cache.containsKey(key)) {
+            Node old = cache.get(key);
+            old.data = value;
+
+            //Reset the node to head position
+            remove(old);
+            setHead(old);
+        } else {
+            // Put new <key, val>
+            Node newNode = new Node(key, value);
+
+            if (cache.size() >= capacity) {
+                //Cache is FULL. Remove tail
+                cache.remove(tail.key); // remove LRU data from cache.
+                remove(tail);
+                setHead(newNode);
+            } else {
+                setHead(newNode);
+            }
+
+            cache.put(key, newNode);
+        }
+    }
+
+    private void remove(Node node) {
+        if (node == head) {
+            // remove a head
+            head = node.next;
+        } else {
+            // remove a non-head
+            node.prev.next = node.next;
+        }
+
+        if (node == tail) {
+            // remove a tail
+            tail = node.prev;
+        } else {
+            // remove a non-head
+            node.next.prev = node.prev;
+        }
+    }
+
+    private void setHead(Node node) {
+        node.next = head;
+        node.prev = null;
+
+        if (head != null) {
+            // insert a new head node
+            head.prev = node;
+        }
+        head = node;
+
+        if (tail == null) {
+            // insert first tail node
+            tail = head;
+        }
+    }
+}
+```
+
+### Solution - LinkedHashMap
+#### Walkthrough\\
+An extended LinkedHashMap is to retrieve elements in the order in which they were last accessed.
+A special constructor is used to create this type of LinkedHashMap:
+new LinkedHashMap(initialCapacity, loadFactor, true) - the true means "accessOrder" instead of the "insertionOrder".
+
+#### Analysis\\
+
+#### Algorithm\\
+
+### Java Code - LinkedHashMap
+```java
+public class LRUCache<K, V> extends LinkedHashMap<K, V> {
+    // indicate the capacity of cache.
+    private final int maxEntries;
+    private static final int DEFAULT_INITIAL_CAPACITY = 16;
+    private static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
+    public LRUCache(int initialCapacity, float loadFactor, int maxEntries) {
+        super(initialCapacity, loadFactor, true);
+        this.maxEntries = maxEntries;
+    }
+
+    public LRUCache(int initialCapacity, int maxEntries) {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR, maxEntries);
+    }
+
+    public LRUCache(int maxEntries) {
+        this(DEFAULT_INITIAL_CAPACITY, maxEntries);
+    }
+
+    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+        return size() > maxEntries;
+    }
+
+}
+```
+
+
+
+## Design a Stack
+
+### Description
+Stack is a LIFO data structure.
+
+### Example
+
+    *  push 1: [1]
+    *  push 2: [1] $\rightarrow$ [2]
+    *  pop returns 2
+
+
+### Solution - Queue
+#### Walkthrough\\
+Since a Queue is FIFO, that is first element will be processed first. Thus, we want to keep
+the top element to be inserted first. To achieve that, we could use a temp Stack to reverse
+the order after enqueue the added item into the stack first (will be processed first).
+
+#### Analysis\\
+
+    *  enqueue(item) takes O(n) time.
+    *  dequeue() takes O(1) as it is only polling the top element.
+
+
+#### Algorithm\\
+
+### Java Code - Queue
+```java
+class MyQueueBasedStack<T> {
+    private Queue<T> value = new LinkedList<>();
+
+    public void push(T item) {
+        Queue<T> temp = new LinkedList<>();
+
+        temp.enqueue(item);
+        while(!value.isEmpty()) {
+            temp.enqueue(value.dequeue());
+        }
+
+        value = temp;
+    }
+
+    public void pop() {
+        return value.poll();
+    }
+
+    public T top() {
+        return value.peek();
+    }
+
+    public boolean empty() {
+        return value.isEmpty();
+    }
+
+    public int size() {
+        return value.size();
+    }
+}
+```
+
+
+
+## Design a Queue
+
+### Description
+Queue is a FIFO data structure
+
+### Example
+
+    *  enqueue 1: [1]
+    *  enqueue 2: [1] $\rightarrow$ [2]
+    *  dequeue returns 1
+
+
+### Solution - Array
+#### Walkthrough\\
+With array implementation, there is a need to resize when enqueueing exceeds limits. Thus, in average
+case, enqueue is constatnt time but will be O(n) in worst case.
+
+In order to mitigate this cost, we could init the Queue with an immutable large array. Each dequeue will
+move an index to the next element. Finally, there could be a background thread to periodically compact
+this immutable implementation into a new queue.
+
+\}\\
+
+    *  enqueue(item) takes O(1) time, but O(n) when resize() is involved.
+    %*  enqueue(i, item) takes O(1) time, but O(n) when resize() is involved.
+    *  dequeue() takes O(n) time
+    %*  dequeue(i) takes O(n) time
+    *  search(val) takes O(n) as it traverse all elements.
+
+
+#### Algorithm\\
+
+### Java Code - Array
+```java
+public class MyArrayQueue<T> {
+
+    private T [] array;
+
+    // position of last element
+    private int endPos = -1;
+
+    private static final int DEFAULT_INITIAL_CAPACITY = 10;
+
+    public MyArrayQueue() {
+        array = (T[]) new Object[DEFAULT_INITIAL_CAPACITY];
+    }
+
+    public MyArrayQueue(int initialCapacity) {
+        array = (T[]) new Object[initialCapacity];
+    }
+
+    public boolean isEmpty() {
+        return endPos == -1;
+    }
+
+    public int size() {
+        return endPos + 1;
+    }
+
+    private void resize(int newSize) {
+        System.out.println("Resizing from " + array.length + " to " + newSize);
+        T[] newArray = Arrays.copyOfRange(array, 0, newSize);
+        array = newArray;
+    }
+
+    // add the item
+    public void enqueue(T item) {
+        Objects.requireNonNull(item);
+
+        if( (endPos + 1) >= array.length) {
+            resize(2 * array.length);
+        }
+
+        endPos++;
+        array[endPos] = item;
+    }
+
+    // remove first item
+    public T dequeue() {
+        if(endPos == -1) {
+            throw new IllegalStateException();
+        }
+
+        // return the first element
+        T result = array[0];
+
+        //move the element one backward
+        for(int i = 0; i < endPos; i++) {
+            array[i] = array[i+1];
+        }
+
+        //nullify last position
+        array[endPos] = null;
+        endPos--;
+
+        return result;
+    }
+
+    public boolean search(int val) {
+        if(index > endPos) {
+            throw new IllegalStateException();
+        }
+
+
+        for(int i = 0; i <= endPos; i++) {
+            if(array[i] == val) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+```
+
+### Solution - LinkedList
+#### Walkthrough\\
+
+#### Analysis\\
+
+    *  enqueue(item) takes O(1) time.
+    %*  enqueue(i, item) takes O(n) time to traverse to the previous element.
+    *  dequeue() takes O(1)
+    %*  dequeue(i) takes O(n) time to traverse to the previous element.
+    *  search(val) takes O(n) as it traverses all elements.
+
+
+#### Algorithm\\
+
+### Java Code
+```java
+public class MyLinkedQueue<T> {
+
+    private static class Node<T> {
+        Node next;
+        T data;
+    }
+
+    private Node<T> head;
+
+    private Node<T> tail;
+
+    // position of last element
+    private int endPos = -1;
+
+    private static final int DEFAULT_INITIAL_CAPACITY = 10;
+
+    public boolean isEmpty() {
+        return endPos == -1;
+    }
+
+    public int size() {
+        return endPos + 1;
+    }
+
+    // add the item
+    public void enqueue(T item) {
+        Objects.requireNonNull(item);
+
+        endPos++;
+        Node newNode = new Node();
+        newNode.data = item;
+
+        if(head == null) {
+            head = newNode;
+        }
+
+        if(tail == null) {
+            tail = newNode;
+        } else {
+            //insert to the tail of the list
+            tail.next = newNode;
+            tail = newNode;
+        }
+    }
+
+    // remove and return a random item
+    public T dequeue() {
+        if(endPos == -1) {
+            throw new IllegalStateException();
+        }
+
+        // return the first node
+        Node dieNode = head;
+
+        //head == tail
+        if(head.next == null) {
+            head = null;
+            tail = null;
+        } else {
+            head = head.next;
+        }
+        endPos--;
+
+        return (T) dieNode.data;
+    }
+
+    public boolean search(int val) {
+        if(index > endPos) {
+            throw new IllegalStateException();
+        }
+
+        Node cursor = head;
+        for(int i = 0; i <= endPos; i++) {
+            if(cursor.data == val) {
+                return true;
+            }
+            cursor = cursor.next;
+        }
+
+        return false;
+    }
+}
+```
+
+### Solution - Stack
+#### Walkthrough\\
+Since a Stack is LIFO, that is last element will be processed first. Thus, we want to keep
+the top element to be inserted last. To achieve that, we could use a temp Stack to reverse
+the order after pushing the added item into the stack first (will be processed last).
+
+#### Analysis\\
+
+    *  enqueue(item) takes O(n) time.
+    *  dequeue() takes O(1) as it is only popping the top element.
+
+
+#### Algorithm\\
+
+### Java Code - Stack
+```java
+class MyStackBasedQueue<T>() {
+    private Stack<T> value = new Stack<>();
+
+    public void enqueue(T item) {
+        if(value.isEmpty()) {
+            // first element
+            value.push(item);
+        } else {
+            Stack<T> temp = new Stack<>();
+            //1. Store previous element in temp
+            while(!value.isEmpty()) {
+                temp.push(value.pop());
+            }
+
+            //2. push item to the back of the stack
+            value.push(item);
+
+            //3. reload the previous elements
+            while(!temp.isEmpty()) {
+                value.push(temp.pop());
+            }
+        }
+    }
+
+    public T dequeue() {
+        T result = value.top();
+        value.pop();
+
+        return result;
+    }
+
+    public int size() {
+        return value.size();
+    }
+
+    public T peek() {
+        return value.top();
+    }
+
+    public boolean empty() {
+        return value.isEmpty();
+    }
+}
+
+```
+
+
+
+## Design a HashSet / LeetCode 705 / Easy
+
+### Description
+Design a HashSet without using any built-in hash table libraries.
+
+To be specific, your design should include these functions:
+
+    *  add(value): Insert a value into the HashSet.
+    *  contains(value) : Return whether the value exists in the HashSet or not.
+    *  remove(value): Remove a value in the HashSet. If the value does not exist in the HashSet, do nothing.
+
+### Example
+
+### Solution
+#### Walkthrough\\
+A HashSet consists of an array of Node where its position is determined by a hash value / hash function. When
+there is a collision, we could chain the collided values together using a LinkedList or a Tree. For add()
+operation, we need to intensionally skip the duplicated key if the it already exists (from contains(key))
+
+
+#### Analysis\\
+The performance of each operation heavily depends on effectiveness of hash function. A good hash function would result
+in less collision, that is less traversal needed for the chaining list, but likely more auxiliary space required. Best
+case for each operation takes O(1). However, In worst case scenario, if it performs all elements on the same chaining
+list, all methods can take up to O(n).
+
+#### Algorithm\\
+
+### Java Code - LinkedList for Chaining
+```java
+class Node {
+    public int key;
+    public Node next;
+}
+
+class MyHashSet {
+
+    private Node[] list;
+    private int size;
+
+    public MyHashSet() {
+        this.size = 10000;
+        this.list = new Node[this.size];
+    }
+
+    public void add(int key) {
+        int index = key % this.size;
+
+        if(contains(key)){
+            //skip for duplicated entry
+        } else {
+            //add as head of chaining
+            Node oldHead = list[index];
+
+            Node newNode = new Node();
+            newNode.key = key;
+            newNode.next = oldHead;
+
+            list[index] = newNode;
+        }
+    }
+
+    public void remove(int key) {
+        int index = key % this.size;
+
+        if(contains(key)) {
+            Node current = list[index];
+
+            if(current.key == key) {
+                // replace head of chaining
+                list[index] = current.next;
+            } else {
+                // replace the middle of chaining
+                Node prev = current;
+
+                while(current != null && current.key != key) {
+                    prev = current;
+                    current = current.next;
+                }
+                prev.next = current.next;
+            }
+        } else {
+            //skip since not exist
+        }
+    }
+
+    public boolean contains(int key) {
+        int index = key % this.size;
+
+        Node current = list[index];
+
+        while(current != null) {
+            if(current.key == key) {
+                return true;
+            }
+
+            current = current.next;
+        }
+
+        return false;
+    }
+}
+```
+
+
+## Design a HashMap / LeetCode 706 / Easy
+
+### Description
+Design a HashMap without using any built-in hash table libraries.
+
+To be specific, your design should include these functions:
+
+
+    *  put(key, value) : Insert a (key, value) pair into the HashMap. If the value already exists in the HashMap, update the value.
+    *  get(key): Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key.
+    *  remove(key) : Remove the mapping for the value key if this map contains the mapping for the key.
+
+### Example
+
+### Solution
+#### Walkthrough\\
+A HashMap consists of an array of Node where its position is determined by a hash value / hash function. When
+there is a collision, we could chain the collided values together using a LinkedList or a Tree. One thing different
+from HashSet implementation is that we need to update the (key, val) entry if key already exists.
+
+#### Analysis\\
+
+    *  add() : Best case takes O(1).
+    *  get(): Best case takes O(1)
+    *  remove(): Best case takes O(1).
+
+However, In worst case scenario, if it performs all elements on the same chaining list, all methods can be O(n).
+
+#### Algorithm\\
+
+### Java Code - LinkedList for Chaining
+```java
+class Node {
+    public int key;
+    public int val;
+    public Node next;
+}
+
+class MyHashMap {
+
+    private Node[] list;
+    private int size;
+
+    /** Initialize your data structure here. */
+    public MyHashMap() {
+        this.size = 10000;
+        this.list = new Node[this.size];
+    }
+
+    public void put(int key, int val) {
+        Node result = getNode(key);
+
+        if(result != null){
+            //if exist, update value
+            result.val = val;
+        } else {
+            Node newNode = new Node();
+            newNode.key = key;
+            newNode.val = val;
+
+            //add as head of chaining
+            int index = key % this.size;
+            Node oldHead = list[index];
+            newNode.next = oldHead;
+
+            list[index] = newNode;
+        }
+    }
+
+    public int get(int key) {
+        Node result = getNode(key);
+
+        if(result != null) {
+            return result.val;
+        } else {
+            return -1;
+        }
+    }
+
+    public void remove(int key) {
+        int index = key % this.size;
+
+        if(exist(key)) {
+            Node head = list[index];
+
+            if(head.key == key) {
+                // replace head of chaining
+                list[index] = head.next;
+            } else {
+                // replace the middle of chaining
+                Node current = head;
+                Node prev = head;
+
+                while(current != null && current.key != key) {
+                    prev = current;
+                    current = current.next;
+                }
+                prev.next = current.next;
+            }
+        } else {
+            //skip since not exist
+        }
+    }
+
+    private boolean exist(int key) {
+        return getNode(key) != null;
+    }
+
+    private Node getNode(int key) {
+        int index = key % this.size;
+
+        Node current = list[index];
+
+        while(current != null) {
+            if(current.key == key) {
+                return current;
+            }
+
+            current = current.next;
+        }
+
+        return null;
+    }
+}
+```
+

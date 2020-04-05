@@ -1,0 +1,498 @@
+# Searching and Sorting
+
+
+
+## Sort a List / Leet Code 148 / Medium
+
+### Description
+Sort a linked list in O(n log n) time using constant Auxiliary Space.
+
+### Example
+Input:
+
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+draw, rectangle split horizontal}, >=stealth, start chain]
+
+\node[list,on chain] (A) {4};
+\node[list,on chain] (B) {2};
+\node[list,on chain] (C) {1};
+\node[list,on chain] (D) {3};
+\node[on chain,draw,inner sep=6pt] (X) {};
+\draw (X.north east) -- (X.south west);
+\draw (X.north west) -- (X.south east);
+\draw[*->] let \p1 = (A.two), \p2 = (A.center) in (\x1,\y2) -- (B);
+\draw[*->] let \p1 = (B.two), \p2 = (B.center) in (\x1,\y2) -- (C);
+\draw[*->] let \p1 = (C.two), \p2 = (C.center) in (\x1,\y2) -- (D);
+\draw[*->] let \p1 = (D.two), \p2 = (D.center) in (\x1,\y2) -- (X);
+\end{tikzpicture}
+```
+
+Output:
+
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+draw, rectangle split horizontal}, >=stealth, start chain]
+
+\node[list,on chain] (A) {1};
+\node[list,on chain] (B) {2};
+\node[list,on chain] (C) {3};
+\node[list,on chain] (D) {4};
+\node[on chain,draw,inner sep=6pt] (X) {};
+\draw (X.north east) -- (X.south west);
+\draw (X.north west) -- (X.south east);
+\draw[*->] let \p1 = (A.two), \p2 = (A.center) in (\x1,\y2) -- (B);
+\draw[*->] let \p1 = (B.two), \p2 = (B.center) in (\x1,\y2) -- (C);
+\draw[*->] let \p1 = (C.two), \p2 = (C.center) in (\x1,\y2) -- (D);
+\draw[*->] let \p1 = (D.two), \p2 = (D.center) in (\x1,\y2) -- (X);
+\end{tikzpicture}
+```
+
+### Solution
+#### Walkthrough\\
+With the idea of Merge sort:
+
+    *  Divide the list in half by finding the middle element of the list. Need to remove the link of middle node
+which was previously links to mid - likely the last node in the 1st half list.
+    *  Invoke sortList() recurisvely on two sub-lists
+    *  Merge and sort against two sub-lists and return head of the list.
+
+
+#### Analysis\\
+In such recursive call to sortList() - O(log(n)) and merge() - O(n), each call creates constant number of temporary
+nodes. For all rounds, it will require $O(1)$ of Auxiliary Space. (Unlike time complexity, storage space in recusive
+scenario can be reused; and thus, will remain $O(1)$ for all rounds)
+
+#### Algorithm\\
+ dnc \@ref(dnc), recursive \@ref(recursive), ms \@ref(ms)
+
+### Java Code
+```java
+public ListNode sortList(ListNode head) {
+    if (head == null || head.next == null) {
+        return head;
+    }
+
+    ListNode midPrev = null, mid = head, tail = head;
+
+    while (tail != null && tail.next != null) {
+        midPrev = mid;
+
+        //mid moves one node at a time
+        mid = mid.next;
+
+        //tail moves two node at a time
+        tail = tail.next.next;
+    }
+
+    //Remove the link of middle node which previously links to mid - likely the last node in the 1st
+    //half list
+    midPrev.next = null;
+
+    // call sortList() recursively
+    ListNode l1 = sortList(head);
+    ListNode l2 = sortList(mid);
+
+    return merge(l1, l2);
+}
+
+// merge l1 and l2 in sorted order and return the head of sorted list.
+private ListNode merge(ListNode l1, ListNode l2) {
+    //Two helper nodes, headPrev.next points to the head of merged list
+    ListNode current = new ListNode(0), headPrev = current;
+
+    while (l1 != null && l2 != null) {
+        if (l1.val < l2.val) {
+            current.next = l1;
+            l1 = l1.next;
+        } else {
+            current.next = l2;
+            l2 = l2.next;
+        }
+        current = current.next;
+    }
+
+    // l2 is empty with l1 remaining
+    if (l1 != null) {
+        current.next = l1;
+    }
+
+    // l1 is empty with l2 remaining
+    if (l2 != null) {
+        current.next = l2;
+    }
+
+    return headPrev.next;
+}
+```
+
+
+## Insertion Sort List / Leet Code 147 / Medium
+
+### Description
+Sort a linked list using insertion sort.
+
+Algorithm of Insertion Sort:
+
+    *  Insertion sort iterates, consuming one input element each repetition, and growing a sorted
+output list.
+    *  At each iteration, insertion sort removes one element from the input data, finds the
+location it belongs within the sorted list, and inserts it there.
+    *  It repeats until no input elements remain.
+
+
+### Example
+Input:
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+draw, rectangle split horizontal}, >=stealth, start chain]
+
+\node[list,on chain] (A) {4};
+\node[list,on chain] (B) {2};
+\node[list,on chain] (C) {1};
+\node[list,on chain] (D) {3};
+\node[on chain,draw,inner sep=6pt] (X) {};
+\draw (X.north east) -- (X.south west);
+\draw (X.north west) -- (X.south east);
+\draw[*->] let \p1 = (A.two), \p2 = (A.center) in (\x1,\y2) -- (B);
+\draw[*->] let \p1 = (B.two), \p2 = (B.center) in (\x1,\y2) -- (C);
+\draw[*->] let \p1 = (C.two), \p2 = (C.center) in (\x1,\y2) -- (D);
+\draw[*->] let \p1 = (D.two), \p2 = (D.center) in (\x1,\y2) -- (X);
+\end{tikzpicture}
+
+Output:
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+draw, rectangle split horizontal}, >=stealth, start chain]
+
+\node[list,on chain] (A) {1};
+\node[list,on chain] (B) {2};
+\node[list,on chain] (C) {3};
+\node[list,on chain] (D) {4};
+\node[on chain,draw,inner sep=6pt] (X) {};
+\draw (X.north east) -- (X.south west);
+\draw (X.north west) -- (X.south east);
+\draw[*->] let \p1 = (A.two), \p2 = (A.center) in (\x1,\y2) -- (B);
+\draw[*->] let \p1 = (B.two), \p2 = (B.center) in (\x1,\y2) -- (C);
+\draw[*->] let \p1 = (C.two), \p2 = (C.center) in (\x1,\y2) -- (D);
+\draw[*->] let \p1 = (D.two), \p2 = (D.center) in (\x1,\y2) -- (X);
+\end{tikzpicture}
+
+### Solution
+#### Walkthrough\\
+With Insertion Sort, we could construct a new list by arranging links in place. We need to do the following:
+
+    *  Maintain pointers to node that will be insert-attempted (current) and a previously
+sorted nodes.
+    *  At each iteration, finds the location it belongs within the sorted list, and inserts between
+sorted and sorted.next.
+    *  Insert the current node between sorted and sorted.next
+\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
+draw, rectangle split horizontal}, >=stealth, start chain]
+\node[list,on chain] (0) {0};
+\node[list,on chain] (1) {1};
+\node[list,on chain] (2) {5};
+\node[list,on chain] (3) {6};
+\node[on chain,draw,inner sep=3pt] (X1) {};
+\draw (X1.north east) -- (X1.south west);
+\draw (X1.north west) -- (X1.south east);
+\node[list,on chain] (4)[below= of 2] {2};
+\node[on chain,draw,inner sep=3pt] (X2) {};
+\draw (X2.north east) -- (X2.south west);
+\draw (X2.north west) -- (X2.south east);
+\node(headP)[below= of 0] {hp};
+\node(sort)[below= of 1] {s};
+\node(curr)[below= of 4] {c};
+
+\draw[*->] let \p1 = (0.two), \p2 = (0.center) in (\x1,\y2) -- (1);
+\draw[*->, dashed] let \p1 = (1.two), \p2 = (1.center) in (\x1,\y2) -- (2);
+\draw[*->] let \p1 = (2.two), \p2 = (2.center) in (\x1,\y2) -- (3);
+\draw[*->] let \p1 = (3.two), \p2 = (3.center) in (\x1,\y2) -- (X1);
+\draw[*->, dashed] let \p1 = (4.two), \p2 = (4.center) in (\x1,\y2) -- (X2);
+\draw[*->] let \p1 = (4.two), \p2 = (4.center) in (\x1,\y2) to[out=60,in=150] (2);
+\draw[*->] let \p1 = (1.two), \p2 = (1.center) in (\x1,\y2) to[out=60,in=150] (4);
+\draw[*->] (headP) -- (0);
+\draw[*->] (sort) -- (1);
+\draw[*->] (curr) -- (4);
+\end{tikzpicture}
+    *  Reset sorted to head of list
+    *  It repeats until no input elements remain.
+
+
+#### Analysis\\
+There are two loops, thus time complexity is $O(n^2)$
+
+#### Algorithm\\
+
+### Java Code
+```java
+public ListNode insertionSortList(ListNode head) {
+    if (head == null) {
+        return head;
+    }
+
+    ListNode headPrev = new ListNode(0); //new starter of the sorted list
+    ListNode current = head; //the node will be inserted
+    ListNode sorted = headPrev; //insert node between sorted and sorted.next
+
+    while (current != null) {
+        ListNode next = current.next;
+
+        //Moving prev until sorted.next.val >= current.val
+        while (sorted.next != null && sorted.next.val < current.val) {
+            sorted = sorted.next;
+        }
+
+        //insert between sorted and sorted.next
+        current.next = sorted.next;
+        sorted.next = current;
+
+        //move sorted back to head for next round search
+        sorted = headPrev;
+        current = next;
+    }
+
+    return headPrev.next;
+}
+```
+
+
+## Selection Sort Array / Firecode / Level 2
+
+### Description
+
+### Example
+
+### Solution
+#### Walkthrough\\
+Have two nested loops, outer loop move one by one indicating the boundary of unsorted subarray [i...j-1] vs [j ... n (or n-1)],
+where the inner loop is to find the minimum element in unsorted array j = [i+1, ... ,n-1]. Swap the found minimum
+element with the current element i.
+```
+[[(1), 5, 6], 2, ...], min_idx = (0)
+[[1, 2, 5, 6], ...]
+```
+
+#### Analysis\\
+There are two loops, thus time complexity is $O(n^2)$
+
+#### Algorithm\\
+
+### Java Code
+```java
+public static int[] selectionSortArray(int[] arr){
+    int n = arr.length;
+
+    // One by one move boundary of unsorted subarray [i...j-1] vs [j ... n]
+    for (int i = 0; i < n; i++)
+    {
+        // Find the minimum element in unsorted array j = [i+1, ... ,n-1]
+        int min_idx = i;
+        for (int j = i+1; j < n; j++) {
+            if (arr[j] < arr[min_idx]) {
+                min_idx = j;
+            }
+        }
+
+        // Swap the found minimum element with the current element
+        int temp = arr[min_idx];
+        arr[min_idx] = arr[i];
+        arr[i] = temp;
+    }
+
+
+
+    return arr;
+}
+```
+
+
+## Quick Sort Array / /
+
+### Description
+
+### Example
+
+### Solution
+#### Walkthrough\\
+First, we check the indices and continue only if there are still elements to be sorted.  We get the index of the sorted
+pivot and use it to recursively call partition() method with the same parameters as the quickSort() method, but with
+different indices.
+
+As for the partition() method, this function takes the last element as the pivot. Then, checks each element and swaps
+it before the pivot if its value is smaller. By the end of the partitioning, all elements less then the pivot are on
+the left of it and all elements greater then the pivot are on the right of it. The pivot is at its final sorted
+position and the function returns this position.
+
+#### Analysis\\
+The worst case occurs when the partition process always picks greatest or smallest element as pivot and can be $O(n^2)$.
+In average case, the time complexity is $O(n \cdot log(n))$
+
+#### Algorithm\\
+ qs \@ref(qs)
+
+### Java Code
+```java
+public void quickSort(int arr[], int begin, int end) {
+    if (begin < end) {
+        int partitionIndex = partition(arr, begin, end);
+
+        quickSort(arr, begin, partitionIndex-1);
+        quickSort(arr, partitionIndex+1, end);
+    }
+}
+
+//smaller elements go left side of pivot
+//larger elements go right side of pivot
+private int partition(int arr[], int begin, int end) {
+    int pivot = arr[end];
+
+    //index of smaller element
+    int i = (begin - 1);
+
+    for (int j = begin; j < end; j++) {
+        /*
+         * swap if element is smaller than pivot
+         */
+        if (arr[j] <= pivot) {
+            i++;
+
+            int swapTemp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = swapTemp;
+        }
+    }
+
+    //swap a[i + 1] and a[end]
+    int swapTemp = arr[i + 1];
+    arr[i + 1] = arr[end];
+    arr[end] = swapTemp;
+
+    return i + 1;
+}
+```
+
+
+## Top K elements
+
+### Description
+Get k largest elements in an array of size n
+
+### Example
+
+### Solution - Sort array before retrieval
+#### Walkthrough\\
+
+#### Analysis\\
+\begin{enumearte}
+    *  Sort the elements in descending order in $O(n \cdot log(n))$
+    *  Get the first k numbers of the sorted array O(k).
+
+
+#### Algorithm\\
+
+### Java Code  - Sort array before retrieval
+```java
+public int[] findFirstKElement(int[] arr, int k) {
+    int n = arr.length;
+
+    Arrays.sort(arr);
+
+    int [] result = new int[k];
+    int index = 0;
+    for(int i = n - 1; i >= n - k - 1 && i >= 0; i--) {
+        result[index++] = arr[i];
+    }
+
+    return result;
+}
+```
+
+### Solution - Retrieve k element during sort
+#### Walkthrough\\
+
+#### Analysis\\
+\begin{enumearte}
+    *  Modify Bubble Sort to run the outer loop at most k times. $O(n \cdot k)$
+
+
+#### Algorithm\\
+ bs \@ref(bs)
+
+### Java Code  - Retrieve k element during sort
+```java
+public int[] findFirstKElement(int[] arr, int k) {
+    int n = arr.length;
+
+    for (int i = 0; i < n-1 && i < k; i++)  {
+        for (int j = 0; j < n-i-1; j++) {
+            if (arr[j] > arr[j+1])  {
+                // swap arr[j] and arr[j+1]
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+
+    int [] result = new int[k];
+    int index = 0;
+    for(int i = n - 1; i >= n - k - 1 && i >= 0; i--) {
+        result[index++] = arr[i];
+    }
+
+    return result;
+}
+```
+
+### Solution - MinHeap
+#### Walkthrough\\
+Retrieving the top k largest elements equals to retriving smallest element in a k-sized min-heap for k times.The value of
+each node is equal to or greater than the value of its parent node and root has the smallest value. Therefore,
+we need to maintain a min-heap (PriorityQueue in java) of \textbf{size k} while inserting new element. Below
+illustrated how to track a top 2 largest elements from a min heap
+```java
+3 -> [3*]
+2 -> [2*, 3]
+1 -> 1, [2*, 3]
+5 -> 1, 2, [3*, 5]
+6 -> 1, 2, 3, [5*, 6]
+4 -> 1, 2, 3, 4, [5*, 6]
+```
+Finally, return root as it is the smallest element (*) in the heap.
+
+#### Analysis\\
+In addition, add() and remove() take $O(log(k))$, since there are at most k element. Thus, total time complexity is
+$O(n \cdot log(k))$. Total Auxiliary Space is O(k) due to size of the heap.
+
+#### Algorithm\\
+heap \@ref(heap)
+
+### Java Code
+```java
+public int findFirstKElement(int[] nums, int k) {
+    Queue<Integer> heap = new PriorityQueue<>();
+
+    for(int num: nums) {
+        helper(num, k);
+    }
+
+    int[] result = new int[heap.size()];
+    int index = 0;
+    while(!heap.isEmpty()) {
+        result[index] = heap.remove();
+        index++;
+    }
+    // return the elements from heap in sorted order
+    return result;
+}
+
+private void helper(int num, int size) {
+    heap.add(num);
+
+    if(heap.size() > size) {
+        //remove smallest element from min-heap
+        heap.remove();
+    }
+}
+```
+
+

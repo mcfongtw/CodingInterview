@@ -946,10 +946,10 @@ Output:
 While we enumerate all possible enumerate with recursive nature, we need to maintain a visited flag for each element
 to ensure that same element (or same value) would not be processed again. Thus, we could define the following skipping
 conditions:
-\begin{enumerate}
-    \item The current[i] element has been visited.
-    \item The current[i] element is the same (value) as the previously[i-1] visited element.
-\end{enumerate}
+
+    * The current[i] element has been visited.
+    * The current[i] element is the same (value) as the previously[i-1] visited element.
+
 
 #### Analysis
 Time complexity $O(n!)$ with memoization to skip some subproblems.
@@ -1657,12 +1657,12 @@ is the array's size.
 Input: nums = [1,1,1,2,2,3], k = 2  Output: [1,2]
 ### Solution
 #### Walkthrough
-\begin{enumerate}
-    \item We first gather the frequency of integer by count with a HashMap
-    \item We sort the frequency map by comparing by value() in descending order and sort them in
+
+    * We first gather the frequency of integer by count with a HashMap
+    * We sort the frequency map by comparing by value() in descending order and sort them in
     $List<Entry<Number, Frequency>>$.
-    \item We could traverse the top K entries from the list in a loop.
-\end{enumerate}
+    * We could traverse the top K entries from the list in a loop.
+
 
 #### Analysis
 Since we sort the frequency map, thus the time complexity is $O(n \cdot log n)$, and Auxiliary Space is $O(n)$ to
@@ -1719,17 +1719,17 @@ Output : 2
 ### Solution
 #### Walkthrough
 For each sub-block of the array, consider the following 3 scenarios
-\begin{enumerate}
-    \item Case 1: There are no 1's. In this case, array cannot be filled with 1's. Thus, return -1;
-    \item Locate the first 1 and evalute the following
-        \begin{enumerate}
-            \item Case 2: [1, 0, 0, ...., 0, 1] Another 1 follows and makes it a block of 0s with 1s on both ends. Number of iteration needed
+
+    * Case 1: There are no 1's. In this case, array cannot be filled with 1's. Thus, return -1;
+    * Locate the first 1 and evalute the following
+        
+            * Case 2: [1, 0, 0, ...., 0, 1] Another 1 follows and makes it a block of 0s with 1s on both ends. Number of iteration needed
 to flip the 0s become $num_zeo / 2$ if number is even otherwise $(num_zero + 1) / 2$
-            \item Case 3: [1, 0, 0, ..., 0] Another 1 cannot be found and makes it a single 1 at the end. Number of iteration needed equals
+            * Case 3: [1, 0, 0, ..., 0] Another 1 cannot be found and makes it a single 1 at the end. Number of iteration needed equals
 to the number of 0s.
-        \end{enumerate}
-    \item Case 3: [0, 0, 0, ..., 1] Count the number of 0s until the first 1 is met.
-\end{enumerate}
+        
+    * Case 3: [0, 0, 0, ..., 1] Count the number of 0s until the first 1 is met.
+
 Finally, we need to get the maximum iteration for each subproblems.
 
 #### Analysis
@@ -2116,26 +2116,26 @@ Note: Given n will be a positive integer.
 ### Example
 Input: 2 , Output: 2
 Explanation: There are two ways to climb to the top.
-\begin{itemize}
-\item 1 step + 1 step
-\item 2 steps
+
+* 1 step + 1 step
+* 2 steps
 \end{itemize}
 
 Input: 3, Output: 3
 Explanation: There are three ways to climb to the top.
-\begin{itemize}
-\item 1 step + 1 step + 1 step
-\item 1 step + 2 steps
-\item 2 steps + 1 step
+
+* 1 step + 1 step + 1 step
+* 1 step + 2 steps
+* 2 steps + 1 step
 \end{itemize}
 
 ### Solution
 #### Walkthrough
-\begin{itemize}
-\item i = 3, total = 1 + 2 = 3
-\item i = 4, total = 3 + 2 = 5
-\item i = 5, total = 5 + 3 = 8
-\item i = 13, total = 8 + 5 = 13
+
+* i = 3, total = 1 + 2 = 3
+* i = 4, total = 3 + 2 = 5
+* i = 5, total = 5 + 3 = 8
+* i = 13, total = 8 + 5 = 13
 \end{itemize}
 
 #### Analysis
@@ -2243,9 +2243,9 @@ Total amount you can rob = 2 + 9 + 1 = 12.
 ### Solution
 #### Walkthrough
 Create an array of same length of nums. While looping through the array, compute the max profit of:
-\begin{itemize}
-    \item Rob this house plus every two houses before : nums[i] + dp[i-2]
-    \item Rob prev house: dp[i-1]
+
+    * Rob this house plus every two houses before : nums[i] + dp[i-2]
+    * Rob prev house: dp[i-1]
 \end{itemize}
 Finally, return the final outcome, which is the dp[n-1]
 
@@ -2428,14 +2428,14 @@ increasing.
 ### Solution
 #### Walkthrough
 Have 2 variables to keep track states as the following:
-\begin{itemize}
-    \item the minimum swaps to maintain sequence increasing if we swap at i
-    \item the minimum swaps to maintain sequence increasing if we DO NOT swap at i
+
+    * the minimum swaps to maintain sequence increasing if we swap at i
+    * the minimum swaps to maintain sequence increasing if we DO NOT swap at i
 \end{itemize}
 
 Since it is guaranteed that there is valid answer, then we could have the following scenario
-\begin{itemize}
-    \item  Scenaior 1: Need to swap at [i] iff [i-1] swapped
+
+    *  Scenaior 1: Need to swap at [i] iff [i-1] swapped
         ```java
         //         | i - 1 | i     | Note
         // A       | 3     | 4     |
@@ -2443,7 +2443,7 @@ Since it is guaranteed that there is valid answer, then we could have the follow
         // noSwap  | x     | x     | [i-1] NOT swapped, [i] NOT swapped
         // withSwap| y     | y + 1 | [i-1] swapped, [i] swapped.
         ```
-    \item Scenario 2: Need to swap at [i] iff [i-1] NOT swapped
+    * Scenario 2: Need to swap at [i] iff [i-1] NOT swapped
         ```java
         //         | i - 1 | i     | Note
         // A       | 3     | 2     |
@@ -2451,7 +2451,7 @@ Since it is guaranteed that there is valid answer, then we could have the follow
         // noSwap  | x     | y     | [i-1] swapped => [i] NOT swapped
         // withSwap| y     | x + 1 | [i-1] NOT swapped => [i] swapped
         ```
-    \item Scenario 3 : either swap or no swap
+    * Scenario 3 : either swap or no swap
 \end{itemize}
 
 #### Analysis
@@ -2527,11 +2527,11 @@ Result = $1 * 1 + 2 * 2 + 3 * 3 + 4 * 4= 30$
 ### Solution - Recursion}
 #### Walkthrough
 In the recursive startegy:
-\begin{enumerate}
-    \item In the base case, where array contains only one element, the function returns the correct value.
-    \item When array contains more than 1 element, we have to start with either array[0] or array[n-1]. The code
+
+    * In the base case, where array contains only one element, the function returns the correct value.
+    * When array contains more than 1 element, we have to start with either array[0] or array[n-1]. The code
 computes for each of these cases with recursion, and returns the maximum.
-\end{enumerate}
+
 
 ```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
 \begin{tikzpicture}[

@@ -1,0 +1,354 @@
+# Common Data Structure : Set / Stack / Heap / TreeMap
+
+In Java,  an implementation for minmum heap is defined as PriorityQueue class.
+
+
+
+## Group Anagrams / Leet Code 49 / Medium
+
+### Description
+Given an array of strings, group anagrams together.
+
+### Example
+Input: ["eat", "tea", "tan", "ate", "nat", "bat"],
+Output:
+[
+["ate","eat","tea"],
+["nat","tan"],
+["bat"]
+]
+
+### Solution
+
+#### Walkthrough\\
+Assume they are all anagrams, and we keeps a map to store the list of anagrams associated with their unique pattern
+, i.e. sorted string; that is, $<$sorted\_str, List of anagram$>$. Finally, we collect the list of anagram in another list
+to return.
+
+#### Analysis\\
+Time complexity is O(n) as every word is processed once.
+
+#### Algorithm\\
+
+### Java Code
+```java
+public List<List<String>> groupAnagrams(String[] strs) {
+    Map<String, List<String>> index = new HashMap<>();
+
+    List<List<String>> result = new ArrayList<>();
+    if(strs == null || strs.length == 0) {
+        return result;
+    }
+
+    for(String str : strs) {
+        char[] chars = str.toCharArray();
+        Arrays.sort(chars);
+        String sortedStr = new String(chars);
+
+        List<String> list = index.getOrDefault(sortedStr, new ArrayList<>());
+        list.add(str);
+        // only insert if key was asbsent
+        index.putIfAbsent(sortedStr, list);
+    }
+
+    for(Map.Entry<String, List<String>> entry : index.entrySet()) {
+        result.add(entry.getValue());
+    }
+
+    return result;
+}
+```
+
+
+## Longest Substring Without Repeating Characters / LeetCode 3 / Medium
+
+### Description
+Given a string, find the length of the longest substring without repeating characters.
+
+### Example
+Input: "abcabcbb", Output: 3 , Explanation: The answer is "abc", with the length of 3.
+
+Input: "bbbbb", Output: 1 , Explanation: The answer is "b", with the length of 1.
+
+Input: "pwwkew", Output: 3, Explanation: The answer is "wke", with the length of 3. Note that the answer must be a
+substring, "pwke" is a subsequence and not a substring.
+### Solution - Sliding Window
+#### Walkthrough\\
+Use two indices left, and right to remember a substring (sliding window). Use a Set to check for unique characters.
+If there is unique character, move right index outward (expand substring); otherwise, move left index rightward
+(shorten substring). Measure the longest length of substring at each expansion.
+
+#### Analysis\\
+Time complexity is O(n) as every letter is visited once.
+
+#### Algorithm\\
+
+### Java Code - Sliding Window
+```java
+public int lengthOfLongestSubstring(String s) {
+    int len = s.length();
+    Set<Character> uniqueChars = new HashSet<>();
+
+    int maxLen = 0, right = 0, left = 0;
+
+    while( right < len && left < len) {
+        //looking for longest repeating unique substring [left, right]
+        if(!uniqueChars.contains(s.charAt(right))) {
+            //unique char, expand substring
+            uniqueChars.add(s.charAt(right));
+            right++;
+            maxLen = Math.max(maxLen, right - left);
+        } else {
+            //not unique, shorten substring
+            uniqueChars.remove(s.charAt(left));
+            left++;
+        }
+
+    }
+
+    return maxLen;
+}
+```
+
+
+
+\section{Find $k^{th}$ Largest Element in an Array / LeetCode 215 / Medium}
+
+### Description
+Find the $k^{th}$ largest element in an unsorted array. Note that it is the $k^{th}$ largest element in the sorted order,
+not the $k^{th}$ distinct element.
+
+### Example
+Input: [3,2,1,5,6,4] and k = 2. Output: 5
+
+Input: [3,2,3,1,2,4,5,5,6] and k = 4. Output: 4
+
+### Solution
+#### Walkthrough\\
+Retrieving the $k^{th}$ largest element equals to retriving smallest element in a k-sized min-heap - The value of
+each node is equal to or greater than the value of its parent node and root has the smallest value. Therefore,
+we need to maintain a min-heap (PriorityQueue in java) of \textbf{size k} while inserting new element. Below
+illustrated how to track a 2nd largest element from a min heap
+```java
+3 -> [3*]
+2 -> [2*, 3]
+1 -> 1, [2*, 3]
+5 -> 1, 2, [3*, 5]
+6 -> 1, 2, 3, [5*, 6]
+4 -> 1, 2, 3, 4, [5*, 6]
+```
+Finally, return root as it is the smallest element (*) in the heap.
+
+#### Analysis\\
+In addition, add() and remove() take $O(log(k))$, since there are at most k element. Thus, total time complexity is
+$O(n \cdot log(k))$. Total Auxiliary Space is O(k) due to size of the heap.
+
+#### Algorithm\\
+ heap \@ref(heap)
+
+### Java Code
+```java
+public int findKthLargest(int[] nums, int k) {
+    Queue<Integer> heap = new PriorityQueue<>();
+
+    for(int num: nums) {
+        helper(num, k);
+    }
+
+    // return the smallest element (root) from heap
+    return heap.peek();
+}
+
+private void helper(int num, int size) {
+    heap.add(num);
+
+    if(heap.size() > size) {
+        //remove smallest element from min-heap
+        heap.remove();
+    }
+}
+```
+
+
+
+## Merge K Sorted Arrays
+
+### Description
+
+### Example
+
+### Solution - Min Heap
+#### Walkthrough\\
+This is similar to the problem of merging K sorted list. we could compare every leading elements in k array and
+retrieve the node with the smallest value using Min Heap.
+Since the original k arrays were sorted, therefore, we could retrieve all $n \cdot k$ elements in
+sorted order by retrieve the min element from PriorityQueue.
+
+#### Analysis\\
+The comparison cost is O(log(k)) for every pop and insertion to priority queue since there are at most k elements
+(from k arrays). Additionally, there are a total number of n nodes in all arrays. Thus, the overall time complexity
+is $O(n \cdot log(k))$ and Auxiliary Space for the ﬁnal array is O(n), where n is the total node number in all k
+arrays.
+
+#### Algorithm\\
+ heap \@ref(heap)
+
+### Java Code- Min Heap
+```java
+class ArrayContainer implements Comparable<ArrayContainer> {
+    int [] array;
+    int index;
+
+    public ArrayContainer(int[] data, int idx) {
+        array = data;
+        index = idx;
+    }
+
+    public void advanceIndex() {
+        index++;
+    }
+
+    @Override
+    public int compareTo(ArrayContainer that) {
+        //comparing element from both arrays at index
+        return this.array[index] - that.array[index];
+    }
+}
+
+int[] mergeSortedArray(int[][] arrays) {
+    Queue<ArrayContainer> queue = new PriorityQueue<ArrayContainer>();
+    int numOfElements = 0;
+
+    // init queue w.r.t. first element of each array
+    for(int i = 0; i < arrays.length; i++) {
+        queue.offer(new ArrayContainer(arrays[i], 0));
+        numOfElements += arrays[i].length;
+    }
+
+    int mainIdx = 0;
+    int result[] = new int[numOfElements];
+
+    while(!queue.isEmpty()) {
+        // return the array at index which is the smallest element in queue
+        ArrayContainer cantainer = queue.poll();
+
+        result[mainIndex] = cantainer.array[index];
+        mainIndex++;
+
+        // advance the index and re-add to the queue
+        if(cantainer.index < cantainer.array.length - 1) {
+            cantainer.advanceIndex();
+            queue.offer(cantainer);
+        }
+    }
+
+    return result;
+}
+```
+
+
+## My Calendar I / LeetCode 729 / Medium
+
+### Description
+Implement a MyCalendar class to store your events. A new event can be added if adding the event will not cause a
+double booking. Your class will have the method, book(int start, int end). Formally, this represents a booking on the
+half open interval [start, end), the range of real numbers x such that start <= x < end. A double booking happens when
+two events have some non-empty intersection (ie., there is some time that is common to both events.) For each call to
+the method MyCalendar.book, return true if the event can be added to the calendar successfully without causing a
+double booking. Otherwise, return false and do not add the event to the calendar.
+
+### Example
+
+### Solution - Interval Data Structure
+#### Walkthrough\\
+We could implment a Data Structure to illustrate a duration interval which has a method to evaluate if this
+interval is overlapping with another interval.
+
+#### Analysis\\
+Time complexity is O(n) for each query as every booking is visited once in the list.
+
+#### Algorithm\\
+
+### Java Code - Interval Data Structure
+```java
+class Booking {
+
+    public int start;
+
+    public int end;
+
+    public Booking(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    public boolean isOverlapped(Booking that) {
+        // this: |--------|
+        // that:      |------|
+        if(isBetween(this.end, that.start, that.end)) {
+            return true;
+        } else if(isBetween(that.end, this.start, this.end)) {
+        // this:      |------|
+        // that: |--------|
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isBetween(int target, int start, int end) {
+        return target > start && target <= end;
+    }
+}
+
+class MyCalendar {
+    private List<Booking> bookings = new ArrayList<>();
+
+    public boolean book(int start, int end) {
+        Booking newBooking = new Booking(start, end);
+
+        for(Booking existedBooking : bookings) {
+            if(existedBooking.isOverlapped(newBooking)) {
+                return false;
+            }
+        }
+
+        bookings.add(newBooking);
+
+        return true;
+    }
+}
+```
+
+### Solution - TreeMap
+#### Walkthrough\\
+Alternatively, we could leverage TreeMap to retrieve the logical relations between keys by calling lowerKey().
+The lowerKey() method is used to find the next greatest element after the element passed as the parameter.
+
+#### Analysis\\
+Time complexity is O(log(n)) for each query as TreeMap takes O(log(n)) to find the location to insert.
+
+#### Algorithm\\
+
+### Java Code - TreeMap
+```java
+class MyCalendar {
+    private TreeMap<Integer, Integer> bookings = new TreeMap<>();
+
+    public boolean book(int start, int end) {
+        Integer nextStart = bookings.lowerKey(end);
+
+        // check if the next closest interval of which end time is less than start time
+        if (nextStart == null || bookings.get(nextStart) <= start) {
+            // either no interval start time < end
+            // existed interval end time > start
+
+            bookings.put(start, end);
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+```
+

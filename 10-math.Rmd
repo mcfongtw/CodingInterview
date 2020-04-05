@@ -1,0 +1,378 @@
+# Math
+
+
+
+## Power of 2 / Firebase / Level 2
+
+### Description
+Write a method - isPowOfTwo to test whether or not a given positive integer is a power of 2.
+
+### Example
+isPowOfTwo(5) = false
+isPowOfTwo(8) = true
+
+### Solution - Recursive
+#### Walkthrough\\
+For recursive solution, we invoke recursive calls on even numbrers and return true on $2^0$ = 1. Return false for other
+cases. For bitwise op solution, if we take 3 (011) \& with 4 (100) and result is 0
+
+#### Analysis\\
+Time Complexity is O(log(n)) since this is the number of  computation performed.
+
+#### Algorithm\\
+recursive \@ref(recursive)
+
+### Java Code - Recursive
+```java
+boolean isPowerOfTwo(int n) {
+    if(num == 0) {
+        return false;
+    } else if( num == 1) {
+        return true;
+    } else if( (num & 1) == 1 ) {
+        //odd number
+        return false;
+    } else {
+        return isPowOfTwo(num / 2);
+    }
+}
+```
+
+### Solution - Bitwise Op
+#### Walkthrough\\
+
+#### Analysis\\
+Time complexity is constant O(1) and Auxiliary Space is O(1).
+
+### Java Code - Bitwise Op
+```java
+boolean isPowerOfTwo(int num) {
+    return (num != 0) && ((num & (num - 1)) == 0);
+}
+```
+
+
+
+\section{Pow(x, n) / Leet Code 50 / Medium}
+
+### Description
+Implement pow(x, n), which calculates x raised to the power n (x^n).
+
+### Example
+2.00000^10  = 1024.00000
+
+2.00000^{-2} = 0.25000
+### Solution
+#### Walkthrough\\
+Try to utilize the formula where $x^{n} = x^{\frac{n}{2} + \frac{n}{2} + (n - \frac{n}{2} * 2)}$, regardless n is
+odd or even. The terminal conditions are $x^0 = 1$, $x^1 = x$, $x^{-1} = \frac{1}{x}$
+
+#### Analysis\\
+Time Complexity is O(log(n)) since this is the number of  computation performed.
+
+#### Algorithm\\
+
+### Java Code
+```java
+public double myPow(double x, int n) {
+    if(n == 0) {
+        return 1.0;
+    }
+    if(n == 1) {
+        return x;
+    }
+    if(n == -1) {
+        return 1/x;
+    }
+
+    int remainPower = n - n/2 * 2;
+    double halfPower = myPow(x, n/2);
+    return halfPower * halfPower * myPow(x, remainPower);
+}
+```
+
+
+## Count Primes / Leet Code 204 / Easy
+
+### Description
+Count the number of prime numbers less than a non-negative number, n.
+
+### Example
+
+### Solution
+#### Walkthrough\\
+
+#### Analysis\\
+Time Complexity is O() since this is the number of  computation performed.
+
+#### Algorithm\\
+
+### Java Code
+```java
+public int countPrimes(int n) {
+    if (n<=2) {
+        return 0;
+    }
+    if (n==3) {
+        return 1;
+    }
+    int r = n-2;
+
+    for (int i=4; i<n; i++){
+        for (int j=2; j<=i/j; j++){
+            if (i%j==0) {
+                r--;
+                break;
+            }
+        }
+    }
+
+    return r;
+}
+```
+
+
+## Summation using Bitwise operator / LeetCode 371 / Easy
+
+### Description
+Calculate the sum of two integers a and b using bitwise oeprators (operator + and - NOT allowed)
+### Example
+
+### Solution
+#### Walkthrough\\
+
+#### Analysis\\
+Time Complexity is O() since this is the number of  computation performed.
+
+#### Algorithm\\
+
+### Java Code
+```java
+public int getSum(int a, int b) {
+    int carry = a & b;
+    int result = a ^ b;
+
+    while(carry != 0) {
+        int shiftedcarry = carry << 1;
+        carry = result & shiftedcarry;
+        result ^= shiftedcarry;
+    }
+
+    return result;
+}
+```
+
+
+
+## Fibonacci Sequence / Firecode / Level 2
+
+### Description
+The Fibonacci Sequence is the series of numbers: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... The next number is found by
+adding up the two numbers before it.
+
+Your goal is to write an optimal method - betterFibonacci that returns the nth Fibonacci number in the sequence. n is
+0 indexed, which means that in the sequence 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ..., n == 0 should return 0 and n == 3
+should return 2. Your method should exhibit a runtime complexity of O(n) and use constant O(1) space.
+
+### Example
+The $n_{th}$ fibonacci number is
+\begin{equation}
+    f(n) =
+    \begin{cases}
+    1 & \text{if $n = 1$}\\
+    1 & \text{if $n = 2$}\\
+    f(n - 1) + f(n - 2)  & \text{if $n \gt 2$}
+    \end{cases}
+\end{equation}
+$
+fib(3) = fib(2) + fib(1) = 2\\
+fib(4) = fib(3) + fib(2) = 3\\
+fib(5) = fib(4) + fib(3) = 5\\
+$
+
+### Walkthough - Top-down Recursion
+The recursion tree of this strategy is
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
+\begin{tikzpicture}[
+level 1/.style={sibling distance=10em},
+level 2/.style={sibling distance=5em},
+level 3/.style={sibling distance=5em},
+level distance=3em,
+]
+\node {fib(5)}
+child { node {fib(4)}
+    child {  node {fib(3)}
+        child {  node {fib(2)}}
+        child {  node {fib(1)}}
+    }
+    child {  node {fib(2)}}
+}
+child { node {fib(3)}
+    child {  node {fib(2)}}
+    child {  node {fib(1)}}
+}
+;
+\end{tikzpicture}
+```
+There are many duplicated subproblems.
+
+#### Analysis\\
+Thus, the overall time complexity is expensive, O(2^{h})
+
+#### Algorithm\\
+ recursive \@ref(recursive)
+
+### Java Code - Top-down Recursion
+```java
+int fib(int x) {
+    return (x == 0 || x == 1) ? x : fib(x - 1) + fib(x - 2);
+}
+```
+
+### Walkthough - Tail Recursion
+
+#### Algorithm\\
+ recursive \@ref(recursive)
+
+### Java Code - Tail Recursion
+```java
+int fib(int x) {
+    if(x <= 2) {
+        return 2;
+    } else {
+        return fibTailRec(x, 0, 1);
+    }
+}
+
+int fibTailRec(int x, int fMinus1, int fMinus2) {
+    if(x == 0) {
+        return fMinus1;
+    }
+
+    return fibTailRec(x - 1, fMinus2, fMinus1 + fMinus2);
+}
+```
+
+\subsection{Solution - Dynamic Programming (Bottom-up Iteration)}
+#### Walkthrough\\
+Define n0 and n1 and another variable to add n0 + n1. Have a loop to iterate the compute these three values from
+2 to n. return n1.
+
+#### Analysis\\
+Time Complexity is O(n) since this is the number of  computation performed.
+
+#### Algorithm\\
+ dp \@ref(dp)
+
+\subsection{Java Code - Dynamic Programming (Bottom-up Iteration)}
+```java
+int fib(int n) {
+    if(n == 0) {
+        return 0;
+    }
+
+    if(n == 1) {
+        return 1;
+    }
+
+    int n0 = 0, n1 = 1, temp = 0;
+
+    for(int i = 2; i <= n; i++) {
+        temp = n0 + n1;
+        n0 = n1;
+        n1 = temp;
+    }
+
+    return n1;
+}
+```
+
+### Walkthough - Dynamic Programming with Memoization
+The strategy is to avoid overlapping subproblems using cache.
+
+#### Analysis\\
+There will only be n + 1 subproblems computed. The time complexity is $O(n)$
+
+#### Algorithm\\
+ memo \@ref(memo), recursive \@ref(recursive), dp \@ref(dp)
+
+### Java Code - Dynamic Programming with Memoization
+```java
+int fib(int x) {
+    return fibMemoization(x, new int[x + 1]);
+}
+
+int fibMemoization(int x, int[] mem) {
+    if (mem[x] != 0) {
+        return mem[x];
+    }
+    if (x == 1 || x == 2)  {
+        return 1;
+    }
+    int n = fibMemoization(x - 1, mem) + fibMemoization(x - 2,mem);
+    mem[x] = n;
+    return n;
+}
+```
+
+
+
+## Min operations to reduce number to 1 / / 
+
+### Description
+Given a positive integer n and 3 operations on n:
+
+    *  n - 1
+    *  n / 2 (if n is even)
+    *  n / 3 (if n \% 3 == 0)
+
+Find the minimum number of above operations to reduce n to 1.
+
+### Example
+Input: n = 9
+Output: 2
+Explanation:
+Step 1: 9 / 3 = 3
+Step 2: 3 / 3 = 1
+
+Input: n = 8
+Output: 3
+Explanation:
+Step 1: 8 / 2 = 4
+Step 2: 4 / 2 = 2
+Step 3: 2 - 1 = 1
+
+### Solution - Recursion
+#### Walkthrough\\
+
+#### Analysis\\
+O(n^3)
+
+#### Algorithm\\
+recursive \@ref(recursive)
+
+### Java Code
+```java
+public int minHops(int num) {
+    return rec(num, 0);
+}
+
+private int rec(int num, int count) {
+    if(num <= 1) {
+        return count;
+    }
+
+    int minCount = Integer.MAX_VALUE;
+
+    if( num % 3 == 0) {
+        minCount = Math.min(minCount, rec(num / 3, count + 1));
+    }
+
+    if( num % 2 == 0) {
+        minCount = Math.min(minCount, rec(num / 2, count + 1));
+    }
+
+    minCount = Math.min(minCount, rec(num - 1, count + 1));
+}
+```
+
