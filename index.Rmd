@@ -1,36 +1,105 @@
 --- 
-title: "Coding Interview"
+title: "Technical Interview"
 author: "Michael Fong"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
-bibliography: [book.bib, packages.bib]
+bibliography: [latex/book.bib, latex/packages.bib]
 biblio-style: apalike
 link-citations: yes
-github-repo: rstudio/bookdown-demo
-description: "Coding Interview The output format for this example is bookdown::gitbook."
+github-repo: mcfongtw/CodingInterview
+description: "Technical Interview."
 ---
 
-# Prerequisites
+# Introduction {#intro}
 
-This is a _sample_ book written in **Markdown**. You can use anything that Pandoc's Markdown supports, e.g., a math equation $a^2 + b^2 = c^2$.
+<!--
+You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \@ref(methods).
+-->
 
-The **bookdown** package can be installed from CRAN or Github:
+## Glossary of Algorithm
 
-```{r eval=FALSE}
-install.packages("bookdown")
-# or the development version
-# devtools::install_github("rstudio/bookdown")
+### Depth First Traversal {#dfs}
+:   An algorithm for traversing or searching tree or graph data structures. The algorithm starts
+at the root node and explores as far as possible along each branch recursively.
+
+### Breadth First Traversal} {#bfs}
+:   An algorithm for traversing or searching tree or graph data structures. It starts at the tree
+root, and explores all of the neighbor nodes at the present depth prior to moving on to the nodes at the next
+depth level.
+    
+### Topological Sorting {#topological}
+:   Topological Sorting
+
+### Minimax {#minimax}
+:   (sometimes MinMax) is an algorithm for minimizing the possible loss for a worst case
+    (maximum loss) scenario.
+
+### Recursion {#recursion}
+:   a method of solving a problem where the solution depends on solutions to smaller
+instances of the same problem
+
+### Backtrack {#backtrack}
+:   a method trying to construct a solution to a computational problem incrementally,
+one small piece at a time. Whenever the algorithm needs to decide between multiple alternatives to the next
+component of the solution, it recursively evaluates \textbf{every} alternative and then chooses the best one.
+
+### Dynamic Programming {#dp}
+:   a method to  to simplify a complicated problem by breaking it down into simpler sub-problems in a
+recursive manner. You have a main problem (the root of your tree of subproblems), and subproblems (subtrees). The
+subproblems typically repeat and overlap. Common approach is implemented recursively or iteratively table-filling.
+
+### Memoization {#memo}
+:   an optimization technique used to speed up programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again. The implementation can be of form recursive call (or some iterative equivalent)    
+
+### Tabulation {#table}
+:   is an approach where you solve a dynamic programming problem by first filling up a table, and then
+compute the solution to the original problem based on the results in this table.
+
+### Divide and Conquer {#dnc}
+:   an algorithm to recursively breaking down a problem into two or more sub-problems of the same or
+related type, until these become simple enough to be solved directly. The solutions to the sub-problems are then
+combined to give a solution to the original problem.
+
+### Binary Search Tree {#bst}
+:   a binary tree where nodes are ordered, where the keys in the left subtree are less then the key in its
+parent node, and the keys in the right subtree are greater the key in its parent node.
+
+### Merge sort {#ms}
+:   a Divide and Conquer algorithm. It divides input array in two halves, calls itself for
+the two halves and then merges the two sorted halves.
+
+### Bubble sort {#bs}
+:   a sorting algorithm that compares adjacent pairs and swaps them if necessary, causing the items to
+"bubble" up toward their proper position.
+
+### Quick Sort {#qs}
+:   a Divide and Conquer algorithm. It picks an element as pivot and partitions the given array around the
+    picked pivot.
+
+### Minimum Heap {#heap}
+:   a complete binary tree in which the value in each internal node is smaller than or equal
+to the values in the children of that node. Thus, the root node is the smallest element in the tree.
+    
+    
+<!--
+
+Figures and tables with captions will be placed in `figure` and `table` environments, respectively.
+
+```{r nice-fig, fig.cap='Here is a nice figure!', out.width='80%', fig.asp=.75, fig.align='center'}
+par(mar = c(4, 4, .1, .1))
+plot(pressure, type = 'b', pch = 19)
 ```
 
-Remember each Rmd file contains one and only one chapter, and a chapter is defined by the first-level heading `#`.
+Reference a figure by its code chunk label with the `fig:` prefix, e.g., see Figure \@ref(fig:nice-fig). Similarly, you can reference tables generated from `knitr::kable()`, e.g., see Table \@ref(tab:nice-tab).
 
-To compile this example to PDF, you need XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <https://yihui.name/tinytex/>.
-
-```{r include=FALSE}
-# automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown'
-), 'packages.bib')
+```{r nice-tab, tidy=FALSE}
+knitr::kable(
+  head(iris, 20), caption = 'Here is a nice table!',
+  booktabs = TRUE
+)
 ```
+
+You can write citations, too. For example, we are using the **bookdown** package [@R-bookdown] in this sample book, which was built on top of R Markdown and **knitr** [@bookmark].
+-->
