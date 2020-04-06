@@ -52,10 +52,9 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 #### Walkthrough
 With the idea of Merge sort:
 
-    *  Divide the list in half by finding the middle element of the list. Need to remove the link of middle node
-which was previously links to mid - likely the last node in the 1st half list.
-    *  Invoke sortList() recurisvely on two sub-lists
-    *  Merge and sort against two sub-lists and return head of the list.
+*  Divide the list in half by finding the middle element of the list. Need to remove the link of middle node which was previously links to mid - likely the last node in the 1st half list.
+*  Invoke sortList() recurisvely on two sub-lists
+*  Merge and sort against two sub-lists and return head of the list.
 
 
 #### Analysis
@@ -66,7 +65,7 @@ scenario can be reused; and thus, will remain $O(1)$ for all rounds)
 #### Algorithm
  dnc \@ref(dnc), recursion \@ref(recursion), ms \@ref(ms)
 
-### Java Code
+#### Java Code
 ```java
 public ListNode sortList(ListNode head) {
     if (head == null || head.next == null) {
@@ -134,11 +133,9 @@ Sort a linked list using insertion sort.
 
 Algorithm of Insertion Sort:
 
-    *  Insertion sort iterates, consuming one input element each repetition, and growing a sorted
-output list.
-    *  At each iteration, insertion sort removes one element from the input data, finds the
-location it belongs within the sorted list, and inserts it there.
-    *  It repeats until no input elements remain.
+*  Insertion sort iterates, consuming one input element each repetition, and growing a sorted output list.
+*  At each iteration, insertion sort removes one element from the input data, finds the location it belongs within the sorted list, and inserts it there.
+*  It repeats until no input elements remain.
 
 
 ### Example
@@ -180,11 +177,11 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 #### Walkthrough
 With Insertion Sort, we could construct a new list by arranging links in place. We need to do the following:
 
-    *  Maintain pointers to node that will be insert-attempted (current) and a previously
-sorted nodes.
-    *  At each iteration, finds the location it belongs within the sorted list, and inserts between
-sorted and sorted.next.
-    *  Insert the current node between sorted and sorted.next
+*  Maintain pointers to node that will be insert-attempted (current) and a previously sorted nodes.
+*  At each iteration, finds the location it belongs within the sorted list, and inserts between sorted and sorted.next.
+*  Insert the current node between sorted and sorted.next
+
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
 \begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
 draw, rectangle split horizontal}, >=stealth, start chain]
 \node[list,on chain] (0) {0};
@@ -213,8 +210,9 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 \draw[*->] (sort) -- (1);
 \draw[*->] (curr) -- (4);
 \end{tikzpicture}
-    *  Reset sorted to head of list
-    *  It repeats until no input elements remain.
+```
+*  Reset sorted to head of list
+*  It repeats until no input elements remain.
 
 
 #### Analysis
@@ -222,7 +220,7 @@ There are two loops, thus time complexity is $O(n^2)$
 
 #### Algorithm
 
-### Java Code
+#### Java Code
 ```java
 public ListNode insertionSortList(ListNode head) {
     if (head == null) {
@@ -276,7 +274,7 @@ There are two loops, thus time complexity is $O(n^2)$
 
 #### Algorithm
 
-### Java Code
+#### Java Code
 ```java
 public static int[] selectionSortArray(int[] arr){
     int n = arr.length;
@@ -329,7 +327,7 @@ In average case, the time complexity is $O(n \cdot log(n))$
 #### Algorithm
  qs \@ref(qs)
 
-### Java Code
+#### Java Code
 ```java
 public void quickSort(int arr[], int begin, int end) {
     if (begin < end) {
@@ -383,13 +381,13 @@ Get k largest elements in an array of size n
 
 #### Analysis
 
-    *  Sort the elements in descending order in $O(n \cdot log(n))$
-    *  Get the first k numbers of the sorted array O(k).
+*  Sort the elements in descending order in $O(n \cdot log(n))$
+*  Get the first k numbers of the sorted array O(k).
 
 
 #### Algorithm
 
-### Java Code  - Sort array before retrieval
+#### Java Code  - Sort array before retrieval
 ```java
 public int[] findFirstKElement(int[] arr, int k) {
     int n = arr.length;
@@ -411,13 +409,13 @@ public int[] findFirstKElement(int[] arr, int k) {
 
 #### Analysis
 
-    *  Modify Bubble Sort to run the outer loop at most k times. $O(n \cdot k)$
+*  Modify Bubble Sort to run the outer loop at most k times. $O(n \cdot k)$
 
 
 #### Algorithm
  bs \@ref(bs)
 
-### Java Code  - Retrieve k element during sort
+#### Java Code  - Retrieve k element during sort
 ```java
 public int[] findFirstKElement(int[] arr, int k) {
     int n = arr.length;
@@ -466,7 +464,7 @@ $O(n \cdot log(k))$. Total Auxiliary Space is O(k) due to size of the heap.
 #### Algorithm
 heap \@ref(heap)
 
-### Java Code
+#### Java Code
 ```java
 public int findFirstKElement(int[] nums, int k) {
     Queue<Integer> heap = new PriorityQueue<>();

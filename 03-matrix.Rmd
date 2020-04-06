@@ -17,7 +17,7 @@ All entries in matrix will be visited, that is, O(rows * cols)
 
 ####  Algorithm
 
-###  Java Code
+#### Java Code
 ```java
 int[][] matrix;
 
@@ -114,7 +114,7 @@ Time complexity is $O(n^2)$ as there are two loops
 
 ####  Algorithm
 
-###  Java Code
+#### Java Code
 ```java
 public void rotate(int[][] matrix) {
     //Swap symmetric element via diagnal
@@ -182,7 +182,7 @@ Time complexity is O(rows * cols), since all elements are visited once
 
 ####  Algorithm
 
-###  Java Code
+#### Java Code
 ```java
 public List spiralOrder(int[][] matrix) {
     List result = new ArrayList<>();
@@ -280,6 +280,7 @@ Input:
 ```
 target = 13
 Output: false
+
 ###  Solution
 ####  Walkthrough
 We can treat the 2D matrix as the one large array, and search the element using binary search. We only need to compute
@@ -291,7 +292,7 @@ The overall time complexity is  O(log(rows * cols))
 ####  Algorithm
  recursion \@ref(dnc)
 
-###  Java Code
+#### Java Code
 ```java
 public boolean searchMatrix(int[][] matrix, int target) {
     if(matrix == null || matrix.length == 0 || matrix[0].length == 0) {
@@ -348,15 +349,15 @@ Write an efficient algorithm that searches for a value in an m x n matrix. This 
 ####  Walkthrough
 Traverse the matrix by
 
-    *  locate row when target is smaller than m[r][c]
-    *  locate col when target is larger than m[r][c]
+* locate row when target is smaller than m[r][c]
+* locate col when target is larger than m[r][c]
 
 ####  Analysis
 A portion of cell is visited, O(m + n) - instead of every cell (m * n)
 
 ####  Algorithm
 
-###  Java Code
+#### Java Code
 ```java
 public boolean searchMatrix(int[][] matrix, int target) {
     if(matrix == null || matrix.length == 0) {
@@ -453,7 +454,7 @@ the same subproblem has been computed again and gain. Thus, the time complexity 
 ####  Algorithm
  recursion \@ref(recursion)
 
-###  Java Code - Recursive
+#### Java Code - Recursive
 ```java
 public int minPathSum(int[][] grid) {
     if(grid == null || grid.length==0) {
@@ -501,7 +502,7 @@ Complexity: O(n * m) since each cell is visited once
 ####  Algorithm
  dp \@ref(dp)
 
-###  Java Code -  Dynamic Programming
+#### Java Code -  Dynamic Programming
 ```java
 public int minPathSum(int[][] grid) {
     if(grid == null || grid.length == 0) {
@@ -596,7 +597,7 @@ Naive recursive strategy results in overlapping subproblems. The time complexity
 ####  Algorithm
  recursion \@ref(recursion)
 
-###  Java Code - Recursion
+#### Java Code - Recursion
 ```java
 public int uniquePaths(int m, int n) {
     return rec(0, 0, m, n);
@@ -635,7 +636,7 @@ value.
 ####  Algorithm
  dp \@ref(dp)
 
-###  Java Code - Dynamic Programming
+#### Java Code - Dynamic Programming
 ```java
 public int uniquePaths(int m, int n) {
     if(m == 0 || n == 0) {
@@ -703,7 +704,7 @@ $O(2^{log(n)})$
 ####  Algorithm
  backtrack \@ref(backtrack), dfs \@ref(dfs)
 
-###  Java Code - DFS
+#### Java Code - DFS
 ```java
 private static final char VISITED_CHARACTER = '*';
 
@@ -781,6 +782,7 @@ all surrounded by water.
 00011
 ```
 = 3
+
 ###  Solution - DFS
 ####  Walkthrough
 Traverse all cell and once we find a land tile, fill the adjacent land recursively. Count each land tile we have
@@ -792,7 +794,7 @@ Everyone cell in matrix is visited. Thus, is O(rows * cols)
 ####  Algorithm
 dfs \@ref(dfs)
 
-###  Java Code - DFS
+#### Java Code - DFS
 ```java
 public int numIslands(char[][] grid) {
     if(grid==null || grid.length==0||grid[0].length==0)
@@ -878,7 +880,7 @@ All cell is visited a few times, thus, O(rows * cols).
 ####  Algorithm
 dfs \@ref(dfs)
 
-###  Java Code - DFS
+#### Java Code - DFS
 ```java
 public void solve(char[][] board) {
     if(board == null || board.length==0)
@@ -957,6 +959,7 @@ For example, given three people living at (0,0), (0,4), and (2,2):
 0 - 0 -   1 -  0 - 0
 ```
 The point (0,2) is an ideal meeting point, as the total travel distance of 2+2+2=6 is minimal. So return 6.
+
 ###  Solution
 ####  Walkthrough
 The median points for row and col should be the optimal meeting point. We could compute the distance by substracting
@@ -967,7 +970,7 @@ Each cell in matrix will be visited at least once. Thus, O(rows * cols).
 
 ####  Algorithm
 
-###  Java Code
+#### Java Code
 ```java
 public int minTotalDistance(int[][] grid) {
     int rows = grid.length;

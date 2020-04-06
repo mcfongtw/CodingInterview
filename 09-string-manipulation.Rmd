@@ -95,11 +95,11 @@ Only one letter can be changed at a time.
 Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
 Note:
 
-    *  Return 0 if there is no such transformation sequence.
-    *  All words have the same length.
-    *  All words contain only lowercase alphabetic characters.
-    *  You may assume no duplicates in the word list.
-    *  You may assume beginWord and endWord are non-empty and are not the same.
+*  Return 0 if there is no such transformation sequence.
+*  All words have the same length.
+*  All words contain only lowercase alphabetic characters.
+*  You may assume no duplicates in the word list.
+*  You may assume beginWord and endWord are non-empty and are not the same.
 
 
 ### Example
@@ -121,7 +121,7 @@ Time complexity is O(n) as each word is processed once.
 #### Algorithm
  backtrack \@ref(backtrack), bfs \@ref(bfs)
 
-### Java Code - BFS
+#### Java Code - BFS
 ```java
 public int ladderLength(String beginWord, String endWord, List<String> wordList) {
     Set<String> dict = new HashSet<>(wordList);
@@ -178,7 +178,8 @@ If there is no common prefix, return an empty string "".
 ### Example
 Input: ["flower","flow","flight"] Output: "fl"
 Input: ["dog","racecar","car"] Output: ""
-### Solution}
+
+### Solution
 #### Walkthrough
 Take the first string as pivotal string and compare it against all other strings. If there is a common character,
 advance the common index; otherwise, return the substring(0, commonIndex + 1);
@@ -227,6 +228,7 @@ Given two strings X and Y, find the length of the longest common substring.
 X = “abcdxyz”, y = “xyzabcd”. Output : 4  The longest common substring is “abcd” and is of length 4.
 
 Input : X = “zxabcdezy”, y = “yzabcdezx”. Output : 6  The longest common substring is “abcdez” and is of length 6.
+
 ### Solution
 #### Walkthrough
 We first declare a 2D array to store the length of each common substring in both strings:
@@ -346,7 +348,7 @@ Both time and Auxiliary Space take $O(n^2)$
 #### Algorithm
  dp \@ref(dp)
 
-### Java Code - Longest Common Substring
+#### Java Code - Longest Common Substring
 ```java
 public String longestPalindrome(String s) {
     if (s.equals("")) {
@@ -420,7 +422,7 @@ $O(2^{log(n)})$, where n is the length of the word.
 #### Algorithm
 recursion \@ref(recursion)
 
-### Java Code - Recursion
+#### Java Code - Recursion
 ```java
 public boolean wordBreak(String word, List<String> dict) {
     int length = word.length();
@@ -453,9 +455,9 @@ public boolean wordBreak(String word, List<String> dict) {
 Create a array of (length of string + 1). In order to ensure the string contains segment of substring in the list, we
 need to ensure:
 
-    *  dp[index of segment 1]: true
-    *  dp[index of segment 2]: true
-    *  dp[other indices] : false
+*  dp[index of segment 1]: true
+*  dp[index of segment 2]: true
+*  dp[other indices] : false
 
 Finally, we only need to check the value of dp[index of last segment].
 
@@ -465,7 +467,7 @@ Assume there are at most m letter in the given string and n words in dictionary.
 #### Algorithm
  dp \@ref(dp)
 
-### Java Code - Dynamic Programming
+#### Java Code - Dynamic Programming
 ```java
 public boolean wordBreak(String s, List<String> wordDict) {
     int n = s.length();
@@ -641,8 +643,8 @@ character which is less than any other character.
 #### Walkthrough
 For each pair of words, return false if
 
-    *  the lexicographical order of the first different pair of chars
-    *  provide the null char if the word is shorter than the other.
+*  the lexicographical order of the first different pair of chars
+*  provide the null char if the word is shorter than the other.
 
 Otherwise, compare pair of words until end of list
 
@@ -709,9 +711,9 @@ with the count we would be able to tell which is the first non repeated characte
 
 We should not use boolean array here since there are three outcome for each chracter:
 
-    *  appear once
-    *  appear multipe times
-    *  does not appaer
+*  appear once
+*  appear multipe times
+*  does not appaer
 
 
 #### Analysis

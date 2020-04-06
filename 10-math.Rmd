@@ -22,7 +22,7 @@ Time Complexity is O(log(n)) since this is the number of  computation performed.
 #### Algorithm
 recursion \@ref(recursion)
 
-### Java Code - Recursive
+#### Java Code - Recursive
 ```java
 boolean isPowerOfTwo(int n) {
     if(num == 0) {
@@ -44,7 +44,7 @@ boolean isPowerOfTwo(int n) {
 #### Analysis
 Time complexity is constant O(1) and Auxiliary Space is O(1).
 
-### Java Code - Bitwise Op
+#### Java Code - Bitwise Op
 ```java
 boolean isPowerOfTwo(int num) {
     return (num != 0) && ((num & (num - 1)) == 0);
@@ -53,7 +53,7 @@ boolean isPowerOfTwo(int num) {
 
 
 
-\section{Pow(x, n) / Leet Code 50 / Medium}
+## Pow(x, n) / Leet Code 50 / Medium
 
 ### Description
 Implement pow(x, n), which calculates x raised to the power n (x^n).
@@ -62,6 +62,7 @@ Implement pow(x, n), which calculates x raised to the power n (x^n).
 2.00000^10  = 1024.00000
 
 2.00000^{-2} = 0.25000
+
 ### Solution
 #### Walkthrough
 Try to utilize the formula where $x^{n} = x^{\frac{n}{2} + \frac{n}{2} + (n - \frac{n}{2} * 2)}$, regardless n is
@@ -72,7 +73,7 @@ Time Complexity is O(log(n)) since this is the number of  computation performed.
 
 #### Algorithm
 
-### Java Code
+#### Java Code
 ```java
 public double myPow(double x, int n) {
     if(n == 0) {
@@ -107,7 +108,7 @@ Time Complexity is O() since this is the number of  computation performed.
 
 #### Algorithm
 
-### Java Code
+#### Java Code
 ```java
 public int countPrimes(int n) {
     if (n<=2) {
@@ -146,7 +147,7 @@ Time Complexity is O() since this is the number of  computation performed.
 
 #### Algorithm
 
-### Java Code
+#### Java Code
 ```java
 public int getSum(int a, int b) {
     int carry = a & b;
@@ -190,7 +191,8 @@ fib(4) = fib(3) + fib(2) = 3
 fib(5) = fib(4) + fib(3) = 5
 $
 
-### Walkthough - Top-down Recursion
+### Solution - Top-down Recursion
+#### Walkthough
 The recursion tree of this strategy is
 ```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
 \begin{tikzpicture}[
@@ -222,19 +224,19 @@ Thus, the overall time complexity is expensive, O(2^{h})
 #### Algorithm
  recursion \@ref(recursion)
 
-### Java Code - Top-down Recursion
+#### Java Code - Top-down Recursion
 ```java
 int fib(int x) {
     return (x == 0 || x == 1) ? x : fib(x - 1) + fib(x - 2);
 }
 ```
-
-### Walkthough - Tail Recursion
+### Solution - Tail Recursion
+#### Walkthough 
 
 #### Algorithm
  recursion \@ref(recursion)
 
-### Java Code - Tail Recursion
+#### Java Code - Tail Recursion
 ```java
 int fib(int x) {
     if(x <= 2) {
@@ -253,7 +255,7 @@ int fibTailRec(int x, int fMinus1, int fMinus2) {
 }
 ```
 
-\subsection{Solution - Dynamic Programming (Bottom-up Iteration)}
+### Solution - Dynamic Programming (Bottom-up Iteration)
 #### Walkthrough
 Define n0 and n1 and another variable to add n0 + n1. Have a loop to iterate the compute these three values from
 2 to n. return n1.
@@ -264,7 +266,7 @@ Time Complexity is O(n) since this is the number of  computation performed.
 #### Algorithm
  dp \@ref(dp)
 
-\subsection{Java Code - Dynamic Programming (Bottom-up Iteration)}
+#### Java Code - Dynamic Programming (Bottom-up Iteration)
 ```java
 int fib(int n) {
     if(n == 0) {
@@ -286,8 +288,8 @@ int fib(int n) {
     return n1;
 }
 ```
-
-### Walkthough - Dynamic Programming with Memoization
+### Solution - Dynamic Programming with Memoization
+#### Walkthough 
 The strategy is to avoid overlapping subproblems using cache.
 
 #### Analysis
@@ -296,7 +298,7 @@ There will only be n + 1 subproblems computed. The time complexity is $O(n)$
 #### Algorithm
  memo \@ref(memo), recursion \@ref(recursion), dp \@ref(dp)
 
-### Java Code - Dynamic Programming with Memoization
+#### Java Code - Dynamic Programming with Memoization
 ```java
 int fib(int x) {
     return fibMemoization(x, new int[x + 1]);
@@ -351,7 +353,7 @@ O(n^3)
 #### Algorithm
 recursion \@ref(recursion)
 
-### Java Code
+#### Java Code
 ```java
 public int minHops(int num) {
     return rec(num, 0);
