@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>3.11 Best Meeting Point / LeetCode 296 / Hard | Technical Interview</title>
+  <meta name="description" content="3.11 Best Meeting Point / LeetCode 296 / Hard | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="3.11 Best Meeting Point / LeetCode 296 / Hard | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="3.11 Best Meeting Point / LeetCode 296 / Hard | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="3.11 Best Meeting Point / LeetCode 296 / Hard | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="3.11 Best Meeting Point / LeetCode 296 / Hard | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="surrounded-regions-leetcode-130-medium.html"/>
+<link rel="next" href="tree.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,81 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="best-meeting-point-leetcode-296-hard" class="section level2">
+<h2><span class="header-section-number">3.11</span> Best Meeting Point / LeetCode 296 / Hard</h2>
+<div id="description-50" class="section level3">
+<h3><span class="header-section-number">3.11.1</span> Description</h3>
+<p>A group of two or more people wants to meet and minimize the total travel distance. You are given a 2D grid of values 0 or 1, where each 1 marks the home of someone in the group. The distance is calculated using Manhattan Distance, where distance(p1, p2) = <span class="math inline">\(|p2.x - p1.x| + |p2.y - p1.y|\)</span></p>
+</div>
+<div id="example-48" class="section level3">
+<h3><span class="header-section-number">3.11.2</span> Example</h3>
+<p>For example, given three people living at (0,0), (0,4), and (2,2):</p>
+<pre><code>1 - 0 - [0] - 0 - 1
+|   |     |     |   |
+0 - 0 -   0 -  0 - 0
+|   |     |     |   |
+0 - 0 -   1 -  0 - 0</code></pre>
+<p>The point (0,2) is an ideal meeting point, as the total travel distance of 2+2+2=6 is minimal. So return 6.</p>
+</div>
+<div id="solution-39" class="section level3">
+<h3><span class="header-section-number">3.11.3</span> Solution</h3>
+<div id="walkthrough-55" class="section level4">
+<h4><span class="header-section-number">3.11.3.1</span> Walkthrough</h4>
+<p>The median points for row and col should be the optimal meeting point. We could compute the distance by substracting the coordinate of people by the median X and Y.</p>
+</div>
+<div id="analysis-56" class="section level4">
+<h4><span class="header-section-number">3.11.3.2</span> Analysis</h4>
+<p>Each cell in matrix will be visited at least once. Thus, O(rows * cols).</p>
+</div>
+<div id="algorithm-55" class="section level4">
+<h4><span class="header-section-number">3.11.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-40" class="section level4">
+<h4><span class="header-section-number">3.11.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minTotalDistance</span>(<span class="dt">int</span>[][] grid) {
+    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;
+    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;
+
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; cols = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; rows = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; rows; i++){
+        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; cols &lt; n; j++){
+            <span class="kw">if</span>(grid[i][j] == <span class="dv">1</span>){
+                cols.<span class="fu">add</span>(j);
+                rows.<span class="fu">add</span>(i);
+            }
+        }
+    }
+
+    <span class="dt">int</span> dist = <span class="dv">0</span>;
+
+    <span class="dt">int</span> medianRow = rows.<span class="fu">get</span>(rows.<span class="fu">size</span>() / <span class="dv">2</span>);
+    <span class="kw">for</span>(<span class="bu">Integer</span> r: rows){
+        dist += <span class="bu">Math</span>.<span class="fu">abs</span>(r - medianRow);
+    }
+
+    <span class="co">//sort col position so that we could get median col properly</span>
+    <span class="bu">Collections</span>.<span class="fu">sort</span>(cols);
+    <span class="dt">int</span> medianCol = cols.<span class="fu">get</span>(cols.<span class="fu">size</span>() / <span class="dv">2</span>);
+
+    <span class="kw">for</span>(<span class="bu">Integer</span> c: cols){
+        dist += <span class="bu">Math</span>.<span class="fu">abs</span>(c - medianCol);
+    }
+
+    <span class="kw">return</span> dist;
+}</code></pre></div>
 
 </div>
+</div>
+</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="surrounded-regions-leetcode-130-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tree.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +973,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/03-matrix.Rmd",
 "text": "Edit"
 },
 "history": {

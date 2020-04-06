@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>8.1 Sort a List / Leet Code 148 / Medium | Technical Interview</title>
+  <meta name="description" content="8.1 Sort a List / Leet Code 148 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="8.1 Sort a List / Leet Code 148 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="8.1 Sort a List / Leet Code 148 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="8.1 Sort a List / Leet Code 148 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="8.1 Sort a List / Leet Code 148 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="searching-and-sorting.html"/>
+<link rel="next" href="insertion-sort-list-leet-code-147-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,116 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="sort-a-list-leet-code-148-medium" class="section level2">
+<h2><span class="header-section-number">8.1</span> Sort a List / Leet Code 148 / Medium</h2>
+<div id="description-107" class="section level3">
+<h3><span class="header-section-number">8.1.1</span> Description</h3>
+<p>Sort a linked list in O(n log n) time using constant Auxiliary Space.</p>
+</div>
+<div id="example-103" class="section level3">
+<h3><span class="header-section-number">8.1.2</span> Example</h3>
+<p>Input:</p>
+<div class="figure"><span id="fig:unnamed-chunk-88"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-88-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 8.1: Some caption.
+</p>
+</div>
+<p>Output:</p>
+<div class="figure"><span id="fig:unnamed-chunk-89"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-89-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 8.2: Some caption.
+</p>
+</div>
+</div>
+<div id="solution-78" class="section level3">
+<h3><span class="header-section-number">8.1.3</span> Solution</h3>
+<div id="walkthrough-131" class="section level4">
+<h4><span class="header-section-number">8.1.3.1</span> Walkthrough</h4>
+<p>With the idea of Merge sort:</p>
+<ul>
+<li>Divide the list in half by finding the middle element of the list. Need to remove the link of middle node which was previously links to mid - likely the last node in the 1st half list.</li>
+<li>Invoke sortList() recurisvely on two sub-lists</li>
+<li>Merge and sort against two sub-lists and return head of the list.</li>
+</ul>
+</div>
+<div id="analysis-133" class="section level4">
+<h4><span class="header-section-number">8.1.3.2</span> Analysis</h4>
+<p>In such recursive call to sortList() - O(log(n)) and merge() - O(n), each call creates constant number of temporary nodes. For all rounds, it will require <span class="math inline">\(O(1)\)</span> of Auxiliary Space. (Unlike time complexity, storage space in recusive scenario can be reused; and thus, will remain <span class="math inline">\(O(1)\)</span> for all rounds)</p>
+</div>
+<div id="algorithm-138" class="section level4">
+<h4><span class="header-section-number">8.1.3.3</span> Algorithm</h4>
+<p>dnc <a href="glossary-of-algorithm.html#dnc">1.2.10</a>, recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a>, ms <a href="glossary-of-algorithm.html#ms">1.2.12</a></p>
+</div>
+<div id="java-code-80" class="section level4">
+<h4><span class="header-section-number">8.1.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">sortList</span>(ListNode head) {
+    <span class="kw">if</span> (head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span>) {
+        <span class="kw">return</span> head;
+    }
 
+    ListNode midPrev = <span class="kw">null</span>, mid = head, tail = head;
+
+    <span class="kw">while</span> (tail != <span class="kw">null</span> &amp;&amp; tail.<span class="fu">next</span> != <span class="kw">null</span>) {
+        midPrev = mid;
+
+        <span class="co">//mid moves one node at a time</span>
+        mid = mid.<span class="fu">next</span>;
+
+        <span class="co">//tail moves two node at a time</span>
+        tail = tail.<span class="fu">next</span>.<span class="fu">next</span>;
+    }
+
+    <span class="co">//Remove the link of middle node which previously links to mid - likely the last node in the 1st</span>
+    <span class="co">//half list</span>
+    midPrev.<span class="fu">next</span> = <span class="kw">null</span>;
+
+    <span class="co">// call sortList() recursively</span>
+    ListNode l1 = <span class="fu">sortList</span>(head);
+    ListNode l2 = <span class="fu">sortList</span>(mid);
+
+    <span class="kw">return</span> <span class="fu">merge</span>(l1, l2);
+}
+
+<span class="co">// merge l1 and l2 in sorted order and return the head of sorted list.</span>
+<span class="kw">private</span> ListNode <span class="fu">merge</span>(ListNode l1, ListNode l2) {
+    <span class="co">//Two helper nodes, headPrev.next points to the head of merged list</span>
+    ListNode current = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), headPrev = current;
+
+    <span class="kw">while</span> (l1 != <span class="kw">null</span> &amp;&amp; l2 != <span class="kw">null</span>) {
+        <span class="kw">if</span> (l1.<span class="fu">val</span> &lt; l2.<span class="fu">val</span>) {
+            current.<span class="fu">next</span> = l1;
+            l1 = l1.<span class="fu">next</span>;
+        } <span class="kw">else</span> {
+            current.<span class="fu">next</span> = l2;
+            l2 = l2.<span class="fu">next</span>;
+        }
+        current = current.<span class="fu">next</span>;
+    }
+
+    <span class="co">// l2 is empty with l1 remaining</span>
+    <span class="kw">if</span> (l1 != <span class="kw">null</span>) {
+        current.<span class="fu">next</span> = l1;
+    }
+
+    <span class="co">// l1 is empty with l2 remaining</span>
+    <span class="kw">if</span> (l2 != <span class="kw">null</span>) {
+        current.<span class="fu">next</span> = l2;
+    }
+
+    <span class="kw">return</span> headPrev.<span class="fu">next</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="searching-and-sorting.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="insertion-sort-list-leet-code-147-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1008,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/08-search-and-sort.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.8 Distance of a node from the root / Firebase / Level 3 | Technical Interview</title>
+  <meta name="description" content="4.8 Distance of a node from the root / Firebase / Level 3 | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.8 Distance of a node from the root / Firebase / Level 3 | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.8 Distance of a node from the root / Firebase / Level 3 | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.8 Distance of a node from the root / Firebase / Level 3 | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.8 Distance of a node from the root / Firebase / Level 3 | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="count-complete-tree-nodes-leet-code-222-medium.html"/>
+<link rel="next" href="path-sum-leet-code-112-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,83 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="distance-of-a-node-from-the-root-firebase-level-3" class="section level2">
+<h2><span class="header-section-number">4.8</span> Distance of a node from the root / Firebase / Level 3</h2>
+<div id="description-58" class="section level3">
+<h3><span class="header-section-number">4.8.1</span> Description</h3>
+<p>Given the root of a Binary Tree and an integer that represents the data value of a TreeNode present in the tree, write a method - pathLengthFromRoot that returns the distance between the root and that node. You can assume that the given key exists in the tree. The distance is defined as the minimum number of nodes that must be traversed to reach the target node.</p>
+</div>
+<div id="example-56" class="section level3">
+<h3><span class="header-section-number">4.8.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-18"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-18-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.12: Some caption.
+</p>
+</div>
+<p>pathLengthFromRoot(root,5) = 3</p>
+<p>pathLengthFromRoot(root,1) = 1</p>
+<p>pathLengthFromRoot(root,3) = 2</p>
+</div>
+<div id="solution-45" class="section level3">
+<h3><span class="header-section-number">4.8.3</span> Solution</h3>
+<div id="walkthrough-68" class="section level4">
+<h4><span class="header-section-number">4.8.3.1</span> Walkthrough</h4>
+<p>Have a global variable of ArrayList to remember the path. Create a helper function to recursively traverse the tree. If the target does not lie either in the left or right subtree of the current node.Thus, remove current node’s value from trace list.</p>
+</div>
+<div id="analysis-69" class="section level4">
+<h4><span class="header-section-number">4.8.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-71" class="section level4">
+<h4><span class="header-section-number">4.8.3.3</span> Algorithm</h4>
+<p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-44" class="section level4">
+<h4><span class="header-section-number">4.8.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">List</span>&lt;<span class="bu">TreeNode</span>&gt; trace = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
 
+<span class="dt">int</span> <span class="fu">pathLengthFromRoot</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> target) {
+    path.<span class="fu">clear</span>();
+
+    <span class="dt">boolean</span> result = <span class="fu">backtrack</span>(root, target);
+
+    <span class="kw">if</span>(result) {
+        <span class="kw">return</span> trace.<span class="fu">size</span>();
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
+}
+
+<span class="dt">boolean</span> <span class="fu">backtrack</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> target) {
+    trace.<span class="fu">add</span>(root);
+
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+    <span class="kw">if</span>(root.<span class="fu">data</span> == target) {
+        <span class="co">//found the node</span>
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    <span class="kw">if</span>(<span class="fu">backtrack</span>(root.<span class="fu">left</span>, target) || <span class="fu">backtrack</span>(root.<span class="fu">right</span>, target) ) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    <span class="co">//not in current path, backtrack</span>
+    trace.<span class="fu">remove</span>(path.<span class="fu">size</span>() - <span class="dv">1</span>);
+    <span class="kw">return</span> <span class="kw">false</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="count-complete-tree-nodes-leet-code-222-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="path-sum-leet-code-112-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +975,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

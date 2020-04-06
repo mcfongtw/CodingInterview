@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.25 Fill in the Ancestors of the Node in a Binary Tree / Firebase / Level 3 | Technical Interview</title>
+  <meta name="description" content="4.25 Fill in the Ancestors of the Node in a Binary Tree / Firebase / Level 3 | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.25 Fill in the Ancestors of the Node in a Binary Tree / Firebase / Level 3 | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.25 Fill in the Ancestors of the Node in a Binary Tree / Firebase / Level 3 | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.25 Fill in the Ancestors of the Node in a Binary Tree / Firebase / Level 3 | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.25 Fill in the Ancestors of the Node in a Binary Tree / Firebase / Level 3 | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="binary-tree-serialization-firecode-level-3.html"/>
+<link rel="next" href="find-the-kth-largest-node-in-a-bst-firecode-level-3.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,74 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3" class="section level2">
+<h2><span class="header-section-number">4.25</span> Fill in the Ancestors of the Node in a Binary Tree / Firebase / Level 3</h2>
+<div id="description-75" class="section level3">
+<h3><span class="header-section-number">4.25.1</span> Description</h3>
+<p>Given a binary tree’s root node, an empty ArrayList and an integer nodeData, write a method that finds a target node - N with data = nodeData and populates the ArrayList with the data of the ancestor nodes of N - added from the bottom - up</p>
+<div id="algorithm-94" class="section level4">
+<h4><span class="header-section-number">4.25.1.1</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a>, backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a></p>
+</div>
+</div>
+<div id="example-72" class="section level3">
+<h3><span class="header-section-number">4.25.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-39"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-39-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.33: Some caption.
+</p>
+</div>
+<p>Node: 5 = [2, 1]</p>
+</div>
+<div id="solution-57" class="section level3">
+<h3><span class="header-section-number">4.25.3</span> Solution</h3>
+<div id="walkthrough-92" class="section level4">
+<h4><span class="header-section-number">4.25.3.1</span> Walkthrough</h4>
+<p>We use an arrayList to keep the current path of TreeNode visited, also TreeNode to be removed for backtracking purposes. We use recurisve call and terminate on leave nodes as well as target node is found. The recursive function returns a boolean value when the target node / value is found on the subtree path.</p>
+</div>
+<div id="analysis-93" class="section level4">
+<h4><span class="header-section-number">4.25.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-95" class="section level4">
+<h4><span class="header-section-number">4.25.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a>, backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a></p>
+</div>
+<div id="java-code-56" class="section level4">
+<h4><span class="header-section-number">4.25.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt; ancestorsList = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();
 
+<span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">printAncestors</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> nodeData) {
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+
+    <span class="kw">if</span>(root.<span class="fu">data</span> == nodeData) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    } <span class="kw">else</span> {
+        ancestorsList.<span class="fu">add</span>(<span class="dv">0</span>, root.<span class="fu">data</span>);
+
+        <span class="dt">boolean</span> isRightSubtree = <span class="fu">printAncestors</span>(root.<span class="fu">left</span>, nodeData) || <span class="fu">printAncestors</span>(root.<span class="fu">right</span>, nodeData);
+
+        <span class="kw">if</span>(!isRightSubtree) {
+            <span class="co">//remove the backtrack nodes</span>
+            ancestorsList.<span class="fu">remove</span>(<span class="dv">0</span>);
+        }
+
+        <span class="kw">return</span> isRightSubtree;
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="binary-tree-serialization-firecode-level-3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="find-the-kth-largest-node-in-a-bst-firecode-level-3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +966,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

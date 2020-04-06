@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.6 Binary Tree Zigzag Level Order Traversal / Leet Code 103 / Medium | Technical Interview</title>
+  <meta name="description" content="4.6 Binary Tree Zigzag Level Order Traversal / Leet Code 103 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.6 Binary Tree Zigzag Level Order Traversal / Leet Code 103 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.6 Binary Tree Zigzag Level Order Traversal / Leet Code 103 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.6 Binary Tree Zigzag Level Order Traversal / Leet Code 103 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.6 Binary Tree Zigzag Level Order Traversal / Leet Code 103 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="binary-tree-level-order-traversal-ii-leet-code-107-medium.html"/>
+<link rel="next" href="count-complete-tree-nodes-leet-code-222-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,159 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="binary-tree-zigzag-level-order-traversal-leet-code-103-medium" class="section level2">
+<h2><span class="header-section-number">4.6</span> Binary Tree Zigzag Level Order Traversal / Leet Code 103 / Medium</h2>
+<div id="description-56" class="section level3">
+<h3><span class="header-section-number">4.6.1</span> Description</h3>
+<p>Given a binary tree, return the zigzag level order traversal of its nodes’ values. (ie, from left to right, then right to left for the next level and alternate between).</p>
+</div>
+<div id="example-54" class="section level3">
+<h3><span class="header-section-number">4.6.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-16"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-16-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.10: Some caption.
+</p>
+</div>
+<p>return its level order traversal as:</p>
+<pre><code>[
+    [3],
+    [20,9],
+    [15,7]
+]</code></pre>
+</div>
+<div id="solution-43" class="section level3">
+<h3><span class="header-section-number">4.6.3</span> Solution</h3>
+<div id="walkthrough-65" class="section level4">
+<h4><span class="header-section-number">4.6.3.1</span> Walkthrough</h4>
+<p>Create a queue and push node of the same level in a two dimensional array list while traversing the tree with BFS algorithm. While pushing the value to the level, remember the current level and evaluate the zig-zag pattern. That is, insert nodes for certain level at the first position at current level list.</p>
+</div>
+<div id="analysis-66" class="section level4">
+<h4><span class="header-section-number">4.6.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-68" class="section level4">
+<h4><span class="header-section-number">4.6.3.3</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code---two-loops-1" class="section level4">
+<h4><span class="header-section-number">4.6.3.4</span> Java Code - Two Loops</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">zigzagLevelOrder</span>(<span class="bu">TreeNode</span> root) {
+    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; levels = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
 
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span> levels;
+    }
+
+    queue.<span class="fu">offer</span>(root);
+    <span class="dt">int</span> levelNum = <span class="dv">1</span>;
+
+    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {
+        <span class="co">//number of element for this level</span>
+        <span class="dt">int</span> currentLevelSize = queue.<span class="fu">size</span>();
+        <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; level = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; currentLevelSize; i++) {
+            <span class="bu">TreeNode</span> node = queue.<span class="fu">poll</span>();
+
+            <span class="kw">if</span>(levelNum % <span class="dv">2</span> != <span class="dv">0</span>) {
+                level.<span class="fu">add</span>(node.<span class="fu">val</span>);
+            } <span class="kw">else</span> {
+                level.<span class="fu">add</span>(<span class="dv">0</span>, node.<span class="fu">val</span>);
+            }
+
+            <span class="co">// push all elements for next level</span>
+            <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {
+                queue.<span class="fu">offer</span>(node.<span class="fu">left</span>);
+            }
+
+            <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {
+                queue.<span class="fu">offer</span>(node.<span class="fu">right</span>);
+            }
+        }
+        levelNum++;
+
+        levels.<span class="fu">add</span>(level);
+    }
+
+    <span class="kw">return</span> levels;
+}</code></pre></div>
+</div>
+<div id="walkthrough-66" class="section level4">
+<h4><span class="header-section-number">4.6.3.5</span> Walkthrough</h4>
+<p>Create a queue and push node of the same level in a two dimensional array list while traversing the tree with BFS algorithm. While pushing the value to the level, remember the current level and evaluate the zig-zag pattern.</p>
+</div>
+<div id="analysis-67" class="section level4">
+<h4><span class="header-section-number">4.6.3.6</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-69" class="section level4">
+<h4><span class="header-section-number">4.6.3.7</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code---one-loop-1" class="section level4">
+<h4><span class="header-section-number">4.6.3.8</span> Java Code - One Loop</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">zigzagLevelOrder</span>(<span class="bu">TreeNode</span> root) {
+    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; levels = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        <span class="kw">return</span> levels;
+    }
+
+    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; currentLevelQueue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">TreeNode</span>&gt;();
+    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; nextLevelQueue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">TreeNode</span>&gt;();
+    currentLevelQueue.<span class="fu">offer</span>(root);
+    <span class="co">//init level = null</span>
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; level = <span class="kw">null</span>;
+    <span class="dt">int</span> levelNum = <span class="dv">1</span>;
+
+    <span class="kw">while</span> (currentLevelQueue.<span class="fu">isEmpty</span>() == <span class="kw">false</span>) {
+        <span class="bu">TreeNode</span> node = currentLevelQueue.<span class="fu">poll</span>();
+
+        <span class="co">//starting a new level</span>
+        <span class="kw">if</span> (level == <span class="kw">null</span>) {
+            level = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();
+            levels.<span class="fu">add</span>(level);
+        }
+
+        <span class="kw">if</span>(levelNum % <span class="dv">2</span> != <span class="dv">0</span>) {
+            level.<span class="fu">add</span>(node.<span class="fu">val</span>);
+        } <span class="kw">else</span> {
+            level.<span class="fu">add</span>(<span class="dv">0</span>, node.<span class="fu">val</span>);
+        }
+
+        <span class="co">//push children to next level queue</span>
+        <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {
+            nextLevelQueue.<span class="fu">offer</span>(node.<span class="fu">left</span>);
+        }
+
+        <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {
+            nextLevelQueue.<span class="fu">offer</span>(node.<span class="fu">right</span>);
+        }
+
+        <span class="co">//swap queue and next, where next collects all nodes for next level</span>
+        <span class="kw">if</span> (currentLevelQueue.<span class="fu">isEmpty</span>()) {
+            <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; temp = currentLevelQueue;
+            currentLevelQueue = nextLevelQueue;
+            nextLevelQueue = temp;
+            <span class="co">//init level = null</span>
+            level = <span class="kw">null</span>;
+            levelNum++;
+        }
+    }
+
+    <span class="kw">return</span> levels;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="binary-tree-level-order-traversal-ii-leet-code-107-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="count-complete-tree-nodes-leet-code-222-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1051,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

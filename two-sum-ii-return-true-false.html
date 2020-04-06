@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.2 Two Sum II - Return True / False | Technical Interview</title>
+  <meta name="description" content="2.2 Two Sum II - Return True / False | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.2 Two Sum II - Return True / False | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.2 Two Sum II - Return True / False | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.2 Two Sum II - Return True / False | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.2 Two Sum II - Return True / False | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="two-sums-i-leetcode-1-easy.html"/>
+<link rel="next" href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,57 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="two-sum-ii---return-true-false" class="section level2">
+<h2><span class="header-section-number">2.2</span> Two Sum II - Return True / False</h2>
+<div id="description-2" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Description</h3>
+<p>You are given an array of n integers and a number k. Determine whether there is a pair of elements in the array that sums to exactly k.</p>
+</div>
+<div id="example-1" class="section level3">
+<h3><span class="header-section-number">2.2.2</span> Example</h3>
+<p>For example, given the array [1, 3, 7] and k = 8, the answer is “yes,” but given k = 6 the answer is “no.”</p>
+</div>
+<div id="solution-1" class="section level3">
+<h3><span class="header-section-number">2.2.3</span> Solution</h3>
+<div id="walkthrough-3" class="section level4">
+<h4><span class="header-section-number">2.2.3.1</span> Walkthrough</h4>
+<p>Have a HashSet to iterate through the array while compute the difference (target - a[i]). Check if the diff exist. Return true if exists; false otherwise. HashSet essentially uses less space than HashTable.</p>
+</div>
+<div id="analysis-3" class="section level4">
+<h4><span class="header-section-number">2.2.3.2</span> Analysis</h4>
+<p>Each insertion and get operation from hashmap takes O(1) and there are n elements. The total time complexity costs O(n) and Auxiliary Space takes O(n)</p>
+</div>
+<div id="algorithm-3" class="section level4">
+<h4><span class="header-section-number">2.2.3.3</span> Algorithm</h4>
+<div id="java-code-1" class="section level5">
+<h5><span class="header-section-number">2.2.3.3.1</span> Java Code</h5>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">sumsToTarget</span>(<span class="dt">int</span>[] arr, <span class="dt">int</span> target) {
+    <span class="bu">Set</span>&lt;<span class="bu">Integer</span>&gt; values = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;<span class="bu">Integer</span>&gt;();
 
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; arr.<span class="fu">length</span>; i++) {
+        <span class="dt">int</span> diff = target - arr[i];
+
+        <span class="co">//if hash set contains the difference</span>
+        <span class="kw">if</span> (values.<span class="fu">contains</span>(diff)) {
+            <span class="kw">return</span> <span class="kw">true</span>;
+        } <span class="kw">else</span> {
+            values.<span class="fu">add</span>(arr[i]);
+        }
+    }
+
+    <span class="kw">return</span> <span class="kw">false</span>;
+}</code></pre></div>
+</div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="two-sums-i-leetcode-1-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +949,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

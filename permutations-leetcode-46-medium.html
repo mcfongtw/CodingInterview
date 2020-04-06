@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.14 Permutations / LeetCode 46 / Medium | Technical Interview</title>
+  <meta name="description" content="2.14 Permutations / LeetCode 46 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.14 Permutations / LeetCode 46 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.14 Permutations / LeetCode 46 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.14 Permutations / LeetCode 46 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.14 Permutations / LeetCode 46 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html"/>
+<link rel="next" href="permutations-ii-leetcode-47-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,87 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="permutations-leetcode-46-medium" class="section level2">
+<h2><span class="header-section-number">2.14</span> Permutations / LeetCode 46 / Medium</h2>
+<div id="description-14" class="section level3">
+<h3><span class="header-section-number">2.14.1</span> Description</h3>
+<p>Given a collection of distinct integers, return all possible permutations.</p>
+</div>
+<div id="example-13" class="section level3">
+<h3><span class="header-section-number">2.14.2</span> Example</h3>
+<p>Input: [1,2,3]</p>
+<pre><code>Output:
+[
+    [1,2,3],
+    [1,3,2],
+    [2,1,3],
+    [2,3,1],
+    [3,1,2],
+    [3,2,1]
+]</code></pre>
+</div>
+<div id="solution---backtrack-with-memoization" class="section level3">
+<h3><span class="header-section-number">2.14.3</span> Solution - Backtrack with Memoization</h3>
+<div id="walkthrough-15" class="section level4">
+<h4><span class="header-section-number">2.14.3.1</span> Walkthrough</h4>
+<p>One way to enumerate all permuations is to recursively add elements into list (avoid adding duplicates) and removing the last element form the last. In order to save time to process the same element, we further save flag for each element to denote that if the element has been visited or not.</p>
+</div>
+<div id="analysis-15" class="section level4">
+<h4><span class="header-section-number">2.14.3.2</span> Analysis</h4>
+<p>Time complexity with memoization to skip some subproblems is <span class="math inline">\((n + n\cdot (n - 1) + n\cdot (n - 1)\cdot (n - 2) + ... + n\cdot (n - 1)\cdot (n - 2)\cdot ...\cdot 1) \cdot n \Rightarrow O(n!)\)</span></p>
+</div>
+<div id="algorithm-15" class="section level4">
+<h4><span class="header-section-number">2.14.3.3</span> Algorithm</h4>
+<p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, memoization <a href="glossary-of-algorithm.html#memo">1.2.8</a></p>
+</div>
+<div id="java-code---backtrack-with-memoization" class="section level4">
+<h4><span class="header-section-number">2.14.3.4</span> Java Code - Backtrack with Memoization</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result= <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
 
+<span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">permute</span>(<span class="dt">int</span>[] nums) {
+    <span class="dt">boolean</span>[] visited = <span class="kw">new</span> <span class="dt">boolean</span>[nums.<span class="fu">length</span>];
+
+    <span class="bu">Arrays</span>.<span class="fu">sort</span>(nums);
+    <span class="fu">backtrack</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(), nums, visited);
+
+    <span class="kw">return</span> result;
+}
+
+<span class="kw">private</span> <span class="dt">void</span> <span class="fu">backtrack</span>(<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list, <span class="dt">int</span> [] nums, <span class="dt">boolean</span>[] visited){
+    <span class="kw">if</span>(list.<span class="fu">size</span>() == nums.<span class="fu">length</span>){
+        <span class="co">//copy elements from the current list</span>
+        result.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(list));
+        <span class="kw">return</span>;
+    }
+
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++){
+        <span class="bu">Integer</span> element = nums[i];
+
+        <span class="kw">if</span>(visited[i]) {
+            <span class="kw">continue</span>;
+        }
+
+        <span class="co">//add a new element</span>
+        list.<span class="fu">add</span>(element);
+        visited[i] = <span class="kw">true</span>;
+
+        <span class="fu">backtrack</span>(list, nums, visited);
+
+        <span class="co">//backtrack the last element</span>
+        list.<span class="fu">remove</span>(list.<span class="fu">size</span>()-<span class="dv">1</span>);
+        visited[i] = <span class="kw">false</span>;
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="permutations-ii-leetcode-47-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +979,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

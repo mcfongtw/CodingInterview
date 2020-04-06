@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.29 Longest Increasing Subsequence / Leet Code 300 / Medium | Technical Interview</title>
+  <meta name="description" content="2.29 Longest Increasing Subsequence / Leet Code 300 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.29 Longest Increasing Subsequence / Leet Code 300 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.29 Longest Increasing Subsequence / Leet Code 300 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.29 Longest Increasing Subsequence / Leet Code 300 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.29 Longest Increasing Subsequence / Leet Code 300 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="longest-valid-parentheses-leet-code-32-hard.html"/>
+<link rel="next" href="paint-house-leet-code-256-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,100 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="longest-increasing-subsequence-leet-code-300-medium" class="section level2">
+<h2><span class="header-section-number">2.29</span> Longest Increasing Subsequence / Leet Code 300 / Medium</h2>
+<div id="description-29" class="section level3">
+<h3><span class="header-section-number">2.29.1</span> Description</h3>
+<p>Given an unsorted array of integers, find the length of longest increasing subsequence.</p>
+</div>
+<div id="example-28" class="section level3">
+<h3><span class="header-section-number">2.29.2</span> Example</h3>
+<p>For example, Given [10, 9, 2, 5, 3, 7, 101, 18],</p>
+<p>The longest increasing subsequence is [2, 3, 7, 101], therefore the length is 4. Note that there may be more than one LIS combination, it is only necessary for you to return the length.</p>
+<p>Your algorithm should run in O(n2) complexity.</p>
+</div>
+<div id="solution--brute-force" class="section level3">
+<h3><span class="header-section-number">2.29.3</span> Solution- Brute Force</h3>
+<div id="walkthrough-30" class="section level4">
+<h4><span class="header-section-number">2.29.3.1</span> Walkthrough</h4>
+<p>Create an array of length of nums to store length of subsequences. Create a nested loop where two indices, stopIdx from 0 to length -1 and from startIdx from 0 to stopIdx - 1. First check if it is a increasing subsequence if (nums[stopIdx] &lt; nums[startIdx]). Increment the current length of subsequence for at startIdx - dp[startIdx] + 1. However, it is possible that dp[stopIdx] is larger than dp[startIdx] + 1 for previously traversed subsequence. Thus, we need to take the maximum out of both cases. Finally, we evaluate the final length out of dp[] array.</p>
+</div>
+<div id="analysis-30" class="section level4">
+<h4><span class="header-section-number">2.29.3.2</span> Analysis</h4>
+<p>There are two loops, thus, the time complexity is <span class="math inline">\(O(n^2)\)</span></p>
+</div>
+<div id="algorithm-30" class="section level4">
+<h4><span class="header-section-number">2.29.3.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+</div>
+<div id="java-code---brute-force" class="section level4">
+<h4><span class="header-section-number">2.29.3.4</span> Java Code - Brute Force</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">lengthOfLIS</span>(<span class="dt">int</span>[] nums) {
+    <span class="dt">int</span> dp[] = <span class="kw">new</span> <span class="dt">int</span>[nums.<span class="fu">length</span>];
 
+    <span class="kw">if</span>(nums.<span class="fu">length</span> == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
+
+    <span class="co">//init</span>
+    <span class="bu">Arrays</span>.<span class="fu">fill</span>(dp, <span class="dv">1</span>);
+
+    <span class="kw">for</span>(<span class="dt">int</span> stopIdx = <span class="dv">0</span>; stopIdx &lt; nums.<span class="fu">length</span>; stopIdx++) {
+        <span class="kw">for</span>(<span class="dt">int</span> startIdx = <span class="dv">0</span>; startIdx &lt; stopIdx; startIdx++) {
+            <span class="co">//Valid Increasing Subsequence</span>
+            <span class="kw">if</span>(nums[startIdx] &lt; nums[stopIdx]) {
+                dp[stopIdx] = <span class="bu">Math</span>.<span class="fu">max</span>(dp[startIdx] + <span class="dv">1</span>, dp[stopIdx]);
+            }
+        }
+    }
+
+    <span class="dt">int</span> maxLength = <span class="dv">0</span>;
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; dp.<span class="fu">length</span>; i++) {
+        maxLength = <span class="bu">Math</span>.<span class="fu">max</span>(maxLength, dp[i]);
+    }
+
+    <span class="kw">return</span> maxLength;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---binary-search" class="section level3">
+<h3><span class="header-section-number">2.29.4</span> Solution - Binary Search</h3>
+<div id="walkthrough-31" class="section level4">
+<h4><span class="header-section-number">2.29.4.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-31" class="section level4">
+<h4><span class="header-section-number">2.29.4.2</span> Analysis</h4>
+<p>For each element, we search for the index using binary search which cost <span class="math inline">\(O(log(n))\)</span>. The overall time complexity is <span class="math inline">\(O(n \cdot log(n))\)</span></p>
+</div>
+<div id="algorithm-31" class="section level4">
+<h4><span class="header-section-number">2.29.4.3</span> Algorithm</h4>
+</div>
+<div id="java-code---binary-search" class="section level4">
+<h4><span class="header-section-number">2.29.4.4</span> Java Code - Binary Search</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">lengthOfLIS</span>(<span class="dt">int</span>[] nums) {
+    <span class="dt">int</span> len = <span class="dv">1</span>;
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++) {
+        <span class="dt">int</span> k = <span class="bu">Arrays</span>.<span class="fu">binarySearch</span>(nums, <span class="dv">0</span>, len, nums[i]);
+        <span class="kw">if</span> (k &lt; <span class="dv">0</span>) {
+            k = -(k + <span class="dv">1</span>);
+            <span class="kw">if</span> (k == len) {
+                len++;
+            }
+            nums[k] = nums[i];
+        }
+    }
+    <span class="kw">return</span> len;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="longest-valid-parentheses-leet-code-32-hard.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="paint-house-leet-code-256-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +992,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

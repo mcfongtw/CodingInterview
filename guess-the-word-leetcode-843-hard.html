@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>11.1 Guess the Word / LeetCode 843 / Hard | Technical Interview</title>
+  <meta name="description" content="11.1 Guess the Word / LeetCode 843 / Hard | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="11.1 Guess the Word / LeetCode 843 / Hard | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="11.1 Guess the Word / LeetCode 843 / Hard | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="11.1 Guess the Word / LeetCode 843 / Hard | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="11.1 Guess the Word / LeetCode 843 / Hard | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="interactive-problems.html"/>
+<link rel="next" href="advanced-data-structure.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,124 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="guess-the-word-leetcode-843-hard" class="section level2">
+<h2><span class="header-section-number">11.1</span> Guess the Word / LeetCode 843 / Hard</h2>
+<div id="description-127" class="section level3">
+<h3><span class="header-section-number">11.1.1</span> Description</h3>
+<p>We are given a word list of unique words, each word is 6 letters long, and one word in this list is chosen as secret.</p>
+<p>You may call master.guess(word) to guess a word. The guessed word should have type string and must be from the original list with 6 lowercase letters.</p>
+<p>This function returns an integer type, representing the number of exact matches (value and position) of your guess to the secret word. Also, if your guess is not in the given wordlist, it will return -1 instead.</p>
+<p>For each test case, you have 10 guesses to guess the word. At the end of any number of calls, if you have made 10 or less calls to master.guess and at least one of these guesses was the secret, you pass the testcase.</p>
+<p>Besides the example test case below, there will be 5 additional test cases, each with 100 words in the word list. The letters of each word in those testcases were chosen independently at random from ‘a’ to ‘z’, such that every word in the given word lists is unique.</p>
+</div>
+<div id="example-122" class="section level3">
+<h3><span class="header-section-number">11.1.2</span> Example</h3>
+<p>Input: secret = “acckzz”, wordlist = [“acckzz”,“ccbazz”,“eiowzz”,“abcczz”]</p>
+<p>master.guess(“aaaaaa”) returns -1, because “aaaaaa” is not in wordlist. master.guess(“acckzz”) returns 6, because “acckzz” is secret and has all 6 matches. master.guess(“ccbazz”) returns 3, because “ccbazz” has 3 matches. master.guess(“eiowzz”) returns 2, because “eiowzz” has 2 matches. master.guess(“abcczz”) returns 4, because “abcczz” has 4 matches.</p>
+<p>We made 5 calls to master.guess and one of them was the secret, so we pass the test case.</p>
+</div>
+<div id="solution-91" class="section level3">
+<h3><span class="header-section-number">11.1.3</span> Solution</h3>
+<div id="walkthrough-156" class="section level4">
+<h4><span class="header-section-number">11.1.3.1</span> Walkthrough</h4>
+<p>At start of the game, we simply have the choice of using each word in the wordlist to call master API, but as we are getting more and more feedbacks from the API, we should eliminate some choice by only keeping the words that have the same number of character matches as the match number returned from the master API. Then we use those words as the possible choices in the next round.</p>
+<p>Simply adapting the above strategy should give us a pretty good performance in terms of minimizing the number of calls to the master API. However, we could use minimax strategy to further improve the accuracy of our guesses at each round by avoiding choices that has little or no effect of reducing the number of choices we have to make in the next round.</p>
+<p>The idea is simply to make a choice that minimizes the maximum possible number of choices (worst outcome) we have to make at each time that we call master.guess(word).</p>
+</div>
+<div id="analysis-160" class="section level4">
+<h4><span class="header-section-number">11.1.3.2</span> Analysis</h4>
+<p>Time Complexity is O() since this is the number of computation performed.</p>
+</div>
+<div id="algorithm-165" class="section level4">
+<h4><span class="header-section-number">11.1.3.3</span> Algorithm</h4>
+<p>minimax <a href="glossary-of-algorithm.html#minimax">1.2.4</a></p>
+</div>
+<div id="java-code-89" class="section level4">
+<h4><span class="header-section-number">11.1.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">final</span> <span class="dt">int</span> N = <span class="dv">6</span>;
+
+<span class="kw">public</span> <span class="dt">void</span> <span class="fu">findSecretWord</span>(<span class="bu">String</span>[] words, Master master) {
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; wordIdxList = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+    <span class="co">//init dictionary</span>
+    <span class="kw">for</span> (<span class="dt">int</span> idx = <span class="dv">0</span> ; idx &lt; words.<span class="fu">length</span>; idx++) {
+        wordIdxList.<span class="fu">add</span>(idx);
+    }
+
+    <span class="kw">while</span> (wordIdxList.<span class="fu">size</span>() &gt; <span class="dv">0</span>) {
+        <span class="dt">int</span> minLoss = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>;
+        <span class="dt">int</span> minIdx = -<span class="dv">1</span>;
+        <span class="kw">for</span> (<span class="dt">int</span> idx : wordIdxList) {
+            <span class="dt">int</span> loss = <span class="fu">maxLoss</span>(idx, words, wordIdxList);
+
+            <span class="co">/* minimizes the possible number of choices (worst outcome) to make at each time that we call master.guess */</span>
+            <span class="kw">if</span> (loss &lt; minLoss) {
+                minLoss = loss;
+                minIdx = idx;
+            }
+        }
+
+        <span class="dt">int</span> match = master.<span class="fu">guess</span>(words[minIdx]);
+        <span class="co">//made the correct guess, return</span>
+        <span class="kw">if</span> (match == N) {
+            <span class="kw">return</span>;
+        }
+        <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; nextIdxList = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+        <span class="kw">for</span> (<span class="dt">int</span> idx: wordIdxList) {
+            <span class="kw">if</span> (<span class="fu">similarity</span>(words[minIdx], words[idx]) == match) {
+                nextIdxList.<span class="fu">add</span>(idx);
+            }
+        }
+        wordIdxList = nextIdxList;
+    }
+}
+
+
+<span class="co">/*</span>
+<span class="co">* Retrieve the MAX # of word from CURRENT dict that has the same similarity with</span>
+<span class="co">* guessed word, where guessWord != candidateWord.</span>
+<span class="co">*/</span>
+<span class="kw">private</span> <span class="dt">int</span> <span class="fu">maxLoss</span>(<span class="dt">int</span> guessIdx, <span class="bu">String</span>[] words, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; wordIdxList) {
+    <span class="dt">int</span>[] bucket = <span class="kw">new</span> <span class="dt">int</span>[N];
+    <span class="dt">int</span> maxScore = <span class="dv">0</span>;
+
+    <span class="kw">for</span> (<span class="dt">int</span> idx : wordIdxList) {
+        <span class="bu">String</span> guess = words[guessIdx];
+        <span class="bu">String</span> candidate = words[idx];
+
+        <span class="kw">if</span> (!guess.<span class="fu">equals</span>(candidate)) {
+            <span class="dt">int</span> score = <span class="fu">similarity</span>(guess, candidate);
+            bucket[score]++;
+        }
+    }
+
+    <span class="kw">for</span>(<span class="dt">int</span> score : bucket) {
+        maxScore = <span class="bu">Math</span>.<span class="fu">max</span>(maxScore, score);
+    }
+
+    <span class="kw">return</span> maxScore;
+}
+
+<span class="kw">private</span> <span class="dt">int</span> <span class="fu">similarity</span>(<span class="bu">String</span> s1, <span class="bu">String</span> s2) {
+    <span class="dt">int</span> match = <span class="dv">0</span>;
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; N; i++) {
+        match += s1.<span class="fu">charAt</span>(i) == s2.<span class="fu">charAt</span>(i) ? <span class="dv">1</span> : <span class="dv">0</span>;
+    }
+    <span class="kw">return</span> match;
+}
+\end{lstlisting}</code></pre></div>
 
 </div>
+</div>
+</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="interactive-problems.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="advanced-data-structure.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1016,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/11-interactive.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>9.7 Word Break / Leet Code 139 / Medium | Technical Interview</title>
+  <meta name="description" content="9.7 Word Break / Leet Code 139 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="9.7 Word Break / Leet Code 139 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="9.7 Word Break / Leet Code 139 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="9.7 Word Break / Leet Code 139 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="9.7 Word Break / Leet Code 139 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="longest-palindromic-substring-leetcode-5-medium.html"/>
+<link rel="next" href="verifying-an-alien-dictionary-leetcode-953-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,217 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="word-break-leet-code-139-medium" class="section level2">
+<h2><span class="header-section-number">9.7</span> Word Break / Leet Code 139 / Medium</h2>
+<div id="description-118" class="section level3">
+<h3><span class="header-section-number">9.7.1</span> Description</h3>
+<p>Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words. You may assume the dictionary does not contain duplicate words.</p>
+</div>
+<div id="example-114" class="section level3">
+<h3><span class="header-section-number">9.7.2</span> Example</h3>
+<p>For example, given s = “leetcode”, dict = [“leet”, “code”]. Return true because “leetcode” can be segmented as “leet code”.</p>
+<p>Input: s = “catsandog”, wordDict = [“cats”, “dog”, “sand”, “and”, “cat”] Return false.</p>
+</div>
+<div id="solution---recursion-2" class="section level3">
+<h3><span class="header-section-number">9.7.3</span> Solution - Recursion</h3>
+<div id="walkthrough-144" class="section level4">
+<h4><span class="header-section-number">9.7.3.1</span> Walkthrough</h4>
+<p>Consider each prefix and search it in dictionary. If the prefix is present in dictionary, we recursively search for the rest of the string and AND all sub results.</p>
+</div>
+<div id="analysis-146" class="section level4">
+<h4><span class="header-section-number">9.7.3.2</span> Analysis</h4>
+<p>The time complexity is exponential, since there are some overlapping subproblems in the recursion tree. <span class="math inline">\(O(2^{log(n)})\)</span>, where n is the length of the word.</p>
+</div>
+<div id="algorithm-151" class="section level4">
+<h4><span class="header-section-number">9.7.3.3</span> Algorithm</h4>
+<p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
+</div>
+<div id="java-code---recursion-2" class="section level4">
+<h4><span class="header-section-number">9.7.3.4</span> Java Code - Recursion</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">wordBreak</span>(<span class="bu">String</span> word, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; dict) {
+    <span class="dt">int</span> length = word.<span class="fu">length</span>();
+    <span class="co">// base case</span>
+    <span class="kw">if</span> (length == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
 
+    <span class="co">//else check for all words</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= length; i++) {
+        <span class="co">// Now we will first divide the word into two parts ,</span>
+        <span class="co">// the prefix will have a length of i and check if it is  </span>
+        <span class="co">// present in dictionary ,if yes then we will check for  </span>
+        <span class="co">// suffix of length size-i recursively. if both prefix and  </span>
+        <span class="co">// suffix are present the word is found in dictionary.</span>
+ 
+        <span class="kw">if</span> (dict.<span class="fu">contains</span>(word.<span class="fu">substring</span>(<span class="dv">0</span>,i)) &amp;&amp;  
+            <span class="fu">wordBreak</span>(word.<span class="fu">substring</span>(i, length), wordDict)) {
+                <span class="kw">return</span> <span class="kw">true</span>;
+        }
+    }
+         
+    <span class="co">// if all cases failed then return false</span>
+    <span class="kw">return</span> <span class="kw">false</span>;        
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---dynamic-programming-2" class="section level3">
+<h3><span class="header-section-number">9.7.4</span> Solution - Dynamic Programming</h3>
+<div id="walkthrough-145" class="section level4">
+<h4><span class="header-section-number">9.7.4.1</span> Walkthrough</h4>
+<p>Create a array of (length of string + 1). In order to ensure the string contains segment of substring in the list, we need to ensure:</p>
+<ul>
+<li>dp[index of segment 1]: true</li>
+<li>dp[index of segment 2]: true</li>
+<li>dp[other indices] : false</li>
+</ul>
+<p>Finally, we only need to check the value of dp[index of last segment].</p>
+</div>
+<div id="analysis-147" class="section level4">
+<h4><span class="header-section-number">9.7.4.2</span> Analysis</h4>
+<p>Assume there are at most m letter in the given string and n words in dictionary. The time complexity is O(m * n).</p>
+</div>
+<div id="algorithm-152" class="section level4">
+<h4><span class="header-section-number">9.7.4.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+</div>
+<div id="java-code---dynamic-programming-2" class="section level4">
+<h4><span class="header-section-number">9.7.4.4</span> Java Code - Dynamic Programming</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">wordBreak</span>(<span class="bu">String</span> s, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; wordDict) {
+    <span class="dt">int</span> n = s.<span class="fu">length</span>();
+    <span class="dt">boolean</span>[] dp = <span class="kw">new</span> <span class="dt">boolean</span>[n + <span class="dv">1</span>];
+    dp[<span class="dv">0</span>] = <span class="kw">true</span>;
+
+    <span class="kw">for</span> (<span class="dt">int</span> endIdx = <span class="dv">1</span>; endIdx &lt;= s.<span class="fu">length</span>(); endIdx++) {
+        <span class="kw">for</span> (<span class="bu">String</span> segment : wordDict) {
+            <span class="dt">int</span> prevIdx = endIdx - segment.<span class="fu">length</span>();
+            <span class="co">/*</span>
+<span class="co">            * 1. prevIdx &gt;= 0 : to avoid IndexOutOfBoundError</span>
+<span class="co">            * 2. dp[prevIdx]  : to make sure prev word is a match</span>
+<span class="co">            * 3. s.substring(prevIdx, endIdx).equals(segment) : to make sure current word is a match</span>
+<span class="co">            *</span>
+<span class="co">            * If 3 conditions match, move to next round (endIdx)</span>
+<span class="co">            */</span>
+            <span class="kw">if</span> (prevIdx &gt;= <span class="dv">0</span> &amp;&amp; dp[prevIdx] &amp;&amp; s.<span class="fu">substring</span>(prevIdx, endIdx).<span class="fu">equals</span>(segment)) {
+                dp[endIdx] = <span class="kw">true</span>;
+                <span class="kw">break</span>;
+            }
+        }
+    }
+
+    <span class="kw">return</span> dp[n];
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---trie-with-dynamic-programming" class="section level3">
+<h3><span class="header-section-number">9.7.5</span> Solution - Trie with Dynamic Programming</h3>
+<div id="walkthrough-146" class="section level4">
+<h4><span class="header-section-number">9.7.5.1</span> Walkthrough</h4>
+<div class="figure"><span id="fig:unnamed-chunk-91"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-91-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 9.1: Some caption.
+</p>
+</div>
+<p>Construct a trie with each word in the dictionary with each node having a property to denote the end of word. Then construct a dynamic programming array to record if the word exists by traversing the Trie tree. Lastly, check the dp[lastIndex] value, true if the string constsis all valid words; false, otherwise.</p>
+</div>
+<div id="analysis-148" class="section level4">
+<h4><span class="header-section-number">9.7.5.2</span> Analysis</h4>
+<p>Time complexity is O(n * h), where where n is the length of the string word and h is the average length of words in the dictionary (average hight of the tree).</p>
+</div>
+<div id="algorithm-153" class="section level4">
+<h4><span class="header-section-number">9.7.5.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">
+<span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> TrieNode {
+    <span class="dt">boolean</span> isEnd;
+
+    <span class="co">// next characters</span>
+    TrieNode [] next;
+
+    <span class="kw">public</span> <span class="fu">TrieNode</span>() {
+        <span class="kw">this</span>.<span class="fu">isEnd</span> = <span class="kw">false</span>;
+        <span class="kw">this</span>.<span class="fu">next</span> = <span class="kw">new</span> TrieNode[<span class="dv">26</span>];
+    }
+}
+
+<span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> Trie {
+    TrieNode root;
+
+    <span class="kw">public</span> <span class="fu">Trie</span>() {
+        <span class="kw">this</span>.<span class="fu">root</span>=<span class="kw">new</span> <span class="fu">TrieNode</span>();
+    }
+
+    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">insert</span>(TrieNode root, <span class="bu">String</span> word, <span class="dt">int</span> index) {
+        <span class="kw">if</span> (index == word.<span class="fu">length</span>()) {
+            root.<span class="fu">isEnd</span> = <span class="kw">true</span>;
+            <span class="kw">return</span>;
+        }
+
+        <span class="dt">int</span> charIndex = word.<span class="fu">charAt</span>(index) - <span class="ch">&#39;a&#39;</span>;
+
+        <span class="kw">if</span> (root.<span class="fu">next</span>[charIndex] == <span class="kw">null</span>) {
+            root.<span class="fu">next</span>[charIndex] = <span class="kw">new</span> <span class="fu">TrieNode</span>();
+        }
+
+        <span class="fu">insert</span>(root.<span class="fu">next</span>[charIndex], word, index + <span class="dv">1</span>);
+    }
+
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">insert</span>(<span class="bu">String</span> word) {
+        <span class="fu">insert</span>(root, word, <span class="dv">0</span>);
+    }
+
+    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">lookUp</span>(TrieNode root, <span class="bu">String</span> str, <span class="dt">int</span> start, <span class="dt">int</span> index, <span class="dt">boolean</span> [] presence) {
+        <span class="dt">int</span> nextCharInStr = start + index;
+
+        <span class="kw">if</span> (root.<span class="fu">isEnd</span>) {
+            presence[nextCharInStr] = <span class="kw">true</span>;
+        }
+
+        <span class="kw">if</span> (nextCharIndex == str.<span class="fu">length</span>()) {
+            <span class="kw">return</span>;
+        }
+
+        <span class="dt">int</span> charIndex = str.<span class="fu">charAt</span>(nextCharInStr) - <span class="ch">&#39;a&#39;</span>;
+
+        <span class="co">// traverse down the trie if TrieNode / char exists</span>
+        <span class="kw">if</span> (root.<span class="fu">next</span>[charIndex] != <span class="kw">null</span>) {
+            <span class="fu">lookUp</span>(root.<span class="fu">next</span>[charIndex], str, start, index + <span class="dv">1</span>, presence);
+        }
+    }
+
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">lookUp</span>(<span class="bu">String</span> str, <span class="dt">int</span> start, <span class="dt">boolean</span> [] presence) {
+        <span class="fu">lookUp</span>(root, str, start, <span class="dv">0</span>, presence);
+    }
+}
+
+<span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">wordBreak</span>(<span class="bu">String</span> str, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; wordDict) {
+    Trie trie = <span class="kw">new</span> <span class="fu">Trie</span>();
+
+    <span class="kw">for</span> (<span class="bu">String</span> word : wordDict) {
+        trie.<span class="fu">insert</span>(word);
+    }
+
+    <span class="dt">boolean</span> [] presence = <span class="kw">new</span> <span class="dt">boolean</span> [str.<span class="fu">length</span>() + <span class="dv">1</span>];
+    presence[<span class="dv">0</span>] = <span class="kw">true</span>;
+
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>;i &lt; str.<span class="fu">length</span>();i++) {
+        <span class="kw">if</span> (presence[i]) {
+            trie.<span class="fu">lookUp</span>(str, i, presence);
+        }
+    }
+
+    <span class="kw">return</span> presence[str.<span class="fu">length</span>()];
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="longest-palindromic-substring-leetcode-5-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="verifying-an-alien-dictionary-leetcode-953-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1109,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/09-string-manipulation.Rmd",
 "text": "Edit"
 },
 "history": {

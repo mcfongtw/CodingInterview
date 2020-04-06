@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.14 Reorder List / Leet Code 143 / Medium | Technical Interview</title>
+  <meta name="description" content="6.14 Reorder List / Leet Code 143 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.14 Reorder List / Leet Code 143 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.14 Reorder List / Leet Code 143 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.14 Reorder List / Leet Code 143 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.14 Reorder List / Leet Code 143 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html"/>
+<link rel="next" href="remove-duplicates-from-sorted-list-leet-code-83-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,117 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="reorder-list-leet-code-143-medium" class="section level2">
+<h2><span class="header-section-number">6.14</span> Reorder List / Leet Code 143 / Medium</h2>
+<div id="description-99" class="section level3">
+<h3><span class="header-section-number">6.14.1</span> Description</h3>
+Given a singly linked list L:
+<div class="figure"><span id="fig:unnamed-chunk-77"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-77-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.35: Some caption.
+</p>
+</div>
+, reorder it to
+<div class="figure"><span id="fig:unnamed-chunk-78"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-78-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.36: Some caption.
+</p>
+</div>
+<p>You may not modify the values in the list’s nodes, only nodes itself may be changed.</p>
+</div>
+<div id="example-95" class="section level3">
+<h3><span class="header-section-number">6.14.2</span> Example</h3>
+Given
+<div class="figure"><span id="fig:unnamed-chunk-79"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-79-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.37: Some caption.
+</p>
+</div>
+, reorder it to
+<div class="figure"><span id="fig:unnamed-chunk-80"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-80-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.38: Some caption.
+</p>
+</div>
+</div>
+<div id="solution-74" class="section level3">
+<h3><span class="header-section-number">6.14.3</span> Solution</h3>
+<div id="walkthrough-122" class="section level4">
+<h4><span class="header-section-number">6.14.3.1</span> Walkthrough</h4>
+<p>We could do the following:</p>
+<ul>
+<li>Locate the middle and tail nodes</li>
+<li>Reverse the nodes in the 2nd half othe list </li>
+<li>Change links between nodes in 1st and 2nd half of list, one by one.</li>
+</ul>
+</div>
+<div id="analysis-123" class="section level4">
+<h4><span class="header-section-number">6.14.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-128" class="section level4">
+<h4><span class="header-section-number">6.14.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-76" class="section level4">
+<h4><span class="header-section-number">6.14.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">reorderList</span>(ListNode head) {
+    <span class="kw">if</span> (head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span>) {
+        <span class="kw">return</span>;
+    }
 
+    <span class="co">//locating middle and tail nodes</span>
+    ListNode middle = head;
+    ListNode tail = head;
+    <span class="kw">while</span> (tail.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; tail.<span class="fu">next</span>.<span class="fu">next</span> != <span class="kw">null</span>) {
+        middle = middle.<span class="fu">next</span>;
+        tail = tail.<span class="fu">next</span>.<span class="fu">next</span>;
+    }
+
+
+    <span class="co">/*</span>
+<span class="co">    * reverse nodes for the 2nd half of the list</span>
+<span class="co">    * L0 &gt; L1 &gt; ... &gt; Ln &gt; L_{n-1} &gt; ...</span>
+<span class="co">    */</span>
+    ListNode middlePrev = middle;
+    ListNode prev = middle.<span class="fu">next</span>;
+
+    <span class="co">/*</span>
+<span class="co">    * reverse links between prev, current and current.next by FIXING middlePrev</span>
+<span class="co">    * 7 &gt; 8 &gt; 9</span>
+<span class="co">    * 8 &gt; 7 &gt; 9</span>
+<span class="co">    */</span>
+    <span class="kw">while</span> (prev.<span class="fu">next</span> != <span class="kw">null</span>) {
+        ListNode current = prev.<span class="fu">next</span>;
+        prev.<span class="fu">next</span> = current.<span class="fu">next</span>;
+        current.<span class="fu">next</span> = middlePrev.<span class="fu">next</span>;
+        middlePrev.<span class="fu">next</span> = current;
+    }
+
+    <span class="co">//change links between nodes in 1st and 2nd half, one by one.</span>
+    ListNode current1 = head;
+    ListNode current2 = middlePrev.<span class="fu">next</span>;
+    <span class="kw">while</span> (current1 != middlePrev) {
+        middlePrev.<span class="fu">next</span> = current2.<span class="fu">next</span>;
+        current2.<span class="fu">next</span> = current1.<span class="fu">next</span>;
+        current1.<span class="fu">next</span> = current2;
+        current1 = current2.<span class="fu">next</span>;
+        current2 = middlePrev.<span class="fu">next</span>;
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1009,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

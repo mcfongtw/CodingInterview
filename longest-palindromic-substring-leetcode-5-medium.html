@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>9.6 Longest Palindromic Substring / LeetCode 5/ Medium | Technical Interview</title>
+  <meta name="description" content="9.6 Longest Palindromic Substring / LeetCode 5/ Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="9.6 Longest Palindromic Substring / LeetCode 5/ Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="9.6 Longest Palindromic Substring / LeetCode 5/ Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="9.6 Longest Palindromic Substring / LeetCode 5/ Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="9.6 Longest Palindromic Substring / LeetCode 5/ Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="longest-common-substring.html"/>
+<link rel="next" href="word-break-leet-code-139-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,91 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="longest-palindromic-substring-leetcode-5-medium" class="section level2">
+<h2><span class="header-section-number">9.6</span> Longest Palindromic Substring / LeetCode 5/ Medium</h2>
+<div id="description-117" class="section level3">
+<h3><span class="header-section-number">9.6.1</span> Description</h3>
+<p>Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.</p>
+</div>
+<div id="example-113" class="section level3">
+<h3><span class="header-section-number">9.6.2</span> Example</h3>
+<p>Input: “babad” Output: “bab” Note: “aba” is also a valid answer.</p>
+</div>
+<div id="solution---longest-common-substring" class="section level3">
+<h3><span class="header-section-number">9.6.3</span> Solution - Longest Common Substring</h3>
+<div id="walkthrough-143" class="section level4">
+<h4><span class="header-section-number">9.6.3.1</span> Walkthrough</h4>
+The idea is to check a  of Longest Common Substring between the sring s and reverse(s). Take S = “abc435cba” and rev(S) = “cba534cba” for example, both “abc” and “cba” are LCS but not Palindromic Substring.
 
+<p>When we need to further check if the substring is palindromic, we need to find the index of LCS, call that {beforeRev}. {beforeRev} = length - 1 - {j} = 9 - 1 - 2 = 6. Next we add the length of LCS at {(i,j)} : {beforeRev} + {dp[i][j]} - 1 = 6 + 3 - 1 = 8, but {i} = 2. Therefore, it is NOT palindromic.</p>
+Take S = “aba435aba” and rev(S) = “aba534aba” for example, “aba” is both LCS and Palindromic Substring.
+
+<p>When we need to further check if the substring is palindromic, we first eval {beforeRev} = length - 1 - {j} = 9 - 1 - 2 = 6 and add the length of LCS at {(i,j)}: {beforeRev} + {dp[i][j]}- 1 = 6 + 3 - 1 = 8 where {i} = 8. Therefore, it is palindromic.</p>
+</div>
+<div id="analysis-145" class="section level4">
+<h4><span class="header-section-number">9.6.3.2</span> Analysis</h4>
+<p>Both time and Auxiliary Space take <span class="math inline">\(O(n^2)\)</span></p>
+</div>
+<div id="algorithm-150" class="section level4">
+<h4><span class="header-section-number">9.6.3.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+</div>
+<div id="java-code---longest-common-substring" class="section level4">
+<h4><span class="header-section-number">9.6.3.4</span> Java Code - Longest Common Substring</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">String</span> <span class="fu">longestPalindrome</span>(<span class="bu">String</span> s) {
+    <span class="kw">if</span> (s.<span class="fu">equals</span>(<span class="st">&quot;&quot;</span>)) {
+        <span class="kw">return</span> <span class="st">&quot;&quot;</span>;
+    }
+
+    <span class="bu">String</span> reverse = <span class="kw">new</span> <span class="bu">StringBuffer</span>(s).<span class="fu">reverse</span>().<span class="fu">toString</span>();
+    <span class="dt">int</span> length = s.<span class="fu">length</span>();
+    <span class="dt">int</span> maxLen = <span class="dv">0</span>;
+    <span class="dt">int</span> maxEnd = <span class="dv">0</span>;
+    <span class="dt">int</span>[][] dp = <span class="kw">new</span> <span class="dt">int</span>[length][length];   <span class="co">//To store the length of common substring</span>
+
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; reverse.<span class="fu">length</span>(); i++){  <span class="co">//Init the first row of 2D array</span>
+        dp[<span class="dv">0</span>][i] = (s.<span class="fu">charAt</span>(<span class="dv">0</span>) == reverse.<span class="fu">charAt</span>(i)) ? <span class="dv">1</span> : <span class="dv">0</span>;
+    }
+
+    <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; s.<span class="fu">length</span>(); j++){    <span class="co">//Init the first column of 2D array</span>
+        dp[j][<span class="dv">0</span>] = (reverse.<span class="fu">charAt</span>(<span class="dv">0</span>) == s.<span class="fu">charAt</span>(j)) ? <span class="dv">1</span> : <span class="dv">0</span>;
+    }
+
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; length; i++) {
+        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; length; j++) {
+            <span class="kw">if</span>(s.<span class="fu">charAt</span>(i) == reverse.<span class="fu">charAt</span>(j)){
+                <span class="kw">if</span> (i &gt; <span class="dv">0</span> &amp;&amp; j &gt; <span class="dv">0</span>) {
+                    dp[i][j] = dp[i - <span class="dv">1</span>][j - <span class="dv">1</span>] + <span class="dv">1</span>;
+                }
+            } <span class="kw">else</span>{
+                dp[i][j] = <span class="dv">0</span>;
+            }
+
+            <span class="kw">if</span> (dp[i][j] &gt; maxLen) {
+                <span class="dt">int</span> beforeRev = length - <span class="dv">1</span> - j;
+
+                <span class="co">//further check if it is a palindromic</span>
+                <span class="kw">if</span> (beforeRev + dp[i][j] - <span class="dv">1</span> == i) {
+                    maxLen = dp[i][j];
+                    maxEnd = i;
+                }
+            }
+        }
+    }
+
+    <span class="bu">String</span> result =  s.<span class="fu">substring</span>(maxEnd - maxLen + <span class="dv">1</span>, maxEnd + <span class="dv">1</span>);
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="longest-common-substring.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="word-break-leet-code-139-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +983,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/09-string-manipulation.Rmd",
 "text": "Edit"
 },
 "history": {

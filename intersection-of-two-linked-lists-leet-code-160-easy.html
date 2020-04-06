@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.11 Intersection of Two Linked Lists / Leet Code 160 / Easy | Technical Interview</title>
+  <meta name="description" content="6.11 Intersection of Two Linked Lists / Leet Code 160 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.11 Intersection of Two Linked Lists / Leet Code 160 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.11 Intersection of Two Linked Lists / Leet Code 160 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.11 Intersection of Two Linked Lists / Leet Code 160 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.11 Intersection of Two Linked Lists / Leet Code 160 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="palindrome-linked-list-leet-code-234-easy.html"/>
+<link rel="next" href="remove-nth-node-from-end-of-list-leet-code-19-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,84 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="intersection-of-two-linked-lists-leet-code-160-easy" class="section level2">
+<h2><span class="header-section-number">6.11</span> Intersection of Two Linked Lists / Leet Code 160 / Easy</h2>
+<div id="description-96" class="section level3">
+<h3><span class="header-section-number">6.11.1</span> Description</h3>
+<p>Write a program to find the node at which the intersection of two singly linked lists begins.</p>
+<ul>
+<li>If the two linked lists have no intersection at all, return null.</li>
+<li>The linked lists must retain their original structure after the function returns.</li>
+<li>You may assume there are no cycles anywhere in the entire linked structure.</li>
+<li>Your code should preferably run in O(n) time and use only O(1) memory.</li>
+<li>The intersected nodes must continue to the end of both lists.</li>
+<li>If two nodes intersect, two node pointers refer to the same ListNode object in memory.</li>
+</ul>
+</div>
+<div id="example-92" class="section level3">
+<h3><span class="header-section-number">6.11.2</span> Example</h3>
+Input:
+<div class="figure"><span id="fig:unnamed-chunk-71"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-71-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.29: Some caption.
+</p>
+</div>
+<p>Output: Reference of the node with value = 8 Input Explanation: The intersected node’s value is 8 (note that this must not be 0 if the two lists intersect). From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads as [5,0,1,8,4,5]. There are 2 nodes before the intersected node in A; There are 3 nodes before the intersected node in B.</p>
+</div>
+<div id="solution-72" class="section level3">
+<h3><span class="header-section-number">6.11.3</span> Solution</h3>
+<div id="walkthrough-118" class="section level4">
+<h4><span class="header-section-number">6.11.3.1</span> Walkthrough</h4>
+<p>First we compute the length of both list and we get rid of the leading extra node of the longer list. For the # of remaining nodes of the longer list should equal to the # of shorter list. We traverse both list, and determine when (p1 == p2) - instead of (p1.val == p2.val)</p>
+</div>
+<div id="analysis-119" class="section level4">
+<h4><span class="header-section-number">6.11.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-125" class="section level4">
+<h4><span class="header-section-number">6.11.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-74" class="section level4">
+<h4><span class="header-section-number">6.11.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">getIntersectionNode</span>(ListNode headA, ListNode headB) {
+    <span class="dt">int</span> lenA = <span class="dv">0</span>, lenB = <span class="dv">0</span>;
 
+    <span class="co">//compute length of both lists</span>
+    <span class="kw">for</span>(ListNode current = headA; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>, lenA++);
+    <span class="kw">for</span>(ListNode current = headB; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>, lenB++);
+
+    <span class="co">//both conditions need to be the same</span>
+    ListNode currentLonger = lenA &gt; lenB ? headA : headB;
+    ListNode currentShorter = lenA &gt; lenB ? headB : headA;
+
+    <span class="co">//Move currentLonger to the position where remaining of nodes equal to len(currentShorter)</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="bu">Math</span>.<span class="fu">abs</span>(lenA - lenB); i++, currentLonger = currentLonger.<span class="fu">next</span>);
+
+    <span class="kw">while</span>(currentLonger != <span class="kw">null</span> &amp;&amp; currentShorter != <span class="kw">null</span>) {
+        <span class="co">//If the node intersect, nodeA == nodeB</span>
+        <span class="kw">if</span>(currentLonger == currentShorter) {
+            <span class="co">//return current node</span>
+            <span class="kw">return</span> currentLonger;
+        }
+
+        currentLonger = currentLonger.<span class="fu">next</span>;
+        currentShorter = currentShorter.<span class="fu">next</span>;
+    }
+
+    <span class="co">//no match</span>
+    <span class="kw">return</span> <span class="kw">null</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="palindrome-linked-list-leet-code-234-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +976,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

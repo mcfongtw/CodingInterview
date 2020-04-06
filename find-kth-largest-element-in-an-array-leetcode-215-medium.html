@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>7.3 Find \(k^{th}\) Largest Element in an Array / LeetCode 215 / Medium | Technical Interview</title>
+  <meta name="description" content="7.3 Find \(k^{th}\) Largest Element in an Array / LeetCode 215 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="7.3 Find \(k^{th}\) Largest Element in an Array / LeetCode 215 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="7.3 Find \(k^{th}\) Largest Element in an Array / LeetCode 215 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="7.3 Find \(k^{th}\) Largest Element in an Array / LeetCode 215 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="7.3 Find \(k^{th}\) Largest Element in an Array / LeetCode 215 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="longest-substring-without-repeating-characters-leetcode-3-medium.html"/>
+<link rel="next" href="merge-k-sorted-arrays.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,69 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="find-kth-largest-element-in-an-array-leetcode-215-medium" class="section level2">
+<h2><span class="header-section-number">7.3</span> Find <span class="math inline">\(k^{th}\)</span> Largest Element in an Array / LeetCode 215 / Medium</h2>
+<div id="description-104" class="section level3">
+<h3><span class="header-section-number">7.3.1</span> Description</h3>
+<p>Find the <span class="math inline">\(k^{th}\)</span> largest element in an unsorted array. Note that it is the <span class="math inline">\(k^{th}\)</span> largest element in the sorted order, not the <span class="math inline">\(k^{th}\)</span> distinct element.</p>
+</div>
+<div id="example-100" class="section level3">
+<h3><span class="header-section-number">7.3.2</span> Example</h3>
+<p>Input: [3,2,1,5,6,4] and k = 2. Output: 5</p>
+<p>Input: [3,2,3,1,2,4,5,5,6] and k = 4. Output: 4</p>
+</div>
+<div id="solution-77" class="section level3">
+<h3><span class="header-section-number">7.3.3</span> Solution</h3>
+<div id="walkthrough-127" class="section level4">
+<h4><span class="header-section-number">7.3.3.1</span> Walkthrough</h4>
+<p>Retrieving the <span class="math inline">\(k^{th}\)</span> largest element equals to retriving smallest element in a k-sized min-heap - The value of each node is equal to or greater than the value of its parent node and root has the smallest value. Therefore, we need to maintain a min-heap (PriorityQueue in java) of  while inserting new element. Below illustrated how to track a 2nd largest element from a min heap</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dv">3</span> -&gt; [<span class="dv">3</span>*]
+<span class="dv">2</span> -&gt; [<span class="dv">2</span>*, <span class="dv">3</span>]
+<span class="dv">1</span> -&gt; <span class="dv">1</span>, [<span class="dv">2</span>*, <span class="dv">3</span>]
+<span class="dv">5</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, [<span class="dv">3</span>*, <span class="dv">5</span>]
+<span class="dv">6</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, [<span class="dv">5</span>*, <span class="dv">6</span>]
+<span class="dv">4</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, [<span class="dv">5</span>*, <span class="dv">6</span>]</code></pre></div>
+<p>Finally, return root as it is the smallest element (*) in the heap.</p>
+</div>
+<div id="analysis-129" class="section level4">
+<h4><span class="header-section-number">7.3.3.2</span> Analysis</h4>
+<p>In addition, add() and remove() take <span class="math inline">\(O(log(k))\)</span>, since there are at most k element. Thus, total time complexity is <span class="math inline">\(O(n \cdot log(k))\)</span>. Total Auxiliary Space is O(k) due to size of the heap.</p>
+</div>
+<div id="algorithm-134" class="section level4">
+<h4><span class="header-section-number">7.3.3.3</span> Algorithm</h4>
+<p>heap <a href="glossary-of-algorithm.html#heap">1.2.15</a></p>
+</div>
+<div id="java-code-79" class="section level4">
+<h4><span class="header-section-number">7.3.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">findKthLargest</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> k) {
+    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; heap = <span class="kw">new</span> <span class="bu">PriorityQueue</span>&lt;&gt;();
 
+    <span class="kw">for</span>(<span class="dt">int</span> num: nums) {
+        <span class="fu">helper</span>(num, k);
+    }
+
+    <span class="co">// return the smallest element (root) from heap</span>
+    <span class="kw">return</span> heap.<span class="fu">peek</span>();
+}
+
+<span class="kw">private</span> <span class="dt">void</span> <span class="fu">helper</span>(<span class="dt">int</span> num, <span class="dt">int</span> size) {
+    heap.<span class="fu">add</span>(num);
+
+    <span class="kw">if</span>(heap.<span class="fu">size</span>() &gt; size) {
+        <span class="co">//remove smallest element from min-heap</span>
+        heap.<span class="fu">remove</span>();
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="longest-substring-without-repeating-characters-leetcode-3-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="merge-k-sorted-arrays.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +961,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/07-data-structure.Rmd",
 "text": "Edit"
 },
 "history": {

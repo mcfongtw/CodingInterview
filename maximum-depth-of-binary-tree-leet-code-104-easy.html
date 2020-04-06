@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.15 Maximum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview</title>
+  <meta name="description" content="4.15 Maximum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.15 Maximum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.15 Maximum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.15 Maximum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.15 Maximum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="binary-tree-postorder-traversal-leet-code-145-hard.html"/>
+<link rel="next" href="minimum-depth-of-binary-tree-leet-code-104-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,69 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="maximum-depth-of-binary-tree-leet-code-104-easy" class="section level2">
+<h2><span class="header-section-number">4.15</span> Maximum Depth of Binary Tree / Leet Code 104 / Easy</h2>
+<div id="description-65" class="section level3">
+<h3><span class="header-section-number">4.15.1</span> Description</h3>
+<p>Given a binary tree, find its maximum depth.</p>
+<p>The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.</p>
+</div>
+<div id="example-62" class="section level3">
+<h3><span class="header-section-number">4.15.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-25"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-25-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.19: Some caption.
+</p>
+</div>
+<p>return its depth = 3.</p>
+</div>
+<div id="solution-49" class="section level3">
+<h3><span class="header-section-number">4.15.3</span> Solution</h3>
+<div id="walkthrough-80" class="section level4">
+<h4><span class="header-section-number">4.15.3.1</span> Walkthrough</h4>
+<p>Recursively for each level:</p>
+<ul>
+<li>Take the larger depth of left and right subtree.</li>
+<li>add one for current level</li>
+</ul>
+</div>
+<div id="analysis-81" class="section level4">
+<h4><span class="header-section-number">4.15.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-82" class="section level4">
+<h4><span class="header-section-number">4.15.3.3</span> Algorithm</h4>
+<p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
+</div>
+<div id="java-code-48" class="section level4">
+<h4><span class="header-section-number">4.15.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">maxDepth</span>(<span class="bu">TreeNode</span> root) {
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
 
+    <span class="dt">int</span> lHeight = <span class="dv">0</span>, rHeight = <span class="dv">0</span>;
+    <span class="kw">if</span>(root.<span class="fu">left</span> != <span class="kw">null</span>) {
+        lHeight = <span class="fu">maxDepth</span>(root.<span class="fu">left</span>);
+    }
+
+    <span class="kw">if</span>(root.<span class="fu">right</span> != <span class="kw">null</span>) {
+        rHeight = <span class="fu">maxDepth</span>(root.<span class="fu">right</span>);
+    }
+
+    <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">max</span>(lHeight, rHeight) + <span class="dv">1</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="binary-tree-postorder-traversal-leet-code-145-hard.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="minimum-depth-of-binary-tree-leet-code-104-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +961,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

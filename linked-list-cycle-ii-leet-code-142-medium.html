@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.6 Linked List Cycle II / Leet Code 142 / Medium | Technical Interview</title>
+  <meta name="description" content="6.6 Linked List Cycle II / Leet Code 142 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.6 Linked List Cycle II / Leet Code 142 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.6 Linked List Cycle II / Leet Code 142 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.6 Linked List Cycle II / Leet Code 142 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.6 Linked List Cycle II / Leet Code 142 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="linked-list-cycle-leet-code-141-easy.html"/>
+<link rel="next" href="odd-even-linked-list-leet-code-328-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,98 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="linked-list-cycle-ii-leet-code-142-medium" class="section level2">
+<h2><span class="header-section-number">6.6</span> Linked List Cycle II / Leet Code 142 / Medium</h2>
+<div id="description-91" class="section level3">
+<h3><span class="header-section-number">6.6.1</span> Description</h3>
+<p>Given a linked list, return the node where the cycle begins. If there is no cycle, return null.</p>
+<p>To represent a cycle in the given linked list, we use an integer pos which represents the position (0-indexed) in the linked list where tail connects to. If pos is -1, then there is no cycle in the linked list.</p>
+<p>Note: Do not modify the linked list.</p>
+</div>
+<div id="example-87" class="section level3">
+<h3><span class="header-section-number">6.6.2</span> Example</h3>
+Input:
+<div class="figure"><span id="fig:unnamed-chunk-62"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-62-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.20: Some caption.
+</p>
+</div>
+<p>Output: tail connects to node index 1. Explanation: There is a cycle in the linked list, where tail connects to the second node.</p>
+Input:
+<div class="figure"><span id="fig:unnamed-chunk-63"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-63-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.21: Some caption.
+</p>
+</div>
+<p>Output: tail connects to node index 0. Explanation: There is a cycle in the linked list, where tail connects to the first node.</p>
+Input:
+<div class="figure"><span id="fig:unnamed-chunk-64"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-64-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.22: Some caption.
+</p>
+</div>
+<p>Output: null (no cycle). Explanation: There is no cycle in the linked list.</p>
+</div>
+<div id="solution-68" class="section level3">
+<h3><span class="header-section-number">6.6.3</span> Solution</h3>
+<div id="walkthrough-112" class="section level4">
+<h4><span class="header-section-number">6.6.3.1</span> Walkthrough</h4>
+<p>Having two pointers, one talks twice as fast as the other. If there is a cycle (p1 == p2), p1 would be at the middle of the cycled list whereas p2 at the tail of the cycled list. In other words, <em># of steps taken from header to p1 equals to # of steps taken from p1 to p2.</em></p>
+</div>
+<div id="analysis-113" class="section level4">
+<h4><span class="header-section-number">6.6.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-119" class="section level4">
+<h4><span class="header-section-number">6.6.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-70" class="section level4">
+<h4><span class="header-section-number">6.6.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">detectCycle</span>(ListNode head) {
+    <span class="kw">if</span>(head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
 
+    ListNode fast = head, slow = head;
+    <span class="kw">while</span>(fast != <span class="kw">null</span> &amp;&amp; fast.<span class="fu">next</span> != <span class="kw">null</span>) {
+        fast = fast.<span class="fu">next</span>.<span class="fu">next</span>;
+        slow = slow.<span class="fu">next</span>;
+
+        <span class="kw">if</span>(fast == slow) {
+            <span class="kw">break</span>;
+        }
+    }
+
+    <span class="kw">if</span>(fast == slow) {
+        ListNode cycleHead = head;
+        <span class="co">/*</span>
+<span class="co">         * slow is at middle of CYCLED list</span>
+<span class="co">         * Initially, cycleHead is at header</span>
+<span class="co">         * cycleHead --&gt; slow == slow --&gt; fast</span>
+<span class="co">         */</span>
+        <span class="kw">while</span>(fast != cycleHead) {
+            fast = fast.<span class="fu">next</span>;
+            cycleHead = cycleHead.<span class="fu">next</span>;
+        }
+
+        <span class="kw">return</span> cycleHead;
+    } <span class="kw">else</span> {<span class="co">//no cycle</span>
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="linked-list-cycle-leet-code-141-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="odd-even-linked-list-leet-code-328-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +990,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

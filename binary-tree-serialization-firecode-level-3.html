@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.24 Binary Tree Serialization / Firecode / Level 3 | Technical Interview</title>
+  <meta name="description" content="4.24 Binary Tree Serialization / Firecode / Level 3 | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.24 Binary Tree Serialization / Firecode / Level 3 | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.24 Binary Tree Serialization / Firecode / Level 3 | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.24 Binary Tree Serialization / Firecode / Level 3 | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.24 Binary Tree Serialization / Firecode / Level 3 | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="diameter-of-binary-tree-leet-code-543-easy.html"/>
+<link rel="next" href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,87 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="binary-tree-serialization-firecode-level-3" class="section level2">
+<h2><span class="header-section-number">4.24</span> Binary Tree Serialization / Firecode / Level 3</h2>
+<div id="description-74" class="section level3">
+<h3><span class="header-section-number">4.24.1</span> Description</h3>
+<p>In Computer Science, serialization is the process of converting objects or data structures into a sequence (or series) of characters that can be stored easily in a file / database table or transmitted across a network. Serialized objects need to be de-serialized to create a semantically identical clone of the original object, before being used in programs. You’re given the root node of a binary tree - TreeNode root in the method serializeTree. This method should serialize the binary tree and output a String str, which is then used as an input parameter for the method restoreTree. restoreTree should create a Binary Tree that is structurally identical to the one you serialized and return the root node of the tree. Your task is to fill in the logic for these 2 methods. Don’t worry about passing the serialized String to restoreTree - that will be done automatically when you run your code. Feel free to use any notation you prefer when serializing the binary tree. The choice of traversal algorithm is also open - but try and limit the time complexity of both methods to O(n).</p>
+</div>
+<div id="example-71" class="section level3">
+<h3><span class="header-section-number">4.24.2</span> Example</h3>
+</div>
+<div id="solution-56" class="section level3">
+<h3><span class="header-section-number">4.24.3</span> Solution</h3>
+<div id="walkthrough-91" class="section level4">
+<h4><span class="header-section-number">4.24.3.1</span> Walkthrough</h4>
+Your serialized String will be used to restore the tree. Be sure to use the same format and notation in restoreTree that you use to serialize in serializeTree. For example, the following binary tree
+<div class="figure"><span id="fig:unnamed-chunk-38"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-38-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.32: Some caption.
+</p>
+</div>
+<p>would be serialize into string “1 2 4 # # 5 # # 3 # #”.</p>
+</div>
+<div id="analysis-92" class="section level4">
+<h4><span class="header-section-number">4.24.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-93" class="section level4">
+<h4><span class="header-section-number">4.24.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-55" class="section level4">
+<h4><span class="header-section-number">4.24.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">String</span> <span class="fu">serializeTree</span>(<span class="bu">TreeNode</span> root){
+    <span class="bu">StringBuilder</span> sb = <span class="kw">new</span> <span class="bu">StringBuilder</span>();
 
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        sb.<span class="fu">append</span>(<span class="st">&quot;# &quot;</span>);
+    } <span class="kw">else</span> {
+        sb.<span class="fu">append</span>(root.<span class="fu">data</span> + <span class="st">&quot; &quot;</span>);
+        sb.<span class="fu">append</span>(<span class="fu">serializeTree</span>(root.<span class="fu">left</span>));
+        sb.<span class="fu">append</span>(<span class="fu">serializeTree</span>(root.<span class="fu">right</span>));
+    }
+
+    <span class="kw">return</span> sb.<span class="fu">toString</span>();
+}
+
+<span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">restoreTree</span>(<span class="bu">String</span> str){
+    <span class="kw">if</span> (str == <span class="kw">null</span> || str.<span class="fu">length</span>() == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+
+    <span class="bu">StringTokenizer</span> tokenizer = <span class="kw">new</span> <span class="bu">StringTokenizer</span>(str, <span class="st">&quot; &quot;</span>);
+    <span class="kw">return</span> <span class="fu">deserialize</span>(tokenizer);
+}
+
+<span class="kw">private</span> <span class="bu">TreeNode</span> <span class="fu">deserialize</span>(<span class="bu">StringTokenizer</span> tokenizer){
+    <span class="kw">if</span> (!tokenizer.<span class="fu">hasMoreTokens</span>()) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+    <span class="bu">String</span> val = tokenizer.<span class="fu">nextToken</span>();
+
+    <span class="kw">if</span> (val.<span class="fu">equals</span>(<span class="st">&quot;#&quot;</span>)) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+
+    <span class="bu">TreeNode</span> root = <span class="kw">new</span> <span class="bu">TreeNode</span>(<span class="bu">Integer</span>.<span class="fu">parseInt</span>(val));
+    root.<span class="fu">left</span> = <span class="fu">deserialize</span>(tokenizer);
+    root.<span class="fu">right</span> = <span class="fu">deserialize</span>(tokenizer);
+
+    <span class="kw">return</span> root;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="diameter-of-binary-tree-leet-code-543-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +979,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

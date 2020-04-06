@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>9.4 Longest Common Prefix / LeetCode 14 / Easy | Technical Interview</title>
+  <meta name="description" content="9.4 Longest Common Prefix / LeetCode 14 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="9.4 Longest Common Prefix / LeetCode 14 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="9.4 Longest Common Prefix / LeetCode 14 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="9.4 Longest Common Prefix / LeetCode 14 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="9.4 Longest Common Prefix / LeetCode 14 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="word-ladder-leetcode-127-medium.html"/>
+<link rel="next" href="longest-common-substring.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,64 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="longest-common-prefix-leetcode-14-easy" class="section level2">
+<h2><span class="header-section-number">9.4</span> Longest Common Prefix / LeetCode 14 / Easy</h2>
+<div id="description-115" class="section level3">
+<h3><span class="header-section-number">9.4.1</span> Description</h3>
+<p>Write a function to find the longest common prefix string amongst an array of strings.</p>
+<p>If there is no common prefix, return an empty string “”.</p>
+</div>
+<div id="example-111" class="section level3">
+<h3><span class="header-section-number">9.4.2</span> Example</h3>
+<p>Input: [“flower”,“flow”,“flight”] Output: “fl” Input: [“dog”,“racecar”,“car”] Output: “”</p>
+</div>
+<div id="solution-84" class="section level3">
+<h3><span class="header-section-number">9.4.3</span> Solution</h3>
+<div id="walkthrough-141" class="section level4">
+<h4><span class="header-section-number">9.4.3.1</span> Walkthrough</h4>
+<p>Take the first string as pivotal string and compare it against all other strings. If there is a common character, advance the common index; otherwise, return the substring(0, commonIndex + 1);</p>
+</div>
+<div id="analysis-143" class="section level4">
+<h4><span class="header-section-number">9.4.3.2</span> Analysis</h4>
+<p>Assume there are at most m letter in the longest string and n strings in total. The time complexity is O(m * n).</p>
+</div>
+<div id="algorithm-148" class="section level4">
+<h4><span class="header-section-number">9.4.3.3</span> Algorithm</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">longestCommonPrefix</span>(<span class="bu">String</span>[] strs) {
+    <span class="kw">if</span>(strs == <span class="kw">null</span> || strs.<span class="fu">length</span> == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="st">&quot;&quot;</span>;
+    }
 
+    <span class="dt">int</span> commonIdx = -<span class="dv">1</span>;
+    <span class="bu">String</span> prefix = strs[<span class="dv">0</span>];
+
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prefix.<span class="fu">length</span>(); i++) {
+        <span class="kw">for</span>(<span class="bu">String</span> str : strs) {
+            <span class="kw">if</span>(str.<span class="fu">length</span>() == i) {
+                <span class="co">//if we have reached the end of a string</span>
+                <span class="kw">return</span> prefix.<span class="fu">substring</span>(<span class="dv">0</span>, commonIdx + <span class="dv">1</span>);
+            }
+            <span class="kw">if</span>(prefix.<span class="fu">charAt</span>(i) != str.<span class="fu">charAt</span>(i)) {
+                <span class="co">//if one of the char does not match</span>
+                <span class="kw">return</span> commonIdx == -<span class="dv">1</span> ? <span class="st">&quot;&quot;</span> : prefix.<span class="fu">substring</span>(<span class="dv">0</span>, commonIdx + <span class="dv">1</span>);
+            }
+        }
+
+        commonIdx = i;
+    }
+
+    <span class="kw">return</span> prefix.<span class="fu">substring</span>(<span class="dv">0</span>, commonIdx + <span class="dv">1</span>);
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="word-ladder-leetcode-127-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="longest-common-substring.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +956,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/09-string-manipulation.Rmd",
 "text": "Edit"
 },
 "history": {

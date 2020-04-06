@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.20 Inorder Successor in BST / Leet Code 285 / Medium | Technical Interview</title>
+  <meta name="description" content="4.20 Inorder Successor in BST / Leet Code 285 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.20 Inorder Successor in BST / Leet Code 285 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.20 Inorder Successor in BST / Leet Code 285 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.20 Inorder Successor in BST / Leet Code 285 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.20 Inorder Successor in BST / Leet Code 285 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="binary-tree-upside-down-leet-code-156-medium.html"/>
+<link rel="next" href="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,58 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
-
+<div id="inorder-successor-in-bst-leet-code-285-medium" class="section level2">
+<h2><span class="header-section-number">4.20</span> Inorder Successor in BST / Leet Code 285 / Medium</h2>
+<div id="description-70" class="section level3">
+<h3><span class="header-section-number">4.20.1</span> Description</h3>
+<p>Given a binary search tree and a node in it, find the in-order successor of that node in the BST. Note: If the given node has no in-order successor in the tree, return null.</p>
+</div>
+<div id="example-67" class="section level3">
+<h3><span class="header-section-number">4.20.2</span> Example</h3>
+</div>
+<div id="solution-52" class="section level3">
+<h3><span class="header-section-number">4.20.3</span> Solution</h3>
+<div id="walkthrough-87" class="section level4">
+<h4><span class="header-section-number">4.20.3.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-88" class="section level4">
+<h4><span class="header-section-number">4.20.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-89" class="section level4">
+<h4><span class="header-section-number">4.20.3.3</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code-51" class="section level4">
+<h4><span class="header-section-number">4.20.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">inorderSuccessor</span>(<span class="bu">TreeNode</span> root, <span class="bu">TreeNode</span> p) {
+    <span class="bu">Stack</span>&lt;<span class="bu">TreeNode</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;<span class="bu">TreeNode</span>&gt;();
+    <span class="bu">TreeNode</span> node = <span class="kw">null</span>, prev = <span class="kw">null</span>;
+    <span class="kw">while</span> (!stack.<span class="fu">isEmpty</span>() || node != <span class="kw">null</span>) {
+        <span class="kw">if</span> (node != <span class="kw">null</span>) {
+            stack.<span class="fu">push</span>(node);
+            node = node.<span class="fu">left</span>;
+        } <span class="kw">else</span> {
+            node = stack.<span class="fu">pop</span>();
+            <span class="kw">if</span> (prev == p) {
+                <span class="kw">return</span> node;
+            }
+            prev = node;
+            node = node.<span class="fu">right</span>;
+        }
+    }
+    <span class="kw">return</span> <span class="kw">null</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="binary-tree-upside-down-leet-code-156-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +950,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

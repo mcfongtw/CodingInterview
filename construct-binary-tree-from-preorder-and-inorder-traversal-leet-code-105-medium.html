@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.29 Construct Binary Tree from Preorder and Inorder Traversal / Leet Code 105 / Medium | Technical Interview</title>
+  <meta name="description" content="4.29 Construct Binary Tree from Preorder and Inorder Traversal / Leet Code 105 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.29 Construct Binary Tree from Preorder and Inorder Traversal / Leet Code 105 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.29 Construct Binary Tree from Preorder and Inorder Traversal / Leet Code 105 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.29 Construct Binary Tree from Preorder and Inorder Traversal / Leet Code 105 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.29 Construct Binary Tree from Preorder and Inorder Traversal / Leet Code 105 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="populating-next-right-pointers-in-each-node-leet-code-116-medium.html"/>
+<link rel="next" href="graph.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,89 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium" class="section level2">
+<h2><span class="header-section-number">4.29</span> Construct Binary Tree from Preorder and Inorder Traversal / Leet Code 105 / Medium</h2>
+<div id="description-79" class="section level3">
+<h3><span class="header-section-number">4.29.1</span> Description</h3>
+<p>Given preorder and inorder traversal of a tree, construct the binary tree. You may assume that duplicates do not exist in the tree.</p>
+</div>
+<div id="example-76" class="section level3">
+<h3><span class="header-section-number">4.29.2</span> Example</h3>
+<p>preorder = [3,9,20,15,7] inorder = [9,3,15,20,7]</p>
+Return the following binary tree:
+<div class="figure"><span id="fig:unnamed-chunk-42"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-42-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.36: Some caption.
+</p>
+</div>
+</div>
+<div id="solution-61" class="section level3">
+<h3><span class="header-section-number">4.29.3</span> Solution</h3>
+<div id="walkthrough-96" class="section level4">
+<h4><span class="header-section-number">4.29.3.1</span> Walkthrough</h4>
+<p>PreOrder array is used to construct data value of a node, whereas InOrder array is used to acknowledge the left and right boundary of a node. We could use a Map to store the InOrder array associated with its index (position in array) value and biuld tree according to the following conditions:</p>
+<ul>
+<li>if startIdx <span class="math inline">\(&gt;\)</span> endIdx Return null. (Terminal)</li>
+<li>if startIdx <span class="math inline">\(==\)</span> endIdx The node is here. (Terminal)</li>
+<li>if startIdx <span class="math inline">\(&gt;\)</span> endIdx There should be more nodes in this branch.</li>
+</ul>
+</div>
+<div id="analysis-97" class="section level4">
+<h4><span class="header-section-number">4.29.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-99" class="section level4">
+<h4><span class="header-section-number">4.29.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code---preorder-recursive-1" class="section level4">
+<h4><span class="header-section-number">4.29.3.4</span> Java Code - PreOrder Recursive</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span> preorderIndex = <span class="dv">0</span>;
+
+<span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">buildTree</span>(<span class="dt">int</span>[] preorder, <span class="dt">int</span>[] inorder) {
+    <span class="kw">if</span> (preorder.<span class="fu">length</span> == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+
+    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; inorderIndex = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; inorder.<span class="fu">length</span>; i++) {
+        inorderIndex.<span class="fu">put</span>(inorder[i], i);
+    }
+
+    <span class="kw">return</span> <span class="fu">buildTree</span>(preorder, inorderIndex, <span class="dv">0</span>, inorder.<span class="fu">length</span> - <span class="dv">1</span>);
+}
+
+<span class="kw">private</span> <span class="bu">TreeNode</span> <span class="fu">buildTree</span>(<span class="dt">int</span>[] preorder, <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; inorderIndex, <span class="dt">int</span> startIdx, <span class="dt">int</span> endIdx) {
+    <span class="kw">if</span> (startIdx &gt; endIdx) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+
+    <span class="dt">int</span> val = preorder[preorderIndex++];
+    <span class="bu">TreeNode</span> node = <span class="kw">new</span> <span class="bu">TreeNode</span>(val);
+
+    <span class="kw">if</span> (startIdx == endIdx) {
+        <span class="kw">return</span> node;
+    }
+
+    <span class="dt">int</span> inIndex = inorderIndex.<span class="fu">get</span>(val);
+    node.<span class="fu">left</span> = <span class="fu">buildTree</span>(preorder, inorderIndex, startIdx, inIndex - <span class="dv">1</span>);
+    node.<span class="fu">right</span> = <span class="fu">buildTree</span>(preorder, inorderIndex, inIndex + <span class="dv">1</span>, endIdx);
+
+    <span class="kw">return</span> node;
+}</code></pre></div>
 
 </div>
+</div>
+</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="populating-next-right-pointers-in-each-node-leet-code-116-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="graph.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +981,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

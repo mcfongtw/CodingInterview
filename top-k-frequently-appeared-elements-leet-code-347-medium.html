@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.24 Top K Frequently Appeared Elements / Leet Code 347 / Medium | Technical Interview</title>
+  <meta name="description" content="2.24 Top K Frequently Appeared Elements / Leet Code 347 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.24 Top K Frequently Appeared Elements / Leet Code 347 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.24 Top K Frequently Appeared Elements / Leet Code 347 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.24 Top K Frequently Appeared Elements / Leet Code 347 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.24 Top K Frequently Appeared Elements / Leet Code 347 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="find-common-characters-leetcode-1002-easy.html"/>
+<link rel="next" href="count-iterations-towards-filling-1s-in-an-array.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,73 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="top-k-frequently-appeared-elements-leet-code-347-medium" class="section level2">
+<h2><span class="header-section-number">2.24</span> Top K Frequently Appeared Elements / Leet Code 347 / Medium</h2>
+<div id="description-24" class="section level3">
+<h3><span class="header-section-number">2.24.1</span> Description</h3>
+<p>Given a non-empty array of integers, return the k most frequent elements. You may assume k is always valid, $1 k $ number of unique elements. Your algorithm’s time complexity must be better than O(<span class="math inline">\(n log n\)</span>), where n is the array’s size.</p>
+</div>
+<div id="example-23" class="section level3">
+<h3><span class="header-section-number">2.24.2</span> Example</h3>
+<p>Input: nums = [1,1,1,2,2,3], k = 2 Output: [1,2]</p>
+</div>
+<div id="solution-21" class="section level3">
+<h3><span class="header-section-number">2.24.3</span> Solution</h3>
+<div id="walkthrough-25" class="section level4">
+<h4><span class="header-section-number">2.24.3.1</span> Walkthrough</h4>
+<ul>
+<li>We first gather the frequency of integer by count with a HashMap</li>
+<li>We sort the frequency map by comparing by value() in descending order and sort them in <span class="math inline">\(List&lt;Entry&lt;Number, Frequency&gt;&gt;\)</span>.</li>
+<li>We could traverse the top K entries from the list in a loop.</li>
+</ul>
+</div>
+<div id="analysis-25" class="section level4">
+<h4><span class="header-section-number">2.24.3.2</span> Analysis</h4>
+<p>Since we sort the frequency map, thus the time complexity is <span class="math inline">\(O(n \cdot log n)\)</span>, and Auxiliary Space is <span class="math inline">\(O(n)\)</span> to store several maps and list.</p>
+</div>
+<div id="algorithm-25" class="section level4">
+<h4><span class="header-section-number">2.24.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-21" class="section level4">
+<h4><span class="header-section-number">2.24.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">topKFrequent</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> k) {
+    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; freq = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();
 
+    <span class="kw">for</span> (<span class="dt">int</span> num : nums) {
+        <span class="dt">int</span> count = freq.<span class="fu">getOrDefault</span>(num, <span class="dv">0</span>);
+        freq.<span class="fu">put</span>(num, ++count);
+    }
+
+    <span class="co">//Sort Map.Entry by comparing by value() in descending order</span>
+    <span class="bu">List</span>&lt;<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt;&gt; sortedList = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(freq.<span class="fu">entrySet</span>());
+    sortedList.<span class="fu">sort</span>(<span class="bu">Map</span>.<span class="fu">Entry</span>.<span class="fu">comparingByValue</span>(<span class="bu">Comparator</span>.<span class="fu">reverseOrder</span>()));
+
+
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+    <span class="dt">int</span> topN = <span class="dv">0</span>;
+
+    <span class="kw">for</span> (<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; entry : sortedList) {
+        <span class="co">//Top K elements retrieved</span>
+        <span class="kw">if</span>(topN == k) {
+            <span class="kw">break</span>;
+        }
+
+        result.<span class="fu">add</span>(entry.<span class="fu">getKey</span>());
+        topN++;
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="find-common-characters-leetcode-1002-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="count-iterations-towards-filling-1s-in-an-array.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +965,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

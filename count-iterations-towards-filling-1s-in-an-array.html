@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.25 Count iterations towards filling 1’s in an array / / } | Technical Interview</title>
+  <meta name="description" content="2.25 Count iterations towards filling 1’s in an array / / } | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.25 Count iterations towards filling 1’s in an array / / } | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.25 Count iterations towards filling 1’s in an array / / } | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.25 Count iterations towards filling 1’s in an array / / } | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.25 Count iterations towards filling 1’s in an array / / } | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="top-k-frequently-appeared-elements-leet-code-347-medium.html"/>
+<link rel="next" href="maximum-subarray-leet-code-53-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,104 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="count-iterations-towards-filling-1s-in-an-array" class="section level2">
+<h2><span class="header-section-number">2.25</span> Count iterations towards filling 1’s in an array / / }</h2>
+<div id="description-25" class="section level3">
+<h3><span class="header-section-number">2.25.1</span> Description</h3>
+<p>Given an array of 0s and 1s, in how many iterations the whole array can be filled with 1s if in a single iteration immediate neighbors of 1s can be filled. If we cannot fill array with 1s, then print “-1”</p>
+</div>
+<div id="example-24" class="section level3">
+<h3><span class="header-section-number">2.25.2</span> Example</h3>
+<p>Input : arr[] = {1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1} Output : 1</p>
+<p>Input : arr[] = {0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1} Output : 2</p>
+</div>
+<div id="solution-22" class="section level3">
+<h3><span class="header-section-number">2.25.3</span> Solution</h3>
+<div id="walkthrough-26" class="section level4">
+<h4><span class="header-section-number">2.25.3.1</span> Walkthrough</h4>
+<p>For each sub-block of the array, consider the following 3 scenarios</p>
+<ul>
+<li>Case 1: There are no 1’s. In this case, array cannot be filled with 1’s. Thus, return -1; Locate the first 1 and evalute the following</li>
+<li>Case 2: [1, 0, 0, …., 0, 1] Another 1 follows and makes it a block of 0s with 1s on both ends. Number of iteration needed to flip the 0s become <span class="math inline">\(num_zeo / 2\)</span> if number is even otherwise <span class="math inline">\((num_zero + 1) / 2\)</span></li>
+<li>Case 3: [1, 0, 0, …, 0] Another 1 cannot be found and makes it a single 1 at the end. Number of iteration needed equals to the number of 0s.</li>
+<li>Case 3: [0, 0, 0, …, 1] Count the number of 0s until the first 1 is met.</li>
+</ul>
+<p>Finally, we need to get the maximum iteration for each subproblems.</p>
+</div>
+<div id="analysis-26" class="section level4">
+<h4><span class="header-section-number">2.25.3.2</span> Analysis</h4>
+<p>Time Complexity : O(n) since every element is visited once.</p>
+</div>
+<div id="algorithm-26" class="section level4">
+<h4><span class="header-section-number">2.25.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-22" class="section level4">
+<h4><span class="header-section-number">2.25.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span> <span class="fu">countIterations</span>(<span class="dt">int</span> arr[]) {
+    <span class="dt">boolean</span> oneFound = <span class="kw">false</span>;
+    <span class="dt">int</span> maxIteration = <span class="dv">0</span>;
 
+    <span class="dt">int</span> n = arr.<span class="fu">length</span>;
+    <span class="dt">int</span> i = <span class="dv">0</span>;
+
+    <span class="co">// Start traversing the array</span>
+    <span class="kw">while</span> ( i &lt; n ) {
+        <span class="kw">if</span> (arr[i] == <span class="dv">1</span>) {
+            oneFound = <span class="kw">true</span>;
+        }
+
+        <span class="co">// Traverse and skip 1s until a 0 is met</span>
+        <span class="kw">while</span> (i &lt; n &amp;&amp; arr[i]==<span class="dv">1</span>) {
+            i++;
+        }
+
+        <span class="co">// Count initial contiguous 0s until a 1 is met</span>
+        <span class="dt">int</span> inialCountZero = <span class="dv">0</span>;
+        <span class="kw">while</span> ( i &lt; n &amp;&amp; arr[i]==<span class="dv">0</span>) {
+            inialCountZero++;
+            i++;
+        }
+
+        <span class="co">// Condition for Case 1</span>
+        <span class="kw">if</span> (oneFound == <span class="kw">false</span> &amp;&amp; i == n) {
+            <span class="kw">return</span> -<span class="dv">1</span>;
+        }
+
+        <span class="co">// Condition to check if Case 2 satisfies:</span>
+        <span class="dt">int</span> countIteration;
+        <span class="kw">if</span> (i &lt; n &amp;&amp; oneFound == <span class="kw">true</span>) {
+
+            <span class="co">// If inialCountZero is even</span>
+            <span class="kw">if</span> ((inialCountZero &amp; <span class="dv">1</span>) == <span class="dv">0</span>) {
+                countIteration = inialCountZero / <span class="dv">2</span>;
+            } <span class="kw">else</span> {
+                <span class="co">//odd</span>
+                countIteration = (inialCountZero + <span class="dv">1</span>) / <span class="dv">2</span>;
+            }
+
+            inialCountZero = <span class="dv">0</span>;
+        } <span class="kw">else</span> {
+            <span class="co">// Case 3</span>
+            countIteration = inialCountZero;
+            inialCountZero = <span class="dv">0</span>;
+        }
+
+        maxIteration = <span class="bu">Math</span>.<span class="fu">max</span>(maxIteration, countIteration);
+        <span class="co">//totalIteration += countIteration</span>
+    }
+
+    <span class="kw">return</span> maxIteration;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="top-k-frequently-appeared-elements-leet-code-347-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="maximum-subarray-leet-code-53-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +996,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

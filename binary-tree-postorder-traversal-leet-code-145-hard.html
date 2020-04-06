@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.14 Binary Tree Postorder Traversal / Leet Code 145 / Hard | Technical Interview</title>
+  <meta name="description" content="4.14 Binary Tree Postorder Traversal / Leet Code 145 / Hard | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.14 Binary Tree Postorder Traversal / Leet Code 145 / Hard | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.14 Binary Tree Postorder Traversal / Leet Code 145 / Hard | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.14 Binary Tree Postorder Traversal / Leet Code 145 / Hard | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.14 Binary Tree Postorder Traversal / Leet Code 145 / Hard | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="binary-tree-inorder-traversal-leet-code-94-medium.html"/>
+<link rel="next" href="maximum-depth-of-binary-tree-leet-code-104-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,157 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="binary-tree-postorder-traversal-leet-code-145-hard" class="section level2">
+<h2><span class="header-section-number">4.14</span> Binary Tree Postorder Traversal / Leet Code 145 / Hard</h2>
 
+<div id="description-64" class="section level3">
+<h3><span class="header-section-number">4.14.1</span> Description</h3>
+<p>Given a binary tree, return the postorder traversal of its nodes’ values.</p>
+</div>
+<div id="example-61" class="section level3">
+<h3><span class="header-section-number">4.14.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-24"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-24-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.18: Some caption.
+</p>
+</div>
+<p>Output: [4, 5, 2, 3, 1]</p>
+</div>
+<div id="solution---iterative-i-2" class="section level3">
+<h3><span class="header-section-number">4.14.3</span> Solution - Iterative I</h3>
+<div id="walkthrough-77" class="section level4">
+<h4><span class="header-section-number">4.14.3.1</span> Walkthrough</h4>
+<p>For iterative solution, use a stack to store the root node that will be used to retrieve root.right for later use. For initial loop condiition, be sure to include (root != null) to make sure loop starts since stack initially is empty.</p>
+</div>
+<div id="analysis-78" class="section level4">
+<h4><span class="header-section-number">4.14.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-79" class="section level4">
+<h4><span class="header-section-number">4.14.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code---iterative-i-2" class="section level4">
+<h4><span class="header-section-number">4.14.3.4</span> Java Code - Iterative I</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">postorderTraversal</span>(<span class="bu">TreeNode</span> root) {
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+    <span class="co">//stack is used to store the root node that will be used access root.right later</span>
+    <span class="bu">Stack</span>&lt;<span class="bu">TreeNode</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();
+
+    <span class="kw">while</span>(!stack.<span class="fu">isEmpty</span>() || root != <span class="kw">null</span>) {
+        <span class="kw">if</span>(root != <span class="kw">null</span>) {
+            stack.<span class="fu">push</span>(root);
+
+            <span class="co">//insert to head</span>
+            result.<span class="fu">add</span>(<span class="dv">0</span>, root.<span class="fu">val</span>);
+            root = root.<span class="fu">right</span>;
+        } <span class="kw">else</span> {
+            root = stack.<span class="fu">pop</span>().<span class="fu">left</span>;
+        }
+    }
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---iterative-with-two-stacks" class="section level3">
+<h3><span class="header-section-number">4.14.4</span> Solution - Iterative with Two Stacks</h3>
+<div id="walkthrough-78" class="section level4">
+<h4><span class="header-section-number">4.14.4.1</span> Walkthrough</h4>
+<p>The idea is to push reverse postorder traversal to a stack. Once we have the reversed postorder traversal in a stack, we can just pop all items one by one from the stack and process them; this order will be in postorder because of the LIFO property of stacks. To get a reversed postorder elements in a stack - the second stack is used for this purpose, this sequence is very similar to the preorder traversal. The only difference is that the right child is visited before left child, and therefore the sequence is “root right left” instead of “root left right”.</p>
+</div>
+<div id="analysis-79" class="section level4">
+<h4><span class="header-section-number">4.14.4.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-80" class="section level4">
+<h4><span class="header-section-number">4.14.4.3</span> Algorithm</h4>
+</div>
+<div id="java-code---iterative-with-two-stacks" class="section level4">
+<h4><span class="header-section-number">4.14.4.4</span> Java Code - Iterative with Two Stacks</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">postorderTraversal</span>(<span class="bu">TreeNode</span> root) {
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+    <span class="bu">Stack</span>&lt;<span class="bu">TreeNode</span>&gt; stack1 = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();
+    <span class="co">//stack2 is used to store the reversed postorder elements in a stack</span>
+    <span class="bu">Stack</span>&lt;<span class="bu">TreeNode</span>&gt; stack2 = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();
+
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        <span class="kw">return</span> result;
+    }
+    stack.<span class="fu">push</span>(root);
+
+    <span class="kw">while</span> (!stack1.<span class="fu">isEmpty</span>()) {
+        <span class="co">// Pop an item from stack1 and push it to stack2</span>
+        <span class="bu">TreeNode</span> node = stack1.<span class="fu">pop</span>();
+        stack2.<span class="fu">push</span>(node);
+
+        <span class="co">// Push LEFT child of popped item to stack1</span>
+        <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {
+            stack1.<span class="fu">push</span>(node.<span class="fu">left</span>);
+        }
+        <span class="co">// Push RIGHT child of popped item to stack1</span>
+        <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {
+            stack1.<span class="fu">push</span>(node.<span class="fu">right</span>);
+        }
+    }
+
+    <span class="co">//Traverse all reversed elements in second stack</span>
+    <span class="kw">while</span> (!stack2.<span class="fu">isEmpty</span>()) {
+        <span class="bu">TreeNode</span> node = stack2.<span class="fu">pop</span>();
+        result.<span class="fu">add</span>(node.<span class="fu">val</span>)
+    }
+
+    <span class="kw">return</span> result;
+    }</code></pre></div>
+</div>
+</div>
+<div id="solution---recursive-2" class="section level3">
+<h3><span class="header-section-number">4.14.5</span> Solution - Recursive</h3>
+<div id="walkthrough-79" class="section level4">
+<h4><span class="header-section-number">4.14.5.1</span> Walkthrough</h4>
+<p>For recursive implementation, do the following step</p>
+<ul>
+<li>Recursively invoke left child node.</li>
+<li>Recursively invoke right child node.</li>
+<li>To process data at current node</li>
+</ul>
+</div>
+<div id="analysis-80" class="section level4">
+<h4><span class="header-section-number">4.14.5.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once. Auxiliary Space is O(1) if we do not consider the size of stacks for function calls, otherwise O(n).</p>
+</div>
+<div id="algorithm-81" class="section level4">
+<h4><span class="header-section-number">4.14.5.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code---recursive-2" class="section level4">
+<h4><span class="header-section-number">4.14.5.4</span> Java Code - Recursive</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">postorderTraversal</span>(<span class="bu">TreeNode</span> root) {
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+    <span class="fu">traversalHelper</span>(root, result);
+
+    <span class="kw">return</span> result;
+}
+
+<span class="kw">public</span> <span class="dt">void</span> <span class="fu">traversalHelper</span>(<span class="bu">TreeNode</span> root, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list) {
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="fu">traversalHelper</span>(root.<span class="fu">left</span>, list);
+    <span class="fu">traversalHelper</span>(root.<span class="fu">right</span>, list);
+    list.<span class="fu">add</span>(root.<span class="fu">val</span>);
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="binary-tree-inorder-traversal-leet-code-94-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="maximum-depth-of-binary-tree-leet-code-104-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1049,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

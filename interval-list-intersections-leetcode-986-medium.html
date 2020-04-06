@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.21 Interval List Intersections / LeetCode 986 / Medium | Technical Interview</title>
+  <meta name="description" content="2.21 Interval List Intersections / LeetCode 986 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.21 Interval List Intersections / LeetCode 986 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.21 Interval List Intersections / LeetCode 986 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.21 Interval List Intersections / LeetCode 986 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.21 Interval List Intersections / LeetCode 986 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="non-overlapping-intervals-leetcode-435-medium.html"/>
+<link rel="next" href="insert-interval-leetcode-57-hard.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,101 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="interval-list-intersections-leetcode-986-medium" class="section level2">
+<h2><span class="header-section-number">2.21</span> Interval List Intersections / LeetCode 986 / Medium</h2>
+<div id="description-21" class="section level3">
+<h3><span class="header-section-number">2.21.1</span> Description</h3>
+<p>Given two lists of closed intervals, each list of intervals is pairwise disjoint and in sorted order. Return the intersection of these two interval lists.</p>
+</div>
+<div id="example-20" class="section level3">
+<h3><span class="header-section-number">2.21.2</span> Example</h3>
+<p>Input: A = [[0,2],[5,10],[13,23],[24,25]], B = [[1,5],[8,12],[15,24],[25,26]] Output: [[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]] Reminder: The inputs and the desired output are lists of Interval objects, and not arrays or lists.</p>
+</div>
+<div id="solution-18" class="section level3">
+<h3><span class="header-section-number">2.21.3</span> Solution</h3>
+<div id="walkthrough-22" class="section level4">
+<h4><span class="header-section-number">2.21.3.1</span> Walkthrough</h4>
+<p>Traverse the two lists of intervals. Merge two intervals if there is an intersection. Move the index of A if <span class="math inline">\(A[i]\)</span>.end <span class="math inline">\(&lt; B[i]\)</span>.end since the interval is the smaller out of comparison.</p>
+</div>
+<div id="analysis-22" class="section level4">
+<h4><span class="header-section-number">2.21.3.2</span> Analysis</h4>
+<p>The runtime complexity is <span class="math inline">\(O(n * m)\)</span></p>
+</div>
+<div id="algorithm-22" class="section level4">
+<h4><span class="header-section-number">2.21.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-18" class="section level4">
+<h4><span class="header-section-number">2.21.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">LeetCode <span class="dv">986</span> / Medium
+<span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> Interval {
+    <span class="kw">public</span> <span class="dt">int</span> start;
+    <span class="kw">public</span> <span class="dt">int</span> end;
 
+    <span class="kw">public</span> <span class="fu">Interval</span>(<span class="dt">int</span> s, <span class="dt">int</span> e) {
+        <span class="kw">this</span>.<span class="fu">start</span> = s;
+        <span class="kw">this</span>.<span class="fu">end</span> = e;
+    }
+
+    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span>[][] <span class="fu">toArray</span>(<span class="bu">List</span>&lt;Interval&gt; list) {
+        <span class="dt">int</span>[][] result = <span class="kw">new</span> <span class="dt">int</span>[list.<span class="fu">size</span>()][<span class="dv">2</span>];
+
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; list.<span class="fu">size</span>(); i++) {
+            Interval interval = list.<span class="fu">get</span>(i);
+
+            result[i] = <span class="kw">new</span> <span class="dt">int</span>[] {interval.<span class="fu">start</span>, interval.<span class="fu">end</span>};
+        }
+
+        <span class="kw">return</span> result;
+    }
+
+    <span class="kw">public</span> <span class="dt">static</span> <span class="bu">List</span>&lt;Interval&gt; <span class="fu">toList</span>(<span class="dt">int</span>[][] array) {
+        <span class="bu">List</span>&lt;Interval&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; array.<span class="fu">length</span>; i++) {
+            Interval interval = <span class="kw">new</span> <span class="fu">Interval</span>(array[i][<span class="dv">0</span>], array[i][<span class="dv">1</span>]);
+
+            result.<span class="fu">add</span>(interval);
+        }
+
+        <span class="kw">return</span> result;
+    }
+
+}
+<span class="kw">public</span> <span class="dt">int</span>[][] <span class="fu">intervalIntersection</span>(<span class="dt">int</span>[][] A, <span class="dt">int</span>[][] B) {
+    <span class="bu">List</span>&lt;Interval&gt; intervalsA = Interval.<span class="fu">toList</span>(A);
+    <span class="bu">List</span>&lt;Interval&gt; intervalsB = Interval.<span class="fu">toList</span>(B);
+    <span class="bu">List</span>&lt;Interval&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+    <span class="dt">int</span> i = <span class="dv">0</span>, j = <span class="dv">0</span>;
+    <span class="kw">while</span>( i &lt; intervalsA.<span class="fu">size</span>() &amp;&amp; j &lt; intervalsB.<span class="fu">size</span>()) {
+        <span class="dt">int</span> highStart = <span class="bu">Math</span>.<span class="fu">max</span>(intervalsA.<span class="fu">get</span>(i).<span class="fu">start</span>, intervalsB.<span class="fu">get</span>(j).<span class="fu">start</span>);
+        <span class="dt">int</span> lowEnd = <span class="bu">Math</span>.<span class="fu">min</span>(intervalsA.<span class="fu">get</span>(i).<span class="fu">end</span>, intervalsB.<span class="fu">get</span>(j).<span class="fu">end</span>);
+
+        <span class="co">//there is an intersection</span>
+        <span class="kw">if</span>( highStart &lt;= lowEnd) {
+            result.<span class="fu">add</span>( <span class="kw">new</span> <span class="fu">Interval</span>(highStart, lowEnd));
+        }
+        <span class="kw">if</span>( intervalsA.<span class="fu">get</span>(i).<span class="fu">end</span> &lt; intervalsB.<span class="fu">get</span>(j).<span class="fu">end</span>) {
+            <span class="co">//move index of A[]</span>
+            i++;
+        } <span class="kw">else</span> {
+            <span class="co">//move index of B[]</span>
+            j++;
+        }
+    }
+
+    <span class="kw">return</span> Interval.<span class="fu">toArray</span>(result);
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="non-overlapping-intervals-leetcode-435-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="insert-interval-leetcode-57-hard.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +993,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

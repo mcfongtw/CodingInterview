@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>9.3 Word Ladder / LeetCode 127 / Medium | Technical Interview</title>
+  <meta name="description" content="9.3 Word Ladder / LeetCode 127 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="9.3 Word Ladder / LeetCode 127 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="9.3 Word Ladder / LeetCode 127 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="9.3 Word Ladder / LeetCode 127 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="9.3 Word Ladder / LeetCode 127 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="insert-stars-firecode-level-2.html"/>
+<link rel="next" href="longest-common-prefix-leetcode-14-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,94 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="word-ladder-leetcode-127-medium" class="section level2">
+<h2><span class="header-section-number">9.3</span> Word Ladder / LeetCode 127 / Medium</h2>
+<div id="description-114" class="section level3">
+<h3><span class="header-section-number">9.3.1</span> Description</h3>
+<p>Given two words (beginWord and endWord), and a dictionary’s word list, find the length of shortest transformation sequence from beginWord to endWord, such that:</p>
+<p>Only one letter can be changed at a time. Each transformed word must exist in the word list. Note that beginWord is not a transformed word. Note:</p>
+<ul>
+<li>Return 0 if there is no such transformation sequence.</li>
+<li>All words have the same length.</li>
+<li>All words contain only lowercase alphabetic characters.</li>
+<li>You may assume no duplicates in the word list.</li>
+<li>You may assume beginWord and endWord are non-empty and are not the same.</li>
+</ul>
+</div>
+<div id="example-110" class="section level3">
+<h3><span class="header-section-number">9.3.2</span> Example</h3>
+<p>Input: beginWord = “hit”, endWord = “cog”, wordList = [“hot”,“dot”,“dog”,“lot”,“log”,“cog”]</p>
+<p>Output: 5</p>
+<p>Explanation: As one shortest transformation is “hit” <span class="math inline">\(-&gt;\)</span> “hot” <span class="math inline">\(-&gt;\)</span> “dot” <span class="math inline">\(-&gt;\)</span> “dog” <span class="math inline">\(-&gt;\)</span> “cog”, return its length 5.</p>
+</div>
+<div id="solution---bfs-2" class="section level3">
+<h3><span class="header-section-number">9.3.3</span> Solution - BFS</h3>
+<div id="walkthrough-140" class="section level4">
+<h4><span class="header-section-number">9.3.3.1</span> Walkthrough</h4>
+<p>Use a queue to grow the tree that beginWord could possibly ‘mutate’ to, each time with a different character. Find the first path that generate endWord; otherwise, continue enumeration until all possibilities exhaust.</p>
+</div>
+<div id="analysis-142" class="section level4">
+<h4><span class="header-section-number">9.3.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as each word is processed once.</p>
+</div>
+<div id="algorithm-147" class="section level4">
+<h4><span class="header-section-number">9.3.3.3</span> Algorithm</h4>
+<p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code---bfs-1" class="section level4">
+<h4><span class="header-section-number">9.3.3.4</span> Java Code - BFS</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">ladderLength</span>(<span class="bu">String</span> beginWord, <span class="bu">String</span> endWord, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; wordList) {
+    <span class="bu">Set</span>&lt;<span class="bu">String</span>&gt; dict = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;(wordList);
+    <span class="bu">Queue</span>&lt;<span class="bu">String</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+    queue.<span class="fu">offer</span>(beginWord);
+    <span class="dt">int</span> level = <span class="dv">1</span>;
 
+    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {
+        <span class="co">//Since we are adding element into queue dynamically, it is better to invoke</span>
+        <span class="co">//queue.size() at beginning b/c queue size would change on the fly.</span>
+        <span class="kw">for</span> (<span class="dt">int</span> i = queue.<span class="fu">size</span>(); i &gt; <span class="dv">0</span>; i--) {
+            <span class="bu">String</span> word = queue.<span class="fu">poll</span>();
+
+            <span class="kw">if</span> (word.<span class="fu">equals</span>(endWord)) {
+                <span class="co">//find match to endWord</span>
+                <span class="kw">return</span> level;
+            }
+
+            <span class="co">//Enumerate all OTHER possible chars against word</span>
+            <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; word.<span class="fu">length</span>(); j++) {
+                <span class="dt">char</span>[] array = word.<span class="fu">toCharArray</span>();
+
+                <span class="kw">for</span> (<span class="dt">char</span> c = <span class="ch">&#39;a&#39;</span>; c &lt;= <span class="ch">&#39;z&#39;</span>; c++) {
+                    <span class="co">//Skip on the same character</span>
+                    <span class="kw">if</span> (c == word.<span class="fu">charAt</span>(j)) {
+                        <span class="kw">continue</span>;
+                    }
+
+                    array[j] = c;
+                    <span class="bu">String</span> guess = <span class="bu">String</span>.<span class="fu">valueOf</span>(array);
+                    <span class="kw">if</span> (dict.<span class="fu">remove</span>(guess)) {
+                        <span class="co">//if dict contains element, return true</span>
+                        queue.<span class="fu">offer</span>(guess);
+                    }
+                }
+            }
+        }
+
+        level++;
+    }
+
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="insert-stars-firecode-level-2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="longest-common-prefix-leetcode-14-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +986,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/09-string-manipulation.Rmd",
 "text": "Edit"
 },
 "history": {

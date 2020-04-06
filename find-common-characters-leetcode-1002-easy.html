@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.23 Find Common Characters / LeetCode 1002 / Easy | Technical Interview</title>
+  <meta name="description" content="2.23 Find Common Characters / LeetCode 1002 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.23 Find Common Characters / LeetCode 1002 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.23 Find Common Characters / LeetCode 1002 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.23 Find Common Characters / LeetCode 1002 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.23 Find Common Characters / LeetCode 1002 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="insert-interval-leetcode-57-hard.html"/>
+<link rel="next" href="top-k-frequently-appeared-elements-leet-code-347-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,92 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="find-common-characters-leetcode-1002-easy" class="section level2">
+<h2><span class="header-section-number">2.23</span> Find Common Characters / LeetCode 1002 / Easy</h2>
+<div id="description-23" class="section level3">
+<h3><span class="header-section-number">2.23.1</span> Description</h3>
+<p>Given an array A of strings made only from lowercase letters, return a list of all characters that show up in all strings within the list (including duplicates). For example, if a character occurs 3 times in all strings but not 4 times, you need to include that character three times in the final answer. You may return the answer in any order.</p>
+</div>
+<div id="example-22" class="section level3">
+<h3><span class="header-section-number">2.23.2</span> Example</h3>
+<p>Input: [“bella”,“label”,“roller”]. Output: [“e”,“l”,“l”]</p>
+<p>Input: [“cool”,“lock”,“cook”]. Output: [“c”,“o”]</p>
+</div>
+<div id="solution-20" class="section level3">
+<h3><span class="header-section-number">2.23.3</span> Solution</h3>
+<div id="walkthrough-24" class="section level4">
+<h4><span class="header-section-number">2.23.3.1</span> Walkthrough</h4>
+<p>First retrieve the alphabet distribution for the first word. For each of following word, maintain the min number of duplicated alphabets. Lastly, take the alphabet which has more than 1 occurrences.</p>
+</div>
+<div id="analysis-24" class="section level4">
+<h4><span class="header-section-number">2.23.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) where n is the number of words.</p>
+</div>
+<div id="algorithm-24" class="section level4">
+<h4><span class="header-section-number">2.23.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-20" class="section level4">
+<h4><span class="header-section-number">2.23.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; <span class="fu">commonChars</span>(<span class="bu">String</span>[] A) {
+    <span class="dt">int</span>[] minFreq = <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">26</span>];
 
+    <span class="co">//init frequency map with the first string</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; A[<span class="dv">0</span>].<span class="fu">length</span>(); i++) {
+        <span class="dt">char</span> c = A[<span class="dv">0</span>].<span class="fu">charAt</span>(i);
+
+        <span class="dt">int</span> index = c - <span class="ch">&#39;a&#39;</span>;
+        <span class="dt">int</span> counter = minFreq[index];
+        minFreq[index] = ++counter;
+    }
+
+
+    <span class="co">//Do the actions for the following words</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; A.<span class="fu">length</span>; i++) {
+        <span class="bu">String</span> str = A[i];
+        <span class="dt">int</span>[] tempFreq = <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">26</span>];
+
+        <span class="co">//1. Store the frequency of alphabets</span>
+        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; str.<span class="fu">length</span>(); j++) {
+            <span class="dt">char</span> c = str.<span class="fu">charAt</span>(j);
+
+            <span class="dt">int</span> index = c - <span class="ch">&#39;a&#39;</span>;
+            <span class="dt">int</span> counter = tempFreq[index];
+            tempFreq[index] = ++counter;
+        }
+
+        <span class="co">//2. Iterate thru 2 arrays and get the min number of (duplicated) alphabets</span>
+        <span class="co">//   non-duplicated returns 0</span>
+        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; <span class="dv">26</span>; j++) {
+            minFreq[j] = <span class="bu">Math</span>.<span class="fu">min</span>(minFreq[j], tempFreq[j]);
+        }
+    }
+
+    <span class="dt">int</span> numOfWords = A.<span class="fu">length</span>;
+    <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="dv">26</span>; i++) {
+        <span class="dt">int</span> minCounter = minFreq[i];
+
+        <span class="co">//Take the min number of duplicated alphabets (1 min)</span>
+        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; minCounter; j++) {
+            <span class="dt">char</span> alphabet = (<span class="dt">char</span>) (<span class="ch">&#39;a&#39;</span> + i);
+            result.<span class="fu">add</span>(<span class="bu">String</span>.<span class="fu">valueOf</span>(alphabet));
+        }
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="insert-interval-leetcode-57-hard.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="top-k-frequently-appeared-elements-leet-code-347-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +984,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

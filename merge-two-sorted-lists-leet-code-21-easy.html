@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.8 Merge Two Sorted Lists / Leet Code 21 / Easy | Technical Interview</title>
+  <meta name="description" content="6.8 Merge Two Sorted Lists / Leet Code 21 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.8 Merge Two Sorted Lists / Leet Code 21 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.8 Merge Two Sorted Lists / Leet Code 21 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.8 Merge Two Sorted Lists / Leet Code 21 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.8 Merge Two Sorted Lists / Leet Code 21 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="odd-even-linked-list-leet-code-328-medium.html"/>
+<link rel="next" href="merge-k-sorted-lists-leet-code-23-hard.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,65 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="merge-two-sorted-lists-leet-code-21-easy" class="section level2">
+<h2><span class="header-section-number">6.8</span> Merge Two Sorted Lists / Leet Code 21 / Easy</h2>
+<div id="description-93" class="section level3">
+<h3><span class="header-section-number">6.8.1</span> Description</h3>
+<p>Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.</p>
+</div>
+<div id="example-89" class="section level3">
+<h3><span class="header-section-number">6.8.2</span> Example</h3>
+</div>
+<div id="solution-70" class="section level3">
+<h3><span class="header-section-number">6.8.3</span> Solution</h3>
+<div id="walkthrough-114" class="section level4">
+<h4><span class="header-section-number">6.8.3.1</span> Walkthrough</h4>
+<p>This is the same as merge() to sort a list in Leet Code 148. First we will create a new ListNode and a current pointer. While traversing the node, compre the nodes at each list and nodes with smaller value will attach to the final sorted list. Exit traversal when either list hits the end. If there are nodes remained in either list, connect to that remaining nodes of the list.</p>
+</div>
+<div id="analysis-115" class="section level4">
+<h4><span class="header-section-number">6.8.3.2</span> Analysis</h4>
+<p>The cost for each merge is O(n) as every node is visited once in the list. There are two lists, thus the overall time complexity remains O(n).</p>
+</div>
+<div id="algorithm-121" class="section level4">
+<h4><span class="header-section-number">6.8.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-72" class="section level4">
+<h4><span class="header-section-number">6.8.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">mergeTwoLists</span>(ListNode l1, ListNode l2) {
+    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), current = headPrev;
 
+    <span class="kw">while</span>(l1 != <span class="kw">null</span> &amp;&amp; l2 != <span class="kw">null</span>) {
+        <span class="kw">if</span>(l1.<span class="fu">val</span> &lt; l2.<span class="fu">val</span>) {
+            <span class="co">//l1 &lt; l2</span>
+            current.<span class="fu">next</span> = l1;
+            l1 = l1.<span class="fu">next</span>;
+        } <span class="kw">else</span> {
+            current.<span class="fu">next</span> = l2;
+            l2 = l2.<span class="fu">next</span>;
+        }
+        current = current.<span class="fu">next</span>;
+    }
+
+    <span class="co">// connect to the rest of the remaining nodes</span>
+    <span class="kw">if</span>(l1 != <span class="kw">null</span>) {
+        current.<span class="fu">next</span> = l1;
+    } <span class="kw">else</span> {
+        <span class="co">// l2 = remaining of list or null</span>
+        current.<span class="fu">next</span> = l2;
+    }
+
+    <span class="kw">return</span> headPrev.<span class="fu">next</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="odd-even-linked-list-leet-code-328-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="merge-k-sorted-lists-leet-code-23-hard.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +957,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

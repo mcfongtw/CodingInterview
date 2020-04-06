@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.32 Find the Maximum Number of Repetitions / Firecode / Level 3 | Technical Interview</title>
+  <meta name="description" content="2.32 Find the Maximum Number of Repetitions / Firecode / Level 3 | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.32 Find the Maximum Number of Repetitions / Firecode / Level 3 | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.32 Find the Maximum Number of Repetitions / Firecode / Level 3 | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.32 Find the Maximum Number of Repetitions / Firecode / Level 3 | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.32 Find the Maximum Number of Repetitions / Firecode / Level 3 | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="climbing-stairs-leet-code-70-easy.html"/>
+<link rel="next" href="house-robber-leet-code-198-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,64 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="find-the-maximum-number-of-repetitions-firecode-level-3" class="section level2">
+<h2><span class="header-section-number">2.32</span> Find the Maximum Number of Repetitions / Firecode / Level 3</h2>
+<div id="description-32" class="section level3">
+<h3><span class="header-section-number">2.32.1</span> Description</h3>
+<p>Given an Array of integers, write a method that will return the integer with the maximum number of repetitions. Your code is expected to run with O(n) time complexity and O(1) Auxiliary Space. The elements in the array are between 0 to size(array) - 1 and the array will not be empty.</p>
+</div>
+<div id="example-31" class="section level3">
+<h3><span class="header-section-number">2.32.2</span> Example</h3>
+<p><span class="math inline">\(f(\{3,1,2,2,3,4,4,4\}) = 4\)</span></p>
+</div>
+<div id="solution-28" class="section level3">
+<h3><span class="header-section-number">2.32.3</span> Solution</h3>
+<div id="walkthrough-34" class="section level4">
+<h4><span class="header-section-number">2.32.3.1</span> Walkthrough</h4>
+<p>The key is to utilize the characteristic of the elements in the array being between 0 to size(array) - 1. We should increment a[a[i]] by k for each element. Retrieve the maximum element and return the index of the element. k is an increment factor as long as it is bigger than size of array.</p>
+</div>
+<div id="analysis-34" class="section level4">
+<h4><span class="header-section-number">2.32.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every element is visited once.</p>
+</div>
+<div id="algorithm-34" class="section level4">
+<h4><span class="header-section-number">2.32.3.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+</div>
+<div id="java-code-28" class="section level4">
+<h4><span class="header-section-number">2.32.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">getMaxRepetition</span>(<span class="dt">int</span>[] a) {
+    <span class="co">//k to be the increment factor, larger &gt;= size(a) to be significant</span>
+    <span class="dt">int</span> k = <span class="dv">100</span>;
 
+    <span class="co">// Iterate though input array, for every element</span>
+    <span class="co">// arr[i], increment a[a[i]] by k</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i&lt; a.<span class="fu">length</span>; i++) {
+        a[(a[i] \% k)] += k;
+    }
+
+    <span class="co">// Find index of the maximum repeating element</span>
+    <span class="dt">int</span> max = a[<span class="dv">0</span>], maxIdx = <span class="dv">0</span>;
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; a.<span class="fu">length</span>; i++) {
+        <span class="kw">if</span> (a[i] &gt; max) {
+            max = a[i];
+            maxIdx = i;
+        }
+    }
+
+    <span class="co">// Return index of the maximum element</span>
+    <span class="kw">return</span> maxIdx;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="climbing-stairs-leet-code-70-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="house-robber-leet-code-198-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +956,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.7 Count Complete Tree Nodes / Leet Code 222 / Medium | Technical Interview</title>
+  <meta name="description" content="4.7 Count Complete Tree Nodes / Leet Code 222 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.7 Count Complete Tree Nodes / Leet Code 222 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.7 Count Complete Tree Nodes / Leet Code 222 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.7 Count Complete Tree Nodes / Leet Code 222 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.7 Count Complete Tree Nodes / Leet Code 222 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html"/>
+<link rel="next" href="distance-of-a-node-from-the-root-firebase-level-3.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,67 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="count-complete-tree-nodes-leet-code-222-medium" class="section level2">
+<h2><span class="header-section-number">4.7</span> Count Complete Tree Nodes / Leet Code 222 / Medium</h2>
+<div id="description-57" class="section level3">
+<h3><span class="header-section-number">4.7.1</span> Description</h3>
+<p>Given a complete binary tree, count the number of nodes. In a complete binary tree every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible. It can have between 1 and 2h nodes inclusive at the last level h. In a full binary tree, it is completely filled at the last level, leaving the total node number of <span class="math inline">\(2^{height} - 1\)</span></p>
+</div>
+<div id="example-55" class="section level3">
+<h3><span class="header-section-number">4.7.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-17"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-17-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.11: Some caption.
+</p>
+</div>
+<p>output 6</p>
+</div>
+<div id="solution-44" class="section level3">
+<h3><span class="header-section-number">4.7.3</span> Solution</h3>
+<div id="walkthrough-67" class="section level4">
+<h4><span class="header-section-number">4.7.3.1</span> Walkthrough</h4>
+<p>Recursively call at each node, and determine if it is a full binary tree or complete binary tree. if it is full binary tree (left height == right height), return <span class="math inline">\((2^{h} - 1)\)</span>, else return 1 + rec(node.left) + rec(node.right)</p>
+</div>
+<div id="analysis-68" class="section level4">
+<h4><span class="header-section-number">4.7.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-70" class="section level4">
+<h4><span class="header-section-number">4.7.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-43" class="section level4">
+<h4><span class="header-section-number">4.7.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">countNodes</span>(<span class="bu">TreeNode</span> root) {
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
+    <span class="dt">int</span> lHeight = <span class="dv">0</span>, rHeight = <span class="dv">0</span>;
 
+    <span class="kw">for</span> (<span class="bu">TreeNode</span> node = root; node != <span class="kw">null</span>; node = node.<span class="fu">left</span>, lHeight++);
+    <span class="kw">for</span> (<span class="bu">TreeNode</span> node = root; node != <span class="kw">null</span>; node = node.<span class="fu">right</span>, rHeight++);
+
+    <span class="kw">if</span> (lHeight == rHeight) {
+        <span class="co">/*</span>
+<span class="co">        * full binary tree</span>
+<span class="co">        * 2^leftNum - 1</span>
+<span class="co">        */</span>
+        <span class="kw">return</span> (<span class="dv">1</span> &lt;&lt; lHeight) - <span class="dv">1</span>;
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> <span class="dv">1</span> + <span class="fu">countNodes</span>(root.<span class="fu">left</span>) + <span class="fu">countNodes</span>(root.<span class="fu">right</span>);
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="distance-of-a-node-from-the-root-firebase-level-3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +959,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

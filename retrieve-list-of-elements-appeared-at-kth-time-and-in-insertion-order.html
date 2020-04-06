@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.13 Retrieve List of Elements Appeared at \(k^{th}\) Time and in Insertion Order / /} | Technical Interview</title>
+  <meta name="description" content="2.13 Retrieve List of Elements Appeared at \(k^{th}\) Time and in Insertion Order / /} | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.13 Retrieve List of Elements Appeared at \(k^{th}\) Time and in Insertion Order / /} | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.13 Retrieve List of Elements Appeared at \(k^{th}\) Time and in Insertion Order / /} | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.13 Retrieve List of Elements Appeared at \(k^{th}\) Time and in Insertion Order / /} | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.13 Retrieve List of Elements Appeared at \(k^{th}\) Time and in Insertion Order / /} | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="median-of-two-sorted-arrays-leet-code-4-hard.html"/>
+<link rel="next" href="permutations-leetcode-46-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,62 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order" class="section level2">
+<h2><span class="header-section-number">2.13</span> Retrieve List of Elements Appeared at <span class="math inline">\(k^{th}\)</span> Time and in Insertion Order / /}</h2>
+<div id="description-13" class="section level3">
+<h3><span class="header-section-number">2.13.1</span> Description</h3>
+<p>Given an unsorted, possibly duplicated elments of array, return the list of element which appeared at kth time where k <span class="math inline">\(&gt;=\)</span> 1. The returned elements need to be stable as they were in insertion order.</p>
+</div>
+<div id="example-12" class="section level3">
+<h3><span class="header-section-number">2.13.2</span> Example</h3>
+<p><span class="math inline">\([1_1, 2_1, 3_1, 4_1, 2_2, 1_2, 1_3, 3_2], k = 1. =&gt; [1_1, 2_1, 3_1, 4_1]\)</span></p>
+<p><span class="math inline">\([1_1, 2_1, 3_1, 4_1, 2_2, 1_2, 1_3, 3_2], k = 2. =&gt; [2_2, 1_2, 3_2]\)</span></p>
+<p><span class="math inline">\([1_1, 2_1, 3_1, 4_1, 2_2, 1_2, 1_3, 3_2], k = 3. =&gt; [1_3]\)</span></p>
+</div>
+<div id="solution-12" class="section level3">
+<h3><span class="header-section-number">2.13.3</span> Solution</h3>
+<div id="walkthrough-14" class="section level4">
+<h4><span class="header-section-number">2.13.3.1</span> Walkthrough</h4>
+<p>Have a map to record the integer and occurrence. Only save to the list when latest occurrence equals to k, so that we could maintain insertion order.</p>
+</div>
+<div id="analysis-14" class="section level4">
+<h4><span class="header-section-number">2.13.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) since every element is visited, and Auxiliary Space is O(n).</p>
+</div>
+<div id="algorithm-14" class="section level4">
+<h4><span class="header-section-number">2.13.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-12" class="section level4">
+<h4><span class="header-section-number">2.13.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">insertToKthElement</span>(<span class="dt">int</span>[] array, <span class="dt">int</span> k) {
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+    <span class="kw">if</span>(array == <span class="kw">null</span> || array.<span class="fu">length</span> == <span class="dv">0</span>) {
+        <span class="kw">return</span> result;
+    }
 
+    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();
+    <span class="kw">for</span>(<span class="dt">int</span> num : array) {
+        <span class="dt">int</span> count = map.<span class="fu">getOrDefault</span>(num, <span class="dv">0</span>);
+        map.<span class="fu">put</span>(num, ++count);
+
+        <span class="co">//latest occurrences equal to k</span>
+        <span class="kw">if</span>( count == k) {
+            result.<span class="fu">add</span>(num);
+        }
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="median-of-two-sorted-arrays-leet-code-4-hard.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="permutations-leetcode-46-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +954,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

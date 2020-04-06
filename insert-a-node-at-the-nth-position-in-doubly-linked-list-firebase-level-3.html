@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.13 Insert a Node at the Nth Position in Doubly Linked List / Firebase / Level 3 | Technical Interview</title>
+  <meta name="description" content="6.13 Insert a Node at the Nth Position in Doubly Linked List / Firebase / Level 3 | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.13 Insert a Node at the Nth Position in Doubly Linked List / Firebase / Level 3 | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.13 Insert a Node at the Nth Position in Doubly Linked List / Firebase / Level 3 | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.13 Insert a Node at the Nth Position in Doubly Linked List / Firebase / Level 3 | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.13 Insert a Node at the Nth Position in Doubly Linked List / Firebase / Level 3 | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="remove-nth-node-from-end-of-list-leet-code-19-medium.html"/>
+<link rel="next" href="reorder-list-leet-code-143-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,121 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3" class="section level2">
+<h2><span class="header-section-number">6.13</span> Insert a Node at the Nth Position in Doubly Linked List / Firebase / Level 3</h2>
+<div id="description-98" class="section level3">
+<h3><span class="header-section-number">6.13.1</span> Description</h3>
+<p>In doubly linked list, implement a method to insert a node at specified position and return the list’s head. Do nothing if insertion position is outside the bounds of the list.</p>
+</div>
+<div id="example-94" class="section level3">
+<h3><span class="header-section-number">6.13.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-74"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-74-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.32: Some caption.
+</p>
+</div>
+<p>given the list, insert a new node at index 2 with value 4.</p>
+Result:
+<div class="figure"><span id="fig:unnamed-chunk-75"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-75-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.33: Some caption.
+</p>
+</div>
+If the index exceed the length, return the list unchanged:
+<div class="figure"><span id="fig:unnamed-chunk-76"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-76-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.34: Some caption.
+</p>
+</div>
+</div>
+<div id="solution-73" class="section level3">
+<h3><span class="header-section-number">6.13.3</span> Solution</h3>
+<div id="walkthrough-121" class="section level4">
+<h4><span class="header-section-number">6.13.3.1</span> Walkthrough</h4>
+<p>The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list and check if the request position is over the lenght limit. The second iteration is to traverse to the previous insertion position, begining from a dummy node headPrev. Finally, we need to check if we are inserting a head / a tail or an intermediate node.</p>
+</div>
+<div id="analysis-122" class="section level4">
+<h4><span class="header-section-number">6.13.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-127" class="section level4">
+<h4><span class="header-section-number">6.13.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-75" class="section level4">
+<h4><span class="header-section-number">6.13.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> DoublyLinkedNode <span class="fu">insertAtPos</span>(DoublyLinkedNode head, <span class="dt">int</span> data, <span class="dt">int</span> pos) {
+    DoublyLinkedNode newNode = <span class="kw">new</span> <span class="fu">DoublyLinkedNode</span>(data);
 
+    <span class="co">//Quick check if we are inserting the only node in the list</span>
+    <span class="kw">if</span>(head == <span class="kw">null</span>) {
+        <span class="kw">if</span>(pos == <span class="dv">1</span>) {
+            <span class="kw">return</span> newNode;
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> head;
+        }
+    }
+
+
+    <span class="dt">int</span> len = <span class="dv">1</span>;
+
+    <span class="co">//1st pass: to get length of the list</span>
+    <span class="kw">for</span>(DoublyLinkedNode current = head; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>) {
+        len++;
+    }
+
+    <span class="co">//pos is over list length</span>
+    <span class="kw">if</span>(pos &gt; len) {
+        <span class="kw">return</span> head;
+    }
+
+    DoublyLinkedNode headPrev = <span class="kw">new</span> <span class="fu">DoublyLinkedNode</span>(<span class="dv">0</span>);
+    headPrev.<span class="fu">next</span> = head;
+    head.<span class="fu">prev</span> = headPrev;
+    DoublyLinkedNode insertPrev = headPrev;
+
+
+    <span class="co">//2nd pass: move to before the insertion position</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; (pos - <span class="dv">1</span>); i++) {
+        insertPrev = insertPrev.<span class="fu">next</span>;
+    }
+
+    <span class="kw">if</span>(insertPrev == headPrev) {
+        <span class="co">// insert head</span>
+        head.<span class="fu">prev</span> = newNode;
+        newNode.<span class="fu">next</span> = head;
+
+        <span class="kw">return</span> newNode;
+    } <span class="kw">else</span> <span class="kw">if</span>(insertPrev.<span class="fu">next</span> == <span class="kw">null</span>) {
+        <span class="co">// insert tail</span>
+        insertPrev.<span class="fu">next</span> = newNode;
+        newNode.<span class="fu">prev</span> = insertPrev;
+
+        <span class="kw">return</span> head;
+    } <span class="kw">else</span> {
+        <span class="co">// insert intermediate</span>
+        DoublyLinkedNode insertNext = insertPrev.<span class="fu">next</span>;
+
+        insertPrev.<span class="fu">next</span> = newNode;
+        newNode.<span class="fu">prev</span> = insertPrev;
+        newNode.<span class="fu">next</span> = insertNext;
+        insertNext.<span class="fu">prev</span> = newNode;
+
+        <span class="kw">return</span> head;
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="reorder-list-leet-code-143-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1013,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

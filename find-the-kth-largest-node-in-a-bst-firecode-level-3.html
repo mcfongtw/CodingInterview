@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.26 Find the \(k^{th}\) Largest Node in a BST / Firecode / Level 3 | Technical Interview</title>
+  <meta name="description" content="4.26 Find the \(k^{th}\) Largest Node in a BST / Firecode / Level 3 | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.26 Find the \(k^{th}\) Largest Node in a BST / Firecode / Level 3 | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.26 Find the \(k^{th}\) Largest Node in a BST / Firecode / Level 3 | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.26 Find the \(k^{th}\) Largest Node in a BST / Firecode / Level 3 | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.26 Find the \(k^{th}\) Largest Node in a BST / Firecode / Level 3 | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"/>
+<link rel="next" href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,70 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="find-the-kth-largest-node-in-a-bst-firecode-level-3" class="section level2">
+<h2><span class="header-section-number">4.26</span> Find the <span class="math inline">\(k^{th}\)</span> Largest Node in a BST / Firecode / Level 3</h2>
+<div id="description-76" class="section level3">
+<h3><span class="header-section-number">4.26.1</span> Description</h3>
+<p>Given a Binary Search Tree and an integer k, implement a method to find and return its <span class="math inline">\(k^{th}\)</span> largest node</p>
+</div>
+<div id="example-73" class="section level3">
+<h3><span class="header-section-number">4.26.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-40"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-40-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.34: Some caption.
+</p>
+</div>
+<p>In the above scenario, if k = 1, then the output is 10 i.e. k = 1, represents the largest element of the tree, k = 2, represents the second largest element and so on.</p>
+</div>
+<div id="solution-58" class="section level3">
+<h3><span class="header-section-number">4.26.3</span> Solution</h3>
+<div id="walkthrough-93" class="section level4">
+<h4><span class="header-section-number">4.26.3.1</span> Walkthrough</h4>
+<p>First we compute the size of right subtree, and evaluate the following possibilities</p>
+<ul>
+<li>if k == (sizeOfRightSubtree + 1), return this node</li>
+<li>if k <span class="math inline">\(&lt;\)</span> sizeOfRightSubtree, the target must reside in the right subtree. Drill down to right subtree</li>
+<li>if k <span class="math inline">\(&gt;\)</span> sizeOfRightSubtree, the target must reside in the left subtree. Drill down to the left subtree and change target position to (k - sizeOfRightSubtree - 1)</li>
+</ul>
+</div>
+<div id="analysis-94" class="section level4">
+<h4><span class="header-section-number">4.26.3.2</span> Analysis</h4>
+<p>Time complexity is O(log(n)) as a certain path of nodes will be visited since this is a BST.</p>
+</div>
+<div id="algorithm-96" class="section level4">
+<h4><span class="header-section-number">4.26.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a>, bst <a href="glossary-of-algorithm.html#bst">1.2.11</a></p>
+</div>
+<div id="java-code-57" class="section level4">
+<h4><span class="header-section-number">4.26.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">findKthLargest</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> k) {
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
 
+    <span class="dt">int</span> rightSubtreeSize = <span class="fu">size</span>(root.<span class="fu">right</span>);
+
+    <span class="kw">if</span>( (rightSubtreeSize + <span class="dv">1</span>) == k) {
+        <span class="kw">return</span> root;
+    } <span class="kw">else</span> <span class="kw">if</span>( rightSubtreeSize &gt; k ) {
+        <span class="co">//drill down to the right subtree</span>
+        <span class="kw">return</span> <span class="fu">findKthLargest</span>(root.<span class="fu">right</span>, k);
+    } <span class="kw">else</span> {
+        <span class="co">//drill down to the left subtree</span>
+        <span class="kw">return</span> <span class="fu">findKthLargest</span>(root.<span class="fu">left</span>, k - rightSubtreeSize - <span class="dv">1</span>);
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +962,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

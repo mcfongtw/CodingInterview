@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.33 House Robber / Leet Code 198 / Easy | Technical Interview</title>
+  <meta name="description" content="2.33 House Robber / Leet Code 198 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.33 House Robber / Leet Code 198 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.33 House Robber / Leet Code 198 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.33 House Robber / Leet Code 198 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.33 House Robber / Leet Code 198 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="find-the-maximum-number-of-repetitions-firecode-level-3.html"/>
+<link rel="next" href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,62 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="house-robber-leet-code-198-easy" class="section level2">
+<h2><span class="header-section-number">2.33</span> House Robber / Leet Code 198 / Easy</h2>
+<div id="description-33" class="section level3">
+<h3><span class="header-section-number">2.33.1</span> Description</h3>
+<p>You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security system connected and it will automatically contact the police if two adjacent houses were broken into on the same night.</p>
+<p>Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight without alerting the police.</p>
+</div>
+<div id="example-32" class="section level3">
+<h3><span class="header-section-number">2.33.2</span> Example</h3>
+<p>Input: [1,2,3,1], Output: 4 Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3). Total amount you can rob = 1 + 3 = 4.</p>
+<p>Input: [2,7,9,3,1], Output: 12 Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1). Total amount you can rob = 2 + 9 + 1 = 12.</p>
+</div>
+<div id="solution-29" class="section level3">
+<h3><span class="header-section-number">2.33.3</span> Solution</h3>
+<div id="walkthrough-35" class="section level4">
+<h4><span class="header-section-number">2.33.3.1</span> Walkthrough</h4>
+<p>Create an array of same length of nums. While looping through the array, compute the max profit of:</p>
+<pre><code>* Rob this house plus every two houses before : nums[i] + dp[i-2]
+* Rob prev house: dp[i-1]</code></pre>
+<p>\end{itemize} Finally, return the final outcome, which is the dp[n-1]</p>
+</div>
+<div id="analysis-35" class="section level4">
+<h4><span class="header-section-number">2.33.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every element is visited once.</p>
+</div>
+<div id="algorithm-35" class="section level4">
+<h4><span class="header-section-number">2.33.3.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+</div>
+<div id="java-code-29" class="section level4">
+<h4><span class="header-section-number">2.33.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">rob</span>(<span class="dt">int</span>[] nums) {
+    <span class="dt">int</span> n = nums.<span class="fu">length</span>;
+    <span class="kw">if</span>(n == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
 
+    <span class="dt">int</span>[] dp = <span class="kw">new</span> <span class="dt">int</span>[n];
+    <span class="dt">int</span> max = <span class="dv">0</span>;
+
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++) {
+        dp[i] = <span class="bu">Math</span>.<span class="fu">max</span>(nums[i] + (i &gt;= <span class="dv">2</span> ? dp[i-<span class="dv">2</span>] : <span class="dv">0</span>), (i &gt;= <span class="dv">1</span> ? dp[i-<span class="dv">1</span>]: <span class="dv">0</span>));
+    }
+
+    <span class="kw">return</span> dp[n-<span class="dv">1</span>];
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="find-the-maximum-number-of-repetitions-firecode-level-3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +954,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

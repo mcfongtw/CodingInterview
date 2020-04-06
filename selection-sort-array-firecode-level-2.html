@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>8.3 Selection Sort Array / Firecode / Level 2 | Technical Interview</title>
+  <meta name="description" content="8.3 Selection Sort Array / Firecode / Level 2 | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="8.3 Selection Sort Array / Firecode / Level 2 | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="8.3 Selection Sort Array / Firecode / Level 2 | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="8.3 Selection Sort Array / Firecode / Level 2 | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="8.3 Selection Sort Array / Firecode / Level 2 | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="insertion-sort-list-leet-code-147-medium.html"/>
+<link rel="next" href="quick-sort-array.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,65 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="selection-sort-array-firecode-level-2" class="section level2">
+<h2><span class="header-section-number">8.3</span> Selection Sort Array / Firecode / Level 2</h2>
+<div id="description-109" class="section level3">
+<h3><span class="header-section-number">8.3.1</span> Description</h3>
+</div>
+<div id="example-105" class="section level3">
+<h3><span class="header-section-number">8.3.2</span> Example</h3>
+</div>
+<div id="solution-80" class="section level3">
+<h3><span class="header-section-number">8.3.3</span> Solution</h3>
+<div id="walkthrough-133" class="section level4">
+<h4><span class="header-section-number">8.3.3.1</span> Walkthrough</h4>
+<p>Have two nested loops, outer loop move one by one indicating the boundary of unsorted subarray [i…j-1] vs [j … n (or n-1)], where the inner loop is to find the minimum element in unsorted array j = [i+1, … ,n-1]. Swap the found minimum element with the current element i.</p>
+<pre><code>[[(1), 5, 6], 2, ...], min_idx = (0)
+[[1, 2, 5, 6], ...]</code></pre>
+</div>
+<div id="analysis-135" class="section level4">
+<h4><span class="header-section-number">8.3.3.2</span> Analysis</h4>
+<p>There are two loops, thus time complexity is <span class="math inline">\(O(n^2)\)</span></p>
+</div>
+<div id="algorithm-140" class="section level4">
+<h4><span class="header-section-number">8.3.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-82" class="section level4">
+<h4><span class="header-section-number">8.3.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span>[] <span class="fu">selectionSortArray</span>(<span class="dt">int</span>[] arr){
+    <span class="dt">int</span> n = arr.<span class="fu">length</span>;
 
+    <span class="co">// One by one move boundary of unsorted subarray [i...j-1] vs [j ... n]</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++)
+    {
+        <span class="co">// Find the minimum element in unsorted array j = [i+1, ... ,n-1]</span>
+        <span class="dt">int</span> min_idx = i;
+        <span class="kw">for</span> (<span class="dt">int</span> j = i+<span class="dv">1</span>; j &lt; n; j++) {
+            <span class="kw">if</span> (arr[j] &lt; arr[min_idx]) {
+                min_idx = j;
+            }
+        }
+
+        <span class="co">// Swap the found minimum element with the current element</span>
+        <span class="dt">int</span> temp = arr[min_idx];
+        arr[min_idx] = arr[i];
+        arr[i] = temp;
+    }
+
+
+
+    <span class="kw">return</span> arr;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="insertion-sort-list-leet-code-147-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="quick-sort-array.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +957,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/08-search-and-sort.Rmd",
 "text": "Edit"
 },
 "history": {

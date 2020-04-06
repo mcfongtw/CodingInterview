@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.30 Paint House / Leet Code 256 / Easy | Technical Interview</title>
+  <meta name="description" content="2.30 Paint House / Leet Code 256 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.30 Paint House / Leet Code 256 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.30 Paint House / Leet Code 256 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.30 Paint House / Leet Code 256 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.30 Paint House / Leet Code 256 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="longest-increasing-subsequence-leet-code-300-medium.html"/>
+<link rel="next" href="climbing-stairs-leet-code-70-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,58 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="paint-house-leet-code-256-easy" class="section level2">
+<h2><span class="header-section-number">2.30</span> Paint House / Leet Code 256 / Easy</h2>
+<div id="description-30" class="section level3">
+<h3><span class="header-section-number">2.30.1</span> Description</h3>
+<p>There are a row of n houses, each house can be painted with one of the three colors: red, blue or green. The cost of painting each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color. The cost of painting each house with a certain color is represented by a n x 3 cost matrix. For example, costs[0][0] is the cost of painting house 0 with color red; costs[1][2] is the cost of painting house 1 with color green, and so on… Find the minimum cost to paint all houses.</p>
+</div>
+<div id="example-29" class="section level3">
+<h3><span class="header-section-number">2.30.2</span> Example</h3>
+</div>
+<div id="solution-26" class="section level3">
+<h3><span class="header-section-number">2.30.3</span> Solution</h3>
+<div id="walkthrough-32" class="section level4">
+<h4><span class="header-section-number">2.30.3.1</span> Walkthrough</h4>
+<p>We need to find the cost of one house of having one color with minimum cost with another color. Last but not least, these values need to minimized.</p>
+</div>
+<div id="analysis-32" class="section level4">
+<h4><span class="header-section-number">2.30.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every house is visited once.</p>
+</div>
+<div id="algorithm-32" class="section level4">
+<h4><span class="header-section-number">2.30.3.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+</div>
+<div id="java-code-26" class="section level4">
+<h4><span class="header-section-number">2.30.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minCost</span>(<span class="dt">int</span>[][] costs) {
+    <span class="dt">int</span>[] house = <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">3</span>];
+    <span class="dt">int</span> h0 = <span class="dv">0</span>, h1 = <span class="dv">0</span>, h2 = <span class="dv">0</span>;
 
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; costs.<span class="fu">length</span>; i++) {
+        <span class="co">/*</span>
+<span class="co">        * house[0] = cost of current house of of r/g/b plus minimum cost of the other two houses</span>
+<span class="co">        */</span>
+        house[<span class="dv">0</span>] = costs[i][<span class="dv">0</span>] + <span class="bu">Math</span>.<span class="fu">min</span>(h1, h2);
+        house[<span class="dv">1</span>] = costs[i][<span class="dv">1</span>] + <span class="bu">Math</span>.<span class="fu">min</span>(h0, h2);
+        house[<span class="dv">2</span>] = costs[i][<span class="dv">2</span>] + <span class="bu">Math</span>.<span class="fu">min</span>(h0, h1);
+        h0 = house[<span class="dv">0</span>];
+        h1 = house[<span class="dv">1</span>];
+        h2 = house[<span class="dv">2</span>];
+    }
+    <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">min</span>(<span class="bu">Math</span>.<span class="fu">min</span>(h0, h1), h2);
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="longest-increasing-subsequence-leet-code-300-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="climbing-stairs-leet-code-70-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +950,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

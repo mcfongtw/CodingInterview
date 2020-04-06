@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>9.9 Find The First Non-Repeated Character in the String / / | Technical Interview</title>
+  <meta name="description" content="9.9 Find The First Non-Repeated Character in the String / / | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="9.9 Find The First Non-Repeated Character in the String / / | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="9.9 Find The First Non-Repeated Character in the String / / | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="9.9 Find The First Non-Repeated Character in the String / / | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="9.9 Find The First Non-Repeated Character in the String / / | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="verifying-an-alien-dictionary-leetcode-953-easy.html"/>
+<link rel="next" href="math.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,66 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="find-the-first-non-repeated-character-in-the-string" class="section level2">
+<h2><span class="header-section-number">9.9</span> Find The First Non-Repeated Character in the String / /</h2>
+<div id="description-120" class="section level3">
+<h3><span class="header-section-number">9.9.1</span> Description</h3>
+<p>Given a string, find the first non-repeating character in it.</p>
+</div>
+<div id="example-116" class="section level3">
+<h3><span class="header-section-number">9.9.2</span> Example</h3>
+<p>For example, if the input string is “GeeksforGeeks”, then output should be ‘f’ and if input string is “GeeksQuiz”, then output should be ‘G’.</p>
+</div>
+<div id="solution-87" class="section level3">
+<h3><span class="header-section-number">9.9.3</span> Solution</h3>
+<div id="walkthrough-148" class="section level4">
+<h4><span class="header-section-number">9.9.3.1</span> Walkthrough</h4>
+<p>Have an array to record the count of occurrence for each alphabet int the string regardless of lower or upper case. That is, count[‘G’]++, count[‘e’]++, count[‘e’]++ so on and so forth. Therefore, if we traverse the string again, with the count we would be able to tell which is the first non repeated character if available.</p>
+<p>We should not use boolean array here since there are three outcome for each chracter:</p>
+<ul>
+<li>appear once</li>
+<li>appear multipe times</li>
+<li>does not appaer</li>
+</ul>
+</div>
+<div id="analysis-150" class="section level4">
+<h4><span class="header-section-number">9.9.3.2</span> Analysis</h4>
+<p>The runtime complexity is O(n) as each character in string will be visited once.</p>
+</div>
+<div id="algorithm-155" class="section level4">
+<h4><span class="header-section-number">9.9.3.3</span> Algorithm</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">
+<span class="co">/* The method returns index of first non-repeating</span>
+<span class="co">character in a string. If all characters are repeating</span>
+<span class="co">then returns -1 */</span>
+<span class="dt">int</span> <span class="fu">firstNonRepeating</span>(<span class="bu">String</span> str) {
+    <span class="dt">int</span> count[] = <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">1000</span>];
+
+    <span class="co">// calculate count of each characters in the passed string</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; str.<span class="fu">length</span>();  i++) {
+        count[str.<span class="fu">charAt</span>(i)]++;
+    }
+
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; str.<span class="fu">length</span>();  i++) {
+        <span class="kw">if</span> (count[str.<span class="fu">charAt</span>(i)] == <span class="dv">1</span>) {
+            <span class="kw">return</span> i;
+        }
+    }
+
+    <span class="kw">return</span> -<span class="dv">1</span>;
+}</code></pre></div>
 
 </div>
+</div>
+</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="verifying-an-alien-dictionary-leetcode-953-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="math.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +958,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/09-string-manipulation.Rmd",
 "text": "Edit"
 },
 "history": {

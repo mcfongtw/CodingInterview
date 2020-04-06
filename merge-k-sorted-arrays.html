@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>7.4 Merge K Sorted Arrays | Technical Interview</title>
+  <meta name="description" content="7.4 Merge K Sorted Arrays | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="7.4 Merge K Sorted Arrays | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="7.4 Merge K Sorted Arrays | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="7.4 Merge K Sorted Arrays | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="7.4 Merge K Sorted Arrays | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="find-kth-largest-element-in-an-array-leetcode-215-medium.html"/>
+<link rel="next" href="my-calendar-i-leetcode-729-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,89 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="merge-k-sorted-arrays" class="section level2">
+<h2><span class="header-section-number">7.4</span> Merge K Sorted Arrays</h2>
+<div id="description-105" class="section level3">
+<h3><span class="header-section-number">7.4.1</span> Description</h3>
+</div>
+<div id="example-101" class="section level3">
+<h3><span class="header-section-number">7.4.2</span> Example</h3>
+</div>
+<div id="solution---min-heap-1" class="section level3">
+<h3><span class="header-section-number">7.4.3</span> Solution - Min Heap</h3>
+<div id="walkthrough-128" class="section level4">
+<h4><span class="header-section-number">7.4.3.1</span> Walkthrough</h4>
+<p>This is similar to the problem of merging K sorted list. we could compare every leading elements in k array and retrieve the node with the smallest value using Min Heap. Since the original k arrays were sorted, therefore, we could retrieve all <span class="math inline">\(n \cdot k\)</span> elements in sorted order by retrieve the min element from PriorityQueue.</p>
+</div>
+<div id="analysis-130" class="section level4">
+<h4><span class="header-section-number">7.4.3.2</span> Analysis</h4>
+<p>The comparison cost is O(log(k)) for every pop and insertion to priority queue since there are at most k elements (from k arrays). Additionally, there are a total number of n nodes in all arrays. Thus, the overall time complexity is <span class="math inline">\(O(n \cdot log(k))\)</span> and Auxiliary Space for the ﬁnal array is O(n), where n is the total node number in all k arrays.</p>
+</div>
+<div id="algorithm-135" class="section level4">
+<h4><span class="header-section-number">7.4.3.3</span> Algorithm</h4>
+<p>heap <a href="glossary-of-algorithm.html#heap">1.2.15</a></p>
+</div>
+<div id="java-code--min-heap" class="section level4">
+<h4><span class="header-section-number">7.4.3.4</span> Java Code- Min Heap</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> ArrayContainer <span class="kw">implements</span> <span class="bu">Comparable</span>&lt;ArrayContainer&gt; {
+    <span class="dt">int</span> [] array;
+    <span class="dt">int</span> index;
 
+    <span class="kw">public</span> <span class="fu">ArrayContainer</span>(<span class="dt">int</span>[] data, <span class="dt">int</span> idx) {
+        array = data;
+        index = idx;
+    }
+
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">advanceIndex</span>() {
+        index++;
+    }
+
+    <span class="at">@Override</span>
+    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">compareTo</span>(ArrayContainer that) {
+        <span class="co">//comparing element from both arrays at index</span>
+        <span class="kw">return</span> <span class="kw">this</span>.<span class="fu">array</span>[index] - that.<span class="fu">array</span>[index];
+    }
+}
+
+<span class="dt">int</span>[] <span class="fu">mergeSortedArray</span>(<span class="dt">int</span>[][] arrays) {
+    <span class="bu">Queue</span>&lt;ArrayContainer&gt; queue = <span class="kw">new</span> <span class="bu">PriorityQueue</span>&lt;ArrayContainer&gt;();
+    <span class="dt">int</span> numOfElements = <span class="dv">0</span>;
+
+    <span class="co">// init queue w.r.t. first element of each array</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; arrays.<span class="fu">length</span>; i++) {
+        queue.<span class="fu">offer</span>(<span class="kw">new</span> <span class="fu">ArrayContainer</span>(arrays[i], <span class="dv">0</span>));
+        numOfElements += arrays[i].<span class="fu">length</span>;
+    }
+
+    <span class="dt">int</span> mainIdx = <span class="dv">0</span>;
+    <span class="dt">int</span> result[] = <span class="kw">new</span> <span class="dt">int</span>[numOfElements];
+
+    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {
+        <span class="co">// return the array at index which is the smallest element in queue</span>
+        ArrayContainer cantainer = queue.<span class="fu">poll</span>();
+
+        result[mainIndex] = cantainer.<span class="fu">array</span>[index];
+        mainIndex++;
+
+        <span class="co">// advance the index and re-add to the queue</span>
+        <span class="kw">if</span>(cantainer.<span class="fu">index</span> &lt; cantainer.<span class="fu">array</span>.<span class="fu">length</span> - <span class="dv">1</span>) {
+            cantainer.<span class="fu">advanceIndex</span>();
+            queue.<span class="fu">offer</span>(cantainer);
+        }
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="my-calendar-i-leetcode-729-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +981,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/07-data-structure.Rmd",
 "text": "Edit"
 },
 "history": {

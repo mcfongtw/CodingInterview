@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>8.2 Insertion Sort List / Leet Code 147 / Medium | Technical Interview</title>
+  <meta name="description" content="8.2 Insertion Sort List / Leet Code 147 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="8.2 Insertion Sort List / Leet Code 147 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="8.2 Insertion Sort List / Leet Code 147 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="8.2 Insertion Sort List / Leet Code 147 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="8.2 Insertion Sort List / Leet Code 147 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="sort-a-list-leet-code-148-medium.html"/>
+<link rel="next" href="selection-sort-array-firecode-level-2.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,93 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="insertion-sort-list-leet-code-147-medium" class="section level2">
+<h2><span class="header-section-number">8.2</span> Insertion Sort List / Leet Code 147 / Medium</h2>
+<div id="description-108" class="section level3">
+<h3><span class="header-section-number">8.2.1</span> Description</h3>
+<p>Sort a linked list using insertion sort.</p>
+<p>Algorithm of Insertion Sort:</p>
+<ul>
+<li>Insertion sort iterates, consuming one input element each repetition, and growing a sorted output list.</li>
+<li>At each iteration, insertion sort removes one element from the input data, finds the location it belongs within the sorted list, and inserts it there.</li>
+<li>It repeats until no input elements remain.</li>
+</ul>
+</div>
+<div id="example-104" class="section level3">
+<h3><span class="header-section-number">8.2.2</span> Example</h3>
+Input:
 
+Output:
+
+</div>
+<div id="solution-79" class="section level3">
+<h3><span class="header-section-number">8.2.3</span> Solution</h3>
+<div id="walkthrough-132" class="section level4">
+<h4><span class="header-section-number">8.2.3.1</span> Walkthrough</h4>
+<p>With Insertion Sort, we could construct a new list by arranging links in place. We need to do the following:</p>
+<ul>
+<li>Maintain pointers to node that will be insert-attempted (current) and a previously sorted nodes.</li>
+<li>At each iteration, finds the location it belongs within the sorted list, and inserts between sorted and sorted.next.</li>
+<li>Insert the current node between sorted and sorted.next</li>
+</ul>
+<div class="figure"><span id="fig:unnamed-chunk-90"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-90-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 8.3: Some caption.
+</p>
+</div>
+<ul>
+<li>Reset sorted to head of list</li>
+<li>It repeats until no input elements remain.</li>
+</ul>
+</div>
+<div id="analysis-134" class="section level4">
+<h4><span class="header-section-number">8.2.3.2</span> Analysis</h4>
+<p>There are two loops, thus time complexity is <span class="math inline">\(O(n^2)\)</span></p>
+</div>
+<div id="algorithm-139" class="section level4">
+<h4><span class="header-section-number">8.2.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-81" class="section level4">
+<h4><span class="header-section-number">8.2.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">insertionSortList</span>(ListNode head) {
+    <span class="kw">if</span> (head == <span class="kw">null</span>) {
+        <span class="kw">return</span> head;
+    }
+
+    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>); <span class="co">//new starter of the sorted list</span>
+    ListNode current = head; <span class="co">//the node will be inserted</span>
+    ListNode sorted = headPrev; <span class="co">//insert node between sorted and sorted.next</span>
+
+    <span class="kw">while</span> (current != <span class="kw">null</span>) {
+        ListNode next = current.<span class="fu">next</span>;
+
+        <span class="co">//Moving prev until sorted.next.val &gt;= current.val</span>
+        <span class="kw">while</span> (sorted.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; sorted.<span class="fu">next</span>.<span class="fu">val</span> &lt; current.<span class="fu">val</span>) {
+            sorted = sorted.<span class="fu">next</span>;
+        }
+
+        <span class="co">//insert between sorted and sorted.next</span>
+        current.<span class="fu">next</span> = sorted.<span class="fu">next</span>;
+        sorted.<span class="fu">next</span> = current;
+
+        <span class="co">//move sorted back to head for next round search</span>
+        sorted = headPrev;
+        current = next;
+    }
+
+    <span class="kw">return</span> headPrev.<span class="fu">next</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="sort-a-list-leet-code-148-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="selection-sort-array-firecode-level-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +985,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/08-search-and-sort.Rmd",
 "text": "Edit"
 },
 "history": {

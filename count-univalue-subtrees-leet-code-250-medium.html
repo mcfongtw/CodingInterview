@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.17 Count Univalue Subtrees / Leet Code 250 / Medium | Technical Interview</title>
+  <meta name="description" content="4.17 Count Univalue Subtrees / Leet Code 250 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.17 Count Univalue Subtrees / Leet Code 250 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.17 Count Univalue Subtrees / Leet Code 250 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.17 Count Univalue Subtrees / Leet Code 250 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.17 Count Univalue Subtrees / Leet Code 250 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="minimum-depth-of-binary-tree-leet-code-104-easy.html"/>
+<link rel="next" href="validate-binary-search-tree-leet-code-98-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,84 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
-
+<div id="count-univalue-subtrees-leet-code-250-medium" class="section level2">
+<h2><span class="header-section-number">4.17</span> Count Univalue Subtrees / Leet Code 250 / Medium</h2>
+<div id="description-67" class="section level3">
+<h3><span class="header-section-number">4.17.1</span> Description</h3>
+<p>Given a binary tree, count the number of uni-value subtrees. A Uni-value subtree means all nodes of the subtree have the same value.</p>
+</div>
+<div id="example-64" class="section level3">
+<h3><span class="header-section-number">4.17.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-27"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-27-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.21: Some caption.
+</p>
+</div>
+<p>return 4.</p>
+</div>
+<div id="solution-50" class="section level3">
+<h3><span class="header-section-number">4.17.3</span> Solution</h3>
+<div id="walkthrough-83" class="section level4">
+<h4><span class="header-section-number">4.17.3.1</span> Walkthrough</h4>
+<p>There are  scenarios that returns true</p>
+<ul>
+<li>Recursively validate left node.val and right node.val == root.val</li>
+<li>A leaf node</li>
+</ul>
+<p>In addition, we need to store accumulated count across recursive function calls. Thus, data type cannot be Immutable, since each arithmetic operation would create another object. Thus, we need to have a mutable variable that exists across each stack frame:</p>
+<ul>
+<li>Have a int[1] to store the accumulated count.</li>
+<li>Have a wrapper object to reset the value towards computation.</li>
+<li>Have a shared variable declared for this purpose.</li>
+</ul>
+</div>
+<div id="analysis-84" class="section level4">
+<h4><span class="header-section-number">4.17.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-85" class="section level4">
+<h4><span class="header-section-number">4.17.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-49" class="section level4">
+<h4><span class="header-section-number">4.17.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span> count = <span class="dv">0</span>;
+<span class="kw">public</span> <span class="dt">int</span> <span class="fu">countUnivalSubtrees</span>(<span class="bu">TreeNode</span> root) {
+    <span class="fu">helper</span>(root, count);
+    <span class="kw">return</span> count;
+}
+<span class="dt">boolean</span> <span class="fu">helper</span>(<span class="bu">TreeNode</span> root) {
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+    <span class="dt">boolean</span> left = <span class="fu">helper</span>(root.<span class="fu">left</span>);
+    <span class="dt">boolean</span> right = <span class="fu">helper</span>(root.<span class="fu">right</span>);
+    <span class="kw">if</span> (left &amp;&amp; right) {
+        <span class="co">//validate left subtree</span>
+        <span class="kw">if</span> (root.<span class="fu">left</span> != <span class="kw">null</span> &amp;&amp; root.<span class="fu">left</span>.<span class="fu">val</span> != root.<span class="fu">val</span>) {
+            <span class="kw">return</span> <span class="kw">false</span>;
+        }
+        <span class="co">// validate right subtree</span>
+        <span class="kw">if</span> (root.<span class="fu">right</span> != <span class="kw">null</span> &amp;&amp; root.<span class="fu">right</span>.<span class="fu">val</span> != root.<span class="fu">val</span>) {
+            <span class="kw">return</span> <span class="kw">false</span>;
+        }
+        count++;
+        <span class="kw">return</span> <span class="kw">true</span>;
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="minimum-depth-of-binary-tree-leet-code-104-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="validate-binary-search-tree-leet-code-98-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +976,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

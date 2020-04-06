@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.22 Insert Interval / LeetCode 57 / Hard | Technical Interview</title>
+  <meta name="description" content="2.22 Insert Interval / LeetCode 57 / Hard | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.22 Insert Interval / LeetCode 57 / Hard | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.22 Insert Interval / LeetCode 57 / Hard | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.22 Insert Interval / LeetCode 57 / Hard | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.22 Insert Interval / LeetCode 57 / Hard | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="interval-list-intersections-leetcode-986-medium.html"/>
+<link rel="next" href="find-common-characters-leetcode-1002-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,113 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="insert-interval-leetcode-57-hard" class="section level2">
+<h2><span class="header-section-number">2.22</span> Insert Interval / LeetCode 57 / Hard</h2>
+<div id="description-22" class="section level3">
+<h3><span class="header-section-number">2.22.1</span> Description</h3>
+<p>Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary).</p>
+<p>You may assume that the intervals were initially sorted according to their start times.</p>
+</div>
+<div id="example-21" class="section level3">
+<h3><span class="header-section-number">2.22.2</span> Example</h3>
+<p>Input: intervals = [[1,3],[6,9]], newInterval = [2,5] Output: [[1,5],[6,9]]</p>
+<p>Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]. Output: [[1,2],[3,10],[12,16]] Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].</p>
+</div>
+<div id="solution-19" class="section level3">
+<h3><span class="header-section-number">2.22.3</span> Solution</h3>
+<div id="walkthrough-23" class="section level4">
+<h4><span class="header-section-number">2.22.3.1</span> Walkthrough</h4>
+<p>Leverage the merge() method to find out which intervals can be merged with new Inserted interval.</p>
+</div>
+<div id="analysis-23" class="section level4">
+<h4><span class="header-section-number">2.22.3.2</span> Analysis</h4>
+<p>Time complexity is <span class="math inline">\(O(n \cdot log(n))\)</span> because of sorting ahead.</p>
+</div>
+<div id="algorithm-23" class="section level4">
+<h4><span class="header-section-number">2.22.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-19" class="section level4">
+<h4><span class="header-section-number">2.22.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> Interval {
+    <span class="kw">public</span> <span class="dt">int</span> start;
+    <span class="kw">public</span> <span class="dt">int</span> end;
 
+    <span class="kw">public</span> <span class="fu">Interval</span>(<span class="dt">int</span> s, <span class="dt">int</span> e) {
+        <span class="kw">this</span>.<span class="fu">start</span> = s;
+        <span class="kw">this</span>.<span class="fu">end</span> = e;
+    }
+
+    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span>[][] <span class="fu">toArray</span>(<span class="bu">List</span>&lt;Interval&gt; list) {
+        <span class="dt">int</span>[][] result = <span class="kw">new</span> <span class="dt">int</span>[list.<span class="fu">size</span>()][<span class="dv">2</span>];
+
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; list.<span class="fu">size</span>(); i++) {
+            Interval interval = list.<span class="fu">get</span>(i);
+
+            result[i] = <span class="kw">new</span> <span class="dt">int</span>[] {interval.<span class="fu">start</span>, interval.<span class="fu">end</span>};
+        }
+
+        <span class="kw">return</span> result;
+    }
+
+    <span class="kw">public</span> <span class="dt">static</span> <span class="bu">List</span>&lt;Interval&gt; <span class="fu">toList</span>(<span class="dt">int</span>[][] array) {
+        <span class="bu">List</span>&lt;Interval&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; array.<span class="fu">length</span>; i++) {
+            Interval interval = <span class="kw">new</span> <span class="fu">Interval</span>(array[i][<span class="dv">0</span>], array[i][<span class="dv">1</span>]);
+
+            result.<span class="fu">add</span>(interval);
+        }
+
+        <span class="kw">return</span> result;
+    }
+}
+
+<span class="kw">public</span> <span class="dt">int</span>[][] <span class="fu">insert</span>(<span class="dt">int</span>[][] existed, <span class="dt">int</span>[] target) {
+    <span class="bu">List</span>&lt;Interval&gt; intervals = Interval.<span class="fu">toList</span>(existed);
+    Interval newInterval = <span class="kw">new</span> <span class="fu">Interval</span>(target[<span class="dv">0</span>], target[<span class="dv">1</span>]);
+
+    intervals.<span class="fu">add</span>(newInterval);
+
+    <span class="bu">List</span>&lt;Interval&gt; merged = <span class="fu">merge</span>(intervals);
+
+    <span class="kw">return</span> Interval.<span class="fu">toArray</span>(merged);
+}
+
+<span class="kw">private</span> <span class="kw">class</span> IntervalComparator <span class="kw">implements</span> <span class="bu">Comparator</span>&lt;Interval&gt; {
+    <span class="at">@Override</span>
+    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">compare</span>(Interval a, Interval b) {
+        <span class="kw">return</span> a.<span class="fu">start</span> &lt; b.<span class="fu">start</span> ? -<span class="dv">1</span> : a.<span class="fu">start</span> == b.<span class="fu">start</span> ? <span class="dv">0</span> : <span class="dv">1</span>;
+    }
+}
+
+<span class="kw">public</span> <span class="bu">List</span>&lt;Interval&gt; <span class="fu">merge</span>(<span class="bu">List</span>&lt;Interval&gt; intervals) {
+    <span class="co">//sort the list</span>
+    <span class="bu">Collections</span>.<span class="fu">sort</span>(intervals, <span class="kw">new</span> <span class="fu">IntervalComparator</span>());
+
+    <span class="bu">LinkedList</span>&lt;Interval&gt; merged = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;Interval&gt;();
+    <span class="kw">for</span> (Interval interval : intervals) {
+        <span class="kw">if</span> (merged.<span class="fu">isEmpty</span>() || merged.<span class="fu">getLast</span>().<span class="fu">end</span> &lt; interval.<span class="fu">start</span>) {
+            <span class="co">// if the list of merged intervals is empty or if the current</span>
+            <span class="co">// interval does not overlap with the previous, simply append it.</span>
+            merged.<span class="fu">add</span>(interval);
+        } <span class="kw">else</span> {
+            <span class="co">// otherwise, there is overlap, so we merge the current and previous</span>
+            <span class="co">// intervals.</span>
+            merged.<span class="fu">getLast</span>().<span class="fu">end</span> = <span class="bu">Math</span>.<span class="fu">max</span>(merged.<span class="fu">getLast</span>().<span class="fu">end</span>, interval.<span class="fu">end</span>);
+        }
+    }
+    <span class="kw">return</span> merged;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="interval-list-intersections-leetcode-986-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="find-common-characters-leetcode-1002-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1005,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

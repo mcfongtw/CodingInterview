@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>5.6 Graph Validate Tree / LeetCode 261 / Medium | Technical Interview</title>
+  <meta name="description" content="5.6 Graph Validate Tree / LeetCode 261 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="5.6 Graph Validate Tree / LeetCode 261 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="5.6 Graph Validate Tree / LeetCode 261 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="5.6 Graph Validate Tree / LeetCode 261 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="5.6 Graph Validate Tree / LeetCode 261 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="course-schedule-ii-leetcode-210-medium.html"/>
+<link rel="next" href="linked-list.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,144 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="graph-validate-tree-leetcode-261-medium" class="section level2">
+<h2><span class="header-section-number">5.6</span> Graph Validate Tree / LeetCode 261 / Medium</h2>
+<div id="description-85" class="section level3">
+<h3><span class="header-section-number">5.6.1</span> Description</h3>
+<p>Given n nodes labeled from 0 to n - 1 and a list of undirected edges (each edge is a pair of nodes), check if these edges form a valid tree.</p>
+</div>
+<div id="example-81" class="section level3">
+<h3><span class="header-section-number">5.6.2</span> Example</h3>
+</div>
+<div id="solution---topological-sorting-via-dfs" class="section level3">
+<h3><span class="header-section-number">5.6.3</span> Solution - Topological Sorting via DFS</h3>
+<div id="walkthrough-104" class="section level4">
+<h4><span class="header-section-number">5.6.3.1</span> Walkthrough</h4>
+<p>This problem can be converted to finding the cycle from a graph using Topological Sorting</p>
+</div>
+<div id="analysis-105" class="section level4">
+<h4><span class="header-section-number">5.6.3.2</span> Analysis</h4>
+<p>A DFS would cost <span class="math inline">\(O(|V| + |E|)\)</span></p>
+</div>
+<div id="algorithm-111" class="section level4">
+<h4><span class="header-section-number">5.6.3.3</span> Algorithm</h4>
+<p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code---topological-sorting-via-dfs" class="section level4">
+<h4><span class="header-section-number">5.6.3.4</span> Java Code - Topological Sorting via DFS</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">validTree</span>(<span class="dt">int</span> n, <span class="dt">int</span>[][] edges) {
+    <span class="bu">HashMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt;();
+    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;n; i++){
+        <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt; list = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();
+        map.<span class="fu">put</span>(i, list);
+    }
+
+    <span class="kw">for</span>(<span class="dt">int</span>[] edge: edges){
+        map.<span class="fu">get</span>(edge[<span class="dv">0</span>]).<span class="fu">add</span>(edge[<span class="dv">1</span>]);
+        map.<span class="fu">get</span>(edge[<span class="dv">1</span>]).<span class="fu">add</span>(edge[<span class="dv">0</span>]);
+    }
+
+    <span class="dt">boolean</span>[] visited = <span class="kw">new</span> <span class="dt">boolean</span>[n];
+
+    <span class="kw">if</span>(!<span class="fu">helper</span>(<span class="dv">0</span>, -<span class="dv">1</span>, map, visited))
+        <span class="kw">return</span> <span class="kw">false</span>;
+
+    <span class="kw">for</span>(<span class="dt">boolean</span> b: visited){
+        <span class="kw">if</span>(!b)
+            <span class="kw">return</span> <span class="kw">false</span>;
+    }
+
+    <span class="kw">return</span> <span class="kw">true</span>;
+}
+
+<span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">helper</span>(<span class="dt">int</span> curr, <span class="dt">int</span> parent,
+    <span class="bu">HashMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt; map, <span class="dt">boolean</span>[] visited){
+    <span class="kw">if</span>(visited[curr])
+        <span class="kw">return</span> <span class="kw">false</span>;
+
+    visited[curr] = <span class="kw">true</span>;
+
+    <span class="kw">for</span>(<span class="dt">int</span> i: map.<span class="fu">get</span>(curr)){
+        <span class="kw">if</span>(i!=parent &amp;&amp; !<span class="fu">helper</span>(i, curr, map, visited)){
+            <span class="kw">return</span> <span class="kw">false</span>;
+        }
+    }
+
+    <span class="kw">return</span> <span class="kw">true</span>;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---topological-sorting-via-bfs" class="section level3">
+<h3><span class="header-section-number">5.6.4</span> Solution - Topological Sorting via BFS</h3>
+<div id="walkthrough-105" class="section level4">
+<h4><span class="header-section-number">5.6.4.1</span> Walkthrough</h4>
+<p>This problem can be converted to finding the cycle from a graph using Topological Sorting</p>
+</div>
+<div id="analysis-106" class="section level4">
+<h4><span class="header-section-number">5.6.4.2</span> Analysis</h4>
+<p>A BFS cost <span class="math inline">\(O(|V| + |E|)\)</span></p>
+</div>
+<div id="algorithm-112" class="section level4">
+<h4><span class="header-section-number">5.6.4.3</span> Algorithm</h4>
+<p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code---topological-sorting-via-bfs" class="section level4">
+<h4><span class="header-section-number">5.6.4.4</span> Java Code - Topological Sorting via BFS</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">validTree</span>(<span class="dt">int</span> n, <span class="dt">int</span>[][] edges) {
+    <span class="bu">ArrayList</span>&lt;<span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt; list = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+        <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;n; i++){
+        list.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;());
+    }
+
+    <span class="co">//build the graph</span>
+    <span class="kw">for</span>(<span class="dt">int</span>[] edge: edges){
+        <span class="dt">int</span> a = edge[<span class="dv">0</span>];
+        <span class="dt">int</span> b = edge[<span class="dv">1</span>];
+
+        list.<span class="fu">get</span>(a).<span class="fu">add</span>(b);
+        list.<span class="fu">get</span>(b).<span class="fu">add</span>(a);
+    }
+
+    <span class="co">//use queue to traverse the graph</span>
+    <span class="bu">HashSet</span>&lt;<span class="bu">Integer</span>&gt; visited = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;();
+    <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt; q = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+    q.<span class="fu">offer</span>(<span class="dv">0</span>);
+
+    <span class="kw">while</span>(!q.<span class="fu">isEmpty</span>()){
+        <span class="dt">int</span> head = q.<span class="fu">poll</span>();
+
+        <span class="kw">if</span>(visited.<span class="fu">contains</span>(head)){
+            <span class="kw">return</span> <span class="kw">false</span>;
+        }
+
+        visited.<span class="fu">add</span>(head);
+
+        <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt; vList = list.<span class="fu">get</span>(head);
+        <span class="kw">for</span>(<span class="dt">int</span> v: vList){
+            <span class="kw">if</span>(!visited.<span class="fu">contains</span>(v)){
+                q.<span class="fu">offer</span>(v);
+            }
+        }
+    }
+
+    <span class="kw">if</span>(visited.<span class="fu">size</span>()&lt;n){
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+
+    <span class="kw">return</span> <span class="kw">true</span>;
+}</code></pre></div>
 
 </div>
+</div>
+</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="course-schedule-ii-leetcode-210-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="linked-list.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1036,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/05-graph.Rmd",
 "text": "Edit"
 },
 "history": {

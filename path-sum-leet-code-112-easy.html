@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.9 Path Sum / Leet Code 112 / Easy | Technical Interview</title>
+  <meta name="description" content="4.9 Path Sum / Leet Code 112 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.9 Path Sum / Leet Code 112 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.9 Path Sum / Leet Code 112 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.9 Path Sum / Leet Code 112 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.9 Path Sum / Leet Code 112 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="distance-of-a-node-from-the-root-firebase-level-3.html"/>
+<link rel="next" href="path-sum-ii-leet-code-113-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,65 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="path-sum-leet-code-112-easy" class="section level2">
+<h2><span class="header-section-number">4.9</span> Path Sum / Leet Code 112 / Easy</h2>
+<div id="description-59" class="section level3">
+<h3><span class="header-section-number">4.9.1</span> Description</h3>
+<p>Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.</p>
+</div>
+<div id="example-57" class="section level3">
+<h3><span class="header-section-number">4.9.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-19"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-19-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.13: Some caption.
+</p>
+</div>
+<p>Given the below binary tree and sum = 22, return true, as there exist a root-to-leaf path <span class="math inline">\(5-&gt;4-&gt;11-&gt;2\)</span> which sum is 22.</p>
+</div>
+<div id="solution-46" class="section level3">
+<h3><span class="header-section-number">4.9.3</span> Solution</h3>
+<div id="walkthrough-69" class="section level4">
+<h4><span class="header-section-number">4.9.3.1</span> Walkthrough</h4>
+<p>Has a variable to remember accumulated sum and recursively call on its left and right subtree.  the result if and only if the accumulated sum equals to target sum or accumulate result with logical OR operator also only when traversal reach to leaf node.</p>
+</div>
+<div id="analysis-70" class="section level4">
+<h4><span class="header-section-number">4.9.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-72" class="section level4">
+<h4><span class="header-section-number">4.9.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-45" class="section level4">
+<h4><span class="header-section-number">4.9.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">hasPathSum</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> sum) {
+    <span class="kw">return</span> <span class="fu">hasPathSum</span>(root, <span class="dv">0</span>, sum);
+}
 
+<span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">hasPathSum</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> current, <span class="dt">int</span> target) {
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+
+    current += root.<span class="fu">val</span>;
+
+    <span class="kw">if</span> (root.<span class="fu">left</span> == <span class="kw">null</span> &amp;&amp; root.<span class="fu">right</span> == <span class="kw">null</span>) {
+        <span class="kw">return</span> current == target;
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> <span class="fu">hasPathSum</span>(root.<span class="fu">left</span>, current, target) || <span class="fu">hasPathSum</span>(root.<span class="fu">right</span>, current, target);
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="distance-of-a-node-from-the-root-firebase-level-3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="path-sum-ii-leet-code-113-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +957,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

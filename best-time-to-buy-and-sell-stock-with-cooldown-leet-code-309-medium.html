@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.36 Best Time to Buy and Sell Stock with Cooldown / Leet Code 309 / Medium | Technical Interview</title>
+  <meta name="description" content="2.36 Best Time to Buy and Sell Stock with Cooldown / Leet Code 309 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.36 Best Time to Buy and Sell Stock with Cooldown / Leet Code 309 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.36 Best Time to Buy and Sell Stock with Cooldown / Leet Code 309 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.36 Best Time to Buy and Sell Stock with Cooldown / Leet Code 309 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.36 Best Time to Buy and Sell Stock with Cooldown / Leet Code 309 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html"/>
+<link rel="next" href="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,58 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium" class="section level2">
+<h2><span class="header-section-number">2.36</span> Best Time to Buy and Sell Stock with Cooldown / Leet Code 309 / Medium</h2>
+<div id="description-36" class="section level3">
+<h3><span class="header-section-number">2.36.1</span> Description</h3>
+<p>Say you have an array for which the ith element is the price of a given stock on day i.</p>
+<p>Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times) with the following restrictions:</p>
+<p>You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again). After you sell your stock, you cannot buy stock on next day. (ie, cooldown 1 day)</p>
+</div>
+<div id="example-35" class="section level3">
+<h3><span class="header-section-number">2.36.2</span> Example</h3>
+<p>Input: [1,2,3,0,2], Output: 3 Explanation: transactions = [buy, sell, cooldown, buy, sell]</p>
+</div>
+<div id="solution-32" class="section level3">
+<h3><span class="header-section-number">2.36.3</span> Solution</h3>
+<div id="walkthrough-38" class="section level4">
+<h4><span class="header-section-number">2.36.3.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-38" class="section level4">
+<h4><span class="header-section-number">2.36.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every element is visited once.</p>
+</div>
+<div id="algorithm-38" class="section level4">
+<h4><span class="header-section-number">2.36.3.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+</div>
+<div id="java-code-32" class="section level4">
+<h4><span class="header-section-number">2.36.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">maxProfit</span>(<span class="dt">int</span>[] prices) {
+    <span class="dt">int</span> profit = <span class="dv">0</span>, prevProfit = <span class="dv">0</span>, diff = <span class="bu">Integer</span>.<span class="fu">MIN_VALUE</span>, prevDiff = <span class="dv">0</span>, maxProfit = <span class="dv">0</span>;
+    <span class="kw">for</span> (<span class="dt">int</span> price : prices) {
+        prevDiff = diff;
+        <span class="co">//diff = MAX (price[i - 1] - price[i], diff)</span>
+        diff = <span class="bu">Math</span>.<span class="fu">max</span>(prevProfit - price, prevDiff);
 
+        prevProfit = profit;
+        <span class="co">//profit = MAX(prevDiff + price[i], prevProfit)</span>
+        profit = <span class="bu">Math</span>.<span class="fu">max</span>(prevDiff + price, prevProfit);
+        maxProfit = <span class="bu">Math</span>.<span class="fu">max</span>(maxProfit, profit);
+    }
+
+    <span class="kw">return</span> maxProfit;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +950,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>3.1 Design a Tic-tac-toe / LeetCode 348 / Medium | Technical Interview</title>
+  <meta name="description" content="3.1 Design a Tic-tac-toe / LeetCode 348 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="3.1 Design a Tic-tac-toe / LeetCode 348 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="3.1 Design a Tic-tac-toe / LeetCode 348 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="3.1 Design a Tic-tac-toe / LeetCode 348 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="3.1 Design a Tic-tac-toe / LeetCode 348 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="matrix.html"/>
+<link rel="next" href="rotate-image-leet-code-48-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,91 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="design-a-tic-tac-toe-leetcode-348-medium" class="section level2">
+<h2><span class="header-section-number">3.1</span> Design a Tic-tac-toe / LeetCode 348 / Medium</h2>
+<div id="description-40" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Description</h3>
+<p>Design a Tic-tac-toe game that is played between two players on a n x n grid.</p>
+</div>
+<div id="example-39" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Example</h3>
+</div>
+<div id="solution-35" class="section level3">
+<h3><span class="header-section-number">3.1.3</span> Solution</h3>
+<div id="walkthrough-44" class="section level4">
+<h4><span class="header-section-number">3.1.3.1</span> Walkthrough</h4>
+<p>Check if the player win for the same row, column, forward and back diagonals.</p>
+</div>
+<div id="analysis-44" class="section level4">
+<h4><span class="header-section-number">3.1.3.2</span> Analysis</h4>
+<p>All entries in matrix will be visited, that is, O(rows * cols)</p>
+</div>
+<div id="algorithm-44" class="section level4">
+<h4><span class="header-section-number">3.1.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-35" class="section level4">
+<h4><span class="header-section-number">3.1.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span>[][] matrix;
 
+<span class="kw">public</span> <span class="dt">int</span> <span class="fu">move</span>(<span class="dt">int</span> row, <span class="dt">int</span> col, <span class="dt">int</span> player) {
+    matrix[row][col]=player;
+
+    <span class="co">//check row</span>
+    <span class="dt">boolean</span> win = <span class="kw">true</span>;
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; matrix.<span class="fu">length</span>; i++){
+        <span class="kw">if</span>(matrix[row][i] != player){
+            win = <span class="kw">false</span>;
+            <span class="kw">break</span>;
+        }
+    }
+
+    <span class="kw">if</span>(win) <span class="kw">return</span> player;
+
+    <span class="co">//check column</span>
+    win = <span class="kw">true</span>;
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; matrix.<span class="fu">length</span>; i++){
+        <span class="kw">if</span>(matrix[i][col] != player){
+            win = <span class="kw">false</span>;
+            <span class="kw">break</span>;
+        }
+    }
+
+    <span class="kw">if</span>(win) <span class="kw">return</span> player;
+
+    <span class="co">//check back diagonal</span>
+    win = <span class="kw">true</span>;
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; matrix.<span class="fu">length</span>; i++){
+        <span class="kw">if</span>(matrix[i][i] != player){
+            win = <span class="kw">false</span>;
+            <span class="kw">break</span>;
+        }
+    }
+
+    <span class="kw">if</span>(win) <span class="kw">return</span> player;
+
+    <span class="co">//check forward diagonal</span>
+    win = <span class="kw">true</span>;
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; matrix.<span class="fu">length</span>; i++){
+        <span class="kw">if</span>(matrix[i][matrix.<span class="fu">length</span>-i-<span class="dv">1</span>] != player){
+            win = <span class="kw">false</span>;
+            <span class="kw">break</span>;
+        }
+    }
+
+    <span class="kw">if</span>(win) <span class="kw">return</span> player;
+
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="matrix.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rotate-image-leet-code-48-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +983,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/03-matrix.Rmd",
 "text": "Edit"
 },
 "history": {

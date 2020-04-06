@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.38 Retrieve an Optimal Computation from an Array / / | Technical Interview</title>
+  <meta name="description" content="2.38 Retrieve an Optimal Computation from an Array / / | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.38 Retrieve an Optimal Computation from an Array / / | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.38 Retrieve an Optimal Computation from an Array / / | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.38 Retrieve an Optimal Computation from an Array / / | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.38 Retrieve an Optimal Computation from an Array / / | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html"/>
+<link rel="next" href="shortest-word-distance.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,166 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="retrieve-an-optimal-computation-from-an-array" class="section level2">
+<h2><span class="header-section-number">2.38</span> Retrieve an Optimal Computation from an Array / /</h2>
+<div id="description-38" class="section level3">
+<h3><span class="header-section-number">2.38.1</span> Description</h3>
+<p>Each piece has a positive integer (weight) that indicates how tasty it is. Since taste is subjective, there is also an expectancy factor. A piece will taste better if you eat it later: if the taste is m on the first day, it will be k * m on day number k. Your task is to design an efficient algorithm that computes an optimal chocolate eating strategy and tells you how much pleasure to expect.</p>
+</div>
+<div id="example-37" class="section level3">
+<h3><span class="header-section-number">2.38.2</span> Example</h3>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], multiplier = <span class="dv">1</span></code></pre></div>
+<p>Result = <span class="math inline">\(1 * 1 + 2 * 2 + 3 * 3 + 4 * 4= 30\)</span></p>
+</div>
+<div id="solution---recursion" class="section level3">
+<h3><span class="header-section-number">2.38.3</span> Solution - Recursion</h3>
+<div id="walkthrough-40" class="section level4">
+<h4><span class="header-section-number">2.38.3.1</span> Walkthrough</h4>
+<p>In the recursive startegy:</p>
+<ul>
+<li>In the base case, where array contains only one element, the function returns the correct value.</li>
+<li>When array contains more than 1 element, we have to start with either array[0] or array[n-1]. The code computes for each of these cases with recursion, and returns the maximum.</li>
+</ul>
+<div class="figure"><span id="fig:unnamed-chunk-4"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-4-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 2.4: Some caption.
+</p>
+</div>
+</div>
+<div id="analysis-40" class="section level4">
+<h4><span class="header-section-number">2.38.3.2</span> Analysis</h4>
+<p>The time complexity is exponential, since there are some overlapping subproblems shown in the recursion tree. <span class="math inline">\(O(2^{log(n)})\)</span></p>
+</div>
+<div id="algorithm-40" class="section level4">
+<h4><span class="header-section-number">2.38.3.3</span> Algorithm</h4>
+<p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
+</div>
+<div id="java-code---recursion" class="section level4">
+<h4><span class="header-section-number">2.38.3.4</span> Java Code - Recursion</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span> <span class="fu">solution</span>(<span class="dt">int</span>[] array) {
+    <span class="kw">return</span> <span class="fu">rec</span>(array, <span class="dv">1</span>);
+}
 
+<span class="dt">int</span> <span class="fu">rec</span>(<span class="dt">int</span>[] array, <span class="dt">int</span> multiplier) {
+    <span class="dt">int</span> len = array.<span class="fu">length</span>;
+
+    <span class="kw">if</span>(len == <span class="dv">1</span>) {
+        <span class="kw">return</span> array[<span class="dv">0</span>] * multiplier;
+    }
+
+    <span class="dt">int</span> left = array[<span class="dv">0</span>] * multiplier + <span class="fu">rec</span>(<span class="bu">Arrays</span>.<span class="fu">copyOfRange</span>(array, <span class="dv">1</span>, len), multiplier + <span class="dv">1</span>);
+    <span class="dt">int</span> right = array[len - <span class="dv">1</span>] * multiplier + <span class="fu">rec</span>(<span class="bu">Arrays</span>.<span class="fu">copyOfRange</span>(array, <span class="dv">0</span>, len - <span class="dv">1</span>), multiplier + <span class="dv">1</span>);
+
+    <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">max</span>(left, right);
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---recursion-with-memoization" class="section level3">
+<h3><span class="header-section-number">2.38.4</span> Solution - Recursion with Memoization</h3>
+<div id="walkthrough-41" class="section level4">
+<h4><span class="header-section-number">2.38.4.1</span> Walkthrough</h4>
+<p>We can derive <span class="math inline">\(multiplier = 1 + n - (j - i), 0 \le i &lt; j \le n,\)</span></p>
+<p>The sum of product array[i:j] is either computed directly (the base case), or it can be computed in constant time from the already known sum of array[i+1:j] and array[i:j-1].</p>
+</div>
+<div id="analysis-41" class="section level4">
+<h4><span class="header-section-number">2.38.4.2</span> Analysis</h4>
+<p>If we use dynamic programming and memorize all of these subresults, we will get an algorithm with <span class="math inline">\(O(n^2)\)</span> time complexity.</p>
+</div>
+<div id="algorithm-41" class="section level4">
+<h4><span class="header-section-number">2.38.4.3</span> Algorithm</h4>
+<p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a>, memoization <a href="glossary-of-algorithm.html#memo">1.2.8</a></p>
+</div>
+<div id="java-code---recursion-with-memoization" class="section level4">
+<h4><span class="header-section-number">2.38.4.4</span> Java Code - Recursion with Memoization</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span> <span class="fu">solution</span>(<span class="dt">int</span>[] array) {
+    <span class="dt">int</span> len = array.<span class="fu">length</span>;
+    <span class="dt">int</span>[][] dp = <span class="kw">new</span> <span class="dt">int</span>[len + <span class="dv">1</span>][len + <span class="dv">1</span>];
+
+    <span class="kw">return</span> <span class="fu">memoization</span>(array, <span class="dv">0</span>, len, dp);
+}
+
+<span class="co">// 0 &lt;= start &lt; stop &lt;= n</span>
+<span class="co">// start inclusive, stop exclusive</span>
+<span class="dt">int</span> <span class="fu">memoization</span>(<span class="dt">int</span>[] array, <span class="dt">int</span> start, <span class="dt">int</span> stop, <span class="dt">int</span>[][] dp) {
+    <span class="dt">int</span> multiplier = <span class="dv">1</span> + array.<span class="fu">length</span> - (stop - start);
+
+    <span class="kw">if</span>(dp[start][stop] &gt; <span class="dv">0</span>) {
+        <span class="co">//visited subproblem</span>
+        <span class="kw">return</span> dp[start][stop];
+    }
+
+    <span class="kw">if</span>(stop - start == <span class="dv">1</span>) {
+        <span class="kw">return</span> array[start] * multiplier;
+    }
+
+    <span class="dt">int</span> left = multiplier * array[start] + <span class="fu">memoization</span>(array, start + <span class="dv">1</span>, stop, dp);
+    <span class="dt">int</span> right = multiplier * array[stop - <span class="dv">1</span>] + <span class="fu">memoization</span>(array, start, stop - <span class="dv">1</span>, dp);
+
+    <span class="dt">int</span> result = <span class="bu">Math</span>.<span class="fu">max</span>(left, right);
+
+    dp[start][stop] = result;
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---dynamic-programming-with-tabulation" class="section level3">
+<h3><span class="header-section-number">2.38.5</span> Solution - Dynamic Programming with Tabulation</h3>
+<div id="walkthrough-42" class="section level4">
+<h4><span class="header-section-number">2.38.5.1</span> Walkthrough</h4>
+<p>We can derive <span class="math inline">\(multiplier = 1 + n - (j - i), 0 \le i &lt; j \le n,\)</span></p>
+<p>As an alternative, we can use tabulation and start by filling up the memo table. Note that the order of computation matters: to compute the value memo[i][j], the values of memo[i+1][j] and memo[i][j-1] must first be known.</p>
+<p>Here is the final view of table from the example:</p>
+<pre class="[language=golang]"><code>0   4   11  20  30
+0   0   8   18  29
+0   0   0   12  25
+0   0   0   0   16
+0   0   0   0   0</code></pre>
+</div>
+<div id="analysis-42" class="section level4">
+<h4><span class="header-section-number">2.38.5.2</span> Analysis</h4>
+</div>
+<div id="algorithm-42" class="section level4">
+<h4><span class="header-section-number">2.38.5.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a>, tabulation <a href="glossary-of-algorithm.html#table">1.2.9</a></p>
+</div>
+<div id="java-code---dynamic-programming-with-tabulation" class="section level4">
+<h4><span class="header-section-number">2.38.5.4</span> Java Code - Dynamic Programming with Tabulation</h4>
+<pre class="[language=golang]"><code>int solution(int[] array) {
+    int len = array.length;
+    int[][] dp = new int[len + 1][len + 1];
+
+    return tabulation(array, dp, len);
+}
+
+int tabulation(int[] array, int[][] dp, int len) {
+    for(int i = 0; i &lt; len; i++) {
+        dp[i][i + 1] = len * array[i];
+    }
+
+    for (int i = len - 1; i &gt;= 0; i--) {
+        for(int j = i + 2; j &lt;= len; j++) {
+            int multiplier = 1 + len - (j - i);
+            int left = multiplier * array[i] + dp[i + 1][j];
+            int right = multiplier * array[j - 1] + dp[i][j - 1];
+            int result = Math.max(left, right);
+            dp[i][j] = result;
+        }
+    }
+
+    return dp[0][len];
+}</code></pre>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="shortest-word-distance.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1058,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

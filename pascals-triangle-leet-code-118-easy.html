@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.10 Pascal’s Triangle / Leet Code 118 / Easy} | Technical Interview</title>
+  <meta name="description" content="2.10 Pascal’s Triangle / Leet Code 118 / Easy} | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.10 Pascal’s Triangle / Leet Code 118 / Easy} | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.10 Pascal’s Triangle / Leet Code 118 / Easy} | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.10 Pascal’s Triangle / Leet Code 118 / Easy} | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.10 Pascal’s Triangle / Leet Code 118 / Easy} | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="max-gain-firecode-level-2.html"/>
+<link rel="next" href="search-in-rotated-sorted-array-leet-code-33-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,67 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="pascals-triangle-leet-code-118-easy" class="section level2">
+<h2><span class="header-section-number">2.10</span> Pascal’s Triangle / Leet Code 118 / Easy}</h2>
+<div id="description-10" class="section level3">
+<h3><span class="header-section-number">2.10.1</span> Description</h3>
+<p>Given a non-negative integer numRows, generate the first numRows of Pascal’s triangle. In Pascal’s triangle, each number is the sum of the two numbers directly above it.</p>
+</div>
+<div id="example-9" class="section level3">
+<h3><span class="header-section-number">2.10.2</span> Example</h3>
+</div>
+<div id="solution-9" class="section level3">
+<h3><span class="header-section-number">2.10.3</span> Solution</h3>
+<div id="walkthrough-11" class="section level4">
+<h4><span class="header-section-number">2.10.3.1</span> Walkthrough</h4>
+<p>For level 1 and level 2, add number 1. For level 3 or above if it is the first or last element, insert 1, otherwise, insert the sum of last two elements in the level above : [i-1][j] + [i-1][j-1].</p>
+</div>
+<div id="analysis-11" class="section level4">
+<h4><span class="header-section-number">2.10.3.2</span> Analysis</h4>
+<p>There are two nested loops, the time complexity is <span class="math inline">\(O(n^2)\)</span>$, and Auxiliary Space is <span class="math inline">\(O(n^2)\)</span>.</p>
+</div>
+<div id="algorithm-11" class="section level4">
+<h4><span class="header-section-number">2.10.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-9" class="section level4">
+<h4><span class="header-section-number">2.10.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">generate</span>(<span class="dt">int</span> numRows) {
+    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; triangle = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
 
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numRows; i++) {
+        <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; level = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; (i+<span class="dv">1</span>); j++) {
+            <span class="kw">if</span>(i == <span class="dv">0</span> || i == <span class="dv">1</span>) {
+                <span class="co">// for level 1 or level 2</span>
+                level.<span class="fu">add</span>(<span class="dv">1</span>);
+            } <span class="kw">else</span> {
+                <span class="co">// for level 3 or above</span>
+                <span class="kw">if</span>(j == <span class="dv">0</span> || j == i) {
+                    level.<span class="fu">add</span>(<span class="dv">1</span>);
+                } <span class="kw">else</span> {
+                    <span class="dt">int</span> op1 = triangle.<span class="fu">get</span>(i-<span class="dv">1</span>).<span class="fu">get</span>(j-<span class="dv">1</span>);
+                    <span class="dt">int</span> op2 = triangle.<span class="fu">get</span>(i-<span class="dv">1</span>).<span class="fu">get</span>(j);
+                    level.<span class="fu">add</span>(op1 + op2);
+                }
+            }
+        }
+
+        triangle.<span class="fu">add</span>(level);
+    }
+
+    <span class="kw">return</span> triangle;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="max-gain-firecode-level-2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="search-in-rotated-sorted-array-leet-code-33-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +959,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

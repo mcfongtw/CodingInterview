@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>3.5 Search a 2D Matrix II / LeetCode 240 / Medium | Technical Interview</title>
+  <meta name="description" content="3.5 Search a 2D Matrix II / LeetCode 240 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="3.5 Search a 2D Matrix II / LeetCode 240 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="3.5 Search a 2D Matrix II / LeetCode 240 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="3.5 Search a 2D Matrix II / LeetCode 240 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="3.5 Search a 2D Matrix II / LeetCode 240 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="search-a-2d-matrix-leetcode-74-medium.html"/>
+<link rel="next" href="minimum-path-sum-leetcode-64-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,70 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="search-a-2d-matrix-ii-leetcode-240-medium" class="section level2">
+<h2><span class="header-section-number">3.5</span> Search a 2D Matrix II / LeetCode 240 / Medium</h2>
+<div id="description-44" class="section level3">
+<h3><span class="header-section-number">3.5.1</span> Description</h3>
+<p>Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:</p>
+<pre><code>*  Integers in each row are sorted in ascending from left to right.
+*  Integers in each column are sorted in ascending from top to bottom.</code></pre>
+</div>
+<div id="example-43" class="section level3">
+<h3><span class="header-section-number">3.5.2</span> Example</h3>
+<p><code>java [ [1,   4,  7, 11, 15], [2,   5,  8, 12, 19], [3,   6,  9, 16, 22], [10, 13, 14, 17, 24], [18, 21, 23, 26, 30] ]</code>, 5 returns true</p>
+</div>
+<div id="solution-38" class="section level3">
+<h3><span class="header-section-number">3.5.3</span> Solution</h3>
+<div id="walkthrough-47" class="section level4">
+<h4><span class="header-section-number">3.5.3.1</span> Walkthrough</h4>
+<p>Traverse the matrix by</p>
+<ul>
+<li>locate row when target is smaller than m[r][c]</li>
+<li>locate col when target is larger than m[r][c]</li>
+</ul>
+</div>
+<div id="analysis-48" class="section level4">
+<h4><span class="header-section-number">3.5.3.2</span> Analysis</h4>
+<p>A portion of cell is visited, O(m + n) - instead of every cell (m * n)</p>
+</div>
+<div id="algorithm-48" class="section level4">
+<h4><span class="header-section-number">3.5.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-39" class="section level4">
+<h4><span class="header-section-number">3.5.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">searchMatrix</span>(<span class="dt">int</span>[][] matrix, <span class="dt">int</span> target) {
+    <span class="kw">if</span>(matrix == <span class="kw">null</span> || matrix.<span class="fu">length</span> == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
 
+    <span class="dt">int</span> rows = matrix.<span class="fu">length</span>-<span class="dv">1</span>;
+    <span class="dt">int</span> cols = matrix[<span class="dv">0</span>].<span class="fu">length</span>-<span class="dv">1</span>;
+
+    <span class="dt">int</span> r = rows;
+    <span class="dt">int</span> c = <span class="dv">0</span>;
+
+    <span class="kw">while</span>(r &gt;= <span class="dv">0</span> &amp;&amp; c &lt;= cols){
+        <span class="kw">if</span>(target &lt; matrix[r][c]) {
+            r--;
+        } <span class="kw">else</span> <span class="kw">if</span>(target &gt; matrix[r][c]) {
+            c++;
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> <span class="kw">true</span>;
+        }
+    }
+
+    <span class="kw">return</span> <span class="kw">false</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="search-a-2d-matrix-leetcode-74-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="minimum-path-sum-leetcode-64-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +962,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/03-matrix.Rmd",
 "text": "Edit"
 },
 "history": {

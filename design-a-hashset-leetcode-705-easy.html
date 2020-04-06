@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>12.4 Design a HashSet / LeetCode 705 / Easy | Technical Interview</title>
+  <meta name="description" content="12.4 Design a HashSet / LeetCode 705 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="12.4 Design a HashSet / LeetCode 705 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="12.4 Design a HashSet / LeetCode 705 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="12.4 Design a HashSet / LeetCode 705 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="12.4 Design a HashSet / LeetCode 705 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="design-a-queue.html"/>
+<link rel="next" href="design-a-hashmap-leetcode-706-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,118 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="design-a-hashset-leetcode-705-easy" class="section level2">
+<h2><span class="header-section-number">12.4</span> Design a HashSet / LeetCode 705 / Easy</h2>
+<div id="description-131" class="section level3">
+<h3><span class="header-section-number">12.4.1</span> Description</h3>
+<p>Design a HashSet without using any built-in hash table libraries.</p>
+<p>To be specific, your design should include these functions:</p>
+<ul>
+<li>add(value): Insert a value into the HashSet.</li>
+<li>contains(value) : Return whether the value exists in the HashSet or not.</li>
+<li>remove(value): Remove a value in the HashSet. If the value does not exist in the HashSet, do nothing.</li>
+</ul>
+</div>
+<div id="example-125" class="section level3">
+<h3><span class="header-section-number">12.4.2</span> Example</h3>
+</div>
+<div id="solution-92" class="section level3">
+<h3><span class="header-section-number">12.4.3</span> Solution</h3>
+<div id="walkthrough-163" class="section level4">
+<h4><span class="header-section-number">12.4.3.1</span> Walkthrough</h4>
+<p>A HashSet consists of an array of Node where its position is determined by a hash value / hash function. When there is a collision, we could chain the collided values together using a LinkedList or a Tree. For add() operation, we need to intensionally skip the duplicated key if the it already exists (from contains(key))</p>
+</div>
+<div id="analysis-166" class="section level4">
+<h4><span class="header-section-number">12.4.3.2</span> Analysis</h4>
+<p>The performance of each operation heavily depends on effectiveness of hash function. A good hash function would result in less collision, that is less traversal needed for the chaining list, but likely more auxiliary space required. Best case for each operation takes O(1). However, In worst case scenario, if it performs all elements on the same chaining list, all methods can take up to O(n).</p>
+</div>
+<div id="algorithm-172" class="section level4">
+<h4><span class="header-section-number">12.4.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code---linkedlist-for-chaining" class="section level4">
+<h4><span class="header-section-number">12.4.3.4</span> Java Code - LinkedList for Chaining</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> <span class="bu">Node</span> {
+    <span class="kw">public</span> <span class="dt">int</span> key;
+    <span class="kw">public</span> <span class="bu">Node</span> next;
+}
 
+<span class="kw">class</span> MyHashSet {
+
+    <span class="kw">private</span> <span class="bu">Node</span>[] list;
+    <span class="kw">private</span> <span class="dt">int</span> size;
+
+    <span class="kw">public</span> <span class="fu">MyHashSet</span>() {
+        <span class="kw">this</span>.<span class="fu">size</span> = <span class="dv">10000</span>;
+        <span class="kw">this</span>.<span class="fu">list</span> = <span class="kw">new</span> <span class="bu">Node</span>[<span class="kw">this</span>.<span class="fu">size</span>];
+    }
+
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">add</span>(<span class="dt">int</span> key) {
+        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;
+
+        <span class="kw">if</span>(<span class="fu">contains</span>(key)){
+            <span class="co">//skip for duplicated entry</span>
+        } <span class="kw">else</span> {
+            <span class="co">//add as head of chaining</span>
+            <span class="bu">Node</span> oldHead = list[index];
+
+            <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>();
+            newNode.<span class="fu">key</span> = key;
+            newNode.<span class="fu">next</span> = oldHead;
+
+            list[index] = newNode;
+        }
+    }
+
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">remove</span>(<span class="dt">int</span> key) {
+        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;
+
+        <span class="kw">if</span>(<span class="fu">contains</span>(key)) {
+            <span class="bu">Node</span> current = list[index];
+
+            <span class="kw">if</span>(current.<span class="fu">key</span> == key) {
+                <span class="co">// replace head of chaining</span>
+                list[index] = current.<span class="fu">next</span>;
+            } <span class="kw">else</span> {
+                <span class="co">// replace the middle of chaining</span>
+                <span class="bu">Node</span> prev = current;
+
+                <span class="kw">while</span>(current != <span class="kw">null</span> &amp;&amp; current.<span class="fu">key</span> != key) {
+                    prev = current;
+                    current = current.<span class="fu">next</span>;
+                }
+                prev.<span class="fu">next</span> = current.<span class="fu">next</span>;
+            }
+        } <span class="kw">else</span> {
+            <span class="co">//skip since not exist</span>
+        }
+    }
+
+    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">contains</span>(<span class="dt">int</span> key) {
+        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;
+
+        <span class="bu">Node</span> current = list[index];
+
+        <span class="kw">while</span>(current != <span class="kw">null</span>) {
+            <span class="kw">if</span>(current.<span class="fu">key</span> == key) {
+                <span class="kw">return</span> <span class="kw">true</span>;
+            }
+
+            current = current.<span class="fu">next</span>;
+        }
+
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="design-a-queue.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1010,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/12-advanced-data-structure.Rmd",
 "text": "Edit"
 },
 "history": {

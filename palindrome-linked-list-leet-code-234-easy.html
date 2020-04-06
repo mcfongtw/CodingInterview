@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.10 Palindrome Linked List / Leet Code 234 / Easy | Technical Interview</title>
+  <meta name="description" content="6.10 Palindrome Linked List / Leet Code 234 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.10 Palindrome Linked List / Leet Code 234 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.10 Palindrome Linked List / Leet Code 234 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.10 Palindrome Linked List / Leet Code 234 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.10 Palindrome Linked List / Leet Code 234 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="merge-k-sorted-lists-leet-code-23-hard.html"/>
+<link rel="next" href="intersection-of-two-linked-lists-leet-code-160-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,120 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="palindrome-linked-list-leet-code-234-easy" class="section level2">
+<h2><span class="header-section-number">6.10</span> Palindrome Linked List / Leet Code 234 / Easy</h2>
+<div id="description-95" class="section level3">
+<h3><span class="header-section-number">6.10.1</span> Description</h3>
+<p>Given a singly linked list, determine if it is a palindrome.</p>
+</div>
+<div id="example-91" class="section level3">
+<h3><span class="header-section-number">6.10.2</span> Example</h3>
+Input:
+<div class="figure"><span id="fig:unnamed-chunk-67"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-67-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.25: Some caption.
+</p>
+</div>
+<p>return false</p>
+Output:
+<div class="figure"><span id="fig:unnamed-chunk-68"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-68-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.26: Some caption.
+</p>
+</div>
+<p>return true</p>
+</div>
+<div id="solution-71" class="section level3">
+<h3><span class="header-section-number">6.10.3</span> Solution</h3>
+<div id="walkthrough-117" class="section level4">
+<h4><span class="header-section-number">6.10.3.1</span> Walkthrough</h4>
+<p>Locate the mid node, and use that to reverse the 2nd half of the list. We will have two sublists: [o, …, m] and [r, …, m].</p>
+<p>Event number of list:</p>
+<div class="figure"><span id="fig:unnamed-chunk-69"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-69-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.27: Some caption.
+</p>
+</div>
+Odd number of list:
+<div class="figure"><span id="fig:unnamed-chunk-70"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-70-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.28: Some caption.
+</p>
+</div>
+<p>Traverse the two sublists, beginning at head of original and head of reversed sublists respectively. If any node is not equal, then it is NOT palindrome.</p>
+</div>
+<div id="analysis-118" class="section level4">
+<h4><span class="header-section-number">6.10.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-124" class="section level4">
+<h4><span class="header-section-number">6.10.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-73" class="section level4">
+<h4><span class="header-section-number">6.10.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isPalindrome</span>(ListNode head) {
+    <span class="kw">if</span>(head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
 
+    ListNode mid = head, tail = head;
+
+    <span class="co">//locating mid and tail nodes</span>
+    <span class="kw">while</span>(tail.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; tail.<span class="fu">next</span>.<span class="fu">next</span> != <span class="kw">null</span>) {
+        mid = mid.<span class="fu">next</span>;
+        tail = tail.<span class="fu">next</span>.<span class="fu">next</span>;
+    }
+
+    <span class="co">// retrieve the head of reversed 2nd half sublist</span>
+    ListNode reversed2ndHalfHead = <span class="fu">reverse</span>(mid);
+
+    ListNode currentOrg = head, currentRev = reversed2ndHalfHead;
+
+    <span class="kw">while</span>(currentOrg != <span class="kw">null</span> &amp;&amp; currentRev != <span class="kw">null</span>) {
+        <span class="co">//if any in original 1st half does not match reversed 2nd half</span>
+        <span class="kw">if</span>(currentOrg.<span class="fu">val</span> != currentRev.<span class="fu">val</span>) {
+            <span class="kw">return</span> <span class="kw">false</span>;
+        }
+
+        currentOrg = currentOrg.<span class="fu">next</span>;
+        currentRev = currentRev.<span class="fu">next</span>;
+    }
+
+    <span class="kw">return</span> <span class="kw">true</span>;
+}
+
+<span class="kw">public</span> ListNode <span class="fu">reverse</span>(ListNode head) {
+    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);
+    ListNode current = head;
+
+    <span class="co">//reverse links between current and prev</span>
+    <span class="kw">while</span> (current != <span class="kw">null</span>) {
+        ListNode next = current.<span class="fu">next</span>;
+
+        <span class="co">/*</span>
+<span class="co">        * swap links between current and prev</span>
+<span class="co">        */</span>
+        current.<span class="fu">next</span> = headPrev.<span class="fu">next</span>;
+        headPrev.<span class="fu">next</span> = current;
+        current = next;
+    }
+
+    <span class="kw">return</span> headPrev.<span class="fu">next</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="merge-k-sorted-lists-leet-code-23-hard.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="intersection-of-two-linked-lists-leet-code-160-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1012,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

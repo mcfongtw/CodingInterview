@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.1 Add Two Numbers / Leet Code 2 / Medium | Technical Interview</title>
+  <meta name="description" content="6.1 Add Two Numbers / Leet Code 2 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.1 Add Two Numbers / Leet Code 2 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.1 Add Two Numbers / Leet Code 2 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.1 Add Two Numbers / Leet Code 2 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.1 Add Two Numbers / Leet Code 2 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="linked-list.html"/>
+<link rel="next" href="reverse-linked-list-leet-code-206-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,116 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="add-two-numbers-leet-code-2-medium" class="section level2">
+<h2><span class="header-section-number">6.1</span> Add Two Numbers / Leet Code 2 / Medium</h2>
+<div id="description-86" class="section level3">
+<h3><span class="header-section-number">6.1.1</span> Description</h3>
+<p>You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.</p>
+<p>You may assume the two numbers do not contain any leading zero, except the number 0 itself.</p>
+</div>
+<div id="example-82" class="section level3">
+<h3><span class="header-section-number">6.1.2</span> Example</h3>
+Input:
+<div class="figure"><span id="fig:unnamed-chunk-43"></span><span id="fig:unnamed-chunk-44"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-43-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.1: Some caption.
+</p>
+</div>
+<ul>
+<li><div class="figure">
+<img src="tech-interview_files/figure-html/unnamed-chunk-44-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.2: Some caption.
+</p>
+</div></li>
+</ul>
+Output:
+<div class="figure"><span id="fig:unnamed-chunk-45"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-45-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.3: Some caption.
+</p>
+</div>
+<p>Explanation: 342 + 465 = 807.</p>
+</div>
+<div id="solution-64" class="section level3">
+<h3><span class="header-section-number">6.1.3</span> Solution</h3>
+<div id="walkthrough-106" class="section level4">
+<h4><span class="header-section-number">6.1.3.1</span> Walkthrough</h4>
+<p>First add two number digit by digit until one number run out of digit. Copy the other number for the remaining of digits.</p>
+</div>
+<div id="analysis-107" class="section level4">
+<h4><span class="header-section-number">6.1.3.2</span> Analysis</h4>
+<p>Time complexity is O(n + m) as every node is visited once.</p>
+</div>
+<div id="algorithm-113" class="section level4">
+<h4><span class="header-section-number">6.1.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-66" class="section level4">
+<h4><span class="header-section-number">6.1.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">addTwoNumbers</span>(ListNode l1, ListNode l2) {
+    ListNode currentN1 = l1;
+    ListNode currentN2 = l2;
+    ListNode currentDigit = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);
+    ListNode resultHead = currentDigit;
 
+    <span class="dt">int</span> digitCarry = <span class="dv">0</span>;
+    <span class="dt">int</span> digitSum = <span class="dv">0</span>;
+
+    <span class="kw">while</span>(currentN1 != <span class="kw">null</span> &amp;&amp; currentN2 != <span class="kw">null</span>) {
+        digitSum = currentN1.<span class="fu">val</span> + currentN2.<span class="fu">val</span> + digitCarry;
+        digitCarry = digitSum / <span class="dv">10</span>;
+        digitSum %= <span class="dv">10</span>;
+
+        currentDigit.<span class="fu">next</span> = <span class="kw">new</span> <span class="fu">ListNode</span>(digitSum);
+        currentDigit = currentDigit.<span class="fu">next</span>;
+
+        currentN1 = currentN1.<span class="fu">next</span>;
+        currentN2 = currentN2.<span class="fu">next</span>;
+    }
+
+    <span class="co">//Copy the remaining of number 1</span>
+    <span class="kw">while</span>(currentN1 != <span class="kw">null</span>) {
+        digitSum = currentN1.<span class="fu">val</span> + digitCarry;
+        digitCarry = digitSum / <span class="dv">10</span>;
+        digitSum %= <span class="dv">10</span>;
+
+        currentDigit.<span class="fu">next</span> = <span class="kw">new</span> <span class="fu">ListNode</span>(digitSum);
+        currentDigit = currentDigit.<span class="fu">next</span>;
+
+        currentN1 = currentN1.<span class="fu">next</span>;
+    }
+
+    <span class="co">//Copy the remaining of number 2</span>
+    <span class="kw">while</span>(currentN2 != <span class="kw">null</span>) {
+        digitSum = currentN2.<span class="fu">val</span> + digitCarry;
+        digitCarry = digitSum / <span class="dv">10</span>;
+        digitSum %= <span class="dv">10</span>;
+
+        currentDigit.<span class="fu">next</span> = <span class="kw">new</span> <span class="fu">ListNode</span>(digitSum);
+        currentDigit = currentDigit.<span class="fu">next</span>;
+
+        currentN2 = currentN2.<span class="fu">next</span>;
+    }
+
+    <span class="kw">if</span>(digitCarry &gt; <span class="dv">0</span>) {
+        currentDigit.<span class="fu">next</span> = <span class="kw">new</span> <span class="fu">ListNode</span>(digitCarry);
+        currentDigit = currentDigit.<span class="fu">next</span>;
+    }
+
+    <span class="kw">return</span> resultHead.<span class="fu">next</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="linked-list.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="reverse-linked-list-leet-code-206-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1008,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

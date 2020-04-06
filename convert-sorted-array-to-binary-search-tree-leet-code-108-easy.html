@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.27 Convert Sorted Array to Binary Search Tree / Leet Code 108 / Easy | Technical Interview</title>
+  <meta name="description" content="4.27 Convert Sorted Array to Binary Search Tree / Leet Code 108 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.27 Convert Sorted Array to Binary Search Tree / Leet Code 108 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.27 Convert Sorted Array to Binary Search Tree / Leet Code 108 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.27 Convert Sorted Array to Binary Search Tree / Leet Code 108 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.27 Convert Sorted Array to Binary Search Tree / Leet Code 108 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="find-the-kth-largest-node-in-a-bst-firecode-level-3.html"/>
+<link rel="next" href="populating-next-right-pointers-in-each-node-leet-code-116-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,64 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="convert-sorted-array-to-binary-search-tree-leet-code-108-easy" class="section level2">
+<h2><span class="header-section-number">4.27</span> Convert Sorted Array to Binary Search Tree / Leet Code 108 / Easy</h2>
+<div id="description-77" class="section level3">
+<h3><span class="header-section-number">4.27.1</span> Description</h3>
+<p>Given an array where elements are sorted in ascending order, convert it to a height balanced BST.</p>
+<p>For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1</p>
+</div>
+<div id="example-74" class="section level3">
+<h3><span class="header-section-number">4.27.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-41"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-41-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.35: Some caption.
+</p>
+</div>
+</div>
+<div id="solution-59" class="section level3">
+<h3><span class="header-section-number">4.27.3</span> Solution</h3>
+<div id="walkthrough-94" class="section level4">
+<h4><span class="header-section-number">4.27.3.1</span> Walkthrough</h4>
+<p>To create a tree of minimal height, we need to mathch the number of nodes in the left subtree to the number of the nodes in the right subtree as much as possible. This means that we want the root to be the middle of the  array, since this would mean that half the elements would be less than the root and half wood be greater than it.</p>
+</div>
+<div id="analysis-95" class="section level4">
+<h4><span class="header-section-number">4.27.3.2</span> Analysis</h4>
+<p>The overal time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-97" class="section level4">
+<h4><span class="header-section-number">4.27.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-58" class="section level4">
+<h4><span class="header-section-number">4.27.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">sortedArrayToBST</span>(<span class="dt">int</span>[] nums) {
+    <span class="kw">return</span> <span class="fu">buildHeightBalancedBST</span>(nums, <span class="dv">0</span>, nums.<span class="fu">length</span> -<span class="dv">1</span>);
+}
 
+<span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">buildHeightBalancedBST</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> start, <span class="dt">int</span> end) {
+    <span class="kw">if</span>(start &gt; end) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+
+    <span class="dt">int</span> mid = (start + end) / <span class="dv">2</span>;
+    <span class="bu">TreeNode</span> node = <span class="kw">new</span> <span class="bu">TreeNode</span>(nums[mid]);
+    node.<span class="fu">left</span> = <span class="fu">buildHeightBalancedBST</span>(nums, start, mid - <span class="dv">1</span>);
+    node.<span class="fu">right</span> = <span class="fu">buildHeightBalancedBST</span>(nums, mid + <span class="dv">1</span>, end);
+
+    <span class="kw">return</span> node;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="find-the-kth-largest-node-in-a-bst-firecode-level-3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="populating-next-right-pointers-in-each-node-leet-code-116-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +956,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>3.6 Minimum Path Sum / LeetCode 64 / Medium | Technical Interview</title>
+  <meta name="description" content="3.6 Minimum Path Sum / LeetCode 64 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="3.6 Minimum Path Sum / LeetCode 64 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="3.6 Minimum Path Sum / LeetCode 64 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="3.6 Minimum Path Sum / LeetCode 64 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="3.6 Minimum Path Sum / LeetCode 64 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="search-a-2d-matrix-ii-leetcode-240-medium.html"/>
+<link rel="next" href="unique-paths-leetcode-62-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,133 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="minimum-path-sum-leetcode-64-medium" class="section level2">
+<h2><span class="header-section-number">3.6</span> Minimum Path Sum / LeetCode 64 / Medium</h2>
+<div id="description-45" class="section level3">
+<h3><span class="header-section-number">3.6.1</span> Description</h3>
+<p>Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path. You can only move either down or right at any point in time. ### Example Input:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">[<span class="dv">1</span>],[<span class="dv">3</span>],[<span class="dv">1</span>],
+ <span class="dv">1</span>,  <span class="dv">5</span>, [<span class="dv">1</span>],
+ <span class="dv">4</span>,  <span class="dv">2</span>, [<span class="dv">1</span>]</code></pre></div>
+<p>Output: 7, because the path <span class="math inline">\(1 -&gt; 3 -&gt; 1 -&gt; 1 -&gt; 1\)</span> minimizes the sum.</p>
+</div>
+<div id="solution---recursive" class="section level3">
+<h3><span class="header-section-number">3.6.2</span> Solution - Recursive</h3>
+<div id="walkthrough-48" class="section level4">
+<h4><span class="header-section-number">3.6.2.1</span> Walkthrough</h4>
+<p>Time Complexity is exponential.</p>
+<div class="figure"><span id="fig:unnamed-chunk-5"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-5-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 3.1: Some caption.
+</p>
+</div>
+<p>See the above recursion tree, there are many nodes which apear more than once. Final cost matrix:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">[<span class="dv">1</span>], [<span class="dv">4</span>], [<span class="dv">5</span>]
+<span class="dv">2</span>,   <span class="dv">7</span>,   [<span class="dv">6</span>]
+<span class="dv">6</span>,   <span class="dv">8</span>,   [<span class="dv">7</span>]</code></pre></div>
+</div>
+<div id="analysis-49" class="section level4">
+<h4><span class="header-section-number">3.6.2.2</span> Analysis</h4>
+<p>There will be <span class="math inline">\(2^{h + 1} - 1 = 2^{log(m*n) + 1} - 1\)</span> subproblems, including the overlapping subproblems, which means the same subproblem has been computed again and gain. Thus, the time complexity is <span class="math inline">\(O(2^{log(m * n)})\)</span></p>
+</div>
+<div id="algorithm-49" class="section level4">
+<h4><span class="header-section-number">3.6.2.3</span> Algorithm</h4>
+<p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
+</div>
+<div id="java-code---recursive" class="section level4">
+<h4><span class="header-section-number">3.6.2.4</span> Java Code - Recursive</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minPathSum</span>(<span class="dt">int</span>[][] grid) {
+    <span class="kw">if</span>(grid == <span class="kw">null</span> || grid.<span class="fu">length</span>==<span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
 
+    <span class="kw">return</span> <span class="fu">rec</span>(<span class="dv">0</span>,<span class="dv">0</span>,grid);
+}
+
+<span class="kw">public</span> <span class="dt">int</span> <span class="fu">rec</span>(<span class="dt">int</span> i, <span class="dt">int</span> j, <span class="dt">int</span>[][] grid){
+    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;
+    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;
+
+
+    <span class="kw">if</span>(i == (rows - <span class="dv">1</span>) &amp;&amp; j == (cols - <span class="dv">1</span>)){
+        <span class="co">//at bottom right</span>
+        <span class="kw">return</span> grid[i][j];
+    } <span class="kw">else</span> <span class="kw">if</span>(i &lt; (rows - <span class="dv">1</span>) &amp;&amp; j == (cols - <span class="dv">1</span>)) {
+        <span class="co">//at last column, moving downward</span>
+        <span class="kw">return</span> grid[i][j] + <span class="fu">dfs</span>(i+<span class="dv">1</span>, j, grid);
+    } <span class="kw">else</span> <span class="kw">if</span>(i == (rows - <span class="dv">1</span>) &amp;&amp; j &lt; (cols - <span class="dv">1</span>)) {
+        <span class="co">//at last row, moving rightward</span>
+        <span class="kw">return</span> grid[i][j] + <span class="fu">dfs</span>(i, j+<span class="dv">1</span>, grid);
+    } <span class="kw">else</span> {
+        <span class="co">//other place, get min of downward and rightward</span>
+        <span class="dt">int</span> r1 = grid[i][j] + <span class="fu">rec</span>(i+<span class="dv">1</span>, j, grid);
+        <span class="dt">int</span> r2 = grid[i][j] + <span class="fu">rec</span>(i, j+<span class="dv">1</span>, grid);
+        <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">min</span>(r1,r2);
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---dynamic-programming" class="section level3">
+<h3><span class="header-section-number">3.6.3</span> Solution - Dynamic Programming</h3>
+<div id="walkthrough-49" class="section level4">
+<h4><span class="header-section-number">3.6.3.1</span> Walkthrough</h4>
+<pre><code>*  create a cost matrix of the same size
+*  init cost[0][0] to be grid[0][0]
+*  init first row and first column, previous cell cost plus current cell cost
+*  For each other cell, determine the minimum cost of previous top or left cell plus current cell cost.</code></pre>
+</div>
+<div id="analysis-50" class="section level4">
+<h4><span class="header-section-number">3.6.3.2</span> Analysis</h4>
+<p>Complexity: O(n * m) since each cell is visited once</p>
+</div>
+<div id="algorithm-50" class="section level4">
+<h4><span class="header-section-number">3.6.3.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+</div>
+<div id="java-code---dynamic-programming" class="section level4">
+<h4><span class="header-section-number">3.6.3.4</span> Java Code - Dynamic Programming</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minPathSum</span>(<span class="dt">int</span>[][] grid) {
+    <span class="kw">if</span>(grid == <span class="kw">null</span> || grid.<span class="fu">length</span> == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
+
+    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;
+    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;
+
+    <span class="dt">int</span>[][] dp = <span class="kw">new</span> <span class="dt">int</span>[rows][cols];
+    dp[<span class="dv">0</span>][<span class="dv">0</span>] = grid[<span class="dv">0</span>][<span class="dv">0</span>];
+
+    <span class="co">// initialize first row</span>
+    <span class="kw">for</span>(<span class="dt">int</span> c = <span class="dv">1</span>; c &lt; cols; c++){
+        dp[<span class="dv">0</span>][c] = dp[<span class="dv">0</span>][c - <span class="dv">1</span>] + grid[<span class="dv">0</span>][c];
+    }
+
+    <span class="co">// initialize first column</span>
+    <span class="kw">for</span>(<span class="dt">int</span> r = <span class="dv">1</span>; r &lt; rows; r++){
+        dp[r][<span class="dv">0</span>] = dp[r - <span class="dv">1</span>][<span class="dv">0</span>] + grid[r][<span class="dv">0</span>];
+    }
+
+    <span class="co">// fill up the dp table</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; rows; i++){
+        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">1</span>; j &lt; cols; j++){
+            <span class="dt">int</span> minNeighbor = <span class="bu">Math</span>.<span class="fu">min</span>(dp[i - <span class="dv">1</span>][j], dp[i][j - <span class="dv">1</span>]);
+            dp[i][j] = minNeighbor + grid[i][j];
+        }
+    }
+
+    <span class="kw">return</span> dp[rows - <span class="dv">1</span>][cols - <span class="dv">1</span>];
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="search-a-2d-matrix-ii-leetcode-240-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="unique-paths-leetcode-62-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1025,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/03-matrix.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.20 Non-overlapping Intervals / LeetCode 435 / Medium | Technical Interview</title>
+  <meta name="description" content="2.20 Non-overlapping Intervals / LeetCode 435 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.20 Non-overlapping Intervals / LeetCode 435 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.20 Non-overlapping Intervals / LeetCode 435 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.20 Non-overlapping Intervals / LeetCode 435 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.20 Non-overlapping Intervals / LeetCode 435 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="merge-intervals-leetcode-56-medium.html"/>
+<link rel="next" href="interval-list-intersections-leetcode-986-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,75 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="non-overlapping-intervals-leetcode-435-medium" class="section level2">
+<h2><span class="header-section-number">2.20</span> Non-overlapping Intervals / LeetCode 435 / Medium</h2>
+<div id="description-20" class="section level3">
+<h3><span class="header-section-number">2.20.1</span> Description</h3>
+<p>Given a collection of intervals, find the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.</p>
+</div>
+<div id="example-19" class="section level3">
+<h3><span class="header-section-number">2.20.2</span> Example</h3>
+<p>Input: [[1,2],[2,3],[3,4],[1,3]]. Output: 1 Explanation: [1,3] can be removed and the rest of intervals are non-overlapping.</p>
+<p>Input: [[1,2],[1,2],[1,2]]. Output: 2 . Explanation: You need to remove two [1,2] to make the rest of intervals non-overlapping.</p>
+</div>
+<div id="solution-17" class="section level3">
+<h3><span class="header-section-number">2.20.3</span> Solution</h3>
+<div id="walkthrough-21" class="section level4">
+<h4><span class="header-section-number">2.20.3.1</span> Walkthrough</h4>
+<p>First, sort the array and count non-overlapping interval - not overlapped with previous end. Finally, number of overlapping intervals would be n - count.</p>
+</div>
+<div id="analysis-21" class="section level4">
+<h4><span class="header-section-number">2.20.3.2</span> Analysis</h4>
+<p>Complexity is <span class="math inline">\(O(n \cdot log n)\)</span> because of sorting ahead.</p>
+</div>
+<div id="algorithm-21" class="section level4">
+<h4><span class="header-section-number">2.20.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-17" class="section level4">
+<h4><span class="header-section-number">2.20.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">eraseOverlapIntervals</span>(<span class="dt">int</span>[][] intervals) {
+    <span class="kw">if</span>(intervals == <span class="kw">null</span> || intervals.<span class="fu">length</span> == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
 
+    <span class="bu">Arrays</span>.<span class="fu">sort</span>(intervals, <span class="kw">new</span> <span class="bu">Comparator</span>&lt;<span class="dt">int</span>[]&gt;() {
+        <span class="at">@Override</span>
+        <span class="kw">public</span> <span class="dt">int</span> <span class="fu">compare</span>(<span class="dt">int</span>[] i1, <span class="dt">int</span>[] i2) {
+            <span class="kw">if</span> (i1[<span class="dv">1</span>] != i2[<span class="dv">1</span>]){
+                <span class="co">//compare end time</span>
+                <span class="kw">return</span> i1[<span class="dv">1</span>] - i2[<span class="dv">1</span>];
+            }<span class="kw">else</span> {
+                <span class="co">//compare start time</span>
+                <span class="kw">return</span> i1[<span class="dv">0</span>] - i2[<span class="dv">0</span>];
+            }
+        }
+    });
+
+    <span class="co">//end for latest non-overlapped interval</span>
+    <span class="dt">int</span> end = intervals[<span class="dv">0</span>][<span class="dv">1</span>];
+    <span class="dt">int</span> n = intervals.<span class="fu">length</span>;
+    <span class="dt">int</span> count = <span class="dv">1</span>;
+
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; n; i++) {
+        <span class="kw">if</span> (intervals[i][<span class="dv">0</span>] &gt;= end) {
+            <span class="co">//for any non-overlapped interval, update end &amp; count</span>
+            end = intervals[i][<span class="dv">1</span>];
+            count++;
+        }
+    }
+
+    <span class="kw">return</span> n - count;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="merge-intervals-leetcode-56-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="interval-list-intersections-leetcode-986-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +967,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

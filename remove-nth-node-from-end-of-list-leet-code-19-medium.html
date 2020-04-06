@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.12 Remove Nth Node From End of List / Leet Code 19 / Medium | Technical Interview</title>
+  <meta name="description" content="6.12 Remove Nth Node From End of List / Leet Code 19 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.12 Remove Nth Node From End of List / Leet Code 19 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.12 Remove Nth Node From End of List / Leet Code 19 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.12 Remove Nth Node From End of List / Leet Code 19 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.12 Remove Nth Node From End of List / Leet Code 19 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="intersection-of-two-linked-lists-leet-code-160-easy.html"/>
+<link rel="next" href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,159 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="remove-nth-node-from-end-of-list-leet-code-19-medium" class="section level2">
+<h2><span class="header-section-number">6.12</span> Remove Nth Node From End of List / Leet Code 19 / Medium</h2>
+<div id="description-97" class="section level3">
+<h3><span class="header-section-number">6.12.1</span> Description</h3>
+<p>Given a linked list, remove the n-th node from the end of list and return its head.</p>
+</div>
+<div id="example-93" class="section level3">
+<h3><span class="header-section-number">6.12.2</span> Example</h3>
+Input:
+<div class="figure"><span id="fig:unnamed-chunk-72"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-72-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.30: Some caption.
+</p>
+</div>
+<p>, and n = 2.</p>
+Output:
+<div class="figure"><span id="fig:unnamed-chunk-73"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-73-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.31: Some caption.
+</p>
+</div>
+</div>
+<div id="solution---two-pass" class="section level3">
+<h3><span class="header-section-number">6.12.3</span> Solution - TWO Pass</h3>
+<div id="walkthrough-119" class="section level4">
+<h4><span class="header-section-number">6.12.3.1</span> Walkthrough</h4>
+<p>The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list, whileas the second iteration is to iterate to the node posiion <span class="math inline">\(length -n + 1\)</span> or prev node position <span class="math inline">\(length - n\)</span>, begining from a dummy node headPrev. Finally, we need to check and move the head node appropriately if we are deleting it.</p>
+</div>
+<div id="analysis-120" class="section level4">
+<h4><span class="header-section-number">6.12.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-126" class="section level4">
+<h4><span class="header-section-number">6.12.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code---two-pass" class="section level4">
+<h4><span class="header-section-number">6.12.3.4</span> Java Code - TWO Pass</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">removeNthFromEnd</span>(ListNode head, <span class="dt">int</span> n) {
+    <span class="kw">if</span>(head == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
 
+    <span class="co">//Quick check to see if we are deleting the only node in the list</span>
+    <span class="kw">if</span> (head.<span class="fu">next</span> == <span class="kw">null</span> &amp;&amp; n &lt;= <span class="dv">1</span>){
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+
+    <span class="dt">int</span> length = <span class="dv">0</span>;
+
+    <span class="co">//1st pass: to get length of the list</span>
+    <span class="kw">for</span>(ListNode current = head; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>) {
+        length++;
+    }
+
+    <span class="co">// removal position is over list length</span>
+    <span class="kw">if</span>(n &gt; length) {
+        <span class="kw">return</span> head;
+    }
+
+    <span class="co">//move to the position before the target</span>
+    <span class="dt">int</span> position = length - n;
+
+    <span class="co">//keep track of current traversed # of nodes</span>
+    <span class="dt">int</span> count = <span class="dv">0</span>;
+
+    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);
+    headPrev.<span class="fu">next</span> = head;
+    ListNode removedPrev = headPrev;
+
+    <span class="co">//2nd pass: move to the one before target</span>
+    <span class="kw">while</span>( count &lt; position) {
+        removedPrev = removedPrev.<span class="fu">next</span>;
+        count++;
+    }
+
+    removedPrev.<span class="fu">next</span> = removedPrev.<span class="fu">next</span>.<span class="fu">next</span>;
+
+    <span class="co">//if removing head, renew head</span>
+    <span class="kw">if</span>(removedPrev == headPrev) {
+        head = removedPrev.<span class="fu">next</span>;
+    }
+
+
+    <span class="kw">return</span> head;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---one-pass" class="section level3">
+<h3><span class="header-section-number">6.12.4</span> Solution - ONE Pass</h3>
+<div id="walkthrough-120" class="section level4">
+<h4><span class="header-section-number">6.12.4.1</span> Walkthrough</h4>
+<p>The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list, whileas the second iteration is to iterate to the node posiion <span class="math inline">\(length -n + 1\)</span> or prev node position <span class="math inline">\(length - n\)</span>, begining from a dummy node headPrev. Finally, we need to check and move the head node appropriately if we are deleting it.</p>
+</div>
+<div id="analysis-121" class="section level4">
+<h4><span class="header-section-number">6.12.4.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="java-code---one-pass" class="section level4">
+<h4><span class="header-section-number">6.12.4.3</span> Java Code - ONE Pass</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">removeNthFromEnd</span>(ListNode head, <span class="dt">int</span> n) {
+    <span class="co">//Quick check to see if we are deleting the only node in the list</span>
+    <span class="kw">if</span> (head.<span class="fu">next</span> == <span class="kw">null</span> &amp;&amp; n == <span class="dv">1</span>){
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+
+    <span class="co">//keep track of current traversed # of nodes</span>
+    <span class="dt">int</span> count = <span class="dv">0</span>;
+
+    <span class="co">//Add a node to the begining of our linked list to make deletions easier at the top</span>
+    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);
+    headPrev.<span class="fu">next</span> = head;
+
+    ListNode current = headPrev;
+    ListNode removedPrev = headPrev;
+
+    <span class="kw">while</span>(current != <span class="kw">null</span>) {
+        count++;
+
+        <span class="kw">if</span>( (count - n) &gt; <span class="dv">1</span> ) {
+            removedPrev = removedPrev.<span class="fu">next</span>;
+        }
+
+        <span class="kw">if</span>(current.<span class="fu">next</span> == <span class="kw">null</span>) {
+            <span class="co">//the last node, removedPrev is also at the right position</span>
+
+            <span class="kw">if</span>(removedPrev.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; removedPrev.<span class="fu">next</span>.<span class="fu">next</span> == <span class="kw">null</span>) {
+                <span class="co">//to remove tail node</span>
+                removedPrev.<span class="fu">next</span> = <span class="kw">null</span>;
+            } <span class="kw">else</span> {
+                <span class="co">// to remove non-tail node (including head)</span>
+                removedPrev.<span class="fu">next</span> = removedPrev.<span class="fu">next</span>.<span class="fu">next</span>;
+            }
+
+            <span class="kw">break</span>;
+        }
+
+        current = current.<span class="fu">next</span>;
+    }
+
+    <span class="kw">return</span> headPrev.<span class="fu">next</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="intersection-of-two-linked-lists-leet-code-160-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1051,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

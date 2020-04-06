@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.2 Reverse Linked List / Leet Code 206 / Easy | Technical Interview</title>
+  <meta name="description" content="6.2 Reverse Linked List / Leet Code 206 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.2 Reverse Linked List / Leet Code 206 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.2 Reverse Linked List / Leet Code 206 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.2 Reverse Linked List / Leet Code 206 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.2 Reverse Linked List / Leet Code 206 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="add-two-numbers-leet-code-2-medium.html"/>
+<link rel="next" href="reverse-linked-list-ii-leet-code-92-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,131 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="reverse-linked-list-leet-code-206-easy" class="section level2">
+<h2><span class="header-section-number">6.2</span> Reverse Linked List / Leet Code 206 / Easy</h2>
+<div id="description-87" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Description</h3>
+<p>Reverse a singly linked list.</p>
+</div>
+<div id="example-83" class="section level3">
+<h3><span class="header-section-number">6.2.2</span> Example</h3>
+Input:
+<div class="figure"><span id="fig:unnamed-chunk-46"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-46-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.4: Some caption.
+</p>
+</div>
+Output:
+<div class="figure"><span id="fig:unnamed-chunk-47"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-47-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.5: Some caption.
+</p>
+</div>
+</div>
+<div id="solution---recursive-5" class="section level3">
+<h3><span class="header-section-number">6.2.3</span> Solution - Recursive</h3>
+<div id="walkthrough-107" class="section level4">
+<h4><span class="header-section-number">6.2.3.1</span> Walkthrough</h4>
+<p>For recursive solution, have a pointer remember original next and swap its link with the original head. Call the method recursively.</p>
+</div>
+<div id="analysis-108" class="section level4">
+<h4><span class="header-section-number">6.2.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) since every node is visited.</p>
+</div>
+<div id="algorithm-114" class="section level4">
+<h4><span class="header-section-number">6.2.3.3</span> Algorithm</h4>
+<p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
+</div>
+<div id="java-code---recursive-5" class="section level4">
+<h4><span class="header-section-number">6.2.3.4</span> Java Code - Recursive</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">reverseList</span>(ListNode node) {
+    <span class="kw">if</span>(node == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    } <span class="kw">else</span> <span class="kw">if</span>(node.<span class="fu">next</span> == <span class="kw">null</span>) {
+        <span class="kw">return</span> node;
+    } <span class="kw">else</span> {
+        ListNode origNext = node.<span class="fu">next</span>;
+        ListNode newNode = <span class="fu">reverseList</span>(origNext);
+        <span class="co">//origNext -&gt; node</span>
+        origNode.<span class="fu">next</span> = node;
+        <span class="co">//delete link</span>
+        node.<span class="fu">next</span> = <span class="kw">null</span>;
+        <span class="kw">return</span> newNode;
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---iterative" class="section level3">
+<h3><span class="header-section-number">6.2.4</span> Solution - Iterative</h3>
+<div id="walkthrough-108" class="section level4">
+<h4><span class="header-section-number">6.2.4.1</span> Walkthrough</h4>
+<p>For iterative solution, have a helper pointer to remember the previous position and reverse the links between current and headPrev nodes while iterating the list.</p>
+<div class="figure"><span id="fig:unnamed-chunk-48"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-48-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.6: Some caption.
+</p>
+</div>
+<p>Finally, reset where begin.next points to head of the list after reverse - tail of the original list, and return the head of the reversed list.</p>
+<div class="figure"><span id="fig:unnamed-chunk-49"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-49-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.7: Some caption.
+</p>
+</div>
+</div>
+<div id="analysis-109" class="section level4">
+<h4><span class="header-section-number">6.2.4.2</span> Analysis</h4>
+<p>Time complexity is O(n) since every node is visited.</p>
+</div>
+<div id="algorithm-115" class="section level4">
+<h4><span class="header-section-number">6.2.4.3</span> Algorithm</h4>
+</div>
+<div id="java-code---iterative" class="section level4">
+<h4><span class="header-section-number">6.2.4.4</span> Java Code - Iterative</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">reverseList</span>(ListNode head) {
+    <span class="kw">if</span>(head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span>) {
+        <span class="kw">return</span> head;
+    }
 
+    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);
+    headPrev.<span class="fu">next</span> = head;
+
+    <span class="kw">return</span> <span class="fu">reverse</span>(headPrev);
+}
+
+<span class="kw">public</span> ListNode <span class="fu">reverse</span>(ListNode begin) {
+    ListNode prev = begin.<span class="fu">next</span>;
+    ListNode current = prev.<span class="fu">next</span>;
+
+    <span class="co">//reverse links between current and prev</span>
+    <span class="kw">while</span> (current != <span class="kw">null</span>) {
+        ListNode next = current.<span class="fu">next</span>;
+        <span class="co">/*</span>
+<span class="co">        * swap links between current and prev</span>
+<span class="co">        */</span>
+        current.<span class="fu">next</span> = prev;
+        prev = current;
+        current = next;
+    }
+
+    begin.<span class="fu">next</span>.<span class="fu">next</span> = current;
+    begin.<span class="fu">next</span> = prev;
+
+    <span class="kw">return</span> begin.<span class="fu">next</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="add-two-numbers-leet-code-2-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="reverse-linked-list-ii-leet-code-92-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1023,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

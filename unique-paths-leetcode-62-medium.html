@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>3.7 Unique Paths / LeetCode 62 / Medium | Technical Interview</title>
+  <meta name="description" content="3.7 Unique Paths / LeetCode 62 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="3.7 Unique Paths / LeetCode 62 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="3.7 Unique Paths / LeetCode 62 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="3.7 Unique Paths / LeetCode 62 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="3.7 Unique Paths / LeetCode 62 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="minimum-path-sum-leetcode-64-medium.html"/>
+<link rel="next" href="word-search-leetcode-79-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,122 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="unique-paths-leetcode-62-medium" class="section level2">
+<h2><span class="header-section-number">3.7</span> Unique Paths / LeetCode 62 / Medium</h2>
+<div id="description-46" class="section level3">
+<h3><span class="header-section-number">3.7.1</span> Description</h3>
+<p>A robot is located at the top-left corner of a m x n grid (marked ‘Start’ in the diagram below).</p>
+<p>The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid. How many possible unique paths are there?</p>
+</div>
+<div id="example-44" class="section level3">
+<h3><span class="header-section-number">3.7.2</span> Example</h3>
+<p>Given a matrix of size 2 * 3:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">[],[],[]
+[],[],[]</code></pre></div>
+<p>There are 3 unique path:</p>
+<pre><code>*  (0,0) - (1,0) - (1,1) - (1,2)
+*  (0,0) - (0,1) - (1,1) - (1,2)
+*  (0,0) - (0,1) - (0,2) - (1,2)</code></pre>
+</div>
+<div id="solution---recursion-1" class="section level3">
+<h3><span class="header-section-number">3.7.3</span> Solution - Recursion</h3>
+<div id="walkthrough-50" class="section level4">
+<h4><span class="header-section-number">3.7.3.1</span> Walkthrough</h4>
+<div class="figure"><span id="fig:unnamed-chunk-6"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-6-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 3.2: Some caption.
+</p>
+</div>
+</div>
+<div id="analysis-51" class="section level4">
+<h4><span class="header-section-number">3.7.3.2</span> Analysis</h4>
+<p>Naive recursive strategy results in overlapping subproblems. The time complexity is <span class="math inline">\(O(2^{log (m * n)})\)</span></p>
+</div>
+<div id="algorithm-51" class="section level4">
+<h4><span class="header-section-number">3.7.3.3</span> Algorithm</h4>
+<p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
+</div>
+<div id="java-code---recursion-1" class="section level4">
+<h4><span class="header-section-number">3.7.3.4</span> Java Code - Recursion</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">uniquePaths</span>(<span class="dt">int</span> m, <span class="dt">int</span> n) {
+    <span class="kw">return</span> <span class="fu">rec</span>(<span class="dv">0</span>, <span class="dv">0</span>, m, n);
+}
+<span class="dt">int</span> <span class="fu">rec</span>(<span class="dt">int</span> i, <span class="dt">int</span> j, <span class="dt">int</span> rows, <span class="dt">int</span> cols){
 
+    <span class="kw">if</span>(i == (rows - <span class="dv">1</span>) &amp;&amp; j == (cols - <span class="dv">1</span>)){
+        <span class="co">//at bottom right</span>
+        <span class="kw">return</span> <span class="dv">1</span>;
+    } <span class="kw">else</span> <span class="kw">if</span>(i &lt; (rows - <span class="dv">1</span>) &amp;&amp; j == (cols - <span class="dv">1</span>)) {
+        <span class="co">//at last column, moving downward</span>
+        <span class="kw">return</span> <span class="fu">rec</span>(i+<span class="dv">1</span>, j, rows, cols);
+    } <span class="kw">else</span> <span class="kw">if</span>(i == (rows - <span class="dv">1</span>) &amp;&amp; j &lt; (cols - <span class="dv">1</span>)) {
+        <span class="co">//at last row, moving rightward</span>
+        <span class="kw">return</span> <span class="fu">rec</span>(i, j+<span class="dv">1</span>, rows, cols);
+    } <span class="kw">else</span> {
+        <span class="co">//other place, get min of downward and rightward</span>
+        <span class="kw">return</span> <span class="fu">rec</span>(i+<span class="dv">1</span>, j, rows, cols) + <span class="fu">rec</span>(i, j+<span class="dv">1</span>, rows, cols);
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---dynamic-programming-1" class="section level3">
+<h3><span class="header-section-number">3.7.4</span> Solution - Dynamic Programming</h3>
+<div id="walkthrough-51" class="section level4">
+<h4><span class="header-section-number">3.7.4.1</span> Walkthrough</h4>
+<p>Number of unique path to current cell equals to the sum of paths to the previous cells. For example, the matrix representing # of path to reach current cell. The weight at (1,2) equals to sum of (0,2) and (1,1)</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span>
+<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span></code></pre></div>
+</div>
+<div id="analysis-52" class="section level4">
+<h4><span class="header-section-number">3.7.4.2</span> Analysis</h4>
+<p>Time complexity is O(n * m) since each cell is visited once. A cache of size O(n * m ) is used to store visited cell value.</p>
+</div>
+<div id="algorithm-52" class="section level4">
+<h4><span class="header-section-number">3.7.4.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+</div>
+<div id="java-code---dynamic-programming-1" class="section level4">
+<h4><span class="header-section-number">3.7.4.4</span> Java Code - Dynamic Programming</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">uniquePaths</span>(<span class="dt">int</span> m, <span class="dt">int</span> n) {
+    <span class="kw">if</span>(m == <span class="dv">0</span> || n == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
+    <span class="kw">if</span>(m == <span class="dv">1</span> || n == <span class="dv">1</span>) {
+        <span class="kw">return</span> <span class="dv">1</span>;
+    }
+
+    <span class="dt">int</span>[][] dp = <span class="kw">new</span> <span class="dt">int</span>[m][n];
+
+    <span class="co">//init first column</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; m; i++){
+        dp[i][<span class="dv">0</span>] = <span class="dv">1</span>;
+    }
+
+    <span class="co">//init first row</span>
+    <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; n; j++){
+        dp[<span class="dv">0</span>][j] = <span class="dv">1</span>;
+    }
+
+    <span class="co">//fill up the rest of table</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; m; i++){
+        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">1</span>; j &lt; n; j++){
+            dp[i][j] = dp[i - <span class="dv">1</span>][j] + dp[i][j - <span class="dv">1</span>];
+        }
+    }
+
+    <span class="kw">return</span> dp[m-<span class="dv">1</span>][n-<span class="dv">1</span>];
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="minimum-path-sum-leetcode-64-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="word-search-leetcode-79-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1014,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/03-matrix.Rmd",
 "text": "Edit"
 },
 "history": {

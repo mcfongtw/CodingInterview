@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>Chapter 4 Tree | Technical Interview</title>
+  <meta name="description" content="Chapter 4 Tree | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="Chapter 4 Tree | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="Chapter 4 Tree | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="Chapter 4 Tree | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="Chapter 4 Tree | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="best-meeting-point-leetcode-296-hard.html"/>
+<link rel="next" href="balanced-binary-tree-leet-code-110-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,109 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="tree" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> Tree</h1>
+<div id="breadth-first-traversal" class="section level3">
+<h3><span class="header-section-number">4.0.1</span> Breadth First Traversal</h3>
+<p>The algorithm starts at the tree root, and explores all of the neighbor nodes at the present depth prior to moving on to the nodes at the next depth level.</p>
+<div id="algorithm-56" class="section level4">
+<h4><span class="header-section-number">4.0.1.1</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="typical-implementation---java" class="section level4">
+<h4><span class="header-section-number">4.0.1.2</span> Typical Implementation - Java</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">breadthFirstTraversal</span>(<span class="bu">TreeNode</span> root) {
+    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>();
 
+    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {
+        <span class="bu">TreeNode</span> node = queue.<span class="fu">poll</span>();
+
+        <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {
+            queue.<span class="fu">offer</span>(node.<span class="fu">left</span>);
+        }
+
+        <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {
+            queue.<span class="fu">offer</span>(node.<span class="fu">right</span>);
+        }
+    }
+
+    <span class="kw">return</span> <span class="kw">false</span>;
+}</code></pre></div>
+</div>
+<div id="complexity-analysis" class="section level4">
+<h4><span class="header-section-number">4.0.1.3</span> Complexity Analysis</h4>
+<ul>
+<li>Time Complexity: Breadth-first search visits every vertex once and checks every edge in the graph once. Therefore, the runtime complexity is <span class="math inline">\(O(|V| + |E|)\)</span>. In simplicity, O(n) since <span class="math inline">\(|V| = n\)</span></li>
+<li>Auxiliary Space: In Breadth First traversal, visited node in different level is stored in a queue one by one. Extra Space required is O(w) where w is maximum width of a level in binary tree.</li>
+</ul>
+</div>
+</div>
+<div id="depth-first-traversal" class="section level3">
+<h3><span class="header-section-number">4.0.2</span> Depth First Traversal</h3>
+<p>The algorithm starts at the root node and explores as far as possible along each branch.</p>
+<div id="algorithm-57" class="section level4">
+<h4><span class="header-section-number">4.0.2.1</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="type-of-depth-first-traversal" class="section level4">
+<h4><span class="header-section-number">4.0.2.2</span> Type of Depth First Traversal</h4>
+<ul>
+<li>Depth First InOrder Traversal</li>
+<li>Depth First PreOrder Traversal</li>
+<li>Depth First PostOrder Traversal</li>
+</ul>
+</div>
+<div id="complexity-analysis-1" class="section level4">
+<h4><span class="header-section-number">4.0.2.3</span> Complexity Analysis</h4>
+<ul>
+<li>Time Complexity: Depth-first search visits every vertex once and checks every edge in the graph once. Therefore, the runtime complexity is <span class="math inline">\(O(|V| + |E|)\)</span>. In simplicity, O(n) since <span class="math inline">\(|V| = n\)</span></li>
+<li>Auxiliary Space: In Depth First Traversals, stack (or function call stack) stores all ancestors of a node. Extra Space required is O(h) where h is maximum height of binary tree.</li>
+</ul>
+</div>
+</div>
+<div id="selection-strategy" class="section level3">
+<h3><span class="header-section-number">4.0.3</span> Selection Strategy</h3>
+<ul>
+<li>Extra Space can be one factor</li>
+<li>Depth First Traversals are typically recursive and recursive code requires function call overheads.</li>
+<li>The most important points is, BFS starts visiting nodes from root while DFS starts visiting nodes from leaves. So if our problem is to search something that is more likely to closer to root, we would prefer BFS. And if the target node is close to a leaf, we would prefer DFS</li>
+<li>Maximum Width of a Binary Tree at depth (or height) h can be 2h where h starts from 0. So the maximum number of nodes can be at the last level. And worst case occurs when Binary Tree is a perfect Binary Tree with numbers of node</li>
+<li>It is evident from above points that extra space required for Level order traversal is likely to be more when tree is more balanced and extra space for Depth First Traversal is likely to be more when tree is less balanced.</li>
+</ul>
+</div>
+<div id="binary-search-tree" class="section level3">
+<h3><span class="header-section-number">4.0.4</span> Binary Search Tree</h3>
+<div class="figure"><span id="fig:unnamed-chunk-7"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-7-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.1: Some caption.
+</p>
+</div>
+<p>A BST is a binary tree where nodes are ordered in the following way:</p>
+<ul>
+<li>each node contains one key (also known as data)</li>
+<li>the keys in the left subtree are less then the key in its parent node</li>
+<li>the keys in the right subtree are greater the key in its parent node</li>
+<li>duplicate keys are not allowed.</li>
+</ul>
+<div id="algorithm-58" class="section level4">
+<h4><span class="header-section-number">4.0.4.1</span> Algorithm</h4>
+<p>bst <a href="glossary-of-algorithm.html#bst">1.2.11</a></p>
+</div>
+<div id="complexity-analysis-2" class="section level4">
+<h4><span class="header-section-number">4.0.4.2</span> Complexity Analysis</h4>
+<p>The particular kind of binary tree is optimized in a way that only a PARTIAL nodes along a path will be visited during search, the general time complexity is reduced to O(h) where h = log(n).</p>
+<p>Since a binary search tree with n nodes has a minimum of O(log(n)) levels, it takes at least O(log(n)) comparisons to find a particular node. However, in the edge cases where tree is in a list form, the worst time complexity is O(n)</p>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="best-meeting-point-leetcode-296-hard.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="balanced-binary-tree-leet-code-110-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1001,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

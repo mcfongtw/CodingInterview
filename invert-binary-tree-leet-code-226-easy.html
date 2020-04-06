@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.2 Invert Binary Tree / Leet Code 226 Easy | Technical Interview</title>
+  <meta name="description" content="4.2 Invert Binary Tree / Leet Code 226 Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.2 Invert Binary Tree / Leet Code 226 Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.2 Invert Binary Tree / Leet Code 226 Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.2 Invert Binary Tree / Leet Code 226 Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.2 Invert Binary Tree / Leet Code 226 Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="balanced-binary-tree-leet-code-110-easy.html"/>
+<link rel="next" href="symmetric-tree-leet-code-101-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,109 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="invert-binary-tree-leet-code-226-easy" class="section level2">
+<h2><span class="header-section-number">4.2</span> Invert Binary Tree / Leet Code 226 Easy</h2>
+<div id="description-52" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Description</h3>
+<p>Invert a binary tree</p>
+</div>
+<div id="example-50" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-10"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-10-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.4: Some caption.
+</p>
+</div>
+<p>inverts</p>
+<div class="figure"><span id="fig:unnamed-chunk-11"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-11-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.5: Some caption.
+</p>
+</div>
+</div>
+<div id="solution---dfs-3" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> Solution - DFS</h3>
+<div id="walkthrough-57" class="section level4">
+<h4><span class="header-section-number">4.2.3.1</span> Walkthrough</h4>
+<p>Swap the left and right subtree with recursive strategy.</p>
+</div>
+<div id="analysis-58" class="section level4">
+<h4><span class="header-section-number">4.2.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-60" class="section level4">
+<h4><span class="header-section-number">4.2.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code---dfs-3" class="section level4">
+<h4><span class="header-section-number">4.2.3.4</span> Java Code - DFS</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">invertTree</span>(<span class="bu">TreeNode</span> root) {
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
 
+    <span class="co">//swap left and right subtrees</span>
+    <span class="bu">TreeNode</span> origRight = root.<span class="fu">right</span>;
+    root.<span class="fu">right</span> = <span class="fu">invertTree</span>(root.<span class="fu">left</span>);
+    root.<span class="fu">left</span> = <span class="fu">invertTree</span>(origRight);
+
+    <span class="kw">return</span> root;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---bfs" class="section level3">
+<h3><span class="header-section-number">4.2.4</span> Solution - BFS</h3>
+<div id="walkthrough-58" class="section level4">
+<h4><span class="header-section-number">4.2.4.1</span> Walkthrough</h4>
+<p>Swap the left and right subtree with iterative (BFS) strategy</p>
+</div>
+<div id="analysis-59" class="section level4">
+<h4><span class="header-section-number">4.2.4.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-61" class="section level4">
+<h4><span class="header-section-number">4.2.4.3</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code---bfs" class="section level4">
+<h4><span class="header-section-number">4.2.4.4</span> Java Code - BFS</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">invertTree</span>(<span class="bu">TreeNode</span> root) {
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+
+    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">TreeNode</span>&gt;();
+    queue.<span class="fu">offer</span>(root);
+
+    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {
+        <span class="bu">TreeNode</span> node = queue.<span class="fu">poll</span>();
+
+        <span class="co">//swap left and right subtrees</span>
+        <span class="bu">TreeNode</span> origRight = node.<span class="fu">right</span>;
+        node.<span class="fu">right</span> = node.<span class="fu">left</span>;
+        node.<span class="fu">left</span> = origRight;
+
+        <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {
+            queue.<span class="fu">offer</span>(node.<span class="fu">left</span>);
+        }
+        <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {
+            queue.<span class="fu">offer</span>(node.<span class="fu">right</span>);
+        }
+    }
+    <span class="kw">return</span> root;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="balanced-binary-tree-leet-code-110-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="symmetric-tree-leet-code-101-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1001,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

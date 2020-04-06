@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>10.6 Min operations to reduce number to 1 / / | Technical Interview</title>
+  <meta name="description" content="10.6 Min operations to reduce number to 1 / / | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="10.6 Min operations to reduce number to 1 / / | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="10.6 Min operations to reduce number to 1 / / | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="10.6 Min operations to reduce number to 1 / / | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="10.6 Min operations to reduce number to 1 / / | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="fibonacci-sequence-firecode-level-2.html"/>
+<link rel="next" href="interactive-problems.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,69 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="min-operations-to-reduce-number-to-1" class="section level2">
+<h2><span class="header-section-number">10.6</span> Min operations to reduce number to 1 / /</h2>
+<div id="description-126" class="section level3">
+<h3><span class="header-section-number">10.6.1</span> Description</h3>
+<p>Given a positive integer n and 3 operations on n:</p>
+<pre><code>*  n - 1
+*  n / 2 (if n is even)
+*  n / 3 (if n \% 3 == 0)</code></pre>
+<p>Find the minimum number of above operations to reduce n to 1.</p>
+</div>
+<div id="example-121" class="section level3">
+<h3><span class="header-section-number">10.6.2</span> Example</h3>
+<p>Input: n = 9 Output: 2 Explanation: Step 1: 9 / 3 = 3 Step 2: 3 / 3 = 1</p>
+<p>Input: n = 8 Output: 3 Explanation: Step 1: 8 / 2 = 4 Step 2: 4 / 2 = 2 Step 3: 2 - 1 = 1</p>
+</div>
+<div id="solution---recursion-3" class="section level3">
+<h3><span class="header-section-number">10.6.3</span> Solution - Recursion</h3>
+<div id="walkthrough-155" class="section level4">
+<h4><span class="header-section-number">10.6.3.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-159" class="section level4">
+<h4><span class="header-section-number">10.6.3.2</span> Analysis</h4>
+<p>O(n^3)</p>
+</div>
+<div id="algorithm-164" class="section level4">
+<h4><span class="header-section-number">10.6.3.3</span> Algorithm</h4>
+<p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
+</div>
+<div id="java-code-88" class="section level4">
+<h4><span class="header-section-number">10.6.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minHops</span>(<span class="dt">int</span> num) {
+    <span class="kw">return</span> <span class="fu">rec</span>(num, <span class="dv">0</span>);
+}
+
+<span class="kw">private</span> <span class="dt">int</span> <span class="fu">rec</span>(<span class="dt">int</span> num, <span class="dt">int</span> count) {
+    <span class="kw">if</span>(num &lt;= <span class="dv">1</span>) {
+        <span class="kw">return</span> count;
+    }
+
+    <span class="dt">int</span> minCount = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>;
+
+    <span class="kw">if</span>( num % <span class="dv">3</span> == <span class="dv">0</span>) {
+        minCount = <span class="bu">Math</span>.<span class="fu">min</span>(minCount, <span class="fu">rec</span>(num / <span class="dv">3</span>, count + <span class="dv">1</span>));
+    }
+
+    <span class="kw">if</span>( num % <span class="dv">2</span> == <span class="dv">0</span>) {
+        minCount = <span class="bu">Math</span>.<span class="fu">min</span>(minCount, <span class="fu">rec</span>(num / <span class="dv">2</span>, count + <span class="dv">1</span>));
+    }
+
+    minCount = <span class="bu">Math</span>.<span class="fu">min</span>(minCount, <span class="fu">rec</span>(num - <span class="dv">1</span>, count + <span class="dv">1</span>));
+}</code></pre></div>
 
 </div>
+</div>
+</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="fibonacci-sequence-firecode-level-2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="interactive-problems.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +961,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/10-math.Rmd",
 "text": "Edit"
 },
 "history": {

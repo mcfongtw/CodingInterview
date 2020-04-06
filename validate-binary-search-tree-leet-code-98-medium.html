@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.18 Validate Binary Search Tree / Leet Code 98 / Medium | Technical Interview</title>
+  <meta name="description" content="4.18 Validate Binary Search Tree / Leet Code 98 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.18 Validate Binary Search Tree / Leet Code 98 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.18 Validate Binary Search Tree / Leet Code 98 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.18 Validate Binary Search Tree / Leet Code 98 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.18 Validate Binary Search Tree / Leet Code 98 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="count-univalue-subtrees-leet-code-250-medium.html"/>
+<link rel="next" href="binary-tree-upside-down-leet-code-156-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,136 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="validate-binary-search-tree-leet-code-98-medium" class="section level2">
+<h2><span class="header-section-number">4.18</span> Validate Binary Search Tree / Leet Code 98 / Medium</h2>
+<div id="description-68" class="section level3">
+<h3><span class="header-section-number">4.18.1</span> Description</h3>
+<p>Given a binary tree, determine if it is a valid binary search tree (BST). Assume a BST is defined as follows:</p>
+<ul>
+<li>The left subtree of a node contains only nodes with keys less than the node’s key.</li>
+<li>The right subtree of a node contains only nodes with keys greater than the node’s key.</li>
+<li>Both the left and right subtrees must also be binary search trees.</li>
+</ul>
+</div>
+<div id="example-65" class="section level3">
+<h3><span class="header-section-number">4.18.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-28"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-28-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.22: Some caption.
+</p>
+</div>
+<p>Output: true</p>
+<div class="figure"><span id="fig:unnamed-chunk-29"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-29-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.23: Some caption.
+</p>
+</div>
+<p>Output: false. Explanation: The root node’s value is 5 but its right child’s value is 4.</p>
+</div>
+<div id="solution---recursive-4" class="section level3">
+<h3><span class="header-section-number">4.18.3</span> Solution - Recursive</h3>
+<div id="walkthrough-84" class="section level4">
+<h4><span class="header-section-number">4.18.3.1</span> Walkthrough</h4>
+<p>For recursive, define a numeric lower and upper bounds for each validation - initially, (long) (Integer.MIN_VALUE - 1) and (long) (Integer.MAX_VALUE + 1). Recursively validate the node boundary by replacing with left and right nodes.</p>
+</div>
+<div id="analysis-85" class="section level4">
+<h4><span class="header-section-number">4.18.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-86" class="section level4">
+<h4><span class="header-section-number">4.18.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code---recursive-4" class="section level4">
+<h4><span class="header-section-number">4.18.3.4</span> Java Code - Recursive</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isValidBST</span>(<span class="bu">TreeNode</span> root) {
+    <span class="kw">return</span> <span class="fu">isValidBST</span>(root, (<span class="dt">long</span>) <span class="bu">Integer</span>.<span class="fu">MIN_VALUE</span> - <span class="dv">1</span>, (<span class="dt">long</span>) <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span> + <span class="dv">1</span>);
+}
 
+<span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isValidBST</span>(<span class="bu">TreeNode</span> root, <span class="dt">long</span> lowerBound, <span class="dt">long</span> upperBound) {
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    } <span class="kw">else</span> {
+        <span class="dt">boolean</span> result = root.<span class="fu">val</span> &gt; lowerBound &amp;&amp; root.<span class="fu">val</span> &lt; upperBound;
+        <span class="kw">return</span> result &amp;&amp; <span class="fu">isValidBST</span>(root.<span class="fu">left</span>, lowerBound, root.<span class="fu">val</span>) &amp;&amp;
+            <span class="fu">isValidBST</span>(root.<span class="fu">right</span>, root.<span class="fu">val</span>, upperBound);
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---iterative-bfs-1" class="section level3">
+<h3><span class="header-section-number">4.18.4</span> Solution - Iterative BFS</h3>
+<div id="walkthrough-85" class="section level4">
+<h4><span class="header-section-number">4.18.4.1</span> Walkthrough</h4>
+<p>For iterative, we have a wrapper to hold upper and lower bounds for each nodes. Use BFS to iteratively traverse the tree and add left or right nodes with proper boundaries accordingly.</p>
+</div>
+<div id="analysis-86" class="section level4">
+<h4><span class="header-section-number">4.18.4.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-87" class="section level4">
+<h4><span class="header-section-number">4.18.4.3</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code---iterative-bfs-1" class="section level4">
+<h4><span class="header-section-number">4.18.4.4</span> Java Code - Iterative BFS</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//Decorator pattern</span>
+<span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> BoundedTreeNode <span class="kw">extends</span> <span class="bu">TreeNode</span> {
+    <span class="dt">int</span> upper;
+
+    <span class="dt">int</span> lower;
+
+    <span class="bu">TreeNode</span> proxy;
+
+    <span class="fu">BoundedTreeNode</span>(<span class="bu">TreeNode</span> node, <span class="dt">int</span> max, <span class="dt">int</span> min) {
+        <span class="kw">this</span>.<span class="fu">proxy</span> = node;
+        <span class="kw">this</span>.<span class="fu">upper</span> = max;
+        <span class="kw">this</span>.<span class="fu">lower</span> = min;
+    }
+}
+
+
+<span class="kw">public</span> <span class="dt">static</span> <span class="dt">boolean</span> <span class="fu">validateBSTItr</span>(<span class="bu">TreeNode</span> root) {
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    <span class="bu">Queue</span>&lt;BoundedTreeNode&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+
+    queue.<span class="fu">offer</span>(<span class="kw">new</span> <span class="fu">BoundedTreeNode</span>(root, <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>, <span class="bu">Integer</span>.<span class="fu">MIN_VALUE</span>));
+
+    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {
+        BoundedTreeNode node = queue.<span class="fu">poll</span>();
+
+
+        <span class="kw">if</span>(node.<span class="fu">proxy</span>.<span class="fu">data</span> &gt; node.<span class="fu">upper</span> || node.<span class="fu">proxy</span>.<span class="fu">data</span> &lt; node.<span class="fu">lower</span>) {
+            <span class="co">// out of boundary</span>
+            <span class="kw">return</span> <span class="kw">false</span>;
+        }
+
+        <span class="kw">if</span>(node.<span class="fu">proxy</span>.<span class="fu">left</span> != <span class="kw">null</span>) {
+            queue.<span class="fu">offer</span>(<span class="kw">new</span> <span class="fu">BoundedTreeNode</span>(node.<span class="fu">proxy</span>.<span class="fu">left</span>, node.<span class="fu">proxy</span>.<span class="fu">data</span>, node.<span class="fu">lower</span>));
+        }
+
+        <span class="kw">if</span>(node.<span class="fu">proxy</span>.<span class="fu">right</span> != <span class="kw">null</span>) {
+            queue.<span class="fu">offer</span>(<span class="kw">new</span> <span class="fu">BoundedTreeNode</span>(node.<span class="fu">proxy</span>.<span class="fu">right</span>, node.<span class="fu">upper</span>, node.<span class="fu">proxy</span>.<span class="fu">data</span>));
+        }
+    }
+
+    <span class="kw">return</span> <span class="kw">true</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="count-univalue-subtrees-leet-code-250-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="binary-tree-upside-down-leet-code-156-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1028,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

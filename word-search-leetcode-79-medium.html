@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>3.8 Word Search / LeetCode 79 / Medium | Technical Interview</title>
+  <meta name="description" content="3.8 Word Search / LeetCode 79 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="3.8 Word Search / LeetCode 79 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="3.8 Word Search / LeetCode 79 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="3.8 Word Search / LeetCode 79 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="3.8 Word Search / LeetCode 79 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="unique-paths-leetcode-62-medium.html"/>
+<link rel="next" href="number-of-islands-leetcode-200-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,99 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="word-search-leetcode-79-medium" class="section level2">
+<h2><span class="header-section-number">3.8</span> Word Search / LeetCode 79 / Medium</h2>
+<div id="description-47" class="section level3">
+<h3><span class="header-section-number">3.8.1</span> Description</h3>
+<p>Given a 2D board and a word, find if the word exists in the grid.</p>
+<p>The word can be constructed from letters of sequentially adjacent cell, where “adjacent” cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.</p>
+</div>
+<div id="example-45" class="section level3">
+<h3><span class="header-section-number">3.8.2</span> Example</h3>
+<pre><code>board =
+[
+[&#39;A&#39;,&#39;B&#39;,&#39;C&#39;,&#39;E&#39;],
+[&#39;S&#39;,&#39;F&#39;,&#39;C&#39;,&#39;S&#39;],
+[&#39;A&#39;,&#39;D&#39;,&#39;E&#39;,&#39;E&#39;]
+]</code></pre>
+<p>Given word = “ABCCED”, return true. Given word = “SEE”, return true. Given word = “ABCB”, return false.</p>
+</div>
+<div id="solution---dfs" class="section level3">
+<h3><span class="header-section-number">3.8.3</span> Solution - DFS</h3>
+<div id="walkthrough-52" class="section level4">
+<h4><span class="header-section-number">3.8.3.1</span> Walkthrough</h4>
+<p>Enumerate all possible starting position from the 2D array by using two nested loops. While traversing the character in the taget string, perform a search recursively on neighboring cells [(i, j + 1), (i, j - 1), (i + 1, j), (i - 1, j)]. If there is a hit in any four neighboring cells, return true; otherwise, return false.</p>
+</div>
+<div id="analysis-53" class="section level4">
+<h4><span class="header-section-number">3.8.3.2</span> Analysis</h4>
+<p>The enumeration cost is exponential, as there are multiple overlapping subproblems. Thus, the time complexity is <span class="math inline">\(O(2^{log(n)})\)</span></p>
+</div>
+<div id="algorithm-53" class="section level4">
+<h4><span class="header-section-number">3.8.3.3</span> Algorithm</h4>
+<p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code---dfs" class="section level4">
+<h4><span class="header-section-number">3.8.3.4</span> Java Code - DFS</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">char</span> VISITED_CHARACTER = <span class="ch">&#39;*&#39;</span>;
 
+<span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">exist</span>(<span class="dt">char</span>[][] board, <span class="bu">String</span> word) {
+    <span class="dt">int</span> numOfRows = board.<span class="fu">length</span>;
+    <span class="dt">int</span> numOfCols = board[<span class="dv">0</span>].<span class="fu">length</span>;
+
+    <span class="co">//Enumerate the all possible starting position from char[][]</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfRows; i++) {
+        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; numOfCols; j++) {
+            <span class="kw">if</span> (<span class="fu">backtrack</span>(board, i, j, word, <span class="dv">0</span>)) {
+                <span class="kw">return</span> <span class="kw">true</span>;
+            }
+        }
+    }
+    <span class="kw">return</span> <span class="kw">false</span>;
+}
+
+<span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">backtrack</span>(<span class="dt">char</span>[][] board, <span class="dt">int</span> row, <span class="dt">int</span> col, <span class="bu">String</span> word, <span class="dt">int</span> index) {
+    <span class="dt">int</span> numOfRows = board.<span class="fu">length</span>;
+    <span class="dt">int</span> numOfCols = board[<span class="dv">0</span>].<span class="fu">length</span>;
+
+    <span class="co">//every other character has matched</span>
+    <span class="kw">if</span> (index == word.<span class="fu">length</span>()) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    <span class="co">//exceed the boundary</span>
+    <span class="kw">if</span> (row &lt; <span class="dv">0</span> || row &gt;= numOfRows || col &lt; <span class="dv">0</span> || col &gt;= numOfCols) {
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+
+    <span class="co">//if current char is not equal</span>
+    <span class="kw">if</span> (board[row][col] != word.<span class="fu">charAt</span>(index)) {
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+
+    <span class="co">// &#39;nullify&#39; current position</span>
+    board[row][col] ^= VISITED_CHARACTER;
+
+    <span class="co">//result of next move from four directions.</span>
+    <span class="dt">boolean</span> result = <span class="fu">backtrack</span>(board, row + <span class="dv">1</span>, col, word, index + <span class="dv">1</span>)
+                || <span class="fu">backtrack</span>(board, row - <span class="dv">1</span>, col, word, index + <span class="dv">1</span>)
+                || <span class="fu">backtrack</span>(board, row, col + <span class="dv">1</span>, word, index + <span class="dv">1</span>)
+                || <span class="fu">backtrack</span>(board, row, col - <span class="dv">1</span>, word, index + <span class="dv">1</span>);
+
+    <span class="co">//nullify back</span>
+    board[row][col] ^= VISITED_CHARACTER;
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="unique-paths-leetcode-62-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="number-of-islands-leetcode-200-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +991,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/03-matrix.Rmd",
 "text": "Edit"
 },
 "history": {

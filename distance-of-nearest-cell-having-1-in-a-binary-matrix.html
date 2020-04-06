@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>5.2 Distance of nearest cell having 1 in a binary matrix | Technical Interview</title>
+  <meta name="description" content="5.2 Distance of nearest cell having 1 in a binary matrix | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="5.2 Distance of nearest cell having 1 in a binary matrix | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="5.2 Distance of nearest cell having 1 in a binary matrix | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="5.2 Distance of nearest cell having 1 in a binary matrix | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="5.2 Distance of nearest cell having 1 in a binary matrix | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="graph-serialization.html"/>
+<link rel="next" href="clone-graph-leetcode-133-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,183 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="distance-of-nearest-cell-having-1-in-a-binary-matrix" class="section level2">
+<h2><span class="header-section-number">5.2</span> Distance of nearest cell having 1 in a binary matrix</h2>
+<div id="description-81" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> Description</h3>
+<p>Given a binary matrix of N x M, containing at least a value 1. The task is to find the distance of nearest 1 in the matrix for each cell. The distance is calculated as <span class="math inline">\(|i_1 - i_2| + |j_1 - j_2|\)</span>, where <span class="math inline">\(i_1, j_1\)</span> are the row number and column number of the current cell and <span class="math inline">\(i_2, j_2\)</span> are the row number and column number of the nearest cell having value 1.</p>
+</div>
+<div id="example-77" class="section level3">
+<h3><span class="header-section-number">5.2.2</span> Example</h3>
+<p>Input:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>
+<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>
+<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span></code></pre></div>
+<p>Output:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>
+<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>
+<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span></code></pre></div>
+</div>
+<div id="solution-63" class="section level3">
+<h3><span class="header-section-number">5.2.3</span> Solution</h3>
+<div id="walkthrough-98" class="section level4">
+<h4><span class="header-section-number">5.2.3.1</span> Walkthrough</h4>
+<p>Consider each cell as a node and each boundary between any two adjacent cells be an edge. Number each cell from 1 to N*M. Now, push all the node whose corresponding cell value is 1 in the matrix in the queue. Apply BFS using this queue to find the minimum distance of the adjacent node.</p>
+</div>
+<div id="analysis-99" class="section level4">
+<h4><span class="header-section-number">5.2.3.2</span> Analysis</h4>
+<pre><code>*  Create a graph with adjacency list for all nodes from 1 to rows * cols. Time complexity is O(rows * cols)
+*  Create an empty queue and 1 dimensional array of size (rows * cols) for visited[] and distance (init Integer.MAX)</code></pre>
+<p>Time complexity is O(rows * cols) * For all nodes in the original matrix being 1, insert the associated node id into the queue and set the distance to 0. * Perform a BFS traversal of graph using above created queue. In BFS, we first explore immediate adjacent of all 1’s, then adjacent of adjacent and determine the minimum distance. Time complexity is O(rows * cols) since all elements will be visited once.</p>
+<p>Thus, the overall time complexity is O(rows * cols)</p>
+</div>
+<div id="algorithm-105" class="section level4">
+<h4><span class="header-section-number">5.2.3.3</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code-60" class="section level4">
+<h4><span class="header-section-number">5.2.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> Graph {
+    <span class="kw">private</span> <span class="dt">int</span> numOfVertices; <span class="co">// No. of vertices</span>
+    <span class="kw">private</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt; adj[]; <span class="co">//Adjacency Lists</span>
 
+    <span class="co">// Constructor</span>
+    <span class="fu">Graph</span>(<span class="dt">int</span>[][] matrix) {
+        <span class="dt">int</span> rows = matrix.<span class="fu">length</span>;
+        <span class="dt">int</span> cols = matrix[<span class="dv">0</span>].<span class="fu">length</span>;
+
+        <span class="kw">if</span>(matrix.<span class="fu">length</span> == <span class="dv">0</span>) {
+            <span class="kw">return</span>;
+        }
+        numOfVertices = rows * cols;
+        adj = <span class="kw">new</span> <span class="bu">LinkedList</span>[numOfVertices];
+
+        <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfVertices; ++i) {
+            adj[i] = <span class="kw">new</span> <span class="bu">LinkedList</span>();
+        }
+    }
+
+    <span class="co">// Function to add an edge into the graph from v1 to v2</span>
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">addEdge</span>(<span class="dt">int</span> src, <span class="dt">int</span> dst) {
+        adj[src].<span class="fu">add</span>(dst);
+    }
+
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">fillAdjacency</span>(<span class="dt">int</span>[][] matrix) {
+        <span class="dt">int</span> rows = matrix.<span class="fu">length</span>;
+        <span class="dt">int</span> cols = matrix[<span class="dv">0</span>].<span class="fu">length</span>;
+
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; rows; i++) {
+            <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; cols; j++) {
+                <span class="dt">int</span> srcNodeId = <span class="kw">this</span>.<span class="fu">computeNodeId</span>(i, j, cols);
+                <span class="dt">int</span> dstNodeId = -<span class="dv">1</span>;
+
+                <span class="co">//adding left or right neighbor nodes, if there are any (cols &gt; 1)</span>
+                <span class="kw">if</span>(cols &gt; <span class="dv">1</span>) {
+                    <span class="kw">if</span> (j == <span class="dv">0</span>) {
+                        dstNodeId = <span class="kw">this</span>.<span class="fu">computeNodeId</span>(i, j + <span class="dv">1</span>, cols);
+                        <span class="kw">this</span>.<span class="fu">addEdge</span>(srcNodeId, dstNodeId);
+                    } <span class="kw">else</span> <span class="kw">if</span> (j == cols - <span class="dv">1</span>) {
+                        dstNodeId = <span class="kw">this</span>.<span class="fu">computeNodeId</span>(i, j - <span class="dv">1</span>, cols);
+                        <span class="kw">this</span>.<span class="fu">addEdge</span>(srcNodeId, dstNodeId);
+                    } <span class="kw">else</span> {
+                        dstNodeId = <span class="kw">this</span>.<span class="fu">computeNodeId</span>(i, j - <span class="dv">1</span>, cols);
+                        <span class="kw">this</span>.<span class="fu">addEdge</span>(srcNodeId, dstNodeId);
+                        dstNodeId = <span class="kw">this</span>.<span class="fu">computeNodeId</span>(i, j + <span class="dv">1</span>, cols);
+                        <span class="kw">this</span>.<span class="fu">addEdge</span>(srcNodeId, dstNodeId);
+                    }
+                }
+
+                <span class="co">//adding above or below neighbor nodes, if there are any (rows &gt; 1)</span>
+                <span class="kw">if</span>(rows &gt; <span class="dv">1</span>) {
+                    <span class="kw">if</span> (i == <span class="dv">0</span>) {
+                        dstNodeId = <span class="kw">this</span>.<span class="fu">computeNodeId</span>(i + <span class="dv">1</span>, j, cols);
+                        <span class="kw">this</span>.<span class="fu">addEdge</span>(srcNodeId, dstNodeId);
+                    } <span class="kw">else</span> <span class="kw">if</span> (i == rows - <span class="dv">1</span>) {
+                        dstNodeId = <span class="kw">this</span>.<span class="fu">computeNodeId</span>(i - <span class="dv">1</span>, j, cols);
+                        <span class="kw">this</span>.<span class="fu">addEdge</span>(srcNodeId, dstNodeId);
+                    } <span class="kw">else</span> {
+                        dstNodeId = <span class="kw">this</span>.<span class="fu">computeNodeId</span>(i - <span class="dv">1</span>, j, cols);
+                        <span class="kw">this</span>.<span class="fu">addEdge</span>(srcNodeId, dstNodeId);
+                        dstNodeId = <span class="kw">this</span>.<span class="fu">computeNodeId</span>(i + <span class="dv">1</span>, j, cols);
+                        <span class="kw">this</span>.<span class="fu">addEdge</span>(srcNodeId, dstNodeId);
+                    }
+                }
+            }
+        }
+    }
+
+    <span class="kw">private</span> <span class="dt">int</span> <span class="fu">computeNodeId</span>(<span class="dt">int</span> i, <span class="dt">int</span> j, <span class="dt">int</span> cols) {
+        <span class="co">// Example</span>
+        <span class="co">// [0][0] = 0 * 2 + 0 = 0</span>
+        <span class="co">// [0][1] = 0 * 2 + 1 = 1</span>
+        <span class="co">// [1][0] = 1 * 2 + 0 = 2</span>
+        <span class="co">// [1][1] = 1 * 2 + 1 = 3</span>
+        <span class="kw">return</span> i * cols + j;
+    }
+
+
+    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">init</span>(<span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue, <span class="dt">int</span>[][] matrix, <span class="dt">boolean</span>[] visited, <span class="dt">int</span>[] dist) {
+        <span class="co">//Traverse all matrix elements. If it is a 1, then insert associated node id into queue</span>
+        <span class="kw">if</span>(matrix.<span class="fu">length</span> == <span class="dv">0</span>) {
+            <span class="kw">return</span>;
+        }
+
+        <span class="dt">int</span> rows = matrix.<span class="fu">length</span>;
+        <span class="dt">int</span> cols = matrix[<span class="dv">0</span>].<span class="fu">length</span>;
+
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; rows; i++) {
+            <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; cols; j++) {
+                <span class="dt">int</span> nodeId = <span class="fu">computeNodeId</span>(i, j, cols);
+
+                <span class="kw">if</span>(matrix[i][j] == <span class="dv">1</span>) {
+                    queue.<span class="fu">offer</span>(nodeId);
+                    visited[nodeId] = <span class="kw">true</span>;
+                } <span class="kw">else</span> {
+                    dist[nodeId] = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>;
+                }
+            }
+        }
+    }
+
+    <span class="kw">public</span> <span class="dt">int</span>[] <span class="fu">bfs</span>(<span class="dt">int</span>[][] matrix) {
+        <span class="dt">int</span>[] dist = <span class="kw">new</span> <span class="dt">int</span>[numOfVertices];
+        <span class="dt">boolean</span> visited[] = <span class="kw">new</span> <span class="dt">boolean</span>[numOfVertices];
+
+        <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();
+
+        <span class="co">// Mark the current node as visited and enqueue it</span>
+        <span class="fu">init</span>(queue, matrix, visited, dist);
+
+        <span class="kw">while</span> (queue.<span class="fu">size</span>() != <span class="dv">0</span>) {
+            <span class="bu">Integer</span> nodeId = queue.<span class="fu">poll</span>();
+
+            <span class="co">// Get all adjacent vertices of the dequeued vertex s</span>
+            <span class="co">// If a adjacent has not been visited, then mark it</span>
+            <span class="co">// visited and enqueue it</span>
+            <span class="kw">for</span> (<span class="bu">Integer</span> adjNodeId : adj[nodeId]) {
+                <span class="kw">if</span> (!visited[adjNodeId] ) {
+                    <span class="co">//find minimum value among adjaNodeId and its neighbors + 1</span>
+                    dist[adjNodeId] = <span class="bu">Math</span>.<span class="fu">min</span>(dist[adjNodeId], dist[nodeId] + <span class="dv">1</span>);
+
+                    queue.<span class="fu">offer</span>(adjNodeId);
+                    visited[adjNodeId] = <span class="kw">true</span>;
+                }
+            }
+        }
+
+        <span class="kw">return</span> dist;
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="graph-serialization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="clone-graph-leetcode-133-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1075,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/05-graph.Rmd",
 "text": "Edit"
 },
 "history": {

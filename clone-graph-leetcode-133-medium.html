@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>5.3 Clone Graph / LeetCode 133 / Medium | Technical Interview</title>
+  <meta name="description" content="5.3 Clone Graph / LeetCode 133 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="5.3 Clone Graph / LeetCode 133 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="5.3 Clone Graph / LeetCode 133 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="5.3 Clone Graph / LeetCode 133 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="5.3 Clone Graph / LeetCode 133 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="distance-of-nearest-cell-having-1-in-a-binary-matrix.html"/>
+<link rel="next" href="course-schedule-i-leetcode-207-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,109 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="clone-graph-leetcode-133-medium" class="section level2">
+<h2><span class="header-section-number">5.3</span> Clone Graph / LeetCode 133 / Medium</h2>
+<div id="description-82" class="section level3">
+<h3><span class="header-section-number">5.3.1</span> Description</h3>
+<p>Given a reference of a node in a connected undirected graph, return a deep copy (clone) of the graph. Each node in the graph contains a val (int) and a list (List[Node]) of its neighbors.</p>
+</div>
+<div id="example-78" class="section level3">
+<h3><span class="header-section-number">5.3.2</span> Example</h3>
+</div>
+<div id="solution---dfs-5" class="section level3">
+<h3><span class="header-section-number">5.3.3</span> Solution - DFS</h3>
+<div id="walkthrough-99" class="section level4">
+<h4><span class="header-section-number">5.3.3.1</span> Walkthrough</h4>
+<p>Have a map as cache to store the mapping between original and new node. Recursively walk through the each adjacent node and assign into the adjacency list if existed in cache; otherwise, recursively clone the node.</p>
+</div>
+<div id="analysis-100" class="section level4">
+<h4><span class="header-section-number">5.3.3.2</span> Analysis</h4>
+<p>Since each edge will appear twice. Once in the adjacency list of either end of the edge. So, the overall complexity will be <span class="math inline">\(O(|V|) + O(2 \cdot |E|) = O(|V + E|)\)</span></p>
+</div>
+<div id="algorithm-106" class="section level4">
+<h4><span class="header-section-number">5.3.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-61" class="section level4">
+<h4><span class="header-section-number">5.3.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="co">//use this map to store original and cloned node.</span>
+<span class="co">//also act as visited[]</span>
+<span class="bu">Map</span>&lt;<span class="bu">Node</span>, <span class="bu">Node</span>&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();
 
+<span class="kw">public</span> <span class="bu">Node</span> <span class="fu">cloneGraph</span>(<span class="bu">Node</span> node) {
+    map.<span class="fu">put</span>(node, <span class="kw">new</span> <span class="bu">Node</span>(node.<span class="fu">val</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Node</span>&gt;()));
+
+    <span class="kw">for</span>(<span class="bu">Node</span> neighbor: node.<span class="fu">neighbors</span>){
+        <span class="kw">if</span>(map.<span class="fu">containsKey</span>(neighbor)) {
+            <span class="co">//if neighbor is cloned</span>
+            <span class="bu">Node</span> cloneNode = map.<span class="fu">get</span>(node);
+            <span class="bu">Node</span> cloneNeighbor = map.<span class="fu">get</span>(neighbor);
+            cloneNode.<span class="fu">neighbors</span>.<span class="fu">add</span>(cloneNeighbor);
+        } <span class="kw">else</span> {
+            <span class="co">//recursively clone and add the neighbor</span>
+            <span class="bu">Node</span> cloneNode = map.<span class="fu">get</span>(node);
+            cloneNode.<span class="fu">neighbors</span>.<span class="fu">add</span>(<span class="fu">cloneGraph</span>(neighbor));
+        }
+    }
+
+    <span class="kw">return</span> map.<span class="fu">get</span>(node);
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---bfs-1" class="section level3">
+<h3><span class="header-section-number">5.3.4</span> Solution - BFS</h3>
+<div id="walkthrough-100" class="section level4">
+<h4><span class="header-section-number">5.3.4.1</span> Walkthrough</h4>
+<p>We use BFS to traverse the graph with a map cache to store the original and cloned node. This cache can only be used as visited[].</p>
+</div>
+<div id="analysis-101" class="section level4">
+<h4><span class="header-section-number">5.3.4.2</span> Analysis</h4>
+<p>For every single vertex in the graph, we will end up visiting its neighboring nodes only twice. The time complexity is the sum of the vertices and their edges as represented by the graph in its adjacency list representation: <span class="math inline">\(O(|V| + |E|)\)</span></p>
+</div>
+<div id="algorithm-107" class="section level4">
+<h4><span class="header-section-number">5.3.4.3</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code-62" class="section level4">
+<h4><span class="header-section-number">5.3.4.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">Node</span> <span class="fu">cloneGraph</span>(<span class="bu">Node</span> root) {
+    <span class="co">//use this map to store original and cloned node</span>
+    <span class="co">//also act as visited[]</span>
+    <span class="bu">Map</span>&lt;<span class="bu">Node</span>, <span class="bu">Node</span>&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();
+    <span class="bu">Queue</span>&lt;<span class="bu">Node</span>&gt; queue = <span class="kw">new</span> <span class="bu">ArrayDeque</span>&lt;&gt;();
+
+    queue.<span class="fu">offer</span>(root);
+    map.<span class="fu">put</span>(root, <span class="kw">new</span> <span class="bu">Node</span>(root.<span class="fu">val</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;()));
+
+    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {
+        <span class="bu">Node</span> node = queue.<span class="fu">poll</span>();
+
+        <span class="kw">for</span> (<span class="bu">Node</span> neighbor : node.<span class="fu">neighbors</span>) {
+            <span class="co">// neighbor node is not yet cloned</span>
+            <span class="kw">if</span> (!map.<span class="fu">containsKey</span>(neighbor)) {
+                map.<span class="fu">put</span>(neighbor, <span class="kw">new</span> <span class="bu">Node</span>(neighbor.<span class="fu">val</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;()));
+                queue.<span class="fu">offer</span>(neighbor);
+            }
+
+            <span class="co">//assign the mapping righ tafter</span>
+            <span class="bu">Node</span> cloneNode = map.<span class="fu">get</span>(node);
+            <span class="bu">Node</span> cloneNeighbor = map.<span class="fu">get</span>(neighbor);
+            cloneNode.<span class="fu">neighbors</span>.<span class="fu">add</span>(cloneNeighbor);
+        }
+    }
+
+    <span class="kw">return</span> map.<span class="fu">get</span>(root);
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="distance-of-nearest-cell-having-1-in-a-binary-matrix.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="course-schedule-i-leetcode-207-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1001,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/05-graph.Rmd",
 "text": "Edit"
 },
 "history": {

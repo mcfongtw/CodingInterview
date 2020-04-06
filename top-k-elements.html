@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>8.5 Top K elements | Technical Interview</title>
+  <meta name="description" content="8.5 Top K elements | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="8.5 Top K elements | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="8.5 Top K elements | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="8.5 Top K elements | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="8.5 Top K elements | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="quick-sort-array.html"/>
+<link rel="next" href="string-manipulation.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,148 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="top-k-elements" class="section level2">
+<h2><span class="header-section-number">8.5</span> Top K elements</h2>
+<div id="description-111" class="section level3">
+<h3><span class="header-section-number">8.5.1</span> Description</h3>
+<p>Get k largest elements in an array of size n</p>
+</div>
+<div id="example-107" class="section level3">
+<h3><span class="header-section-number">8.5.2</span> Example</h3>
+</div>
+<div id="solution---sort-array-before-retrieval" class="section level3">
+<h3><span class="header-section-number">8.5.3</span> Solution - Sort array before retrieval</h3>
+<div id="walkthrough-135" class="section level4">
+<h4><span class="header-section-number">8.5.3.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-137" class="section level4">
+<h4><span class="header-section-number">8.5.3.2</span> Analysis</h4>
+<ul>
+<li>Sort the elements in descending order in <span class="math inline">\(O(n \cdot log(n))\)</span></li>
+<li>Get the first k numbers of the sorted array O(k).</li>
+</ul>
+</div>
+<div id="algorithm-142" class="section level4">
+<h4><span class="header-section-number">8.5.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code---sort-array-before-retrieval" class="section level4">
+<h4><span class="header-section-number">8.5.3.4</span> Java Code - Sort array before retrieval</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span>[] <span class="fu">findFirstKElement</span>(<span class="dt">int</span>[] arr, <span class="dt">int</span> k) {
+    <span class="dt">int</span> n = arr.<span class="fu">length</span>;
+
+    <span class="bu">Arrays</span>.<span class="fu">sort</span>(arr);
+
+    <span class="dt">int</span> [] result = <span class="kw">new</span> <span class="dt">int</span>[k];
+    <span class="dt">int</span> index = <span class="dv">0</span>;
+    <span class="kw">for</span>(<span class="dt">int</span> i = n - <span class="dv">1</span>; i &gt;= n - k - <span class="dv">1</span> &amp;&amp; i &gt;= <span class="dv">0</span>; i--) {
+        result[index++] = arr[i];
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---retrieve-k-element-during-sort" class="section level3">
+<h3><span class="header-section-number">8.5.4</span> Solution - Retrieve k element during sort</h3>
+<div id="walkthrough-136" class="section level4">
+<h4><span class="header-section-number">8.5.4.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-138" class="section level4">
+<h4><span class="header-section-number">8.5.4.2</span> Analysis</h4>
+<ul>
+<li>Modify Bubble Sort to run the outer loop at most k times. <span class="math inline">\(O(n \cdot k)\)</span></li>
+</ul>
+</div>
+<div id="algorithm-143" class="section level4">
+<h4><span class="header-section-number">8.5.4.3</span> Algorithm</h4>
+<p>bs <a href="glossary-of-algorithm.html#bs">1.2.13</a></p>
+</div>
+<div id="java-code---retrieve-k-element-during-sort" class="section level4">
+<h4><span class="header-section-number">8.5.4.4</span> Java Code - Retrieve k element during sort</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span>[] <span class="fu">findFirstKElement</span>(<span class="dt">int</span>[] arr, <span class="dt">int</span> k) {
+    <span class="dt">int</span> n = arr.<span class="fu">length</span>;
+
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n-<span class="dv">1</span> &amp;&amp; i &lt; k; i++)  {
+        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; n-i-<span class="dv">1</span>; j++) {
+            <span class="kw">if</span> (arr[j] &gt; arr[j+<span class="dv">1</span>])  {
+                <span class="co">// swap arr[j] and arr[j+1]</span>
+                <span class="dt">int</span> temp = arr[j];
+                arr[j] = arr[j+<span class="dv">1</span>];
+                arr[j+<span class="dv">1</span>] = temp;
+            }
+        }
+    }
+
+    <span class="dt">int</span> [] result = <span class="kw">new</span> <span class="dt">int</span>[k];
+    <span class="dt">int</span> index = <span class="dv">0</span>;
+    <span class="kw">for</span>(<span class="dt">int</span> i = n - <span class="dv">1</span>; i &gt;= n - k - <span class="dv">1</span> &amp;&amp; i &gt;= <span class="dv">0</span>; i--) {
+        result[index++] = arr[i];
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---minheap" class="section level3">
+<h3><span class="header-section-number">8.5.5</span> Solution - MinHeap</h3>
+<div id="walkthrough-137" class="section level4">
+<h4><span class="header-section-number">8.5.5.1</span> Walkthrough</h4>
+<p>Retrieving the top k largest elements equals to retriving smallest element in a k-sized min-heap for k times.The value of each node is equal to or greater than the value of its parent node and root has the smallest value. Therefore, we need to maintain a min-heap (PriorityQueue in java) of  while inserting new element. Below illustrated how to track a top 2 largest elements from a min heap</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dv">3</span> -&gt; [<span class="dv">3</span>*]
+<span class="dv">2</span> -&gt; [<span class="dv">2</span>*, <span class="dv">3</span>]
+<span class="dv">1</span> -&gt; <span class="dv">1</span>, [<span class="dv">2</span>*, <span class="dv">3</span>]
+<span class="dv">5</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, [<span class="dv">3</span>*, <span class="dv">5</span>]
+<span class="dv">6</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, [<span class="dv">5</span>*, <span class="dv">6</span>]
+<span class="dv">4</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, [<span class="dv">5</span>*, <span class="dv">6</span>]</code></pre></div>
+<p>Finally, return root as it is the smallest element (*) in the heap.</p>
+</div>
+<div id="analysis-139" class="section level4">
+<h4><span class="header-section-number">8.5.5.2</span> Analysis</h4>
+<p>In addition, add() and remove() take <span class="math inline">\(O(log(k))\)</span>, since there are at most k element. Thus, total time complexity is <span class="math inline">\(O(n \cdot log(k))\)</span>. Total Auxiliary Space is O(k) due to size of the heap.</p>
+</div>
+<div id="algorithm-144" class="section level4">
+<h4><span class="header-section-number">8.5.5.3</span> Algorithm</h4>
+<p>heap <a href="glossary-of-algorithm.html#heap">1.2.15</a></p>
+</div>
+<div id="java-code-84" class="section level4">
+<h4><span class="header-section-number">8.5.5.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">findFirstKElement</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> k) {
+    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; heap = <span class="kw">new</span> <span class="bu">PriorityQueue</span>&lt;&gt;();
+
+    <span class="kw">for</span>(<span class="dt">int</span> num: nums) {
+        <span class="fu">helper</span>(num, k);
+    }
+
+    <span class="dt">int</span>[] result = <span class="kw">new</span> <span class="dt">int</span>[heap.<span class="fu">size</span>()];
+    <span class="dt">int</span> index = <span class="dv">0</span>;
+    <span class="kw">while</span>(!heap.<span class="fu">isEmpty</span>()) {
+        result[index] = heap.<span class="fu">remove</span>();
+        index++;
+    }
+    <span class="co">// return the elements from heap in sorted order</span>
+    <span class="kw">return</span> result;
+}
+
+<span class="kw">private</span> <span class="dt">void</span> <span class="fu">helper</span>(<span class="dt">int</span> num, <span class="dt">int</span> size) {
+    heap.<span class="fu">add</span>(num);
+
+    <span class="kw">if</span>(heap.<span class="fu">size</span>() &gt; size) {
+        <span class="co">//remove smallest element from min-heap</span>
+        heap.<span class="fu">remove</span>();
+    }
+}</code></pre></div>
 
 </div>
+</div>
+</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="quick-sort-array.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="string-manipulation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1040,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/08-search-and-sort.Rmd",
 "text": "Edit"
 },
 "history": {

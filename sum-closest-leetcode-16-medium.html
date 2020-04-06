@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.6 3 Sum Closest / LeetCode 16 / Medium | Technical Interview</title>
+  <meta name="description" content="2.6 3 Sum Closest / LeetCode 16 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.6 3 Sum Closest / LeetCode 16 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.6 3 Sum Closest / LeetCode 16 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.6 3 Sum Closest / LeetCode 16 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.6 3 Sum Closest / LeetCode 16 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="sum-leet-code-15-medium.html"/>
+<link rel="next" href="sum-leet-code-18-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,72 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="sum-closest-leetcode-16-medium" class="section level2">
+<h2><span class="header-section-number">2.6</span> 3 Sum Closest / LeetCode 16 / Medium</h2>
+<div id="description-6" class="section level3">
+<h3><span class="header-section-number">2.6.1</span> Description</h3>
+<p>Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. Return the sum of the three integers. You may assume that each input would have exactly one solution.</p>
+</div>
+<div id="example-5" class="section level3">
+<h3><span class="header-section-number">2.6.2</span> Example</h3>
+<p>For example, given array S = -1 2 1 -4, and target = 1. The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).</p>
+</div>
+<div id="solution-5" class="section level3">
+<h3><span class="header-section-number">2.6.3</span> Solution</h3>
+<div id="walkthrough-7" class="section level4">
+<h4><span class="header-section-number">2.6.3.1</span> Walkthrough</h4>
+<p>Looping the array with index i, while searching for the other two elements from both ends, with indices left incrementally and right decrmentally, find the sum = nums[i] + nums[left] + nums[right]. Return sum if existed; otherwise, keep for the closest tuple of (nums[i], nums[left], nums[right]) against target using Math.abs().</p>
+</div>
+<div id="analysis-7" class="section level4">
+<h4><span class="header-section-number">2.6.3.2</span> Analysis</h4>
+<p>There are two nested loops, the time complexity is <span class="math inline">\(O(n^2)\)</span>, and Auxiliary Space is O(1) since it is returning the closest answer.</p>
+</div>
+<div id="algorithm-7" class="section level4">
+<h4><span class="header-section-number">2.6.3.3</span> Algorithm</h4>
+<div id="java-code-5" class="section level5">
+<h5><span class="header-section-number">2.6.3.3.1</span> Java Code</h5>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">threeSumClosest</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> target) {
+    <span class="bu">Arrays</span>.<span class="fu">sort</span>(num); <span class="co">//sort</span>
+    <span class="dt">int</span> minDelta = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>, result = <span class="dv">0</span>;
 
+    <span class="co">//last possible pair is [i=len - 3, left=len - 2, right=len - 1]</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; num.<span class="fu">length</span> - <span class="dv">2</span>; i++) {
+        <span class="dt">int</span> left = i + <span class="dv">1</span>, right = num.<span class="fu">length</span> - <span class="dv">1</span>;
+
+        <span class="kw">while</span> (left &lt; right) {
+            <span class="dt">int</span> sum = num[i] + num[left] + num[right];
+
+            <span class="kw">if</span> (sum == target) {
+                <span class="co">//find exact match</span>
+                <span class="kw">return</span> sum;
+            } <span class="kw">else</span> <span class="kw">if</span> (sum &lt; target) {
+                left++;
+            } <span class="kw">else</span> {
+                <span class="co">// sum &gt; target</span>
+                right--;
+            }
+
+            <span class="dt">int</span> delta = <span class="bu">Math</span>.<span class="fu">abs</span>(sum - target);
+            <span class="kw">if</span>(delta &lt; minDelta) {
+                minDelta = delta;
+                result = sum;
+            }
+        }
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="sum-leet-code-15-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sum-leet-code-18-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +964,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

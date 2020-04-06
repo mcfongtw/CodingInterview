@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>12.3 Design a Queue | Technical Interview</title>
+  <meta name="description" content="12.3 Design a Queue | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="12.3 Design a Queue | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="12.3 Design a Queue | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="12.3 Design a Queue | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="12.3 Design a Queue | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="design-a-stack.html"/>
+<link rel="next" href="design-a-hashset-leetcode-705-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,291 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="design-a-queue" class="section level2">
+<h2><span class="header-section-number">12.3</span> Design a Queue</h2>
+<div id="description-130" class="section level3">
+<h3><span class="header-section-number">12.3.1</span> Description</h3>
+<p>Queue is a FIFO data structure</p>
+</div>
+<div id="example-124" class="section level3">
+<h3><span class="header-section-number">12.3.2</span> Example</h3>
+<ul>
+<li>enqueue 1: [1]</li>
+<li>enqueue 2: [1] <span class="math inline">\(\rightarrow\)</span> [2]</li>
+<li>dequeue returns 1</li>
+</ul>
+</div>
+<div id="solution---array" class="section level3">
+<h3><span class="header-section-number">12.3.3</span> Solution - Array</h3>
+<div id="walkthrough-160" class="section level4">
+<h4><span class="header-section-number">12.3.3.1</span> Walkthrough</h4>
+<p>With array implementation, there is a need to resize when enqueueing exceeds limits. Thus, in average case, enqueue is constatnt time but will be O(n) in worst case.</p>
+<p>In order to mitigate this cost, we could init the Queue with an immutable large array. Each dequeue will move an index to the next element. Finally, there could be a background thread to periodically compact this immutable implementation into a new queue.</p>
+<ul>
+<li>enqueue(item) takes O(1) time, but O(n) when resize() is involved.</li>
+<li>dequeue() takes O(n) time</li>
+<li>search(val) takes O(n) as it traverse all elements.</li>
+</ul>
+</div>
+<div id="algorithm-169" class="section level4">
+<h4><span class="header-section-number">12.3.3.2</span> Algorithm</h4>
+</div>
+<div id="java-code---array" class="section level4">
+<h4><span class="header-section-number">12.3.3.3</span> Java Code - Array</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">class</span> MyArrayQueue&lt;T&gt; {
 
+    <span class="kw">private</span> T [] array;
+
+    <span class="co">// position of last element</span>
+    <span class="kw">private</span> <span class="dt">int</span> endPos = -<span class="dv">1</span>;
+
+    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> DEFAULT_INITIAL_CAPACITY = <span class="dv">10</span>;
+
+    <span class="kw">public</span> <span class="fu">MyArrayQueue</span>() {
+        array = (T[]) <span class="kw">new</span> <span class="bu">Object</span>[DEFAULT_INITIAL_CAPACITY];
+    }
+
+    <span class="kw">public</span> <span class="fu">MyArrayQueue</span>(<span class="dt">int</span> initialCapacity) {
+        array = (T[]) <span class="kw">new</span> <span class="bu">Object</span>[initialCapacity];
+    }
+
+    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isEmpty</span>() {
+        <span class="kw">return</span> endPos == -<span class="dv">1</span>;
+    }
+
+    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {
+        <span class="kw">return</span> endPos + <span class="dv">1</span>;
+    }
+
+    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">resize</span>(<span class="dt">int</span> newSize) {
+        <span class="bu">System</span>.<span class="fu">out</span>.<span class="fu">println</span>(<span class="st">&quot;Resizing from &quot;</span> + array.<span class="fu">length</span> + <span class="st">&quot; to &quot;</span> + newSize);
+        T[] newArray = <span class="bu">Arrays</span>.<span class="fu">copyOfRange</span>(array, <span class="dv">0</span>, newSize);
+        array = newArray;
+    }
+
+    <span class="co">// add the item</span>
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">enqueue</span>(T item) {
+        Objects.<span class="fu">requireNonNull</span>(item);
+
+        <span class="kw">if</span>( (endPos + <span class="dv">1</span>) &gt;= array.<span class="fu">length</span>) {
+            <span class="fu">resize</span>(<span class="dv">2</span> * array.<span class="fu">length</span>);
+        }
+
+        endPos++;
+        array[endPos] = item;
+    }
+
+    <span class="co">// remove first item</span>
+    <span class="kw">public</span> T <span class="fu">dequeue</span>() {
+        <span class="kw">if</span>(endPos == -<span class="dv">1</span>) {
+            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();
+        }
+
+        <span class="co">// return the first element</span>
+        T result = array[<span class="dv">0</span>];
+
+        <span class="co">//move the element one backward</span>
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; endPos; i++) {
+            array[i] = array[i+<span class="dv">1</span>];
+        }
+
+        <span class="co">//nullify last position</span>
+        array[endPos] = <span class="kw">null</span>;
+        endPos--;
+
+        <span class="kw">return</span> result;
+    }
+
+    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">search</span>(<span class="dt">int</span> val) {
+        <span class="kw">if</span>(index &gt; endPos) {
+            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();
+        }
+
+
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= endPos; i++) {
+            <span class="kw">if</span>(array[i] == val) {
+                <span class="kw">return</span> <span class="kw">true</span>;
+            }
+        }
+
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---linkedlist" class="section level3">
+<h3><span class="header-section-number">12.3.4</span> Solution - LinkedList</h3>
+<div id="walkthrough-161" class="section level4">
+<h4><span class="header-section-number">12.3.4.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-164" class="section level4">
+<h4><span class="header-section-number">12.3.4.2</span> Analysis</h4>
+<pre><code>*  enqueue(item) takes O(1) time.
+%*  enqueue(i, item) takes O(n) time to traverse to the previous element.
+*  dequeue() takes O(1)
+%*  dequeue(i) takes O(n) time to traverse to the previous element.
+*  search(val) takes O(n) as it traverses all elements.</code></pre>
+</div>
+<div id="algorithm-170" class="section level4">
+<h4><span class="header-section-number">12.3.4.3</span> Algorithm</h4>
+</div>
+<div id="java-code-90" class="section level4">
+<h4><span class="header-section-number">12.3.4.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">class</span> MyLinkedQueue&lt;T&gt; {
+
+    <span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> <span class="bu">Node</span>&lt;T&gt; {
+        <span class="bu">Node</span> next;
+        T data;
+    }
+
+    <span class="kw">private</span> <span class="bu">Node</span>&lt;T&gt; head;
+
+    <span class="kw">private</span> <span class="bu">Node</span>&lt;T&gt; tail;
+
+    <span class="co">// position of last element</span>
+    <span class="kw">private</span> <span class="dt">int</span> endPos = -<span class="dv">1</span>;
+
+    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> DEFAULT_INITIAL_CAPACITY = <span class="dv">10</span>;
+
+    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isEmpty</span>() {
+        <span class="kw">return</span> endPos == -<span class="dv">1</span>;
+    }
+
+    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {
+        <span class="kw">return</span> endPos + <span class="dv">1</span>;
+    }
+
+    <span class="co">// add the item</span>
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">enqueue</span>(T item) {
+        Objects.<span class="fu">requireNonNull</span>(item);
+
+        endPos++;
+        <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>();
+        newNode.<span class="fu">data</span> = item;
+
+        <span class="kw">if</span>(head == <span class="kw">null</span>) {
+            head = newNode;
+        }
+
+        <span class="kw">if</span>(tail == <span class="kw">null</span>) {
+            tail = newNode;
+        } <span class="kw">else</span> {
+            <span class="co">//insert to the tail of the list</span>
+            tail.<span class="fu">next</span> = newNode;
+            tail = newNode;
+        }
+    }
+
+    <span class="co">// remove and return a random item</span>
+    <span class="kw">public</span> T <span class="fu">dequeue</span>() {
+        <span class="kw">if</span>(endPos == -<span class="dv">1</span>) {
+            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();
+        }
+
+        <span class="co">// return the first node</span>
+        <span class="bu">Node</span> dieNode = head;
+
+        <span class="co">//head == tail</span>
+        <span class="kw">if</span>(head.<span class="fu">next</span> == <span class="kw">null</span>) {
+            head = <span class="kw">null</span>;
+            tail = <span class="kw">null</span>;
+        } <span class="kw">else</span> {
+            head = head.<span class="fu">next</span>;
+        }
+        endPos--;
+
+        <span class="kw">return</span> (T) dieNode.<span class="fu">data</span>;
+    }
+
+    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">search</span>(<span class="dt">int</span> val) {
+        <span class="kw">if</span>(index &gt; endPos) {
+            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();
+        }
+
+        <span class="bu">Node</span> cursor = head;
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= endPos; i++) {
+            <span class="kw">if</span>(cursor.<span class="fu">data</span> == val) {
+                <span class="kw">return</span> <span class="kw">true</span>;
+            }
+            cursor = cursor.<span class="fu">next</span>;
+        }
+
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---stack" class="section level3">
+<h3><span class="header-section-number">12.3.5</span> Solution - Stack</h3>
+<div id="walkthrough-162" class="section level4">
+<h4><span class="header-section-number">12.3.5.1</span> Walkthrough</h4>
+<p>Since a Stack is LIFO, that is last element will be processed first. Thus, we want to keep the top element to be inserted last. To achieve that, we could use a temp Stack to reverse the order after pushing the added item into the stack first (will be processed last).</p>
+</div>
+<div id="analysis-165" class="section level4">
+<h4><span class="header-section-number">12.3.5.2</span> Analysis</h4>
+<ul>
+<li>enqueue(item) takes O(n) time.</li>
+<li>dequeue() takes O(1) as it is only popping the top element.</li>
+</ul>
+</div>
+<div id="algorithm-171" class="section level4">
+<h4><span class="header-section-number">12.3.5.3</span> Algorithm</h4>
+</div>
+<div id="java-code---stack" class="section level4">
+<h4><span class="header-section-number">12.3.5.4</span> Java Code - Stack</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> MyStackBasedQueue&lt;T&gt;() {
+    <span class="kw">private</span> <span class="bu">Stack</span>&lt;T&gt; value = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();
+
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">enqueue</span>(T item) {
+        <span class="kw">if</span>(value.<span class="fu">isEmpty</span>()) {
+            <span class="co">// first element</span>
+            value.<span class="fu">push</span>(item);
+        } <span class="kw">else</span> {
+            <span class="bu">Stack</span>&lt;T&gt; temp = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();
+            <span class="co">//1. Store previous element in temp</span>
+            <span class="kw">while</span>(!value.<span class="fu">isEmpty</span>()) {
+                temp.<span class="fu">push</span>(value.<span class="fu">pop</span>());
+            }
+
+            <span class="co">//2. push item to the back of the stack</span>
+            value.<span class="fu">push</span>(item);
+
+            <span class="co">//3. reload the previous elements</span>
+            <span class="kw">while</span>(!temp.<span class="fu">isEmpty</span>()) {
+                value.<span class="fu">push</span>(temp.<span class="fu">pop</span>());
+            }
+        }
+    }
+
+    <span class="kw">public</span> T <span class="fu">dequeue</span>() {
+        T result = value.<span class="fu">top</span>();
+        value.<span class="fu">pop</span>();
+
+        <span class="kw">return</span> result;
+    }
+
+    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {
+        <span class="kw">return</span> value.<span class="fu">size</span>();
+    }
+
+    <span class="kw">public</span> T <span class="fu">peek</span>() {
+        <span class="kw">return</span> value.<span class="fu">top</span>();
+    }
+
+    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">empty</span>() {
+        <span class="kw">return</span> value.<span class="fu">isEmpty</span>();
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="design-a-stack.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="design-a-hashset-leetcode-705-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1183,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/12-advanced-data-structure.Rmd",
 "text": "Edit"
 },
 "history": {

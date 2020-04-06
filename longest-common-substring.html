@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>9.5 Longest Common Substring | Technical Interview</title>
+  <meta name="description" content="9.5 Longest Common Substring | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="9.5 Longest Common Substring | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="9.5 Longest Common Substring | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="9.5 Longest Common Substring | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="9.5 Longest Common Substring | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="longest-common-prefix-leetcode-14-easy.html"/>
+<link rel="next" href="longest-palindromic-substring-leetcode-5-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,67 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="longest-common-substring" class="section level2">
+<h2><span class="header-section-number">9.5</span> Longest Common Substring</h2>
+<div id="description-116" class="section level3">
+<h3><span class="header-section-number">9.5.1</span> Description</h3>
+<p>Given two strings X and Y, find the length of the longest common substring.</p>
+</div>
+<div id="example-112" class="section level3">
+<h3><span class="header-section-number">9.5.2</span> Example</h3>
+<p>X = “abcdxyz”, y = “xyzabcd”. Output : 4 The longest common substring is “abcd” and is of length 4.</p>
+<p>Input : X = “zxabcdezy”, y = “yzabcdezx”. Output : 6 The longest common substring is “abcdez” and is of length 6.</p>
+</div>
+<div id="solution-85" class="section level3">
+<h3><span class="header-section-number">9.5.3</span> Solution</h3>
+<div id="walkthrough-142" class="section level4">
+<h4><span class="header-section-number">9.5.3.1</span> Walkthrough</h4>
+<p>We first declare a 2D array to store the length of each common substring in both strings: We first initialize the 1st row and 1st column of the 2D array by checking 1st character of a string against the other string - as specified in red color in the table. Next we run two nested loops, iterating with both strings and checking if there is a common character. If there is a common character at {dp[i][j]}, where i is the position from str1 and j is the position from str2. Increment the value from {dp[i-1][j-1]} - as specified in blue color in the table. During the traversal, we could also retrive the longest length.</p>
 
+</div>
+<div id="analysis-144" class="section level4">
+<h4><span class="header-section-number">9.5.3.2</span> Analysis</h4>
+<p>Both space and time complexity are <span class="math inline">\(O(n^2)\)</span>, where n is the length of string</p>
+</div>
+<div id="algorithm-149" class="section level4">
+<h4><span class="header-section-number">9.5.3.3</span> Algorithm</h4>
+<p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">getLCSLength</span>(<span class="bu">String</span> str1, <span class="bu">String</span> str2){
+    <span class="dt">int</span>[][] dp = <span class="kw">new</span> <span class="dt">int</span>[str1.<span class="fu">length</span>()][str2.<span class="fu">length</span>()]; <span class="co">//To store the length of common substring</span>
+    <span class="dt">int</span> maxLength = <span class="dv">0</span>;
+
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; str2.<span class="fu">length</span>(); i++){ <span class="co">//Init the first row of 2D array</span>
+        dp[<span class="dv">0</span>][i] = (str1.<span class="fu">charAt</span>(<span class="dv">0</span>) == str2.<span class="fu">charAt</span>(i)) ? <span class="dv">1</span> : <span class="dv">0</span>;
+    }
+
+    <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; str1.<span class="fu">length</span>(); j++){ <span class="co">//Init the first column of 2D array</span>
+        dp[j][<span class="dv">0</span>] = (str2.<span class="fu">charAt</span>(<span class="dv">0</span>) == str1.<span class="fu">charAt</span>(j)) ? <span class="dv">1</span> : <span class="dv">0</span>;
+    }
+
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; str1.<span class="fu">length</span>(); i++) {
+        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">1</span>; j &lt; str2.<span class="fu">length</span>(); j++) {
+            <span class="kw">if</span>(str1.<span class="fu">charAt</span>(i) == str2.<span class="fu">charAt</span>(j)){
+                <span class="co">// a common character</span>
+                dp[i][j] = dp[i-<span class="dv">1</span>][j-<span class="dv">1</span>] + <span class="dv">1</span>;
+                maxLength = <span class="bu">Math</span>.<span class="fu">max</span>(maxLength, dp[i][j]);
+            } <span class="kw">else</span>{
+                dp[i][j] = <span class="dv">0</span>;
+            }
+        }
+    }
+
+    <span class="kw">return</span> maxLength;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="longest-common-prefix-leetcode-14-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="longest-palindromic-substring-leetcode-5-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +959,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/09-string-manipulation.Rmd",
 "text": "Edit"
 },
 "history": {

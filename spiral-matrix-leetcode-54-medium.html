@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>3.3 Spiral Matrix / LeetCode 54 / Medium | Technical Interview</title>
+  <meta name="description" content="3.3 Spiral Matrix / LeetCode 54 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="3.3 Spiral Matrix / LeetCode 54 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="3.3 Spiral Matrix / LeetCode 54 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="3.3 Spiral Matrix / LeetCode 54 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="3.3 Spiral Matrix / LeetCode 54 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="rotate-image-leet-code-48-medium.html"/>
+<link rel="next" href="search-a-2d-matrix-leetcode-74-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,119 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="spiral-matrix-leetcode-54-medium" class="section level2">
+<h2><span class="header-section-number">3.3</span> Spiral Matrix / LeetCode 54 / Medium</h2>
+<div id="description-42" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> Description</h3>
+<p>Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.</p>
+</div>
+<div id="example-41" class="section level3">
+<h3><span class="header-section-number">3.3.2</span> Example</h3>
+<p>Input:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span> ,
+<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span> ,
+<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span></code></pre></div>
+<p>Output: [1,2,3,6,9,8,7,4,5]</p>
+<p>Input:</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>,
+<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>,
+<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span></code></pre></div>
+<p>Output: [1,2,3,4,8,12,11,10,9,5,6,7] ### Solution #### Walkthrough While walking through the circles, track current left, right, top, and bottom positions.</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">(r)
+    <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span>   (c)
+ <span class="dv">0</span>  -  -  -
+ <span class="dv">1</span>  |  &gt;  |
+ <span class="dv">2</span>  -  -  |</code></pre></div>
+<pre><code>*  Going rightward
+*  Going downward
+*  Going leftward
+*  Going upward</code></pre>
+<p>Be sure to check for duplicated column or row before going for each direction.</p>
+<div id="analysis-46" class="section level4">
+<h4><span class="header-section-number">3.3.2.1</span> Analysis</h4>
+<p>Time complexity is O(rows * cols), since all elements are visited once</p>
+</div>
+<div id="algorithm-46" class="section level4">
+<h4><span class="header-section-number">3.3.2.2</span> Algorithm</h4>
+</div>
+<div id="java-code-37" class="section level4">
+<h4><span class="header-section-number">3.3.2.3</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span> <span class="fu">spiralOrder</span>(<span class="dt">int</span>[][] matrix) {
+    <span class="bu">List</span> result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
 
+    <span class="kw">if</span>(matrix.<span class="fu">length</span> == <span class="dv">0</span>) {
+        <span class="kw">return</span> result;
+    }
+
+    <span class="dt">int</span> rows = matrix.<span class="fu">length</span>;
+    <span class="dt">int</span> cols = matrix[<span class="dv">0</span>].<span class="fu">length</span>;
+
+    <span class="co">// position of left, right, top and buttom border</span>
+    <span class="dt">int</span> left = <span class="dv">0</span>;
+    <span class="dt">int</span> right = cols - <span class="dv">1</span>;
+    <span class="dt">int</span> top = <span class="dv">0</span>;
+    <span class="dt">int</span> bottom = rows - <span class="dv">1</span>;
+
+    <span class="kw">while</span>( result.<span class="fu">size</span>() &lt; (cols * rows) ) {
+        <span class="co">//traverse a circle</span>
+
+        <span class="co">// avoid duplicated row</span>
+        <span class="kw">if</span>(top &gt; bottom) {
+            <span class="kw">break</span>;
+        }
+
+        <span class="co">//going rightward</span>
+        <span class="kw">for</span>(<span class="dt">int</span> i = left; i &lt;= right; i++){
+            result.<span class="fu">add</span>(matrix[top][i]);
+        }
+        top++;
+
+        <span class="co">// avoid duplicated column</span>
+        <span class="kw">if</span>(left &gt; right) {
+            <span class="kw">break</span>;
+        }
+
+        <span class="co">//going downward</span>
+        <span class="kw">for</span>(<span class="dt">int</span> i = top; i &lt;= bottom; i++){
+            result.<span class="fu">add</span>(matrix[i][right]);
+        }
+        right--;
+
+        <span class="co">// avoid duplicated row</span>
+        <span class="kw">if</span>(top &gt; bottom) {
+            <span class="kw">break</span>;
+        }
+
+        <span class="co">// going leftward</span>
+        <span class="kw">for</span>(<span class="dt">int</span> i = right; i &gt;= left; i--){
+            result.<span class="fu">add</span>(matrix[bottom][i]);
+        }
+        bottom--;
+
+        <span class="co">// avoid duplicated column</span>
+        <span class="kw">if</span>(left &gt; right) {
+            <span class="kw">break</span>;
+        }
+
+        <span class="co">// going upward</span>
+        <span class="kw">for</span>(<span class="dt">int</span> i = bottom; i &gt;= top; i--){
+            result.<span class="fu">add</span>(matrix[i][left]);
+        }
+        left++;
+    }
+
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="rotate-image-leet-code-48-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="search-a-2d-matrix-leetcode-74-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1011,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/03-matrix.Rmd",
 "text": "Edit"
 },
 "history": {

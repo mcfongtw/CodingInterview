@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.15 Remove Duplicates from Sorted List / Leet Code 83 / Easy | Technical Interview</title>
+  <meta name="description" content="6.15 Remove Duplicates from Sorted List / Leet Code 83 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.15 Remove Duplicates from Sorted List / Leet Code 83 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.15 Remove Duplicates from Sorted List / Leet Code 83 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.15 Remove Duplicates from Sorted List / Leet Code 83 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.15 Remove Duplicates from Sorted List / Leet Code 83 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="reorder-list-leet-code-143-medium.html"/>
+<link rel="next" href="copy-list-with-random-pointer-leetcode-138-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,106 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="remove-duplicates-from-sorted-list-leet-code-83-easy" class="section level2">
+<h2><span class="header-section-number">6.15</span> Remove Duplicates from Sorted List / Leet Code 83 / Easy</h2>
+<div id="description-100" class="section level3">
+<h3><span class="header-section-number">6.15.1</span> Description</h3>
+<p>Given a sorted linked list, delete all duplicates such that each element appear only once.</p>
+</div>
+<div id="example-96" class="section level3">
+<h3><span class="header-section-number">6.15.2</span> Example</h3>
+Input
+<div class="figure"><span id="fig:unnamed-chunk-81"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-81-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.39: Some caption.
+</p>
+</div>
+Output
+<div class="figure"><span id="fig:unnamed-chunk-82"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-82-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.40: Some caption.
+</p>
+</div>
+</div>
+<div id="solution---non-sorted-list" class="section level3">
+<h3><span class="header-section-number">6.15.3</span> Solution - non sorted list</h3>
+<div id="walkthrough-123" class="section level4">
+<h4><span class="header-section-number">6.15.3.1</span> Walkthrough</h4>
+<p>If this is a non sorted list, we need to keep a record (HashSet) and a prev node. Remove the duplicate node if found - set.add() returns false</p>
+</div>
+<div id="analysis-124" class="section level4">
+<h4><span class="header-section-number">6.15.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-129" class="section level4">
+<h4><span class="header-section-number">6.15.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code---non-sorted-list" class="section level4">
+<h4><span class="header-section-number">6.15.3.4</span> Java Code - non sorted list</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">removeDuplicates</span>(ListNode head) {
+    ListNode prev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);
+    prev.<span class="fu">next</span> = head;
+    ListNode current = head;
 
+    <span class="bu">Set</span>&lt;<span class="bu">Integer</span>&gt; set = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;();
+
+    <span class="kw">while</span>(current != <span class="kw">null</span>) {
+        <span class="dt">int</span> value = current.<span class="fu">data</span>;
+
+        <span class="kw">if</span>(!set.<span class="fu">add</span>(value)) {
+            <span class="co">//duplicated entry</span>
+            prev.<span class="fu">next</span> = prev.<span class="fu">next</span>.<span class="fu">next</span>;
+        } <span class="kw">else</span> {
+            prev = prev.<span class="fu">next</span>;
+        }
+        current = current.<span class="fu">next</span>;
+    }
+
+    <span class="kw">return</span> head;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---sorted-list" class="section level3">
+<h3><span class="header-section-number">6.15.4</span> Solution - sorted list</h3>
+<div id="walkthrough-124" class="section level4">
+<h4><span class="header-section-number">6.15.4.1</span> Walkthrough</h4>
+<p>If this is a sorted list, we could utilize the fact that if current.data == next.data. Remove the next node.</p>
+</div>
+<div id="analysis-125" class="section level4">
+<h4><span class="header-section-number">6.15.4.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-130" class="section level4">
+<h4><span class="header-section-number">6.15.4.3</span> Algorithm</h4>
+</div>
+<div id="java-code---sorted-list" class="section level4">
+<h4><span class="header-section-number">6.15.4.4</span> Java Code - sorted list</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">deleteDuplicates</span>(ListNode head) {
+    ListNode current = head;
+
+    <span class="kw">while</span>(current != <span class="kw">null</span>) {
+        <span class="kw">if</span>(current.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; current.<span class="fu">val</span> == current.<span class="fu">next</span>.<span class="fu">val</span>) {
+            <span class="co">//remove the current node</span>
+            current.<span class="fu">next</span> = current.<span class="fu">next</span>.<span class="fu">next</span>;
+        } <span class="kw">else</span> {
+            current = current.<span class="fu">next</span>;
+        }
+    }
+
+    <span class="kw">return</span> head;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="reorder-list-leet-code-143-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="copy-list-with-random-pointer-leetcode-138-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +998,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

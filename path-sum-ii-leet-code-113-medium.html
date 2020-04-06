@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.10 Path Sum II / Leet Code 113 / Medium | Technical Interview</title>
+  <meta name="description" content="4.10 Path Sum II / Leet Code 113 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.10 Path Sum II / Leet Code 113 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.10 Path Sum II / Leet Code 113 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.10 Path Sum II / Leet Code 113 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.10 Path Sum II / Leet Code 113 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="path-sum-leet-code-112-easy.html"/>
+<link rel="next" href="path-sum-iii-leet-code-437-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,86 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="path-sum-ii-leet-code-113-medium" class="section level2">
+<h2><span class="header-section-number">4.10</span> Path Sum II / Leet Code 113 / Medium</h2>
+<div id="description-60" class="section level3">
+<h3><span class="header-section-number">4.10.1</span> Description</h3>
+<p>Given a binary tree and a sum, find all root-to-leaf paths where each path’s sum equals the given sum.</p>
+</div>
+<div id="example-58" class="section level3">
+<h3><span class="header-section-number">4.10.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-20"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-20-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.14: Some caption.
+</p>
+</div>
+<p>Given the below binary tree and sum = 22, return:</p>
+<pre><code>[
+    [5,4,11,2],
+    [5,8,4,5]
+]</code></pre>
+</div>
+<div id="solution-47" class="section level3">
+<h3><span class="header-section-number">4.10.3</span> Solution</h3>
+<div id="walkthrough-70" class="section level4">
+<h4><span class="header-section-number">4.10.3.1</span> Walkthrough</h4>
+<p>Additional list is needed to keep track current path: adding current node on entering and removing (current) node on exiting. Remember and  the list if and only if current sum equals to target sum for leaf nodes. Need to remove the node list to back track also to help us locate more path in the tree.</p>
+</div>
+<div id="analysis-71" class="section level4">
+<h4><span class="header-section-number">4.10.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-73" class="section level4">
+<h4><span class="header-section-number">4.10.3.3</span> Algorithm</h4>
+<p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-46" class="section level4">
+<h4><span class="header-section-number">4.10.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">pathSum</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> sum) {
+    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; trace = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+    <span class="fu">backtrack</span>(root, <span class="dv">0</span>, sum, result, trace);
+    <span class="kw">return</span> result;
+}
+<span class="kw">private</span> <span class="dt">void</span> <span class="fu">backtrack</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> current, <span class="dt">int</span> target, <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; trace) {
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        <span class="kw">return</span>;
+    }
+    trace.<span class="fu">add</span>(root.<span class="fu">val</span>);
+    current += root.<span class="fu">val</span>;
 
+    <span class="co">//leaf node</span>
+    <span class="kw">if</span> (root.<span class="fu">left</span> == <span class="kw">null</span> &amp;&amp; root.<span class="fu">right</span> == <span class="kw">null</span> &amp;&amp; current == target) {
+        <span class="co">//to copy the valid list</span>
+        result.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;(trace));
+        <span class="kw">return</span>;
+    }
+
+    <span class="co">//otherwise - intermediate nodes</span>
+    <span class="kw">if</span> (root.<span class="fu">left</span> != <span class="kw">null</span>) {
+        <span class="fu">pathSum</span>(root.<span class="fu">left</span>, current, target, result, trace);
+
+        <span class="co">//clean up last inserted left node to back track one step</span>
+        trace.<span class="fu">remove</span>(trace.<span class="fu">size</span>() - <span class="dv">1</span>);
+    }
+    <span class="kw">if</span> (root.<span class="fu">right</span> != <span class="kw">null</span>) {
+        <span class="fu">pathSum</span>(root.<span class="fu">right</span>, current, target, result, trace);
+
+        <span class="co">//clean up last inserted right node to back track one step</span>
+        trace.<span class="fu">remove</span>(trace.<span class="fu">size</span>() - <span class="dv">1</span>);
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="path-sum-leet-code-112-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="path-sum-iii-leet-code-437-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +978,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

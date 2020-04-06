@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>12.1 Design a LRU Cache / LeetCode 146 / Medium | Technical Interview</title>
+  <meta name="description" content="12.1 Design a LRU Cache / LeetCode 146 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="12.1 Design a LRU Cache / LeetCode 146 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="12.1 Design a LRU Cache / LeetCode 146 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="12.1 Design a LRU Cache / LeetCode 146 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="12.1 Design a LRU Cache / LeetCode 146 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="advanced-data-structure.html"/>
+<link rel="next" href="design-a-stack.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,207 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="design-a-lru-cache-leetcode-146-medium" class="section level2">
+<h2><span class="header-section-number">12.1</span> Design a LRU Cache / LeetCode 146 / Medium</h2>
+<div id="description-128" class="section level3">
+<h3><span class="header-section-number">12.1.1</span> Description</h3>
+<p>Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put.</p>
+<p>get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1. put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.</p>
+<p>The cache is initialized with a positive capacity. ### Example</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">LRUCache cache = <span class="kw">new</span> <span class="fu">LRUCache</span>( <span class="dv">2</span> <span class="co">/* capacity */</span> );
 
+cache.<span class="fu">put</span>(<span class="dv">1</span>, <span class="dv">1</span>);
+cache.<span class="fu">put</span>(<span class="dv">2</span>, <span class="dv">2</span>);
+cache.<span class="fu">get</span>(<span class="dv">1</span>);       <span class="co">// returns 1</span>
+cache.<span class="fu">put</span>(<span class="dv">3</span>, <span class="dv">3</span>);    <span class="co">// evicts key 2</span>
+cache.<span class="fu">get</span>(<span class="dv">2</span>);       <span class="co">// returns -1 (not found)</span>
+cache.<span class="fu">put</span>(<span class="dv">4</span>, <span class="dv">4</span>);    <span class="co">// evicts key 1</span>
+cache.<span class="fu">get</span>(<span class="dv">1</span>);       <span class="co">// returns -1 (not found)</span>
+cache.<span class="fu">get</span>(<span class="dv">3</span>);       <span class="co">// returns 3</span>
+cache.<span class="fu">get</span>(<span class="dv">4</span>);       <span class="co">// returns 4</span></code></pre></div>
+</div>
+<div id="solution---naive" class="section level3">
+<h3><span class="header-section-number">12.1.2</span> Solution - Naive</h3>
+<div id="walkthrough-157" class="section level4">
+<h4><span class="header-section-number">12.1.2.1</span> Walkthrough</h4>
+Have a internal map to store cache data and doubly linked list to keep track history of data usage. The head node indicate it was recently used where the tail node represents data that were . That is, get(4) would change the cache:
+<div class="figure"><span id="fig:unnamed-chunk-93"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-93-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 12.1: Some caption.
+</p>
+</div>
+In addition, put<span class="math inline">\((4, v_2)\)</span> would change the cache:
+<div class="figure"><span id="fig:unnamed-chunk-94"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-94-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 12.2: Some caption.
+</p>
+</div>
+</div>
+<div id="analysis-161" class="section level4">
+<h4><span class="header-section-number">12.1.2.2</span> Analysis</h4>
+<p>There is a Map used as internal cache and each public method will leverage this internal cache as storage, and thus each public method cost O(1) overhead. The Auxiliary Space is O(n)</p>
+</div>
+<div id="algorithm-166" class="section level4">
+<h4><span class="header-section-number">12.1.2.3</span> Algorithm</h4>
+</div>
+<div id="java-code---naive" class="section level4">
+<h4><span class="header-section-number">12.1.2.4</span> Java Code - Naive</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> LRUCache {
+
+    <span class="co">// Doubly Linked List</span>
+    <span class="kw">class</span> <span class="bu">Node</span> {
+        <span class="dt">int</span> key;
+
+        <span class="dt">int</span> data;
+
+        <span class="kw">private</span> <span class="bu">Node</span> prev;
+
+        <span class="kw">private</span> <span class="bu">Node</span> next;
+
+        <span class="kw">public</span> <span class="bu">Node</span>(<span class="dt">int</span> key, <span class="dt">int</span> data) {
+            <span class="kw">this</span>.<span class="fu">key</span> = key;
+            <span class="kw">this</span>.<span class="fu">data</span> = data;
+        }
+    }
+
+    <span class="kw">private</span> <span class="dt">int</span> capacity;
+
+    <span class="co">// internal cache</span>
+    <span class="kw">private</span> <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Node</span>&gt; cache = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();
+
+    <span class="kw">private</span> <span class="bu">Node</span> head;
+
+    <span class="kw">private</span> <span class="bu">Node</span> tail;
+
+    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> capacity) {
+        <span class="kw">this</span>.<span class="fu">capacity</span> = capacity;
+    }
+
+    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">get</span>(<span class="dt">int</span> key) {
+        <span class="kw">if</span> (cache.<span class="fu">containsKey</span>(key)) {
+            <span class="bu">Node</span> node = cache.<span class="fu">get</span>(key);
+
+            <span class="co">//Reset the node to head position</span>
+            <span class="fu">remove</span>(node);
+            <span class="fu">setHead</span>(node);
+
+            <span class="kw">return</span> node.<span class="fu">data</span>;
+        }
+
+        <span class="kw">return</span> -<span class="dv">1</span>;
+    }
+
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">put</span>(<span class="dt">int</span> key, <span class="dt">int</span> value) {
+        <span class="kw">if</span> (cache.<span class="fu">containsKey</span>(key)) {
+            <span class="bu">Node</span> old = cache.<span class="fu">get</span>(key);
+            old.<span class="fu">data</span> = value;
+
+            <span class="co">//Reset the node to head position</span>
+            <span class="fu">remove</span>(old);
+            <span class="fu">setHead</span>(old);
+        } <span class="kw">else</span> {
+            <span class="co">// Put new &lt;key, val&gt;</span>
+            <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>(key, value);
+
+            <span class="kw">if</span> (cache.<span class="fu">size</span>() &gt;= capacity) {
+                <span class="co">//Cache is FULL. Remove tail</span>
+                cache.<span class="fu">remove</span>(tail.<span class="fu">key</span>); <span class="co">// remove LRU data from cache.</span>
+                <span class="fu">remove</span>(tail);
+                <span class="fu">setHead</span>(newNode);
+            } <span class="kw">else</span> {
+                <span class="fu">setHead</span>(newNode);
+            }
+
+            cache.<span class="fu">put</span>(key, newNode);
+        }
+    }
+
+    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">remove</span>(<span class="bu">Node</span> node) {
+        <span class="kw">if</span> (node == head) {
+            <span class="co">// remove a head</span>
+            head = node.<span class="fu">next</span>;
+        } <span class="kw">else</span> {
+            <span class="co">// remove a non-head</span>
+            node.<span class="fu">prev</span>.<span class="fu">next</span> = node.<span class="fu">next</span>;
+        }
+
+        <span class="kw">if</span> (node == tail) {
+            <span class="co">// remove a tail</span>
+            tail = node.<span class="fu">prev</span>;
+        } <span class="kw">else</span> {
+            <span class="co">// remove a non-head</span>
+            node.<span class="fu">next</span>.<span class="fu">prev</span> = node.<span class="fu">prev</span>;
+        }
+    }
+
+    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">setHead</span>(<span class="bu">Node</span> node) {
+        node.<span class="fu">next</span> = head;
+        node.<span class="fu">prev</span> = <span class="kw">null</span>;
+
+        <span class="kw">if</span> (head != <span class="kw">null</span>) {
+            <span class="co">// insert a new head node</span>
+            head.<span class="fu">prev</span> = node;
+        }
+        head = node;
+
+        <span class="kw">if</span> (tail == <span class="kw">null</span>) {
+            <span class="co">// insert first tail node</span>
+            tail = head;
+        }
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---linkedhashmap" class="section level3">
+<h3><span class="header-section-number">12.1.3</span> Solution - LinkedHashMap</h3>
+<div id="walkthrough-158" class="section level4">
+<h4><span class="header-section-number">12.1.3.1</span> Walkthrough</h4>
+<p>An extended LinkedHashMap is to retrieve elements in the order in which they were last accessed. A special constructor is used to create this type of LinkedHashMap: new LinkedHashMap(initialCapacity, loadFactor, true) - the true means “accessOrder” instead of the “insertionOrder”.</p>
+</div>
+<div id="analysis-162" class="section level4">
+<h4><span class="header-section-number">12.1.3.2</span> Analysis</h4>
+</div>
+<div id="algorithm-167" class="section level4">
+<h4><span class="header-section-number">12.1.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code---linkedhashmap" class="section level4">
+<h4><span class="header-section-number">12.1.3.4</span> Java Code - LinkedHashMap</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="kw">class</span> LRUCache&lt;K, V&gt; <span class="kw">extends</span> <span class="bu">LinkedHashMap</span>&lt;K, V&gt; {
+    <span class="co">// indicate the capacity of cache.</span>
+    <span class="kw">private</span> <span class="dt">final</span> <span class="dt">int</span> maxEntries;
+    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> DEFAULT_INITIAL_CAPACITY = <span class="dv">16</span>;
+    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">float</span> DEFAULT_LOAD_FACTOR = <span class="fl">0.</span>75f;
+
+    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> initialCapacity, <span class="dt">float</span> loadFactor, <span class="dt">int</span> maxEntries) {
+        <span class="kw">super</span>(initialCapacity, loadFactor, <span class="kw">true</span>);
+        <span class="kw">this</span>.<span class="fu">maxEntries</span> = maxEntries;
+    }
+
+    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> initialCapacity, <span class="dt">int</span> maxEntries) {
+        <span class="kw">this</span>(initialCapacity, DEFAULT_LOAD_FACTOR, maxEntries);
+    }
+
+    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> maxEntries) {
+        <span class="kw">this</span>(DEFAULT_INITIAL_CAPACITY, maxEntries);
+    }
+
+    <span class="kw">protected</span> <span class="dt">boolean</span> <span class="fu">removeEldestEntry</span>(<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;K, V&gt; eldest) {
+        <span class="kw">return</span> <span class="fu">size</span>() &gt; maxEntries;
+    }
+
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="advanced-data-structure.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="design-a-stack.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1099,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/12-advanced-data-structure.Rmd",
 "text": "Edit"
 },
 "history": {

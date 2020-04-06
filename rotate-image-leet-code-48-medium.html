@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>3.2 Rotate Image / Leet Code 48 / Medium | Technical Interview</title>
+  <meta name="description" content="3.2 Rotate Image / Leet Code 48 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="3.2 Rotate Image / Leet Code 48 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="3.2 Rotate Image / Leet Code 48 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="3.2 Rotate Image / Leet Code 48 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="3.2 Rotate Image / Leet Code 48 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="design-a-tic-tac-toe-leetcode-348-medium.html"/>
+<link rel="next" href="spiral-matrix-leetcode-54-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,73 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
-
+<div id="rotate-image-leet-code-48-medium" class="section level2">
+<h2><span class="header-section-number">3.2</span> Rotate Image / Leet Code 48 / Medium</h2>
+<div id="description-41" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Description</h3>
+<p>You are given an n x n 2D matrix representing an image. Rotate the image by 90 degrees (clockwise). You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.</p>
+</div>
+<div id="example-40" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> Example</h3>
+<p>Given input matrix, and rotate the input matrix in-place.</p>
+<pre><code>[1,2,3],          [7,4,1],
+[4,5,6],  ==&gt;     [8,5,2],
+[7,8,9]           [9,6,3]</code></pre>
+</div>
+<div id="solution-36" class="section level3">
+<h3><span class="header-section-number">3.2.3</span> Solution</h3>
+<div id="walkthrough-45" class="section level4">
+<h4><span class="header-section-number">3.2.3.1</span> Walkthrough</h4>
+<p>Take this matrix as example,</p>
+<pre><code>[1,2,3],
+[4,5,6],
+[7,8,9]</code></pre>
+<p>first swap the symmetric elements via top-left to bottom-right diagnal,</p>
+<pre><code>[1,4,7],
+[2,5,8],
+[3,6,9]</code></pre>
+<p>and swap columns via centeral vertical line.</p>
+<pre><code>[7,|4|,1],
+[8,|5|,2],
+[9,|6|,3]</code></pre>
+</div>
+<div id="analysis-45" class="section level4">
+<h4><span class="header-section-number">3.2.3.2</span> Analysis</h4>
+<p>Time complexity is <span class="math inline">\(O(n^2)\)</span> as there are two loops</p>
+</div>
+<div id="algorithm-45" class="section level4">
+<h4><span class="header-section-number">3.2.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-36" class="section level4">
+<h4><span class="header-section-number">3.2.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">rotate</span>(<span class="dt">int</span>[][] matrix) {
+    <span class="co">//Swap symmetric element via diagnal</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;  matrix.<span class="fu">length</span>; i++) {
+        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; i; j++) {
+            <span class="dt">int</span> temp = matrix[i][j];
+            matrix[i][j] = matrix[j][i];
+            matrix[j][i] = temp;
+        }
+    }
+    <span class="co">//Swap columns via centeral vertical line</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>, j = matrix.<span class="fu">length</span> - <span class="dv">1</span>; i &lt; matrix.<span class="fu">length</span> / <span class="dv">2</span>; i++, j--) {
+        <span class="kw">for</span> (<span class="dt">int</span> k = <span class="dv">0</span>; k &lt; matrix.<span class="fu">length</span>; k++) {
+            <span class="dt">int</span> temp = matrix[k][i];
+            matrix[k][i] = matrix[k][j];
+            matrix[k][j] = temp;
+        }
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="design-a-tic-tac-toe-leetcode-348-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="spiral-matrix-leetcode-54-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +965,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/03-matrix.Rmd",
 "text": "Edit"
 },
 "history": {

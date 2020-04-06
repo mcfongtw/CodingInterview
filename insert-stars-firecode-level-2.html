@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>9.2 Insert Stars / Firecode / Level 2 | Technical Interview</title>
+  <meta name="description" content="9.2 Insert Stars / Firecode / Level 2 | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="9.2 Insert Stars / Firecode / Level 2 | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="9.2 Insert Stars / Firecode / Level 2 | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="9.2 Insert Stars / Firecode / Level 2 | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="9.2 Insert Stars / Firecode / Level 2 | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="binary-representation-firecode-level-2.html"/>
+<link rel="next" href="word-ladder-leetcode-127-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,55 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="insert-stars-firecode-level-2" class="section level2">
+<h2><span class="header-section-number">9.2</span> Insert Stars / Firecode / Level 2</h2>
+<div id="description-113" class="section level3">
+<h3><span class="header-section-number">9.2.1</span> Description</h3>
+<p>Given a string, recursively compute a new string where the identical adjacent characters in the original string are separated by a “*“.</p>
+</div>
+<div id="example-109" class="section level3">
+<h3><span class="header-section-number">9.2.2</span> Example</h3>
+<p>insertPairStar(“cac”) = “cac” insertPairStar(“cc”) = “c*c&quot;</p>
+</div>
+<div id="solution-83" class="section level3">
+<h3><span class="header-section-number">9.2.3</span> Solution</h3>
+<div id="walkthrough-139" class="section level4">
+<h4><span class="header-section-number">9.2.3.1</span> Walkthrough</h4>
+<p>Use recursive call with substring() method to narrow the original string from outside and find out if there are identical adjacent characters existed. Append “*&quot; if there is.</p>
+</div>
+<div id="analysis-141" class="section level4">
+<h4><span class="header-section-number">9.2.3.2</span> Analysis</h4>
+<p>Complexity is O(n) as each alphabet is processed once.</p>
+</div>
+<div id="algorithm-146" class="section level4">
+<h4><span class="header-section-number">9.2.3.3</span> Algorithm</h4>
+<p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">static</span> <span class="bu">String</span> <span class="fu">insertPairStar</span>(<span class="bu">String</span> s) {
+    <span class="kw">if</span>(s == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
 
+    <span class="kw">if</span>(s.<span class="fu">length</span>() == <span class="dv">1</span>) {
+        <span class="co">//base case</span>
+        <span class="kw">return</span> s;
+    } <span class="kw">else</span> <span class="kw">if</span>(s.<span class="fu">substring</span>(<span class="dv">0</span>, <span class="dv">1</span>).<span class="fu">equals</span>(s.<span class="fu">substring</span>(<span class="dv">1</span>, <span class="dv">2</span>))) {
+        <span class="co">//identical adjacent char</span>
+        <span class="kw">return</span> s.<span class="fu">substring</span>(<span class="dv">0</span>,<span class="dv">1</span>) + <span class="st">&quot;*&quot;</span> + <span class="fu">insertPairStar</span>(s.<span class="fu">substring</span>(<span class="dv">1</span>,s.<span class="fu">length</span>()));
+    } <span class="kw">else</span> {
+        <span class="co">//recursive call</span>
+        <span class="kw">return</span> s.<span class="fu">substring</span>(<span class="dv">0</span>,<span class="dv">1</span>) + <span class="fu">insertPairStar</span>(s.<span class="fu">substring</span>(<span class="dv">1</span>,s.<span class="fu">length</span>()));
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="binary-representation-firecode-level-2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="word-ladder-leetcode-127-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +947,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/09-string-manipulation.Rmd",
 "text": "Edit"
 },
 "history": {

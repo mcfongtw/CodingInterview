@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>10.1 Power of 2 / Firebase / Level 2 | Technical Interview</title>
+  <meta name="description" content="10.1 Power of 2 / Firebase / Level 2 | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="10.1 Power of 2 / Firebase / Level 2 | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="10.1 Power of 2 / Firebase / Level 2 | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="10.1 Power of 2 / Firebase / Level 2 | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="10.1 Power of 2 / Firebase / Level 2 | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="math.html"/>
+<link rel="next" href="powx-n-leet-code-50-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,70 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
-
+<div id="power-of-2-firebase-level-2" class="section level2">
+<h2><span class="header-section-number">10.1</span> Power of 2 / Firebase / Level 2</h2>
+<div id="description-121" class="section level3">
+<h3><span class="header-section-number">10.1.1</span> Description</h3>
+<p>Write a method - isPowOfTwo to test whether or not a given positive integer is a power of 2.</p>
+</div>
+<div id="example-117" class="section level3">
+<h3><span class="header-section-number">10.1.2</span> Example</h3>
+<p>isPowOfTwo(5) = false isPowOfTwo(8) = true</p>
+</div>
+<div id="solution---recursive-6" class="section level3">
+<h3><span class="header-section-number">10.1.3</span> Solution - Recursive</h3>
+<div id="walkthrough-149" class="section level4">
+<h4><span class="header-section-number">10.1.3.1</span> Walkthrough</h4>
+<p>For recursive solution, we invoke recursive calls on even numbrers and return true on <span class="math inline">\(2^0\)</span> = 1. Return false for other cases. For bitwise op solution, if we take 3 (011) &amp; with 4 (100) and result is 0</p>
+</div>
+<div id="analysis-151" class="section level4">
+<h4><span class="header-section-number">10.1.3.2</span> Analysis</h4>
+<p>Time Complexity is O(log(n)) since this is the number of computation performed.</p>
+</div>
+<div id="algorithm-156" class="section level4">
+<h4><span class="header-section-number">10.1.3.3</span> Algorithm</h4>
+<p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
+</div>
+<div id="java-code---recursive-6" class="section level4">
+<h4><span class="header-section-number">10.1.3.4</span> Java Code - Recursive</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">boolean</span> <span class="fu">isPowerOfTwo</span>(<span class="dt">int</span> n) {
+    <span class="kw">if</span>(num == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="kw">false</span>;
+    } <span class="kw">else</span> <span class="kw">if</span>( num == <span class="dv">1</span>) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    } <span class="kw">else</span> <span class="kw">if</span>( (num &amp; <span class="dv">1</span>) == <span class="dv">1</span> ) {
+        <span class="co">//odd number</span>
+        <span class="kw">return</span> <span class="kw">false</span>;
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> <span class="fu">isPowOfTwo</span>(num / <span class="dv">2</span>);
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---bitwise-op" class="section level3">
+<h3><span class="header-section-number">10.1.4</span> Solution - Bitwise Op</h3>
+<div id="walkthrough-150" class="section level4">
+<h4><span class="header-section-number">10.1.4.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-152" class="section level4">
+<h4><span class="header-section-number">10.1.4.2</span> Analysis</h4>
+<p>Time complexity is constant O(1) and Auxiliary Space is O(1).</p>
+</div>
+<div id="java-code---bitwise-op" class="section level4">
+<h4><span class="header-section-number">10.1.4.3</span> Java Code - Bitwise Op</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">boolean</span> <span class="fu">isPowerOfTwo</span>(<span class="dt">int</span> num) {
+    <span class="kw">return</span> (num != <span class="dv">0</span>) &amp;&amp; ((num &amp; (num - <span class="dv">1</span>)) == <span class="dv">0</span>);
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="math.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="powx-n-leet-code-50-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +962,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/10-math.Rmd",
 "text": "Edit"
 },
 "history": {

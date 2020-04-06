@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.11 Path Sum III / Leet Code 437 / Easy | Technical Interview</title>
+  <meta name="description" content="4.11 Path Sum III / Leet Code 437 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.11 Path Sum III / Leet Code 437 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.11 Path Sum III / Leet Code 437 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.11 Path Sum III / Leet Code 437 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.11 Path Sum III / Leet Code 437 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="path-sum-ii-leet-code-113-medium.html"/>
+<link rel="next" href="binary-tree-preorder-traversal-leet-code-144-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,88 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
-
+<div id="path-sum-iii-leet-code-437-easy" class="section level2">
+<h2><span class="header-section-number">4.11</span> Path Sum III / Leet Code 437 / Easy</h2>
+<div id="description-61" class="section level3">
+<h3><span class="header-section-number">4.11.1</span> Description</h3>
+<p>You are given a binary tree in which each node contains an integer value.</p>
+<p>Find the number of paths that sum to a given value.</p>
+<p>The path does not need to start or end at the root or a leaf, but it must go downwards (traveling only from parent nodes to child nodes).</p>
+The tree has no more than 1,000 nodes and the values are in the range -1,000,000 to 1,000,000. ### Example
+<div class="figure"><span id="fig:unnamed-chunk-21"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-21-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.15: Some caption.
+</p>
+</div>
+<p>sum = 8, Return 3. The paths that sum to 8 are:</p>
+<pre><code>1. 5 -&gt; 3
+2. 5 -&gt; 2 -&gt; 1
+3. -3 -&gt; 11</code></pre>
+</div>
+<div id="solution-48" class="section level3">
+<h3><span class="header-section-number">4.11.2</span> Solution</h3>
+<div id="walkthrough-71" class="section level4">
+<h4><span class="header-section-number">4.11.2.1</span> Walkthrough</h4>
+<p>Continue the recursive on left and right subtrees and  when accumulated sum equals to the target sum. Use a length-1 array to keep track the count of path number in the recursive. We should consider both cases to include root and exlude root. For instance, if there is a tree [1,-2,1,-1] and taget sum is -1. There are four paths combined :</p>
+<pre><code>1. [1,-2]
+2. [-2,1]
+3. [-1]
+4. [1,-2,1,-1]</code></pre>
+<p>In addition, we need to store accumulated count across recursive function calls. Thus, data type cannot be Immutable, since each arithmetic operation would create another object. Thus, we need to have a mutable variable that exists across each stack frame:</p>
+<ul>
+<li>Have a int[1] to store the accumulated count.</li>
+<li>Have a wrapper object to reset the value towards computation.</li>
+<li>Have a shared variable declared for this purpose.</li>
+</ul>
+</div>
+<div id="analysis-72" class="section level4">
+<h4><span class="header-section-number">4.11.2.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-74" class="section level4">
+<h4><span class="header-section-number">4.11.2.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-47" class="section level4">
+<h4><span class="header-section-number">4.11.2.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">int</span> count = <span class="dv">0</span>;
+<span class="kw">public</span> <span class="dt">int</span> <span class="fu">pathSum</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> sum) {
+    <span class="fu">helperSum</span>(root, <span class="dv">0</span>, sum);
+    <span class="kw">return</span> count;
+}
+<span class="kw">private</span> <span class="dt">void</span> <span class="fu">helperSum</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> current, <span class="dt">int</span> target) {
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        <span class="kw">return</span>;
+    }
+    <span class="co">// root included</span>
+    <span class="fu">helper</span>(root, current, target);
+    <span class="co">// root excluded</span>
+    <span class="fu">helperSum</span>(root.<span class="fu">left</span>, current, target);
+    <span class="fu">helperSum</span>(root.<span class="fu">right</span>, current, target);
+}
+<span class="kw">private</span> <span class="dt">void</span> <span class="fu">helper</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> current, <span class="dt">int</span> target) {
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        <span class="kw">return</span>;
+    }
+    current += root.<span class="fu">val</span>;
+    <span class="kw">if</span> (current == target) {
+        count++;
+        <span class="co">// do not return.</span>
+    }
+    <span class="fu">helper</span>(root.<span class="fu">left</span>, current, target);
+    <span class="fu">helper</span>(root.<span class="fu">right</span>, current, target);
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="path-sum-ii-leet-code-113-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="binary-tree-preorder-traversal-leet-code-144-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +980,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

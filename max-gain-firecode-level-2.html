@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.9 Max Gain / Firecode / Level 2 | Technical Interview</title>
+  <meta name="description" content="2.9 Max Gain / Firecode / Level 2 | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.9 Max Gain / Firecode / Level 2 | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.9 Max Gain / Firecode / Level 2 | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.9 Max Gain / Firecode / Level 2 | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.9 Max Gain / Firecode / Level 2 | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="sum-ii.html"/>
+<link rel="next" href="pascals-triangle-leet-code-118-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,53 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="max-gain-firecode-level-2" class="section level2">
+<h2><span class="header-section-number">2.9</span> Max Gain / Firecode / Level 2</h2>
+<div id="description-9" class="section level3">
+<h3><span class="header-section-number">2.9.1</span> Description</h3>
+<p>Given an array of integers, write a method - maxGain - that returns the maximum gain. Maximum Gain is defined as the maximum difference between 2 elements in a list such that the larger element appears after the smaller element. If no gain is possible, return 0.</p>
+</div>
+<div id="example-8" class="section level3">
+<h3><span class="header-section-number">2.9.2</span> Example</h3>
+<p>[0,50,10,100,30] returns 100</p>
+<p>[100,40,20,10] returns 0</p>
+<p>[0,100,0,100,0,100] returns 100</p>
+</div>
+<div id="solution-8" class="section level3">
+<h3><span class="header-section-number">2.9.3</span> Solution</h3>
+<div id="walkthrough-10" class="section level4">
+<h4><span class="header-section-number">2.9.3.1</span> Walkthrough</h4>
+<p>By definition, , we could do this in one pass by finding the minimum element and the maximum gain (so far) by Math.max(min, a[i] - min)</p>
+</div>
+<div id="analysis-10" class="section level4">
+<h4><span class="header-section-number">2.9.3.2</span> Analysis</h4>
+<p>The time complexity is O(n) since every element is visited in the loop.</p>
+</div>
+<div id="algorithm-10" class="section level4">
+<h4><span class="header-section-number">2.9.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-8" class="section level4">
+<h4><span class="header-section-number">2.9.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">maxGain</span>(<span class="dt">int</span>[] a) {
+    <span class="dt">int</span> min = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>, gain = <span class="dv">0</span>;
 
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; a.<span class="fu">length</span>; i++) {
+        min = <span class="bu">Math</span>.<span class="fu">min</span>(min, a[i]);
+        gain = <span class="bu">Math</span>.<span class="fu">max</span>(gain, a[i] - min);
+    }
+
+    <span class="kw">return</span> gain;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="sum-ii.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="pascals-triangle-leet-code-118-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +945,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

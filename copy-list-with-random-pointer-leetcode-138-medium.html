@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.16 Copy List with Random Pointer / LeetCode 138 / Medium | Technical Interview</title>
+  <meta name="description" content="6.16 Copy List with Random Pointer / LeetCode 138 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.16 Copy List with Random Pointer / LeetCode 138 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.16 Copy List with Random Pointer / LeetCode 138 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.16 Copy List with Random Pointer / LeetCode 138 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.16 Copy List with Random Pointer / LeetCode 138 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="remove-duplicates-from-sorted-list-leet-code-83-easy.html"/>
+<link rel="next" href="common-data-structure-set-stack-heap-treemap.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,122 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="copy-list-with-random-pointer-leetcode-138-medium" class="section level2">
+<h2><span class="header-section-number">6.16</span> Copy List with Random Pointer / LeetCode 138 / Medium</h2>
+<div id="description-101" class="section level3">
+<h3><span class="header-section-number">6.16.1</span> Description</h3>
+<p>A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null. Return a deep copy of the list.</p>
+<p>The Linked List is represented in the input/output as a list of n nodes. Each node is represented as a pair of [val, random_index] where:</p>
+<ul>
+<li>val: an integer representing Node.val</li>
+<li>random_index: the index of the node (range from 0 to n-1) where random pointer points to, or null if it does not point to any node.</li>
+</ul>
+</div>
+<div id="example-97" class="section level3">
+<h3><span class="header-section-number">6.16.2</span> Example</h3>
+Deep copy of the following array:
+<div class="figure"><span id="fig:unnamed-chunk-83"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-83-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.41: Some caption.
+</p>
+</div>
+</div>
+<div id="solution-75" class="section level3">
+<h3><span class="header-section-number">6.16.3</span> Solution</h3>
+<div id="walkthrough-125" class="section level4">
+<h4><span class="header-section-number">6.16.3.1</span> Walkthrough</h4>
+<p>We could not copy random index (<span class="math inline">\(\Rightarrow\)</span>) in 1st pass, since the desginated node might not be created yet. Thus, we need to perform in 3 pass:</p>
+<ul>
+<li>copy every node, i.e., duplicate every node and next index (<span class="math inline">\(\rightarrow\)</span>), and insert it to the list
+<div class="figure"><span id="fig:unnamed-chunk-84"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-84-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.42: Some caption.
+</p>
+</div></li>
+<li>copy random pointers for all newly created nodes
+<div class="figure"><span id="fig:unnamed-chunk-85"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-85-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.43: Some caption.
+</p>
+</div></li>
+<li>break the list to two
+<div class="figure"><span id="fig:unnamed-chunk-86"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-86-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.44: Some caption.
+</p>
+</div></li>
+<li>finally,
+<div class="figure"><span id="fig:unnamed-chunk-87"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-87-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.45: Some caption.
+</p>
+</div></li>
+</ul>
+</div>
+<div id="analysis-126" class="section level4">
+<h4><span class="header-section-number">6.16.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-131" class="section level4">
+<h4><span class="header-section-number">6.16.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-77" class="section level4">
+<h4><span class="header-section-number">6.16.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">Node</span> <span class="fu">copyRandomList</span>(<span class="bu">Node</span> head) {
+    <span class="kw">if</span> (head == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+
+    <span class="co">// copy every node and insert to list</span>
+    <span class="bu">Node</span> current = head;
+    <span class="kw">while</span> (current != <span class="kw">null</span>) {
+        <span class="bu">Node</span> dup = <span class="kw">new</span> <span class="bu">Node</span>(current.<span class="fu">val</span>);
+        dup.<span class="fu">next</span> = current.<span class="fu">next</span>;
+        current.<span class="fu">next</span> = dup;
+        current = dup.<span class="fu">next</span>;
+    }
+
+    <span class="co">// copy random pointer for each new node</span>
+    current = head;
+    <span class="kw">while</span> (current != <span class="kw">null</span>) {
+        <span class="bu">Node</span> dup = current.<span class="fu">next</span>;
+        <span class="kw">if</span> (current.<span class="fu">random</span> != <span class="kw">null</span>) {
+            dup.<span class="fu">random</span> = current.<span class="fu">random</span>.<span class="fu">next</span>;
+        }
+        current = dup.<span class="fu">next</span>;
+    }
+
+    <span class="co">// break list to two</span>
+    current = head;
+    <span class="bu">Node</span> newHead = head.<span class="fu">next</span>;
+    <span class="kw">while</span> (current != <span class="kw">null</span>) {
+        <span class="bu">Node</span> dup = current.<span class="fu">next</span>;
+        current.<span class="fu">next</span> = dup.<span class="fu">next</span>;
+        <span class="kw">if</span> (dup.<span class="fu">next</span> != <span class="kw">null</span>) {
+            dup.<span class="fu">next</span> = dup.<span class="fu">next</span>.<span class="fu">next</span>;
+        }
+        current = current.<span class="fu">next</span>;
+    }
+
+    <span class="kw">return</span> newHead;
+}</code></pre></div>
 
 </div>
+</div>
+</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="common-data-structure-set-stack-heap-treemap.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1014,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

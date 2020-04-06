@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>5.4 Course Schedule I / LeetCode 207 / Medium | Technical Interview</title>
+  <meta name="description" content="5.4 Course Schedule I / LeetCode 207 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="5.4 Course Schedule I / LeetCode 207 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="5.4 Course Schedule I / LeetCode 207 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="5.4 Course Schedule I / LeetCode 207 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="5.4 Course Schedule I / LeetCode 207 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="clone-graph-leetcode-133-medium.html"/>
+<link rel="next" href="course-schedule-ii-leetcode-210-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,162 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="course-schedule-i-leetcode-207-medium" class="section level2">
+<h2><span class="header-section-number">5.4</span> Course Schedule I / LeetCode 207 / Medium</h2>
+<div id="description-83" class="section level3">
+<h3><span class="header-section-number">5.4.1</span> Description</h3>
+<p>There are a total of n courses you have to take, labeled from 0 to n-1.</p>
+<p>Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair: [0,1]</p>
+<p>Given the total number of courses and a list of prerequisite pairs, is it possible for you to finish all courses?</p>
+</div>
+<div id="example-79" class="section level3">
+<h3><span class="header-section-number">5.4.2</span> Example</h3>
+<div id="example-1-1" class="section level4">
+<h4><span class="header-section-number">5.4.2.1</span> Example 1</h4>
+<p>Input: 2, [[1,0]] Output: true Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0. So it is possible.</p>
+</div>
+<div id="example-2-1" class="section level4">
+<h4><span class="header-section-number">5.4.2.2</span> Example 2</h4>
+<p>Input: 2, [[1,0],[0,1]] Output: false Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0, and to take course 0 you should also have finished course 1. So it is impossible.</p>
+</div>
+</div>
+<div id="solution---topological-sort-via-bfs" class="section level3">
+<h3><span class="header-section-number">5.4.3</span> Solution - Topological Sort via BFS</h3>
+<div id="walkthrough-101" class="section level4">
+<h4><span class="header-section-number">5.4.3.1</span> Walkthrough</h4>
+<p>This problem can be converted to finding if a graph contains a cycle using topological sort</p>
+</div>
+<div id="analysis-102" class="section level4">
+<h4><span class="header-section-number">5.4.3.2</span> Analysis</h4>
+<p>A BFS would cost <span class="math inline">\(O(|V| + |E|)\)</span></p>
+</div>
+<div id="algorithm-108" class="section level4">
+<h4><span class="header-section-number">5.4.3.3</span> Algorithm</h4>
+<p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code-63" class="section level4">
+<h4><span class="header-section-number">5.4.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">canFinish</span>(<span class="dt">int</span> numCourses, <span class="dt">int</span>[][] prerequisites) {
+    <span class="kw">if</span>(numCourses == <span class="dv">0</span> || prerequisites.<span class="fu">length</span> == <span class="dv">0</span>){
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
 
+    <span class="co">// counter for number of prerequisites</span>
+    <span class="dt">int</span>[] numPrereq = <span class="kw">new</span> <span class="dt">int</span>[numCourses];
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prerequisites.<span class="fu">length</span>; i++){
+        numPrereq[prerequisites[i][<span class="dv">0</span>]]++;
+    }
+
+    <span class="co">//store courses that have no prerequisites</span>
+    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numCourses; i++){
+        <span class="kw">if</span>(numPrereq[i] == <span class="dv">0</span>){
+            queue.<span class="fu">offer</span>(i);
+        }
+    }
+
+    <span class="co">// store the topological sorting order</span>
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; order = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {
+        <span class="dt">int</span> vertex = queue.<span class="fu">poll</span>();
+        order.<span class="fu">add</span>(vertex);
+
+        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prerequisites.<span class="fu">length</span>; i++){
+            <span class="co">// if a course&#39;s prerequisite can be satisfied by a course in queue</span>
+            <span class="kw">if</span>(prerequisites[i][<span class="dv">1</span>] == vertex) {
+                numPrereq[prerequisites[i][<span class="dv">0</span>]]--;
+
+                <span class="kw">if</span>(numPrereq[prerequisites[i][<span class="dv">0</span>]] == <span class="dv">0</span>) {
+                    queue.<span class="fu">offer</span>(prerequisites[i][<span class="dv">0</span>]);
+                }
+            }
+        }
+    }
+
+    <span class="kw">return</span> order.<span class="fu">size</span>() == numCourses;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---topological-sort-via-dfs" class="section level3">
+<h3><span class="header-section-number">5.4.4</span> Solution - Topological Sort via DFS</h3>
+<div id="walkthrough-102" class="section level4">
+<h4><span class="header-section-number">5.4.4.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-103" class="section level4">
+<h4><span class="header-section-number">5.4.4.2</span> Analysis</h4>
+<p>A DFS would cost <span class="math inline">\(O(|V| + |E|)\)</span></p>
+</div>
+<div id="algorithm-109" class="section level4">
+<h4><span class="header-section-number">5.4.4.3</span> Algorithm</h4>
+<p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-64" class="section level4">
+<h4><span class="header-section-number">5.4.4.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">canFinish</span>(<span class="dt">int</span> numCourses, <span class="dt">int</span>[][] prerequisites) {
+    <span class="kw">if</span>(numCourses == <span class="dv">0</span> || prerequisites.<span class="fu">length</span> == <span class="dv">0</span>){
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    <span class="co">//track state of visited courses</span>
+    <span class="co">// -1: VISITING</span>
+    <span class="co">//  1: VISITED</span>
+    <span class="dt">int</span>[] visited = <span class="kw">new</span> <span class="dt">int</span>[numCourses];
+
+    <span class="co">// use the map to store what courses depend on a course</span>
+    <span class="co">// can transform into an adjcency list</span>
+    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; adjMap = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();
+    <span class="kw">for</span>(<span class="dt">int</span>[] edge: prerequisites){
+        <span class="kw">if</span>(adjMap.<span class="fu">containsKey</span>(edge[<span class="dv">1</span>])) {
+            adjMap.<span class="fu">get</span>(edge[<span class="dv">1</span>]).<span class="fu">add</span>(edge[<span class="dv">0</span>]);
+        } <span class="kw">else</span> {
+            <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();
+            list.<span class="fu">add</span>(edge[<span class="dv">0</span>]);
+            adjMap.<span class="fu">put</span>(edge[<span class="dv">1</span>], list);
+        }
+    }
+
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numCourses; i++) {
+        <span class="kw">if</span>(!<span class="fu">dfs</span>(adjMap, visited, i)) {
+            <span class="kw">return</span> <span class="kw">false</span>;
+        }
+    }
+
+    <span class="kw">return</span> <span class="kw">true</span>;
+}
+
+<span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">dfs</span>(<span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; adjMap, <span class="dt">int</span>[] visited, <span class="bu">Integer</span> vertex){
+    <span class="kw">if</span>(visited[vertex] == -<span class="dv">1</span>) {
+        <span class="kw">return</span> <span class="kw">false</span>;
+    }
+    <span class="kw">if</span>(visited[vertex] == <span class="dv">1</span>) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    visited[vertex] = -<span class="dv">1</span>;
+
+    <span class="kw">if</span>(adjMap.<span class="fu">containsKey</span>(vertex)){
+        <span class="kw">for</span>(<span class="bu">Integer</span> adjVertex: adjMap.<span class="fu">get</span>(vertex)){
+            <span class="kw">if</span>(!<span class="fu">dfs</span>(adjMap, visited, adjVertex)) {
+                <span class="kw">return</span> <span class="kw">false</span>;
+            }
+        }
+    }
+
+    visited[vertex] = <span class="dv">1</span>;
+
+    <span class="kw">return</span> <span class="kw">true</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="clone-graph-leetcode-133-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="course-schedule-ii-leetcode-210-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1054,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/05-graph.Rmd",
 "text": "Edit"
 },
 "history": {

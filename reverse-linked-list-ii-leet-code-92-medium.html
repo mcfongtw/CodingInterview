@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.3 Reverse Linked List II / Leet Code 92 / Medium | Technical Interview</title>
+  <meta name="description" content="6.3 Reverse Linked List II / Leet Code 92 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.3 Reverse Linked List II / Leet Code 92 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.3 Reverse Linked List II / Leet Code 92 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.3 Reverse Linked List II / Leet Code 92 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.3 Reverse Linked List II / Leet Code 92 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="reverse-linked-list-leet-code-206-easy.html"/>
+<link rel="next" href="reverse-nodes-in-k-group-leetcode-25-hard.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,114 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="reverse-linked-list-ii-leet-code-92-medium" class="section level2">
+<h2><span class="header-section-number">6.3</span> Reverse Linked List II / Leet Code 92 / Medium</h2>
+<div id="description-88" class="section level3">
+<h3><span class="header-section-number">6.3.1</span> Description</h3>
+<p>Reverse a linked list from position m to n. Do it in one-pass</p>
+</div>
+<div id="example-84" class="section level3">
+<h3><span class="header-section-number">6.3.2</span> Example</h3>
+Input:
+<div class="figure"><span id="fig:unnamed-chunk-50"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-50-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.8: Some caption.
+</p>
+</div>
+<p>, m = 2, n = 4</p>
+Output:
+<div class="figure"><span id="fig:unnamed-chunk-51"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-51-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.9: Some caption.
+</p>
+</div>
+</div>
+<div id="solution-65" class="section level3">
+<h3><span class="header-section-number">6.3.3</span> Solution</h3>
+<div id="walkthrough-109" class="section level4">
+<h4><span class="header-section-number">6.3.3.1</span> Walkthrough</h4>
+<p>Have a helper pointer to to move to (M-1) position and reverse the links between current and prev nodes while iterating the list for (N-M) nodes.</p>
+<div class="figure"><span id="fig:unnamed-chunk-52"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-52-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.10: Some caption.
+</p>
+</div>
+<p>Finally, reset where begin.next points to head of the list after reverse - tail of the original list, and return the tail of the reversed list.</p>
+<div class="figure"><span id="fig:unnamed-chunk-53"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-53-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 6.11: Some caption.
+</p>
+</div>
+</div>
+<div id="analysis-110" class="section level4">
+<h4><span class="header-section-number">6.3.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-116" class="section level4">
+<h4><span class="header-section-number">6.3.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-67" class="section level4">
+<h4><span class="header-section-number">6.3.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">reverseBetween</span>(ListNode head, <span class="dt">int</span> m, <span class="dt">int</span> n) {
+    <span class="kw">if</span>(head == <span class="kw">null</span>) {
+        <span class="kw">return</span> head;
+    }
 
+    <span class="co">//headHelper.next is original head</span>
+    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);
+    headPrev.<span class="fu">next</span> = head;
+
+    ListNode mMinus1 = headPrev;
+    <span class="co">//move to starting position</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; m - <span class="dv">1</span>; i++) {
+        mMinus1 = mMinus1.<span class="fu">next</span>;
+    }
+
+    <span class="co">//reverse node between (m, n)</span>
+    <span class="fu">reverseList</span>(mMinus1, n-m);
+
+    <span class="kw">return</span> headPrev.<span class="fu">next</span>;
+}
+
+<span class="kw">public</span> ListNode <span class="fu">reverseList</span>(ListNode begin, <span class="dt">int</span> length) {
+    ListNode prev = begin.<span class="fu">next</span>;
+    ListNode current = prev.<span class="fu">next</span>;
+
+    <span class="co">//reverse links between current and prev</span>
+    <span class="dt">int</span> i = <span class="dv">0</span>;
+    <span class="kw">while</span> (i &lt; length) {
+        ListNode next = current.<span class="fu">next</span>;
+        <span class="co">/*</span>
+<span class="co">        * swap links between current and prev</span>
+<span class="co">        */</span>
+        current.<span class="fu">next</span> = prev;
+        prev = current;
+        current = next;
+        i++;
+    }
+
+    <span class="co">// tail of reversed is head of original list</span>
+    ListNode tail = begin.<span class="fu">next</span>;
+
+    begin.<span class="fu">next</span>.<span class="fu">next</span> = current;
+    begin.<span class="fu">next</span> = prev;
+
+    <span class="kw">return</span> tail;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="reverse-linked-list-leet-code-206-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="reverse-nodes-in-k-group-leetcode-25-hard.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1006,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

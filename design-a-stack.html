@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>12.2 Design a Stack | Technical Interview</title>
+  <meta name="description" content="12.2 Design a Stack | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="12.2 Design a Stack | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="12.2 Design a Stack | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="12.2 Design a Stack | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="12.2 Design a Stack | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="design-a-lru-cache-leetcode-146-medium.html"/>
+<link rel="next" href="design-a-queue.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,78 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="design-a-stack" class="section level2">
+<h2><span class="header-section-number">12.2</span> Design a Stack</h2>
+<div id="description-129" class="section level3">
+<h3><span class="header-section-number">12.2.1</span> Description</h3>
+<p>Stack is a LIFO data structure.</p>
+</div>
+<div id="example-123" class="section level3">
+<h3><span class="header-section-number">12.2.2</span> Example</h3>
+<ul>
+<li>push 1: [1]</li>
+<li>push 2: [1] <span class="math inline">\(\rightarrow\)</span> [2]</li>
+<li>pop returns 2</li>
+</ul>
+</div>
+<div id="solution---queue" class="section level3">
+<h3><span class="header-section-number">12.2.3</span> Solution - Queue</h3>
+<div id="walkthrough-159" class="section level4">
+<h4><span class="header-section-number">12.2.3.1</span> Walkthrough</h4>
+<p>Since a Queue is FIFO, that is first element will be processed first. Thus, we want to keep the top element to be inserted first. To achieve that, we could use a temp Stack to reverse the order after enqueue the added item into the stack first (will be processed first).</p>
+</div>
+<div id="analysis-163" class="section level4">
+<h4><span class="header-section-number">12.2.3.2</span> Analysis</h4>
+<ul>
+<li>enqueue(item) takes O(n) time.</li>
+<li>dequeue() takes O(1) as it is only polling the top element.</li>
+</ul>
+</div>
+<div id="algorithm-168" class="section level4">
+<h4><span class="header-section-number">12.2.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code---queue" class="section level4">
+<h4><span class="header-section-number">12.2.3.4</span> Java Code - Queue</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> MyQueueBasedStack&lt;T&gt; {
+    <span class="kw">private</span> <span class="bu">Queue</span>&lt;T&gt; value = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
 
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">push</span>(T item) {
+        <span class="bu">Queue</span>&lt;T&gt; temp = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+
+        temp.<span class="fu">enqueue</span>(item);
+        <span class="kw">while</span>(!value.<span class="fu">isEmpty</span>()) {
+            temp.<span class="fu">enqueue</span>(value.<span class="fu">dequeue</span>());
+        }
+
+        value = temp;
+    }
+
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">pop</span>() {
+        <span class="kw">return</span> value.<span class="fu">poll</span>();
+    }
+
+    <span class="kw">public</span> T <span class="fu">top</span>() {
+        <span class="kw">return</span> value.<span class="fu">peek</span>();
+    }
+
+    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">empty</span>() {
+        <span class="kw">return</span> value.<span class="fu">isEmpty</span>();
+    }
+
+    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {
+        <span class="kw">return</span> value.<span class="fu">size</span>();
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="design-a-lru-cache-leetcode-146-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="design-a-queue.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +970,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/12-advanced-data-structure.Rmd",
 "text": "Edit"
 },
 "history": {

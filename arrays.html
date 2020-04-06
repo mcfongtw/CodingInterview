@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>Chapter 2 Arrays | Technical Interview</title>
+  <meta name="description" content="Chapter 2 Arrays | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="Chapter 2 Arrays | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="Chapter 2 Arrays | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="Chapter 2 Arrays | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="Chapter 2 Arrays | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="glossary-of-algorithm.html"/>
+<link rel="next" href="two-sums-i-leetcode-1-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,41 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="arrays" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> Arrays</h1>
+<p>If we are enumerating the cartesian products over two arrays of n elements.</p>
+<pre><code>A = [A_1, A_2, ..., A_n]
+B = [B_1, B_2, ..., B_n]
+A1 X A2 = [(A_1, B_1), (A_1, B_2), ..., (A_n, B_n)]</code></pre>
+<p>The time complexity is O(n^2).</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; A.<span class="fu">length</span>; i++) {
+    <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; B.<span class="fu">length</span>; j++) {
+        <span class="co">// process each (A_i, B_j)</span>
+    }
+}</code></pre></div>
+<p>If we only need to enumerate part of the combination over two arrays while traversing both arrays simultaneously.</p>
+<pre><code>A = [A_1, A_2, ..., A_n]
+B = [B_1, B_2, ..., B_n]
+A1 X A2 = [(A_1, B_1), (A_2, B_1), (A_2, B_2), ..., (A_n, B_n)]</code></pre>
+<p>we could possibly reduce the complexity to O(n)</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>, j = <span class="dv">0</span>; i &lt; A.<span class="fu">length</span>; j &lt; B.<span class="fu">length</span>;) {
+    <span class="dt">int</span> a = A[i];
+    <span class="dt">int</span> b = B[j];
 
+    <span class="kw">if</span>(a &lt; b) {
+        i++;
+    } <span class="kw">else</span> <span class="kw">if</span>(a &gt; b) {
+        j++;
+    }
+}</code></pre></div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="glossary-of-algorithm.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="two-sums-i-leetcode-1-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +933,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

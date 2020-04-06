@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.16 Minimum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview</title>
+  <meta name="description" content="4.16 Minimum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.16 Minimum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.16 Minimum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.16 Minimum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.16 Minimum Depth of Binary Tree / Leet Code 104 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="maximum-depth-of-binary-tree-leet-code-104-easy.html"/>
+<link rel="next" href="count-univalue-subtrees-leet-code-250-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,122 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="minimum-depth-of-binary-tree-leet-code-104-easy" class="section level2">
+<h2><span class="header-section-number">4.16</span> Minimum Depth of Binary Tree / Leet Code 104 / Easy</h2>
+<div id="description-66" class="section level3">
+<h3><span class="header-section-number">4.16.1</span> Description</h3>
+<p>Given a binary tree, find its minimum depth.</p>
+<p>The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.</p>
+</div>
+<div id="example-63" class="section level3">
+<h3><span class="header-section-number">4.16.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-26"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-26-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.20: Some caption.
+</p>
+</div>
+<p>return its minimum depth = 2.</p>
+</div>
+<div id="solution---recursive-3" class="section level3">
+<h3><span class="header-section-number">4.16.3</span> Solution - Recursive</h3>
+<div id="walkthrough-81" class="section level4">
+<h4><span class="header-section-number">4.16.3.1</span> Walkthrough</h4>
+<p>If a node has a missing child (depth is  0 ), then we need to drill down to the other path to the leaf node recursively. If both nodes exist, take the minimum value out of the left and right subtree.</p>
+</div>
+<div id="analysis-82" class="section level4">
+<h4><span class="header-section-number">4.16.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-83" class="section level4">
+<h4><span class="header-section-number">4.16.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code---recursive-3" class="section level4">
+<h4><span class="header-section-number">4.16.3.4</span> Java Code - Recursive</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minDepth</span>(<span class="bu">TreeNode</span> root) {
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
 
+    <span class="kw">if</span>(root.<span class="fu">left</span> == <span class="kw">null</span>) {
+        <span class="co">//drill down to leaf node of the other path</span>
+        <span class="kw">return</span> <span class="fu">minDepth</span>(root.<span class="fu">right</span>) + <span class="dv">1</span>;
+    } <span class="kw">else</span> <span class="kw">if</span>(root.<span class="fu">right</span> == <span class="kw">null</span>) {
+        <span class="co">//drill down to leaf node of the other path</span>
+        <span class="kw">return</span> <span class="fu">minDepth</span>(root.<span class="fu">left</span>) + <span class="dv">1</span>;
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">min</span>(<span class="fu">minDepth</span>(root.<span class="fu">left</span>), <span class="fu">minDepth</span>(root.<span class="fu">right</span>)) + <span class="dv">1</span>;
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---iterative-bfs" class="section level3">
+<h3><span class="header-section-number">4.16.4</span> Solution - Iterative BFS</h3>
+<div id="walkthrough-82" class="section level4">
+<h4><span class="header-section-number">4.16.4.1</span> Walkthrough</h4>
+<p>Iterative: With BFS strategy, use two queues. One for current level and the other for next level.</p>
+<ul>
+<li>While traversing the currentLevel queue, add left and right children to the nextLevel queue.</li>
+<li>If currentLevel is empty, switch to nextLevel by currentLevel=nextLevel and nextLevel = new Queue(); Also, increment depth by 1</li>
+</ul>
+</div>
+<div id="analysis-83" class="section level4">
+<h4><span class="header-section-number">4.16.4.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-84" class="section level4">
+<h4><span class="header-section-number">4.16.4.3</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code---iterative-bfs" class="section level4">
+<h4><span class="header-section-number">4.16.4.4</span> Java Code - Iterative BFS</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minDepth</span>(<span class="bu">TreeNode</span> root) {
+    <span class="kw">if</span>(root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
+
+    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; currentLevel = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; nextLevel = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+
+    currentLevel.<span class="fu">offer</span>(root);
+    <span class="dt">int</span> depth = <span class="dv">1</span>;
+
+    <span class="kw">while</span>(!currentLevel.<span class="fu">isEmpty</span>()) {
+        <span class="bu">TreeNode</span> node = currentLevel.<span class="fu">poll</span>();
+
+        <span class="kw">if</span>(node.<span class="fu">left</span> == <span class="kw">null</span> &amp;&amp; node.<span class="fu">right</span> == <span class="kw">null</span>) {
+            <span class="kw">return</span> depth;
+        }
+
+        <span class="kw">if</span>(node.<span class="fu">left</span> != <span class="kw">null</span>) {
+            nextLevel.<span class="fu">offer</span>(node.<span class="fu">left</span>);
+        }
+
+        <span class="kw">if</span>(node.<span class="fu">right</span> != <span class="kw">null</span>) {
+            nextLevel.<span class="fu">offer</span>(node.<span class="fu">right</span>);
+        }
+
+        <span class="co">//go to children level by swapping queues, increase depth</span>
+        <span class="kw">if</span>(currentLevel.<span class="fu">isEmpty</span>()) {
+            currentLevel = nextLevel;
+            nextLevel = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+            depth++;
+        }
+    }
+
+    <span class="kw">return</span> depth;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="maximum-depth-of-binary-tree-leet-code-104-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="count-univalue-subtrees-leet-code-250-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1014,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

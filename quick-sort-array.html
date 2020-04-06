@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>8.4 Quick Sort Array / / | Technical Interview</title>
+  <meta name="description" content="8.4 Quick Sort Array / / | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="8.4 Quick Sort Array / / | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="8.4 Quick Sort Array / / | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="8.4 Quick Sort Array / / | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="8.4 Quick Sort Array / / | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="selection-sort-array-firecode-level-2.html"/>
+<link rel="next" href="top-k-elements.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,78 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="quick-sort-array" class="section level2">
+<h2><span class="header-section-number">8.4</span> Quick Sort Array / /</h2>
+<div id="description-110" class="section level3">
+<h3><span class="header-section-number">8.4.1</span> Description</h3>
+</div>
+<div id="example-106" class="section level3">
+<h3><span class="header-section-number">8.4.2</span> Example</h3>
+</div>
+<div id="solution-81" class="section level3">
+<h3><span class="header-section-number">8.4.3</span> Solution</h3>
+<div id="walkthrough-134" class="section level4">
+<h4><span class="header-section-number">8.4.3.1</span> Walkthrough</h4>
+<p>First, we check the indices and continue only if there are still elements to be sorted. We get the index of the sorted pivot and use it to recursively call partition() method with the same parameters as the quickSort() method, but with different indices.</p>
+<p>As for the partition() method, this function takes the last element as the pivot. Then, checks each element and swaps it before the pivot if its value is smaller. By the end of the partitioning, all elements less then the pivot are on the left of it and all elements greater then the pivot are on the right of it. The pivot is at its final sorted position and the function returns this position.</p>
+</div>
+<div id="analysis-136" class="section level4">
+<h4><span class="header-section-number">8.4.3.2</span> Analysis</h4>
+<p>The worst case occurs when the partition process always picks greatest or smallest element as pivot and can be <span class="math inline">\(O(n^2)\)</span>. In average case, the time complexity is <span class="math inline">\(O(n \cdot log(n))\)</span></p>
+</div>
+<div id="algorithm-141" class="section level4">
+<h4><span class="header-section-number">8.4.3.3</span> Algorithm</h4>
+<p>qs <a href="glossary-of-algorithm.html#qs">1.2.14</a></p>
+</div>
+<div id="java-code-83" class="section level4">
+<h4><span class="header-section-number">8.4.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">void</span> <span class="fu">quickSort</span>(<span class="dt">int</span> arr[], <span class="dt">int</span> begin, <span class="dt">int</span> end) {
+    <span class="kw">if</span> (begin &lt; end) {
+        <span class="dt">int</span> partitionIndex = <span class="fu">partition</span>(arr, begin, end);
 
+        <span class="fu">quickSort</span>(arr, begin, partitionIndex-<span class="dv">1</span>);
+        <span class="fu">quickSort</span>(arr, partitionIndex+<span class="dv">1</span>, end);
+    }
+}
+
+<span class="co">//smaller elements go left side of pivot</span>
+<span class="co">//larger elements go right side of pivot</span>
+<span class="kw">private</span> <span class="dt">int</span> <span class="fu">partition</span>(<span class="dt">int</span> arr[], <span class="dt">int</span> begin, <span class="dt">int</span> end) {
+    <span class="dt">int</span> pivot = arr[end];
+
+    <span class="co">//index of smaller element</span>
+    <span class="dt">int</span> i = (begin - <span class="dv">1</span>);
+
+    <span class="kw">for</span> (<span class="dt">int</span> j = begin; j &lt; end; j++) {
+        <span class="co">/*</span>
+<span class="co">         * swap if element is smaller than pivot</span>
+<span class="co">         */</span>
+        <span class="kw">if</span> (arr[j] &lt;= pivot) {
+            i++;
+
+            <span class="dt">int</span> swapTemp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = swapTemp;
+        }
+    }
+
+    <span class="co">//swap a[i + 1] and a[end]</span>
+    <span class="dt">int</span> swapTemp = arr[i + <span class="dv">1</span>];
+    arr[i + <span class="dv">1</span>] = arr[end];
+    arr[end] = swapTemp;
+
+    <span class="kw">return</span> i + <span class="dv">1</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="selection-sort-array-firecode-level-2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="top-k-elements.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +970,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/08-search-and-sort.Rmd",
 "text": "Edit"
 },
 "history": {

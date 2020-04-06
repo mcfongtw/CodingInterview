@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>5.1 Graph Serialization / / | Technical Interview</title>
+  <meta name="description" content="5.1 Graph Serialization / / | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="5.1 Graph Serialization / / | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="5.1 Graph Serialization / / | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="5.1 Graph Serialization / / | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="5.1 Graph Serialization / / | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="graph.html"/>
+<link rel="next" href="distance-of-nearest-cell-having-1-in-a-binary-matrix.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,139 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="graph-serialization" class="section level2">
+<h2><span class="header-section-number">5.1</span> Graph Serialization / /</h2>
+<div id="description-80" class="section level3">
+<h3><span class="header-section-number">5.1.1</span> Description</h3>
+<p>Given the a node to a Graph, represent that Graph as a String in such a way that it may be translated back to a Graph using the generated String A Node contains an integer value and all of the node’s neighbors. ### Example N.A.</p>
+</div>
+<div id="solution-62" class="section level3">
+<h3><span class="header-section-number">5.1.2</span> Solution</h3>
+<div id="walkthrough-97" class="section level4">
+<h4><span class="header-section-number">5.1.2.1</span> Walkthrough</h4>
+<p>We use BFS to traverse the graph with a visited Set to avoid running into cycle, and add child node only on unvisited adjacent nodes. For serialization, we simply place current val as first element and adjacent nodes val at the same line for the following elements, i.e. current, adj1, adj2, adj3, ..etc. Therefore, there will be two occurrence for each node-pair (edges) in the serialized content. For deserialization, it is easier by first splitting the lines and splitting by the dilimter ‘,’ and finally reassemble the graph data structure.</p>
+</div>
+<div id="analysis-98" class="section level4">
+<h4><span class="header-section-number">5.1.2.2</span> Analysis</h4>
+<p>The time complexity for both a directed and undirected graph is the sum of the vertices and their edges as represented by the graph in its adjacency list representation, or <span class="math inline">\(O(|V| + |E|)\)</span></p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Graph:
+<span class="dv">1</span>
+Serialized Content:
+<span class="dv">1</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">Graph:
+<span class="dv">1</span> - <span class="dv">2</span>
+|   |
+<span class="dv">3</span> - <span class="dv">5</span>
+|
+<span class="dv">4</span>
+Serialized Content:
+<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>
+<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">5</span>
+<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">4</span>
+<span class="dv">4</span>, <span class="dv">3</span>
+<span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">3</span></code></pre></div>
+</div>
+<div id="algorithm-104" class="section level4">
+<h4><span class="header-section-number">5.1.2.3</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+</div>
+<div id="java-code-59" class="section level4">
+<h4><span class="header-section-number">5.1.2.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> Graph {
+    <span class="kw">private</span> <span class="dt">int</span> numOfVertices; <span class="co">// No. of vertices</span>
+    <span class="kw">private</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt; adj[]; <span class="co">//Adjacency Lists</span>
 
+    <span class="co">// Constructor</span>
+    <span class="fu">Graph</span>(<span class="dt">int</span> num) {
+        numOfVertices = num;
+        adj = <span class="kw">new</span> <span class="bu">LinkedList</span>[numOfVertices];
+        <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfVertices; ++i) {
+            adj[i] = <span class="kw">new</span> <span class="bu">LinkedList</span>();
+        }
+    }
+
+    <span class="co">// Function to add an edge into the graph from v1 to v2</span>
+    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">addEdge</span>(<span class="dt">int</span> v1, <span class="dt">int</span> v2) {
+        adj[v1].<span class="fu">add</span>(v2);
+    }
+
+    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">serialize</span>(<span class="bu">Integer</span> rootId) {
+        <span class="bu">StringBuilder</span> stringBuilder = <span class="kw">new</span> <span class="bu">StringBuilder</span>();
+
+        <span class="kw">if</span>(adj.<span class="fu">length</span> &lt;= <span class="dv">0</span>) {
+            <span class="kw">return</span> <span class="st">&quot;&quot;</span>;
+        }
+
+        <span class="dt">boolean</span> visited[] = <span class="kw">new</span> <span class="dt">boolean</span>[numOfVertices];
+        <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();
+
+        <span class="co">// Mark the current node as visited and enqueue it</span>
+        queue.<span class="fu">offer</span>(rootId);
+
+        <span class="kw">while</span> (queue.<span class="fu">size</span>() != <span class="dv">0</span>) {
+            <span class="bu">Integer</span> nodeId = queue.<span class="fu">poll</span>();
+            visited[nodeId]=<span class="kw">true</span>;
+
+            stringBuilder.<span class="fu">append</span>(<span class="fu">serializeNode</span>(nodeId));
+
+            <span class="co">// Get all adjacent vertices of the dequeued vertex s</span>
+            <span class="co">// If a adjacent has not been visited, then mark it</span>
+            <span class="co">// visited and enqueue it</span>
+            <span class="kw">for</span>(<span class="bu">Integer</span> adjNodeId : adj[nodeId]) {
+                <span class="kw">if</span> (!visited[adjNodeId] &amp;&amp; !queue.<span class="fu">contains</span>(adjNodeId)) {
+                    queue.<span class="fu">offer</span>(adjNodeId);
+                }
+            }
+        }
+
+        <span class="kw">return</span> stringBuilder.<span class="fu">toString</span>();
+    }
+
+    <span class="kw">private</span> <span class="bu">String</span> <span class="fu">serializeNode</span>(<span class="dt">int</span> nodeId) {
+        <span class="bu">StringBuilder</span> sb = <span class="kw">new</span> <span class="bu">StringBuilder</span>();
+
+        <span class="co">//serialize node and adjacency nodes</span>
+        sb.<span class="fu">append</span>(nodeId);
+        <span class="kw">for</span>(<span class="bu">Integer</span> adjNodeId: adj[nodeId]) {
+            sb.<span class="fu">append</span>(<span class="st">&quot;,&quot;</span>);
+            sb.<span class="fu">append</span>(adjNodeId);
+        }
+        sb.<span class="fu">append</span>(<span class="st">&quot;</span><span class="sc">\r\n</span><span class="st">&quot;</span>);
+
+        <span class="kw">return</span> sb.<span class="fu">toString</span>();
+    }
+
+    <span class="kw">public</span> Graph <span class="fu">deserialize</span>(<span class="bu">String</span> input) {
+        <span class="bu">String</span>[] lines = input.<span class="fu">split</span>(<span class="st">&quot;</span><span class="sc">\r\n</span><span class="st">&quot;</span>);
+        Graph graph = <span class="kw">new</span> <span class="fu">Graph</span>(lines.<span class="fu">length</span>);
+
+        <span class="kw">for</span>(<span class="bu">String</span> line: lines) {
+            <span class="bu">String</span>[] nodes = line.<span class="fu">split</span>(<span class="st">&quot;,&quot;</span>);
+
+            <span class="kw">if</span>(nodes.<span class="fu">length</span> &gt; <span class="dv">1</span>) {
+                <span class="dt">int</span> srcNodeId = <span class="bu">Integer</span>.<span class="fu">parseInt</span>(nodes[<span class="dv">0</span>]);
+
+                <span class="co">//there are adjacent nodes</span>
+                <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">1</span>; j &lt; nodes.<span class="fu">length</span>; j++) {
+                    <span class="bu">Integer</span> dstNodeId = <span class="bu">Integer</span>.<span class="fu">valueOf</span>(nodes[j]);
+                    graph.<span class="fu">addEdge</span>(srcNodeId, dstNodeId);
+                }
+            }
+        }
+
+        <span class="kw">return</span> graph;
+    }
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="graph.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="distance-of-nearest-cell-having-1-in-a-binary-matrix.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1031,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/05-graph.Rmd",
 "text": "Edit"
 },
 "history": {

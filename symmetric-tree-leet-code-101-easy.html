@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.3 Symmetric Tree / Leet Code 101 / Easy | Technical Interview</title>
+  <meta name="description" content="4.3 Symmetric Tree / Leet Code 101 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.3 Symmetric Tree / Leet Code 101 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.3 Symmetric Tree / Leet Code 101 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.3 Symmetric Tree / Leet Code 101 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.3 Symmetric Tree / Leet Code 101 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="invert-binary-tree-leet-code-226-easy.html"/>
+<link rel="next" href="binary-tree-level-order-traversal-leet-code-102-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,76 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="symmetric-tree-leet-code-101-easy" class="section level2">
+<h2><span class="header-section-number">4.3</span> Symmetric Tree / Leet Code 101 / Easy</h2>
+<div id="description-53" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> Description</h3>
+<p>Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).</p>
+</div>
+<div id="example-51" class="section level3">
+<h3><span class="header-section-number">4.3.2</span> Example</h3>
+<div class="figure"><span id="fig:unnamed-chunk-12"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-12-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.6: Some caption.
+</p>
+</div>
+<p>is symmetric.</p>
+<div class="figure"><span id="fig:unnamed-chunk-13"></span>
+<img src="tech-interview_files/figure-html/unnamed-chunk-13-1.png" alt="Some caption." width="90%" />
+<p class="caption">
+Figure 4.7: Some caption.
+</p>
+</div>
+<p>is NOT symmetric.</p>
+</div>
+<div id="solution-41" class="section level3">
+<h3><span class="header-section-number">4.3.3</span> Solution</h3>
+<div id="walkthrough-59" class="section level4">
+<h4><span class="header-section-number">4.3.3.1</span> Walkthrough</h4>
+<p>If they are symmetric, compare its value and recursively call its grand children node in symmetric manner:</p>
+<ul>
+<li>left.left vs right.right</li>
+<li>left.right vs right.left</li>
+</ul>
+</div>
+<div id="analysis-60" class="section level4">
+<h4><span class="header-section-number">4.3.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-62" class="section level4">
+<h4><span class="header-section-number">4.3.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-42" class="section level4">
+<h4><span class="header-section-number">4.3.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isSymmetric</span>(<span class="bu">TreeNode</span> root) {
+    <span class="kw">if</span> (root == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+    <span class="kw">return</span> <span class="fu">isSymmetric</span>(root.<span class="fu">left</span>, root.<span class="fu">right</span>);
+}
+<span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">isSymmetric</span>(<span class="bu">TreeNode</span> left, <span class="bu">TreeNode</span> right) {
+    <span class="kw">if</span> (left == <span class="kw">null</span> &amp;&amp; right == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">true</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> (left == <span class="kw">null</span> || right == <span class="kw">null</span>) {
+        <span class="kw">return</span> <span class="kw">false</span>;
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> left.<span class="fu">val</span> == right.<span class="fu">val</span> &amp;&amp; <span class="fu">isSymmetric</span>(left.<span class="fu">left</span>, right.<span class="fu">right</span>)
+&amp;&amp; <span class="fu">isSymmetric</span>(left.<span class="fu">right</span>, right.<span class="fu">left</span>);
+    }
 
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="invert-binary-tree-leet-code-226-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="binary-tree-level-order-traversal-leet-code-102-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +968,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

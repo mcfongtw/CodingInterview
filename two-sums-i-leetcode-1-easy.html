@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.1 Two Sums I / LeetCode 1 / Easy | Technical Interview</title>
+  <meta name="description" content="2.1 Two Sums I / LeetCode 1 / Easy | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.1 Two Sums I / LeetCode 1 / Easy | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.1 Two Sums I / LeetCode 1 / Easy | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.1 Two Sums I / LeetCode 1 / Easy | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.1 Two Sums I / LeetCode 1 / Easy | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="arrays.html"/>
+<link rel="next" href="two-sum-ii-return-true-false.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,98 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="two-sums-i-leetcode-1-easy" class="section level2">
+<h2><span class="header-section-number">2.1</span> Two Sums I / LeetCode 1 / Easy</h2>
+<div id="description-1" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Description</h3>
+<p>Given an array of integers, return indices of the two numbers such that they add up to a specific target. You may assume that each input would have exactly one solution, and you may not <strong>use the same element twice</strong>.</p>
+</div>
+<div id="examples" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Examples</h3>
+<p>Given nums = [2, 7, 11, 15], target = 9. Because nums[0] + nums[1] = 2 + 7 = 9, return [0, 1].</p>
+</div>
+<div id="solution---with-hashtable" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> Solution - with HashTable</h3>
+<div id="walkthrough-1" class="section level4">
+<h4><span class="header-section-number">2.1.3.1</span> Walkthrough</h4>
+<p>Use a HashMap to store each element and its associated index, that is <span class="math inline">\(&lt;\)</span>nums[i], i<span class="math inline">\(&gt;\)</span>. Then check if diff = (target - nums[i]) and return the pair of indices if existed.</p>
+</div>
+<div id="analysis-1" class="section level4">
+<h4><span class="header-section-number">2.1.3.2</span> Analysis</h4>
+<p>Each insertion and get operation from hashmap takes O(1) and there are n elements. The total time complexity costs O(n) and Auxiliary Space takes <span class="math inline">\(O(n)\)</span></p>
+</div>
+<div id="algorithm-1" class="section level4">
+<h4><span class="header-section-number">2.1.3.3</span> Algorithm</h4>
+<div id="java-code---with-hashtable" class="section level5">
+<h5><span class="header-section-number">2.1.3.3.1</span> Java Code - with HashTable</h5>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span>[] <span class="fu">twoSum</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> target) {
+    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt;();
 
+    <span class="co">//iterate through the indices</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++) {
+        <span class="dt">int</span> diff = target - nums[i];
+        <span class="bu">Integer</span> diffIdx = map.<span class="fu">get</span>(diff);
+
+        <span class="kw">if</span>(map.<span class="fu">containsKey</span>(diff) &amp;&amp; i != diffIdx) {
+            <span class="co">//map contains diff value and its associated index</span>
+            <span class="kw">return</span> <span class="kw">new</span> <span class="dt">int</span>[]{i, diffIdx};
+        } <span class="kw">else</span> {
+            <span class="co">//store the value and index for later use</span>
+            map.<span class="fu">put</span>(nums[i], i);
+        }
+    }
+
+    <span class="kw">return</span> <span class="kw">null</span>;
+}</code></pre></div>
+</div>
+</div>
+</div>
+<div id="solution---searching-target-sum-from-sorted-array" class="section level3">
+<h3><span class="header-section-number">2.1.4</span> Solution - Searching Target Sum from Sorted Array</h3>
+<div id="walkthrough-2" class="section level4">
+<h4><span class="header-section-number">2.1.4.1</span> Walkthrough</h4>
+<p>This solution is valid only on  array. Have two indices pointed to left most and right most position of array. Start comparing the sum against the target. If sum meets, return the indices; otherwise, move indices inward.</p>
+</div>
+<div id="analysis-2" class="section level4">
+<h4><span class="header-section-number">2.1.4.2</span> Analysis</h4>
+<p>Time complexity is O(n) since every element is visited, and Auxiliary Space is O(1)</p>
+</div>
+<div id="algorithm-2" class="section level4">
+<h4><span class="header-section-number">2.1.4.3</span> Algorithm</h4>
+<div id="java-code---searching-target-sum-from-sorted-array" class="section level5">
+<h5><span class="header-section-number">2.1.4.3.1</span> Java Code - Searching Target Sum from Sorted Array</h5>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span>[] <span class="fu">twoSum</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> target) {
+    <span class="dt">int</span> left = <span class="dv">0</span>, right = nums.<span class="fu">length</span> - <span class="dv">1</span>;
+
+    <span class="kw">while</span>(left &lt; right) {
+        <span class="dt">int</span> sum = nums[left] + nums[right];
+
+        <span class="kw">if</span>(sum == target) {
+            <span class="kw">return</span> <span class="kw">new</span> <span class="dt">int</span>[]{left, right};
+        }
+
+        <span class="kw">if</span>(target &gt; sum) {
+            <span class="co">//increase value by shifting rightward</span>
+            left++;
+        } <span class="kw">else</span> {
+            <span class="co">//decrease value by shifting leftward</span>
+            right--;
+        }
+    }
+
+    <span class="kw">return</span> <span class="kw">null</span>;
+}</code></pre></div>
+</div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="arrays.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="two-sum-ii-return-true-false.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +990,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>6.9 Merge k Sorted Lists / Leet Code 23 / Hard | Technical Interview</title>
+  <meta name="description" content="6.9 Merge k Sorted Lists / Leet Code 23 / Hard | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="6.9 Merge k Sorted Lists / Leet Code 23 / Hard | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="6.9 Merge k Sorted Lists / Leet Code 23 / Hard | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="6.9 Merge k Sorted Lists / Leet Code 23 / Hard | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="6.9 Merge k Sorted Lists / Leet Code 23 / Hard | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="merge-two-sorted-lists-leet-code-21-easy.html"/>
+<link rel="next" href="palindrome-linked-list-leet-code-234-easy.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,139 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="merge-k-sorted-lists-leet-code-23-hard" class="section level2">
+<h2><span class="header-section-number">6.9</span> Merge k Sorted Lists / Leet Code 23 / Hard</h2>
+<div id="description-94" class="section level3">
+<h3><span class="header-section-number">6.9.1</span> Description</h3>
+<p>Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.</p>
+</div>
+<div id="example-90" class="section level3">
+<h3><span class="header-section-number">6.9.2</span> Example</h3>
+</div>
+<div id="solution---merge-lists-one-by-one" class="section level3">
+<h3><span class="header-section-number">6.9.3</span> Solution - Merge lists one by one</h3>
+<div id="walkthrough-115" class="section level4">
+<h4><span class="header-section-number">6.9.3.1</span> Walkthrough</h4>
+<p>One solution is to leverage the previous problem of merging 2 list.</p>
+</div>
+<div id="analysis-116" class="section level4">
+<h4><span class="header-section-number">6.9.3.2</span> Analysis</h4>
+<p>We will need to merge two lists for (k-1) times, where each merge() will cost O(n) in time complexity and O(1) in Auxiliary Space. The total cost for merge is <span class="math inline">\(\sum_{i=1}^{k-1} (i * \frac{n}{k} + \frac{n}{k}) = O(k \cdot n)\)</span> in time complexity, where n is the total node number in k list. and O(1) in Auxiliary Space. However, this would not be an efficient solution if k is large.</p>
+</div>
+<div id="algorithm-122" class="section level4">
+<h4><span class="header-section-number">6.9.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code---merge-lists-one-by-one" class="section level4">
+<h4><span class="header-section-number">6.9.3.4</span> Java Code - Merge lists one by one</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">mergeKLists</span>(ListNode[] lists) {
+    <span class="kw">if</span>(lists.<span class="fu">length</span> == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
 
+    ListNode newHead = lists[<span class="dv">0</span>];
+
+    <span class="co">//merge k-1 times</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; lists.<span class="fu">length</span>; i++) {
+        newHead = <span class="fu">merge</span>(newHead, lists[i]);
+    }
+
+    <span class="kw">return</span> newHead;
+}
+
+<span class="kw">public</span> ListNode <span class="fu">merge</span>(ListNode l1, ListNode l2) {
+    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), current = headPrev;
+
+    <span class="kw">while</span>(l1 != <span class="kw">null</span> &amp;&amp; l2 != <span class="kw">null</span>) {
+        <span class="kw">if</span>(l1.<span class="fu">val</span> &lt; l2.<span class="fu">val</span>) {
+            <span class="co">//l1 &lt; l2</span>
+            current.<span class="fu">next</span> = l1;
+            l1 = l1.<span class="fu">next</span>;
+        } <span class="kw">else</span> {
+            current.<span class="fu">next</span> = l2;
+            l2 = l2.<span class="fu">next</span>;
+        }
+        current = current.<span class="fu">next</span>;
+    }
+
+    <span class="co">// connect to the rest of the remaining nodes</span>
+    <span class="kw">if</span>(l1 != <span class="kw">null</span>) {
+        current.<span class="fu">next</span> = l1;
+    } <span class="kw">else</span> {
+        current.<span class="fu">next</span> = l2;
+    }
+
+    <span class="kw">return</span> headPrev.<span class="fu">next</span>;
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---min-heap" class="section level3">
+<h3><span class="header-section-number">6.9.4</span> Solution - Min Heap</h3>
+<div id="walkthrough-116" class="section level4">
+<h4><span class="header-section-number">6.9.4.1</span> Walkthrough</h4>
+<p>We could compare every leading elements in k lists and retrieve the node with the smallest value using Min Heap.</p>
+</div>
+<div id="analysis-117" class="section level4">
+<h4><span class="header-section-number">6.9.4.2</span> Analysis</h4>
+<p>Since the original k lists were sorted, therefore, we could retrieve all <span class="math inline">\(n \cdot k\)</span> elements in sorted order by retrieve the min element from PriorityQueue (min heap). The comparison cost is O(log k) for every pop and insertion to the priority queue since there are at most k elements (from k list). Additionally, there are a total number of n nodes in all lists. Thus, the overall time complexity is <span class="math inline">\(O(\log k \cdot n)\)</span> and Auxiliary Space for the ﬁnal list is O(n), where n is the total node number in all k lists.</p>
+</div>
+<div id="algorithm-123" class="section level4">
+<h4><span class="header-section-number">6.9.4.3</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a>, heap <a href="glossary-of-algorithm.html#heap">1.2.15</a></p>
+</div>
+<div id="java-code---min-heap" class="section level4">
+<h4><span class="header-section-number">6.9.4.4</span> Java Code - Min Heap</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> ListNode <span class="fu">mergeKLists</span>(ListNode[] lists) {
+    <span class="kw">if</span>(lists.<span class="fu">length</span> == <span class="dv">0</span>) {
+        <span class="kw">return</span> <span class="kw">null</span>;
+    }
+
+    ListNode head = <span class="kw">null</span>, current = <span class="kw">null</span>;
+
+    <span class="bu">PriorityQueue</span>&lt;ListNode&gt; queue = <span class="kw">new</span> <span class="bu">PriorityQueue</span>&lt;&gt;(<span class="kw">new</span> <span class="bu">Comparator</span>&lt;ListNode&gt;() {
+        <span class="at">@Override</span>
+        <span class="kw">public</span> <span class="dt">int</span> <span class="fu">compare</span>(ListNode node1, ListNode node2) {
+            <span class="kw">return</span> node1.<span class="fu">val</span> - node2.<span class="fu">val</span>;
+        }
+    });
+
+    <span class="co">//insert all heads into the priority queue</span>
+    <span class="kw">for</span>(ListNode headOfList : lists) {
+        <span class="kw">if</span>(headOfList != <span class="kw">null</span>) {
+            queue.<span class="fu">offer</span>(headOfList);
+        }
+    }
+
+
+    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {
+        ListNode node = queue.<span class="fu">poll</span>();
+
+        <span class="co">//add next node into priority queue</span>
+        <span class="kw">if</span>(node.<span class="fu">next</span> != <span class="kw">null</span>) {
+            queue.<span class="fu">offer</span>(node.<span class="fu">next</span>);
+        }
+
+        <span class="co">// construct the list with the min element from queue</span>
+        <span class="kw">if</span>(head == <span class="kw">null</span>) {
+            head = node;
+            current = node;
+        } <span class="kw">else</span> {
+            current.<span class="fu">next</span> = node;
+            current = current.<span class="fu">next</span>;
+        }
+    }
+
+    <span class="kw">return</span> head;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="merge-two-sorted-lists-leet-code-21-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="palindrome-linked-list-leet-code-234-easy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1031,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/06-linked-list.Rmd",
 "text": "Edit"
 },
 "history": {

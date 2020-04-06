@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.11 Search in Rotated Sorted Array / Leet Code 33 / Medium | Technical Interview</title>
+  <meta name="description" content="2.11 Search in Rotated Sorted Array / Leet Code 33 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.11 Search in Rotated Sorted Array / Leet Code 33 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.11 Search in Rotated Sorted Array / Leet Code 33 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.11 Search in Rotated Sorted Array / Leet Code 33 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.11 Search in Rotated Sorted Array / Leet Code 33 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="pascals-triangle-leet-code-118-easy.html"/>
+<link rel="next" href="median-of-two-sorted-arrays-leet-code-4-hard.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,77 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="search-in-rotated-sorted-array-leet-code-33-medium" class="section level2">
+<h2><span class="header-section-number">2.11</span> Search in Rotated Sorted Array / Leet Code 33 / Medium</h2>
+<div id="description-11" class="section level3">
+<h3><span class="header-section-number">2.11.1</span> Description</h3>
+<p>Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand. (i.e., [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2]).</p>
+<p>You are given a target value to search. If found in the array return its index, otherwise return -1. You may assume no duplicate exists in the array. Your algorithm’s runtime complexity must be in the order of O(log n).</p>
+</div>
+<div id="example-10" class="section level3">
+<h3><span class="header-section-number">2.11.2</span> Example</h3>
+<p>Input: nums = [4,5,6,7,0,1,2], target = 0 Output: 4</p>
+<p>Input: nums = [4,5,6,7,0,1,2], target = 3 Output: -1</p>
+</div>
+<div id="solution-10" class="section level3">
+<h3><span class="header-section-number">2.11.3</span> Solution</h3>
+<div id="walkthrough-12" class="section level4">
+<h4><span class="header-section-number">2.11.3.1</span> Walkthrough</h4>
+<p>The key point is to search the element in a divide-and-conquer manner. We need to repeated compare the mid element of index = (left + right) / 2 with target and keep shrinking the boundaries from left and right two ends according to the conditions. Return the mid index if found; otherwise, return -1.</p>
+</div>
+<div id="analysis-12" class="section level4">
+<h4><span class="header-section-number">2.11.3.2</span> Analysis</h4>
+<p>The time complexity is O(log n) since we only pick one from half of target elements each time.</p>
+</div>
+<div id="algorithm-12" class="section level4">
+<h4><span class="header-section-number">2.11.3.3</span> Algorithm</h4>
+<p>dnc <a href="glossary-of-algorithm.html#dnc">1.2.10</a></p>
+</div>
+<div id="java-code-10" class="section level4">
+<h4><span class="header-section-number">2.11.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">int</span> <span class="fu">search</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> target) {
+    <span class="dt">int</span> left = <span class="dv">0</span>, right = nums.<span class="fu">length</span> - <span class="dv">1</span>;
 
+    <span class="kw">while</span>(left &lt;= right) {
+        <span class="dt">int</span> mid = (right - left) / <span class="dv">2</span> + left;
+
+        <span class="kw">if</span>(nums[mid] == target) {
+            <span class="co">//Found index</span>
+            <span class="kw">return</span> mid;
+        } <span class="kw">else</span> <span class="kw">if</span>(nums[mid] &gt;= nums[left]) {
+            <span class="co">//left half of array</span>
+            <span class="kw">if</span>(target &gt;= nums[left] &amp;&amp; target &lt; nums[mid]) {
+                <span class="co">//&lt;-- moving leftward</span>
+                right = mid -<span class="dv">1</span>;
+            } <span class="kw">else</span> {
+                <span class="co">//--&gt; moving rightward</span>
+                left = mid + <span class="dv">1</span>;
+            }
+        } <span class="kw">else</span> {
+            <span class="co">//nums[mid] &lt; nums[right</span>
+            <span class="co">//right half of array</span>
+            <span class="kw">if</span>(target &gt; nums[mid] &amp;&amp; target &lt;= nums[right]) {
+                <span class="co">//--&gt; moving rightward</span>
+                left = mid + <span class="dv">1</span>;
+            } <span class="kw">else</span> {
+                <span class="co">//&lt;-- moving leftward</span>
+                right = mid - <span class="dv">1</span>;
+            }
+        }
+    }
+
+    <span class="kw">return</span> -<span class="dv">1</span>;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="pascals-triangle-leet-code-118-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="median-of-two-sorted-arrays-leet-code-4-hard.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +969,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {

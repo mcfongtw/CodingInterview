@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>4.28 Populating Next Right Pointers in Each Node / Leet Code 116 / Medium | Technical Interview</title>
+  <meta name="description" content="4.28 Populating Next Right Pointers in Each Node / Leet Code 116 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="4.28 Populating Next Right Pointers in Each Node / Leet Code 116 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="4.28 Populating Next Right Pointers in Each Node / Leet Code 116 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="4.28 Populating Next Right Pointers in Each Node / Leet Code 116 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="4.28 Populating Next Right Pointers in Each Node / Leet Code 116 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html"/>
+<link rel="next" href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,63 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="populating-next-right-pointers-in-each-node-leet-code-116-medium" class="section level2">
+<h2><span class="header-section-number">4.28</span> Populating Next Right Pointers in Each Node / Leet Code 116 / Medium</h2>
+<div id="description-78" class="section level3">
+<h3><span class="header-section-number">4.28.1</span> Description</h3>
+<p>You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL. Initially, all next pointers are set to NULL.</p>
+</div>
+<div id="example-75" class="section level3">
+<h3><span class="header-section-number">4.28.2</span> Example</h3>
+</div>
+<div id="solution-60" class="section level3">
+<h3><span class="header-section-number">4.28.3</span> Solution</h3>
+<div id="walkthrough-95" class="section level4">
+<h4><span class="header-section-number">4.28.3.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-96" class="section level4">
+<h4><span class="header-section-number">4.28.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) as every node is visited once.</p>
+</div>
+<div id="algorithm-98" class="section level4">
+<h4><span class="header-section-number">4.28.3.3</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code---preorder-recursive" class="section level4">
+<h4><span class="header-section-number">4.28.3.4</span> Java Code - PreOrder Recursive</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">Node</span> <span class="fu">connect</span>(<span class="bu">Node</span> root) {
+    <span class="kw">if</span>(root == <span class="kw">null</span>){
+        <span class="kw">return</span> root;
+    }
 
+    <span class="kw">if</span>(root.<span class="fu">left</span> == <span class="kw">null</span>) {
+        <span class="kw">return</span> root;
+    }
+
+    <span class="co">// populate left child.next =&gt; right child</span>
+    root.<span class="fu">left</span>.<span class="fu">next</span>=root.<span class="fu">right</span>;
+
+    <span class="co">// previously populated, i.e. root(2)</span>
+    <span class="kw">if</span>(root.<span class="fu">next</span> != <span class="kw">null</span>){
+        <span class="co">//root.next = 3 which connects to another branch</span>
+        root.<span class="fu">right</span>.<span class="fu">next</span>=root.<span class="fu">next</span>.<span class="fu">left</span>;
+    }
+
+    <span class="fu">connect</span>(root.<span class="fu">left</span>);
+    <span class="fu">connect</span>(root.<span class="fu">right</span>);
+
+    <span class="kw">return</span> root;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +955,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
 "text": "Edit"
 },
 "history": {

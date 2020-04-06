@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>7.5 My Calendar I / LeetCode 729 / Medium | Technical Interview</title>
+  <meta name="description" content="7.5 My Calendar I / LeetCode 729 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="7.5 My Calendar I / LeetCode 729 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="7.5 My Calendar I / LeetCode 729 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="7.5 My Calendar I / LeetCode 729 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="7.5 My Calendar I / LeetCode 729 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="merge-k-sorted-arrays.html"/>
+<link rel="next" href="searching-and-sorting.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,124 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="my-calendar-i-leetcode-729-medium" class="section level2">
+<h2><span class="header-section-number">7.5</span> My Calendar I / LeetCode 729 / Medium</h2>
+<div id="description-106" class="section level3">
+<h3><span class="header-section-number">7.5.1</span> Description</h3>
+<p>Implement a MyCalendar class to store your events. A new event can be added if adding the event will not cause a double booking. Your class will have the method, book(int start, int end). Formally, this represents a booking on the half open interval [start, end), the range of real numbers x such that start &lt;= x &lt; end. A double booking happens when two events have some non-empty intersection (ie., there is some time that is common to both events.) For each call to the method MyCalendar.book, return true if the event can be added to the calendar successfully without causing a double booking. Otherwise, return false and do not add the event to the calendar.</p>
+</div>
+<div id="example-102" class="section level3">
+<h3><span class="header-section-number">7.5.2</span> Example</h3>
+</div>
+<div id="solution---interval-data-structure" class="section level3">
+<h3><span class="header-section-number">7.5.3</span> Solution - Interval Data Structure</h3>
+<div id="walkthrough-129" class="section level4">
+<h4><span class="header-section-number">7.5.3.1</span> Walkthrough</h4>
+<p>We could implment a Data Structure to illustrate a duration interval which has a method to evaluate if this interval is overlapping with another interval.</p>
+</div>
+<div id="analysis-131" class="section level4">
+<h4><span class="header-section-number">7.5.3.2</span> Analysis</h4>
+<p>Time complexity is O(n) for each query as every booking is visited once in the list.</p>
+</div>
+<div id="algorithm-136" class="section level4">
+<h4><span class="header-section-number">7.5.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code---interval-data-structure" class="section level4">
+<h4><span class="header-section-number">7.5.3.4</span> Java Code - Interval Data Structure</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> Booking {
+
+    <span class="kw">public</span> <span class="dt">int</span> start;
+
+    <span class="kw">public</span> <span class="dt">int</span> end;
+
+    <span class="kw">public</span> <span class="fu">Booking</span>(<span class="dt">int</span> start, <span class="dt">int</span> end) {
+        <span class="kw">this</span>.<span class="fu">start</span> = start;
+        <span class="kw">this</span>.<span class="fu">end</span> = end;
+    }
+
+    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isOverlapped</span>(Booking that) {
+        <span class="co">// this: |--------|</span>
+        <span class="co">// that:      |------|</span>
+        <span class="kw">if</span>(<span class="fu">isBetween</span>(<span class="kw">this</span>.<span class="fu">end</span>, that.<span class="fu">start</span>, that.<span class="fu">end</span>)) {
+            <span class="kw">return</span> <span class="kw">true</span>;
+        } <span class="kw">else</span> <span class="kw">if</span>(<span class="fu">isBetween</span>(that.<span class="fu">end</span>, <span class="kw">this</span>.<span class="fu">start</span>, <span class="kw">this</span>.<span class="fu">end</span>)) {
+        <span class="co">// this:      |------|</span>
+        <span class="co">// that: |--------|</span>
+            <span class="kw">return</span> <span class="kw">true</span>;
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> <span class="kw">false</span>;
+        }
+    }
+
+    <span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">isBetween</span>(<span class="dt">int</span> target, <span class="dt">int</span> start, <span class="dt">int</span> end) {
+        <span class="kw">return</span> target &gt; start &amp;&amp; target &lt;= end;
+    }
+}
+
+<span class="kw">class</span> MyCalendar {
+    <span class="kw">private</span> <span class="bu">List</span>&lt;Booking&gt; bookings = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">book</span>(<span class="dt">int</span> start, <span class="dt">int</span> end) {
+        Booking newBooking = <span class="kw">new</span> <span class="fu">Booking</span>(start, end);
+
+        <span class="kw">for</span>(Booking existedBooking : bookings) {
+            <span class="kw">if</span>(existedBooking.<span class="fu">isOverlapped</span>(newBooking)) {
+                <span class="kw">return</span> <span class="kw">false</span>;
+            }
+        }
+
+        bookings.<span class="fu">add</span>(newBooking);
+
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="solution---treemap" class="section level3">
+<h3><span class="header-section-number">7.5.4</span> Solution - TreeMap</h3>
+<div id="walkthrough-130" class="section level4">
+<h4><span class="header-section-number">7.5.4.1</span> Walkthrough</h4>
+<p>Alternatively, we could leverage TreeMap to retrieve the logical relations between keys by calling lowerKey(). The lowerKey() method is used to find the next greatest element after the element passed as the parameter.</p>
+</div>
+<div id="analysis-132" class="section level4">
+<h4><span class="header-section-number">7.5.4.2</span> Analysis</h4>
+<p>Time complexity is O(log(n)) for each query as TreeMap takes O(log(n)) to find the location to insert.</p>
+</div>
+<div id="algorithm-137" class="section level4">
+<h4><span class="header-section-number">7.5.4.3</span> Algorithm</h4>
+</div>
+<div id="java-code---treemap" class="section level4">
+<h4><span class="header-section-number">7.5.4.4</span> Java Code - TreeMap</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> MyCalendar {
+    <span class="kw">private</span> <span class="bu">TreeMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; bookings = <span class="kw">new</span> <span class="bu">TreeMap</span>&lt;&gt;();
+
+    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">book</span>(<span class="dt">int</span> start, <span class="dt">int</span> end) {
+        <span class="bu">Integer</span> nextStart = bookings.<span class="fu">lowerKey</span>(end);
+
+        <span class="co">// check if the next closest interval of which end time is less than start time</span>
+        <span class="kw">if</span> (nextStart == <span class="kw">null</span> || bookings.<span class="fu">get</span>(nextStart) &lt;= start) {
+            <span class="co">// either no interval start time &lt; end</span>
+            <span class="co">// existed interval end time &gt; start</span>
+
+            bookings.<span class="fu">put</span>(start, end);
+            <span class="kw">return</span> <span class="kw">true</span>;
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> <span class="kw">false</span>;
+        }
+    }
+}</code></pre></div>
 
 </div>
+</div>
+</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="merge-k-sorted-arrays.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="searching-and-sorting.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1016,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/07-data-structure.Rmd",
 "text": "Edit"
 },
 "history": {

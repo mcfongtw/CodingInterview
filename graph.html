@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>Chapter 5 Graph | Technical Interview</title>
+  <meta name="description" content="Chapter 5 Graph | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="Chapter 5 Graph | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="Chapter 5 Graph | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="Chapter 5 Graph | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="Chapter 5 Graph | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html"/>
+<link rel="next" href="graph-serialization.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,253 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="graph" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Graph</h1>
+<p>Imagine a graph with as the following:</p>
+<pre><code>1 -- 0 -- 4
+|
+5 -- 6
+|  / | \
+| /  |   \
+2 -- 3 -- 7</code></pre>
 
+<p>An adjacency list is created with an array of lists. Size of the array is equal to the number of vertices. Each entry represents the list of vertices adjacent to the <span class="math inline">\(i^{th}\)</span> vertex. Each node maintains a list of all its adjacent edges, then, for each node, you could discover all its neighbors by traversing its adjacency list just once in linear time.</p>
+<pre><code>| 0 | -- 1 -- 4
+| 1 | -- 0 -- 5
+| 2 | -- 3 -- 5 -- 6
+| 3 | -- 2 -- 6 -- 7
+| 4 | -- 0
+| 5 | -- 1 -- 2 -- 6
+| 6 | -- 2 -- 3 -- 5 -- 7
+| 7 | -- 3 -- 6</code></pre>
+
+<p>The adjacency information can also transform into matrix form with the convention followed here (for undirected graphs) is that each edge adds 1 to the appropriate cell in the matrix, and each loop adds 2. For each node, you have to traverse an entire row of length V in the matrix to discover all its outgoing edges.</p>
+<pre><code>0, 1, 0, 0, 1, 0, 0, 0
+1, 0, 0, 0, 0, 1, 0, 0
+0, 0, 0, 1, 0, 1, 1, 0
+0, 0, 1, 0, 0, 0, 1, 1
+1, 0, 0, 0, 0, 0, 0, 0
+0, 1, 1, 0, 0, 0, 1, 0
+0, 0, 1, 1, 0, 1, 0, 1
+0, 0, 0, 1, 0, 0, 1, 0</code></pre>
+<p>In addition, a “visited” array that we’ll use to keep track of which vertices have been visited.</p>
+
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> Graph  {
+    <span class="kw">private</span> <span class="dt">int</span> numOfVertices;   <span class="co">//No. of vertices</span>
+    <span class="kw">private</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; adj[]; <span class="co">//Adjacency List</span>
+    <span class="kw">private</span> <span class="dt">boolean</span>[] visited;   <span class="co">//visited mark for each vertex</span>
+
+    <span class="co">// Constructor</span>
+    <span class="kw">public</span> <span class="fu">Graph</span>(<span class="dt">int</span> num) {
+        numOfVertices = num;
+        adj = <span class="kw">new</span> <span class="bu">LinkedList</span>[v];
+        <span class="kw">for</span> (<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;numOfVertices; ++i) {
+            adj[i] = <span class="kw">new</span> <span class="bu">LinkedList</span>();
+        }
+    }
+    ...
+}</code></pre></div>
+<p>There is an alternative implementation to represent per node with a list of adjacent nodes. </p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> <span class="bu">Node</span> {
+    <span class="kw">public</span> <span class="dt">int</span> val;
+    <span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Node</span>&gt; neighbors;
+    <span class="kw">private</span> <span class="dt">boolean</span> visited;     <span class="co">//visited mark for the vertex</span>
+
+    <span class="kw">public</span> <span class="bu">Node</span>(<span class="dt">int</span> _val, <span class="bu">List</span>&lt;<span class="bu">Node</span>&gt; _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+    ...
+}</code></pre></div>
+<div id="depth-first-traversal-1" class="section level3">
+<h3><span class="header-section-number">5.0.1</span> Depth First Traversal</h3>
+<p>A depth first traversal without labeling the visited node usually ends up in exponential time complexity. There will be many subproblems being reevaluated (which were visited in past). Thus, the time complexity is <span class="math inline">\(O(2^{h+1} - 1)\)</span> (as a full binary tree)</p>
+<p>If your graph is implemented as an adjacency matrix, then, for each node, you have to traverse an entire row of length V in the matrix to discover all its outgoing edges. So, the complexity of DFS is <span class="math inline">\(O(|V| * |V|) = O(|V|^2)\)</span>.</p>
+<p>If your graph is implemented using adjacency lists, wherein each node maintains a list of all its adjacent edges, then, for each node, you could discover all its neighbors by traversing its adjacency list just once in linear time. For a directed graph, the sum of the sizes of the adjacency lists of all the nodes is E (total number of edges). So, the complexity of DFS is O(V) + O(E) = O(V + E). For an undirected graph, each edge will appear twice. Once in the adjacency list of either end of the edge. So, the overall complexity will be <span class="math inline">\(O(|V|) + O (2\cdot |E|) = O(|V + E|)\)</span>.</p>
+<div id="algorithm-100" class="section level4">
+<h4><span class="header-section-number">5.0.1.1</span> Algorithm</h4>
+<p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">void</span> <span class="fu">helper</span>(<span class="dt">int</span> node, <span class="dt">boolean</span> visited[]) {
+    <span class="co">// Mark the current node as visited and print it</span>
+    visited[node] = <span class="kw">true</span>;
+
+    <span class="co">// Recur for all the vertices adjacent to this vertex</span>
+    <span class="kw">for</span>(<span class="bu">Integer</span> adjNode: adj[node]) {
+        <span class="kw">if</span> (!visited[adjNode]) {
+            <span class="fu">helper</span>(adjNode, visited);
+        }
+    }
+}
+
+<span class="co">// The function to do DFS traversal. It uses recursive DFSUtil()</span>
+<span class="dt">void</span> <span class="fu">dfs</span>(<span class="dt">int</span> root) {
+    <span class="co">// Mark all the vertices as not visited(set as</span>
+    <span class="co">// false by default in java)</span>
+    <span class="dt">boolean</span> visited[] = <span class="kw">new</span> <span class="dt">boolean</span>[numOfVertices];
+
+    <span class="fu">helper</span>(root, visited);
+}</code></pre></div>
+</div>
+</div>
+<div id="bread-first-traversal" class="section level3">
+<h3><span class="header-section-number">5.0.2</span> Bread First Traversal</h3>
+<p>For every single vertex in the graph, we will end up looking at its neighboring nodes only once (directed graph) or twice (undirected graph). The time complexity for both a directed and undirected graph is the sum of the vertices and their edges as represented by the graph in its adjacency list representation, or <span class="math inline">\(O(|V| + |E|)\)</span></p>
+<p>The power of using breadth-first search to traverse through a graph is that it can easily tell us the shortest way to get from one node to another.</p>
+<div id="algorithm-101" class="section level4">
+<h4><span class="header-section-number">5.0.2.1</span> Algorithm</h4>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">class</span> Graph  {
+    <span class="kw">private</span> <span class="dt">int</span> numOfVertices;   <span class="co">// No. of vertices</span>
+    <span class="kw">private</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt; adj[]; <span class="co">//Adjacency Lists</span>
+
+    ...
+
+    <span class="dt">void</span> <span class="fu">traversal</span>(<span class="bu">Integer</span> root)  {
+        <span class="co">// Mark all the vertices as not visited(By default</span>
+        <span class="co">// set as false)</span>
+        <span class="dt">boolean</span> visited[] = <span class="kw">new</span> <span class="dt">boolean</span>[numOfVertices];
+
+        <span class="co">// Create a queue for BFS</span>
+        <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();
+
+        <span class="co">// Mark the current node as visited and enqueue it</span>
+        visited[root] = <span class="kw">true</span>;
+        queue.<span class="fu">offer</span>(root);
+
+        <span class="kw">while</span> (queue.<span class="fu">size</span>() != <span class="dv">0</span>) {
+            <span class="co">// Dequeue a vertex from queue and print it</span>
+            <span class="bu">Integer</span> node = queue.<span class="fu">poll</span>();
+
+            <span class="co">// Get all adjacent vertices of the dequeued vertex s</span>
+            <span class="co">// If a adjacent has not been visited, then mark it</span>
+            <span class="co">// visited and enqueue it</span>
+            <span class="kw">for</span>(<span class="bu">Integer</span> adjNode : adj[node]) {
+                <span class="kw">if</span> (!visited[adjNode] &amp;&amp; !queue.<span class="fu">contain</span>(adjNode)) {
+                    queue.<span class="fu">offer</span>(adjNode);
+                }
+            }
+        }
+    }
+}</code></pre></div>
+</div>
+</div>
+<div id="topological-sorting" class="section level3">
+<h3><span class="header-section-number">5.0.3</span> Topological Sorting</h3>
+<p>A traversal algorithm for  is a linear ordering of vertices such that for every directed edge <span class="math inline">\([u,v]\)</span>, vertex u comes before v in the ordering.</p>
+
+<p>In DFS implementation of Topological Sort we focused on sink vertices, i.e, vertices with zero out-going edges, and then at last had to reverse the order in which we got the  (which we did by using a stack, which is a Last In First Out data structure). A DAG has to have at least one sink vertex which is the vertex which has no outbound edges. In DFS we print the nodes as we see them, which means when we print a node, it has just been discovered but not yet processed, which means it is in the Visiting state. So DFS gives the order in which the nodes enter the Visiting state and not the Visited state. For topological sorting we need to have the order in which the nodes are completely processed, i.e, the order in which the nodes are marked as Visited. Because when a node is marked Visited then all of its child node have already been processed, so they would be towards the right of the child nodes in the topological sort, as it should be.</p>
+<p>For example, in the given graph, the vertex ‘5’ should be printed before vertex ‘0’, but unlike DFS, the vertex ‘4’ should also be printed before vertex ‘0’.</p>
+<pre><code>5 -&gt; 0 &lt;- 4
+|         |
+v         v
+2 -&gt; 3 -&gt; 1</code></pre>
+<p>In topological sorting, we use a temporary stack. We don’t print the vertex immediately, we first recursively call topological sorting for all its adjacent vertices, then push it to a stack. Finally, print contents of stack. The final sequence is [5, 4, 2, 3, 1, 0]</p>
+<div id="algorithm-102" class="section level4">
+<h4><span class="header-section-number">5.0.3.1</span> Algorithm</h4>
+<pre><code>topological \@ref(topological), dfs \@ref(dfs)</code></pre>
+
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="dt">void</span> <span class="fu">helper</span>(<span class="bu">Integer</span> v, <span class="bu">Stack</span> stack) {
+    visited[v] = <span class="kw">true</span>;
+
+    <span class="co">// Recur for all the vertices adjacent to this</span>
+    <span class="co">// vertex</span>
+    <span class="bu">Iterator</span>&lt;<span class="bu">Integer</span>&gt; it = adj[v].<span class="fu">iterator</span>();
+    <span class="kw">while</span> (it.<span class="fu">hasNext</span>()) {
+        <span class="bu">Integer</span> adjNode = it.<span class="fu">next</span>();
+
+        <span class="kw">if</span> (!visited[adjNode])  {
+            <span class="fu">helper</span>(adjNode, visited, stack);
+        }
+    }
+
+    <span class="co">// Push current vertex to stack which stores result</span>
+    stack.<span class="fu">push</span>(<span class="kw">new</span> <span class="bu">Integer</span>(v));
+}
+
+<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">topologicalSort</span>(Graph graph) {
+    <span class="bu">Stack</span>&lt;<span class="bu">Integer</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+
+    <span class="co">// Call the recursive helper function to store</span>
+    <span class="co">// Topological Sort starting from all vertices</span>
+    <span class="co">// one by one</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfVertices; i++) {
+        <span class="kw">if</span> (visited[i] == <span class="kw">false</span>)  {
+            <span class="fu">helper</span>(i, visited, stack);
+        }
+    }
+
+    <span class="co">//Now the stack contains the topological sorting of the graph</span>
+    <span class="kw">for</span> (<span class="bu">Integer</span> vertex : stack) {
+        result.<span class="fu">add</span>(stack.<span class="fu">pop</span>());
+    }
+
+    <span class="kw">return</span> result
+}</code></pre></div>
+
+<p>In BFS implementation of the Topological sort we do the opposite: We look for for edges with no inbound edges (). And consequently in BFS implementation we don’t have to reverse the order in which we get the vertices, since we get the vertices in order of the topological ordering. We use First-In-First-Out data structure Queue in this implementation. We just search for the vertices with zero indegrees and put them in the queue till we have processed all the vertices of the graph. Polling vertices from the queue one by one give the topological sort of the graph. Lastly check if the result set does not contain all the vertices that means there is at least one cycle in the graph. That is because the indegree of those vertices participating in the loop could not be made 0 by decrementing.</p>
+<div class="figure">
+<img src="img/graph_dag_degrees.png" alt="in-degree, out-degree" />
+<p class="caption">in-degree, out-degree</p>
+</div>
+</div>
+<div id="algorithm-103" class="section level4">
+<h4><span class="header-section-number">5.0.3.2</span> Algorithm</h4>
+<p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
+
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span> <span class="fu">topological_sort_bfs</span>(<span class="dt">int</span>[][] graph) {
+    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();
+    <span class="dt">int</span>[] indegree = <span class="kw">new</span> <span class="dt">int</span>[numOfVertices];
+
+    <span class="co">// compute the indegree of all the vertices in the graph</span>
+    <span class="co">// For edge (0,1), indegree[1]++;</span>
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfVertices; i++) {
+        <span class="kw">for</span>(<span class="bu">Integer</span> vertex : adj[i]) {
+            indegree[vertex]++;
+        }
+    }
+
+    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
+
+    <span class="co">// initialize the queue with all the vertices with no inbound edges</span>
+    <span class="kw">for</span> (<span class="bu">Integer</span> vertex = <span class="dv">0</span>; index &lt; numOfVertices; index++) {
+        <span class="kw">if</span> (indegree[vertex] == <span class="dv">0</span>) {
+            queue.<span class="fu">offer</span>(vertex);
+        }
+    }
+
+    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {
+        <span class="bu">Integer</span> vertex = queue.<span class="fu">poll</span>();
+        result.<span class="fu">add</span>(vertex);
+
+        <span class="co">// now disconnect vertex1 from the graph</span>
+        <span class="co">// and decrease the indegree of the other end of the edge by 1</span>
+        <span class="kw">for</span> (<span class="bu">Integer</span> adjVertex : adj[i]) {
+            indegree[adjVertex]--;
+            <span class="kw">if</span> (indegree[adjVertex] == <span class="dv">0</span>) {
+                queue.<span class="fu">offer</span>(adjVertex);
+            }
+        }
+    }
+
+    <span class="co">// check if the graph had a cycle / loop</span>
+    <span class="kw">if</span> (result.<span class="fu">size</span>() != numOfVertices) {
+        <span class="kw">return</span> <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();
+    }
+    <span class="kw">return</span> result;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="graph-serialization.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +1145,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/05-graph.Rmd",
 "text": "Edit"
 },
 "history": {

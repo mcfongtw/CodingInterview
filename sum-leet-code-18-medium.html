@@ -4,21 +4,21 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Technical Interview</title>
-  <meta name="description" content="References | Technical Interview." />
+  <title>2.7 4Sum / Leet Code 18 / Medium | Technical Interview</title>
+  <meta name="description" content="2.7 4Sum / Leet Code 18 / Medium | Technical Interview." />
   <meta name="generator" content="bookdown 0.18.1 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Technical Interview" />
+  <meta property="og:title" content="2.7 4Sum / Leet Code 18 / Medium | Technical Interview" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="References | Technical Interview." />
+  <meta property="og:description" content="2.7 4Sum / Leet Code 18 / Medium | Technical Interview." />
   <meta name="github-repo" content="mcfongtw/CodingInterview" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Technical Interview" />
+  <meta name="twitter:title" content="2.7 4Sum / Leet Code 18 / Medium | Technical Interview" />
   
-  <meta name="twitter:description" content="References | Technical Interview." />
+  <meta name="twitter:description" content="2.7 4Sum / Leet Code 18 / Medium | Technical Interview." />
   
 
 <meta name="author" content="Michael Fong" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design-a-hashmap-leetcode-706-easy.html"/>
-
+<link rel="prev" href="sum-closest-leetcode-16-medium.html"/>
+<link rel="next" href="sum-ii.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -868,17 +868,86 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="sum-leet-code-18-medium" class="section level2">
+<h2><span class="header-section-number">2.7</span> 4Sum / Leet Code 18 / Medium</h2>
+<div id="description-7" class="section level3">
+<h3><span class="header-section-number">2.7.1</span> Description</h3>
+<p>Given an array nums of n integers and an integer target, are there elements a, b, c, and d in nums such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target. The solution set must not contain duplicate quadruplets.</p>
+</div>
+<div id="example-6" class="section level3">
+<h3><span class="header-section-number">2.7.2</span> Example</h3>
+<p>Given array nums = [1, 0, -1, 0, -2, 2], and target = 0.</p>
+<p>A solution set is: [ [-1, 0, 0, 1], [-2, -1, 1, 2], [-2, 0, 0, 2]]</p>
+</div>
+<div id="solution-6" class="section level3">
+<h3><span class="header-section-number">2.7.3</span> Solution</h3>
+<div id="walkthrough-8" class="section level4">
+<h4><span class="header-section-number">2.7.3.1</span> Walkthrough</h4>
+<p>The solution is similar to 3Sum to find the sum = nums[i] + nums[j] + nums[left] + nums[right] == target. The only difference is there is an extra loop as well as we need to avoid duplicated entry by moving forward the index during search.</p>
+</div>
+<div id="analysis-8" class="section level4">
+<h4><span class="header-section-number">2.7.3.2</span> Analysis</h4>
+<p>Overall, there are three nested loops, the time complexity is <span class="math inline">\(O(n^3)\)</span>, and Auxiliary Space is <span class="math inline">\(O(n^3)\)</span> since one member of any quotriplet is uniquely determined by the other three member. If the numbers are not distinct, the Auxiliary Space as large as is <span class="math inline">\(O(\binom{n}{4}) = O(n^4)\)</span></p>
+</div>
+<div id="algorithm-8" class="section level4">
+<h4><span class="header-section-number">2.7.3.3</span> Algorithm</h4>
+</div>
+<div id="java-code-6" class="section level4">
+<h4><span class="header-section-number">2.7.3.4</span> Java Code</h4>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">fourSum</span>(<span class="dt">int</span>[] num, <span class="dt">int</span> target) {
+    <span class="bu">Arrays</span>.<span class="fu">sort</span>(num); <span class="co">//sort</span>
+    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; res = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();
 
+    <span class="co">//last possible pair is [j=len - 4, i=len-3, left=len - 2, right=len - 1]</span>
+    <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; i &lt; num.<span class="fu">length</span> - <span class="dv">3</span>; i++) {
+
+        <span class="co">// Since the array is sorted, we need to avoid duplicated entry by moving forward the index</span>
+        <span class="kw">if</span> (j == <span class="dv">0</span> || (j &gt; <span class="dv">0</span> &amp;&amp; num[j] != num[j - <span class="dv">1</span>])) {
+            <span class="kw">for</span> (<span class="dt">int</span> i = j + <span class="dv">1</span>; i &lt; num.<span class="fu">length</span> - <span class="dv">2</span>; i++) {
+
+                <span class="co">// Since the array is sorted, we need to avoid duplicated entry by moving forward the index</span>
+                <span class="kw">if</span> (i == j + <span class="dv">1</span> || (i &gt; <span class="dv">0</span> &amp;&amp; num[i] != num[i - <span class="dv">1</span>])) {
+                    <span class="dt">int</span> left = i + <span class="dv">1</span>, right = num.<span class="fu">length</span>-<span class="dv">1</span>;
+
+                    <span class="kw">while</span> (left &lt; right) {
+                        <span class="dt">int</span> sum = num[i] + num[j] + num[left] + num[right];
+
+                        <span class="kw">if</span> (sum == target) {
+                            res.<span class="fu">add</span>(<span class="bu">Arrays</span>.<span class="fu">asList</span>(num[i], num[j], num[left], num[right]));
+
+                            <span class="co">//avoid duplicated entry by moving forward the index</span>
+                            <span class="kw">while</span> (left &lt; right &amp;&amp; num[left] == num[left + <span class="dv">1</span>]) {
+                                left++;
+                            }
+                            <span class="kw">while</span> (left &lt; right &amp;&amp; num[right] == num[right - <span class="dv">1</span>]) {
+                                right--;
+                            }
+                            left++;
+                            right--;
+                        } <span class="kw">else</span> <span class="kw">if</span> (sum &lt; target) {
+                            left++;
+                        } <span class="kw">else</span> {
+                            <span class="co">// sum &gt; 0</span>
+                            right--;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    <span class="kw">return</span> res;
+}</code></pre></div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="design-a-hashmap-leetcode-706-easy.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="sum-closest-leetcode-16-medium.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sum-ii.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -909,7 +978,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/mcfongtw/CodingInterview/edit/master/20-references.Rmd",
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/02-array.Rmd",
 "text": "Edit"
 },
 "history": {
