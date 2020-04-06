@@ -20,15 +20,15 @@ Output:
 
 ### Solution
 
-#### Walkthrough\\
+#### Walkthrough
 Assume they are all anagrams, and we keeps a map to store the list of anagrams associated with their unique pattern
 , i.e. sorted string; that is, $<$sorted\_str, List of anagram$>$. Finally, we collect the list of anagram in another list
 to return.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every word is processed once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -73,15 +73,15 @@ Input: "bbbbb", Output: 1 , Explanation: The answer is "b", with the length of 1
 Input: "pwwkew", Output: 3, Explanation: The answer is "wke", with the length of 3. Note that the answer must be a
 substring, "pwke" is a subsequence and not a substring.
 ### Solution - Sliding Window
-#### Walkthrough\\
+#### Walkthrough
 Use two indices left, and right to remember a substring (sliding window). Use a Set to check for unique characters.
 If there is unique character, move right index outward (expand substring); otherwise, move left index rightward
 (shorten substring). Measure the longest length of substring at each expansion.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every letter is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - Sliding Window
 ```java
@@ -124,7 +124,7 @@ Input: [3,2,1,5,6,4] and k = 2. Output: 5
 Input: [3,2,3,1,2,4,5,5,6] and k = 4. Output: 4
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 Retrieving the $k^{th}$ largest element equals to retriving smallest element in a k-sized min-heap - The value of
 each node is equal to or greater than the value of its parent node and root has the smallest value. Therefore,
 we need to maintain a min-heap (PriorityQueue in java) of \textbf{size k} while inserting new element. Below
@@ -139,11 +139,11 @@ illustrated how to track a 2nd largest element from a min heap
 ```
 Finally, return root as it is the smallest element (*) in the heap.
 
-#### Analysis\\
+#### Analysis
 In addition, add() and remove() take $O(log(k))$, since there are at most k element. Thus, total time complexity is
 $O(n \cdot log(k))$. Total Auxiliary Space is O(k) due to size of the heap.
 
-#### Algorithm\\
+#### Algorithm
  heap \@ref(heap)
 
 ### Java Code
@@ -178,19 +178,19 @@ private void helper(int num, int size) {
 ### Example
 
 ### Solution - Min Heap
-#### Walkthrough\\
+#### Walkthrough
 This is similar to the problem of merging K sorted list. we could compare every leading elements in k array and
 retrieve the node with the smallest value using Min Heap.
 Since the original k arrays were sorted, therefore, we could retrieve all $n \cdot k$ elements in
 sorted order by retrieve the min element from PriorityQueue.
 
-#### Analysis\\
+#### Analysis
 The comparison cost is O(log(k)) for every pop and insertion to priority queue since there are at most k elements
 (from k arrays). Additionally, there are a total number of n nodes in all arrays. Thus, the overall time complexity
 is $O(n \cdot log(k))$ and Auxiliary Space for the ﬁnal array is O(n), where n is the total node number in all k
 arrays.
 
-#### Algorithm\\
+#### Algorithm
  heap \@ref(heap)
 
 ### Java Code- Min Heap
@@ -260,14 +260,14 @@ double booking. Otherwise, return false and do not add the event to the calendar
 ### Example
 
 ### Solution - Interval Data Structure
-#### Walkthrough\\
+#### Walkthrough
 We could implment a Data Structure to illustrate a duration interval which has a method to evaluate if this
 interval is overlapping with another interval.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) for each query as every booking is visited once in the list.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - Interval Data Structure
 ```java
@@ -321,14 +321,14 @@ class MyCalendar {
 ```
 
 ### Solution - TreeMap
-#### Walkthrough\\
+#### Walkthrough
 Alternatively, we could leverage TreeMap to retrieve the logical relations between keys by calling lowerKey().
 The lowerKey() method is used to find the next greatest element after the element passed as the parameter.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(log(n)) for each query as TreeMap takes O(log(n)) to find the location to insert.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - TreeMap
 ```java

@@ -49,7 +49,7 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 ```
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 With the idea of Merge sort:
 
     *  Divide the list in half by finding the middle element of the list. Need to remove the link of middle node
@@ -58,13 +58,13 @@ which was previously links to mid - likely the last node in the 1st half list.
     *  Merge and sort against two sub-lists and return head of the list.
 
 
-#### Analysis\\
+#### Analysis
 In such recursive call to sortList() - O(log(n)) and merge() - O(n), each call creates constant number of temporary
 nodes. For all rounds, it will require $O(1)$ of Auxiliary Space. (Unlike time complexity, storage space in recusive
 scenario can be reused; and thus, will remain $O(1)$ for all rounds)
 
-#### Algorithm\\
- dnc \@ref(dnc), recursive \@ref(recursive), ms \@ref(ms)
+#### Algorithm
+ dnc \@ref(dnc), recursion \@ref(recursion), ms \@ref(ms)
 
 ### Java Code
 ```java
@@ -177,7 +177,7 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 \end{tikzpicture}
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 With Insertion Sort, we could construct a new list by arranging links in place. We need to do the following:
 
     *  Maintain pointers to node that will be insert-attempted (current) and a previously
@@ -217,10 +217,10 @@ draw, rectangle split horizontal}, >=stealth, start chain]
     *  It repeats until no input elements remain.
 
 
-#### Analysis\\
+#### Analysis
 There are two loops, thus time complexity is $O(n^2)$
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -262,7 +262,7 @@ public ListNode insertionSortList(ListNode head) {
 ### Example
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 Have two nested loops, outer loop move one by one indicating the boundary of unsorted subarray [i...j-1] vs [j ... n (or n-1)],
 where the inner loop is to find the minimum element in unsorted array j = [i+1, ... ,n-1]. Swap the found minimum
 element with the current element i.
@@ -271,10 +271,10 @@ element with the current element i.
 [[1, 2, 5, 6], ...]
 ```
 
-#### Analysis\\
+#### Analysis
 There are two loops, thus time complexity is $O(n^2)$
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -312,7 +312,7 @@ public static int[] selectionSortArray(int[] arr){
 ### Example
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 First, we check the indices and continue only if there are still elements to be sorted.  We get the index of the sorted
 pivot and use it to recursively call partition() method with the same parameters as the quickSort() method, but with
 different indices.
@@ -322,11 +322,11 @@ it before the pivot if its value is smaller. By the end of the partitioning, all
 the left of it and all elements greater then the pivot are on the right of it. The pivot is at its final sorted
 position and the function returns this position.
 
-#### Analysis\\
+#### Analysis
 The worst case occurs when the partition process always picks greatest or smallest element as pivot and can be $O(n^2)$.
 In average case, the time complexity is $O(n \cdot log(n))$
 
-#### Algorithm\\
+#### Algorithm
  qs \@ref(qs)
 
 ### Java Code
@@ -379,15 +379,15 @@ Get k largest elements in an array of size n
 ### Example
 
 ### Solution - Sort array before retrieval
-#### Walkthrough\\
+#### Walkthrough
 
-#### Analysis\\
-\begin{enumearte}
+#### Analysis
+
     *  Sort the elements in descending order in $O(n \cdot log(n))$
     *  Get the first k numbers of the sorted array O(k).
 
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code  - Sort array before retrieval
 ```java
@@ -407,14 +407,14 @@ public int[] findFirstKElement(int[] arr, int k) {
 ```
 
 ### Solution - Retrieve k element during sort
-#### Walkthrough\\
+#### Walkthrough
 
-#### Analysis\\
-\begin{enumearte}
+#### Analysis
+
     *  Modify Bubble Sort to run the outer loop at most k times. $O(n \cdot k)$
 
 
-#### Algorithm\\
+#### Algorithm
  bs \@ref(bs)
 
 ### Java Code  - Retrieve k element during sort
@@ -444,7 +444,7 @@ public int[] findFirstKElement(int[] arr, int k) {
 ```
 
 ### Solution - MinHeap
-#### Walkthrough\\
+#### Walkthrough
 Retrieving the top k largest elements equals to retriving smallest element in a k-sized min-heap for k times.The value of
 each node is equal to or greater than the value of its parent node and root has the smallest value. Therefore,
 we need to maintain a min-heap (PriorityQueue in java) of \textbf{size k} while inserting new element. Below
@@ -459,11 +459,11 @@ illustrated how to track a top 2 largest elements from a min heap
 ```
 Finally, return root as it is the smallest element (*) in the heap.
 
-#### Analysis\\
+#### Analysis
 In addition, add() and remove() take $O(log(k))$, since there are at most k element. Thus, total time complexity is
 $O(n \cdot log(k))$. Total Auxiliary Space is O(k) due to size of the heap.
 
-#### Algorithm\\
+#### Algorithm
 heap \@ref(heap)
 
 ### Java Code

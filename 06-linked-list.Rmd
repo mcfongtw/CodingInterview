@@ -67,14 +67,14 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 Explanation: 342 + 465 = 807.
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 First add two number digit by digit until one number run out of digit. Copy the other number for the remaining
 of digits.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n + m) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -183,15 +183,15 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 ```
 
 ### Solution - Recursive
-#### Walkthrough\\
+#### Walkthrough
 For recursive solution, have a pointer remember original next and swap its link with the original head. Call
 the method recursively.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) since every node is visited.
 
-#### Algorithm\\
- recursive \@ref(recursive)
+#### Algorithm
+ recursion \@ref(recursion)
 
 ### Java Code - Recursive
 ```java
@@ -213,7 +213,7 @@ public ListNode reverseList(ListNode node) {
 ```
 
 ### Solution - Iterative
-#### Walkthrough\\
+#### Walkthrough
 For iterative solution, have a helper pointer to remember the previous position and reverse the links between
 current and headPrev nodes while iterating the list.
 
@@ -270,10 +270,10 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 \end{tikzpicture}
 ```
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) since every node is visited.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - Iterative
 ```java
@@ -362,7 +362,7 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 ```
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 Have a helper pointer to to move to (M-1) position and reverse the links between current and prev nodes while
 iterating the list for (N-M) nodes.
 
@@ -422,10 +422,10 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 \end{tikzpicture}
 ```
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -552,7 +552,7 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 ```
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 Have a index to remember when to start reversing and when to stop and reverse the links between current and prev nodes
 while iterating the list until the stop position is met.
 
@@ -612,10 +612,10 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 \end{tikzpicture}
 ```
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -740,15 +740,15 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 Output: false. Explanation: There is no cycle in the linked list.
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 Having two pointers, one running twice as fast as the other(p1 = p1.next; p2 = p2.next.next). If there is a
 cycle, eventually (p1 == p2) representing a node in the cycle. A better traversal algorithm would make p1 at
 the middle of the cycled list whereas p2 at the tail of the cycled list.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -843,15 +843,15 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 Output: null (no cycle). Explanation: There is no cycle in the linked list.
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 Having two pointers, one talks twice as fast as the other. If there is a cycle (p1 == p2), p1 would be at
 the middle of the cycled list whereas p2 at the tail of the cycled list. In other words, *# of steps
 taken from header to p1 equals to # of steps taken from p1 to p2.*
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -941,14 +941,14 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 ```
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 Have two helper pointers to construct to list: one for odd nodes and one for even nodes. Assign those nodes
 accordingly while traversing the list. Finally, connect odd nodes list to even nodes list.
 
-#### Analysis\\
+#### Analysis
 The program should run in O(1) Auxiliary Space and O(n) time complexity.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -997,17 +997,17 @@ together the nodes of the first two lists.
 ### Example
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 This is the same as merge() to sort a list in Leet Code 148. First we will create a new ListNode and a
 current pointer. While traversing the node, compre the nodes at each list and nodes with smaller value
 will attach to the final sorted list. Exit traversal when either list hits the end. If there are nodes
 remained in either list, connect to that remaining nodes of the list.
 
-#### Analysis\\
+#### Analysis
 The cost for each merge is O(n) as every node is visited once in the list. There are two lists, thus the overall time
 complexity remains O(n).
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -1047,17 +1047,17 @@ Merge k sorted linked lists and return it as one sorted list. Analyze and descri
 ### Example
 
 ### Solution - Merge lists one by one
-#### Walkthrough\\
+#### Walkthrough
 One solution is to leverage the previous problem of merging 2 list.
 
-#### Analysis\\
+#### Analysis
 We will need to merge two lists for (k-1) times, where each
 merge() will cost O(n) in time complexity and O(1) in Auxiliary Space. The total cost for merge is
 $\sum_{i=1}^{k-1} (i * \frac{n}{k} + \frac{n}{k}) = O(k \cdot n)$ in time  complexity, where n is the
 total node number in k list. and O(1) in Auxiliary Space. However, this would not be an efficient solution if k
 is large.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - Merge lists one by one
 ```java
@@ -1103,17 +1103,17 @@ public ListNode merge(ListNode l1, ListNode l2) {
 ```
 
 ### Solution - Min Heap
-#### Walkthrough\\
+#### Walkthrough
 We could compare every leading elements in k lists and retrieve the node with the smallest value using Min Heap.
 
-#### Analysis\\
+#### Analysis
 Since the original k lists were sorted, therefore, we could retrieve all $n \cdot k$ elements in
 sorted order by retrieve the min element from PriorityQueue (min heap). The comparison cost is O(log k) for every pop
 and insertion to the priority queue since there are at most k elements (from k list). Additionally, there are
 a total number of n nodes in all lists. Thus, the overall time complexity is $O(\log k \cdot n)$ and Auxiliary Space
 for the ﬁnal list is O(n), where n is the total node number in all k lists.
 
-#### Algorithm\\
+#### Algorithm
  bfs \@ref(bfs), heap \@ref(heap)
 
 ### Java Code - Min Heap
@@ -1207,7 +1207,7 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 return true
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 Locate the mid node, and use that to reverse the 2nd half of the list. We will have two sublists: [o, ..., m] and
 [r, ..., m].
 
@@ -1267,10 +1267,10 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 Traverse the two sublists, beginning at head of original and head of reversed sublists respectively. If any node is
 not equal, then it is NOT palindrome.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -1375,15 +1375,15 @@ intersect). From the head of A, it reads as [4,1,8,4,5]. From the head of B, it 
 intersected node in B.
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 First we compute the length of both list and we get rid of the leading extra node of the longer list.
 For the # of remaining nodes of the longer list should equal to the # of shorter list. We traverse
 both list, and determine when (p1 == p2) - instead of (p1.val == p2.val)
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -1466,16 +1466,16 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 ```
 
 ### Solution - TWO Pass
-#### Walkthrough\\
+#### Walkthrough
 The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list,
 whileas the second iteration is to iterate to the node posiion $length -n + 1$ or prev node position $length - n$,
 begining from a dummy node headPrev. Finally, we need to check and move the head node appropriately if we are deleting
 it.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - TWO Pass
 ```java
@@ -1530,13 +1530,13 @@ public ListNode removeNthFromEnd(ListNode head, int n) {
 ```
 
 ### Solution - ONE Pass
-#### Walkthrough\\
+#### Walkthrough
 The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list,
 whileas the second iteration is to iterate to the node posiion $length -n + 1$ or prev node position $length - n$,
 begining from a dummy node headPrev. Finally, we need to check and move the head node appropriately if we are deleting
 it.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
 ### Java Code - ONE Pass
@@ -1643,16 +1643,16 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 ```
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list and
 check if the request position is over the lenght limit. The second iteration is to traverse to the previous insertion
 position, begining from a dummy node headPrev. Finally, we need to check if we are inserting a head / a tail or an
 intermediate node.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -1803,7 +1803,7 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 ```
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 We could do the following:
 
     *  Locate the middle and tail nodes
@@ -1811,10 +1811,10 @@ We could do the following:
     *  Change links between nodes in 1st and 2nd half of list, one by one.
 
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -1903,14 +1903,14 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 ```
 
 ### Solution - non sorted list
-#### Walkthrough\\
+#### Walkthrough
 If this is a non sorted list, we need to keep a record (HashSet) and a prev node. Remove the duplicate node if
 found - set.add() returns false
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - non sorted list
 ```java
@@ -1938,13 +1938,13 @@ public ListNode removeDuplicates(ListNode head) {
 ```
 
 ### Solution - sorted list
-#### Walkthrough\\
+#### Walkthrough
 If this is a sorted list, we could utilize the fact that if current.data == next.data. Remove the next node.
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - sorted list
 ```java
@@ -2126,10 +2126,10 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 \end{tikzpicture}
 ```
 
-#### Analysis\\
+#### Analysis
 Time complexity is O(n) as every node is visited once.
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java

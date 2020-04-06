@@ -29,7 +29,7 @@ cache.get(4);       // returns 4
 ```
 
 ### Solution - Naive
-#### Walkthrough\\
+#### Walkthrough
 Have a internal map to store cache data and doubly linked list to keep track history of data usage. The head
 node indicate it was recently used where the tail node represents data that were \textbf{most recently used}.
 That is, get(4) would change the cache:
@@ -79,11 +79,11 @@ draw, rectangle split horizontal}, >=stealth, start chain]
 \end{tikzpicture}
 ```
 
-#### Analysis\\
+#### Analysis
 There is a Map used as internal cache and each public method will leverage this internal cache as storage, and thus
 each public method cost O(1) overhead. The Auxiliary Space is O(n)
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - Naive
 ```java
@@ -194,14 +194,14 @@ class LRUCache {
 ```
 
 ### Solution - LinkedHashMap
-#### Walkthrough\\
+#### Walkthrough
 An extended LinkedHashMap is to retrieve elements in the order in which they were last accessed.
 A special constructor is used to create this type of LinkedHashMap:
 new LinkedHashMap(initialCapacity, loadFactor, true) - the true means "accessOrder" instead of the "insertionOrder".
 
-#### Analysis\\
+#### Analysis
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - LinkedHashMap
 ```java
@@ -246,18 +246,18 @@ Stack is a LIFO data structure.
 
 
 ### Solution - Queue
-#### Walkthrough\\
+#### Walkthrough
 Since a Queue is FIFO, that is first element will be processed first. Thus, we want to keep
 the top element to be inserted first. To achieve that, we could use a temp Stack to reverse
 the order after enqueue the added item into the stack first (will be processed first).
 
-#### Analysis\\
+#### Analysis
 
     *  enqueue(item) takes O(n) time.
     *  dequeue() takes O(1) as it is only polling the top element.
 
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - Queue
 ```java
@@ -308,7 +308,7 @@ Queue is a FIFO data structure
 
 
 ### Solution - Array
-#### Walkthrough\\
+#### Walkthrough
 With array implementation, there is a need to resize when enqueueing exceeds limits. Thus, in average
 case, enqueue is constatnt time but will be O(n) in worst case.
 
@@ -316,7 +316,6 @@ In order to mitigate this cost, we could init the Queue with an immutable large 
 move an index to the next element. Finally, there could be a background thread to periodically compact
 this immutable implementation into a new queue.
 
-\}\\
 
     *  enqueue(item) takes O(1) time, but O(n) when resize() is involved.
     %*  enqueue(i, item) takes O(1) time, but O(n) when resize() is involved.
@@ -325,7 +324,7 @@ this immutable implementation into a new queue.
     *  search(val) takes O(n) as it traverse all elements.
 
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - Array
 ```java
@@ -411,9 +410,9 @@ public class MyArrayQueue<T> {
 ```
 
 ### Solution - LinkedList
-#### Walkthrough\\
+#### Walkthrough
 
-#### Analysis\\
+#### Analysis
 
     *  enqueue(item) takes O(1) time.
     %*  enqueue(i, item) takes O(n) time to traverse to the previous element.
@@ -422,7 +421,7 @@ public class MyArrayQueue<T> {
     *  search(val) takes O(n) as it traverses all elements.
 
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code
 ```java
@@ -511,18 +510,18 @@ public class MyLinkedQueue<T> {
 ```
 
 ### Solution - Stack
-#### Walkthrough\\
+#### Walkthrough
 Since a Stack is LIFO, that is last element will be processed first. Thus, we want to keep
 the top element to be inserted last. To achieve that, we could use a temp Stack to reverse
 the order after pushing the added item into the stack first (will be processed last).
 
-#### Analysis\\
+#### Analysis
 
     *  enqueue(item) takes O(n) time.
     *  dequeue() takes O(1) as it is only popping the top element.
 
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - Stack
 ```java
@@ -588,19 +587,19 @@ To be specific, your design should include these functions:
 ### Example
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 A HashSet consists of an array of Node where its position is determined by a hash value / hash function. When
 there is a collision, we could chain the collided values together using a LinkedList or a Tree. For add()
 operation, we need to intensionally skip the duplicated key if the it already exists (from contains(key))
 
 
-#### Analysis\\
+#### Analysis
 The performance of each operation heavily depends on effectiveness of hash function. A good hash function would result
 in less collision, that is less traversal needed for the chaining list, but likely more auxiliary space required. Best
 case for each operation takes O(1). However, In worst case scenario, if it performs all elements on the same chaining
 list, all methods can take up to O(n).
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - LinkedList for Chaining
 ```java
@@ -694,12 +693,12 @@ To be specific, your design should include these functions:
 ### Example
 
 ### Solution
-#### Walkthrough\\
+#### Walkthrough
 A HashMap consists of an array of Node where its position is determined by a hash value / hash function. When
 there is a collision, we could chain the collided values together using a LinkedList or a Tree. One thing different
 from HashSet implementation is that we need to update the (key, val) entry if key already exists.
 
-#### Analysis\\
+#### Analysis
 
     *  add() : Best case takes O(1).
     *  get(): Best case takes O(1)
@@ -707,7 +706,7 @@ from HashSet implementation is that we need to update the (key, val) entry if ke
 
 However, In worst case scenario, if it performs all elements on the same chaining list, all methods can be O(n).
 
-#### Algorithm\\
+#### Algorithm
 
 ### Java Code - LinkedList for Chaining
 ```java
