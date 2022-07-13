@@ -17,6 +17,7 @@ jobs:
         
     - name: Checkout source code 
       uses: actions/checkout@v3
+    
       
     - name: Deploy to GitHub Pages
       if: success()
@@ -25,5 +26,6 @@ jobs:
         repo: mcfongtw/CodingInterview
         target_branch: gh-pages
         build_dir: .
+        verbose: true
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
