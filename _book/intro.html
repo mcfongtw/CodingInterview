@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Technical Interview</title>
+  <meta name="description" content="Technical Interview." />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Technical Interview" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Technical Interview." />
+  <meta name="github-repo" content="mcfongtw/CodingInterview" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Technical Interview" />
+  
+  <meta name="twitter:description" content="Technical Interview." />
+  
+
+<meta name="author" content="Michael Fong" />
+
+
+<meta name="date" content="2020-04-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="arrays.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Technical Interview</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#glossary"><i class="fa fa-check"></i><b>1.1</b> Glossary</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="intro.html"><a href="intro.html#term1"><i class="fa fa-check"></i><b>1.1.1</b> Term 1</a></li>
+<li class="chapter" data-level="1.1.2" data-path="intro.html"><a href="intro.html#term2"><i class="fa fa-check"></i><b>1.1.2</b> Term 2</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="arrays.html"><a href="arrays.html"><i class="fa fa-check"></i><b>2</b> Arrays</a><ul>
+<li class="chapter" data-level="2.1" data-path="arrays.html"><a href="arrays.html#two-sums-i-leetcode-1-easy"><i class="fa fa-check"></i><b>2.1</b> Two Sums I / LeetCode 1 / Easy</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="arrays.html"><a href="arrays.html#description"><i class="fa fa-check"></i><b>2.1.1</b> Description</a></li>
+<li class="chapter" data-level="2.1.2" data-path="arrays.html"><a href="arrays.html#examples"><i class="fa fa-check"></i><b>2.1.2</b> Examples</a></li>
+<li class="chapter" data-level="2.1.3" data-path="arrays.html"><a href="arrays.html#solution---with-hashtable"><i class="fa fa-check"></i><b>2.1.3</b> Solution - with HashTable</a></li>
+<li class="chapter" data-level="2.1.4" data-path="arrays.html"><a href="arrays.html#java-code---with-hashtable"><i class="fa fa-check"></i><b>2.1.4</b> Java Code - with HashTable</a></li>
+<li class="chapter" data-level="2.1.5" data-path="arrays.html"><a href="arrays.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.1.5</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.1.6" data-path="arrays.html"><a href="arrays.html#java-code---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.1.6</b> Java Code - Searching Target Sum from Sorted Array</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="arrays.html"><a href="arrays.html#two-sum-ii---return-true-false"><i class="fa fa-check"></i><b>2.2</b> Two Sum II - Return True / False</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="arrays.html"><a href="arrays.html#description-1"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
+<li class="chapter" data-level="2.2.2" data-path="arrays.html"><a href="arrays.html#example"><i class="fa fa-check"></i><b>2.2.2</b> Example</a></li>
+<li class="chapter" data-level="2.2.3" data-path="arrays.html"><a href="arrays.html#solution"><i class="fa fa-check"></i><b>2.2.3</b> Solution</a></li>
+<li class="chapter" data-level="2.2.4" data-path="arrays.html"><a href="arrays.html#java-code"><i class="fa fa-check"></i><b>2.2.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="arrays.html"><a href="arrays.html#two-sum-iv---input-is-a-bst-leetcode-653-easy"><i class="fa fa-check"></i><b>2.3</b> Two Sum IV - Input is a BST / LeetCode 653 / Easy</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="arrays.html"><a href="arrays.html#description-2"><i class="fa fa-check"></i><b>2.3.1</b> Description</a></li>
+<li class="chapter" data-level="2.3.2" data-path="arrays.html"><a href="arrays.html#example-1"><i class="fa fa-check"></i><b>2.3.2</b> Example</a></li>
+<li class="chapter" data-level="2.3.3" data-path="arrays.html"><a href="arrays.html#solution-1"><i class="fa fa-check"></i><b>2.3.3</b> Solution</a></li>
+<li class="chapter" data-level="2.3.4" data-path="arrays.html"><a href="arrays.html#java-code-1"><i class="fa fa-check"></i><b>2.3.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="arrays.html"><a href="arrays.html#twosum-v"><i class="fa fa-check"></i><b>2.4</b> TwoSum V / / }</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="arrays.html"><a href="arrays.html#description-3"><i class="fa fa-check"></i><b>2.4.1</b> Description</a></li>
+<li class="chapter" data-level="2.4.2" data-path="arrays.html"><a href="arrays.html#example-2"><i class="fa fa-check"></i><b>2.4.2</b> Example</a></li>
+<li class="chapter" data-level="2.4.3" data-path="arrays.html"><a href="arrays.html#solution-2"><i class="fa fa-check"></i><b>2.4.3</b> Solution</a></li>
+<li class="chapter" data-level="2.4.4" data-path="arrays.html"><a href="arrays.html#java-code-2"><i class="fa fa-check"></i><b>2.4.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="arrays.html"><a href="arrays.html#sum-leet-code-15-medium"><i class="fa fa-check"></i><b>2.5</b> 3Sum / Leet Code 15 / Medium}</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="arrays.html"><a href="arrays.html#description-4"><i class="fa fa-check"></i><b>2.5.1</b> Description</a></li>
+<li class="chapter" data-level="2.5.2" data-path="arrays.html"><a href="arrays.html#example-3"><i class="fa fa-check"></i><b>2.5.2</b> Example</a></li>
+<li class="chapter" data-level="2.5.3" data-path="arrays.html"><a href="arrays.html#solution-3"><i class="fa fa-check"></i><b>2.5.3</b> Solution</a></li>
+<li class="chapter" data-level="2.5.4" data-path="arrays.html"><a href="arrays.html#java-code-3"><i class="fa fa-check"></i><b>2.5.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="arrays.html"><a href="arrays.html#sum-closest-leetcode-16-medium"><i class="fa fa-check"></i><b>2.6</b> 3 Sum Closest / LeetCode 16 / Medium}</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="arrays.html"><a href="arrays.html#description-5"><i class="fa fa-check"></i><b>2.6.1</b> Description</a></li>
+<li class="chapter" data-level="2.6.2" data-path="arrays.html"><a href="arrays.html#example-4"><i class="fa fa-check"></i><b>2.6.2</b> Example</a></li>
+<li class="chapter" data-level="2.6.3" data-path="arrays.html"><a href="arrays.html#solution-4"><i class="fa fa-check"></i><b>2.6.3</b> Solution</a></li>
+<li class="chapter" data-level="2.6.4" data-path="arrays.html"><a href="arrays.html#java-code-4"><i class="fa fa-check"></i><b>2.6.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="arrays.html"><a href="arrays.html#sum-leet-code-18-medium"><i class="fa fa-check"></i><b>2.7</b> 4Sum / Leet Code 18 / Medium}</a><ul>
+<li class="chapter" data-level="2.7.1" data-path="arrays.html"><a href="arrays.html#description-6"><i class="fa fa-check"></i><b>2.7.1</b> Description</a></li>
+<li class="chapter" data-level="2.7.2" data-path="arrays.html"><a href="arrays.html#example-5"><i class="fa fa-check"></i><b>2.7.2</b> Example</a></li>
+<li class="chapter" data-level="2.7.3" data-path="arrays.html"><a href="arrays.html#solution-5"><i class="fa fa-check"></i><b>2.7.3</b> Solution</a></li>
+<li class="chapter" data-level="2.7.4" data-path="arrays.html"><a href="arrays.html#java-code-5"><i class="fa fa-check"></i><b>2.7.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="arrays.html"><a href="arrays.html#sum-ii"><i class="fa fa-check"></i><b>2.8</b> 4Sum II}</a><ul>
+<li class="chapter" data-level="2.8.1" data-path="arrays.html"><a href="arrays.html#description-7"><i class="fa fa-check"></i><b>2.8.1</b> Description</a></li>
+<li class="chapter" data-level="2.8.2" data-path="arrays.html"><a href="arrays.html#example-6"><i class="fa fa-check"></i><b>2.8.2</b> Example</a></li>
+<li class="chapter" data-level="2.8.3" data-path="arrays.html"><a href="arrays.html#java-code-6"><i class="fa fa-check"></i><b>2.8.3</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="arrays.html"><a href="arrays.html#max-gain-firecode-level-2"><i class="fa fa-check"></i><b>2.9</b> Max Gain / Firecode / Level 2}</a><ul>
+<li class="chapter" data-level="2.9.1" data-path="arrays.html"><a href="arrays.html#description-8"><i class="fa fa-check"></i><b>2.9.1</b> Description</a></li>
+<li class="chapter" data-level="2.9.2" data-path="arrays.html"><a href="arrays.html#example-7"><i class="fa fa-check"></i><b>2.9.2</b> Example</a></li>
+<li class="chapter" data-level="2.9.3" data-path="arrays.html"><a href="arrays.html#solution-6"><i class="fa fa-check"></i><b>2.9.3</b> Solution</a></li>
+<li class="chapter" data-level="2.9.4" data-path="arrays.html"><a href="arrays.html#java-code-7"><i class="fa fa-check"></i><b>2.9.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.10" data-path="arrays.html"><a href="arrays.html#pascals-triangle-leet-code-118-easy"><i class="fa fa-check"></i><b>2.10</b> Pascal’s Triangle / Leet Code 118 / Easy}</a><ul>
+<li class="chapter" data-level="2.10.1" data-path="arrays.html"><a href="arrays.html#description-9"><i class="fa fa-check"></i><b>2.10.1</b> Description</a></li>
+<li class="chapter" data-level="2.10.2" data-path="arrays.html"><a href="arrays.html#example-8"><i class="fa fa-check"></i><b>2.10.2</b> Example</a></li>
+<li class="chapter" data-level="2.10.3" data-path="arrays.html"><a href="arrays.html#solution-7"><i class="fa fa-check"></i><b>2.10.3</b> Solution</a></li>
+<li class="chapter" data-level="2.10.4" data-path="arrays.html"><a href="arrays.html#java-code-8"><i class="fa fa-check"></i><b>2.10.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.11" data-path="arrays.html"><a href="arrays.html#search-in-rotated-sorted-array-leet-code-33-medium"><i class="fa fa-check"></i><b>2.11</b> Search in Rotated Sorted Array / Leet Code 33 / Medium }</a><ul>
+<li class="chapter" data-level="2.11.1" data-path="arrays.html"><a href="arrays.html#description-10"><i class="fa fa-check"></i><b>2.11.1</b> Description</a></li>
+<li class="chapter" data-level="2.11.2" data-path="arrays.html"><a href="arrays.html#example-9"><i class="fa fa-check"></i><b>2.11.2</b> Example</a></li>
+<li class="chapter" data-level="2.11.3" data-path="arrays.html"><a href="arrays.html#java-code-9"><i class="fa fa-check"></i><b>2.11.3</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.12" data-path="arrays.html"><a href="arrays.html#median-of-two-sorted-arrays-leet-code-4-hard"><i class="fa fa-check"></i><b>2.12</b> Median of Two Sorted Arrays / Leet Code 4 / Hard}</a><ul>
+<li class="chapter" data-level="2.12.1" data-path="arrays.html"><a href="arrays.html#description-11"><i class="fa fa-check"></i><b>2.12.1</b> Description</a></li>
+<li class="chapter" data-level="2.12.2" data-path="arrays.html"><a href="arrays.html#example-10"><i class="fa fa-check"></i><b>2.12.2</b> Example</a></li>
+<li class="chapter" data-level="2.12.3" data-path="arrays.html"><a href="arrays.html#solution-8"><i class="fa fa-check"></i><b>2.12.3</b> Solution</a></li>
+<li class="chapter" data-level="2.12.4" data-path="arrays.html"><a href="arrays.html#java-code-10"><i class="fa fa-check"></i><b>2.12.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.13" data-path="arrays.html"><a href="arrays.html#retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order"><i class="fa fa-check"></i><b>2.13</b> Retrieve List of Elements Appeared at <span class="math inline">\(k^{th}\)</span> Time and in Insertion Order / /}</a><ul>
+<li class="chapter" data-level="2.13.1" data-path="arrays.html"><a href="arrays.html#description-12"><i class="fa fa-check"></i><b>2.13.1</b> Description</a></li>
+<li class="chapter" data-level="2.13.2" data-path="arrays.html"><a href="arrays.html#example-11"><i class="fa fa-check"></i><b>2.13.2</b> Example</a></li>
+<li class="chapter" data-level="2.13.3" data-path="arrays.html"><a href="arrays.html#solution-9"><i class="fa fa-check"></i><b>2.13.3</b> Solution</a></li>
+<li class="chapter" data-level="2.13.4" data-path="arrays.html"><a href="arrays.html#java-code-11"><i class="fa fa-check"></i><b>2.13.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.14" data-path="arrays.html"><a href="arrays.html#permutations-leetcode-46-medium"><i class="fa fa-check"></i><b>2.14</b> Permutations / LeetCode 46 / Medium}</a><ul>
+<li class="chapter" data-level="2.14.1" data-path="arrays.html"><a href="arrays.html#description-13"><i class="fa fa-check"></i><b>2.14.1</b> Description</a></li>
+<li class="chapter" data-level="2.14.2" data-path="arrays.html"><a href="arrays.html#example-12"><i class="fa fa-check"></i><b>2.14.2</b> Example</a></li>
+<li class="chapter" data-level="2.14.3" data-path="arrays.html"><a href="arrays.html#solution---backtrack-with-memoization"><i class="fa fa-check"></i><b>2.14.3</b> Solution - Backtrack with Memoization}</a></li>
+<li class="chapter" data-level="2.14.4" data-path="arrays.html"><a href="arrays.html#java-code---backtrack-with-memoization"><i class="fa fa-check"></i><b>2.14.4</b> Java Code - Backtrack with Memoization}</a></li>
+</ul></li>
+<li class="chapter" data-level="2.15" data-path="arrays.html"><a href="arrays.html#permutations-ii-leetcode-47-medium"><i class="fa fa-check"></i><b>2.15</b> Permutations II / LeetCode 47 / Medium}</a><ul>
+<li class="chapter" data-level="2.15.1" data-path="arrays.html"><a href="arrays.html#description-14"><i class="fa fa-check"></i><b>2.15.1</b> Description</a></li>
+<li class="chapter" data-level="2.15.2" data-path="arrays.html"><a href="arrays.html#example-13"><i class="fa fa-check"></i><b>2.15.2</b> Example</a></li>
+<li class="chapter" data-level="2.15.3" data-path="arrays.html"><a href="arrays.html#solution---backtrack-with-memoization-1"><i class="fa fa-check"></i><b>2.15.3</b> Solution - Backtrack with Memoization}</a></li>
+<li class="chapter" data-level="2.15.4" data-path="arrays.html"><a href="arrays.html#java-code---backtrack-with-memoization-1"><i class="fa fa-check"></i><b>2.15.4</b> Java Code - Backtrack with Memoization}</a></li>
+</ul></li>
+<li class="chapter" data-level="2.16" data-path="arrays.html"><a href="arrays.html#subsets-leetcode-78-medium"><i class="fa fa-check"></i><b>2.16</b> Subsets / LeetCode 78 / Medium}</a><ul>
+<li class="chapter" data-level="2.16.1" data-path="arrays.html"><a href="arrays.html#description-15"><i class="fa fa-check"></i><b>2.16.1</b> Description</a></li>
+<li class="chapter" data-level="2.16.2" data-path="arrays.html"><a href="arrays.html#example-14"><i class="fa fa-check"></i><b>2.16.2</b> Example</a></li>
+<li class="chapter" data-level="2.16.3" data-path="arrays.html"><a href="arrays.html#solution-10"><i class="fa fa-check"></i><b>2.16.3</b> Solution</a></li>
+<li class="chapter" data-level="2.16.4" data-path="arrays.html"><a href="arrays.html#java-code-12"><i class="fa fa-check"></i><b>2.16.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.17" data-path="arrays.html"><a href="arrays.html#subsets-ii-leetcode-90-medium"><i class="fa fa-check"></i><b>2.17</b> Subsets II / LeetCode 90 / Medium}</a><ul>
+<li class="chapter" data-level="2.17.1" data-path="arrays.html"><a href="arrays.html#description-16"><i class="fa fa-check"></i><b>2.17.1</b> Description</a></li>
+<li class="chapter" data-level="2.17.2" data-path="arrays.html"><a href="arrays.html#example-15"><i class="fa fa-check"></i><b>2.17.2</b> Example</a></li>
+<li class="chapter" data-level="2.17.3" data-path="arrays.html"><a href="arrays.html#solution-11"><i class="fa fa-check"></i><b>2.17.3</b> Solution</a></li>
+<li class="chapter" data-level="2.17.4" data-path="arrays.html"><a href="arrays.html#java-code-13"><i class="fa fa-check"></i><b>2.17.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.18" data-path="arrays.html"><a href="arrays.html#sort-array-by-parity-leetcode-906-easy"><i class="fa fa-check"></i><b>2.18</b> Sort Array By Parity / LeetCode 906 / Easy}</a><ul>
+<li class="chapter" data-level="2.18.1" data-path="arrays.html"><a href="arrays.html#description-17"><i class="fa fa-check"></i><b>2.18.1</b> Description</a></li>
+<li class="chapter" data-level="2.18.2" data-path="arrays.html"><a href="arrays.html#example-16"><i class="fa fa-check"></i><b>2.18.2</b> Example</a></li>
+<li class="chapter" data-level="2.18.3" data-path="arrays.html"><a href="arrays.html#solution-12"><i class="fa fa-check"></i><b>2.18.3</b> Solution</a></li>
+<li class="chapter" data-level="2.18.4" data-path="arrays.html"><a href="arrays.html#java-code-14"><i class="fa fa-check"></i><b>2.18.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.19" data-path="arrays.html"><a href="arrays.html#merge-intervals-leetcode-56-medium"><i class="fa fa-check"></i><b>2.19</b> Merge Intervals / LeetCode 56 / Medium}</a><ul>
+<li class="chapter" data-level="2.19.1" data-path="arrays.html"><a href="arrays.html#description-18"><i class="fa fa-check"></i><b>2.19.1</b> Description</a></li>
+<li class="chapter" data-level="2.19.2" data-path="arrays.html"><a href="arrays.html#example-17"><i class="fa fa-check"></i><b>2.19.2</b> Example</a></li>
+<li class="chapter" data-level="2.19.3" data-path="arrays.html"><a href="arrays.html#solution-13"><i class="fa fa-check"></i><b>2.19.3</b> Solution</a></li>
+<li class="chapter" data-level="2.19.4" data-path="arrays.html"><a href="arrays.html#java-code-15"><i class="fa fa-check"></i><b>2.19.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.20" data-path="arrays.html"><a href="arrays.html#non-overlapping-intervals-leetcode-435-medium"><i class="fa fa-check"></i><b>2.20</b> Non-overlapping Intervals / LeetCode 435 / Medium}</a><ul>
+<li class="chapter" data-level="2.20.1" data-path="arrays.html"><a href="arrays.html#description-19"><i class="fa fa-check"></i><b>2.20.1</b> Description</a></li>
+<li class="chapter" data-level="2.20.2" data-path="arrays.html"><a href="arrays.html#example-18"><i class="fa fa-check"></i><b>2.20.2</b> Example</a></li>
+<li class="chapter" data-level="2.20.3" data-path="arrays.html"><a href="arrays.html#solution-14"><i class="fa fa-check"></i><b>2.20.3</b> Solution</a></li>
+<li class="chapter" data-level="2.20.4" data-path="arrays.html"><a href="arrays.html#java-code-16"><i class="fa fa-check"></i><b>2.20.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.21" data-path="arrays.html"><a href="arrays.html#interval-list-intersections-leetcode-986-medium"><i class="fa fa-check"></i><b>2.21</b> Interval List Intersections / LeetCode 986 / Medium}</a><ul>
+<li class="chapter" data-level="2.21.1" data-path="arrays.html"><a href="arrays.html#description-20"><i class="fa fa-check"></i><b>2.21.1</b> Description</a></li>
+<li class="chapter" data-level="2.21.2" data-path="arrays.html"><a href="arrays.html#example-19"><i class="fa fa-check"></i><b>2.21.2</b> Example</a></li>
+<li class="chapter" data-level="2.21.3" data-path="arrays.html"><a href="arrays.html#solution-15"><i class="fa fa-check"></i><b>2.21.3</b> Solution</a></li>
+<li class="chapter" data-level="2.21.4" data-path="arrays.html"><a href="arrays.html#java-code-17"><i class="fa fa-check"></i><b>2.21.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.22" data-path="arrays.html"><a href="arrays.html#insert-interval-leetcode-57-hard"><i class="fa fa-check"></i><b>2.22</b> Insert Interval / LeetCode 57 / Hard}</a><ul>
+<li class="chapter" data-level="2.22.1" data-path="arrays.html"><a href="arrays.html#description-21"><i class="fa fa-check"></i><b>2.22.1</b> Description</a></li>
+<li class="chapter" data-level="2.22.2" data-path="arrays.html"><a href="arrays.html#example-20"><i class="fa fa-check"></i><b>2.22.2</b> Example</a></li>
+<li class="chapter" data-level="2.22.3" data-path="arrays.html"><a href="arrays.html#solution-16"><i class="fa fa-check"></i><b>2.22.3</b> Solution</a></li>
+<li class="chapter" data-level="2.22.4" data-path="arrays.html"><a href="arrays.html#java-code-18"><i class="fa fa-check"></i><b>2.22.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.23" data-path="arrays.html"><a href="arrays.html#find-common-characters-leetcode-1002-easy"><i class="fa fa-check"></i><b>2.23</b> Find Common Characters / LeetCode 1002 / Easy}</a><ul>
+<li class="chapter" data-level="2.23.1" data-path="arrays.html"><a href="arrays.html#description-22"><i class="fa fa-check"></i><b>2.23.1</b> Description</a></li>
+<li class="chapter" data-level="2.23.2" data-path="arrays.html"><a href="arrays.html#example-21"><i class="fa fa-check"></i><b>2.23.2</b> Example</a></li>
+<li class="chapter" data-level="2.23.3" data-path="arrays.html"><a href="arrays.html#solution-17"><i class="fa fa-check"></i><b>2.23.3</b> Solution</a></li>
+<li class="chapter" data-level="2.23.4" data-path="arrays.html"><a href="arrays.html#java-code-19"><i class="fa fa-check"></i><b>2.23.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.24" data-path="arrays.html"><a href="arrays.html#top-k-frequently-appeared-elements-leet-code-347-medium"><i class="fa fa-check"></i><b>2.24</b> Top K Frequently Appeared Elements / Leet Code 347 / Medium}</a><ul>
+<li class="chapter" data-level="2.24.1" data-path="arrays.html"><a href="arrays.html#description-23"><i class="fa fa-check"></i><b>2.24.1</b> Description</a></li>
+<li class="chapter" data-level="2.24.2" data-path="arrays.html"><a href="arrays.html#example-22"><i class="fa fa-check"></i><b>2.24.2</b> Example</a></li>
+<li class="chapter" data-level="2.24.3" data-path="arrays.html"><a href="arrays.html#java-code-20"><i class="fa fa-check"></i><b>2.24.3</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.25" data-path="arrays.html"><a href="arrays.html#count-iterations-towards-filling-1s-in-an-array"><i class="fa fa-check"></i><b>2.25</b> Count iterations towards filling 1’s in an array / / }</a><ul>
+<li class="chapter" data-level="2.25.1" data-path="arrays.html"><a href="arrays.html#description-24"><i class="fa fa-check"></i><b>2.25.1</b> Description</a></li>
+<li class="chapter" data-level="2.25.2" data-path="arrays.html"><a href="arrays.html#example-23"><i class="fa fa-check"></i><b>2.25.2</b> Example</a></li>
+<li class="chapter" data-level="2.25.3" data-path="arrays.html"><a href="arrays.html#solution-18"><i class="fa fa-check"></i><b>2.25.3</b> Solution</a></li>
+<li class="chapter" data-level="2.25.4" data-path="arrays.html"><a href="arrays.html#java-code-21"><i class="fa fa-check"></i><b>2.25.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.26" data-path="arrays.html"><a href="arrays.html#maximum-subarray-leet-code-53-easy"><i class="fa fa-check"></i><b>2.26</b> Maximum Subarray / Leet Code 53 / Easy}</a><ul>
+<li class="chapter" data-level="2.26.1" data-path="arrays.html"><a href="arrays.html#description-25"><i class="fa fa-check"></i><b>2.26.1</b> Description</a></li>
+<li class="chapter" data-level="2.26.2" data-path="arrays.html"><a href="arrays.html#example-24"><i class="fa fa-check"></i><b>2.26.2</b> Example</a></li>
+<li class="chapter" data-level="2.26.3" data-path="arrays.html"><a href="arrays.html#solution-19"><i class="fa fa-check"></i><b>2.26.3</b> Solution</a></li>
+<li class="chapter" data-level="2.26.4" data-path="arrays.html"><a href="arrays.html#java-code-22"><i class="fa fa-check"></i><b>2.26.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.27" data-path="arrays.html"><a href="arrays.html#maximum-product-subarray-leet-code-152-medium"><i class="fa fa-check"></i><b>2.27</b> Maximum Product Subarray / Leet Code 152 / Medium}</a><ul>
+<li class="chapter" data-level="2.27.1" data-path="arrays.html"><a href="arrays.html#description-26"><i class="fa fa-check"></i><b>2.27.1</b> Description</a></li>
+<li class="chapter" data-level="2.27.2" data-path="arrays.html"><a href="arrays.html#example-25"><i class="fa fa-check"></i><b>2.27.2</b> Example</a></li>
+<li class="chapter" data-level="2.27.3" data-path="arrays.html"><a href="arrays.html#solution-20"><i class="fa fa-check"></i><b>2.27.3</b> Solution</a></li>
+<li class="chapter" data-level="2.27.4" data-path="arrays.html"><a href="arrays.html#java-code-23"><i class="fa fa-check"></i><b>2.27.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.28" data-path="arrays.html"><a href="arrays.html#longest-valid-parentheses-leet-code-32-hard"><i class="fa fa-check"></i><b>2.28</b> Longest Valid Parentheses / Leet Code 32 / Hard}</a><ul>
+<li class="chapter" data-level="2.28.1" data-path="arrays.html"><a href="arrays.html#description-27"><i class="fa fa-check"></i><b>2.28.1</b> Description</a></li>
+<li class="chapter" data-level="2.28.2" data-path="arrays.html"><a href="arrays.html#example-26"><i class="fa fa-check"></i><b>2.28.2</b> Example</a></li>
+<li class="chapter" data-level="2.28.3" data-path="arrays.html"><a href="arrays.html#solution-21"><i class="fa fa-check"></i><b>2.28.3</b> Solution</a></li>
+<li class="chapter" data-level="2.28.4" data-path="arrays.html"><a href="arrays.html#java-code-24"><i class="fa fa-check"></i><b>2.28.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.29" data-path="arrays.html"><a href="arrays.html#longest-increasing-subsequence-leet-code-300-medium"><i class="fa fa-check"></i><b>2.29</b> Longest Increasing Subsequence / Leet Code 300 / Medium}</a><ul>
+<li class="chapter" data-level="2.29.1" data-path="arrays.html"><a href="arrays.html#description-28"><i class="fa fa-check"></i><b>2.29.1</b> Description</a></li>
+<li class="chapter" data-level="2.29.2" data-path="arrays.html"><a href="arrays.html#example-27"><i class="fa fa-check"></i><b>2.29.2</b> Example</a></li>
+<li class="chapter" data-level="2.29.3" data-path="arrays.html"><a href="arrays.html#solution--brute-force"><i class="fa fa-check"></i><b>2.29.3</b> Solution- Brute Force}</a></li>
+<li class="chapter" data-level="2.29.4" data-path="arrays.html"><a href="arrays.html#java-code---brute-force"><i class="fa fa-check"></i><b>2.29.4</b> Java Code - Brute Force}</a></li>
+<li class="chapter" data-level="2.29.5" data-path="arrays.html"><a href="arrays.html#solution---binary-search"><i class="fa fa-check"></i><b>2.29.5</b> Solution - Binary Search}</a></li>
+<li class="chapter" data-level="2.29.6" data-path="arrays.html"><a href="arrays.html#java-code---binary-search"><i class="fa fa-check"></i><b>2.29.6</b> Java Code - Binary Search}</a></li>
+</ul></li>
+<li class="chapter" data-level="2.30" data-path="arrays.html"><a href="arrays.html#paint-house-leet-code-256-easy"><i class="fa fa-check"></i><b>2.30</b> Paint House / Leet Code 256 / Easy}</a><ul>
+<li class="chapter" data-level="2.30.1" data-path="arrays.html"><a href="arrays.html#description-29"><i class="fa fa-check"></i><b>2.30.1</b> Description</a></li>
+<li class="chapter" data-level="2.30.2" data-path="arrays.html"><a href="arrays.html#example-28"><i class="fa fa-check"></i><b>2.30.2</b> Example</a></li>
+<li class="chapter" data-level="2.30.3" data-path="arrays.html"><a href="arrays.html#solution-22"><i class="fa fa-check"></i><b>2.30.3</b> Solution</a></li>
+<li class="chapter" data-level="2.30.4" data-path="arrays.html"><a href="arrays.html#java-code-25"><i class="fa fa-check"></i><b>2.30.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.31" data-path="arrays.html"><a href="arrays.html#climbing-stairs-leet-code-70-easy"><i class="fa fa-check"></i><b>2.31</b> Climbing Stairs / Leet Code 70 / Easy}</a><ul>
+<li class="chapter" data-level="2.31.1" data-path="arrays.html"><a href="arrays.html#description-30"><i class="fa fa-check"></i><b>2.31.1</b> Description</a></li>
+<li class="chapter" data-level="2.31.2" data-path="arrays.html"><a href="arrays.html#example-29"><i class="fa fa-check"></i><b>2.31.2</b> Example</a></li>
+<li class="chapter" data-level="2.31.3" data-path="arrays.html"><a href="arrays.html#solution-23"><i class="fa fa-check"></i><b>2.31.3</b> Solution</a></li>
+<li class="chapter" data-level="2.31.4" data-path="arrays.html"><a href="arrays.html#java-code-26"><i class="fa fa-check"></i><b>2.31.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.32" data-path="arrays.html"><a href="arrays.html#find-the-maximum-number-of-repetitions-firecode-level-3"><i class="fa fa-check"></i><b>2.32</b> Find the Maximum Number of Repetitions / Firecode / Level 3}</a><ul>
+<li class="chapter" data-level="2.32.1" data-path="arrays.html"><a href="arrays.html#description-31"><i class="fa fa-check"></i><b>2.32.1</b> Description</a></li>
+<li class="chapter" data-level="2.32.2" data-path="arrays.html"><a href="arrays.html#example-30"><i class="fa fa-check"></i><b>2.32.2</b> Example</a></li>
+<li class="chapter" data-level="2.32.3" data-path="arrays.html"><a href="arrays.html#solution-24"><i class="fa fa-check"></i><b>2.32.3</b> Solution</a></li>
+<li class="chapter" data-level="2.32.4" data-path="arrays.html"><a href="arrays.html#java-code-27"><i class="fa fa-check"></i><b>2.32.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.33" data-path="arrays.html"><a href="arrays.html#house-robber-leet-code-198-easy"><i class="fa fa-check"></i><b>2.33</b> House Robber / Leet Code 198 / Easy}</a><ul>
+<li class="chapter" data-level="2.33.1" data-path="arrays.html"><a href="arrays.html#description-32"><i class="fa fa-check"></i><b>2.33.1</b> Description</a></li>
+<li class="chapter" data-level="2.33.2" data-path="arrays.html"><a href="arrays.html#example-31"><i class="fa fa-check"></i><b>2.33.2</b> Example</a></li>
+<li class="chapter" data-level="2.33.3" data-path="arrays.html"><a href="arrays.html#solution-25"><i class="fa fa-check"></i><b>2.33.3</b> Solution</a></li>
+<li class="chapter" data-level="2.33.4" data-path="arrays.html"><a href="arrays.html#java-code-28"><i class="fa fa-check"></i><b>2.33.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.34" data-path="arrays.html"><a href="arrays.html#best-time-to-buy-and-sell-stock-leet-code-121-easy"><i class="fa fa-check"></i><b>2.34</b> Best Time to Buy and Sell Stock / Leet Code 121 / Easy}</a><ul>
+<li class="chapter" data-level="2.34.1" data-path="arrays.html"><a href="arrays.html#description-33"><i class="fa fa-check"></i><b>2.34.1</b> Description</a></li>
+<li class="chapter" data-level="2.34.2" data-path="arrays.html"><a href="arrays.html#example-32"><i class="fa fa-check"></i><b>2.34.2</b> Example</a></li>
+<li class="chapter" data-level="2.34.3" data-path="arrays.html"><a href="arrays.html#solution-26"><i class="fa fa-check"></i><b>2.34.3</b> Solution</a></li>
+<li class="chapter" data-level="2.34.4" data-path="arrays.html"><a href="arrays.html#java-code-29"><i class="fa fa-check"></i><b>2.34.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.35" data-path="arrays.html"><a href="arrays.html#best-time-to-buy-and-sell-stock-ii-leet-code-122-easy"><i class="fa fa-check"></i><b>2.35</b> Best Time to Buy and Sell Stock II / Leet Code 122 / Easy}</a><ul>
+<li class="chapter" data-level="2.35.1" data-path="arrays.html"><a href="arrays.html#description-34"><i class="fa fa-check"></i><b>2.35.1</b> Description</a></li>
+<li class="chapter" data-level="2.35.2" data-path="arrays.html"><a href="arrays.html#example-33"><i class="fa fa-check"></i><b>2.35.2</b> Example</a></li>
+<li class="chapter" data-level="2.35.3" data-path="arrays.html"><a href="arrays.html#solution-27"><i class="fa fa-check"></i><b>2.35.3</b> Solution</a></li>
+<li class="chapter" data-level="2.35.4" data-path="arrays.html"><a href="arrays.html#java-code-30"><i class="fa fa-check"></i><b>2.35.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.36" data-path="arrays.html"><a href="arrays.html#best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium"><i class="fa fa-check"></i><b>2.36</b> Best Time to Buy and Sell Stock with Cooldown / Leet Code 309 / Medium}</a><ul>
+<li class="chapter" data-level="2.36.1" data-path="arrays.html"><a href="arrays.html#description-35"><i class="fa fa-check"></i><b>2.36.1</b> Description</a></li>
+<li class="chapter" data-level="2.36.2" data-path="arrays.html"><a href="arrays.html#example-34"><i class="fa fa-check"></i><b>2.36.2</b> Example</a></li>
+<li class="chapter" data-level="2.36.3" data-path="arrays.html"><a href="arrays.html#solution-28"><i class="fa fa-check"></i><b>2.36.3</b> Solution</a></li>
+<li class="chapter" data-level="2.36.4" data-path="arrays.html"><a href="arrays.html#java-code-31"><i class="fa fa-check"></i><b>2.36.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.37" data-path="arrays.html"><a href="arrays.html#minimum-swaps-to-make-sequences-increasing-leetcode-801-medium"><i class="fa fa-check"></i><b>2.37</b> Minimum Swaps To Make Sequences Increasing / LeetCode 801 / Medium}</a><ul>
+<li class="chapter" data-level="2.37.1" data-path="arrays.html"><a href="arrays.html#description-36"><i class="fa fa-check"></i><b>2.37.1</b> Description</a></li>
+<li class="chapter" data-level="2.37.2" data-path="arrays.html"><a href="arrays.html#example-35"><i class="fa fa-check"></i><b>2.37.2</b> Example</a></li>
+<li class="chapter" data-level="2.37.3" data-path="arrays.html"><a href="arrays.html#solution-29"><i class="fa fa-check"></i><b>2.37.3</b> Solution</a></li>
+<li class="chapter" data-level="2.37.4" data-path="arrays.html"><a href="arrays.html#java-code-32"><i class="fa fa-check"></i><b>2.37.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.38" data-path="arrays.html"><a href="arrays.html#retrieve-an-optimal-computation-from-an-array"><i class="fa fa-check"></i><b>2.38</b> Retrieve an Optimal Computation from an Array / / }</a><ul>
+<li class="chapter" data-level="2.38.1" data-path="arrays.html"><a href="arrays.html#description-37"><i class="fa fa-check"></i><b>2.38.1</b> Description</a></li>
+<li class="chapter" data-level="2.38.2" data-path="arrays.html"><a href="arrays.html#example-36"><i class="fa fa-check"></i><b>2.38.2</b> Example</a></li>
+<li class="chapter" data-level="2.38.3" data-path="arrays.html"><a href="arrays.html#solution---recursion"><i class="fa fa-check"></i><b>2.38.3</b> Solution - Recursion}</a></li>
+<li class="chapter" data-level="2.38.4" data-path="arrays.html"><a href="arrays.html#java-code---recursion"><i class="fa fa-check"></i><b>2.38.4</b> Java Code - Recursion}</a></li>
+<li class="chapter" data-level="2.38.5" data-path="arrays.html"><a href="arrays.html#solution---recursion-with-memoization"><i class="fa fa-check"></i><b>2.38.5</b> Solution - Recursion with Memoization}</a></li>
+<li class="chapter" data-level="2.38.6" data-path="arrays.html"><a href="arrays.html#java-code---recursion-with-memoization"><i class="fa fa-check"></i><b>2.38.6</b> Java Code - Recursion with Memoization}</a></li>
+<li class="chapter" data-level="2.38.7" data-path="arrays.html"><a href="arrays.html#solution---dynamic-programming-with-tabulation"><i class="fa fa-check"></i><b>2.38.7</b> Solution - Dynamic Programming with Tabulation}</a></li>
+<li class="chapter" data-level="2.38.8" data-path="arrays.html"><a href="arrays.html#java-code---dynamic-programming-with-tabulation"><i class="fa fa-check"></i><b>2.38.8</b> Java Code - Dynamic Programming with Tabulation}</a></li>
+</ul></li>
+<li class="chapter" data-level="2.39" data-path="arrays.html"><a href="arrays.html#shortest-word-distance"><i class="fa fa-check"></i><b>2.39</b> Shortest Word Distance / / }</a><ul>
+<li class="chapter" data-level="2.39.1" data-path="arrays.html"><a href="arrays.html#description-38"><i class="fa fa-check"></i><b>2.39.1</b> Description</a></li>
+<li class="chapter" data-level="2.39.2" data-path="arrays.html"><a href="arrays.html#example-37"><i class="fa fa-check"></i><b>2.39.2</b> Example</a></li>
+<li class="chapter" data-level="2.39.3" data-path="arrays.html"><a href="arrays.html#solution-30"><i class="fa fa-check"></i><b>2.39.3</b> Solution</a></li>
+<li class="chapter" data-level="2.39.4" data-path="arrays.html"><a href="arrays.html#java-code-33"><i class="fa fa-check"></i><b>2.39.4</b> Java Code</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="literature.html"><a href="literature.html"><i class="fa fa-check"></i><b>3</b> Literature</a><ul>
+<li class="chapter" data-level="3.1" data-path="literature.html"><a href="literature.html#two-sum-iv---input-is-a-bst-leetcode-653-easy-1"><i class="fa fa-check"></i><b>3.1</b> Two Sum IV - Input is a BST / LeetCode 653 / Easy</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="literature.html"><a href="literature.html#description-39"><i class="fa fa-check"></i><b>3.1.1</b> Description</a></li>
+<li class="chapter" data-level="3.1.2" data-path="literature.html"><a href="literature.html#example-38"><i class="fa fa-check"></i><b>3.1.2</b> Example</a></li>
+<li class="chapter" data-level="3.1.3" data-path="literature.html"><a href="literature.html#solution-31"><i class="fa fa-check"></i><b>3.1.3</b> Solution}</a></li>
+<li class="chapter" data-level="3.1.4" data-path="literature.html"><a href="literature.html#java-code-34"><i class="fa fa-check"></i><b>3.1.4</b> Java Code</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a></li>
+<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a><ul>
+<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
+<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Technical Interview</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Technical Interview</h1>
+<p class="author"><em>Michael Fong</em></p>
+<p class="date"><em>2020-04-04</em></p>
+</div>
+<div id="intro" class="section level1">
+<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
+<p>You can label chapter and section titles using <code>{#label}</code> after them, e.g., we can reference Chapter <a href="intro.html#intro">1</a>. If you do not manually label them, there will be automatic labels anyway, e.g., Chapter <a href="methods.html#methods">4</a>.</p>
+<div id="glossary" class="section level2">
+<h2><span class="header-section-number">1.1</span> Glossary</h2>
+<div id="term1" class="section level3">
+<h3><span class="header-section-number">1.1.1</span> Term 1</h3>
+<p>: This is a definition with two paragraphs. Lorem ipsum
+dolor sit amet, consectetuer adipiscing elit. Aliquam
+hendrerit mi posuere lectus.</p>
+<pre><code>Vestibulum enim wisi, viverra nec, fringilla in, laoreet
+vitae, risus.</code></pre>
+<p>: Second definition for term 1, also wrapped in a paragraph
+because of the blank line preceding it.</p>
+</div>
+<div id="term2" class="section level3">
+<h3><span class="header-section-number">1.1.2</span> Term 2</h3>
+<p>: This definition has a code block, a blockquote and a list.</p>
+<pre><code>    code block.
+
+&gt; block quote
+&gt; on two lines.
+
+1.  first list item
+2.  second list item</code></pre>
+<p>Reference: Term 1 <a href="intro.html#term1">1.1.1</a>.and Term 2 <a href="intro.html#term2">1.1.2</a></p>
+<p>Figures and tables with captions will be placed in <code>figure</code> and <code>table</code> environments, respectively.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">.1</span>, <span class="fl">.1</span>))</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">plot</span>(pressure, <span class="dt">type =</span> <span class="st">&#39;b&#39;</span>, <span class="dt">pch =</span> <span class="dv">19</span>)</a></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:nice-fig"></span>
+<img src="tech-interview_files/figure-html/nice-fig-1.png" alt="Here is a nice figure!" width="80%" />
+<p class="caption">
+Figure 1.1: Here is a nice figure!
+</p>
+</div>
+<p>Reference a figure by its code chunk label with the <code>fig:</code> prefix, e.g., see Figure <a href="intro.html#fig:nice-fig">1.1</a>. Similarly, you can reference tables generated from <code>knitr::kable()</code>, e.g., see Table <a href="intro.html#tab:nice-tab">1.1</a>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">kable</span>(</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="kw">head</span>(iris, <span class="dv">20</span>), <span class="dt">caption =</span> <span class="st">&#39;Here is a nice table!&#39;</span>,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="dt">booktabs =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">)</a></code></pre></div>
+<table>
+<caption><span id="tab:nice-tab">Table 1.1: </span>Here is a nice table!</caption>
+<thead>
+<tr class="header">
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+<th align="left">Species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.9</td>
+<td align="right">3.0</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">4.7</td>
+<td align="right">3.2</td>
+<td align="right">1.3</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.6</td>
+<td align="right">3.1</td>
+<td align="right">1.5</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.0</td>
+<td align="right">3.6</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.4</td>
+<td align="right">3.9</td>
+<td align="right">1.7</td>
+<td align="right">0.4</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">4.6</td>
+<td align="right">3.4</td>
+<td align="right">1.4</td>
+<td align="right">0.3</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.0</td>
+<td align="right">3.4</td>
+<td align="right">1.5</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">4.4</td>
+<td align="right">2.9</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.9</td>
+<td align="right">3.1</td>
+<td align="right">1.5</td>
+<td align="right">0.1</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.4</td>
+<td align="right">3.7</td>
+<td align="right">1.5</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.8</td>
+<td align="right">3.4</td>
+<td align="right">1.6</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">4.8</td>
+<td align="right">3.0</td>
+<td align="right">1.4</td>
+<td align="right">0.1</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.3</td>
+<td align="right">3.0</td>
+<td align="right">1.1</td>
+<td align="right">0.1</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.8</td>
+<td align="right">4.0</td>
+<td align="right">1.2</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.7</td>
+<td align="right">4.4</td>
+<td align="right">1.5</td>
+<td align="right">0.4</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.4</td>
+<td align="right">3.9</td>
+<td align="right">1.3</td>
+<td align="right">0.4</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+<td align="right">1.4</td>
+<td align="right">0.3</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.7</td>
+<td align="right">3.8</td>
+<td align="right">1.7</td>
+<td align="right">0.3</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.1</td>
+<td align="right">3.8</td>
+<td align="right">1.5</td>
+<td align="right">0.3</td>
+<td align="left">setosa</td>
+</tr>
+</tbody>
+</table>
+<p>You can write citations, too. For example, we are using the <strong>bookdown</strong> package <span class="citation">(Xie <a href="#ref-R-bookdown">2020</a>)</span> in this sample book, which was built on top of R Markdown and <strong>knitr</strong> <span class="citation">(Joe <a href="#ref-bookmark">2015</a>)</span>.</p>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-bookmark">
+<p>Joe, Average. 2015. <em>Hello World</em>. 2nd ed.</p>
+</div>
+<div id="ref-R-bookdown">
+<p>Xie, Yihui. 2020. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. <a href="https://CRAN.R-project.org/package=bookdown">https://CRAN.R-project.org/package=bookdown</a>.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="arrays.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/00-intro.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["tech-interview.pdf", "tech-interview.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

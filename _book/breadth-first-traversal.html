@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4.1 Breadth First Traversal | Technical Interview</title>
+  <meta name="description" content="4.1 Breadth First Traversal | Technical Interview." />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4.1 Breadth First Traversal | Technical Interview" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="4.1 Breadth First Traversal | Technical Interview." />
+  <meta name="github-repo" content="mcfongtw/CodingInterview" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4.1 Breadth First Traversal | Technical Interview" />
+  
+  <meta name="twitter:description" content="4.1 Breadth First Traversal | Technical Interview." />
+  
+
+<meta name="author" content="Michael Fong" />
+
+
+<meta name="date" content="2020-04-05" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="tree.html"/>
+<link rel="next" href="depth-first-traversal.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Technical Interview</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html"><i class="fa fa-check"></i><b>1.1</b> Glossary of Algorithm</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#dfs"><i class="fa fa-check"></i><b>1.1.1</b> Depth First Traversal</a></li>
+<li class="chapter" data-level="1.1.2" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#bfs"><i class="fa fa-check"></i><b>1.1.2</b> Breadth First Traversal}</a></li>
+<li class="chapter" data-level="1.1.3" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#topological"><i class="fa fa-check"></i><b>1.1.3</b> Topological Sorting</a></li>
+<li class="chapter" data-level="1.1.4" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#minimax"><i class="fa fa-check"></i><b>1.1.4</b> Minimax</a></li>
+<li class="chapter" data-level="1.1.5" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#recursion"><i class="fa fa-check"></i><b>1.1.5</b> Recursion</a></li>
+<li class="chapter" data-level="1.1.6" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#backtrack"><i class="fa fa-check"></i><b>1.1.6</b> Backtrack</a></li>
+<li class="chapter" data-level="1.1.7" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#dp"><i class="fa fa-check"></i><b>1.1.7</b> Dynamic Programming</a></li>
+<li class="chapter" data-level="1.1.8" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#memo"><i class="fa fa-check"></i><b>1.1.8</b> Memoization</a></li>
+<li class="chapter" data-level="1.1.9" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#table"><i class="fa fa-check"></i><b>1.1.9</b> Tabulation</a></li>
+<li class="chapter" data-level="1.1.10" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#dnc"><i class="fa fa-check"></i><b>1.1.10</b> Divide and Conquer</a></li>
+<li class="chapter" data-level="1.1.11" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#bst"><i class="fa fa-check"></i><b>1.1.11</b> Binary Search Tree</a></li>
+<li class="chapter" data-level="1.1.12" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#ms"><i class="fa fa-check"></i><b>1.1.12</b> Merge sort</a></li>
+<li class="chapter" data-level="1.1.13" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#bs"><i class="fa fa-check"></i><b>1.1.13</b> Bubble sort</a></li>
+<li class="chapter" data-level="1.1.14" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#qs"><i class="fa fa-check"></i><b>1.1.14</b> Quick Sort</a></li>
+<li class="chapter" data-level="1.1.15" data-path="glossary-of-algorithm.html"><a href="glossary-of-algorithm.html#heap"><i class="fa fa-check"></i><b>1.1.15</b> Minimum Heap</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="dev-guide.html"><a href="dev-guide.html"><i class="fa fa-check"></i><b>1.2</b> Dev Guide</a></li>
+<li class="chapter" data-level="1.3" data-path="problem.html"><a href="problem.html"><i class="fa fa-check"></i><b>1.3</b> Problem</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="problem.html"><a href="problem.html#description"><i class="fa fa-check"></i><b>1.3.1</b> Description</a></li>
+<li class="chapter" data-level="1.3.2" data-path="problem.html"><a href="problem.html#example"><i class="fa fa-check"></i><b>1.3.2</b> Example</a></li>
+<li class="chapter" data-level="1.3.3" data-path="problem.html"><a href="problem.html#solution"><i class="fa fa-check"></i><b>1.3.3</b> Solution</a></li>
+<li class="chapter" data-level="1.3.4" data-path="problem.html"><a href="problem.html#java-code"><i class="fa fa-check"></i><b>1.3.4</b> Java Code</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="arrays.html"><a href="arrays.html"><i class="fa fa-check"></i><b>2</b> Arrays</a><ul>
+<li class="chapter" data-level="2.1" data-path="two-sums-i-leetcode-1-easy.html"><a href="two-sums-i-leetcode-1-easy.html"><i class="fa fa-check"></i><b>2.1</b> Two Sums I / LeetCode 1 / Easy</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="two-sums-i-leetcode-1-easy.html"><a href="two-sums-i-leetcode-1-easy.html#description-1"><i class="fa fa-check"></i><b>2.1.1</b> Description</a></li>
+<li class="chapter" data-level="2.1.2" data-path="two-sums-i-leetcode-1-easy.html"><a href="two-sums-i-leetcode-1-easy.html#examples"><i class="fa fa-check"></i><b>2.1.2</b> Examples</a></li>
+<li class="chapter" data-level="2.1.3" data-path="two-sums-i-leetcode-1-easy.html"><a href="two-sums-i-leetcode-1-easy.html#solution---with-hashtable"><i class="fa fa-check"></i><b>2.1.3</b> Solution - with HashTable</a></li>
+<li class="chapter" data-level="2.1.4" data-path="two-sums-i-leetcode-1-easy.html"><a href="two-sums-i-leetcode-1-easy.html#java-code---with-hashtable"><i class="fa fa-check"></i><b>2.1.4</b> Java Code - with HashTable</a></li>
+<li class="chapter" data-level="2.1.5" data-path="two-sums-i-leetcode-1-easy.html"><a href="two-sums-i-leetcode-1-easy.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.1.5</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.1.6" data-path="two-sums-i-leetcode-1-easy.html"><a href="two-sums-i-leetcode-1-easy.html#java-code---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.1.6</b> Java Code - Searching Target Sum from Sorted Array</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.2</b> Two Sum II - Return True / False</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
+<li class="chapter" data-level="2.2.2" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html#example-1"><i class="fa fa-check"></i><b>2.2.2</b> Example</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html#solution-1"><i class="fa fa-check"></i><b>2.2.3</b> Solution</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html#java-code-1"><i class="fa fa-check"></i><b>2.2.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="two-sum-iv-input-is-a-bst-leetcode-653-easy.html"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum IV - Input is a BST / LeetCode 653 / Easy</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="two-sum-iv-input-is-a-bst-leetcode-653-easy.html"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#description-3"><i class="fa fa-check"></i><b>2.3.1</b> Description</a></li>
+<li class="chapter" data-level="2.3.2" data-path="two-sum-iv-input-is-a-bst-leetcode-653-easy.html"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#example-2"><i class="fa fa-check"></i><b>2.3.2</b> Example</a></li>
+<li class="chapter" data-level="2.3.3" data-path="two-sum-iv-input-is-a-bst-leetcode-653-easy.html"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#solution-2"><i class="fa fa-check"></i><b>2.3.3</b> Solution</a></li>
+<li class="chapter" data-level="2.3.4" data-path="two-sum-iv-input-is-a-bst-leetcode-653-easy.html"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#java-code-2"><i class="fa fa-check"></i><b>2.3.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="twosum-v.html"><a href="twosum-v.html"><i class="fa fa-check"></i><b>2.4</b> TwoSum V / / }</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="twosum-v.html"><a href="twosum-v.html#description-4"><i class="fa fa-check"></i><b>2.4.1</b> Description</a></li>
+<li class="chapter" data-level="2.4.2" data-path="twosum-v.html"><a href="twosum-v.html#example-3"><i class="fa fa-check"></i><b>2.4.2</b> Example</a></li>
+<li class="chapter" data-level="2.4.3" data-path="twosum-v.html"><a href="twosum-v.html#solution-3"><i class="fa fa-check"></i><b>2.4.3</b> Solution</a></li>
+<li class="chapter" data-level="2.4.4" data-path="twosum-v.html"><a href="twosum-v.html#java-code-3"><i class="fa fa-check"></i><b>2.4.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="sum-leet-code-15-medium.html"><a href="sum-leet-code-15-medium.html"><i class="fa fa-check"></i><b>2.5</b> 3Sum / Leet Code 15 / Medium}</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="sum-leet-code-15-medium.html"><a href="sum-leet-code-15-medium.html#description-5"><i class="fa fa-check"></i><b>2.5.1</b> Description</a></li>
+<li class="chapter" data-level="2.5.2" data-path="sum-leet-code-15-medium.html"><a href="sum-leet-code-15-medium.html#example-4"><i class="fa fa-check"></i><b>2.5.2</b> Example</a></li>
+<li class="chapter" data-level="2.5.3" data-path="sum-leet-code-15-medium.html"><a href="sum-leet-code-15-medium.html#solution-4"><i class="fa fa-check"></i><b>2.5.3</b> Solution</a></li>
+<li class="chapter" data-level="2.5.4" data-path="sum-leet-code-15-medium.html"><a href="sum-leet-code-15-medium.html#java-code-4"><i class="fa fa-check"></i><b>2.5.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="sum-closest-leetcode-16-medium.html"><a href="sum-closest-leetcode-16-medium.html"><i class="fa fa-check"></i><b>2.6</b> 3 Sum Closest / LeetCode 16 / Medium}</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="sum-closest-leetcode-16-medium.html"><a href="sum-closest-leetcode-16-medium.html#description-6"><i class="fa fa-check"></i><b>2.6.1</b> Description</a></li>
+<li class="chapter" data-level="2.6.2" data-path="sum-closest-leetcode-16-medium.html"><a href="sum-closest-leetcode-16-medium.html#example-5"><i class="fa fa-check"></i><b>2.6.2</b> Example</a></li>
+<li class="chapter" data-level="2.6.3" data-path="sum-closest-leetcode-16-medium.html"><a href="sum-closest-leetcode-16-medium.html#solution-5"><i class="fa fa-check"></i><b>2.6.3</b> Solution</a></li>
+<li class="chapter" data-level="2.6.4" data-path="sum-closest-leetcode-16-medium.html"><a href="sum-closest-leetcode-16-medium.html#java-code-5"><i class="fa fa-check"></i><b>2.6.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="sum-leet-code-18-medium.html"><a href="sum-leet-code-18-medium.html"><i class="fa fa-check"></i><b>2.7</b> 4Sum / Leet Code 18 / Medium}</a><ul>
+<li class="chapter" data-level="2.7.1" data-path="sum-leet-code-18-medium.html"><a href="sum-leet-code-18-medium.html#description-7"><i class="fa fa-check"></i><b>2.7.1</b> Description</a></li>
+<li class="chapter" data-level="2.7.2" data-path="sum-leet-code-18-medium.html"><a href="sum-leet-code-18-medium.html#example-6"><i class="fa fa-check"></i><b>2.7.2</b> Example</a></li>
+<li class="chapter" data-level="2.7.3" data-path="sum-leet-code-18-medium.html"><a href="sum-leet-code-18-medium.html#solution-6"><i class="fa fa-check"></i><b>2.7.3</b> Solution</a></li>
+<li class="chapter" data-level="2.7.4" data-path="sum-leet-code-18-medium.html"><a href="sum-leet-code-18-medium.html#java-code-6"><i class="fa fa-check"></i><b>2.7.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="sum-ii.html"><a href="sum-ii.html"><i class="fa fa-check"></i><b>2.8</b> 4Sum II}</a><ul>
+<li class="chapter" data-level="2.8.1" data-path="sum-ii.html"><a href="sum-ii.html#description-8"><i class="fa fa-check"></i><b>2.8.1</b> Description</a></li>
+<li class="chapter" data-level="2.8.2" data-path="sum-ii.html"><a href="sum-ii.html#example-7"><i class="fa fa-check"></i><b>2.8.2</b> Example</a></li>
+<li class="chapter" data-level="2.8.3" data-path="sum-ii.html"><a href="sum-ii.html#java-code-7"><i class="fa fa-check"></i><b>2.8.3</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="max-gain-firecode-level-2.html"><a href="max-gain-firecode-level-2.html"><i class="fa fa-check"></i><b>2.9</b> Max Gain / Firecode / Level 2}</a><ul>
+<li class="chapter" data-level="2.9.1" data-path="max-gain-firecode-level-2.html"><a href="max-gain-firecode-level-2.html#description-9"><i class="fa fa-check"></i><b>2.9.1</b> Description</a></li>
+<li class="chapter" data-level="2.9.2" data-path="max-gain-firecode-level-2.html"><a href="max-gain-firecode-level-2.html#example-8"><i class="fa fa-check"></i><b>2.9.2</b> Example</a></li>
+<li class="chapter" data-level="2.9.3" data-path="max-gain-firecode-level-2.html"><a href="max-gain-firecode-level-2.html#solution-7"><i class="fa fa-check"></i><b>2.9.3</b> Solution</a></li>
+<li class="chapter" data-level="2.9.4" data-path="max-gain-firecode-level-2.html"><a href="max-gain-firecode-level-2.html#java-code-8"><i class="fa fa-check"></i><b>2.9.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.10" data-path="pascals-triangle-leet-code-118-easy.html"><a href="pascals-triangle-leet-code-118-easy.html"><i class="fa fa-check"></i><b>2.10</b> Pascal’s Triangle / Leet Code 118 / Easy}</a><ul>
+<li class="chapter" data-level="2.10.1" data-path="pascals-triangle-leet-code-118-easy.html"><a href="pascals-triangle-leet-code-118-easy.html#description-10"><i class="fa fa-check"></i><b>2.10.1</b> Description</a></li>
+<li class="chapter" data-level="2.10.2" data-path="pascals-triangle-leet-code-118-easy.html"><a href="pascals-triangle-leet-code-118-easy.html#example-9"><i class="fa fa-check"></i><b>2.10.2</b> Example</a></li>
+<li class="chapter" data-level="2.10.3" data-path="pascals-triangle-leet-code-118-easy.html"><a href="pascals-triangle-leet-code-118-easy.html#solution-8"><i class="fa fa-check"></i><b>2.10.3</b> Solution</a></li>
+<li class="chapter" data-level="2.10.4" data-path="pascals-triangle-leet-code-118-easy.html"><a href="pascals-triangle-leet-code-118-easy.html#java-code-9"><i class="fa fa-check"></i><b>2.10.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.11" data-path="search-in-rotated-sorted-array-leet-code-33-medium.html"><a href="search-in-rotated-sorted-array-leet-code-33-medium.html"><i class="fa fa-check"></i><b>2.11</b> Search in Rotated Sorted Array / Leet Code 33 / Medium }</a><ul>
+<li class="chapter" data-level="2.11.1" data-path="search-in-rotated-sorted-array-leet-code-33-medium.html"><a href="search-in-rotated-sorted-array-leet-code-33-medium.html#description-11"><i class="fa fa-check"></i><b>2.11.1</b> Description</a></li>
+<li class="chapter" data-level="2.11.2" data-path="search-in-rotated-sorted-array-leet-code-33-medium.html"><a href="search-in-rotated-sorted-array-leet-code-33-medium.html#example-10"><i class="fa fa-check"></i><b>2.11.2</b> Example</a></li>
+<li class="chapter" data-level="2.11.3" data-path="search-in-rotated-sorted-array-leet-code-33-medium.html"><a href="search-in-rotated-sorted-array-leet-code-33-medium.html#java-code-10"><i class="fa fa-check"></i><b>2.11.3</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.12" data-path="median-of-two-sorted-arrays-leet-code-4-hard.html"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html"><i class="fa fa-check"></i><b>2.12</b> Median of Two Sorted Arrays / Leet Code 4 / Hard}</a><ul>
+<li class="chapter" data-level="2.12.1" data-path="median-of-two-sorted-arrays-leet-code-4-hard.html"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#description-12"><i class="fa fa-check"></i><b>2.12.1</b> Description</a></li>
+<li class="chapter" data-level="2.12.2" data-path="median-of-two-sorted-arrays-leet-code-4-hard.html"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#example-11"><i class="fa fa-check"></i><b>2.12.2</b> Example</a></li>
+<li class="chapter" data-level="2.12.3" data-path="median-of-two-sorted-arrays-leet-code-4-hard.html"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#solution-9"><i class="fa fa-check"></i><b>2.12.3</b> Solution</a></li>
+<li class="chapter" data-level="2.12.4" data-path="median-of-two-sorted-arrays-leet-code-4-hard.html"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#java-code-11"><i class="fa fa-check"></i><b>2.12.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.13" data-path="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html"><a href="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html"><i class="fa fa-check"></i><b>2.13</b> Retrieve List of Elements Appeared at <span class="math inline">\(k^{th}\)</span> Time and in Insertion Order / /}</a><ul>
+<li class="chapter" data-level="2.13.1" data-path="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html"><a href="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html#description-13"><i class="fa fa-check"></i><b>2.13.1</b> Description</a></li>
+<li class="chapter" data-level="2.13.2" data-path="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html"><a href="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html#example-12"><i class="fa fa-check"></i><b>2.13.2</b> Example</a></li>
+<li class="chapter" data-level="2.13.3" data-path="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html"><a href="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html#solution-10"><i class="fa fa-check"></i><b>2.13.3</b> Solution</a></li>
+<li class="chapter" data-level="2.13.4" data-path="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html"><a href="retrieve-list-of-elements-appeared-at-kth-time-and-in-insertion-order.html#java-code-12"><i class="fa fa-check"></i><b>2.13.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.14" data-path="permutations-leetcode-46-medium.html"><a href="permutations-leetcode-46-medium.html"><i class="fa fa-check"></i><b>2.14</b> Permutations / LeetCode 46 / Medium}</a><ul>
+<li class="chapter" data-level="2.14.1" data-path="permutations-leetcode-46-medium.html"><a href="permutations-leetcode-46-medium.html#description-14"><i class="fa fa-check"></i><b>2.14.1</b> Description</a></li>
+<li class="chapter" data-level="2.14.2" data-path="permutations-leetcode-46-medium.html"><a href="permutations-leetcode-46-medium.html#example-13"><i class="fa fa-check"></i><b>2.14.2</b> Example</a></li>
+<li class="chapter" data-level="2.14.3" data-path="permutations-leetcode-46-medium.html"><a href="permutations-leetcode-46-medium.html#solution---backtrack-with-memoization"><i class="fa fa-check"></i><b>2.14.3</b> Solution - Backtrack with Memoization}</a></li>
+<li class="chapter" data-level="2.14.4" data-path="permutations-leetcode-46-medium.html"><a href="permutations-leetcode-46-medium.html#java-code---backtrack-with-memoization"><i class="fa fa-check"></i><b>2.14.4</b> Java Code - Backtrack with Memoization}</a></li>
+</ul></li>
+<li class="chapter" data-level="2.15" data-path="permutations-ii-leetcode-47-medium.html"><a href="permutations-ii-leetcode-47-medium.html"><i class="fa fa-check"></i><b>2.15</b> Permutations II / LeetCode 47 / Medium}</a><ul>
+<li class="chapter" data-level="2.15.1" data-path="permutations-ii-leetcode-47-medium.html"><a href="permutations-ii-leetcode-47-medium.html#description-15"><i class="fa fa-check"></i><b>2.15.1</b> Description</a></li>
+<li class="chapter" data-level="2.15.2" data-path="permutations-ii-leetcode-47-medium.html"><a href="permutations-ii-leetcode-47-medium.html#example-14"><i class="fa fa-check"></i><b>2.15.2</b> Example</a></li>
+<li class="chapter" data-level="2.15.3" data-path="permutations-ii-leetcode-47-medium.html"><a href="permutations-ii-leetcode-47-medium.html#solution---backtrack-with-memoization-1"><i class="fa fa-check"></i><b>2.15.3</b> Solution - Backtrack with Memoization}</a></li>
+<li class="chapter" data-level="2.15.4" data-path="permutations-ii-leetcode-47-medium.html"><a href="permutations-ii-leetcode-47-medium.html#java-code---backtrack-with-memoization-1"><i class="fa fa-check"></i><b>2.15.4</b> Java Code - Backtrack with Memoization}</a></li>
+</ul></li>
+<li class="chapter" data-level="2.16" data-path="subsets-leetcode-78-medium.html"><a href="subsets-leetcode-78-medium.html"><i class="fa fa-check"></i><b>2.16</b> Subsets / LeetCode 78 / Medium}</a><ul>
+<li class="chapter" data-level="2.16.1" data-path="subsets-leetcode-78-medium.html"><a href="subsets-leetcode-78-medium.html#description-16"><i class="fa fa-check"></i><b>2.16.1</b> Description</a></li>
+<li class="chapter" data-level="2.16.2" data-path="subsets-leetcode-78-medium.html"><a href="subsets-leetcode-78-medium.html#example-15"><i class="fa fa-check"></i><b>2.16.2</b> Example</a></li>
+<li class="chapter" data-level="2.16.3" data-path="subsets-leetcode-78-medium.html"><a href="subsets-leetcode-78-medium.html#solution-11"><i class="fa fa-check"></i><b>2.16.3</b> Solution</a></li>
+<li class="chapter" data-level="2.16.4" data-path="subsets-leetcode-78-medium.html"><a href="subsets-leetcode-78-medium.html#java-code-13"><i class="fa fa-check"></i><b>2.16.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.17" data-path="subsets-ii-leetcode-90-medium.html"><a href="subsets-ii-leetcode-90-medium.html"><i class="fa fa-check"></i><b>2.17</b> Subsets II / LeetCode 90 / Medium}</a><ul>
+<li class="chapter" data-level="2.17.1" data-path="subsets-ii-leetcode-90-medium.html"><a href="subsets-ii-leetcode-90-medium.html#description-17"><i class="fa fa-check"></i><b>2.17.1</b> Description</a></li>
+<li class="chapter" data-level="2.17.2" data-path="subsets-ii-leetcode-90-medium.html"><a href="subsets-ii-leetcode-90-medium.html#example-16"><i class="fa fa-check"></i><b>2.17.2</b> Example</a></li>
+<li class="chapter" data-level="2.17.3" data-path="subsets-ii-leetcode-90-medium.html"><a href="subsets-ii-leetcode-90-medium.html#solution-12"><i class="fa fa-check"></i><b>2.17.3</b> Solution</a></li>
+<li class="chapter" data-level="2.17.4" data-path="subsets-ii-leetcode-90-medium.html"><a href="subsets-ii-leetcode-90-medium.html#java-code-14"><i class="fa fa-check"></i><b>2.17.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.18" data-path="sort-array-by-parity-leetcode-906-easy.html"><a href="sort-array-by-parity-leetcode-906-easy.html"><i class="fa fa-check"></i><b>2.18</b> Sort Array By Parity / LeetCode 906 / Easy}</a><ul>
+<li class="chapter" data-level="2.18.1" data-path="sort-array-by-parity-leetcode-906-easy.html"><a href="sort-array-by-parity-leetcode-906-easy.html#description-18"><i class="fa fa-check"></i><b>2.18.1</b> Description</a></li>
+<li class="chapter" data-level="2.18.2" data-path="sort-array-by-parity-leetcode-906-easy.html"><a href="sort-array-by-parity-leetcode-906-easy.html#example-17"><i class="fa fa-check"></i><b>2.18.2</b> Example</a></li>
+<li class="chapter" data-level="2.18.3" data-path="sort-array-by-parity-leetcode-906-easy.html"><a href="sort-array-by-parity-leetcode-906-easy.html#solution-13"><i class="fa fa-check"></i><b>2.18.3</b> Solution</a></li>
+<li class="chapter" data-level="2.18.4" data-path="sort-array-by-parity-leetcode-906-easy.html"><a href="sort-array-by-parity-leetcode-906-easy.html#java-code-15"><i class="fa fa-check"></i><b>2.18.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.19" data-path="merge-intervals-leetcode-56-medium.html"><a href="merge-intervals-leetcode-56-medium.html"><i class="fa fa-check"></i><b>2.19</b> Merge Intervals / LeetCode 56 / Medium}</a><ul>
+<li class="chapter" data-level="2.19.1" data-path="merge-intervals-leetcode-56-medium.html"><a href="merge-intervals-leetcode-56-medium.html#description-19"><i class="fa fa-check"></i><b>2.19.1</b> Description</a></li>
+<li class="chapter" data-level="2.19.2" data-path="merge-intervals-leetcode-56-medium.html"><a href="merge-intervals-leetcode-56-medium.html#example-18"><i class="fa fa-check"></i><b>2.19.2</b> Example</a></li>
+<li class="chapter" data-level="2.19.3" data-path="merge-intervals-leetcode-56-medium.html"><a href="merge-intervals-leetcode-56-medium.html#solution-14"><i class="fa fa-check"></i><b>2.19.3</b> Solution</a></li>
+<li class="chapter" data-level="2.19.4" data-path="merge-intervals-leetcode-56-medium.html"><a href="merge-intervals-leetcode-56-medium.html#java-code-16"><i class="fa fa-check"></i><b>2.19.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.20" data-path="non-overlapping-intervals-leetcode-435-medium.html"><a href="non-overlapping-intervals-leetcode-435-medium.html"><i class="fa fa-check"></i><b>2.20</b> Non-overlapping Intervals / LeetCode 435 / Medium}</a><ul>
+<li class="chapter" data-level="2.20.1" data-path="non-overlapping-intervals-leetcode-435-medium.html"><a href="non-overlapping-intervals-leetcode-435-medium.html#description-20"><i class="fa fa-check"></i><b>2.20.1</b> Description</a></li>
+<li class="chapter" data-level="2.20.2" data-path="non-overlapping-intervals-leetcode-435-medium.html"><a href="non-overlapping-intervals-leetcode-435-medium.html#example-19"><i class="fa fa-check"></i><b>2.20.2</b> Example</a></li>
+<li class="chapter" data-level="2.20.3" data-path="non-overlapping-intervals-leetcode-435-medium.html"><a href="non-overlapping-intervals-leetcode-435-medium.html#solution-15"><i class="fa fa-check"></i><b>2.20.3</b> Solution</a></li>
+<li class="chapter" data-level="2.20.4" data-path="non-overlapping-intervals-leetcode-435-medium.html"><a href="non-overlapping-intervals-leetcode-435-medium.html#java-code-17"><i class="fa fa-check"></i><b>2.20.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.21" data-path="interval-list-intersections-leetcode-986-medium.html"><a href="interval-list-intersections-leetcode-986-medium.html"><i class="fa fa-check"></i><b>2.21</b> Interval List Intersections / LeetCode 986 / Medium}</a><ul>
+<li class="chapter" data-level="2.21.1" data-path="interval-list-intersections-leetcode-986-medium.html"><a href="interval-list-intersections-leetcode-986-medium.html#description-21"><i class="fa fa-check"></i><b>2.21.1</b> Description</a></li>
+<li class="chapter" data-level="2.21.2" data-path="interval-list-intersections-leetcode-986-medium.html"><a href="interval-list-intersections-leetcode-986-medium.html#example-20"><i class="fa fa-check"></i><b>2.21.2</b> Example</a></li>
+<li class="chapter" data-level="2.21.3" data-path="interval-list-intersections-leetcode-986-medium.html"><a href="interval-list-intersections-leetcode-986-medium.html#solution-16"><i class="fa fa-check"></i><b>2.21.3</b> Solution</a></li>
+<li class="chapter" data-level="2.21.4" data-path="interval-list-intersections-leetcode-986-medium.html"><a href="interval-list-intersections-leetcode-986-medium.html#java-code-18"><i class="fa fa-check"></i><b>2.21.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.22" data-path="insert-interval-leetcode-57-hard.html"><a href="insert-interval-leetcode-57-hard.html"><i class="fa fa-check"></i><b>2.22</b> Insert Interval / LeetCode 57 / Hard}</a><ul>
+<li class="chapter" data-level="2.22.1" data-path="insert-interval-leetcode-57-hard.html"><a href="insert-interval-leetcode-57-hard.html#description-22"><i class="fa fa-check"></i><b>2.22.1</b> Description</a></li>
+<li class="chapter" data-level="2.22.2" data-path="insert-interval-leetcode-57-hard.html"><a href="insert-interval-leetcode-57-hard.html#example-21"><i class="fa fa-check"></i><b>2.22.2</b> Example</a></li>
+<li class="chapter" data-level="2.22.3" data-path="insert-interval-leetcode-57-hard.html"><a href="insert-interval-leetcode-57-hard.html#solution-17"><i class="fa fa-check"></i><b>2.22.3</b> Solution</a></li>
+<li class="chapter" data-level="2.22.4" data-path="insert-interval-leetcode-57-hard.html"><a href="insert-interval-leetcode-57-hard.html#java-code-19"><i class="fa fa-check"></i><b>2.22.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.23" data-path="find-common-characters-leetcode-1002-easy.html"><a href="find-common-characters-leetcode-1002-easy.html"><i class="fa fa-check"></i><b>2.23</b> Find Common Characters / LeetCode 1002 / Easy}</a><ul>
+<li class="chapter" data-level="2.23.1" data-path="find-common-characters-leetcode-1002-easy.html"><a href="find-common-characters-leetcode-1002-easy.html#description-23"><i class="fa fa-check"></i><b>2.23.1</b> Description</a></li>
+<li class="chapter" data-level="2.23.2" data-path="find-common-characters-leetcode-1002-easy.html"><a href="find-common-characters-leetcode-1002-easy.html#example-22"><i class="fa fa-check"></i><b>2.23.2</b> Example</a></li>
+<li class="chapter" data-level="2.23.3" data-path="find-common-characters-leetcode-1002-easy.html"><a href="find-common-characters-leetcode-1002-easy.html#solution-18"><i class="fa fa-check"></i><b>2.23.3</b> Solution</a></li>
+<li class="chapter" data-level="2.23.4" data-path="find-common-characters-leetcode-1002-easy.html"><a href="find-common-characters-leetcode-1002-easy.html#java-code-20"><i class="fa fa-check"></i><b>2.23.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.24" data-path="top-k-frequently-appeared-elements-leet-code-347-medium.html"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html"><i class="fa fa-check"></i><b>2.24</b> Top K Frequently Appeared Elements / Leet Code 347 / Medium}</a><ul>
+<li class="chapter" data-level="2.24.1" data-path="top-k-frequently-appeared-elements-leet-code-347-medium.html"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#description-24"><i class="fa fa-check"></i><b>2.24.1</b> Description</a></li>
+<li class="chapter" data-level="2.24.2" data-path="top-k-frequently-appeared-elements-leet-code-347-medium.html"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#example-23"><i class="fa fa-check"></i><b>2.24.2</b> Example</a></li>
+<li class="chapter" data-level="2.24.3" data-path="top-k-frequently-appeared-elements-leet-code-347-medium.html"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#java-code-21"><i class="fa fa-check"></i><b>2.24.3</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.25" data-path="count-iterations-towards-filling-1s-in-an-array.html"><a href="count-iterations-towards-filling-1s-in-an-array.html"><i class="fa fa-check"></i><b>2.25</b> Count iterations towards filling 1’s in an array / / }</a><ul>
+<li class="chapter" data-level="2.25.1" data-path="count-iterations-towards-filling-1s-in-an-array.html"><a href="count-iterations-towards-filling-1s-in-an-array.html#description-25"><i class="fa fa-check"></i><b>2.25.1</b> Description</a></li>
+<li class="chapter" data-level="2.25.2" data-path="count-iterations-towards-filling-1s-in-an-array.html"><a href="count-iterations-towards-filling-1s-in-an-array.html#example-24"><i class="fa fa-check"></i><b>2.25.2</b> Example</a></li>
+<li class="chapter" data-level="2.25.3" data-path="count-iterations-towards-filling-1s-in-an-array.html"><a href="count-iterations-towards-filling-1s-in-an-array.html#solution-19"><i class="fa fa-check"></i><b>2.25.3</b> Solution</a></li>
+<li class="chapter" data-level="2.25.4" data-path="count-iterations-towards-filling-1s-in-an-array.html"><a href="count-iterations-towards-filling-1s-in-an-array.html#java-code-22"><i class="fa fa-check"></i><b>2.25.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.26" data-path="maximum-subarray-leet-code-53-easy.html"><a href="maximum-subarray-leet-code-53-easy.html"><i class="fa fa-check"></i><b>2.26</b> Maximum Subarray / Leet Code 53 / Easy}</a><ul>
+<li class="chapter" data-level="2.26.1" data-path="maximum-subarray-leet-code-53-easy.html"><a href="maximum-subarray-leet-code-53-easy.html#description-26"><i class="fa fa-check"></i><b>2.26.1</b> Description</a></li>
+<li class="chapter" data-level="2.26.2" data-path="maximum-subarray-leet-code-53-easy.html"><a href="maximum-subarray-leet-code-53-easy.html#example-25"><i class="fa fa-check"></i><b>2.26.2</b> Example</a></li>
+<li class="chapter" data-level="2.26.3" data-path="maximum-subarray-leet-code-53-easy.html"><a href="maximum-subarray-leet-code-53-easy.html#solution-20"><i class="fa fa-check"></i><b>2.26.3</b> Solution</a></li>
+<li class="chapter" data-level="2.26.4" data-path="maximum-subarray-leet-code-53-easy.html"><a href="maximum-subarray-leet-code-53-easy.html#java-code-23"><i class="fa fa-check"></i><b>2.26.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.27" data-path="maximum-product-subarray-leet-code-152-medium.html"><a href="maximum-product-subarray-leet-code-152-medium.html"><i class="fa fa-check"></i><b>2.27</b> Maximum Product Subarray / Leet Code 152 / Medium}</a><ul>
+<li class="chapter" data-level="2.27.1" data-path="maximum-product-subarray-leet-code-152-medium.html"><a href="maximum-product-subarray-leet-code-152-medium.html#description-27"><i class="fa fa-check"></i><b>2.27.1</b> Description</a></li>
+<li class="chapter" data-level="2.27.2" data-path="maximum-product-subarray-leet-code-152-medium.html"><a href="maximum-product-subarray-leet-code-152-medium.html#example-26"><i class="fa fa-check"></i><b>2.27.2</b> Example</a></li>
+<li class="chapter" data-level="2.27.3" data-path="maximum-product-subarray-leet-code-152-medium.html"><a href="maximum-product-subarray-leet-code-152-medium.html#solution-21"><i class="fa fa-check"></i><b>2.27.3</b> Solution</a></li>
+<li class="chapter" data-level="2.27.4" data-path="maximum-product-subarray-leet-code-152-medium.html"><a href="maximum-product-subarray-leet-code-152-medium.html#java-code-24"><i class="fa fa-check"></i><b>2.27.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.28" data-path="longest-valid-parentheses-leet-code-32-hard.html"><a href="longest-valid-parentheses-leet-code-32-hard.html"><i class="fa fa-check"></i><b>2.28</b> Longest Valid Parentheses / Leet Code 32 / Hard}</a><ul>
+<li class="chapter" data-level="2.28.1" data-path="longest-valid-parentheses-leet-code-32-hard.html"><a href="longest-valid-parentheses-leet-code-32-hard.html#description-28"><i class="fa fa-check"></i><b>2.28.1</b> Description</a></li>
+<li class="chapter" data-level="2.28.2" data-path="longest-valid-parentheses-leet-code-32-hard.html"><a href="longest-valid-parentheses-leet-code-32-hard.html#example-27"><i class="fa fa-check"></i><b>2.28.2</b> Example</a></li>
+<li class="chapter" data-level="2.28.3" data-path="longest-valid-parentheses-leet-code-32-hard.html"><a href="longest-valid-parentheses-leet-code-32-hard.html#solution-22"><i class="fa fa-check"></i><b>2.28.3</b> Solution</a></li>
+<li class="chapter" data-level="2.28.4" data-path="longest-valid-parentheses-leet-code-32-hard.html"><a href="longest-valid-parentheses-leet-code-32-hard.html#java-code-25"><i class="fa fa-check"></i><b>2.28.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.29" data-path="longest-increasing-subsequence-leet-code-300-medium.html"><a href="longest-increasing-subsequence-leet-code-300-medium.html"><i class="fa fa-check"></i><b>2.29</b> Longest Increasing Subsequence / Leet Code 300 / Medium}</a><ul>
+<li class="chapter" data-level="2.29.1" data-path="longest-increasing-subsequence-leet-code-300-medium.html"><a href="longest-increasing-subsequence-leet-code-300-medium.html#description-29"><i class="fa fa-check"></i><b>2.29.1</b> Description</a></li>
+<li class="chapter" data-level="2.29.2" data-path="longest-increasing-subsequence-leet-code-300-medium.html"><a href="longest-increasing-subsequence-leet-code-300-medium.html#example-28"><i class="fa fa-check"></i><b>2.29.2</b> Example</a></li>
+<li class="chapter" data-level="2.29.3" data-path="longest-increasing-subsequence-leet-code-300-medium.html"><a href="longest-increasing-subsequence-leet-code-300-medium.html#solution--brute-force"><i class="fa fa-check"></i><b>2.29.3</b> Solution- Brute Force}</a></li>
+<li class="chapter" data-level="2.29.4" data-path="longest-increasing-subsequence-leet-code-300-medium.html"><a href="longest-increasing-subsequence-leet-code-300-medium.html#java-code---brute-force"><i class="fa fa-check"></i><b>2.29.4</b> Java Code - Brute Force}</a></li>
+<li class="chapter" data-level="2.29.5" data-path="longest-increasing-subsequence-leet-code-300-medium.html"><a href="longest-increasing-subsequence-leet-code-300-medium.html#solution---binary-search"><i class="fa fa-check"></i><b>2.29.5</b> Solution - Binary Search}</a></li>
+<li class="chapter" data-level="2.29.6" data-path="longest-increasing-subsequence-leet-code-300-medium.html"><a href="longest-increasing-subsequence-leet-code-300-medium.html#java-code---binary-search"><i class="fa fa-check"></i><b>2.29.6</b> Java Code - Binary Search}</a></li>
+</ul></li>
+<li class="chapter" data-level="2.30" data-path="paint-house-leet-code-256-easy.html"><a href="paint-house-leet-code-256-easy.html"><i class="fa fa-check"></i><b>2.30</b> Paint House / Leet Code 256 / Easy}</a><ul>
+<li class="chapter" data-level="2.30.1" data-path="paint-house-leet-code-256-easy.html"><a href="paint-house-leet-code-256-easy.html#description-30"><i class="fa fa-check"></i><b>2.30.1</b> Description</a></li>
+<li class="chapter" data-level="2.30.2" data-path="paint-house-leet-code-256-easy.html"><a href="paint-house-leet-code-256-easy.html#example-29"><i class="fa fa-check"></i><b>2.30.2</b> Example</a></li>
+<li class="chapter" data-level="2.30.3" data-path="paint-house-leet-code-256-easy.html"><a href="paint-house-leet-code-256-easy.html#solution-23"><i class="fa fa-check"></i><b>2.30.3</b> Solution</a></li>
+<li class="chapter" data-level="2.30.4" data-path="paint-house-leet-code-256-easy.html"><a href="paint-house-leet-code-256-easy.html#java-code-26"><i class="fa fa-check"></i><b>2.30.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.31" data-path="climbing-stairs-leet-code-70-easy.html"><a href="climbing-stairs-leet-code-70-easy.html"><i class="fa fa-check"></i><b>2.31</b> Climbing Stairs / Leet Code 70 / Easy}</a><ul>
+<li class="chapter" data-level="2.31.1" data-path="climbing-stairs-leet-code-70-easy.html"><a href="climbing-stairs-leet-code-70-easy.html#description-31"><i class="fa fa-check"></i><b>2.31.1</b> Description</a></li>
+<li class="chapter" data-level="2.31.2" data-path="climbing-stairs-leet-code-70-easy.html"><a href="climbing-stairs-leet-code-70-easy.html#example-30"><i class="fa fa-check"></i><b>2.31.2</b> Example</a></li>
+<li class="chapter" data-level="2.31.3" data-path="climbing-stairs-leet-code-70-easy.html"><a href="climbing-stairs-leet-code-70-easy.html#solution-24"><i class="fa fa-check"></i><b>2.31.3</b> Solution</a></li>
+<li class="chapter" data-level="2.31.4" data-path="climbing-stairs-leet-code-70-easy.html"><a href="climbing-stairs-leet-code-70-easy.html#java-code-27"><i class="fa fa-check"></i><b>2.31.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.32" data-path="find-the-maximum-number-of-repetitions-firecode-level-3.html"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html"><i class="fa fa-check"></i><b>2.32</b> Find the Maximum Number of Repetitions / Firecode / Level 3}</a><ul>
+<li class="chapter" data-level="2.32.1" data-path="find-the-maximum-number-of-repetitions-firecode-level-3.html"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#description-32"><i class="fa fa-check"></i><b>2.32.1</b> Description</a></li>
+<li class="chapter" data-level="2.32.2" data-path="find-the-maximum-number-of-repetitions-firecode-level-3.html"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#example-31"><i class="fa fa-check"></i><b>2.32.2</b> Example</a></li>
+<li class="chapter" data-level="2.32.3" data-path="find-the-maximum-number-of-repetitions-firecode-level-3.html"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#solution-25"><i class="fa fa-check"></i><b>2.32.3</b> Solution</a></li>
+<li class="chapter" data-level="2.32.4" data-path="find-the-maximum-number-of-repetitions-firecode-level-3.html"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#java-code-28"><i class="fa fa-check"></i><b>2.32.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.33" data-path="house-robber-leet-code-198-easy.html"><a href="house-robber-leet-code-198-easy.html"><i class="fa fa-check"></i><b>2.33</b> House Robber / Leet Code 198 / Easy}</a><ul>
+<li class="chapter" data-level="2.33.1" data-path="house-robber-leet-code-198-easy.html"><a href="house-robber-leet-code-198-easy.html#description-33"><i class="fa fa-check"></i><b>2.33.1</b> Description</a></li>
+<li class="chapter" data-level="2.33.2" data-path="house-robber-leet-code-198-easy.html"><a href="house-robber-leet-code-198-easy.html#example-32"><i class="fa fa-check"></i><b>2.33.2</b> Example</a></li>
+<li class="chapter" data-level="2.33.3" data-path="house-robber-leet-code-198-easy.html"><a href="house-robber-leet-code-198-easy.html#solution-26"><i class="fa fa-check"></i><b>2.33.3</b> Solution</a></li>
+<li class="chapter" data-level="2.33.4" data-path="house-robber-leet-code-198-easy.html"><a href="house-robber-leet-code-198-easy.html#java-code-29"><i class="fa fa-check"></i><b>2.33.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.34" data-path="best-time-to-buy-and-sell-stock-leet-code-121-easy.html"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html"><i class="fa fa-check"></i><b>2.34</b> Best Time to Buy and Sell Stock / Leet Code 121 / Easy}</a><ul>
+<li class="chapter" data-level="2.34.1" data-path="best-time-to-buy-and-sell-stock-leet-code-121-easy.html"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#description-34"><i class="fa fa-check"></i><b>2.34.1</b> Description</a></li>
+<li class="chapter" data-level="2.34.2" data-path="best-time-to-buy-and-sell-stock-leet-code-121-easy.html"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#example-33"><i class="fa fa-check"></i><b>2.34.2</b> Example</a></li>
+<li class="chapter" data-level="2.34.3" data-path="best-time-to-buy-and-sell-stock-leet-code-121-easy.html"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#solution-27"><i class="fa fa-check"></i><b>2.34.3</b> Solution</a></li>
+<li class="chapter" data-level="2.34.4" data-path="best-time-to-buy-and-sell-stock-leet-code-121-easy.html"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#java-code-30"><i class="fa fa-check"></i><b>2.34.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.35" data-path="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html"><a href="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html"><i class="fa fa-check"></i><b>2.35</b> Best Time to Buy and Sell Stock II / Leet Code 122 / Easy}</a><ul>
+<li class="chapter" data-level="2.35.1" data-path="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html"><a href="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html#description-35"><i class="fa fa-check"></i><b>2.35.1</b> Description</a></li>
+<li class="chapter" data-level="2.35.2" data-path="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html"><a href="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html#example-34"><i class="fa fa-check"></i><b>2.35.2</b> Example</a></li>
+<li class="chapter" data-level="2.35.3" data-path="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html"><a href="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html#solution-28"><i class="fa fa-check"></i><b>2.35.3</b> Solution</a></li>
+<li class="chapter" data-level="2.35.4" data-path="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html"><a href="best-time-to-buy-and-sell-stock-ii-leet-code-122-easy.html#java-code-31"><i class="fa fa-check"></i><b>2.35.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.36" data-path="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium.html"><a href="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium.html"><i class="fa fa-check"></i><b>2.36</b> Best Time to Buy and Sell Stock with Cooldown / Leet Code 309 / Medium}</a><ul>
+<li class="chapter" data-level="2.36.1" data-path="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium.html"><a href="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium.html#description-36"><i class="fa fa-check"></i><b>2.36.1</b> Description</a></li>
+<li class="chapter" data-level="2.36.2" data-path="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium.html"><a href="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium.html#example-35"><i class="fa fa-check"></i><b>2.36.2</b> Example</a></li>
+<li class="chapter" data-level="2.36.3" data-path="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium.html"><a href="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium.html#solution-29"><i class="fa fa-check"></i><b>2.36.3</b> Solution</a></li>
+<li class="chapter" data-level="2.36.4" data-path="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium.html"><a href="best-time-to-buy-and-sell-stock-with-cooldown-leet-code-309-medium.html#java-code-32"><i class="fa fa-check"></i><b>2.36.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.37" data-path="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html"><a href="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html"><i class="fa fa-check"></i><b>2.37</b> Minimum Swaps To Make Sequences Increasing / LeetCode 801 / Medium}</a><ul>
+<li class="chapter" data-level="2.37.1" data-path="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html"><a href="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html#description-37"><i class="fa fa-check"></i><b>2.37.1</b> Description</a></li>
+<li class="chapter" data-level="2.37.2" data-path="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html"><a href="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html#example-36"><i class="fa fa-check"></i><b>2.37.2</b> Example</a></li>
+<li class="chapter" data-level="2.37.3" data-path="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html"><a href="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html#solution-30"><i class="fa fa-check"></i><b>2.37.3</b> Solution</a></li>
+<li class="chapter" data-level="2.37.4" data-path="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html"><a href="minimum-swaps-to-make-sequences-increasing-leetcode-801-medium.html#java-code-33"><i class="fa fa-check"></i><b>2.37.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="2.38" data-path="retrieve-an-optimal-computation-from-an-array.html"><a href="retrieve-an-optimal-computation-from-an-array.html"><i class="fa fa-check"></i><b>2.38</b> Retrieve an Optimal Computation from an Array / / }</a><ul>
+<li class="chapter" data-level="2.38.1" data-path="retrieve-an-optimal-computation-from-an-array.html"><a href="retrieve-an-optimal-computation-from-an-array.html#description-38"><i class="fa fa-check"></i><b>2.38.1</b> Description</a></li>
+<li class="chapter" data-level="2.38.2" data-path="retrieve-an-optimal-computation-from-an-array.html"><a href="retrieve-an-optimal-computation-from-an-array.html#example-37"><i class="fa fa-check"></i><b>2.38.2</b> Example</a></li>
+<li class="chapter" data-level="2.38.3" data-path="retrieve-an-optimal-computation-from-an-array.html"><a href="retrieve-an-optimal-computation-from-an-array.html#solution---recursion"><i class="fa fa-check"></i><b>2.38.3</b> Solution - Recursion}</a></li>
+<li class="chapter" data-level="2.38.4" data-path="retrieve-an-optimal-computation-from-an-array.html"><a href="retrieve-an-optimal-computation-from-an-array.html#java-code---recursion"><i class="fa fa-check"></i><b>2.38.4</b> Java Code - Recursion}</a></li>
+<li class="chapter" data-level="2.38.5" data-path="retrieve-an-optimal-computation-from-an-array.html"><a href="retrieve-an-optimal-computation-from-an-array.html#solution---recursion-with-memoization"><i class="fa fa-check"></i><b>2.38.5</b> Solution - Recursion with Memoization}</a></li>
+<li class="chapter" data-level="2.38.6" data-path="retrieve-an-optimal-computation-from-an-array.html"><a href="retrieve-an-optimal-computation-from-an-array.html#java-code---recursion-with-memoization"><i class="fa fa-check"></i><b>2.38.6</b> Java Code - Recursion with Memoization}</a></li>
+<li class="chapter" data-level="2.38.7" data-path="retrieve-an-optimal-computation-from-an-array.html"><a href="retrieve-an-optimal-computation-from-an-array.html#solution---dynamic-programming-with-tabulation"><i class="fa fa-check"></i><b>2.38.7</b> Solution - Dynamic Programming with Tabulation}</a></li>
+<li class="chapter" data-level="2.38.8" data-path="retrieve-an-optimal-computation-from-an-array.html"><a href="retrieve-an-optimal-computation-from-an-array.html#java-code---dynamic-programming-with-tabulation"><i class="fa fa-check"></i><b>2.38.8</b> Java Code - Dynamic Programming with Tabulation}</a></li>
+</ul></li>
+<li class="chapter" data-level="2.39" data-path="shortest-word-distance.html"><a href="shortest-word-distance.html"><i class="fa fa-check"></i><b>2.39</b> Shortest Word Distance / / }</a><ul>
+<li class="chapter" data-level="2.39.1" data-path="shortest-word-distance.html"><a href="shortest-word-distance.html#description-39"><i class="fa fa-check"></i><b>2.39.1</b> Description</a></li>
+<li class="chapter" data-level="2.39.2" data-path="shortest-word-distance.html"><a href="shortest-word-distance.html#example-38"><i class="fa fa-check"></i><b>2.39.2</b> Example</a></li>
+<li class="chapter" data-level="2.39.3" data-path="shortest-word-distance.html"><a href="shortest-word-distance.html#solution-31"><i class="fa fa-check"></i><b>2.39.3</b> Solution</a></li>
+<li class="chapter" data-level="2.39.4" data-path="shortest-word-distance.html"><a href="shortest-word-distance.html#java-code-34"><i class="fa fa-check"></i><b>2.39.4</b> Java Code</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="matrix.html"><a href="matrix.html"><i class="fa fa-check"></i><b>3</b> Matrix</a><ul>
+<li class="chapter" data-level="3.1" data-path="design-a-tic-tac-toe-leetcode-348-medium.html"><a href="design-a-tic-tac-toe-leetcode-348-medium.html"><i class="fa fa-check"></i><b>3.1</b> Design a Tic-tac-toe / LeetCode 348 / Medium}</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="design-a-tic-tac-toe-leetcode-348-medium.html"><a href="design-a-tic-tac-toe-leetcode-348-medium.html#description-40"><i class="fa fa-check"></i><b>3.1.1</b> Description}</a></li>
+<li class="chapter" data-level="3.1.2" data-path="design-a-tic-tac-toe-leetcode-348-medium.html"><a href="design-a-tic-tac-toe-leetcode-348-medium.html#example-39"><i class="fa fa-check"></i><b>3.1.2</b> Example}</a></li>
+<li class="chapter" data-level="3.1.3" data-path="design-a-tic-tac-toe-leetcode-348-medium.html"><a href="design-a-tic-tac-toe-leetcode-348-medium.html#solution-32"><i class="fa fa-check"></i><b>3.1.3</b> Solution}</a></li>
+<li class="chapter" data-level="3.1.4" data-path="design-a-tic-tac-toe-leetcode-348-medium.html"><a href="design-a-tic-tac-toe-leetcode-348-medium.html#java-code-35"><i class="fa fa-check"></i><b>3.1.4</b> Java Code}</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="rotate-image-leet-code-48-medium.html"><a href="rotate-image-leet-code-48-medium.html"><i class="fa fa-check"></i><b>3.2</b> Rotate Image / Leet Code 48 / Medium}</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="rotate-image-leet-code-48-medium.html"><a href="rotate-image-leet-code-48-medium.html#description-41"><i class="fa fa-check"></i><b>3.2.1</b> Description}</a></li>
+<li class="chapter" data-level="3.2.2" data-path="rotate-image-leet-code-48-medium.html"><a href="rotate-image-leet-code-48-medium.html#example-40"><i class="fa fa-check"></i><b>3.2.2</b> Example}</a></li>
+<li class="chapter" data-level="3.2.3" data-path="rotate-image-leet-code-48-medium.html"><a href="rotate-image-leet-code-48-medium.html#solution-33"><i class="fa fa-check"></i><b>3.2.3</b> Solution}</a></li>
+<li class="chapter" data-level="3.2.4" data-path="rotate-image-leet-code-48-medium.html"><a href="rotate-image-leet-code-48-medium.html#java-code-36"><i class="fa fa-check"></i><b>3.2.4</b> Java Code}</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="spiral-matrix-leetcode-54-medium.html"><a href="spiral-matrix-leetcode-54-medium.html"><i class="fa fa-check"></i><b>3.3</b> Spiral Matrix / LeetCode 54 / Medium}</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="spiral-matrix-leetcode-54-medium.html"><a href="spiral-matrix-leetcode-54-medium.html#description-42"><i class="fa fa-check"></i><b>3.3.1</b> Description}</a></li>
+<li class="chapter" data-level="3.3.2" data-path="spiral-matrix-leetcode-54-medium.html"><a href="spiral-matrix-leetcode-54-medium.html#example-41"><i class="fa fa-check"></i><b>3.3.2</b> Example}</a></li>
+<li class="chapter" data-level="3.3.3" data-path="spiral-matrix-leetcode-54-medium.html"><a href="spiral-matrix-leetcode-54-medium.html#java-code-37"><i class="fa fa-check"></i><b>3.3.3</b> Java Code}</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="search-a-2d-matrix-leetcode-74-medium.html"><a href="search-a-2d-matrix-leetcode-74-medium.html"><i class="fa fa-check"></i><b>3.4</b> Search a 2D Matrix / LeetCode 74 / Medium}</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="search-a-2d-matrix-leetcode-74-medium.html"><a href="search-a-2d-matrix-leetcode-74-medium.html#description-43"><i class="fa fa-check"></i><b>3.4.1</b> Description}</a></li>
+<li class="chapter" data-level="3.4.2" data-path="search-a-2d-matrix-leetcode-74-medium.html"><a href="search-a-2d-matrix-leetcode-74-medium.html#example-42"><i class="fa fa-check"></i><b>3.4.2</b> Example}</a></li>
+<li class="chapter" data-level="3.4.3" data-path="search-a-2d-matrix-leetcode-74-medium.html"><a href="search-a-2d-matrix-leetcode-74-medium.html#java-code-38"><i class="fa fa-check"></i><b>3.4.3</b> Java Code}</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="search-a-2d-matrix-ii-leetcode-240-medium.html"><a href="search-a-2d-matrix-ii-leetcode-240-medium.html"><i class="fa fa-check"></i><b>3.5</b> Search a 2D Matrix II / LeetCode 240 / Medium}</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="search-a-2d-matrix-ii-leetcode-240-medium.html"><a href="search-a-2d-matrix-ii-leetcode-240-medium.html#description-44"><i class="fa fa-check"></i><b>3.5.1</b> Description}</a></li>
+<li class="chapter" data-level="3.5.2" data-path="search-a-2d-matrix-ii-leetcode-240-medium.html"><a href="search-a-2d-matrix-ii-leetcode-240-medium.html#example-43"><i class="fa fa-check"></i><b>3.5.2</b> Example}</a></li>
+<li class="chapter" data-level="3.5.3" data-path="search-a-2d-matrix-ii-leetcode-240-medium.html"><a href="search-a-2d-matrix-ii-leetcode-240-medium.html#solution-34"><i class="fa fa-check"></i><b>3.5.3</b> Solution}</a></li>
+<li class="chapter" data-level="3.5.4" data-path="search-a-2d-matrix-ii-leetcode-240-medium.html"><a href="search-a-2d-matrix-ii-leetcode-240-medium.html#java-code-39"><i class="fa fa-check"></i><b>3.5.4</b> Java Code}</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="minimum-path-sum-leetcode-64-medium.html"><a href="minimum-path-sum-leetcode-64-medium.html"><i class="fa fa-check"></i><b>3.6</b> Minimum Path Sum / LeetCode 64 / Medium}</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="minimum-path-sum-leetcode-64-medium.html"><a href="minimum-path-sum-leetcode-64-medium.html#description-45"><i class="fa fa-check"></i><b>3.6.1</b> Description}</a></li>
+<li class="chapter" data-level="3.6.2" data-path="minimum-path-sum-leetcode-64-medium.html"><a href="minimum-path-sum-leetcode-64-medium.html#solution---recursive"><i class="fa fa-check"></i><b>3.6.2</b> Solution - Recursive}</a></li>
+<li class="chapter" data-level="3.6.3" data-path="minimum-path-sum-leetcode-64-medium.html"><a href="minimum-path-sum-leetcode-64-medium.html#java-code---recursive"><i class="fa fa-check"></i><b>3.6.3</b> Java Code - Recursive}</a></li>
+<li class="chapter" data-level="3.6.4" data-path="minimum-path-sum-leetcode-64-medium.html"><a href="minimum-path-sum-leetcode-64-medium.html#solution---dynamic-programming"><i class="fa fa-check"></i><b>3.6.4</b> Solution - Dynamic Programming}</a></li>
+<li class="chapter" data-level="3.6.5" data-path="minimum-path-sum-leetcode-64-medium.html"><a href="minimum-path-sum-leetcode-64-medium.html#java-code---dynamic-programming"><i class="fa fa-check"></i><b>3.6.5</b> Java Code - Dynamic Programming}</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="unique-paths-leetcode-62-medium.html"><a href="unique-paths-leetcode-62-medium.html"><i class="fa fa-check"></i><b>3.7</b> Unique Paths / LeetCode 62 / Medium}</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="unique-paths-leetcode-62-medium.html"><a href="unique-paths-leetcode-62-medium.html#description-46"><i class="fa fa-check"></i><b>3.7.1</b> Description}</a></li>
+<li class="chapter" data-level="3.7.2" data-path="unique-paths-leetcode-62-medium.html"><a href="unique-paths-leetcode-62-medium.html#example-44"><i class="fa fa-check"></i><b>3.7.2</b> Example}</a></li>
+<li class="chapter" data-level="3.7.3" data-path="unique-paths-leetcode-62-medium.html"><a href="unique-paths-leetcode-62-medium.html#solution---recursion-1"><i class="fa fa-check"></i><b>3.7.3</b> Solution - Recursion}</a></li>
+<li class="chapter" data-level="3.7.4" data-path="unique-paths-leetcode-62-medium.html"><a href="unique-paths-leetcode-62-medium.html#java-code---recursion-1"><i class="fa fa-check"></i><b>3.7.4</b> Java Code - Recursion}</a></li>
+<li class="chapter" data-level="3.7.5" data-path="unique-paths-leetcode-62-medium.html"><a href="unique-paths-leetcode-62-medium.html#solution---dynamic-programming-1"><i class="fa fa-check"></i><b>3.7.5</b> Solution - Dynamic Programming}</a></li>
+<li class="chapter" data-level="3.7.6" data-path="unique-paths-leetcode-62-medium.html"><a href="unique-paths-leetcode-62-medium.html#java-code---dynamic-programming-1"><i class="fa fa-check"></i><b>3.7.6</b> Java Code - Dynamic Programming}</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="word-search-leetcode-79-medium.html"><a href="word-search-leetcode-79-medium.html"><i class="fa fa-check"></i><b>3.8</b> Word Search / LeetCode 79 / Medium}</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="word-search-leetcode-79-medium.html"><a href="word-search-leetcode-79-medium.html#description-47"><i class="fa fa-check"></i><b>3.8.1</b> Description}</a></li>
+<li class="chapter" data-level="3.8.2" data-path="word-search-leetcode-79-medium.html"><a href="word-search-leetcode-79-medium.html#example-45"><i class="fa fa-check"></i><b>3.8.2</b> Example}</a></li>
+<li class="chapter" data-level="3.8.3" data-path="word-search-leetcode-79-medium.html"><a href="word-search-leetcode-79-medium.html#solution---dfs"><i class="fa fa-check"></i><b>3.8.3</b> Solution - DFS}</a></li>
+<li class="chapter" data-level="3.8.4" data-path="word-search-leetcode-79-medium.html"><a href="word-search-leetcode-79-medium.html#java-code---dfs"><i class="fa fa-check"></i><b>3.8.4</b> Java Code - DFS}</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="number-of-islands-leetcode-200-medium.html"><a href="number-of-islands-leetcode-200-medium.html"><i class="fa fa-check"></i><b>3.9</b> Number of Islands / LeetCode 200 / Medium}</a><ul>
+<li class="chapter" data-level="3.9.1" data-path="number-of-islands-leetcode-200-medium.html"><a href="number-of-islands-leetcode-200-medium.html#description-48"><i class="fa fa-check"></i><b>3.9.1</b> Description}</a></li>
+<li class="chapter" data-level="3.9.2" data-path="number-of-islands-leetcode-200-medium.html"><a href="number-of-islands-leetcode-200-medium.html#example-46"><i class="fa fa-check"></i><b>3.9.2</b> Example}</a></li>
+<li class="chapter" data-level="3.9.3" data-path="number-of-islands-leetcode-200-medium.html"><a href="number-of-islands-leetcode-200-medium.html#java-code---dfs-1"><i class="fa fa-check"></i><b>3.9.3</b> Java Code - DFS}</a></li>
+</ul></li>
+<li class="chapter" data-level="3.10" data-path="surrounded-regions-leetcode-130-medium.html"><a href="surrounded-regions-leetcode-130-medium.html"><i class="fa fa-check"></i><b>3.10</b> Surrounded Regions / LeetCode 130 / Medium}</a><ul>
+<li class="chapter" data-level="3.10.1" data-path="surrounded-regions-leetcode-130-medium.html"><a href="surrounded-regions-leetcode-130-medium.html#description-49"><i class="fa fa-check"></i><b>3.10.1</b> Description}</a></li>
+<li class="chapter" data-level="3.10.2" data-path="surrounded-regions-leetcode-130-medium.html"><a href="surrounded-regions-leetcode-130-medium.html#example-47"><i class="fa fa-check"></i><b>3.10.2</b> Example}</a></li>
+<li class="chapter" data-level="3.10.3" data-path="surrounded-regions-leetcode-130-medium.html"><a href="surrounded-regions-leetcode-130-medium.html#solution---dfs-1"><i class="fa fa-check"></i><b>3.10.3</b> Solution - DFS}</a></li>
+<li class="chapter" data-level="3.10.4" data-path="surrounded-regions-leetcode-130-medium.html"><a href="surrounded-regions-leetcode-130-medium.html#java-code---dfs-2"><i class="fa fa-check"></i><b>3.10.4</b> Java Code - DFS}</a></li>
+</ul></li>
+<li class="chapter" data-level="3.11" data-path="best-meeting-point-leetcode-296-hard.html"><a href="best-meeting-point-leetcode-296-hard.html"><i class="fa fa-check"></i><b>3.11</b> Best Meeting Point / LeetCode 296 / Hard}</a><ul>
+<li class="chapter" data-level="3.11.1" data-path="best-meeting-point-leetcode-296-hard.html"><a href="best-meeting-point-leetcode-296-hard.html#description-50"><i class="fa fa-check"></i><b>3.11.1</b> Description}</a></li>
+<li class="chapter" data-level="3.11.2" data-path="best-meeting-point-leetcode-296-hard.html"><a href="best-meeting-point-leetcode-296-hard.html#example-48"><i class="fa fa-check"></i><b>3.11.2</b> Example}</a></li>
+<li class="chapter" data-level="3.11.3" data-path="best-meeting-point-leetcode-296-hard.html"><a href="best-meeting-point-leetcode-296-hard.html#java-code-40"><i class="fa fa-check"></i><b>3.11.3</b> Java Code}</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="tree.html"><a href="tree.html"><i class="fa fa-check"></i><b>4</b> Tree</a><ul>
+<li class="chapter" data-level="4.1" data-path="breadth-first-traversal.html"><a href="breadth-first-traversal.html"><i class="fa fa-check"></i><b>4.1</b> Breadth First Traversal</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="breadth-first-traversal.html"><a href="breadth-first-traversal.html#algorithm-56"><i class="fa fa-check"></i><b>4.1.1</b> Algorithm\</a></li>
+<li class="chapter" data-level="4.1.2" data-path="breadth-first-traversal.html"><a href="breadth-first-traversal.html#typical-implementation---java"><i class="fa fa-check"></i><b>4.1.2</b> Typical Implementation - Java</a></li>
+<li class="chapter" data-level="4.1.3" data-path="breadth-first-traversal.html"><a href="breadth-first-traversal.html#complexity-analysis"><i class="fa fa-check"></i><b>4.1.3</b> Complexity Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="depth-first-traversal.html"><a href="depth-first-traversal.html"><i class="fa fa-check"></i><b>4.2</b> Depth First Traversal</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="depth-first-traversal.html"><a href="depth-first-traversal.html#algorithm-57"><i class="fa fa-check"></i><b>4.2.1</b> Algorithm</a></li>
+<li class="chapter" data-level="4.2.2" data-path="depth-first-traversal.html"><a href="depth-first-traversal.html#type-of-depth-first-traversal"><i class="fa fa-check"></i><b>4.2.2</b> Type of Depth First Traversal</a></li>
+<li class="chapter" data-level="4.2.3" data-path="depth-first-traversal.html"><a href="depth-first-traversal.html#complexity-analysis-1"><i class="fa fa-check"></i><b>4.2.3</b> Complexity Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="selection-strategy.html"><a href="selection-strategy.html"><i class="fa fa-check"></i><b>4.3</b> Selection Strategy</a></li>
+<li class="chapter" data-level="4.4" data-path="binary-search-tree.html"><a href="binary-search-tree.html"><i class="fa fa-check"></i><b>4.4</b> Binary Search Tree</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="binary-search-tree.html"><a href="binary-search-tree.html#algorithm-58"><i class="fa fa-check"></i><b>4.4.1</b> Algorithm</a></li>
+<li class="chapter" data-level="4.4.2" data-path="binary-search-tree.html"><a href="binary-search-tree.html#complexity-analysis-2"><i class="fa fa-check"></i><b>4.4.2</b> Complexity Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="balanced-binary-tree-leet-code-110-easy.html"><a href="balanced-binary-tree-leet-code-110-easy.html"><i class="fa fa-check"></i><b>4.5</b> Balanced Binary Tree / Leet Code 110 / Easy</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="balanced-binary-tree-leet-code-110-easy.html"><a href="balanced-binary-tree-leet-code-110-easy.html#description-51"><i class="fa fa-check"></i><b>4.5.1</b> Description</a></li>
+<li class="chapter" data-level="4.5.2" data-path="balanced-binary-tree-leet-code-110-easy.html"><a href="balanced-binary-tree-leet-code-110-easy.html#example-49"><i class="fa fa-check"></i><b>4.5.2</b> Example</a></li>
+<li class="chapter" data-level="4.5.3" data-path="balanced-binary-tree-leet-code-110-easy.html"><a href="balanced-binary-tree-leet-code-110-easy.html#solution-35"><i class="fa fa-check"></i><b>4.5.3</b> Solution</a></li>
+<li class="chapter" data-level="4.5.4" data-path="balanced-binary-tree-leet-code-110-easy.html"><a href="balanced-binary-tree-leet-code-110-easy.html#java-code-41"><i class="fa fa-check"></i><b>4.5.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="invert-binary-tree-leet-code-226-easy.html"><a href="invert-binary-tree-leet-code-226-easy.html"><i class="fa fa-check"></i><b>4.6</b> Invert Binary Tree / Leet Code 226 Easy</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="invert-binary-tree-leet-code-226-easy.html"><a href="invert-binary-tree-leet-code-226-easy.html#description-52"><i class="fa fa-check"></i><b>4.6.1</b> Description</a></li>
+<li class="chapter" data-level="4.6.2" data-path="invert-binary-tree-leet-code-226-easy.html"><a href="invert-binary-tree-leet-code-226-easy.html#example-50"><i class="fa fa-check"></i><b>4.6.2</b> Example</a></li>
+<li class="chapter" data-level="4.6.3" data-path="invert-binary-tree-leet-code-226-easy.html"><a href="invert-binary-tree-leet-code-226-easy.html#solution---dfs-2"><i class="fa fa-check"></i><b>4.6.3</b> Solution - DFS</a></li>
+<li class="chapter" data-level="4.6.4" data-path="invert-binary-tree-leet-code-226-easy.html"><a href="invert-binary-tree-leet-code-226-easy.html#java-code---dfs-3"><i class="fa fa-check"></i><b>4.6.4</b> Java Code - DFS</a></li>
+<li class="chapter" data-level="4.6.5" data-path="invert-binary-tree-leet-code-226-easy.html"><a href="invert-binary-tree-leet-code-226-easy.html#solution---bfs"><i class="fa fa-check"></i><b>4.6.5</b> Solution - BFS</a></li>
+<li class="chapter" data-level="4.6.6" data-path="invert-binary-tree-leet-code-226-easy.html"><a href="invert-binary-tree-leet-code-226-easy.html#java-code---bfs"><i class="fa fa-check"></i><b>4.6.6</b> Java Code - BFS</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="symmetric-tree-leet-code-101-easy.html"><a href="symmetric-tree-leet-code-101-easy.html"><i class="fa fa-check"></i><b>4.7</b> Symmetric Tree / Leet Code 101 / Easy</a><ul>
+<li class="chapter" data-level="4.7.1" data-path="symmetric-tree-leet-code-101-easy.html"><a href="symmetric-tree-leet-code-101-easy.html#description-53"><i class="fa fa-check"></i><b>4.7.1</b> Description</a></li>
+<li class="chapter" data-level="4.7.2" data-path="symmetric-tree-leet-code-101-easy.html"><a href="symmetric-tree-leet-code-101-easy.html#example-51"><i class="fa fa-check"></i><b>4.7.2</b> Example</a></li>
+<li class="chapter" data-level="4.7.3" data-path="symmetric-tree-leet-code-101-easy.html"><a href="symmetric-tree-leet-code-101-easy.html#solution-36"><i class="fa fa-check"></i><b>4.7.3</b> Solution</a></li>
+<li class="chapter" data-level="4.7.4" data-path="symmetric-tree-leet-code-101-easy.html"><a href="symmetric-tree-leet-code-101-easy.html#java-code-42"><i class="fa fa-check"></i><b>4.7.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="binary-tree-level-order-traversal-leet-code-102-medium.html"><a href="binary-tree-level-order-traversal-leet-code-102-medium.html"><i class="fa fa-check"></i><b>4.8</b> Binary Tree Level Order Traversal / Leet Code 102 / Medium</a><ul>
+<li class="chapter" data-level="4.8.1" data-path="binary-tree-level-order-traversal-leet-code-102-medium.html"><a href="binary-tree-level-order-traversal-leet-code-102-medium.html#description-54"><i class="fa fa-check"></i><b>4.8.1</b> Description</a></li>
+<li class="chapter" data-level="4.8.2" data-path="binary-tree-level-order-traversal-leet-code-102-medium.html"><a href="binary-tree-level-order-traversal-leet-code-102-medium.html#example-52"><i class="fa fa-check"></i><b>4.8.2</b> Example</a></li>
+<li class="chapter" data-level="4.8.3" data-path="binary-tree-level-order-traversal-leet-code-102-medium.html"><a href="binary-tree-level-order-traversal-leet-code-102-medium.html#solution---bfs-with-two-loops"><i class="fa fa-check"></i><b>4.8.3</b> Solution - BFS with Two Loops</a></li>
+<li class="chapter" data-level="4.8.4" data-path="binary-tree-level-order-traversal-leet-code-102-medium.html"><a href="binary-tree-level-order-traversal-leet-code-102-medium.html#java-code---bfs-with-two-loops"><i class="fa fa-check"></i><b>4.8.4</b> Java Code - BFS with Two Loops</a></li>
+<li class="chapter" data-level="4.8.5" data-path="binary-tree-level-order-traversal-leet-code-102-medium.html"><a href="binary-tree-level-order-traversal-leet-code-102-medium.html#solution---bfs-with-one-loops"><i class="fa fa-check"></i><b>4.8.5</b> Solution - BFS with One Loops</a></li>
+<li class="chapter" data-level="4.8.6" data-path="binary-tree-level-order-traversal-leet-code-102-medium.html"><a href="binary-tree-level-order-traversal-leet-code-102-medium.html#java-code---bfs-with-one-loop"><i class="fa fa-check"></i><b>4.8.6</b> Java Code - BFS with One Loop</a></li>
+<li class="chapter" data-level="4.8.7" data-path="binary-tree-level-order-traversal-leet-code-102-medium.html"><a href="binary-tree-level-order-traversal-leet-code-102-medium.html#solution---dfs-3"><i class="fa fa-check"></i><b>4.8.7</b> Solution - DFS</a></li>
+<li class="chapter" data-level="4.8.8" data-path="binary-tree-level-order-traversal-leet-code-102-medium.html"><a href="binary-tree-level-order-traversal-leet-code-102-medium.html#java-code---dfs-4"><i class="fa fa-check"></i><b>4.8.8</b> Java Code - DFS</a></li>
+</ul></li>
+<li class="chapter" data-level="4.9" data-path="binary-tree-level-order-traversal-ii-leet-code-107-medium.html"><a href="binary-tree-level-order-traversal-ii-leet-code-107-medium.html"><i class="fa fa-check"></i><b>4.9</b> Binary Tree Level Order Traversal II / Leet Code 107 / Medium</a><ul>
+<li class="chapter" data-level="4.9.1" data-path="binary-tree-level-order-traversal-ii-leet-code-107-medium.html"><a href="binary-tree-level-order-traversal-ii-leet-code-107-medium.html#description-55"><i class="fa fa-check"></i><b>4.9.1</b> Description</a></li>
+<li class="chapter" data-level="4.9.2" data-path="binary-tree-level-order-traversal-ii-leet-code-107-medium.html"><a href="binary-tree-level-order-traversal-ii-leet-code-107-medium.html#example-53"><i class="fa fa-check"></i><b>4.9.2</b> Example</a></li>
+<li class="chapter" data-level="4.9.3" data-path="binary-tree-level-order-traversal-ii-leet-code-107-medium.html"><a href="binary-tree-level-order-traversal-ii-leet-code-107-medium.html#solution-37"><i class="fa fa-check"></i><b>4.9.3</b> Solution</a></li>
+<li class="chapter" data-level="4.9.4" data-path="binary-tree-level-order-traversal-ii-leet-code-107-medium.html"><a href="binary-tree-level-order-traversal-ii-leet-code-107-medium.html#java-code---two-loops"><i class="fa fa-check"></i><b>4.9.4</b> Java Code - Two Loops</a></li>
+<li class="chapter" data-level="4.9.5" data-path="binary-tree-level-order-traversal-ii-leet-code-107-medium.html"><a href="binary-tree-level-order-traversal-ii-leet-code-107-medium.html#java-code---one-loop"><i class="fa fa-check"></i><b>4.9.5</b> Java Code - One Loop</a></li>
+</ul></li>
+<li class="chapter" data-level="4.10" data-path="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html"><i class="fa fa-check"></i><b>4.10</b> Binary Tree Zigzag Level Order Traversal / Leet Code 103 / Medium</a><ul>
+<li class="chapter" data-level="4.10.1" data-path="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#description-56"><i class="fa fa-check"></i><b>4.10.1</b> Description</a></li>
+<li class="chapter" data-level="4.10.2" data-path="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#example-54"><i class="fa fa-check"></i><b>4.10.2</b> Example</a></li>
+<li class="chapter" data-level="4.10.3" data-path="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#solution-38"><i class="fa fa-check"></i><b>4.10.3</b> Solution</a></li>
+<li class="chapter" data-level="4.10.4" data-path="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#java-code---two-loops-1"><i class="fa fa-check"></i><b>4.10.4</b> Java Code - Two Loops</a></li>
+<li class="chapter" data-level="4.10.5" data-path="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#java-code---one-loop-1"><i class="fa fa-check"></i><b>4.10.5</b> Java Code - One Loop</a></li>
+</ul></li>
+<li class="chapter" data-level="4.11" data-path="count-complete-tree-nodes-leet-code-222-medium.html"><a href="count-complete-tree-nodes-leet-code-222-medium.html"><i class="fa fa-check"></i><b>4.11</b> Count Complete Tree Nodes / Leet Code 222 / Medium</a><ul>
+<li class="chapter" data-level="4.11.1" data-path="count-complete-tree-nodes-leet-code-222-medium.html"><a href="count-complete-tree-nodes-leet-code-222-medium.html#description-57"><i class="fa fa-check"></i><b>4.11.1</b> Description</a></li>
+<li class="chapter" data-level="4.11.2" data-path="count-complete-tree-nodes-leet-code-222-medium.html"><a href="count-complete-tree-nodes-leet-code-222-medium.html#example-55"><i class="fa fa-check"></i><b>4.11.2</b> Example</a></li>
+<li class="chapter" data-level="4.11.3" data-path="count-complete-tree-nodes-leet-code-222-medium.html"><a href="count-complete-tree-nodes-leet-code-222-medium.html#solution-39"><i class="fa fa-check"></i><b>4.11.3</b> Solution</a></li>
+<li class="chapter" data-level="4.11.4" data-path="count-complete-tree-nodes-leet-code-222-medium.html"><a href="count-complete-tree-nodes-leet-code-222-medium.html#java-code-43"><i class="fa fa-check"></i><b>4.11.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.12" data-path="distance-of-a-node-from-the-root-firebase-level-3.html"><a href="distance-of-a-node-from-the-root-firebase-level-3.html"><i class="fa fa-check"></i><b>4.12</b> Distance of a node from the root / Firebase / Level 3</a><ul>
+<li class="chapter" data-level="4.12.1" data-path="distance-of-a-node-from-the-root-firebase-level-3.html"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#description-58"><i class="fa fa-check"></i><b>4.12.1</b> Description</a></li>
+<li class="chapter" data-level="4.12.2" data-path="distance-of-a-node-from-the-root-firebase-level-3.html"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#example-56"><i class="fa fa-check"></i><b>4.12.2</b> Example</a></li>
+<li class="chapter" data-level="4.12.3" data-path="distance-of-a-node-from-the-root-firebase-level-3.html"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#solution-40"><i class="fa fa-check"></i><b>4.12.3</b> Solution</a></li>
+<li class="chapter" data-level="4.12.4" data-path="distance-of-a-node-from-the-root-firebase-level-3.html"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#java-code-44"><i class="fa fa-check"></i><b>4.12.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.13" data-path="path-sum-leet-code-112-easy.html"><a href="path-sum-leet-code-112-easy.html"><i class="fa fa-check"></i><b>4.13</b> Path Sum / Leet Code 112 / Easy</a><ul>
+<li class="chapter" data-level="4.13.1" data-path="path-sum-leet-code-112-easy.html"><a href="path-sum-leet-code-112-easy.html#description-59"><i class="fa fa-check"></i><b>4.13.1</b> Description</a></li>
+<li class="chapter" data-level="4.13.2" data-path="path-sum-leet-code-112-easy.html"><a href="path-sum-leet-code-112-easy.html#example-57"><i class="fa fa-check"></i><b>4.13.2</b> Example</a></li>
+<li class="chapter" data-level="4.13.3" data-path="path-sum-leet-code-112-easy.html"><a href="path-sum-leet-code-112-easy.html#solution-41"><i class="fa fa-check"></i><b>4.13.3</b> Solution</a></li>
+<li class="chapter" data-level="4.13.4" data-path="path-sum-leet-code-112-easy.html"><a href="path-sum-leet-code-112-easy.html#java-code-45"><i class="fa fa-check"></i><b>4.13.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.14" data-path="path-sum-ii-leet-code-113-medium.html"><a href="path-sum-ii-leet-code-113-medium.html"><i class="fa fa-check"></i><b>4.14</b> Path Sum II / Leet Code 113 / Medium</a><ul>
+<li class="chapter" data-level="4.14.1" data-path="path-sum-ii-leet-code-113-medium.html"><a href="path-sum-ii-leet-code-113-medium.html#description-60"><i class="fa fa-check"></i><b>4.14.1</b> Description</a></li>
+<li class="chapter" data-level="4.14.2" data-path="path-sum-ii-leet-code-113-medium.html"><a href="path-sum-ii-leet-code-113-medium.html#example-58"><i class="fa fa-check"></i><b>4.14.2</b> Example</a></li>
+<li class="chapter" data-level="4.14.3" data-path="path-sum-ii-leet-code-113-medium.html"><a href="path-sum-ii-leet-code-113-medium.html#solution-42"><i class="fa fa-check"></i><b>4.14.3</b> Solution</a></li>
+<li class="chapter" data-level="4.14.4" data-path="path-sum-ii-leet-code-113-medium.html"><a href="path-sum-ii-leet-code-113-medium.html#java-code-46"><i class="fa fa-check"></i><b>4.14.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.15" data-path="path-sum-iii-leet-code-437-easy.html"><a href="path-sum-iii-leet-code-437-easy.html"><i class="fa fa-check"></i><b>4.15</b> Path Sum III / Leet Code 437 / Easy</a><ul>
+<li class="chapter" data-level="4.15.1" data-path="path-sum-iii-leet-code-437-easy.html"><a href="path-sum-iii-leet-code-437-easy.html#description-61"><i class="fa fa-check"></i><b>4.15.1</b> Description</a></li>
+<li class="chapter" data-level="4.15.2" data-path="path-sum-iii-leet-code-437-easy.html"><a href="path-sum-iii-leet-code-437-easy.html#solution-43"><i class="fa fa-check"></i><b>4.15.2</b> Solution</a></li>
+<li class="chapter" data-level="4.15.3" data-path="path-sum-iii-leet-code-437-easy.html"><a href="path-sum-iii-leet-code-437-easy.html#java-code-47"><i class="fa fa-check"></i><b>4.15.3</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.16" data-path="binary-tree-preorder-traversal-leet-code-144-medium.html"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html"><i class="fa fa-check"></i><b>4.16</b> Binary Tree Preorder Traversal / Leet Code 144 / Medium</a><ul>
+<li class="chapter" data-level="4.16.1" data-path="binary-tree-preorder-traversal-leet-code-144-medium.html"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#description-62"><i class="fa fa-check"></i><b>4.16.1</b> Description</a></li>
+<li class="chapter" data-level="4.16.2" data-path="binary-tree-preorder-traversal-leet-code-144-medium.html"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#example-59"><i class="fa fa-check"></i><b>4.16.2</b> Example</a></li>
+<li class="chapter" data-level="4.16.3" data-path="binary-tree-preorder-traversal-leet-code-144-medium.html"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#solution---iterative-i"><i class="fa fa-check"></i><b>4.16.3</b> Solution - Iterative I</a></li>
+<li class="chapter" data-level="4.16.4" data-path="binary-tree-preorder-traversal-leet-code-144-medium.html"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#java-code---iterative-i"><i class="fa fa-check"></i><b>4.16.4</b> Java Code - Iterative I</a></li>
+<li class="chapter" data-level="4.16.5" data-path="binary-tree-preorder-traversal-leet-code-144-medium.html"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#solution---iterative-ii"><i class="fa fa-check"></i><b>4.16.5</b> Solution - Iterative II</a></li>
+<li class="chapter" data-level="4.16.6" data-path="binary-tree-preorder-traversal-leet-code-144-medium.html"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#java-code---iterative-ii"><i class="fa fa-check"></i><b>4.16.6</b> Java Code - Iterative II</a></li>
+<li class="chapter" data-level="4.16.7" data-path="binary-tree-preorder-traversal-leet-code-144-medium.html"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#solution---recursive-1"><i class="fa fa-check"></i><b>4.16.7</b> Solution - Recursive</a></li>
+<li class="chapter" data-level="4.16.8" data-path="binary-tree-preorder-traversal-leet-code-144-medium.html"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#java-code---recursive-1"><i class="fa fa-check"></i><b>4.16.8</b> Java Code - Recursive</a></li>
+</ul></li>
+<li class="chapter" data-level="4.17" data-path="binary-tree-inorder-traversal-leet-code-94-medium.html"><a href="binary-tree-inorder-traversal-leet-code-94-medium.html"><i class="fa fa-check"></i><b>4.17</b> Binary Tree Inorder Traversal / Leet Code 94 / Medium</a><ul>
+<li class="chapter" data-level="4.17.1" data-path="binary-tree-inorder-traversal-leet-code-94-medium.html"><a href="binary-tree-inorder-traversal-leet-code-94-medium.html#description-63"><i class="fa fa-check"></i><b>4.17.1</b> Description</a></li>
+<li class="chapter" data-level="4.17.2" data-path="binary-tree-inorder-traversal-leet-code-94-medium.html"><a href="binary-tree-inorder-traversal-leet-code-94-medium.html#example-60"><i class="fa fa-check"></i><b>4.17.2</b> Example</a></li>
+<li class="chapter" data-level="4.17.3" data-path="binary-tree-inorder-traversal-leet-code-94-medium.html"><a href="binary-tree-inorder-traversal-leet-code-94-medium.html#solution---iterative-i-1"><i class="fa fa-check"></i><b>4.17.3</b> Solution - Iterative I</a></li>
+<li class="chapter" data-level="4.17.4" data-path="binary-tree-inorder-traversal-leet-code-94-medium.html"><a href="binary-tree-inorder-traversal-leet-code-94-medium.html#java-code---iterative-i-1"><i class="fa fa-check"></i><b>4.17.4</b> Java Code - Iterative I</a></li>
+<li class="chapter" data-level="4.17.5" data-path="binary-tree-inorder-traversal-leet-code-94-medium.html"><a href="binary-tree-inorder-traversal-leet-code-94-medium.html#solution---inorder-recursive"><i class="fa fa-check"></i><b>4.17.5</b> Solution - Inorder Recursive</a></li>
+<li class="chapter" data-level="4.17.6" data-path="binary-tree-inorder-traversal-leet-code-94-medium.html"><a href="binary-tree-inorder-traversal-leet-code-94-medium.html#java-code---inorder-recursive"><i class="fa fa-check"></i><b>4.17.6</b> Java Code - Inorder Recursive</a></li>
+</ul></li>
+<li class="chapter" data-level="4.18" data-path="binary-tree-postorder-traversal-leet-code-145-hard.html"><a href="binary-tree-postorder-traversal-leet-code-145-hard.html"><i class="fa fa-check"></i><b>4.18</b> Binary Tree Postorder Traversal / Leet Code 145 / Hard</a><ul>
+<li class="chapter" data-level="4.18.1" data-path="binary-tree-postorder-traversal-leet-code-145-hard.html"><a href="binary-tree-postorder-traversal-leet-code-145-hard.html#description-64"><i class="fa fa-check"></i><b>4.18.1</b> Description</a></li>
+<li class="chapter" data-level="4.18.2" data-path="binary-tree-postorder-traversal-leet-code-145-hard.html"><a href="binary-tree-postorder-traversal-leet-code-145-hard.html#example-61"><i class="fa fa-check"></i><b>4.18.2</b> Example</a></li>
+<li class="chapter" data-level="4.18.3" data-path="binary-tree-postorder-traversal-leet-code-145-hard.html"><a href="binary-tree-postorder-traversal-leet-code-145-hard.html#solution---iterative-i-2"><i class="fa fa-check"></i><b>4.18.3</b> Solution - Iterative I</a></li>
+<li class="chapter" data-level="4.18.4" data-path="binary-tree-postorder-traversal-leet-code-145-hard.html"><a href="binary-tree-postorder-traversal-leet-code-145-hard.html#java-code---iterative-i-2"><i class="fa fa-check"></i><b>4.18.4</b> Java Code - Iterative I</a></li>
+<li class="chapter" data-level="4.18.5" data-path="binary-tree-postorder-traversal-leet-code-145-hard.html"><a href="binary-tree-postorder-traversal-leet-code-145-hard.html#solution---iterative-with-two-stacks"><i class="fa fa-check"></i><b>4.18.5</b> Solution - Iterative with Two Stacks</a></li>
+<li class="chapter" data-level="4.18.6" data-path="binary-tree-postorder-traversal-leet-code-145-hard.html"><a href="binary-tree-postorder-traversal-leet-code-145-hard.html#java-code---iterative-with-two-stacks"><i class="fa fa-check"></i><b>4.18.6</b> Java Code - Iterative with Two Stacks</a></li>
+<li class="chapter" data-level="4.18.7" data-path="binary-tree-postorder-traversal-leet-code-145-hard.html"><a href="binary-tree-postorder-traversal-leet-code-145-hard.html#solution---recursive-2"><i class="fa fa-check"></i><b>4.18.7</b> Solution - Recursive</a></li>
+<li class="chapter" data-level="4.18.8" data-path="binary-tree-postorder-traversal-leet-code-145-hard.html"><a href="binary-tree-postorder-traversal-leet-code-145-hard.html#java-code---recursive-2"><i class="fa fa-check"></i><b>4.18.8</b> Java Code - Recursive</a></li>
+</ul></li>
+<li class="chapter" data-level="4.19" data-path="maximum-depth-of-binary-tree-leet-code-104-easy.html"><a href="maximum-depth-of-binary-tree-leet-code-104-easy.html"><i class="fa fa-check"></i><b>4.19</b> Maximum Depth of Binary Tree / Leet Code 104 / Easy</a><ul>
+<li class="chapter" data-level="4.19.1" data-path="maximum-depth-of-binary-tree-leet-code-104-easy.html"><a href="maximum-depth-of-binary-tree-leet-code-104-easy.html#description-65"><i class="fa fa-check"></i><b>4.19.1</b> Description</a></li>
+<li class="chapter" data-level="4.19.2" data-path="maximum-depth-of-binary-tree-leet-code-104-easy.html"><a href="maximum-depth-of-binary-tree-leet-code-104-easy.html#example-62"><i class="fa fa-check"></i><b>4.19.2</b> Example</a></li>
+<li class="chapter" data-level="4.19.3" data-path="maximum-depth-of-binary-tree-leet-code-104-easy.html"><a href="maximum-depth-of-binary-tree-leet-code-104-easy.html#solution-44"><i class="fa fa-check"></i><b>4.19.3</b> Solution</a></li>
+<li class="chapter" data-level="4.19.4" data-path="maximum-depth-of-binary-tree-leet-code-104-easy.html"><a href="maximum-depth-of-binary-tree-leet-code-104-easy.html#java-code-48"><i class="fa fa-check"></i><b>4.19.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.20" data-path="minimum-depth-of-binary-tree-leet-code-104-easy.html"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html"><i class="fa fa-check"></i><b>4.20</b> Minimum Depth of Binary Tree / Leet Code 104 / Easy</a><ul>
+<li class="chapter" data-level="4.20.1" data-path="minimum-depth-of-binary-tree-leet-code-104-easy.html"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#description-66"><i class="fa fa-check"></i><b>4.20.1</b> Description</a></li>
+<li class="chapter" data-level="4.20.2" data-path="minimum-depth-of-binary-tree-leet-code-104-easy.html"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#example-63"><i class="fa fa-check"></i><b>4.20.2</b> Example</a></li>
+<li class="chapter" data-level="4.20.3" data-path="minimum-depth-of-binary-tree-leet-code-104-easy.html"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#solution---recursive-3"><i class="fa fa-check"></i><b>4.20.3</b> Solution - Recursive</a></li>
+<li class="chapter" data-level="4.20.4" data-path="minimum-depth-of-binary-tree-leet-code-104-easy.html"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#java-code---recursive-3"><i class="fa fa-check"></i><b>4.20.4</b> Java Code - Recursive</a></li>
+<li class="chapter" data-level="4.20.5" data-path="minimum-depth-of-binary-tree-leet-code-104-easy.html"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#solution---iterative-bfs"><i class="fa fa-check"></i><b>4.20.5</b> Solution - Iterative BFS</a></li>
+<li class="chapter" data-level="4.20.6" data-path="minimum-depth-of-binary-tree-leet-code-104-easy.html"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#java-code---iterative-bfs"><i class="fa fa-check"></i><b>4.20.6</b> Java Code - Iterative BFS</a></li>
+</ul></li>
+<li class="chapter" data-level="4.21" data-path="count-univalue-subtrees-leet-code-250-medium.html"><a href="count-univalue-subtrees-leet-code-250-medium.html"><i class="fa fa-check"></i><b>4.21</b> Count Univalue Subtrees / Leet Code 250 / Medium</a><ul>
+<li class="chapter" data-level="4.21.1" data-path="count-univalue-subtrees-leet-code-250-medium.html"><a href="count-univalue-subtrees-leet-code-250-medium.html#description-67"><i class="fa fa-check"></i><b>4.21.1</b> Description</a></li>
+<li class="chapter" data-level="4.21.2" data-path="count-univalue-subtrees-leet-code-250-medium.html"><a href="count-univalue-subtrees-leet-code-250-medium.html#example-64"><i class="fa fa-check"></i><b>4.21.2</b> Example</a></li>
+<li class="chapter" data-level="4.21.3" data-path="count-univalue-subtrees-leet-code-250-medium.html"><a href="count-univalue-subtrees-leet-code-250-medium.html#solution-45"><i class="fa fa-check"></i><b>4.21.3</b> Solution</a></li>
+<li class="chapter" data-level="4.21.4" data-path="count-univalue-subtrees-leet-code-250-medium.html"><a href="count-univalue-subtrees-leet-code-250-medium.html#java-code-49"><i class="fa fa-check"></i><b>4.21.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.22" data-path="validate-binary-search-tree-leet-code-98-medium.html"><a href="validate-binary-search-tree-leet-code-98-medium.html"><i class="fa fa-check"></i><b>4.22</b> Validate Binary Search Tree / Leet Code 98 / Medium</a><ul>
+<li class="chapter" data-level="4.22.1" data-path="validate-binary-search-tree-leet-code-98-medium.html"><a href="validate-binary-search-tree-leet-code-98-medium.html#description-68"><i class="fa fa-check"></i><b>4.22.1</b> Description</a></li>
+<li class="chapter" data-level="4.22.2" data-path="validate-binary-search-tree-leet-code-98-medium.html"><a href="validate-binary-search-tree-leet-code-98-medium.html#example-65"><i class="fa fa-check"></i><b>4.22.2</b> Example</a></li>
+<li class="chapter" data-level="4.22.3" data-path="validate-binary-search-tree-leet-code-98-medium.html"><a href="validate-binary-search-tree-leet-code-98-medium.html#solution---recursive-4"><i class="fa fa-check"></i><b>4.22.3</b> Solution - Recursive</a></li>
+<li class="chapter" data-level="4.22.4" data-path="validate-binary-search-tree-leet-code-98-medium.html"><a href="validate-binary-search-tree-leet-code-98-medium.html#java-code---recursive-4"><i class="fa fa-check"></i><b>4.22.4</b> Java Code - Recursive</a></li>
+<li class="chapter" data-level="4.22.5" data-path="validate-binary-search-tree-leet-code-98-medium.html"><a href="validate-binary-search-tree-leet-code-98-medium.html#solution---iterative-bfs-1"><i class="fa fa-check"></i><b>4.22.5</b> Solution - Iterative BFS</a></li>
+<li class="chapter" data-level="4.22.6" data-path="validate-binary-search-tree-leet-code-98-medium.html"><a href="validate-binary-search-tree-leet-code-98-medium.html#java-code---iterative-bfs-1"><i class="fa fa-check"></i><b>4.22.6</b> Java Code - Iterative BFS</a></li>
+</ul></li>
+<li class="chapter" data-level="4.23" data-path="binary-tree-upside-down-leet-code-156-medium.html"><a href="binary-tree-upside-down-leet-code-156-medium.html"><i class="fa fa-check"></i><b>4.23</b> Binary Tree Upside Down / Leet Code 156 / Medium</a><ul>
+<li class="chapter" data-level="4.23.1" data-path="binary-tree-upside-down-leet-code-156-medium.html"><a href="binary-tree-upside-down-leet-code-156-medium.html#description-69"><i class="fa fa-check"></i><b>4.23.1</b> Description</a></li>
+<li class="chapter" data-level="4.23.2" data-path="binary-tree-upside-down-leet-code-156-medium.html"><a href="binary-tree-upside-down-leet-code-156-medium.html#example-66"><i class="fa fa-check"></i><b>4.23.2</b> Example</a></li>
+<li class="chapter" data-level="4.23.3" data-path="binary-tree-upside-down-leet-code-156-medium.html"><a href="binary-tree-upside-down-leet-code-156-medium.html#solution-46"><i class="fa fa-check"></i><b>4.23.3</b> Solution</a></li>
+<li class="chapter" data-level="4.23.4" data-path="binary-tree-upside-down-leet-code-156-medium.html"><a href="binary-tree-upside-down-leet-code-156-medium.html#java-code-50"><i class="fa fa-check"></i><b>4.23.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.24" data-path="inorder-successor-in-bst-leet-code-285-medium.html"><a href="inorder-successor-in-bst-leet-code-285-medium.html"><i class="fa fa-check"></i><b>4.24</b> Inorder Successor in BST / Leet Code 285 / Medium</a><ul>
+<li class="chapter" data-level="4.24.1" data-path="inorder-successor-in-bst-leet-code-285-medium.html"><a href="inorder-successor-in-bst-leet-code-285-medium.html#description-70"><i class="fa fa-check"></i><b>4.24.1</b> Description</a></li>
+<li class="chapter" data-level="4.24.2" data-path="inorder-successor-in-bst-leet-code-285-medium.html"><a href="inorder-successor-in-bst-leet-code-285-medium.html#example-67"><i class="fa fa-check"></i><b>4.24.2</b> Example</a></li>
+<li class="chapter" data-level="4.24.3" data-path="inorder-successor-in-bst-leet-code-285-medium.html"><a href="inorder-successor-in-bst-leet-code-285-medium.html#solution-47"><i class="fa fa-check"></i><b>4.24.3</b> Solution</a></li>
+<li class="chapter" data-level="4.24.4" data-path="inorder-successor-in-bst-leet-code-285-medium.html"><a href="inorder-successor-in-bst-leet-code-285-medium.html#java-code-51"><i class="fa fa-check"></i><b>4.24.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.25" data-path="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html"><a href="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html"><i class="fa fa-check"></i><b>4.25</b> Binary Tree Longest Consecutive Sequence / Leet Code 298 / Medium</a><ul>
+<li class="chapter" data-level="4.25.1" data-path="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html"><a href="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html#description-71"><i class="fa fa-check"></i><b>4.25.1</b> Description</a></li>
+<li class="chapter" data-level="4.25.2" data-path="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html"><a href="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html#example-68"><i class="fa fa-check"></i><b>4.25.2</b> Example</a></li>
+<li class="chapter" data-level="4.25.3" data-path="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html"><a href="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html#solution-48"><i class="fa fa-check"></i><b>4.25.3</b> Solution</a></li>
+<li class="chapter" data-level="4.25.4" data-path="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html"><a href="binary-tree-longest-consecutive-sequence-leet-code-298-medium.html#java-code-52"><i class="fa fa-check"></i><b>4.25.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.26" data-path="find-leaves-of-binary-tree-leet-code-366-medium.html"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html"><i class="fa fa-check"></i><b>4.26</b> Find Leaves of Binary Tree / Leet Code 366 / Medium</a><ul>
+<li class="chapter" data-level="4.26.1" data-path="find-leaves-of-binary-tree-leet-code-366-medium.html"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#description-72"><i class="fa fa-check"></i><b>4.26.1</b> Description</a></li>
+<li class="chapter" data-level="4.26.2" data-path="find-leaves-of-binary-tree-leet-code-366-medium.html"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#example-69"><i class="fa fa-check"></i><b>4.26.2</b> Example</a></li>
+<li class="chapter" data-level="4.26.3" data-path="find-leaves-of-binary-tree-leet-code-366-medium.html"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#solution-49"><i class="fa fa-check"></i><b>4.26.3</b> Solution</a></li>
+<li class="chapter" data-level="4.26.4" data-path="find-leaves-of-binary-tree-leet-code-366-medium.html"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#java-code-53"><i class="fa fa-check"></i><b>4.26.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.27" data-path="diameter-of-binary-tree-leet-code-543-easy.html"><a href="diameter-of-binary-tree-leet-code-543-easy.html"><i class="fa fa-check"></i><b>4.27</b> Diameter of Binary Tree / Leet Code 543 / Easy</a><ul>
+<li class="chapter" data-level="4.27.1" data-path="diameter-of-binary-tree-leet-code-543-easy.html"><a href="diameter-of-binary-tree-leet-code-543-easy.html#description-73"><i class="fa fa-check"></i><b>4.27.1</b> Description</a></li>
+<li class="chapter" data-level="4.27.2" data-path="diameter-of-binary-tree-leet-code-543-easy.html"><a href="diameter-of-binary-tree-leet-code-543-easy.html#example-70"><i class="fa fa-check"></i><b>4.27.2</b> Example</a></li>
+<li class="chapter" data-level="4.27.3" data-path="diameter-of-binary-tree-leet-code-543-easy.html"><a href="diameter-of-binary-tree-leet-code-543-easy.html#solution-50"><i class="fa fa-check"></i><b>4.27.3</b> Solution</a></li>
+<li class="chapter" data-level="4.27.4" data-path="diameter-of-binary-tree-leet-code-543-easy.html"><a href="diameter-of-binary-tree-leet-code-543-easy.html#java-code-54"><i class="fa fa-check"></i><b>4.27.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.28" data-path="binary-tree-serialization-firecode-level-3.html"><a href="binary-tree-serialization-firecode-level-3.html"><i class="fa fa-check"></i><b>4.28</b> Binary Tree Serialization / Firecode / Level 3</a><ul>
+<li class="chapter" data-level="4.28.1" data-path="binary-tree-serialization-firecode-level-3.html"><a href="binary-tree-serialization-firecode-level-3.html#description-74"><i class="fa fa-check"></i><b>4.28.1</b> Description</a></li>
+<li class="chapter" data-level="4.28.2" data-path="binary-tree-serialization-firecode-level-3.html"><a href="binary-tree-serialization-firecode-level-3.html#example-71"><i class="fa fa-check"></i><b>4.28.2</b> Example</a></li>
+<li class="chapter" data-level="4.28.3" data-path="binary-tree-serialization-firecode-level-3.html"><a href="binary-tree-serialization-firecode-level-3.html#solution-51"><i class="fa fa-check"></i><b>4.28.3</b> Solution</a></li>
+<li class="chapter" data-level="4.28.4" data-path="binary-tree-serialization-firecode-level-3.html"><a href="binary-tree-serialization-firecode-level-3.html#java-code-55"><i class="fa fa-check"></i><b>4.28.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.29" data-path="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"><a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"><i class="fa fa-check"></i><b>4.29</b> Fill in the Ancestors of the Node in a Binary Tree / Firebase / Level 3</a><ul>
+<li class="chapter" data-level="4.29.1" data-path="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"><a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html#description-75"><i class="fa fa-check"></i><b>4.29.1</b> Description</a></li>
+<li class="chapter" data-level="4.29.2" data-path="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"><a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html#example-72"><i class="fa fa-check"></i><b>4.29.2</b> Example</a></li>
+<li class="chapter" data-level="4.29.3" data-path="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"><a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html#solution-52"><i class="fa fa-check"></i><b>4.29.3</b> Solution</a></li>
+<li class="chapter" data-level="4.29.4" data-path="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"><a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html#java-code-56"><i class="fa fa-check"></i><b>4.29.4</b> Java Code</a></li>
+<li class="chapter" data-level="4.29.5" data-path="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"><a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html#description-76"><i class="fa fa-check"></i><b>4.29.5</b> Description</a></li>
+<li class="chapter" data-level="4.29.6" data-path="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"><a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html#example-73"><i class="fa fa-check"></i><b>4.29.6</b> Example</a></li>
+<li class="chapter" data-level="4.29.7" data-path="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"><a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html#solution-53"><i class="fa fa-check"></i><b>4.29.7</b> Solution</a></li>
+<li class="chapter" data-level="4.29.8" data-path="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html"><a href="fill-in-the-ancestors-of-the-node-in-a-binary-tree-firebase-level-3.html#java-code-57"><i class="fa fa-check"></i><b>4.29.8</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.30" data-path="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html"><i class="fa fa-check"></i><b>4.30</b> Convert Sorted Array to Binary Search Tree / Leet Code 108 / Easy</a><ul>
+<li class="chapter" data-level="4.30.1" data-path="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#description-77"><i class="fa fa-check"></i><b>4.30.1</b> Description</a></li>
+<li class="chapter" data-level="4.30.2" data-path="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#example-74"><i class="fa fa-check"></i><b>4.30.2</b> Example</a></li>
+<li class="chapter" data-level="4.30.3" data-path="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#solution-54"><i class="fa fa-check"></i><b>4.30.3</b> Solution</a></li>
+<li class="chapter" data-level="4.30.4" data-path="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#java-code-58"><i class="fa fa-check"></i><b>4.30.4</b> Java Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.31" data-path="populating-next-right-pointers-in-each-node-leet-code-116-medium.html"><a href="populating-next-right-pointers-in-each-node-leet-code-116-medium.html"><i class="fa fa-check"></i><b>4.31</b> Populating Next Right Pointers in Each Node / Leet Code 116 / Medium</a><ul>
+<li class="chapter" data-level="4.31.1" data-path="populating-next-right-pointers-in-each-node-leet-code-116-medium.html"><a href="populating-next-right-pointers-in-each-node-leet-code-116-medium.html#description-78"><i class="fa fa-check"></i><b>4.31.1</b> Description</a></li>
+<li class="chapter" data-level="4.31.2" data-path="populating-next-right-pointers-in-each-node-leet-code-116-medium.html"><a href="populating-next-right-pointers-in-each-node-leet-code-116-medium.html#example-75"><i class="fa fa-check"></i><b>4.31.2</b> Example</a></li>
+<li class="chapter" data-level="4.31.3" data-path="populating-next-right-pointers-in-each-node-leet-code-116-medium.html"><a href="populating-next-right-pointers-in-each-node-leet-code-116-medium.html#solution-55"><i class="fa fa-check"></i><b>4.31.3</b> Solution</a></li>
+<li class="chapter" data-level="4.31.4" data-path="populating-next-right-pointers-in-each-node-leet-code-116-medium.html"><a href="populating-next-right-pointers-in-each-node-leet-code-116-medium.html#java-code---preorder-recursive"><i class="fa fa-check"></i><b>4.31.4</b> Java Code - PreOrder Recursive</a></li>
+</ul></li>
+<li class="chapter" data-level="4.32" data-path="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html"><i class="fa fa-check"></i><b>4.32</b> Construct Binary Tree from Preorder and Inorder Traversal / Leet Code 105 / Medium</a><ul>
+<li class="chapter" data-level="4.32.1" data-path="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#description-79"><i class="fa fa-check"></i><b>4.32.1</b> Description</a></li>
+<li class="chapter" data-level="4.32.2" data-path="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#example-76"><i class="fa fa-check"></i><b>4.32.2</b> Example</a></li>
+<li class="chapter" data-level="4.32.3" data-path="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#solution-56"><i class="fa fa-check"></i><b>4.32.3</b> Solution</a></li>
+<li class="chapter" data-level="4.32.4" data-path="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#java-code---preorder-recursive-1"><i class="fa fa-check"></i><b>4.32.4</b> Java Code - PreOrder Recursive</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Technical Interview</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="breadth-first-traversal" class="section level2">
+<h2><span class="header-section-number">4.1</span> Breadth First Traversal</h2>
+<p>The algorithm starts at the tree root, and explores all of the neighbor nodes at the present depth prior to moving
+on to the nodes at the next depth level.</p>
+<div id="algorithm-56" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Algorithm\</h3>
+<p>bfs <a href="glossary-of-algorithm.html#bfs">1.1.2</a></p>
+</div>
+<div id="typical-implementation---java" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> Typical Implementation - Java</h3>
+<div class="sourceCode" id="cb88"><pre class="sourceCode java"><code class="sourceCode java"><a class="sourceLine" id="cb88-1" data-line-number="1"><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">breadthFirstTraversal</span>(<span class="bu">TreeNode</span> root) {</a>
+<a class="sourceLine" id="cb88-2" data-line-number="2">    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>();</a>
+<a class="sourceLine" id="cb88-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb88-4" data-line-number="4">    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {</a>
+<a class="sourceLine" id="cb88-5" data-line-number="5">        <span class="bu">TreeNode</span> node = queue.<span class="fu">poll</span>();</a>
+<a class="sourceLine" id="cb88-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb88-7" data-line-number="7">        <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {</a>
+<a class="sourceLine" id="cb88-8" data-line-number="8">            queue.<span class="fu">offer</span>(node.<span class="fu">left</span>);</a>
+<a class="sourceLine" id="cb88-9" data-line-number="9">        }</a>
+<a class="sourceLine" id="cb88-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb88-11" data-line-number="11">        <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {</a>
+<a class="sourceLine" id="cb88-12" data-line-number="12">            queue.<span class="fu">offer</span>(node.<span class="fu">right</span>);</a>
+<a class="sourceLine" id="cb88-13" data-line-number="13">        }</a>
+<a class="sourceLine" id="cb88-14" data-line-number="14">    }</a>
+<a class="sourceLine" id="cb88-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb88-16" data-line-number="16">    <span class="kw">return</span> <span class="kw">false</span>;</a>
+<a class="sourceLine" id="cb88-17" data-line-number="17">}</a></code></pre></div>
+</div>
+<div id="complexity-analysis" class="section level3">
+<h3><span class="header-section-number">4.1.3</span> Complexity Analysis</h3>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="tree.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="depth-first-traversal.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/mcfongtw/CodingInterview/edit/master/04-tree.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["tech-interview.pdf", "tech-interview.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
