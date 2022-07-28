@@ -1,5 +1,19 @@
-Master Build Status: ![](https://travis-ci.org/mcfongtw/CodingInterview.svg?branch=master)
+## Github Page
 
-The book can also be previewed at (https://mcfongtw.github.io/CodingInterview/)
+The coding interview book is deployed and and previewed at (https://mcfongtw.github.io/CodingInterview/)
 
+## Build Process
+
+1. On dev local, execute
+```
+sh build.sh
+```
+which will create necessary changes in HTML page under docs/ directory. 
+2. Commit the change to master branch. 
+3. The Github action will deploy the static content under docs/ directory to the Github Page. 
+
+## Dev Setup
+It's recommended to use RStudio to create a work on a new solution in (R) Markdown format. 
+
+## Reference
 This is based off the minimal example of a bookdown (https://github.com/rstudio/bookdown). 
