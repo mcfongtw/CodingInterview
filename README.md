@@ -17,3 +17,9 @@ It's recommended to use RStudio to create a work on a new solution in (R) Markdo
 
 ## Reference
 This is based off the minimal example of a bookdown (https://github.com/rstudio/bookdown). 
+
+## Work In Progress
+
+- [ ] Able to execute pandoc and rscript in build env.
+- [ ] Change build infrastructure to execute build.sh as part of deployment pipeline instead of executing build.sh offline and deploy content statically. 
+
