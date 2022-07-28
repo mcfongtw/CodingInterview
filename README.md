@@ -23,3 +23,8 @@ This is based off the minimal example of a bookdown (https://github.com/rstudio/
 - [ ] Able to execute pandoc and rscript in build env.
 - [ ] Change build infrastructure to execute build.sh as part of deployment pipeline instead of executing build.sh offline and deploy content statically. 
 
+
+<!--
+## Leetcode Progress
+![LeetCode Stats](https://leetcard.jacoblin.cool/shannaracat?theme=dark&font=Marcellus%20SC&ext=activity)
+-->
