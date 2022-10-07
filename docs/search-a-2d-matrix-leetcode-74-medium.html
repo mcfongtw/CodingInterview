@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1056,63 +1057,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="example-42" class="section level3" number="3.4.2">
 <h3><span class="header-section-number">3.4.2</span> Example</h3>
 <p>Input:</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb70-1"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb70-1" aria-hidden="true"></a>[<span class="dv">1</span>,   <span class="dv">3</span>,  <span class="dv">5</span>,  <span class="dv">7</span>],</span>
-<span id="cb70-2"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb70-2" aria-hidden="true"></a>[<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">16</span>, <span class="dv">20</span>],</span>
-<span id="cb70-3"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb70-3" aria-hidden="true"></a>[<span class="dv">23</span>, <span class="dv">30</span>, <span class="dv">34</span>, <span class="dv">50</span>]</span></code></pre></div>
-<p>target = 3
-Output: true</p>
-<p>Input:</p>
 <div class="sourceCode" id="cb71"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb71-1"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb71-1" aria-hidden="true"></a>[<span class="dv">1</span>,   <span class="dv">3</span>,  <span class="dv">5</span>,  <span class="dv">7</span>],</span>
 <span id="cb71-2"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb71-2" aria-hidden="true"></a>[<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">16</span>, <span class="dv">20</span>],</span>
 <span id="cb71-3"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb71-3" aria-hidden="true"></a>[<span class="dv">23</span>, <span class="dv">30</span>, <span class="dv">34</span>, <span class="dv">50</span>]</span></code></pre></div>
+<p>target = 3
+Output: true</p>
+<p>Input:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb72-1"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-1" aria-hidden="true"></a>[<span class="dv">1</span>,   <span class="dv">3</span>,  <span class="dv">5</span>,  <span class="dv">7</span>],</span>
+<span id="cb72-2"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-2" aria-hidden="true"></a>[<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">16</span>, <span class="dv">20</span>],</span>
+<span id="cb72-3"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-3" aria-hidden="true"></a>[<span class="dv">23</span>, <span class="dv">30</span>, <span class="dv">34</span>, <span class="dv">50</span>]</span></code></pre></div>
 <p>target = 13
 Output: false</p>
 </div>
 <div id="solution-37" class="section level3" number="3.4.3">
 <h3><span class="header-section-number">3.4.3</span> Solution</h3>
-<div id="walkthrough-46" class="section level4" number="3.4.3.1">
+<div id="walkthrough-47" class="section level4" number="3.4.3.1">
 <h4><span class="header-section-number">3.4.3.1</span> Walkthrough</h4>
 <p>We can treat the 2D matrix as the one large array, and search the element using binary search. We only need to compute
 middle of row or column for each divide-and-conquer turn.</p>
 </div>
-<div id="analysis-47" class="section level4" number="3.4.3.2">
+<div id="analysis-48" class="section level4" number="3.4.3.2">
 <h4><span class="header-section-number">3.4.3.2</span> Analysis</h4>
 <p>The overall time complexity is O(log(rows * cols))</p>
 </div>
-<div id="algorithm-47" class="section level4" number="3.4.3.3">
+<div id="algorithm-48" class="section level4" number="3.4.3.3">
 <h4><span class="header-section-number">3.4.3.3</span> Algorithm</h4>
 <p>recursion <a href="glossary-of-algorithm.html#dnc">1.2.10</a></p>
 </div>
-<div id="java-code-38" class="section level4" number="3.4.3.4">
+<div id="java-code-40" class="section level4" number="3.4.3.4">
 <h4><span class="header-section-number">3.4.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb72"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb72-1"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">searchMatrix</span>(<span class="dt">int</span>[][] matrix, <span class="dt">int</span> target) {</span>
-<span id="cb72-2"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-2" aria-hidden="true"></a>    <span class="kw">if</span>(matrix == <span class="kw">null</span> || matrix.<span class="fu">length</span> == <span class="dv">0</span> || matrix[<span class="dv">0</span>].<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb72-3"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb72-4"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-4" aria-hidden="true"></a>    }</span>
-<span id="cb72-5"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-5" aria-hidden="true"></a></span>
-<span id="cb72-6"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-6" aria-hidden="true"></a>    <span class="dt">int</span> rows = matrix.<span class="fu">length</span>;</span>
-<span id="cb72-7"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-7" aria-hidden="true"></a>    <span class="dt">int</span> cols = matrix[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb72-8"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-8" aria-hidden="true"></a></span>
-<span id="cb72-9"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-9" aria-hidden="true"></a>    <span class="dt">int</span> start = <span class="dv">0</span>;</span>
-<span id="cb72-10"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-10" aria-hidden="true"></a>    <span class="dt">int</span> end = rows * cols - <span class="dv">1</span>;</span>
-<span id="cb72-11"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-11" aria-hidden="true"></a></span>
-<span id="cb72-12"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-12" aria-hidden="true"></a>    <span class="kw">while</span>(start &lt;= end) {</span>
-<span id="cb72-13"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-13" aria-hidden="true"></a>        <span class="dt">int</span> mid = (end - start) / <span class="dv">2</span> + start;</span>
-<span id="cb72-14"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-14" aria-hidden="true"></a>        <span class="dt">int</span> midRow = mid / cols;</span>
-<span id="cb72-15"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-15" aria-hidden="true"></a>        <span class="dt">int</span> midCol = mid % cols;</span>
-<span id="cb72-16"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-16" aria-hidden="true"></a></span>
-<span id="cb72-17"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-17" aria-hidden="true"></a>        <span class="kw">if</span>(matrix[midRow][midCol] == target) {</span>
-<span id="cb72-18"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-18" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb72-19"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-19" aria-hidden="true"></a>        } <span class="kw">else</span> <span class="kw">if</span>(matrix[midRow][midCol] &lt; target) {</span>
-<span id="cb72-20"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-20" aria-hidden="true"></a>            start = mid + <span class="dv">1</span>;</span>
-<span id="cb72-21"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-21" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb72-22"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-22" aria-hidden="true"></a>            <span class="co">//matrix[midRow][midCol] &gt; target</span></span>
-<span id="cb72-23"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-23" aria-hidden="true"></a>            end = mid - <span class="dv">1</span>;</span>
-<span id="cb72-24"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-24" aria-hidden="true"></a>        }</span>
-<span id="cb72-25"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-25" aria-hidden="true"></a>    }</span>
-<span id="cb72-26"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-26" aria-hidden="true"></a></span>
-<span id="cb72-27"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-27" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb72-28"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb72-28" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb73-1"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">searchMatrix</span>(<span class="dt">int</span>[][] matrix, <span class="dt">int</span> target) {</span>
+<span id="cb73-2"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-2" aria-hidden="true"></a>    <span class="kw">if</span>(matrix == <span class="kw">null</span> || matrix.<span class="fu">length</span> == <span class="dv">0</span> || matrix[<span class="dv">0</span>].<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb73-3"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb73-4"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-4" aria-hidden="true"></a>    }</span>
+<span id="cb73-5"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-5" aria-hidden="true"></a></span>
+<span id="cb73-6"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-6" aria-hidden="true"></a>    <span class="dt">int</span> rows = matrix.<span class="fu">length</span>;</span>
+<span id="cb73-7"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-7" aria-hidden="true"></a>    <span class="dt">int</span> cols = matrix[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb73-8"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-8" aria-hidden="true"></a></span>
+<span id="cb73-9"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-9" aria-hidden="true"></a>    <span class="dt">int</span> start = <span class="dv">0</span>;</span>
+<span id="cb73-10"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-10" aria-hidden="true"></a>    <span class="dt">int</span> end = rows * cols - <span class="dv">1</span>;</span>
+<span id="cb73-11"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-11" aria-hidden="true"></a></span>
+<span id="cb73-12"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-12" aria-hidden="true"></a>    <span class="kw">while</span>(start &lt;= end) {</span>
+<span id="cb73-13"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-13" aria-hidden="true"></a>        <span class="dt">int</span> mid = (end - start) / <span class="dv">2</span> + start;</span>
+<span id="cb73-14"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-14" aria-hidden="true"></a>        <span class="dt">int</span> midRow = mid / cols;</span>
+<span id="cb73-15"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-15" aria-hidden="true"></a>        <span class="dt">int</span> midCol = mid % cols;</span>
+<span id="cb73-16"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-16" aria-hidden="true"></a></span>
+<span id="cb73-17"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-17" aria-hidden="true"></a>        <span class="kw">if</span>(matrix[midRow][midCol] == target) {</span>
+<span id="cb73-18"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-18" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb73-19"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-19" aria-hidden="true"></a>        } <span class="kw">else</span> <span class="kw">if</span>(matrix[midRow][midCol] &lt; target) {</span>
+<span id="cb73-20"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-20" aria-hidden="true"></a>            start = mid + <span class="dv">1</span>;</span>
+<span id="cb73-21"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-21" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb73-22"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-22" aria-hidden="true"></a>            <span class="co">//matrix[midRow][midCol] &gt; target</span></span>
+<span id="cb73-23"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-23" aria-hidden="true"></a>            end = mid - <span class="dv">1</span>;</span>
+<span id="cb73-24"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-24" aria-hidden="true"></a>        }</span>
+<span id="cb73-25"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-25" aria-hidden="true"></a>    }</span>
+<span id="cb73-26"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-26" aria-hidden="true"></a></span>
+<span id="cb73-27"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-27" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb73-28"><a href="search-a-2d-matrix-leetcode-74-medium.html#cb73-28" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

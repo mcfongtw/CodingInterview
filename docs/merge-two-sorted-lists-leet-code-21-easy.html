@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1057,48 +1058,48 @@ together the nodes of the first two lists.</p>
 </div>
 <div id="solution-69" class="section level3" number="6.8.3">
 <h3><span class="header-section-number">6.8.3</span> Solution</h3>
-<div id="walkthrough-113" class="section level4" number="6.8.3.1">
+<div id="walkthrough-114" class="section level4" number="6.8.3.1">
 <h4><span class="header-section-number">6.8.3.1</span> Walkthrough</h4>
 <p>This is the same as merge() to sort a list in Leet Code 148. First we will create a new ListNode and a
 current pointer. While traversing the node, compre the nodes at each list and nodes with smaller value
 will attach to the final sorted list. Exit traversal when either list hits the end. If there are nodes
 remained in either list, connect to that remaining nodes of the list.</p>
 </div>
-<div id="analysis-114" class="section level4" number="6.8.3.2">
+<div id="analysis-115" class="section level4" number="6.8.3.2">
 <h4><span class="header-section-number">6.8.3.2</span> Analysis</h4>
 <p>The cost for each merge is O(n) as every node is visited once in the list. There are two lists, thus the overall time
 complexity remains O(n).</p>
 </div>
-<div id="algorithm-120" class="section level4" number="6.8.3.3">
+<div id="algorithm-121" class="section level4" number="6.8.3.3">
 <h4><span class="header-section-number">6.8.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-71" class="section level4" number="6.8.3.4">
+<div id="java-code-73" class="section level4" number="6.8.3.4">
 <h4><span class="header-section-number">6.8.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb178"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb178-1"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">mergeTwoLists</span>(ListNode l1, ListNode l2) {</span>
-<span id="cb178-2"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-2" aria-hidden="true"></a>    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), current = headPrev;</span>
-<span id="cb178-3"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-3" aria-hidden="true"></a></span>
-<span id="cb178-4"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-4" aria-hidden="true"></a>    <span class="kw">while</span>(l1 != <span class="kw">null</span> &amp;&amp; l2 != <span class="kw">null</span>) {</span>
-<span id="cb178-5"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-5" aria-hidden="true"></a>        <span class="kw">if</span>(l1.<span class="fu">val</span> &lt; l2.<span class="fu">val</span>) {</span>
-<span id="cb178-6"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-6" aria-hidden="true"></a>            <span class="co">//l1 &lt; l2</span></span>
-<span id="cb178-7"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-7" aria-hidden="true"></a>            current.<span class="fu">next</span> = l1;</span>
-<span id="cb178-8"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-8" aria-hidden="true"></a>            l1 = l1.<span class="fu">next</span>;</span>
-<span id="cb178-9"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-9" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb178-10"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-10" aria-hidden="true"></a>            current.<span class="fu">next</span> = l2;</span>
-<span id="cb178-11"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-11" aria-hidden="true"></a>            l2 = l2.<span class="fu">next</span>;</span>
-<span id="cb178-12"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-12" aria-hidden="true"></a>        }</span>
-<span id="cb178-13"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-13" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
-<span id="cb178-14"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-14" aria-hidden="true"></a>    }</span>
-<span id="cb178-15"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-15" aria-hidden="true"></a></span>
-<span id="cb178-16"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-16" aria-hidden="true"></a>    <span class="co">// connect to the rest of the remaining nodes</span></span>
-<span id="cb178-17"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-17" aria-hidden="true"></a>    <span class="kw">if</span>(l1 != <span class="kw">null</span>) {</span>
-<span id="cb178-18"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-18" aria-hidden="true"></a>        current.<span class="fu">next</span> = l1;</span>
-<span id="cb178-19"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-19" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb178-20"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-20" aria-hidden="true"></a>        <span class="co">// l2 = remaining of list or null</span></span>
-<span id="cb178-21"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-21" aria-hidden="true"></a>        current.<span class="fu">next</span> = l2;</span>
-<span id="cb178-22"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-22" aria-hidden="true"></a>    }</span>
-<span id="cb178-23"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-23" aria-hidden="true"></a></span>
-<span id="cb178-24"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-24" aria-hidden="true"></a>    <span class="kw">return</span> headPrev.<span class="fu">next</span>;</span>
-<span id="cb178-25"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb178-25" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb179"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb179-1"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">mergeTwoLists</span>(ListNode l1, ListNode l2) {</span>
+<span id="cb179-2"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-2" aria-hidden="true"></a>    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), current = headPrev;</span>
+<span id="cb179-3"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-3" aria-hidden="true"></a></span>
+<span id="cb179-4"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-4" aria-hidden="true"></a>    <span class="kw">while</span>(l1 != <span class="kw">null</span> &amp;&amp; l2 != <span class="kw">null</span>) {</span>
+<span id="cb179-5"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-5" aria-hidden="true"></a>        <span class="kw">if</span>(l1.<span class="fu">val</span> &lt; l2.<span class="fu">val</span>) {</span>
+<span id="cb179-6"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-6" aria-hidden="true"></a>            <span class="co">//l1 &lt; l2</span></span>
+<span id="cb179-7"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-7" aria-hidden="true"></a>            current.<span class="fu">next</span> = l1;</span>
+<span id="cb179-8"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-8" aria-hidden="true"></a>            l1 = l1.<span class="fu">next</span>;</span>
+<span id="cb179-9"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-9" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb179-10"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-10" aria-hidden="true"></a>            current.<span class="fu">next</span> = l2;</span>
+<span id="cb179-11"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-11" aria-hidden="true"></a>            l2 = l2.<span class="fu">next</span>;</span>
+<span id="cb179-12"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-12" aria-hidden="true"></a>        }</span>
+<span id="cb179-13"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-13" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
+<span id="cb179-14"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-14" aria-hidden="true"></a>    }</span>
+<span id="cb179-15"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-15" aria-hidden="true"></a></span>
+<span id="cb179-16"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-16" aria-hidden="true"></a>    <span class="co">// connect to the rest of the remaining nodes</span></span>
+<span id="cb179-17"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-17" aria-hidden="true"></a>    <span class="kw">if</span>(l1 != <span class="kw">null</span>) {</span>
+<span id="cb179-18"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-18" aria-hidden="true"></a>        current.<span class="fu">next</span> = l1;</span>
+<span id="cb179-19"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-19" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb179-20"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-20" aria-hidden="true"></a>        <span class="co">// l2 = remaining of list or null</span></span>
+<span id="cb179-21"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-21" aria-hidden="true"></a>        current.<span class="fu">next</span> = l2;</span>
+<span id="cb179-22"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-22" aria-hidden="true"></a>    }</span>
+<span id="cb179-23"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-23" aria-hidden="true"></a></span>
+<span id="cb179-24"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-24" aria-hidden="true"></a>    <span class="kw">return</span> headPrev.<span class="fu">next</span>;</span>
+<span id="cb179-25"><a href="merge-two-sorted-lists-leet-code-21-easy.html#cb179-25" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1059,44 +1060,44 @@ size(array) - 1 and the array will not be empty.</p>
 </div>
 <div id="solution-28" class="section level3" number="2.33.3">
 <h3><span class="header-section-number">2.33.3</span> Solution</h3>
-<div id="walkthrough-34" class="section level4" number="2.33.3.1">
+<div id="walkthrough-35" class="section level4" number="2.33.3.1">
 <h4><span class="header-section-number">2.33.3.1</span> Walkthrough</h4>
 <p>The key is to utilize the characteristic of the elements in the array being between 0 to size(array) - 1. We should
 increment a[a[i]] by k for each element. Retrieve the maximum element and return the index of the element. k is an
 increment factor as long as it is bigger than size of array.</p>
 </div>
-<div id="analysis-34" class="section level4" number="2.33.3.2">
+<div id="analysis-35" class="section level4" number="2.33.3.2">
 <h4><span class="header-section-number">2.33.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every element is visited once.</p>
 </div>
-<div id="algorithm-34" class="section level4" number="2.33.3.3">
+<div id="algorithm-35" class="section level4" number="2.33.3.3">
 <h4><span class="header-section-number">2.33.3.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
 </div>
-<div id="java-code-28" class="section level4" number="2.33.3.4">
+<div id="java-code-30" class="section level4" number="2.33.3.4">
 <h4><span class="header-section-number">2.33.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb43"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb43-1"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">getMaxRepetition</span>(<span class="dt">int</span>[] a) {</span>
-<span id="cb43-2"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-2" aria-hidden="true"></a>    <span class="co">//k to be the increment factor, larger &gt;= size(a) to be significant</span></span>
-<span id="cb43-3"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-3" aria-hidden="true"></a>    <span class="dt">int</span> k = <span class="dv">100</span>;</span>
-<span id="cb43-4"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-4" aria-hidden="true"></a></span>
-<span id="cb43-5"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-5" aria-hidden="true"></a>    <span class="co">// Iterate though input array, for every element</span></span>
-<span id="cb43-6"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-6" aria-hidden="true"></a>    <span class="co">// arr[i], increment a[a[i]] by k</span></span>
-<span id="cb43-7"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-7" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i&lt; a.<span class="fu">length</span>; i++) {</span>
-<span id="cb43-8"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-8" aria-hidden="true"></a>        a[(a[i] \% k)] += k;</span>
-<span id="cb43-9"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-9" aria-hidden="true"></a>    }</span>
-<span id="cb43-10"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-10" aria-hidden="true"></a></span>
-<span id="cb43-11"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-11" aria-hidden="true"></a>    <span class="co">// Find index of the maximum repeating element</span></span>
-<span id="cb43-12"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-12" aria-hidden="true"></a>    <span class="dt">int</span> max = a[<span class="dv">0</span>], maxIdx = <span class="dv">0</span>;</span>
-<span id="cb43-13"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-13" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; a.<span class="fu">length</span>; i++) {</span>
-<span id="cb43-14"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-14" aria-hidden="true"></a>        <span class="kw">if</span> (a[i] &gt; max) {</span>
-<span id="cb43-15"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-15" aria-hidden="true"></a>            max = a[i];</span>
-<span id="cb43-16"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-16" aria-hidden="true"></a>            maxIdx = i;</span>
-<span id="cb43-17"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-17" aria-hidden="true"></a>        }</span>
-<span id="cb43-18"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-18" aria-hidden="true"></a>    }</span>
-<span id="cb43-19"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-19" aria-hidden="true"></a></span>
-<span id="cb43-20"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-20" aria-hidden="true"></a>    <span class="co">// Return index of the maximum element</span></span>
-<span id="cb43-21"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-21" aria-hidden="true"></a>    <span class="kw">return</span> maxIdx;</span>
-<span id="cb43-22"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb43-22" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb44-1"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">getMaxRepetition</span>(<span class="dt">int</span>[] a) {</span>
+<span id="cb44-2"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-2" aria-hidden="true"></a>    <span class="co">//k to be the increment factor, larger &gt;= size(a) to be significant</span></span>
+<span id="cb44-3"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-3" aria-hidden="true"></a>    <span class="dt">int</span> k = <span class="dv">100</span>;</span>
+<span id="cb44-4"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-4" aria-hidden="true"></a></span>
+<span id="cb44-5"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-5" aria-hidden="true"></a>    <span class="co">// Iterate though input array, for every element</span></span>
+<span id="cb44-6"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-6" aria-hidden="true"></a>    <span class="co">// arr[i], increment a[a[i]] by k</span></span>
+<span id="cb44-7"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-7" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i&lt; a.<span class="fu">length</span>; i++) {</span>
+<span id="cb44-8"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-8" aria-hidden="true"></a>        a[(a[i] \% k)] += k;</span>
+<span id="cb44-9"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-9" aria-hidden="true"></a>    }</span>
+<span id="cb44-10"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-10" aria-hidden="true"></a></span>
+<span id="cb44-11"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-11" aria-hidden="true"></a>    <span class="co">// Find index of the maximum repeating element</span></span>
+<span id="cb44-12"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-12" aria-hidden="true"></a>    <span class="dt">int</span> max = a[<span class="dv">0</span>], maxIdx = <span class="dv">0</span>;</span>
+<span id="cb44-13"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-13" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; a.<span class="fu">length</span>; i++) {</span>
+<span id="cb44-14"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-14" aria-hidden="true"></a>        <span class="kw">if</span> (a[i] &gt; max) {</span>
+<span id="cb44-15"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-15" aria-hidden="true"></a>            max = a[i];</span>
+<span id="cb44-16"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-16" aria-hidden="true"></a>            maxIdx = i;</span>
+<span id="cb44-17"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-17" aria-hidden="true"></a>        }</span>
+<span id="cb44-18"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-18" aria-hidden="true"></a>    }</span>
+<span id="cb44-19"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-19" aria-hidden="true"></a></span>
+<span id="cb44-20"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-20" aria-hidden="true"></a>    <span class="co">// Return index of the maximum element</span></span>
+<span id="cb44-21"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-21" aria-hidden="true"></a>    <span class="kw">return</span> maxIdx;</span>
+<span id="cb44-22"><a href="find-the-maximum-number-of-repetitions-firecode-level-3.html#cb44-22" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

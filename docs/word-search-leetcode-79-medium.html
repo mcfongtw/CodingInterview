@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1067,73 +1068,73 @@ Given word = “ABCB”, return false.</p>
 </div>
 <div id="solution---dfs" class="section level3" number="3.8.3">
 <h3><span class="header-section-number">3.8.3</span> Solution - DFS</h3>
-<div id="walkthrough-51" class="section level4" number="3.8.3.1">
+<div id="walkthrough-52" class="section level4" number="3.8.3.1">
 <h4><span class="header-section-number">3.8.3.1</span> Walkthrough</h4>
 <p>Enumerate all possible starting position from the 2D array by using two nested loops. While traversing the character
 in the taget string, perform a search recursively on neighboring cells [(i, j + 1), (i, j - 1), (i + 1, j), (i - 1, j)].
 If there is a hit in any four neighboring cells, return true; otherwise, return false.</p>
 </div>
-<div id="analysis-52" class="section level4" number="3.8.3.2">
+<div id="analysis-53" class="section level4" number="3.8.3.2">
 <h4><span class="header-section-number">3.8.3.2</span> Analysis</h4>
 <p>The enumeration cost is exponential, as there are multiple overlapping subproblems. Thus, the time complexity is
 <span class="math inline">\(O(2^{log(n)})\)</span></p>
 </div>
-<div id="algorithm-52" class="section level4" number="3.8.3.3">
+<div id="algorithm-53" class="section level4" number="3.8.3.3">
 <h4><span class="header-section-number">3.8.3.3</span> Algorithm</h4>
 <p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
 <div id="java-code---dfs" class="section level4" number="3.8.3.4">
 <h4><span class="header-section-number">3.8.3.4</span> Java Code - DFS</h4>
-<div class="sourceCode" id="cb86"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb86-1"><a href="word-search-leetcode-79-medium.html#cb86-1" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">char</span> VISITED_CHARACTER = <span class="ch">&#39;*&#39;</span>;</span>
-<span id="cb86-2"><a href="word-search-leetcode-79-medium.html#cb86-2" aria-hidden="true"></a></span>
-<span id="cb86-3"><a href="word-search-leetcode-79-medium.html#cb86-3" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">exist</span>(<span class="dt">char</span>[][] board, <span class="bu">String</span> word) {</span>
-<span id="cb86-4"><a href="word-search-leetcode-79-medium.html#cb86-4" aria-hidden="true"></a>    <span class="dt">int</span> numOfRows = board.<span class="fu">length</span>;</span>
-<span id="cb86-5"><a href="word-search-leetcode-79-medium.html#cb86-5" aria-hidden="true"></a>    <span class="dt">int</span> numOfCols = board[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb86-6"><a href="word-search-leetcode-79-medium.html#cb86-6" aria-hidden="true"></a></span>
-<span id="cb86-7"><a href="word-search-leetcode-79-medium.html#cb86-7" aria-hidden="true"></a>    <span class="co">//Enumerate the all possible starting position from char[][]</span></span>
-<span id="cb86-8"><a href="word-search-leetcode-79-medium.html#cb86-8" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfRows; i++) {</span>
-<span id="cb86-9"><a href="word-search-leetcode-79-medium.html#cb86-9" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; numOfCols; j++) {</span>
-<span id="cb86-10"><a href="word-search-leetcode-79-medium.html#cb86-10" aria-hidden="true"></a>            <span class="kw">if</span> (<span class="fu">backtrack</span>(board, i, j, word, <span class="dv">0</span>)) {</span>
-<span id="cb86-11"><a href="word-search-leetcode-79-medium.html#cb86-11" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb86-12"><a href="word-search-leetcode-79-medium.html#cb86-12" aria-hidden="true"></a>            }</span>
-<span id="cb86-13"><a href="word-search-leetcode-79-medium.html#cb86-13" aria-hidden="true"></a>        }</span>
-<span id="cb86-14"><a href="word-search-leetcode-79-medium.html#cb86-14" aria-hidden="true"></a>    }</span>
-<span id="cb86-15"><a href="word-search-leetcode-79-medium.html#cb86-15" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb86-16"><a href="word-search-leetcode-79-medium.html#cb86-16" aria-hidden="true"></a>}</span>
-<span id="cb86-17"><a href="word-search-leetcode-79-medium.html#cb86-17" aria-hidden="true"></a></span>
-<span id="cb86-18"><a href="word-search-leetcode-79-medium.html#cb86-18" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">backtrack</span>(<span class="dt">char</span>[][] board, <span class="dt">int</span> row, <span class="dt">int</span> col, <span class="bu">String</span> word, <span class="dt">int</span> index) {</span>
-<span id="cb86-19"><a href="word-search-leetcode-79-medium.html#cb86-19" aria-hidden="true"></a>    <span class="dt">int</span> numOfRows = board.<span class="fu">length</span>;</span>
-<span id="cb86-20"><a href="word-search-leetcode-79-medium.html#cb86-20" aria-hidden="true"></a>    <span class="dt">int</span> numOfCols = board[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb86-21"><a href="word-search-leetcode-79-medium.html#cb86-21" aria-hidden="true"></a></span>
-<span id="cb86-22"><a href="word-search-leetcode-79-medium.html#cb86-22" aria-hidden="true"></a>    <span class="co">//every other character has matched</span></span>
-<span id="cb86-23"><a href="word-search-leetcode-79-medium.html#cb86-23" aria-hidden="true"></a>    <span class="kw">if</span> (index == word.<span class="fu">length</span>()) {</span>
-<span id="cb86-24"><a href="word-search-leetcode-79-medium.html#cb86-24" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb86-25"><a href="word-search-leetcode-79-medium.html#cb86-25" aria-hidden="true"></a>    }</span>
-<span id="cb86-26"><a href="word-search-leetcode-79-medium.html#cb86-26" aria-hidden="true"></a></span>
-<span id="cb86-27"><a href="word-search-leetcode-79-medium.html#cb86-27" aria-hidden="true"></a>    <span class="co">//exceed the boundary</span></span>
-<span id="cb86-28"><a href="word-search-leetcode-79-medium.html#cb86-28" aria-hidden="true"></a>    <span class="kw">if</span> (row &lt; <span class="dv">0</span> || row &gt;= numOfRows || col &lt; <span class="dv">0</span> || col &gt;= numOfCols) {</span>
-<span id="cb86-29"><a href="word-search-leetcode-79-medium.html#cb86-29" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb86-30"><a href="word-search-leetcode-79-medium.html#cb86-30" aria-hidden="true"></a>    }</span>
-<span id="cb86-31"><a href="word-search-leetcode-79-medium.html#cb86-31" aria-hidden="true"></a></span>
-<span id="cb86-32"><a href="word-search-leetcode-79-medium.html#cb86-32" aria-hidden="true"></a>    <span class="co">//if current char is not equal</span></span>
-<span id="cb86-33"><a href="word-search-leetcode-79-medium.html#cb86-33" aria-hidden="true"></a>    <span class="kw">if</span> (board[row][col] != word.<span class="fu">charAt</span>(index)) {</span>
-<span id="cb86-34"><a href="word-search-leetcode-79-medium.html#cb86-34" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb86-35"><a href="word-search-leetcode-79-medium.html#cb86-35" aria-hidden="true"></a>    }</span>
-<span id="cb86-36"><a href="word-search-leetcode-79-medium.html#cb86-36" aria-hidden="true"></a></span>
-<span id="cb86-37"><a href="word-search-leetcode-79-medium.html#cb86-37" aria-hidden="true"></a>    <span class="co">// &#39;nullify&#39; current position</span></span>
-<span id="cb86-38"><a href="word-search-leetcode-79-medium.html#cb86-38" aria-hidden="true"></a>    board[row][col] ^= VISITED_CHARACTER;</span>
-<span id="cb86-39"><a href="word-search-leetcode-79-medium.html#cb86-39" aria-hidden="true"></a></span>
-<span id="cb86-40"><a href="word-search-leetcode-79-medium.html#cb86-40" aria-hidden="true"></a>    <span class="co">//result of next move from four directions.</span></span>
-<span id="cb86-41"><a href="word-search-leetcode-79-medium.html#cb86-41" aria-hidden="true"></a>    <span class="dt">boolean</span> result = <span class="fu">backtrack</span>(board, row + <span class="dv">1</span>, col, word, index + <span class="dv">1</span>)</span>
-<span id="cb86-42"><a href="word-search-leetcode-79-medium.html#cb86-42" aria-hidden="true"></a>                || <span class="fu">backtrack</span>(board, row - <span class="dv">1</span>, col, word, index + <span class="dv">1</span>)</span>
-<span id="cb86-43"><a href="word-search-leetcode-79-medium.html#cb86-43" aria-hidden="true"></a>                || <span class="fu">backtrack</span>(board, row, col + <span class="dv">1</span>, word, index + <span class="dv">1</span>)</span>
-<span id="cb86-44"><a href="word-search-leetcode-79-medium.html#cb86-44" aria-hidden="true"></a>                || <span class="fu">backtrack</span>(board, row, col - <span class="dv">1</span>, word, index + <span class="dv">1</span>);</span>
-<span id="cb86-45"><a href="word-search-leetcode-79-medium.html#cb86-45" aria-hidden="true"></a></span>
-<span id="cb86-46"><a href="word-search-leetcode-79-medium.html#cb86-46" aria-hidden="true"></a>    <span class="co">//nullify back</span></span>
-<span id="cb86-47"><a href="word-search-leetcode-79-medium.html#cb86-47" aria-hidden="true"></a>    board[row][col] ^= VISITED_CHARACTER;</span>
-<span id="cb86-48"><a href="word-search-leetcode-79-medium.html#cb86-48" aria-hidden="true"></a></span>
-<span id="cb86-49"><a href="word-search-leetcode-79-medium.html#cb86-49" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb86-50"><a href="word-search-leetcode-79-medium.html#cb86-50" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb87-1"><a href="word-search-leetcode-79-medium.html#cb87-1" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">char</span> VISITED_CHARACTER = <span class="ch">&#39;*&#39;</span>;</span>
+<span id="cb87-2"><a href="word-search-leetcode-79-medium.html#cb87-2" aria-hidden="true"></a></span>
+<span id="cb87-3"><a href="word-search-leetcode-79-medium.html#cb87-3" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">exist</span>(<span class="dt">char</span>[][] board, <span class="bu">String</span> word) {</span>
+<span id="cb87-4"><a href="word-search-leetcode-79-medium.html#cb87-4" aria-hidden="true"></a>    <span class="dt">int</span> numOfRows = board.<span class="fu">length</span>;</span>
+<span id="cb87-5"><a href="word-search-leetcode-79-medium.html#cb87-5" aria-hidden="true"></a>    <span class="dt">int</span> numOfCols = board[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb87-6"><a href="word-search-leetcode-79-medium.html#cb87-6" aria-hidden="true"></a></span>
+<span id="cb87-7"><a href="word-search-leetcode-79-medium.html#cb87-7" aria-hidden="true"></a>    <span class="co">//Enumerate the all possible starting position from char[][]</span></span>
+<span id="cb87-8"><a href="word-search-leetcode-79-medium.html#cb87-8" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfRows; i++) {</span>
+<span id="cb87-9"><a href="word-search-leetcode-79-medium.html#cb87-9" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; numOfCols; j++) {</span>
+<span id="cb87-10"><a href="word-search-leetcode-79-medium.html#cb87-10" aria-hidden="true"></a>            <span class="kw">if</span> (<span class="fu">backtrack</span>(board, i, j, word, <span class="dv">0</span>)) {</span>
+<span id="cb87-11"><a href="word-search-leetcode-79-medium.html#cb87-11" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb87-12"><a href="word-search-leetcode-79-medium.html#cb87-12" aria-hidden="true"></a>            }</span>
+<span id="cb87-13"><a href="word-search-leetcode-79-medium.html#cb87-13" aria-hidden="true"></a>        }</span>
+<span id="cb87-14"><a href="word-search-leetcode-79-medium.html#cb87-14" aria-hidden="true"></a>    }</span>
+<span id="cb87-15"><a href="word-search-leetcode-79-medium.html#cb87-15" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb87-16"><a href="word-search-leetcode-79-medium.html#cb87-16" aria-hidden="true"></a>}</span>
+<span id="cb87-17"><a href="word-search-leetcode-79-medium.html#cb87-17" aria-hidden="true"></a></span>
+<span id="cb87-18"><a href="word-search-leetcode-79-medium.html#cb87-18" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">backtrack</span>(<span class="dt">char</span>[][] board, <span class="dt">int</span> row, <span class="dt">int</span> col, <span class="bu">String</span> word, <span class="dt">int</span> index) {</span>
+<span id="cb87-19"><a href="word-search-leetcode-79-medium.html#cb87-19" aria-hidden="true"></a>    <span class="dt">int</span> numOfRows = board.<span class="fu">length</span>;</span>
+<span id="cb87-20"><a href="word-search-leetcode-79-medium.html#cb87-20" aria-hidden="true"></a>    <span class="dt">int</span> numOfCols = board[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb87-21"><a href="word-search-leetcode-79-medium.html#cb87-21" aria-hidden="true"></a></span>
+<span id="cb87-22"><a href="word-search-leetcode-79-medium.html#cb87-22" aria-hidden="true"></a>    <span class="co">//every other character has matched</span></span>
+<span id="cb87-23"><a href="word-search-leetcode-79-medium.html#cb87-23" aria-hidden="true"></a>    <span class="kw">if</span> (index == word.<span class="fu">length</span>()) {</span>
+<span id="cb87-24"><a href="word-search-leetcode-79-medium.html#cb87-24" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb87-25"><a href="word-search-leetcode-79-medium.html#cb87-25" aria-hidden="true"></a>    }</span>
+<span id="cb87-26"><a href="word-search-leetcode-79-medium.html#cb87-26" aria-hidden="true"></a></span>
+<span id="cb87-27"><a href="word-search-leetcode-79-medium.html#cb87-27" aria-hidden="true"></a>    <span class="co">//exceed the boundary</span></span>
+<span id="cb87-28"><a href="word-search-leetcode-79-medium.html#cb87-28" aria-hidden="true"></a>    <span class="kw">if</span> (row &lt; <span class="dv">0</span> || row &gt;= numOfRows || col &lt; <span class="dv">0</span> || col &gt;= numOfCols) {</span>
+<span id="cb87-29"><a href="word-search-leetcode-79-medium.html#cb87-29" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb87-30"><a href="word-search-leetcode-79-medium.html#cb87-30" aria-hidden="true"></a>    }</span>
+<span id="cb87-31"><a href="word-search-leetcode-79-medium.html#cb87-31" aria-hidden="true"></a></span>
+<span id="cb87-32"><a href="word-search-leetcode-79-medium.html#cb87-32" aria-hidden="true"></a>    <span class="co">//if current char is not equal</span></span>
+<span id="cb87-33"><a href="word-search-leetcode-79-medium.html#cb87-33" aria-hidden="true"></a>    <span class="kw">if</span> (board[row][col] != word.<span class="fu">charAt</span>(index)) {</span>
+<span id="cb87-34"><a href="word-search-leetcode-79-medium.html#cb87-34" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb87-35"><a href="word-search-leetcode-79-medium.html#cb87-35" aria-hidden="true"></a>    }</span>
+<span id="cb87-36"><a href="word-search-leetcode-79-medium.html#cb87-36" aria-hidden="true"></a></span>
+<span id="cb87-37"><a href="word-search-leetcode-79-medium.html#cb87-37" aria-hidden="true"></a>    <span class="co">// &#39;nullify&#39; current position</span></span>
+<span id="cb87-38"><a href="word-search-leetcode-79-medium.html#cb87-38" aria-hidden="true"></a>    board[row][col] ^= VISITED_CHARACTER;</span>
+<span id="cb87-39"><a href="word-search-leetcode-79-medium.html#cb87-39" aria-hidden="true"></a></span>
+<span id="cb87-40"><a href="word-search-leetcode-79-medium.html#cb87-40" aria-hidden="true"></a>    <span class="co">//result of next move from four directions.</span></span>
+<span id="cb87-41"><a href="word-search-leetcode-79-medium.html#cb87-41" aria-hidden="true"></a>    <span class="dt">boolean</span> result = <span class="fu">backtrack</span>(board, row + <span class="dv">1</span>, col, word, index + <span class="dv">1</span>)</span>
+<span id="cb87-42"><a href="word-search-leetcode-79-medium.html#cb87-42" aria-hidden="true"></a>                || <span class="fu">backtrack</span>(board, row - <span class="dv">1</span>, col, word, index + <span class="dv">1</span>)</span>
+<span id="cb87-43"><a href="word-search-leetcode-79-medium.html#cb87-43" aria-hidden="true"></a>                || <span class="fu">backtrack</span>(board, row, col + <span class="dv">1</span>, word, index + <span class="dv">1</span>)</span>
+<span id="cb87-44"><a href="word-search-leetcode-79-medium.html#cb87-44" aria-hidden="true"></a>                || <span class="fu">backtrack</span>(board, row, col - <span class="dv">1</span>, word, index + <span class="dv">1</span>);</span>
+<span id="cb87-45"><a href="word-search-leetcode-79-medium.html#cb87-45" aria-hidden="true"></a></span>
+<span id="cb87-46"><a href="word-search-leetcode-79-medium.html#cb87-46" aria-hidden="true"></a>    <span class="co">//nullify back</span></span>
+<span id="cb87-47"><a href="word-search-leetcode-79-medium.html#cb87-47" aria-hidden="true"></a>    board[row][col] ^= VISITED_CHARACTER;</span>
+<span id="cb87-48"><a href="word-search-leetcode-79-medium.html#cb87-48" aria-hidden="true"></a></span>
+<span id="cb87-49"><a href="word-search-leetcode-79-medium.html#cb87-49" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb87-50"><a href="word-search-leetcode-79-medium.html#cb87-50" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

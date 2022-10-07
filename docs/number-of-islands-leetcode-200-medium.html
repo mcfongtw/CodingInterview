@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1068,57 +1069,57 @@ all surrounded by water.</p>
 </div>
 <div id="solution---dfs-1" class="section level3" number="3.9.3">
 <h3><span class="header-section-number">3.9.3</span> Solution - DFS</h3>
-<div id="walkthrough-52" class="section level4" number="3.9.3.1">
+<div id="walkthrough-53" class="section level4" number="3.9.3.1">
 <h4><span class="header-section-number">3.9.3.1</span> Walkthrough</h4>
 <p>Traverse all cell and once we find a land tile, fill the adjacent land recursively. Count each land tile we have
 encountered.</p>
 </div>
-<div id="analysis-53" class="section level4" number="3.9.3.2">
+<div id="analysis-54" class="section level4" number="3.9.3.2">
 <h4><span class="header-section-number">3.9.3.2</span> Analysis</h4>
 <p>Everyone cell in matrix is visited. Thus, is O(rows * cols)</p>
 </div>
-<div id="algorithm-53" class="section level4" number="3.9.3.3">
+<div id="algorithm-54" class="section level4" number="3.9.3.3">
 <h4><span class="header-section-number">3.9.3.3</span> Algorithm</h4>
 <p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
 <div id="java-code---dfs-1" class="section level4" number="3.9.3.4">
 <h4><span class="header-section-number">3.9.3.4</span> Java Code - DFS</h4>
-<div class="sourceCode" id="cb89"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb89-1"><a href="number-of-islands-leetcode-200-medium.html#cb89-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">numIslands</span>(<span class="dt">char</span>[][] grid) {</span>
-<span id="cb89-2"><a href="number-of-islands-leetcode-200-medium.html#cb89-2" aria-hidden="true"></a>    <span class="kw">if</span>(grid==<span class="kw">null</span> || grid.<span class="fu">length</span>==<span class="dv">0</span>||grid[<span class="dv">0</span>].<span class="fu">length</span>==<span class="dv">0</span>)</span>
-<span id="cb89-3"><a href="number-of-islands-leetcode-200-medium.html#cb89-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb89-4"><a href="number-of-islands-leetcode-200-medium.html#cb89-4" aria-hidden="true"></a></span>
-<span id="cb89-5"><a href="number-of-islands-leetcode-200-medium.html#cb89-5" aria-hidden="true"></a>    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;</span>
-<span id="cb89-6"><a href="number-of-islands-leetcode-200-medium.html#cb89-6" aria-hidden="true"></a>    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb89-7"><a href="number-of-islands-leetcode-200-medium.html#cb89-7" aria-hidden="true"></a></span>
-<span id="cb89-8"><a href="number-of-islands-leetcode-200-medium.html#cb89-8" aria-hidden="true"></a>    <span class="dt">int</span> count = <span class="dv">0</span>;</span>
-<span id="cb89-9"><a href="number-of-islands-leetcode-200-medium.html#cb89-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; rows; i++){</span>
-<span id="cb89-10"><a href="number-of-islands-leetcode-200-medium.html#cb89-10" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; cols; j++){</span>
-<span id="cb89-11"><a href="number-of-islands-leetcode-200-medium.html#cb89-11" aria-hidden="true"></a>            <span class="kw">if</span>(grid[i][j] == <span class="ch">&#39;1&#39;</span>){</span>
-<span id="cb89-12"><a href="number-of-islands-leetcode-200-medium.html#cb89-12" aria-hidden="true"></a>                count++;</span>
-<span id="cb89-13"><a href="number-of-islands-leetcode-200-medium.html#cb89-13" aria-hidden="true"></a>                <span class="fu">fill</span>(grid, i, j);</span>
-<span id="cb89-14"><a href="number-of-islands-leetcode-200-medium.html#cb89-14" aria-hidden="true"></a>            }</span>
-<span id="cb89-15"><a href="number-of-islands-leetcode-200-medium.html#cb89-15" aria-hidden="true"></a>        }</span>
-<span id="cb89-16"><a href="number-of-islands-leetcode-200-medium.html#cb89-16" aria-hidden="true"></a>    }</span>
-<span id="cb89-17"><a href="number-of-islands-leetcode-200-medium.html#cb89-17" aria-hidden="true"></a></span>
-<span id="cb89-18"><a href="number-of-islands-leetcode-200-medium.html#cb89-18" aria-hidden="true"></a></span>
-<span id="cb89-19"><a href="number-of-islands-leetcode-200-medium.html#cb89-19" aria-hidden="true"></a>    <span class="kw">return</span> count;</span>
-<span id="cb89-20"><a href="number-of-islands-leetcode-200-medium.html#cb89-20" aria-hidden="true"></a>}</span>
-<span id="cb89-21"><a href="number-of-islands-leetcode-200-medium.html#cb89-21" aria-hidden="true"></a></span>
-<span id="cb89-22"><a href="number-of-islands-leetcode-200-medium.html#cb89-22" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">fill</span>(<span class="dt">char</span>[][] grid, <span class="dt">int</span> i, <span class="dt">int</span> j){</span>
-<span id="cb89-23"><a href="number-of-islands-leetcode-200-medium.html#cb89-23" aria-hidden="true"></a>    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;</span>
-<span id="cb89-24"><a href="number-of-islands-leetcode-200-medium.html#cb89-24" aria-hidden="true"></a>    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb89-25"><a href="number-of-islands-leetcode-200-medium.html#cb89-25" aria-hidden="true"></a></span>
-<span id="cb89-26"><a href="number-of-islands-leetcode-200-medium.html#cb89-26" aria-hidden="true"></a>    <span class="kw">if</span>(i &lt; <span class="dv">0</span> || i &gt;= rows || j &lt; <span class="dv">0</span> || j &gt;= cols || grid[i][j] != <span class="ch">&#39;1&#39;</span>)</span>
-<span id="cb89-27"><a href="number-of-islands-leetcode-200-medium.html#cb89-27" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
-<span id="cb89-28"><a href="number-of-islands-leetcode-200-medium.html#cb89-28" aria-hidden="true"></a></span>
-<span id="cb89-29"><a href="number-of-islands-leetcode-200-medium.html#cb89-29" aria-hidden="true"></a>    grid[i][j] = <span class="ch">&#39;X&#39;</span>;</span>
-<span id="cb89-30"><a href="number-of-islands-leetcode-200-medium.html#cb89-30" aria-hidden="true"></a></span>
-<span id="cb89-31"><a href="number-of-islands-leetcode-200-medium.html#cb89-31" aria-hidden="true"></a>    <span class="co">// recursively fill the adjacent land</span></span>
-<span id="cb89-32"><a href="number-of-islands-leetcode-200-medium.html#cb89-32" aria-hidden="true"></a>    <span class="fu">fill</span>(grid, i - <span class="dv">1</span>, j);</span>
-<span id="cb89-33"><a href="number-of-islands-leetcode-200-medium.html#cb89-33" aria-hidden="true"></a>    <span class="fu">fill</span>(grid, i + <span class="dv">1</span>, j);</span>
-<span id="cb89-34"><a href="number-of-islands-leetcode-200-medium.html#cb89-34" aria-hidden="true"></a>    <span class="fu">fill</span>(grid, i, j - <span class="dv">1</span>);</span>
-<span id="cb89-35"><a href="number-of-islands-leetcode-200-medium.html#cb89-35" aria-hidden="true"></a>    <span class="fu">fill</span>(grid, i, j + <span class="dv">1</span>);</span>
-<span id="cb89-36"><a href="number-of-islands-leetcode-200-medium.html#cb89-36" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb90-1"><a href="number-of-islands-leetcode-200-medium.html#cb90-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">numIslands</span>(<span class="dt">char</span>[][] grid) {</span>
+<span id="cb90-2"><a href="number-of-islands-leetcode-200-medium.html#cb90-2" aria-hidden="true"></a>    <span class="kw">if</span>(grid==<span class="kw">null</span> || grid.<span class="fu">length</span>==<span class="dv">0</span>||grid[<span class="dv">0</span>].<span class="fu">length</span>==<span class="dv">0</span>)</span>
+<span id="cb90-3"><a href="number-of-islands-leetcode-200-medium.html#cb90-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb90-4"><a href="number-of-islands-leetcode-200-medium.html#cb90-4" aria-hidden="true"></a></span>
+<span id="cb90-5"><a href="number-of-islands-leetcode-200-medium.html#cb90-5" aria-hidden="true"></a>    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;</span>
+<span id="cb90-6"><a href="number-of-islands-leetcode-200-medium.html#cb90-6" aria-hidden="true"></a>    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb90-7"><a href="number-of-islands-leetcode-200-medium.html#cb90-7" aria-hidden="true"></a></span>
+<span id="cb90-8"><a href="number-of-islands-leetcode-200-medium.html#cb90-8" aria-hidden="true"></a>    <span class="dt">int</span> count = <span class="dv">0</span>;</span>
+<span id="cb90-9"><a href="number-of-islands-leetcode-200-medium.html#cb90-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; rows; i++){</span>
+<span id="cb90-10"><a href="number-of-islands-leetcode-200-medium.html#cb90-10" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; cols; j++){</span>
+<span id="cb90-11"><a href="number-of-islands-leetcode-200-medium.html#cb90-11" aria-hidden="true"></a>            <span class="kw">if</span>(grid[i][j] == <span class="ch">&#39;1&#39;</span>){</span>
+<span id="cb90-12"><a href="number-of-islands-leetcode-200-medium.html#cb90-12" aria-hidden="true"></a>                count++;</span>
+<span id="cb90-13"><a href="number-of-islands-leetcode-200-medium.html#cb90-13" aria-hidden="true"></a>                <span class="fu">fill</span>(grid, i, j);</span>
+<span id="cb90-14"><a href="number-of-islands-leetcode-200-medium.html#cb90-14" aria-hidden="true"></a>            }</span>
+<span id="cb90-15"><a href="number-of-islands-leetcode-200-medium.html#cb90-15" aria-hidden="true"></a>        }</span>
+<span id="cb90-16"><a href="number-of-islands-leetcode-200-medium.html#cb90-16" aria-hidden="true"></a>    }</span>
+<span id="cb90-17"><a href="number-of-islands-leetcode-200-medium.html#cb90-17" aria-hidden="true"></a></span>
+<span id="cb90-18"><a href="number-of-islands-leetcode-200-medium.html#cb90-18" aria-hidden="true"></a></span>
+<span id="cb90-19"><a href="number-of-islands-leetcode-200-medium.html#cb90-19" aria-hidden="true"></a>    <span class="kw">return</span> count;</span>
+<span id="cb90-20"><a href="number-of-islands-leetcode-200-medium.html#cb90-20" aria-hidden="true"></a>}</span>
+<span id="cb90-21"><a href="number-of-islands-leetcode-200-medium.html#cb90-21" aria-hidden="true"></a></span>
+<span id="cb90-22"><a href="number-of-islands-leetcode-200-medium.html#cb90-22" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">fill</span>(<span class="dt">char</span>[][] grid, <span class="dt">int</span> i, <span class="dt">int</span> j){</span>
+<span id="cb90-23"><a href="number-of-islands-leetcode-200-medium.html#cb90-23" aria-hidden="true"></a>    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;</span>
+<span id="cb90-24"><a href="number-of-islands-leetcode-200-medium.html#cb90-24" aria-hidden="true"></a>    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb90-25"><a href="number-of-islands-leetcode-200-medium.html#cb90-25" aria-hidden="true"></a></span>
+<span id="cb90-26"><a href="number-of-islands-leetcode-200-medium.html#cb90-26" aria-hidden="true"></a>    <span class="kw">if</span>(i &lt; <span class="dv">0</span> || i &gt;= rows || j &lt; <span class="dv">0</span> || j &gt;= cols || grid[i][j] != <span class="ch">&#39;1&#39;</span>)</span>
+<span id="cb90-27"><a href="number-of-islands-leetcode-200-medium.html#cb90-27" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
+<span id="cb90-28"><a href="number-of-islands-leetcode-200-medium.html#cb90-28" aria-hidden="true"></a></span>
+<span id="cb90-29"><a href="number-of-islands-leetcode-200-medium.html#cb90-29" aria-hidden="true"></a>    grid[i][j] = <span class="ch">&#39;X&#39;</span>;</span>
+<span id="cb90-30"><a href="number-of-islands-leetcode-200-medium.html#cb90-30" aria-hidden="true"></a></span>
+<span id="cb90-31"><a href="number-of-islands-leetcode-200-medium.html#cb90-31" aria-hidden="true"></a>    <span class="co">// recursively fill the adjacent land</span></span>
+<span id="cb90-32"><a href="number-of-islands-leetcode-200-medium.html#cb90-32" aria-hidden="true"></a>    <span class="fu">fill</span>(grid, i - <span class="dv">1</span>, j);</span>
+<span id="cb90-33"><a href="number-of-islands-leetcode-200-medium.html#cb90-33" aria-hidden="true"></a>    <span class="fu">fill</span>(grid, i + <span class="dv">1</span>, j);</span>
+<span id="cb90-34"><a href="number-of-islands-leetcode-200-medium.html#cb90-34" aria-hidden="true"></a>    <span class="fu">fill</span>(grid, i, j - <span class="dv">1</span>);</span>
+<span id="cb90-35"><a href="number-of-islands-leetcode-200-medium.html#cb90-35" aria-hidden="true"></a>    <span class="fu">fill</span>(grid, i, j + <span class="dv">1</span>);</span>
+<span id="cb90-36"><a href="number-of-islands-leetcode-200-medium.html#cb90-36" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

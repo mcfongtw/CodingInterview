@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1062,38 +1063,38 @@ substring, “pwke” is a subsequence and not a substring.
 Use two indices left, and right to remember a substring (sliding window). Use a Set to check for unique characters.
 If there is unique character, move right index outward (expand substring); otherwise, move left index rightward
 (shorten substring). Measure the longest length of substring at each expansion.</p>
-<div id="analysis-127" class="section level4" number="7.2.2.1">
+<div id="analysis-128" class="section level4" number="7.2.2.1">
 <h4><span class="header-section-number">7.2.2.1</span> Analysis</h4>
 <p>Time complexity is O(n) as every letter is visited once.</p>
 </div>
-<div id="algorithm-132" class="section level4" number="7.2.2.2">
+<div id="algorithm-133" class="section level4" number="7.2.2.2">
 <h4><span class="header-section-number">7.2.2.2</span> Algorithm</h4>
 </div>
 <div id="java-code---sliding-window" class="section level4" number="7.2.2.3">
 <h4><span class="header-section-number">7.2.2.3</span> Java Code - Sliding Window</h4>
-<div class="sourceCode" id="cb191"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb191-1"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">lengthOfLongestSubstring</span>(<span class="bu">String</span> s) {</span>
-<span id="cb191-2"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-2" aria-hidden="true"></a>    <span class="dt">int</span> len = s.<span class="fu">length</span>();</span>
-<span id="cb191-3"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-3" aria-hidden="true"></a>    <span class="bu">Set</span>&lt;<span class="bu">Character</span>&gt; uniqueChars = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;();</span>
-<span id="cb191-4"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-4" aria-hidden="true"></a></span>
-<span id="cb191-5"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-5" aria-hidden="true"></a>    <span class="dt">int</span> maxLen = <span class="dv">0</span>, right = <span class="dv">0</span>, left = <span class="dv">0</span>;</span>
-<span id="cb191-6"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-6" aria-hidden="true"></a></span>
-<span id="cb191-7"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-7" aria-hidden="true"></a>    <span class="kw">while</span>( right &lt; len &amp;&amp; left &lt; len) {</span>
-<span id="cb191-8"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-8" aria-hidden="true"></a>        <span class="co">//looking for longest repeating unique substring [left, right]</span></span>
-<span id="cb191-9"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-9" aria-hidden="true"></a>        <span class="kw">if</span>(!uniqueChars.<span class="fu">contains</span>(s.<span class="fu">charAt</span>(right))) {</span>
-<span id="cb191-10"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-10" aria-hidden="true"></a>            <span class="co">//unique char, expand substring</span></span>
-<span id="cb191-11"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-11" aria-hidden="true"></a>            uniqueChars.<span class="fu">add</span>(s.<span class="fu">charAt</span>(right));</span>
-<span id="cb191-12"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-12" aria-hidden="true"></a>            right++;</span>
-<span id="cb191-13"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-13" aria-hidden="true"></a>            maxLen = <span class="bu">Math</span>.<span class="fu">max</span>(maxLen, right - left);</span>
-<span id="cb191-14"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-14" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb191-15"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-15" aria-hidden="true"></a>            <span class="co">//not unique, shorten substring</span></span>
-<span id="cb191-16"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-16" aria-hidden="true"></a>            uniqueChars.<span class="fu">remove</span>(s.<span class="fu">charAt</span>(left));</span>
-<span id="cb191-17"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-17" aria-hidden="true"></a>            left++;</span>
-<span id="cb191-18"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-18" aria-hidden="true"></a>        }</span>
-<span id="cb191-19"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-19" aria-hidden="true"></a></span>
-<span id="cb191-20"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-20" aria-hidden="true"></a>    }</span>
-<span id="cb191-21"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-21" aria-hidden="true"></a></span>
-<span id="cb191-22"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-22" aria-hidden="true"></a>    <span class="kw">return</span> maxLen;</span>
-<span id="cb191-23"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb191-23" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb192"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb192-1"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">lengthOfLongestSubstring</span>(<span class="bu">String</span> s) {</span>
+<span id="cb192-2"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-2" aria-hidden="true"></a>    <span class="dt">int</span> len = s.<span class="fu">length</span>();</span>
+<span id="cb192-3"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-3" aria-hidden="true"></a>    <span class="bu">Set</span>&lt;<span class="bu">Character</span>&gt; uniqueChars = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;();</span>
+<span id="cb192-4"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-4" aria-hidden="true"></a></span>
+<span id="cb192-5"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-5" aria-hidden="true"></a>    <span class="dt">int</span> maxLen = <span class="dv">0</span>, right = <span class="dv">0</span>, left = <span class="dv">0</span>;</span>
+<span id="cb192-6"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-6" aria-hidden="true"></a></span>
+<span id="cb192-7"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-7" aria-hidden="true"></a>    <span class="kw">while</span>( right &lt; len &amp;&amp; left &lt; len) {</span>
+<span id="cb192-8"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-8" aria-hidden="true"></a>        <span class="co">//looking for longest repeating unique substring [left, right]</span></span>
+<span id="cb192-9"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-9" aria-hidden="true"></a>        <span class="kw">if</span>(!uniqueChars.<span class="fu">contains</span>(s.<span class="fu">charAt</span>(right))) {</span>
+<span id="cb192-10"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-10" aria-hidden="true"></a>            <span class="co">//unique char, expand substring</span></span>
+<span id="cb192-11"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-11" aria-hidden="true"></a>            uniqueChars.<span class="fu">add</span>(s.<span class="fu">charAt</span>(right));</span>
+<span id="cb192-12"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-12" aria-hidden="true"></a>            right++;</span>
+<span id="cb192-13"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-13" aria-hidden="true"></a>            maxLen = <span class="bu">Math</span>.<span class="fu">max</span>(maxLen, right - left);</span>
+<span id="cb192-14"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-14" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb192-15"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-15" aria-hidden="true"></a>            <span class="co">//not unique, shorten substring</span></span>
+<span id="cb192-16"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-16" aria-hidden="true"></a>            uniqueChars.<span class="fu">remove</span>(s.<span class="fu">charAt</span>(left));</span>
+<span id="cb192-17"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-17" aria-hidden="true"></a>            left++;</span>
+<span id="cb192-18"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-18" aria-hidden="true"></a>        }</span>
+<span id="cb192-19"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-19" aria-hidden="true"></a></span>
+<span id="cb192-20"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-20" aria-hidden="true"></a>    }</span>
+<span id="cb192-21"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-21" aria-hidden="true"></a></span>
+<span id="cb192-22"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-22" aria-hidden="true"></a>    <span class="kw">return</span> maxLen;</span>
+<span id="cb192-23"><a href="longest-substring-without-repeating-characters-leetcode-3-medium.html#cb192-23" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

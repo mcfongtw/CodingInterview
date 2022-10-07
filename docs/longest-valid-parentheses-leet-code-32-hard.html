@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1059,76 +1060,76 @@ Another example is ”)()())”, where the longest valid parentheses substring i
 </div>
 <div id="solution-25" class="section level3" number="2.29.3">
 <h3><span class="header-section-number">2.29.3</span> Solution</h3>
-<div id="walkthrough-29" class="section level4" number="2.29.3.1">
+<div id="walkthrough-30" class="section level4" number="2.29.3.1">
 <h4><span class="header-section-number">2.29.3.1</span> Walkthrough</h4>
 <p>Find the indices of unmatched paranthesis, then locate the adjacent indices with largest difference which would be
 the longest valid paranthesis.</p>
 </div>
-<div id="analysis-29" class="section level4" number="2.29.3.2">
+<div id="analysis-30" class="section level4" number="2.29.3.2">
 <h4><span class="header-section-number">2.29.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) where n is the number of alphabets.</p>
 </div>
-<div id="algorithm-29" class="section level4" number="2.29.3.3">
+<div id="algorithm-30" class="section level4" number="2.29.3.3">
 <h4><span class="header-section-number">2.29.3.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
 </div>
-<div id="java-code-25" class="section level4" number="2.29.3.4">
+<div id="java-code-27" class="section level4" number="2.29.3.4">
 <h4><span class="header-section-number">2.29.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb38"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb38-1"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">longestValidParentheses</span>(<span class="bu">String</span> s) {</span>
-<span id="cb38-2"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-2" aria-hidden="true"></a>    <span class="co">//Stack contains the indices of chars which cannot be matched.</span></span>
-<span id="cb38-3"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-3" aria-hidden="true"></a>    <span class="bu">Stack</span>&lt;<span class="bu">Integer</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
-<span id="cb38-4"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-4" aria-hidden="true"></a></span>
-<span id="cb38-5"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-5" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; s.<span class="fu">length</span>(); i++) {</span>
-<span id="cb38-6"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-6" aria-hidden="true"></a>        <span class="dt">char</span> c = s.<span class="fu">charAt</span>(i);</span>
-<span id="cb38-7"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-7" aria-hidden="true"></a></span>
-<span id="cb38-8"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-8" aria-hidden="true"></a>        <span class="kw">if</span>(c == <span class="ch">&#39;(&#39;</span>) {</span>
-<span id="cb38-9"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-9" aria-hidden="true"></a>            stack.<span class="fu">push</span>(i);</span>
-<span id="cb38-10"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-10" aria-hidden="true"></a>        } <span class="kw">else</span> <span class="kw">if</span>(c == <span class="ch">&#39;)&#39;</span>) {</span>
-<span id="cb38-11"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-11" aria-hidden="true"></a>            <span class="kw">if</span>(stack.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb38-12"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-12" aria-hidden="true"></a>            stack.<span class="fu">push</span>(i);</span>
-<span id="cb38-13"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-13" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
-<span id="cb38-14"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-14" aria-hidden="true"></a>                <span class="dt">int</span> lastIndex = stack.<span class="fu">peek</span>();</span>
-<span id="cb38-15"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-15" aria-hidden="true"></a></span>
-<span id="cb38-16"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-16" aria-hidden="true"></a>                <span class="kw">if</span>(s.<span class="fu">charAt</span>(lastIndex) == <span class="ch">&#39;(&#39;</span>) {</span>
-<span id="cb38-17"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-17" aria-hidden="true"></a>                    <span class="co">//pop out the valid pairs</span></span>
-<span id="cb38-18"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-18" aria-hidden="true"></a>                    stack.<span class="fu">pop</span>();</span>
-<span id="cb38-19"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-19" aria-hidden="true"></a>                } <span class="kw">else</span> {</span>
-<span id="cb38-20"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-20" aria-hidden="true"></a>                    <span class="co">//XXX: )))))(</span></span>
-<span id="cb38-21"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-21" aria-hidden="true"></a>                    stack.<span class="fu">push</span>(i);</span>
-<span id="cb38-22"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-22" aria-hidden="true"></a>                }</span>
-<span id="cb38-23"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-23" aria-hidden="true"></a>            }</span>
-<span id="cb38-24"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-24" aria-hidden="true"></a>        }</span>
-<span id="cb38-25"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-25" aria-hidden="true"></a>    }</span>
-<span id="cb38-26"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-26" aria-hidden="true"></a></span>
-<span id="cb38-27"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-27" aria-hidden="true"></a>    <span class="dt">int</span> longestLength = <span class="dv">0</span>;</span>
-<span id="cb38-28"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-28" aria-hidden="true"></a>    <span class="kw">if</span>(stack.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb38-29"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-29" aria-hidden="true"></a>        <span class="co">//string contains a well-formed paranthesis</span></span>
-<span id="cb38-30"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-30" aria-hidden="true"></a>        longestLength = s.<span class="fu">length</span>();</span>
-<span id="cb38-31"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-31" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb38-32"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-32" aria-hidden="true"></a>        <span class="co">/*</span></span>
-<span id="cb38-33"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-33" aria-hidden="true"></a><span class="co">        * Any discontinual adjacent indices represents a valid parenthesis.</span></span>
-<span id="cb38-34"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-34" aria-hidden="true"></a><span class="co">        * Therefore, locate the adjacent indices with largest difference ==&gt; the longest valid parenthesis</span></span>
-<span id="cb38-35"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-35" aria-hidden="true"></a><span class="co">        *</span></span>
-<span id="cb38-36"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-36" aria-hidden="true"></a><span class="co">        * Example:</span></span>
-<span id="cb38-37"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-37" aria-hidden="true"></a><span class="co">        * Input: (()()((()((</span></span>
-<span id="cb38-38"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-38" aria-hidden="true"></a><span class="co">        * Indices in stack:</span></span>
-<span id="cb38-39"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-39" aria-hidden="true"></a><span class="co">        * 10&lt;-9&lt;-6&lt;-5&lt;-0</span></span>
-<span id="cb38-40"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-40" aria-hidden="true"></a><span class="co">        *</span></span>
-<span id="cb38-41"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-41" aria-hidden="true"></a><span class="co">        * Longest valid parenthesis: 5 - 0  - 1 = 4</span></span>
-<span id="cb38-42"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-42" aria-hidden="true"></a><span class="co">        */</span></span>
-<span id="cb38-43"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-43" aria-hidden="true"></a>        <span class="dt">int</span> stopIndex = s.<span class="fu">length</span>(), startIndex = <span class="dv">0</span>;</span>
-<span id="cb38-44"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-44" aria-hidden="true"></a></span>
-<span id="cb38-45"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-45" aria-hidden="true"></a>        <span class="kw">while</span>(!stack.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb38-46"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-46" aria-hidden="true"></a>            startIndex = stack.<span class="fu">pop</span>();</span>
-<span id="cb38-47"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-47" aria-hidden="true"></a>            longestLength = <span class="bu">Math</span>.<span class="fu">max</span>(longestLength, stopIndex - startIndex - <span class="dv">1</span>);</span>
-<span id="cb38-48"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-48" aria-hidden="true"></a>            stopIndex = startIndex;</span>
-<span id="cb38-49"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-49" aria-hidden="true"></a>        }</span>
-<span id="cb38-50"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-50" aria-hidden="true"></a></span>
-<span id="cb38-51"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-51" aria-hidden="true"></a>        longestLength = <span class="bu">Math</span>.<span class="fu">max</span>(longestLength, stopIndex);</span>
-<span id="cb38-52"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-52" aria-hidden="true"></a>    }</span>
-<span id="cb38-53"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-53" aria-hidden="true"></a></span>
-<span id="cb38-54"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-54" aria-hidden="true"></a>    <span class="kw">return</span> longestLength;</span>
-<span id="cb38-55"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb38-55" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb39-1"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">longestValidParentheses</span>(<span class="bu">String</span> s) {</span>
+<span id="cb39-2"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-2" aria-hidden="true"></a>    <span class="co">//Stack contains the indices of chars which cannot be matched.</span></span>
+<span id="cb39-3"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-3" aria-hidden="true"></a>    <span class="bu">Stack</span>&lt;<span class="bu">Integer</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
+<span id="cb39-4"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-4" aria-hidden="true"></a></span>
+<span id="cb39-5"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-5" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; s.<span class="fu">length</span>(); i++) {</span>
+<span id="cb39-6"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-6" aria-hidden="true"></a>        <span class="dt">char</span> c = s.<span class="fu">charAt</span>(i);</span>
+<span id="cb39-7"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-7" aria-hidden="true"></a></span>
+<span id="cb39-8"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-8" aria-hidden="true"></a>        <span class="kw">if</span>(c == <span class="ch">&#39;(&#39;</span>) {</span>
+<span id="cb39-9"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-9" aria-hidden="true"></a>            stack.<span class="fu">push</span>(i);</span>
+<span id="cb39-10"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-10" aria-hidden="true"></a>        } <span class="kw">else</span> <span class="kw">if</span>(c == <span class="ch">&#39;)&#39;</span>) {</span>
+<span id="cb39-11"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-11" aria-hidden="true"></a>            <span class="kw">if</span>(stack.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb39-12"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-12" aria-hidden="true"></a>            stack.<span class="fu">push</span>(i);</span>
+<span id="cb39-13"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-13" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
+<span id="cb39-14"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-14" aria-hidden="true"></a>                <span class="dt">int</span> lastIndex = stack.<span class="fu">peek</span>();</span>
+<span id="cb39-15"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-15" aria-hidden="true"></a></span>
+<span id="cb39-16"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-16" aria-hidden="true"></a>                <span class="kw">if</span>(s.<span class="fu">charAt</span>(lastIndex) == <span class="ch">&#39;(&#39;</span>) {</span>
+<span id="cb39-17"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-17" aria-hidden="true"></a>                    <span class="co">//pop out the valid pairs</span></span>
+<span id="cb39-18"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-18" aria-hidden="true"></a>                    stack.<span class="fu">pop</span>();</span>
+<span id="cb39-19"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-19" aria-hidden="true"></a>                } <span class="kw">else</span> {</span>
+<span id="cb39-20"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-20" aria-hidden="true"></a>                    <span class="co">//XXX: )))))(</span></span>
+<span id="cb39-21"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-21" aria-hidden="true"></a>                    stack.<span class="fu">push</span>(i);</span>
+<span id="cb39-22"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-22" aria-hidden="true"></a>                }</span>
+<span id="cb39-23"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-23" aria-hidden="true"></a>            }</span>
+<span id="cb39-24"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-24" aria-hidden="true"></a>        }</span>
+<span id="cb39-25"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-25" aria-hidden="true"></a>    }</span>
+<span id="cb39-26"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-26" aria-hidden="true"></a></span>
+<span id="cb39-27"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-27" aria-hidden="true"></a>    <span class="dt">int</span> longestLength = <span class="dv">0</span>;</span>
+<span id="cb39-28"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-28" aria-hidden="true"></a>    <span class="kw">if</span>(stack.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb39-29"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-29" aria-hidden="true"></a>        <span class="co">//string contains a well-formed paranthesis</span></span>
+<span id="cb39-30"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-30" aria-hidden="true"></a>        longestLength = s.<span class="fu">length</span>();</span>
+<span id="cb39-31"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-31" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb39-32"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-32" aria-hidden="true"></a>        <span class="co">/*</span></span>
+<span id="cb39-33"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-33" aria-hidden="true"></a><span class="co">        * Any discontinual adjacent indices represents a valid parenthesis.</span></span>
+<span id="cb39-34"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-34" aria-hidden="true"></a><span class="co">        * Therefore, locate the adjacent indices with largest difference ==&gt; the longest valid parenthesis</span></span>
+<span id="cb39-35"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-35" aria-hidden="true"></a><span class="co">        *</span></span>
+<span id="cb39-36"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-36" aria-hidden="true"></a><span class="co">        * Example:</span></span>
+<span id="cb39-37"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-37" aria-hidden="true"></a><span class="co">        * Input: (()()((()((</span></span>
+<span id="cb39-38"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-38" aria-hidden="true"></a><span class="co">        * Indices in stack:</span></span>
+<span id="cb39-39"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-39" aria-hidden="true"></a><span class="co">        * 10&lt;-9&lt;-6&lt;-5&lt;-0</span></span>
+<span id="cb39-40"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-40" aria-hidden="true"></a><span class="co">        *</span></span>
+<span id="cb39-41"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-41" aria-hidden="true"></a><span class="co">        * Longest valid parenthesis: 5 - 0  - 1 = 4</span></span>
+<span id="cb39-42"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-42" aria-hidden="true"></a><span class="co">        */</span></span>
+<span id="cb39-43"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-43" aria-hidden="true"></a>        <span class="dt">int</span> stopIndex = s.<span class="fu">length</span>(), startIndex = <span class="dv">0</span>;</span>
+<span id="cb39-44"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-44" aria-hidden="true"></a></span>
+<span id="cb39-45"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-45" aria-hidden="true"></a>        <span class="kw">while</span>(!stack.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb39-46"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-46" aria-hidden="true"></a>            startIndex = stack.<span class="fu">pop</span>();</span>
+<span id="cb39-47"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-47" aria-hidden="true"></a>            longestLength = <span class="bu">Math</span>.<span class="fu">max</span>(longestLength, stopIndex - startIndex - <span class="dv">1</span>);</span>
+<span id="cb39-48"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-48" aria-hidden="true"></a>            stopIndex = startIndex;</span>
+<span id="cb39-49"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-49" aria-hidden="true"></a>        }</span>
+<span id="cb39-50"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-50" aria-hidden="true"></a></span>
+<span id="cb39-51"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-51" aria-hidden="true"></a>        longestLength = <span class="bu">Math</span>.<span class="fu">max</span>(longestLength, stopIndex);</span>
+<span id="cb39-52"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-52" aria-hidden="true"></a>    }</span>
+<span id="cb39-53"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-53" aria-hidden="true"></a></span>
+<span id="cb39-54"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-54" aria-hidden="true"></a>    <span class="kw">return</span> longestLength;</span>
+<span id="cb39-55"><a href="longest-valid-parentheses-leet-code-32-hard.html#cb39-55" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

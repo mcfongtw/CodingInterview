@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1054,103 +1055,103 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="example-41" class="section level3" number="3.3.2">
 <h3><span class="header-section-number">3.3.2</span> Example</h3>
 <p>Input:</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb64-1"><a href="spiral-matrix-leetcode-54-medium.html#cb64-1" aria-hidden="true"></a><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span> ,</span>
-<span id="cb64-2"><a href="spiral-matrix-leetcode-54-medium.html#cb64-2" aria-hidden="true"></a><span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span> ,</span>
-<span id="cb64-3"><a href="spiral-matrix-leetcode-54-medium.html#cb64-3" aria-hidden="true"></a><span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span></span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb65-1"><a href="spiral-matrix-leetcode-54-medium.html#cb65-1" aria-hidden="true"></a><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span> ,</span>
+<span id="cb65-2"><a href="spiral-matrix-leetcode-54-medium.html#cb65-2" aria-hidden="true"></a><span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span> ,</span>
+<span id="cb65-3"><a href="spiral-matrix-leetcode-54-medium.html#cb65-3" aria-hidden="true"></a><span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span></span></code></pre></div>
 <p>Output: [1,2,3,6,9,8,7,4,5]</p>
 <p>Input:</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb65-1"><a href="spiral-matrix-leetcode-54-medium.html#cb65-1" aria-hidden="true"></a><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>,</span>
-<span id="cb65-2"><a href="spiral-matrix-leetcode-54-medium.html#cb65-2" aria-hidden="true"></a><span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>,</span>
-<span id="cb65-3"><a href="spiral-matrix-leetcode-54-medium.html#cb65-3" aria-hidden="true"></a><span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span></span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb66-1"><a href="spiral-matrix-leetcode-54-medium.html#cb66-1" aria-hidden="true"></a><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>,</span>
+<span id="cb66-2"><a href="spiral-matrix-leetcode-54-medium.html#cb66-2" aria-hidden="true"></a><span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>,</span>
+<span id="cb66-3"><a href="spiral-matrix-leetcode-54-medium.html#cb66-3" aria-hidden="true"></a><span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span></span></code></pre></div>
 <p>Output: [1,2,3,4,8,12,11,10,9,5,6,7]
 ### Solution
 #### Walkthrough
 While walking through the circles, track current left, right, top, and bottom positions.</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb66-1"><a href="spiral-matrix-leetcode-54-medium.html#cb66-1" aria-hidden="true"></a>(r)</span>
-<span id="cb66-2"><a href="spiral-matrix-leetcode-54-medium.html#cb66-2" aria-hidden="true"></a>    <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span>   (c)</span>
-<span id="cb66-3"><a href="spiral-matrix-leetcode-54-medium.html#cb66-3" aria-hidden="true"></a> <span class="dv">0</span>  -  -  -</span>
-<span id="cb66-4"><a href="spiral-matrix-leetcode-54-medium.html#cb66-4" aria-hidden="true"></a> <span class="dv">1</span>  |  &gt;  |</span>
-<span id="cb66-5"><a href="spiral-matrix-leetcode-54-medium.html#cb66-5" aria-hidden="true"></a> <span class="dv">2</span>  -  -  |</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb67-1"><a href="spiral-matrix-leetcode-54-medium.html#cb67-1" aria-hidden="true"></a>(r)</span>
+<span id="cb67-2"><a href="spiral-matrix-leetcode-54-medium.html#cb67-2" aria-hidden="true"></a>    <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span>   (c)</span>
+<span id="cb67-3"><a href="spiral-matrix-leetcode-54-medium.html#cb67-3" aria-hidden="true"></a> <span class="dv">0</span>  -  -  -</span>
+<span id="cb67-4"><a href="spiral-matrix-leetcode-54-medium.html#cb67-4" aria-hidden="true"></a> <span class="dv">1</span>  |  &gt;  |</span>
+<span id="cb67-5"><a href="spiral-matrix-leetcode-54-medium.html#cb67-5" aria-hidden="true"></a> <span class="dv">2</span>  -  -  |</span></code></pre></div>
 <pre><code>*  Going rightward
 *  Going downward
 *  Going leftward
 *  Going upward</code></pre>
 <p>Be sure to check for duplicated column or row before going for each direction.</p>
-<div id="analysis-46" class="section level4" number="3.3.2.1">
+<div id="analysis-47" class="section level4" number="3.3.2.1">
 <h4><span class="header-section-number">3.3.2.1</span> Analysis</h4>
 <p>Time complexity is O(rows * cols), since all elements are visited once</p>
 </div>
-<div id="algorithm-46" class="section level4" number="3.3.2.2">
+<div id="algorithm-47" class="section level4" number="3.3.2.2">
 <h4><span class="header-section-number">3.3.2.2</span> Algorithm</h4>
 </div>
-<div id="java-code-37" class="section level4" number="3.3.2.3">
+<div id="java-code-39" class="section level4" number="3.3.2.3">
 <h4><span class="header-section-number">3.3.2.3</span> Java Code</h4>
-<div class="sourceCode" id="cb68"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb68-1"><a href="spiral-matrix-leetcode-54-medium.html#cb68-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span> <span class="fu">spiralOrder</span>(<span class="dt">int</span>[][] matrix) {</span>
-<span id="cb68-2"><a href="spiral-matrix-leetcode-54-medium.html#cb68-2" aria-hidden="true"></a>    <span class="bu">List</span> result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb68-3"><a href="spiral-matrix-leetcode-54-medium.html#cb68-3" aria-hidden="true"></a></span>
-<span id="cb68-4"><a href="spiral-matrix-leetcode-54-medium.html#cb68-4" aria-hidden="true"></a>    <span class="kw">if</span>(matrix.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb68-5"><a href="spiral-matrix-leetcode-54-medium.html#cb68-5" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
-<span id="cb68-6"><a href="spiral-matrix-leetcode-54-medium.html#cb68-6" aria-hidden="true"></a>    }</span>
-<span id="cb68-7"><a href="spiral-matrix-leetcode-54-medium.html#cb68-7" aria-hidden="true"></a></span>
-<span id="cb68-8"><a href="spiral-matrix-leetcode-54-medium.html#cb68-8" aria-hidden="true"></a>    <span class="dt">int</span> rows = matrix.<span class="fu">length</span>;</span>
-<span id="cb68-9"><a href="spiral-matrix-leetcode-54-medium.html#cb68-9" aria-hidden="true"></a>    <span class="dt">int</span> cols = matrix[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb68-10"><a href="spiral-matrix-leetcode-54-medium.html#cb68-10" aria-hidden="true"></a></span>
-<span id="cb68-11"><a href="spiral-matrix-leetcode-54-medium.html#cb68-11" aria-hidden="true"></a>    <span class="co">// position of left, right, top and buttom border</span></span>
-<span id="cb68-12"><a href="spiral-matrix-leetcode-54-medium.html#cb68-12" aria-hidden="true"></a>    <span class="dt">int</span> left = <span class="dv">0</span>;</span>
-<span id="cb68-13"><a href="spiral-matrix-leetcode-54-medium.html#cb68-13" aria-hidden="true"></a>    <span class="dt">int</span> right = cols - <span class="dv">1</span>;</span>
-<span id="cb68-14"><a href="spiral-matrix-leetcode-54-medium.html#cb68-14" aria-hidden="true"></a>    <span class="dt">int</span> top = <span class="dv">0</span>;</span>
-<span id="cb68-15"><a href="spiral-matrix-leetcode-54-medium.html#cb68-15" aria-hidden="true"></a>    <span class="dt">int</span> bottom = rows - <span class="dv">1</span>;</span>
-<span id="cb68-16"><a href="spiral-matrix-leetcode-54-medium.html#cb68-16" aria-hidden="true"></a></span>
-<span id="cb68-17"><a href="spiral-matrix-leetcode-54-medium.html#cb68-17" aria-hidden="true"></a>    <span class="kw">while</span>( result.<span class="fu">size</span>() &lt; (cols * rows) ) {</span>
-<span id="cb68-18"><a href="spiral-matrix-leetcode-54-medium.html#cb68-18" aria-hidden="true"></a>        <span class="co">//traverse a circle</span></span>
-<span id="cb68-19"><a href="spiral-matrix-leetcode-54-medium.html#cb68-19" aria-hidden="true"></a></span>
-<span id="cb68-20"><a href="spiral-matrix-leetcode-54-medium.html#cb68-20" aria-hidden="true"></a>        <span class="co">// avoid duplicated row</span></span>
-<span id="cb68-21"><a href="spiral-matrix-leetcode-54-medium.html#cb68-21" aria-hidden="true"></a>        <span class="kw">if</span>(top &gt; bottom) {</span>
-<span id="cb68-22"><a href="spiral-matrix-leetcode-54-medium.html#cb68-22" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
-<span id="cb68-23"><a href="spiral-matrix-leetcode-54-medium.html#cb68-23" aria-hidden="true"></a>        }</span>
-<span id="cb68-24"><a href="spiral-matrix-leetcode-54-medium.html#cb68-24" aria-hidden="true"></a></span>
-<span id="cb68-25"><a href="spiral-matrix-leetcode-54-medium.html#cb68-25" aria-hidden="true"></a>        <span class="co">//going rightward</span></span>
-<span id="cb68-26"><a href="spiral-matrix-leetcode-54-medium.html#cb68-26" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = left; i &lt;= right; i++){</span>
-<span id="cb68-27"><a href="spiral-matrix-leetcode-54-medium.html#cb68-27" aria-hidden="true"></a>            result.<span class="fu">add</span>(matrix[top][i]);</span>
-<span id="cb68-28"><a href="spiral-matrix-leetcode-54-medium.html#cb68-28" aria-hidden="true"></a>        }</span>
-<span id="cb68-29"><a href="spiral-matrix-leetcode-54-medium.html#cb68-29" aria-hidden="true"></a>        top++;</span>
-<span id="cb68-30"><a href="spiral-matrix-leetcode-54-medium.html#cb68-30" aria-hidden="true"></a></span>
-<span id="cb68-31"><a href="spiral-matrix-leetcode-54-medium.html#cb68-31" aria-hidden="true"></a>        <span class="co">// avoid duplicated column</span></span>
-<span id="cb68-32"><a href="spiral-matrix-leetcode-54-medium.html#cb68-32" aria-hidden="true"></a>        <span class="kw">if</span>(left &gt; right) {</span>
-<span id="cb68-33"><a href="spiral-matrix-leetcode-54-medium.html#cb68-33" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
-<span id="cb68-34"><a href="spiral-matrix-leetcode-54-medium.html#cb68-34" aria-hidden="true"></a>        }</span>
-<span id="cb68-35"><a href="spiral-matrix-leetcode-54-medium.html#cb68-35" aria-hidden="true"></a></span>
-<span id="cb68-36"><a href="spiral-matrix-leetcode-54-medium.html#cb68-36" aria-hidden="true"></a>        <span class="co">//going downward</span></span>
-<span id="cb68-37"><a href="spiral-matrix-leetcode-54-medium.html#cb68-37" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = top; i &lt;= bottom; i++){</span>
-<span id="cb68-38"><a href="spiral-matrix-leetcode-54-medium.html#cb68-38" aria-hidden="true"></a>            result.<span class="fu">add</span>(matrix[i][right]);</span>
-<span id="cb68-39"><a href="spiral-matrix-leetcode-54-medium.html#cb68-39" aria-hidden="true"></a>        }</span>
-<span id="cb68-40"><a href="spiral-matrix-leetcode-54-medium.html#cb68-40" aria-hidden="true"></a>        right--;</span>
-<span id="cb68-41"><a href="spiral-matrix-leetcode-54-medium.html#cb68-41" aria-hidden="true"></a></span>
-<span id="cb68-42"><a href="spiral-matrix-leetcode-54-medium.html#cb68-42" aria-hidden="true"></a>        <span class="co">// avoid duplicated row</span></span>
-<span id="cb68-43"><a href="spiral-matrix-leetcode-54-medium.html#cb68-43" aria-hidden="true"></a>        <span class="kw">if</span>(top &gt; bottom) {</span>
-<span id="cb68-44"><a href="spiral-matrix-leetcode-54-medium.html#cb68-44" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
-<span id="cb68-45"><a href="spiral-matrix-leetcode-54-medium.html#cb68-45" aria-hidden="true"></a>        }</span>
-<span id="cb68-46"><a href="spiral-matrix-leetcode-54-medium.html#cb68-46" aria-hidden="true"></a></span>
-<span id="cb68-47"><a href="spiral-matrix-leetcode-54-medium.html#cb68-47" aria-hidden="true"></a>        <span class="co">// going leftward</span></span>
-<span id="cb68-48"><a href="spiral-matrix-leetcode-54-medium.html#cb68-48" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = right; i &gt;= left; i--){</span>
-<span id="cb68-49"><a href="spiral-matrix-leetcode-54-medium.html#cb68-49" aria-hidden="true"></a>            result.<span class="fu">add</span>(matrix[bottom][i]);</span>
-<span id="cb68-50"><a href="spiral-matrix-leetcode-54-medium.html#cb68-50" aria-hidden="true"></a>        }</span>
-<span id="cb68-51"><a href="spiral-matrix-leetcode-54-medium.html#cb68-51" aria-hidden="true"></a>        bottom--;</span>
-<span id="cb68-52"><a href="spiral-matrix-leetcode-54-medium.html#cb68-52" aria-hidden="true"></a></span>
-<span id="cb68-53"><a href="spiral-matrix-leetcode-54-medium.html#cb68-53" aria-hidden="true"></a>        <span class="co">// avoid duplicated column</span></span>
-<span id="cb68-54"><a href="spiral-matrix-leetcode-54-medium.html#cb68-54" aria-hidden="true"></a>        <span class="kw">if</span>(left &gt; right) {</span>
-<span id="cb68-55"><a href="spiral-matrix-leetcode-54-medium.html#cb68-55" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
-<span id="cb68-56"><a href="spiral-matrix-leetcode-54-medium.html#cb68-56" aria-hidden="true"></a>        }</span>
-<span id="cb68-57"><a href="spiral-matrix-leetcode-54-medium.html#cb68-57" aria-hidden="true"></a></span>
-<span id="cb68-58"><a href="spiral-matrix-leetcode-54-medium.html#cb68-58" aria-hidden="true"></a>        <span class="co">// going upward</span></span>
-<span id="cb68-59"><a href="spiral-matrix-leetcode-54-medium.html#cb68-59" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = bottom; i &gt;= top; i--){</span>
-<span id="cb68-60"><a href="spiral-matrix-leetcode-54-medium.html#cb68-60" aria-hidden="true"></a>            result.<span class="fu">add</span>(matrix[i][left]);</span>
-<span id="cb68-61"><a href="spiral-matrix-leetcode-54-medium.html#cb68-61" aria-hidden="true"></a>        }</span>
-<span id="cb68-62"><a href="spiral-matrix-leetcode-54-medium.html#cb68-62" aria-hidden="true"></a>        left++;</span>
-<span id="cb68-63"><a href="spiral-matrix-leetcode-54-medium.html#cb68-63" aria-hidden="true"></a>    }</span>
-<span id="cb68-64"><a href="spiral-matrix-leetcode-54-medium.html#cb68-64" aria-hidden="true"></a></span>
-<span id="cb68-65"><a href="spiral-matrix-leetcode-54-medium.html#cb68-65" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb68-66"><a href="spiral-matrix-leetcode-54-medium.html#cb68-66" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb69-1"><a href="spiral-matrix-leetcode-54-medium.html#cb69-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span> <span class="fu">spiralOrder</span>(<span class="dt">int</span>[][] matrix) {</span>
+<span id="cb69-2"><a href="spiral-matrix-leetcode-54-medium.html#cb69-2" aria-hidden="true"></a>    <span class="bu">List</span> result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb69-3"><a href="spiral-matrix-leetcode-54-medium.html#cb69-3" aria-hidden="true"></a></span>
+<span id="cb69-4"><a href="spiral-matrix-leetcode-54-medium.html#cb69-4" aria-hidden="true"></a>    <span class="kw">if</span>(matrix.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb69-5"><a href="spiral-matrix-leetcode-54-medium.html#cb69-5" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
+<span id="cb69-6"><a href="spiral-matrix-leetcode-54-medium.html#cb69-6" aria-hidden="true"></a>    }</span>
+<span id="cb69-7"><a href="spiral-matrix-leetcode-54-medium.html#cb69-7" aria-hidden="true"></a></span>
+<span id="cb69-8"><a href="spiral-matrix-leetcode-54-medium.html#cb69-8" aria-hidden="true"></a>    <span class="dt">int</span> rows = matrix.<span class="fu">length</span>;</span>
+<span id="cb69-9"><a href="spiral-matrix-leetcode-54-medium.html#cb69-9" aria-hidden="true"></a>    <span class="dt">int</span> cols = matrix[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb69-10"><a href="spiral-matrix-leetcode-54-medium.html#cb69-10" aria-hidden="true"></a></span>
+<span id="cb69-11"><a href="spiral-matrix-leetcode-54-medium.html#cb69-11" aria-hidden="true"></a>    <span class="co">// position of left, right, top and buttom border</span></span>
+<span id="cb69-12"><a href="spiral-matrix-leetcode-54-medium.html#cb69-12" aria-hidden="true"></a>    <span class="dt">int</span> left = <span class="dv">0</span>;</span>
+<span id="cb69-13"><a href="spiral-matrix-leetcode-54-medium.html#cb69-13" aria-hidden="true"></a>    <span class="dt">int</span> right = cols - <span class="dv">1</span>;</span>
+<span id="cb69-14"><a href="spiral-matrix-leetcode-54-medium.html#cb69-14" aria-hidden="true"></a>    <span class="dt">int</span> top = <span class="dv">0</span>;</span>
+<span id="cb69-15"><a href="spiral-matrix-leetcode-54-medium.html#cb69-15" aria-hidden="true"></a>    <span class="dt">int</span> bottom = rows - <span class="dv">1</span>;</span>
+<span id="cb69-16"><a href="spiral-matrix-leetcode-54-medium.html#cb69-16" aria-hidden="true"></a></span>
+<span id="cb69-17"><a href="spiral-matrix-leetcode-54-medium.html#cb69-17" aria-hidden="true"></a>    <span class="kw">while</span>( result.<span class="fu">size</span>() &lt; (cols * rows) ) {</span>
+<span id="cb69-18"><a href="spiral-matrix-leetcode-54-medium.html#cb69-18" aria-hidden="true"></a>        <span class="co">//traverse a circle</span></span>
+<span id="cb69-19"><a href="spiral-matrix-leetcode-54-medium.html#cb69-19" aria-hidden="true"></a></span>
+<span id="cb69-20"><a href="spiral-matrix-leetcode-54-medium.html#cb69-20" aria-hidden="true"></a>        <span class="co">// avoid duplicated row</span></span>
+<span id="cb69-21"><a href="spiral-matrix-leetcode-54-medium.html#cb69-21" aria-hidden="true"></a>        <span class="kw">if</span>(top &gt; bottom) {</span>
+<span id="cb69-22"><a href="spiral-matrix-leetcode-54-medium.html#cb69-22" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
+<span id="cb69-23"><a href="spiral-matrix-leetcode-54-medium.html#cb69-23" aria-hidden="true"></a>        }</span>
+<span id="cb69-24"><a href="spiral-matrix-leetcode-54-medium.html#cb69-24" aria-hidden="true"></a></span>
+<span id="cb69-25"><a href="spiral-matrix-leetcode-54-medium.html#cb69-25" aria-hidden="true"></a>        <span class="co">//going rightward</span></span>
+<span id="cb69-26"><a href="spiral-matrix-leetcode-54-medium.html#cb69-26" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = left; i &lt;= right; i++){</span>
+<span id="cb69-27"><a href="spiral-matrix-leetcode-54-medium.html#cb69-27" aria-hidden="true"></a>            result.<span class="fu">add</span>(matrix[top][i]);</span>
+<span id="cb69-28"><a href="spiral-matrix-leetcode-54-medium.html#cb69-28" aria-hidden="true"></a>        }</span>
+<span id="cb69-29"><a href="spiral-matrix-leetcode-54-medium.html#cb69-29" aria-hidden="true"></a>        top++;</span>
+<span id="cb69-30"><a href="spiral-matrix-leetcode-54-medium.html#cb69-30" aria-hidden="true"></a></span>
+<span id="cb69-31"><a href="spiral-matrix-leetcode-54-medium.html#cb69-31" aria-hidden="true"></a>        <span class="co">// avoid duplicated column</span></span>
+<span id="cb69-32"><a href="spiral-matrix-leetcode-54-medium.html#cb69-32" aria-hidden="true"></a>        <span class="kw">if</span>(left &gt; right) {</span>
+<span id="cb69-33"><a href="spiral-matrix-leetcode-54-medium.html#cb69-33" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
+<span id="cb69-34"><a href="spiral-matrix-leetcode-54-medium.html#cb69-34" aria-hidden="true"></a>        }</span>
+<span id="cb69-35"><a href="spiral-matrix-leetcode-54-medium.html#cb69-35" aria-hidden="true"></a></span>
+<span id="cb69-36"><a href="spiral-matrix-leetcode-54-medium.html#cb69-36" aria-hidden="true"></a>        <span class="co">//going downward</span></span>
+<span id="cb69-37"><a href="spiral-matrix-leetcode-54-medium.html#cb69-37" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = top; i &lt;= bottom; i++){</span>
+<span id="cb69-38"><a href="spiral-matrix-leetcode-54-medium.html#cb69-38" aria-hidden="true"></a>            result.<span class="fu">add</span>(matrix[i][right]);</span>
+<span id="cb69-39"><a href="spiral-matrix-leetcode-54-medium.html#cb69-39" aria-hidden="true"></a>        }</span>
+<span id="cb69-40"><a href="spiral-matrix-leetcode-54-medium.html#cb69-40" aria-hidden="true"></a>        right--;</span>
+<span id="cb69-41"><a href="spiral-matrix-leetcode-54-medium.html#cb69-41" aria-hidden="true"></a></span>
+<span id="cb69-42"><a href="spiral-matrix-leetcode-54-medium.html#cb69-42" aria-hidden="true"></a>        <span class="co">// avoid duplicated row</span></span>
+<span id="cb69-43"><a href="spiral-matrix-leetcode-54-medium.html#cb69-43" aria-hidden="true"></a>        <span class="kw">if</span>(top &gt; bottom) {</span>
+<span id="cb69-44"><a href="spiral-matrix-leetcode-54-medium.html#cb69-44" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
+<span id="cb69-45"><a href="spiral-matrix-leetcode-54-medium.html#cb69-45" aria-hidden="true"></a>        }</span>
+<span id="cb69-46"><a href="spiral-matrix-leetcode-54-medium.html#cb69-46" aria-hidden="true"></a></span>
+<span id="cb69-47"><a href="spiral-matrix-leetcode-54-medium.html#cb69-47" aria-hidden="true"></a>        <span class="co">// going leftward</span></span>
+<span id="cb69-48"><a href="spiral-matrix-leetcode-54-medium.html#cb69-48" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = right; i &gt;= left; i--){</span>
+<span id="cb69-49"><a href="spiral-matrix-leetcode-54-medium.html#cb69-49" aria-hidden="true"></a>            result.<span class="fu">add</span>(matrix[bottom][i]);</span>
+<span id="cb69-50"><a href="spiral-matrix-leetcode-54-medium.html#cb69-50" aria-hidden="true"></a>        }</span>
+<span id="cb69-51"><a href="spiral-matrix-leetcode-54-medium.html#cb69-51" aria-hidden="true"></a>        bottom--;</span>
+<span id="cb69-52"><a href="spiral-matrix-leetcode-54-medium.html#cb69-52" aria-hidden="true"></a></span>
+<span id="cb69-53"><a href="spiral-matrix-leetcode-54-medium.html#cb69-53" aria-hidden="true"></a>        <span class="co">// avoid duplicated column</span></span>
+<span id="cb69-54"><a href="spiral-matrix-leetcode-54-medium.html#cb69-54" aria-hidden="true"></a>        <span class="kw">if</span>(left &gt; right) {</span>
+<span id="cb69-55"><a href="spiral-matrix-leetcode-54-medium.html#cb69-55" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
+<span id="cb69-56"><a href="spiral-matrix-leetcode-54-medium.html#cb69-56" aria-hidden="true"></a>        }</span>
+<span id="cb69-57"><a href="spiral-matrix-leetcode-54-medium.html#cb69-57" aria-hidden="true"></a></span>
+<span id="cb69-58"><a href="spiral-matrix-leetcode-54-medium.html#cb69-58" aria-hidden="true"></a>        <span class="co">// going upward</span></span>
+<span id="cb69-59"><a href="spiral-matrix-leetcode-54-medium.html#cb69-59" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = bottom; i &gt;= top; i--){</span>
+<span id="cb69-60"><a href="spiral-matrix-leetcode-54-medium.html#cb69-60" aria-hidden="true"></a>            result.<span class="fu">add</span>(matrix[i][left]);</span>
+<span id="cb69-61"><a href="spiral-matrix-leetcode-54-medium.html#cb69-61" aria-hidden="true"></a>        }</span>
+<span id="cb69-62"><a href="spiral-matrix-leetcode-54-medium.html#cb69-62" aria-hidden="true"></a>        left++;</span>
+<span id="cb69-63"><a href="spiral-matrix-leetcode-54-medium.html#cb69-63" aria-hidden="true"></a>    }</span>
+<span id="cb69-64"><a href="spiral-matrix-leetcode-54-medium.html#cb69-64" aria-hidden="true"></a></span>
+<span id="cb69-65"><a href="spiral-matrix-leetcode-54-medium.html#cb69-65" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb69-66"><a href="spiral-matrix-leetcode-54-medium.html#cb69-66" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

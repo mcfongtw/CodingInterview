@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1070,72 +1071,72 @@ Figure 6.40: Some caption.
 </div>
 <div id="solution---non-sorted-list" class="section level3" number="6.15.3">
 <h3><span class="header-section-number">6.15.3</span> Solution - non sorted list</h3>
-<div id="walkthrough-122" class="section level4" number="6.15.3.1">
+<div id="walkthrough-123" class="section level4" number="6.15.3.1">
 <h4><span class="header-section-number">6.15.3.1</span> Walkthrough</h4>
 <p>If this is a non sorted list, we need to keep a record (HashSet) and a prev node. Remove the duplicate node if
 found - set.add() returns false</p>
 </div>
-<div id="analysis-123" class="section level4" number="6.15.3.2">
+<div id="analysis-124" class="section level4" number="6.15.3.2">
 <h4><span class="header-section-number">6.15.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-128" class="section level4" number="6.15.3.3">
+<div id="algorithm-129" class="section level4" number="6.15.3.3">
 <h4><span class="header-section-number">6.15.3.3</span> Algorithm</h4>
 </div>
 <div id="java-code---non-sorted-list" class="section level4" number="6.15.3.4">
 <h4><span class="header-section-number">6.15.3.4</span> Java Code - non sorted list</h4>
-<div class="sourceCode" id="cb187"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb187-1"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">removeDuplicates</span>(ListNode head) {</span>
-<span id="cb187-2"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-2" aria-hidden="true"></a>    ListNode prev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);</span>
-<span id="cb187-3"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-3" aria-hidden="true"></a>    prev.<span class="fu">next</span> = head;</span>
-<span id="cb187-4"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-4" aria-hidden="true"></a>    ListNode current = head;</span>
-<span id="cb187-5"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-5" aria-hidden="true"></a></span>
-<span id="cb187-6"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-6" aria-hidden="true"></a>    <span class="bu">Set</span>&lt;<span class="bu">Integer</span>&gt; set = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;();</span>
-<span id="cb187-7"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-7" aria-hidden="true"></a></span>
-<span id="cb187-8"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-8" aria-hidden="true"></a>    <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
-<span id="cb187-9"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-9" aria-hidden="true"></a>        <span class="dt">int</span> value = current.<span class="fu">data</span>;</span>
-<span id="cb187-10"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-10" aria-hidden="true"></a></span>
-<span id="cb187-11"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-11" aria-hidden="true"></a>        <span class="kw">if</span>(!set.<span class="fu">add</span>(value)) {</span>
-<span id="cb187-12"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-12" aria-hidden="true"></a>            <span class="co">//duplicated entry</span></span>
-<span id="cb187-13"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-13" aria-hidden="true"></a>            prev.<span class="fu">next</span> = prev.<span class="fu">next</span>.<span class="fu">next</span>;</span>
-<span id="cb187-14"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-14" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb187-15"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-15" aria-hidden="true"></a>            prev = prev.<span class="fu">next</span>;</span>
-<span id="cb187-16"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-16" aria-hidden="true"></a>        }</span>
-<span id="cb187-17"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-17" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
-<span id="cb187-18"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-18" aria-hidden="true"></a>    }</span>
-<span id="cb187-19"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-19" aria-hidden="true"></a></span>
-<span id="cb187-20"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-20" aria-hidden="true"></a>    <span class="kw">return</span> head;</span>
-<span id="cb187-21"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb187-21" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb188"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb188-1"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">removeDuplicates</span>(ListNode head) {</span>
+<span id="cb188-2"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-2" aria-hidden="true"></a>    ListNode prev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);</span>
+<span id="cb188-3"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-3" aria-hidden="true"></a>    prev.<span class="fu">next</span> = head;</span>
+<span id="cb188-4"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-4" aria-hidden="true"></a>    ListNode current = head;</span>
+<span id="cb188-5"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-5" aria-hidden="true"></a></span>
+<span id="cb188-6"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-6" aria-hidden="true"></a>    <span class="bu">Set</span>&lt;<span class="bu">Integer</span>&gt; set = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;();</span>
+<span id="cb188-7"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-7" aria-hidden="true"></a></span>
+<span id="cb188-8"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-8" aria-hidden="true"></a>    <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
+<span id="cb188-9"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-9" aria-hidden="true"></a>        <span class="dt">int</span> value = current.<span class="fu">data</span>;</span>
+<span id="cb188-10"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-10" aria-hidden="true"></a></span>
+<span id="cb188-11"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-11" aria-hidden="true"></a>        <span class="kw">if</span>(!set.<span class="fu">add</span>(value)) {</span>
+<span id="cb188-12"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-12" aria-hidden="true"></a>            <span class="co">//duplicated entry</span></span>
+<span id="cb188-13"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-13" aria-hidden="true"></a>            prev.<span class="fu">next</span> = prev.<span class="fu">next</span>.<span class="fu">next</span>;</span>
+<span id="cb188-14"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-14" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb188-15"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-15" aria-hidden="true"></a>            prev = prev.<span class="fu">next</span>;</span>
+<span id="cb188-16"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-16" aria-hidden="true"></a>        }</span>
+<span id="cb188-17"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-17" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
+<span id="cb188-18"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-18" aria-hidden="true"></a>    }</span>
+<span id="cb188-19"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-19" aria-hidden="true"></a></span>
+<span id="cb188-20"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-20" aria-hidden="true"></a>    <span class="kw">return</span> head;</span>
+<span id="cb188-21"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-21" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---sorted-list" class="section level3" number="6.15.4">
 <h3><span class="header-section-number">6.15.4</span> Solution - sorted list</h3>
-<div id="walkthrough-123" class="section level4" number="6.15.4.1">
+<div id="walkthrough-124" class="section level4" number="6.15.4.1">
 <h4><span class="header-section-number">6.15.4.1</span> Walkthrough</h4>
 <p>If this is a sorted list, we could utilize the fact that if current.data == next.data. Remove the next node.</p>
 </div>
-<div id="analysis-124" class="section level4" number="6.15.4.2">
+<div id="analysis-125" class="section level4" number="6.15.4.2">
 <h4><span class="header-section-number">6.15.4.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-129" class="section level4" number="6.15.4.3">
+<div id="algorithm-130" class="section level4" number="6.15.4.3">
 <h4><span class="header-section-number">6.15.4.3</span> Algorithm</h4>
 </div>
 <div id="java-code---sorted-list" class="section level4" number="6.15.4.4">
 <h4><span class="header-section-number">6.15.4.4</span> Java Code - sorted list</h4>
-<div class="sourceCode" id="cb188"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb188-1"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">deleteDuplicates</span>(ListNode head) {</span>
-<span id="cb188-2"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-2" aria-hidden="true"></a>    ListNode current = head;</span>
-<span id="cb188-3"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-3" aria-hidden="true"></a></span>
-<span id="cb188-4"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-4" aria-hidden="true"></a>    <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
-<span id="cb188-5"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-5" aria-hidden="true"></a>        <span class="kw">if</span>(current.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; current.<span class="fu">val</span> == current.<span class="fu">next</span>.<span class="fu">val</span>) {</span>
-<span id="cb188-6"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-6" aria-hidden="true"></a>            <span class="co">//remove the current node</span></span>
-<span id="cb188-7"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-7" aria-hidden="true"></a>            current.<span class="fu">next</span> = current.<span class="fu">next</span>.<span class="fu">next</span>;</span>
-<span id="cb188-8"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-8" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb188-9"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-9" aria-hidden="true"></a>            current = current.<span class="fu">next</span>;</span>
-<span id="cb188-10"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-10" aria-hidden="true"></a>        }</span>
-<span id="cb188-11"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-11" aria-hidden="true"></a>    }</span>
-<span id="cb188-12"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-12" aria-hidden="true"></a></span>
-<span id="cb188-13"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-13" aria-hidden="true"></a>    <span class="kw">return</span> head;</span>
-<span id="cb188-14"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb188-14" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb189"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb189-1"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">deleteDuplicates</span>(ListNode head) {</span>
+<span id="cb189-2"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-2" aria-hidden="true"></a>    ListNode current = head;</span>
+<span id="cb189-3"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-3" aria-hidden="true"></a></span>
+<span id="cb189-4"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-4" aria-hidden="true"></a>    <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
+<span id="cb189-5"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-5" aria-hidden="true"></a>        <span class="kw">if</span>(current.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; current.<span class="fu">val</span> == current.<span class="fu">next</span>.<span class="fu">val</span>) {</span>
+<span id="cb189-6"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-6" aria-hidden="true"></a>            <span class="co">//remove the current node</span></span>
+<span id="cb189-7"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-7" aria-hidden="true"></a>            current.<span class="fu">next</span> = current.<span class="fu">next</span>.<span class="fu">next</span>;</span>
+<span id="cb189-8"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-8" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb189-9"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-9" aria-hidden="true"></a>            current = current.<span class="fu">next</span>;</span>
+<span id="cb189-10"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-10" aria-hidden="true"></a>        }</span>
+<span id="cb189-11"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-11" aria-hidden="true"></a>    }</span>
+<span id="cb189-12"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-12" aria-hidden="true"></a></span>
+<span id="cb189-13"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-13" aria-hidden="true"></a>    <span class="kw">return</span> head;</span>
+<span id="cb189-14"><a href="remove-duplicates-from-sorted-list-leet-code-83-easy.html#cb189-14" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

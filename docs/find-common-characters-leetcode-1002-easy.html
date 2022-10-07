@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1061,70 +1062,70 @@ any order.</p>
 </div>
 <div id="solution-20" class="section level3" number="2.24.3">
 <h3><span class="header-section-number">2.24.3</span> Solution</h3>
-<div id="walkthrough-24" class="section level4" number="2.24.3.1">
+<div id="walkthrough-25" class="section level4" number="2.24.3.1">
 <h4><span class="header-section-number">2.24.3.1</span> Walkthrough</h4>
 <p>First retrieve the alphabet distribution for the first word. For each of following word, maintain the min number
 of duplicated alphabets. Lastly, take the alphabet which has more than 1 occurrences.</p>
 </div>
-<div id="analysis-24" class="section level4" number="2.24.3.2">
+<div id="analysis-25" class="section level4" number="2.24.3.2">
 <h4><span class="header-section-number">2.24.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) where n is the number of words.</p>
 </div>
-<div id="algorithm-24" class="section level4" number="2.24.3.3">
+<div id="algorithm-25" class="section level4" number="2.24.3.3">
 <h4><span class="header-section-number">2.24.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-20" class="section level4" number="2.24.3.4">
+<div id="java-code-22" class="section level4" number="2.24.3.4">
 <h4><span class="header-section-number">2.24.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb33"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb33-1"><a href="find-common-characters-leetcode-1002-easy.html#cb33-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; <span class="fu">commonChars</span>(<span class="bu">String</span>[] A) {</span>
-<span id="cb33-2"><a href="find-common-characters-leetcode-1002-easy.html#cb33-2" aria-hidden="true"></a>    <span class="dt">int</span>[] minFreq = <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">26</span>];</span>
-<span id="cb33-3"><a href="find-common-characters-leetcode-1002-easy.html#cb33-3" aria-hidden="true"></a></span>
-<span id="cb33-4"><a href="find-common-characters-leetcode-1002-easy.html#cb33-4" aria-hidden="true"></a>    <span class="co">//init frequency map with the first string</span></span>
-<span id="cb33-5"><a href="find-common-characters-leetcode-1002-easy.html#cb33-5" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; A[<span class="dv">0</span>].<span class="fu">length</span>(); i++) {</span>
-<span id="cb33-6"><a href="find-common-characters-leetcode-1002-easy.html#cb33-6" aria-hidden="true"></a>        <span class="dt">char</span> c = A[<span class="dv">0</span>].<span class="fu">charAt</span>(i);</span>
-<span id="cb33-7"><a href="find-common-characters-leetcode-1002-easy.html#cb33-7" aria-hidden="true"></a></span>
-<span id="cb33-8"><a href="find-common-characters-leetcode-1002-easy.html#cb33-8" aria-hidden="true"></a>        <span class="dt">int</span> index = c - <span class="ch">&#39;a&#39;</span>;</span>
-<span id="cb33-9"><a href="find-common-characters-leetcode-1002-easy.html#cb33-9" aria-hidden="true"></a>        <span class="dt">int</span> counter = minFreq[index];</span>
-<span id="cb33-10"><a href="find-common-characters-leetcode-1002-easy.html#cb33-10" aria-hidden="true"></a>        minFreq[index] = ++counter;</span>
-<span id="cb33-11"><a href="find-common-characters-leetcode-1002-easy.html#cb33-11" aria-hidden="true"></a>    }</span>
-<span id="cb33-12"><a href="find-common-characters-leetcode-1002-easy.html#cb33-12" aria-hidden="true"></a></span>
-<span id="cb33-13"><a href="find-common-characters-leetcode-1002-easy.html#cb33-13" aria-hidden="true"></a></span>
-<span id="cb33-14"><a href="find-common-characters-leetcode-1002-easy.html#cb33-14" aria-hidden="true"></a>    <span class="co">//Do the actions for the following words</span></span>
-<span id="cb33-15"><a href="find-common-characters-leetcode-1002-easy.html#cb33-15" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; A.<span class="fu">length</span>; i++) {</span>
-<span id="cb33-16"><a href="find-common-characters-leetcode-1002-easy.html#cb33-16" aria-hidden="true"></a>        <span class="bu">String</span> str = A[i];</span>
-<span id="cb33-17"><a href="find-common-characters-leetcode-1002-easy.html#cb33-17" aria-hidden="true"></a>        <span class="dt">int</span>[] tempFreq = <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">26</span>];</span>
-<span id="cb33-18"><a href="find-common-characters-leetcode-1002-easy.html#cb33-18" aria-hidden="true"></a></span>
-<span id="cb33-19"><a href="find-common-characters-leetcode-1002-easy.html#cb33-19" aria-hidden="true"></a>        <span class="co">//1. Store the frequency of alphabets</span></span>
-<span id="cb33-20"><a href="find-common-characters-leetcode-1002-easy.html#cb33-20" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; str.<span class="fu">length</span>(); j++) {</span>
-<span id="cb33-21"><a href="find-common-characters-leetcode-1002-easy.html#cb33-21" aria-hidden="true"></a>            <span class="dt">char</span> c = str.<span class="fu">charAt</span>(j);</span>
-<span id="cb33-22"><a href="find-common-characters-leetcode-1002-easy.html#cb33-22" aria-hidden="true"></a></span>
-<span id="cb33-23"><a href="find-common-characters-leetcode-1002-easy.html#cb33-23" aria-hidden="true"></a>            <span class="dt">int</span> index = c - <span class="ch">&#39;a&#39;</span>;</span>
-<span id="cb33-24"><a href="find-common-characters-leetcode-1002-easy.html#cb33-24" aria-hidden="true"></a>            <span class="dt">int</span> counter = tempFreq[index];</span>
-<span id="cb33-25"><a href="find-common-characters-leetcode-1002-easy.html#cb33-25" aria-hidden="true"></a>            tempFreq[index] = ++counter;</span>
-<span id="cb33-26"><a href="find-common-characters-leetcode-1002-easy.html#cb33-26" aria-hidden="true"></a>        }</span>
-<span id="cb33-27"><a href="find-common-characters-leetcode-1002-easy.html#cb33-27" aria-hidden="true"></a></span>
-<span id="cb33-28"><a href="find-common-characters-leetcode-1002-easy.html#cb33-28" aria-hidden="true"></a>        <span class="co">//2. Iterate thru 2 arrays and get the min number of (duplicated) alphabets</span></span>
-<span id="cb33-29"><a href="find-common-characters-leetcode-1002-easy.html#cb33-29" aria-hidden="true"></a>        <span class="co">//   non-duplicated returns 0</span></span>
-<span id="cb33-30"><a href="find-common-characters-leetcode-1002-easy.html#cb33-30" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; <span class="dv">26</span>; j++) {</span>
-<span id="cb33-31"><a href="find-common-characters-leetcode-1002-easy.html#cb33-31" aria-hidden="true"></a>            minFreq[j] = <span class="bu">Math</span>.<span class="fu">min</span>(minFreq[j], tempFreq[j]);</span>
-<span id="cb33-32"><a href="find-common-characters-leetcode-1002-easy.html#cb33-32" aria-hidden="true"></a>        }</span>
-<span id="cb33-33"><a href="find-common-characters-leetcode-1002-easy.html#cb33-33" aria-hidden="true"></a>    }</span>
-<span id="cb33-34"><a href="find-common-characters-leetcode-1002-easy.html#cb33-34" aria-hidden="true"></a></span>
-<span id="cb33-35"><a href="find-common-characters-leetcode-1002-easy.html#cb33-35" aria-hidden="true"></a>    <span class="dt">int</span> numOfWords = A.<span class="fu">length</span>;</span>
-<span id="cb33-36"><a href="find-common-characters-leetcode-1002-easy.html#cb33-36" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb33-37"><a href="find-common-characters-leetcode-1002-easy.html#cb33-37" aria-hidden="true"></a></span>
-<span id="cb33-38"><a href="find-common-characters-leetcode-1002-easy.html#cb33-38" aria-hidden="true"></a></span>
-<span id="cb33-39"><a href="find-common-characters-leetcode-1002-easy.html#cb33-39" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="dv">26</span>; i++) {</span>
-<span id="cb33-40"><a href="find-common-characters-leetcode-1002-easy.html#cb33-40" aria-hidden="true"></a>        <span class="dt">int</span> minCounter = minFreq[i];</span>
-<span id="cb33-41"><a href="find-common-characters-leetcode-1002-easy.html#cb33-41" aria-hidden="true"></a></span>
-<span id="cb33-42"><a href="find-common-characters-leetcode-1002-easy.html#cb33-42" aria-hidden="true"></a>        <span class="co">//Take the min number of duplicated alphabets (1 min)</span></span>
-<span id="cb33-43"><a href="find-common-characters-leetcode-1002-easy.html#cb33-43" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; minCounter; j++) {</span>
-<span id="cb33-44"><a href="find-common-characters-leetcode-1002-easy.html#cb33-44" aria-hidden="true"></a>            <span class="dt">char</span> alphabet = (<span class="dt">char</span>) (<span class="ch">&#39;a&#39;</span> + i);</span>
-<span id="cb33-45"><a href="find-common-characters-leetcode-1002-easy.html#cb33-45" aria-hidden="true"></a>            result.<span class="fu">add</span>(<span class="bu">String</span>.<span class="fu">valueOf</span>(alphabet));</span>
-<span id="cb33-46"><a href="find-common-characters-leetcode-1002-easy.html#cb33-46" aria-hidden="true"></a>        }</span>
-<span id="cb33-47"><a href="find-common-characters-leetcode-1002-easy.html#cb33-47" aria-hidden="true"></a>    }</span>
-<span id="cb33-48"><a href="find-common-characters-leetcode-1002-easy.html#cb33-48" aria-hidden="true"></a></span>
-<span id="cb33-49"><a href="find-common-characters-leetcode-1002-easy.html#cb33-49" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb33-50"><a href="find-common-characters-leetcode-1002-easy.html#cb33-50" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb34-1"><a href="find-common-characters-leetcode-1002-easy.html#cb34-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; <span class="fu">commonChars</span>(<span class="bu">String</span>[] A) {</span>
+<span id="cb34-2"><a href="find-common-characters-leetcode-1002-easy.html#cb34-2" aria-hidden="true"></a>    <span class="dt">int</span>[] minFreq = <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">26</span>];</span>
+<span id="cb34-3"><a href="find-common-characters-leetcode-1002-easy.html#cb34-3" aria-hidden="true"></a></span>
+<span id="cb34-4"><a href="find-common-characters-leetcode-1002-easy.html#cb34-4" aria-hidden="true"></a>    <span class="co">//init frequency map with the first string</span></span>
+<span id="cb34-5"><a href="find-common-characters-leetcode-1002-easy.html#cb34-5" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; A[<span class="dv">0</span>].<span class="fu">length</span>(); i++) {</span>
+<span id="cb34-6"><a href="find-common-characters-leetcode-1002-easy.html#cb34-6" aria-hidden="true"></a>        <span class="dt">char</span> c = A[<span class="dv">0</span>].<span class="fu">charAt</span>(i);</span>
+<span id="cb34-7"><a href="find-common-characters-leetcode-1002-easy.html#cb34-7" aria-hidden="true"></a></span>
+<span id="cb34-8"><a href="find-common-characters-leetcode-1002-easy.html#cb34-8" aria-hidden="true"></a>        <span class="dt">int</span> index = c - <span class="ch">&#39;a&#39;</span>;</span>
+<span id="cb34-9"><a href="find-common-characters-leetcode-1002-easy.html#cb34-9" aria-hidden="true"></a>        <span class="dt">int</span> counter = minFreq[index];</span>
+<span id="cb34-10"><a href="find-common-characters-leetcode-1002-easy.html#cb34-10" aria-hidden="true"></a>        minFreq[index] = ++counter;</span>
+<span id="cb34-11"><a href="find-common-characters-leetcode-1002-easy.html#cb34-11" aria-hidden="true"></a>    }</span>
+<span id="cb34-12"><a href="find-common-characters-leetcode-1002-easy.html#cb34-12" aria-hidden="true"></a></span>
+<span id="cb34-13"><a href="find-common-characters-leetcode-1002-easy.html#cb34-13" aria-hidden="true"></a></span>
+<span id="cb34-14"><a href="find-common-characters-leetcode-1002-easy.html#cb34-14" aria-hidden="true"></a>    <span class="co">//Do the actions for the following words</span></span>
+<span id="cb34-15"><a href="find-common-characters-leetcode-1002-easy.html#cb34-15" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; A.<span class="fu">length</span>; i++) {</span>
+<span id="cb34-16"><a href="find-common-characters-leetcode-1002-easy.html#cb34-16" aria-hidden="true"></a>        <span class="bu">String</span> str = A[i];</span>
+<span id="cb34-17"><a href="find-common-characters-leetcode-1002-easy.html#cb34-17" aria-hidden="true"></a>        <span class="dt">int</span>[] tempFreq = <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">26</span>];</span>
+<span id="cb34-18"><a href="find-common-characters-leetcode-1002-easy.html#cb34-18" aria-hidden="true"></a></span>
+<span id="cb34-19"><a href="find-common-characters-leetcode-1002-easy.html#cb34-19" aria-hidden="true"></a>        <span class="co">//1. Store the frequency of alphabets</span></span>
+<span id="cb34-20"><a href="find-common-characters-leetcode-1002-easy.html#cb34-20" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; str.<span class="fu">length</span>(); j++) {</span>
+<span id="cb34-21"><a href="find-common-characters-leetcode-1002-easy.html#cb34-21" aria-hidden="true"></a>            <span class="dt">char</span> c = str.<span class="fu">charAt</span>(j);</span>
+<span id="cb34-22"><a href="find-common-characters-leetcode-1002-easy.html#cb34-22" aria-hidden="true"></a></span>
+<span id="cb34-23"><a href="find-common-characters-leetcode-1002-easy.html#cb34-23" aria-hidden="true"></a>            <span class="dt">int</span> index = c - <span class="ch">&#39;a&#39;</span>;</span>
+<span id="cb34-24"><a href="find-common-characters-leetcode-1002-easy.html#cb34-24" aria-hidden="true"></a>            <span class="dt">int</span> counter = tempFreq[index];</span>
+<span id="cb34-25"><a href="find-common-characters-leetcode-1002-easy.html#cb34-25" aria-hidden="true"></a>            tempFreq[index] = ++counter;</span>
+<span id="cb34-26"><a href="find-common-characters-leetcode-1002-easy.html#cb34-26" aria-hidden="true"></a>        }</span>
+<span id="cb34-27"><a href="find-common-characters-leetcode-1002-easy.html#cb34-27" aria-hidden="true"></a></span>
+<span id="cb34-28"><a href="find-common-characters-leetcode-1002-easy.html#cb34-28" aria-hidden="true"></a>        <span class="co">//2. Iterate thru 2 arrays and get the min number of (duplicated) alphabets</span></span>
+<span id="cb34-29"><a href="find-common-characters-leetcode-1002-easy.html#cb34-29" aria-hidden="true"></a>        <span class="co">//   non-duplicated returns 0</span></span>
+<span id="cb34-30"><a href="find-common-characters-leetcode-1002-easy.html#cb34-30" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; <span class="dv">26</span>; j++) {</span>
+<span id="cb34-31"><a href="find-common-characters-leetcode-1002-easy.html#cb34-31" aria-hidden="true"></a>            minFreq[j] = <span class="bu">Math</span>.<span class="fu">min</span>(minFreq[j], tempFreq[j]);</span>
+<span id="cb34-32"><a href="find-common-characters-leetcode-1002-easy.html#cb34-32" aria-hidden="true"></a>        }</span>
+<span id="cb34-33"><a href="find-common-characters-leetcode-1002-easy.html#cb34-33" aria-hidden="true"></a>    }</span>
+<span id="cb34-34"><a href="find-common-characters-leetcode-1002-easy.html#cb34-34" aria-hidden="true"></a></span>
+<span id="cb34-35"><a href="find-common-characters-leetcode-1002-easy.html#cb34-35" aria-hidden="true"></a>    <span class="dt">int</span> numOfWords = A.<span class="fu">length</span>;</span>
+<span id="cb34-36"><a href="find-common-characters-leetcode-1002-easy.html#cb34-36" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb34-37"><a href="find-common-characters-leetcode-1002-easy.html#cb34-37" aria-hidden="true"></a></span>
+<span id="cb34-38"><a href="find-common-characters-leetcode-1002-easy.html#cb34-38" aria-hidden="true"></a></span>
+<span id="cb34-39"><a href="find-common-characters-leetcode-1002-easy.html#cb34-39" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="dv">26</span>; i++) {</span>
+<span id="cb34-40"><a href="find-common-characters-leetcode-1002-easy.html#cb34-40" aria-hidden="true"></a>        <span class="dt">int</span> minCounter = minFreq[i];</span>
+<span id="cb34-41"><a href="find-common-characters-leetcode-1002-easy.html#cb34-41" aria-hidden="true"></a></span>
+<span id="cb34-42"><a href="find-common-characters-leetcode-1002-easy.html#cb34-42" aria-hidden="true"></a>        <span class="co">//Take the min number of duplicated alphabets (1 min)</span></span>
+<span id="cb34-43"><a href="find-common-characters-leetcode-1002-easy.html#cb34-43" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; minCounter; j++) {</span>
+<span id="cb34-44"><a href="find-common-characters-leetcode-1002-easy.html#cb34-44" aria-hidden="true"></a>            <span class="dt">char</span> alphabet = (<span class="dt">char</span>) (<span class="ch">&#39;a&#39;</span> + i);</span>
+<span id="cb34-45"><a href="find-common-characters-leetcode-1002-easy.html#cb34-45" aria-hidden="true"></a>            result.<span class="fu">add</span>(<span class="bu">String</span>.<span class="fu">valueOf</span>(alphabet));</span>
+<span id="cb34-46"><a href="find-common-characters-leetcode-1002-easy.html#cb34-46" aria-hidden="true"></a>        }</span>
+<span id="cb34-47"><a href="find-common-characters-leetcode-1002-easy.html#cb34-47" aria-hidden="true"></a>    }</span>
+<span id="cb34-48"><a href="find-common-characters-leetcode-1002-easy.html#cb34-48" aria-hidden="true"></a></span>
+<span id="cb34-49"><a href="find-common-characters-leetcode-1002-easy.html#cb34-49" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb34-50"><a href="find-common-characters-leetcode-1002-easy.html#cb34-50" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1064,37 +1065,37 @@ Figure 2.1: Some caption.
 </div>
 <div id="solution-2" class="section level3" number="2.4.3">
 <h3><span class="header-section-number">2.4.3</span> Solution</h3>
-<div id="walkthrough-4" class="section level4" number="2.4.3.1">
+<div id="walkthrough-5" class="section level4" number="2.4.3.1">
 <h4><span class="header-section-number">2.4.3.1</span> Walkthrough</h4>
 <p>Use a HashSet to store value of current node, that is (node.val). Then check if answer = (target - node.val)
 and return true if existed; otherwise, recursively call the same function for its left and right children.</p>
 </div>
-<div id="analysis-4" class="section level4" number="2.4.3.2">
+<div id="analysis-5" class="section level4" number="2.4.3.2">
 <h4><span class="header-section-number">2.4.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) since every node is visited. Auxiliary Space is O(1)</p>
 </div>
-<div id="algorithm-4" class="section level4" number="2.4.3.3">
+<div id="algorithm-5" class="section level4" number="2.4.3.3">
 <h4><span class="header-section-number">2.4.3.3</span> Algorithm</h4>
 <p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
-<div id="java-code-2" class="section level5" number="2.4.3.3.1">
+<div id="java-code-4" class="section level5" number="2.4.3.3.1">
 <h5><span class="header-section-number">2.4.3.3.1</span> Java Code</h5>
-<div class="sourceCode" id="cb9"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb9-1"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">findTarget</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> target) {</span>
-<span id="cb9-2"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-2" aria-hidden="true"></a>    <span class="bu">Set</span>&lt;<span class="bu">Integer</span>&gt; set = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;();</span>
-<span id="cb9-3"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-3" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">findTarget</span>(root, target, set);</span>
-<span id="cb9-4"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-4" aria-hidden="true"></a>}</span>
-<span id="cb9-5"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-5" aria-hidden="true"></a></span>
-<span id="cb9-6"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-6" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">findTarget</span>(<span class="bu">TreeNode</span> node, <span class="dt">int</span> target, <span class="bu">Set</span>&lt;<span class="bu">Integer</span>&gt; set) {</span>
-<span id="cb9-7"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-7" aria-hidden="true"></a>    <span class="kw">if</span>(node == <span class="kw">null</span>) {</span>
-<span id="cb9-8"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-8" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb9-9"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-9" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(set.<span class="fu">contains</span>(target - node.<span class="fu">val</span>)) {</span>
-<span id="cb9-10"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-10" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb9-11"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-11" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb9-12"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-12" aria-hidden="true"></a>        <span class="co">//recursively calling</span></span>
-<span id="cb9-13"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-13" aria-hidden="true"></a>        set.<span class="fu">add</span>(node.<span class="fu">val</span>);</span>
-<span id="cb9-14"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-14" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">findTarget</span>(node.<span class="fu">right</span>, target, set) || <span class="fu">findTarget</span>(node.<span class="fu">left</span>, target, set);</span>
-<span id="cb9-15"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-15" aria-hidden="true"></a>    }</span>
-<span id="cb9-16"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-16" aria-hidden="true"></a></span>
-<span id="cb9-17"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb9-17" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb10-1"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">findTarget</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> target) {</span>
+<span id="cb10-2"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-2" aria-hidden="true"></a>    <span class="bu">Set</span>&lt;<span class="bu">Integer</span>&gt; set = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;();</span>
+<span id="cb10-3"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-3" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">findTarget</span>(root, target, set);</span>
+<span id="cb10-4"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-4" aria-hidden="true"></a>}</span>
+<span id="cb10-5"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-5" aria-hidden="true"></a></span>
+<span id="cb10-6"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-6" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">findTarget</span>(<span class="bu">TreeNode</span> node, <span class="dt">int</span> target, <span class="bu">Set</span>&lt;<span class="bu">Integer</span>&gt; set) {</span>
+<span id="cb10-7"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-7" aria-hidden="true"></a>    <span class="kw">if</span>(node == <span class="kw">null</span>) {</span>
+<span id="cb10-8"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-8" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb10-9"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-9" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(set.<span class="fu">contains</span>(target - node.<span class="fu">val</span>)) {</span>
+<span id="cb10-10"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-10" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb10-11"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-11" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb10-12"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-12" aria-hidden="true"></a>        <span class="co">//recursively calling</span></span>
+<span id="cb10-13"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-13" aria-hidden="true"></a>        set.<span class="fu">add</span>(node.<span class="fu">val</span>);</span>
+<span id="cb10-14"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-14" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">findTarget</span>(node.<span class="fu">right</span>, target, set) || <span class="fu">findTarget</span>(node.<span class="fu">left</span>, target, set);</span>
+<span id="cb10-15"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-15" aria-hidden="true"></a>    }</span>
+<span id="cb10-16"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-16" aria-hidden="true"></a></span>
+<span id="cb10-17"><a href="two-sum-iv-input-is-a-bst-leetcode-653-easy.html#cb10-17" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

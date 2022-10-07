@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1058,7 +1059,7 @@ then output should be ‘G’.</p>
 </div>
 <div id="solution-86" class="section level3" number="9.9.3">
 <h3><span class="header-section-number">9.9.3</span> Solution</h3>
-<div id="walkthrough-147" class="section level4" number="9.9.3.1">
+<div id="walkthrough-148" class="section level4" number="9.9.3.1">
 <h4><span class="header-section-number">9.9.3.1</span> Walkthrough</h4>
 <p>Have an array to record the count of occurrence for each alphabet int the string regardless of lower or upper case.
 That is, count[‘G’]++, count[‘e’]++, count[‘e’]++ so on and so forth. Therefore, if we traverse the string again,
@@ -1070,32 +1071,32 @@ with the count we would be able to tell which is the first non repeated characte
 <li>does not appaer</li>
 </ul>
 </div>
-<div id="analysis-149" class="section level4" number="9.9.3.2">
+<div id="analysis-150" class="section level4" number="9.9.3.2">
 <h4><span class="header-section-number">9.9.3.2</span> Analysis</h4>
 <p>The runtime complexity is O(n) as each character in string will be visited once.</p>
 </div>
-<div id="algorithm-154" class="section level4" number="9.9.3.3">
+<div id="algorithm-155" class="section level4" number="9.9.3.3">
 <h4><span class="header-section-number">9.9.3.3</span> Algorithm</h4>
-<div class="sourceCode" id="cb216"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb216-1"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-1" aria-hidden="true"></a></span>
-<span id="cb216-2"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-2" aria-hidden="true"></a><span class="co">/* The method returns index of first non-repeating</span></span>
-<span id="cb216-3"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-3" aria-hidden="true"></a><span class="co">character in a string. If all characters are repeating</span></span>
-<span id="cb216-4"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-4" aria-hidden="true"></a><span class="co">then returns -1 */</span></span>
-<span id="cb216-5"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-5" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">firstNonRepeating</span>(<span class="bu">String</span> str) {</span>
-<span id="cb216-6"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-6" aria-hidden="true"></a>    <span class="dt">int</span> count[] = <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">1000</span>];</span>
-<span id="cb216-7"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-7" aria-hidden="true"></a></span>
-<span id="cb216-8"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-8" aria-hidden="true"></a>    <span class="co">// calculate count of each characters in the passed string</span></span>
-<span id="cb216-9"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-9" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; str.<span class="fu">length</span>();  i++) {</span>
-<span id="cb216-10"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-10" aria-hidden="true"></a>        count[str.<span class="fu">charAt</span>(i)]++;</span>
-<span id="cb216-11"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-11" aria-hidden="true"></a>    }</span>
-<span id="cb216-12"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-12" aria-hidden="true"></a></span>
-<span id="cb216-13"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-13" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; str.<span class="fu">length</span>();  i++) {</span>
-<span id="cb216-14"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-14" aria-hidden="true"></a>        <span class="kw">if</span> (count[str.<span class="fu">charAt</span>(i)] == <span class="dv">1</span>) {</span>
-<span id="cb216-15"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-15" aria-hidden="true"></a>            <span class="kw">return</span> i;</span>
-<span id="cb216-16"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-16" aria-hidden="true"></a>        }</span>
-<span id="cb216-17"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-17" aria-hidden="true"></a>    }</span>
-<span id="cb216-18"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-18" aria-hidden="true"></a></span>
-<span id="cb216-19"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-19" aria-hidden="true"></a>    <span class="kw">return</span> -<span class="dv">1</span>;</span>
-<span id="cb216-20"><a href="find-the-first-non-repeated-character-in-the-string.html#cb216-20" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb217-1"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-1" aria-hidden="true"></a></span>
+<span id="cb217-2"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-2" aria-hidden="true"></a><span class="co">/* The method returns index of first non-repeating</span></span>
+<span id="cb217-3"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-3" aria-hidden="true"></a><span class="co">character in a string. If all characters are repeating</span></span>
+<span id="cb217-4"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-4" aria-hidden="true"></a><span class="co">then returns -1 */</span></span>
+<span id="cb217-5"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-5" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">firstNonRepeating</span>(<span class="bu">String</span> str) {</span>
+<span id="cb217-6"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-6" aria-hidden="true"></a>    <span class="dt">int</span> count[] = <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">1000</span>];</span>
+<span id="cb217-7"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-7" aria-hidden="true"></a></span>
+<span id="cb217-8"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-8" aria-hidden="true"></a>    <span class="co">// calculate count of each characters in the passed string</span></span>
+<span id="cb217-9"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-9" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; str.<span class="fu">length</span>();  i++) {</span>
+<span id="cb217-10"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-10" aria-hidden="true"></a>        count[str.<span class="fu">charAt</span>(i)]++;</span>
+<span id="cb217-11"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-11" aria-hidden="true"></a>    }</span>
+<span id="cb217-12"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-12" aria-hidden="true"></a></span>
+<span id="cb217-13"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-13" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; str.<span class="fu">length</span>();  i++) {</span>
+<span id="cb217-14"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-14" aria-hidden="true"></a>        <span class="kw">if</span> (count[str.<span class="fu">charAt</span>(i)] == <span class="dv">1</span>) {</span>
+<span id="cb217-15"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-15" aria-hidden="true"></a>            <span class="kw">return</span> i;</span>
+<span id="cb217-16"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-16" aria-hidden="true"></a>        }</span>
+<span id="cb217-17"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-17" aria-hidden="true"></a>    }</span>
+<span id="cb217-18"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-18" aria-hidden="true"></a></span>
+<span id="cb217-19"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-19" aria-hidden="true"></a>    <span class="kw">return</span> -<span class="dv">1</span>;</span>
+<span id="cb217-20"><a href="find-the-first-non-repeated-character-in-the-string.html#cb217-20" aria-hidden="true"></a>}</span></code></pre></div>
 
 </div>
 </div>

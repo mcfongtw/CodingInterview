@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1066,7 +1067,7 @@ Figure 4.36: Some caption.
 </div>
 <div id="solution-60" class="section level3" number="4.29.3">
 <h3><span class="header-section-number">4.29.3</span> Solution</h3>
-<div id="walkthrough-95" class="section level4" number="4.29.3.1">
+<div id="walkthrough-96" class="section level4" number="4.29.3.1">
 <h4><span class="header-section-number">4.29.3.1</span> Walkthrough</h4>
 <p>PreOrder array is used to construct data value of a node, whereas InOrder array is used to acknowledge the left and right boundary
 of a node. We could use a Map to store the InOrder array associated with its index (position in array) value and biuld
@@ -1077,49 +1078,49 @@ tree according to the following conditions:</p>
 <li>if startIdx <span class="math inline">\(&gt;\)</span> endIdx There should be more nodes in this branch.</li>
 </ul>
 </div>
-<div id="analysis-96" class="section level4" number="4.29.3.2">
+<div id="analysis-97" class="section level4" number="4.29.3.2">
 <h4><span class="header-section-number">4.29.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-98" class="section level4" number="4.29.3.3">
+<div id="algorithm-99" class="section level4" number="4.29.3.3">
 <h4><span class="header-section-number">4.29.3.3</span> Algorithm</h4>
 <p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
 <div id="java-code---preorder-recursive-1" class="section level4" number="4.29.3.4">
 <h4><span class="header-section-number">4.29.3.4</span> Java Code - PreOrder Recursive</h4>
-<div class="sourceCode" id="cb144"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb144-1"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-1" aria-hidden="true"></a><span class="dt">int</span> preorderIndex = <span class="dv">0</span>;</span>
-<span id="cb144-2"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-2" aria-hidden="true"></a></span>
-<span id="cb144-3"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-3" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">buildTree</span>(<span class="dt">int</span>[] preorder, <span class="dt">int</span>[] inorder) {</span>
-<span id="cb144-4"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-4" aria-hidden="true"></a>    <span class="kw">if</span> (preorder.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb144-5"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-5" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
-<span id="cb144-6"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-6" aria-hidden="true"></a>    }</span>
-<span id="cb144-7"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-7" aria-hidden="true"></a></span>
-<span id="cb144-8"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-8" aria-hidden="true"></a>    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; inorderIndex = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
-<span id="cb144-9"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-9" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; inorder.<span class="fu">length</span>; i++) {</span>
-<span id="cb144-10"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-10" aria-hidden="true"></a>        inorderIndex.<span class="fu">put</span>(inorder[i], i);</span>
-<span id="cb144-11"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-11" aria-hidden="true"></a>    }</span>
-<span id="cb144-12"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-12" aria-hidden="true"></a></span>
-<span id="cb144-13"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-13" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">buildTree</span>(preorder, inorderIndex, <span class="dv">0</span>, inorder.<span class="fu">length</span> - <span class="dv">1</span>);</span>
-<span id="cb144-14"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-14" aria-hidden="true"></a>}</span>
-<span id="cb144-15"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-15" aria-hidden="true"></a></span>
-<span id="cb144-16"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-16" aria-hidden="true"></a><span class="kw">private</span> <span class="bu">TreeNode</span> <span class="fu">buildTree</span>(<span class="dt">int</span>[] preorder, <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; inorderIndex, <span class="dt">int</span> startIdx, <span class="dt">int</span> endIdx) {</span>
-<span id="cb144-17"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-17" aria-hidden="true"></a>    <span class="kw">if</span> (startIdx &gt; endIdx) {</span>
-<span id="cb144-18"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-18" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
-<span id="cb144-19"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-19" aria-hidden="true"></a>    }</span>
-<span id="cb144-20"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-20" aria-hidden="true"></a></span>
-<span id="cb144-21"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-21" aria-hidden="true"></a>    <span class="dt">int</span> val = preorder[preorderIndex++];</span>
-<span id="cb144-22"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-22" aria-hidden="true"></a>    <span class="bu">TreeNode</span> node = <span class="kw">new</span> <span class="bu">TreeNode</span>(val);</span>
-<span id="cb144-23"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-23" aria-hidden="true"></a></span>
-<span id="cb144-24"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-24" aria-hidden="true"></a>    <span class="kw">if</span> (startIdx == endIdx) {</span>
-<span id="cb144-25"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-25" aria-hidden="true"></a>        <span class="kw">return</span> node;</span>
-<span id="cb144-26"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-26" aria-hidden="true"></a>    }</span>
-<span id="cb144-27"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-27" aria-hidden="true"></a></span>
-<span id="cb144-28"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-28" aria-hidden="true"></a>    <span class="dt">int</span> inIndex = inorderIndex.<span class="fu">get</span>(val);</span>
-<span id="cb144-29"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-29" aria-hidden="true"></a>    node.<span class="fu">left</span> = <span class="fu">buildTree</span>(preorder, inorderIndex, startIdx, inIndex - <span class="dv">1</span>);</span>
-<span id="cb144-30"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-30" aria-hidden="true"></a>    node.<span class="fu">right</span> = <span class="fu">buildTree</span>(preorder, inorderIndex, inIndex + <span class="dv">1</span>, endIdx);</span>
-<span id="cb144-31"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-31" aria-hidden="true"></a></span>
-<span id="cb144-32"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-32" aria-hidden="true"></a>    <span class="kw">return</span> node;</span>
-<span id="cb144-33"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb144-33" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb145-1"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-1" aria-hidden="true"></a><span class="dt">int</span> preorderIndex = <span class="dv">0</span>;</span>
+<span id="cb145-2"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-2" aria-hidden="true"></a></span>
+<span id="cb145-3"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-3" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">buildTree</span>(<span class="dt">int</span>[] preorder, <span class="dt">int</span>[] inorder) {</span>
+<span id="cb145-4"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-4" aria-hidden="true"></a>    <span class="kw">if</span> (preorder.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb145-5"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-5" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb145-6"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-6" aria-hidden="true"></a>    }</span>
+<span id="cb145-7"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-7" aria-hidden="true"></a></span>
+<span id="cb145-8"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-8" aria-hidden="true"></a>    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; inorderIndex = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
+<span id="cb145-9"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-9" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; inorder.<span class="fu">length</span>; i++) {</span>
+<span id="cb145-10"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-10" aria-hidden="true"></a>        inorderIndex.<span class="fu">put</span>(inorder[i], i);</span>
+<span id="cb145-11"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-11" aria-hidden="true"></a>    }</span>
+<span id="cb145-12"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-12" aria-hidden="true"></a></span>
+<span id="cb145-13"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-13" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">buildTree</span>(preorder, inorderIndex, <span class="dv">0</span>, inorder.<span class="fu">length</span> - <span class="dv">1</span>);</span>
+<span id="cb145-14"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-14" aria-hidden="true"></a>}</span>
+<span id="cb145-15"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-15" aria-hidden="true"></a></span>
+<span id="cb145-16"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-16" aria-hidden="true"></a><span class="kw">private</span> <span class="bu">TreeNode</span> <span class="fu">buildTree</span>(<span class="dt">int</span>[] preorder, <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; inorderIndex, <span class="dt">int</span> startIdx, <span class="dt">int</span> endIdx) {</span>
+<span id="cb145-17"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-17" aria-hidden="true"></a>    <span class="kw">if</span> (startIdx &gt; endIdx) {</span>
+<span id="cb145-18"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-18" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb145-19"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-19" aria-hidden="true"></a>    }</span>
+<span id="cb145-20"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-20" aria-hidden="true"></a></span>
+<span id="cb145-21"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-21" aria-hidden="true"></a>    <span class="dt">int</span> val = preorder[preorderIndex++];</span>
+<span id="cb145-22"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-22" aria-hidden="true"></a>    <span class="bu">TreeNode</span> node = <span class="kw">new</span> <span class="bu">TreeNode</span>(val);</span>
+<span id="cb145-23"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-23" aria-hidden="true"></a></span>
+<span id="cb145-24"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-24" aria-hidden="true"></a>    <span class="kw">if</span> (startIdx == endIdx) {</span>
+<span id="cb145-25"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-25" aria-hidden="true"></a>        <span class="kw">return</span> node;</span>
+<span id="cb145-26"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-26" aria-hidden="true"></a>    }</span>
+<span id="cb145-27"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-27" aria-hidden="true"></a></span>
+<span id="cb145-28"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-28" aria-hidden="true"></a>    <span class="dt">int</span> inIndex = inorderIndex.<span class="fu">get</span>(val);</span>
+<span id="cb145-29"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-29" aria-hidden="true"></a>    node.<span class="fu">left</span> = <span class="fu">buildTree</span>(preorder, inorderIndex, startIdx, inIndex - <span class="dv">1</span>);</span>
+<span id="cb145-30"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-30" aria-hidden="true"></a>    node.<span class="fu">right</span> = <span class="fu">buildTree</span>(preorder, inorderIndex, inIndex + <span class="dv">1</span>, endIdx);</span>
+<span id="cb145-31"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-31" aria-hidden="true"></a></span>
+<span id="cb145-32"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-32" aria-hidden="true"></a>    <span class="kw">return</span> node;</span>
+<span id="cb145-33"><a href="construct-binary-tree-from-preorder-and-inorder-traversal-leet-code-105-medium.html#cb145-33" aria-hidden="true"></a>}</span></code></pre></div>
 
 </div>
 </div>

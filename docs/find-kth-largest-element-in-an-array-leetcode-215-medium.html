@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1059,50 +1060,50 @@ not the <span class="math inline">\(k^{th}\)</span> distinct element.</p>
 </div>
 <div id="solution-76" class="section level3" number="7.3.3">
 <h3><span class="header-section-number">7.3.3</span> Solution</h3>
-<div id="walkthrough-126" class="section level4" number="7.3.3.1">
+<div id="walkthrough-127" class="section level4" number="7.3.3.1">
 <h4><span class="header-section-number">7.3.3.1</span> Walkthrough</h4>
 <p>Retrieving the <span class="math inline">\(k^{th}\)</span> largest element equals to retriving smallest element in a k-sized min-heap - The value of
 each node is equal to or greater than the value of its parent node and root has the smallest value. Therefore,
 we need to maintain a min-heap (PriorityQueue in java) of  while inserting new element. Below
 illustrated how to track a 2nd largest element from a min heap</p>
-<div class="sourceCode" id="cb192"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb192-1"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb192-1" aria-hidden="true"></a><span class="dv">3</span> -&gt; [<span class="dv">3</span>*]</span>
-<span id="cb192-2"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb192-2" aria-hidden="true"></a><span class="dv">2</span> -&gt; [<span class="dv">2</span>*, <span class="dv">3</span>]</span>
-<span id="cb192-3"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb192-3" aria-hidden="true"></a><span class="dv">1</span> -&gt; <span class="dv">1</span>, [<span class="dv">2</span>*, <span class="dv">3</span>]</span>
-<span id="cb192-4"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb192-4" aria-hidden="true"></a><span class="dv">5</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, [<span class="dv">3</span>*, <span class="dv">5</span>]</span>
-<span id="cb192-5"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb192-5" aria-hidden="true"></a><span class="dv">6</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, [<span class="dv">5</span>*, <span class="dv">6</span>]</span>
-<span id="cb192-6"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb192-6" aria-hidden="true"></a><span class="dv">4</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, [<span class="dv">5</span>*, <span class="dv">6</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb193"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb193-1"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-1" aria-hidden="true"></a><span class="dv">3</span> -&gt; [<span class="dv">3</span>*]</span>
+<span id="cb193-2"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-2" aria-hidden="true"></a><span class="dv">2</span> -&gt; [<span class="dv">2</span>*, <span class="dv">3</span>]</span>
+<span id="cb193-3"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-3" aria-hidden="true"></a><span class="dv">1</span> -&gt; <span class="dv">1</span>, [<span class="dv">2</span>*, <span class="dv">3</span>]</span>
+<span id="cb193-4"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-4" aria-hidden="true"></a><span class="dv">5</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, [<span class="dv">3</span>*, <span class="dv">5</span>]</span>
+<span id="cb193-5"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-5" aria-hidden="true"></a><span class="dv">6</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, [<span class="dv">5</span>*, <span class="dv">6</span>]</span>
+<span id="cb193-6"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-6" aria-hidden="true"></a><span class="dv">4</span> -&gt; <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, [<span class="dv">5</span>*, <span class="dv">6</span>]</span></code></pre></div>
 <p>Finally, return root as it is the smallest element (*) in the heap.</p>
 </div>
-<div id="analysis-128" class="section level4" number="7.3.3.2">
+<div id="analysis-129" class="section level4" number="7.3.3.2">
 <h4><span class="header-section-number">7.3.3.2</span> Analysis</h4>
 <p>In addition, add() and remove() take <span class="math inline">\(O(log(k))\)</span>, since there are at most k element. Thus, total time complexity is
 <span class="math inline">\(O(n \cdot log(k))\)</span>. Total Auxiliary Space is O(k) due to size of the heap.</p>
 </div>
-<div id="algorithm-133" class="section level4" number="7.3.3.3">
+<div id="algorithm-134" class="section level4" number="7.3.3.3">
 <h4><span class="header-section-number">7.3.3.3</span> Algorithm</h4>
 <p>heap <a href="glossary-of-algorithm.html#heap">1.2.15</a></p>
 </div>
-<div id="java-code-78" class="section level4" number="7.3.3.4">
+<div id="java-code-80" class="section level4" number="7.3.3.4">
 <h4><span class="header-section-number">7.3.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb193"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb193-1"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">findKthLargest</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> k) {</span>
-<span id="cb193-2"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-2" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; heap = <span class="kw">new</span> <span class="bu">PriorityQueue</span>&lt;&gt;();</span>
-<span id="cb193-3"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-3" aria-hidden="true"></a></span>
-<span id="cb193-4"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-4" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> num: nums) {</span>
-<span id="cb193-5"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-5" aria-hidden="true"></a>        <span class="fu">helper</span>(num, k);</span>
-<span id="cb193-6"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-6" aria-hidden="true"></a>    }</span>
-<span id="cb193-7"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-7" aria-hidden="true"></a></span>
-<span id="cb193-8"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-8" aria-hidden="true"></a>    <span class="co">// return the smallest element (root) from heap</span></span>
-<span id="cb193-9"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-9" aria-hidden="true"></a>    <span class="kw">return</span> heap.<span class="fu">peek</span>();</span>
-<span id="cb193-10"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-10" aria-hidden="true"></a>}</span>
-<span id="cb193-11"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-11" aria-hidden="true"></a></span>
-<span id="cb193-12"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-12" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">helper</span>(<span class="dt">int</span> num, <span class="dt">int</span> size) {</span>
-<span id="cb193-13"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-13" aria-hidden="true"></a>    heap.<span class="fu">add</span>(num);</span>
-<span id="cb193-14"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-14" aria-hidden="true"></a></span>
-<span id="cb193-15"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-15" aria-hidden="true"></a>    <span class="kw">if</span>(heap.<span class="fu">size</span>() &gt; size) {</span>
-<span id="cb193-16"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-16" aria-hidden="true"></a>        <span class="co">//remove smallest element from min-heap</span></span>
-<span id="cb193-17"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-17" aria-hidden="true"></a>        heap.<span class="fu">remove</span>();</span>
-<span id="cb193-18"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-18" aria-hidden="true"></a>    }</span>
-<span id="cb193-19"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb193-19" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb194"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb194-1"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">findKthLargest</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> k) {</span>
+<span id="cb194-2"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-2" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; heap = <span class="kw">new</span> <span class="bu">PriorityQueue</span>&lt;&gt;();</span>
+<span id="cb194-3"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-3" aria-hidden="true"></a></span>
+<span id="cb194-4"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-4" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> num: nums) {</span>
+<span id="cb194-5"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-5" aria-hidden="true"></a>        <span class="fu">helper</span>(num, k);</span>
+<span id="cb194-6"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-6" aria-hidden="true"></a>    }</span>
+<span id="cb194-7"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-7" aria-hidden="true"></a></span>
+<span id="cb194-8"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-8" aria-hidden="true"></a>    <span class="co">// return the smallest element (root) from heap</span></span>
+<span id="cb194-9"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-9" aria-hidden="true"></a>    <span class="kw">return</span> heap.<span class="fu">peek</span>();</span>
+<span id="cb194-10"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-10" aria-hidden="true"></a>}</span>
+<span id="cb194-11"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-11" aria-hidden="true"></a></span>
+<span id="cb194-12"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-12" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">helper</span>(<span class="dt">int</span> num, <span class="dt">int</span> size) {</span>
+<span id="cb194-13"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-13" aria-hidden="true"></a>    heap.<span class="fu">add</span>(num);</span>
+<span id="cb194-14"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-14" aria-hidden="true"></a></span>
+<span id="cb194-15"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-15" aria-hidden="true"></a>    <span class="kw">if</span>(heap.<span class="fu">size</span>() &gt; size) {</span>
+<span id="cb194-16"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-16" aria-hidden="true"></a>        <span class="co">//remove smallest element from min-heap</span></span>
+<span id="cb194-17"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-17" aria-hidden="true"></a>        heap.<span class="fu">remove</span>();</span>
+<span id="cb194-18"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-18" aria-hidden="true"></a>    }</span>
+<span id="cb194-19"><a href="find-kth-largest-element-in-an-array-leetcode-215-medium.html#cb194-19" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

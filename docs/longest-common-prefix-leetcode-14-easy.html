@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1059,42 +1060,42 @@ Input: [“dog”,“racecar”,“car”] Output: ""</p>
 </div>
 <div id="solution-83" class="section level3" number="9.4.3">
 <h3><span class="header-section-number">9.4.3</span> Solution</h3>
-<div id="walkthrough-140" class="section level4" number="9.4.3.1">
+<div id="walkthrough-141" class="section level4" number="9.4.3.1">
 <h4><span class="header-section-number">9.4.3.1</span> Walkthrough</h4>
 <p>Take the first string as pivotal string and compare it against all other strings. If there is a common character,
 advance the common index; otherwise, return the substring(0, commonIndex + 1);</p>
 </div>
-<div id="analysis-142" class="section level4" number="9.4.3.2">
+<div id="analysis-143" class="section level4" number="9.4.3.2">
 <h4><span class="header-section-number">9.4.3.2</span> Analysis</h4>
 <p>Assume there are at most m letter in the longest string and n strings in total. The time complexity is O(m * n).</p>
 </div>
-<div id="algorithm-147" class="section level4" number="9.4.3.3">
+<div id="algorithm-148" class="section level4" number="9.4.3.3">
 <h4><span class="header-section-number">9.4.3.3</span> Algorithm</h4>
-<div class="sourceCode" id="cb209"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb209-1"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-1" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">longestCommonPrefix</span>(<span class="bu">String</span>[] strs) {</span>
-<span id="cb209-2"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-2" aria-hidden="true"></a>    <span class="kw">if</span>(strs == <span class="kw">null</span> || strs.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb209-3"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="st">&quot;&quot;</span>;</span>
-<span id="cb209-4"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-4" aria-hidden="true"></a>    }</span>
-<span id="cb209-5"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-5" aria-hidden="true"></a></span>
-<span id="cb209-6"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-6" aria-hidden="true"></a>    <span class="dt">int</span> commonIdx = -<span class="dv">1</span>;</span>
-<span id="cb209-7"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-7" aria-hidden="true"></a>    <span class="bu">String</span> prefix = strs[<span class="dv">0</span>];</span>
-<span id="cb209-8"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-8" aria-hidden="true"></a></span>
-<span id="cb209-9"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prefix.<span class="fu">length</span>(); i++) {</span>
-<span id="cb209-10"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-10" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="bu">String</span> str : strs) {</span>
-<span id="cb209-11"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-11" aria-hidden="true"></a>            <span class="kw">if</span>(str.<span class="fu">length</span>() == i) {</span>
-<span id="cb209-12"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-12" aria-hidden="true"></a>                <span class="co">//if we have reached the end of a string</span></span>
-<span id="cb209-13"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-13" aria-hidden="true"></a>                <span class="kw">return</span> prefix.<span class="fu">substring</span>(<span class="dv">0</span>, commonIdx + <span class="dv">1</span>);</span>
-<span id="cb209-14"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-14" aria-hidden="true"></a>            }</span>
-<span id="cb209-15"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-15" aria-hidden="true"></a>            <span class="kw">if</span>(prefix.<span class="fu">charAt</span>(i) != str.<span class="fu">charAt</span>(i)) {</span>
-<span id="cb209-16"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-16" aria-hidden="true"></a>                <span class="co">//if one of the char does not match</span></span>
-<span id="cb209-17"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-17" aria-hidden="true"></a>                <span class="kw">return</span> commonIdx == -<span class="dv">1</span> ? <span class="st">&quot;&quot;</span> : prefix.<span class="fu">substring</span>(<span class="dv">0</span>, commonIdx + <span class="dv">1</span>);</span>
-<span id="cb209-18"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-18" aria-hidden="true"></a>            }</span>
-<span id="cb209-19"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-19" aria-hidden="true"></a>        }</span>
-<span id="cb209-20"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-20" aria-hidden="true"></a></span>
-<span id="cb209-21"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-21" aria-hidden="true"></a>        commonIdx = i;</span>
-<span id="cb209-22"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-22" aria-hidden="true"></a>    }</span>
-<span id="cb209-23"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-23" aria-hidden="true"></a></span>
-<span id="cb209-24"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-24" aria-hidden="true"></a>    <span class="kw">return</span> prefix.<span class="fu">substring</span>(<span class="dv">0</span>, commonIdx + <span class="dv">1</span>);</span>
-<span id="cb209-25"><a href="longest-common-prefix-leetcode-14-easy.html#cb209-25" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb210"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb210-1"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-1" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">String</span> <span class="fu">longestCommonPrefix</span>(<span class="bu">String</span>[] strs) {</span>
+<span id="cb210-2"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-2" aria-hidden="true"></a>    <span class="kw">if</span>(strs == <span class="kw">null</span> || strs.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb210-3"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="st">&quot;&quot;</span>;</span>
+<span id="cb210-4"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-4" aria-hidden="true"></a>    }</span>
+<span id="cb210-5"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-5" aria-hidden="true"></a></span>
+<span id="cb210-6"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-6" aria-hidden="true"></a>    <span class="dt">int</span> commonIdx = -<span class="dv">1</span>;</span>
+<span id="cb210-7"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-7" aria-hidden="true"></a>    <span class="bu">String</span> prefix = strs[<span class="dv">0</span>];</span>
+<span id="cb210-8"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-8" aria-hidden="true"></a></span>
+<span id="cb210-9"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prefix.<span class="fu">length</span>(); i++) {</span>
+<span id="cb210-10"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-10" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="bu">String</span> str : strs) {</span>
+<span id="cb210-11"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-11" aria-hidden="true"></a>            <span class="kw">if</span>(str.<span class="fu">length</span>() == i) {</span>
+<span id="cb210-12"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-12" aria-hidden="true"></a>                <span class="co">//if we have reached the end of a string</span></span>
+<span id="cb210-13"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-13" aria-hidden="true"></a>                <span class="kw">return</span> prefix.<span class="fu">substring</span>(<span class="dv">0</span>, commonIdx + <span class="dv">1</span>);</span>
+<span id="cb210-14"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-14" aria-hidden="true"></a>            }</span>
+<span id="cb210-15"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-15" aria-hidden="true"></a>            <span class="kw">if</span>(prefix.<span class="fu">charAt</span>(i) != str.<span class="fu">charAt</span>(i)) {</span>
+<span id="cb210-16"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-16" aria-hidden="true"></a>                <span class="co">//if one of the char does not match</span></span>
+<span id="cb210-17"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-17" aria-hidden="true"></a>                <span class="kw">return</span> commonIdx == -<span class="dv">1</span> ? <span class="st">&quot;&quot;</span> : prefix.<span class="fu">substring</span>(<span class="dv">0</span>, commonIdx + <span class="dv">1</span>);</span>
+<span id="cb210-18"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-18" aria-hidden="true"></a>            }</span>
+<span id="cb210-19"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-19" aria-hidden="true"></a>        }</span>
+<span id="cb210-20"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-20" aria-hidden="true"></a></span>
+<span id="cb210-21"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-21" aria-hidden="true"></a>        commonIdx = i;</span>
+<span id="cb210-22"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-22" aria-hidden="true"></a>    }</span>
+<span id="cb210-23"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-23" aria-hidden="true"></a></span>
+<span id="cb210-24"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-24" aria-hidden="true"></a>    <span class="kw">return</span> prefix.<span class="fu">substring</span>(<span class="dv">0</span>, commonIdx + <span class="dv">1</span>);</span>
+<span id="cb210-25"><a href="longest-common-prefix-leetcode-14-easy.html#cb210-25" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

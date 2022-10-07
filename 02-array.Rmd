@@ -112,7 +112,7 @@ public int[] twoSum(int[] nums, int target) {
 
 ## Two Sum II - Input Array Is Sorted / LeetCode 167 / Medium
 ### Description
-Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 <= index1 < index2 <= numbers.length.
+Given a 0-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 0 <= index1 < index2 < numbers.length.
 
 Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2] of length 2.
 
@@ -123,11 +123,11 @@ Your solution must use only constant extra space.
 ### Examples
 Input: numbers = [2,7,11,15], target = 9
 Output: [1,2]
-Explanation: The sum of 2 and 7 is 9. Therefore, index1 = 1, index2 = 2. We return [1, 2].
+Explanation: The sum of 2 and 7 is 9. Therefore, index1 = 1, index2 = 2. We return [0, 1].
 
-### Solution - Searching Target Sum from Sorted Array
+### Solution - Searching Target Sum from Sorted Array Usng Two Pointers
 #### Walkthrough
-This solution is valid only on \textbf{sorted} array. Have two indices pointed to left most and right most position
+This solution is valid only on **sorted** array. Have two indices pointed to left most and right most position
 of array. Start comparing the sum against the target. If sum meets, return the indices; otherwise, move indices
 inward.
 
@@ -136,7 +136,7 @@ Time complexity is O(n) since every element is visited, and Auxiliary Space is O
 
 #### Algorithm
 
-##### Java Code - Searching Target Sum from Sorted Array
+##### Java Code
 ```java
 public int[] twoSum(int[] nums, int target) {
     int left = 0, right = nums.length - 1;
@@ -145,7 +145,7 @@ public int[] twoSum(int[] nums, int target) {
         int sum = nums[left] + nums[right];
 
         if(sum == target) {
-            return new int[]{left+1, right+1};
+            return new int[]{left, right};
         }
 
         if(target > sum) {
@@ -158,6 +158,55 @@ public int[] twoSum(int[] nums, int target) {
     }
 
     return null;
+}
+```
+ 
+### Solution - Searching Target Sum from Sorted Array Usng Binary Search
+#### Walkthrough
+This solution is valid only on **sorted** array. Start from left most element, and for each elemy ents, search for $target - element$ using binary search.
+
+#### Analysis
+Time complexity is O(log(n)) for each binary search and there are n elements. Thus, the total time complexity is $O(n\cdot log(n))$ since every element is visited, and Auxiliary Space is O(1)
+
+#### Algorithm
+
+##### Java Code
+```java
+public int[] twoSum(int[] nums, int target) {
+    for(int i = 0; i < nums.length - 1; i++) {
+        int diff = target - nums[i];
+        int foundIdx = binarySearch(nums, i+1, nums.length - 1,  diff);
+
+        if(foundIdx > 0)
+            return new int[]{i, foundIdx};
+    }
+
+    return null;
+}
+
+
+int binarySearch(int arr[], int l, int r, int x) {
+    if (r >= l) {
+        int mid = l + (r - l) / 2;
+
+        // If the element is present at the
+        // middle itself
+        if (arr[mid] == x)
+            return mid;
+
+        // If element is smaller than mid, then
+        // it can only be present in left subarray
+        if (arr[mid] > x)
+            return binarySearch(arr, l, mid - 1, x);
+
+        // Else the element can only be present
+        // in right subarray
+        return binarySearch(arr, mid + 1, r, x);
+    }
+
+    // We reach here when element is not present
+    // in array
+    return -1;
 }
 ```
 

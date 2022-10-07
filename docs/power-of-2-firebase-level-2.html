@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1058,49 +1059,49 @@ isPowOfTwo(8) = true</p>
 </div>
 <div id="solution---recursive-6" class="section level3" number="10.1.3">
 <h3><span class="header-section-number">10.1.3</span> Solution - Recursive</h3>
-<div id="walkthrough-148" class="section level4" number="10.1.3.1">
+<div id="walkthrough-149" class="section level4" number="10.1.3.1">
 <h4><span class="header-section-number">10.1.3.1</span> Walkthrough</h4>
 <p>For recursive solution, we invoke recursive calls on even numbrers and return true on <span class="math inline">\(2^0\)</span> = 1. Return false for other
 cases. For bitwise op solution, if we take 3 (011) &amp; with 4 (100) and result is 0</p>
 </div>
-<div id="analysis-150" class="section level4" number="10.1.3.2">
+<div id="analysis-151" class="section level4" number="10.1.3.2">
 <h4><span class="header-section-number">10.1.3.2</span> Analysis</h4>
 <p>Time Complexity is O(log(n)) since this is the number of computation performed.</p>
 </div>
-<div id="algorithm-155" class="section level4" number="10.1.3.3">
+<div id="algorithm-156" class="section level4" number="10.1.3.3">
 <h4><span class="header-section-number">10.1.3.3</span> Algorithm</h4>
 <p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
 </div>
 <div id="java-code---recursive-6" class="section level4" number="10.1.3.4">
 <h4><span class="header-section-number">10.1.3.4</span> Java Code - Recursive</h4>
-<div class="sourceCode" id="cb217"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb217-1"><a href="power-of-2-firebase-level-2.html#cb217-1" aria-hidden="true"></a><span class="dt">boolean</span> <span class="fu">isPowerOfTwo</span>(<span class="dt">int</span> n) {</span>
-<span id="cb217-2"><a href="power-of-2-firebase-level-2.html#cb217-2" aria-hidden="true"></a>    <span class="kw">if</span>(num == <span class="dv">0</span>) {</span>
-<span id="cb217-3"><a href="power-of-2-firebase-level-2.html#cb217-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb217-4"><a href="power-of-2-firebase-level-2.html#cb217-4" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>( num == <span class="dv">1</span>) {</span>
-<span id="cb217-5"><a href="power-of-2-firebase-level-2.html#cb217-5" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb217-6"><a href="power-of-2-firebase-level-2.html#cb217-6" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>( (num &amp; <span class="dv">1</span>) == <span class="dv">1</span> ) {</span>
-<span id="cb217-7"><a href="power-of-2-firebase-level-2.html#cb217-7" aria-hidden="true"></a>        <span class="co">//odd number</span></span>
-<span id="cb217-8"><a href="power-of-2-firebase-level-2.html#cb217-8" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb217-9"><a href="power-of-2-firebase-level-2.html#cb217-9" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb217-10"><a href="power-of-2-firebase-level-2.html#cb217-10" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">isPowOfTwo</span>(num / <span class="dv">2</span>);</span>
-<span id="cb217-11"><a href="power-of-2-firebase-level-2.html#cb217-11" aria-hidden="true"></a>    }</span>
-<span id="cb217-12"><a href="power-of-2-firebase-level-2.html#cb217-12" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb218"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb218-1"><a href="power-of-2-firebase-level-2.html#cb218-1" aria-hidden="true"></a><span class="dt">boolean</span> <span class="fu">isPowerOfTwo</span>(<span class="dt">int</span> n) {</span>
+<span id="cb218-2"><a href="power-of-2-firebase-level-2.html#cb218-2" aria-hidden="true"></a>    <span class="kw">if</span>(num == <span class="dv">0</span>) {</span>
+<span id="cb218-3"><a href="power-of-2-firebase-level-2.html#cb218-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb218-4"><a href="power-of-2-firebase-level-2.html#cb218-4" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>( num == <span class="dv">1</span>) {</span>
+<span id="cb218-5"><a href="power-of-2-firebase-level-2.html#cb218-5" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb218-6"><a href="power-of-2-firebase-level-2.html#cb218-6" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>( (num &amp; <span class="dv">1</span>) == <span class="dv">1</span> ) {</span>
+<span id="cb218-7"><a href="power-of-2-firebase-level-2.html#cb218-7" aria-hidden="true"></a>        <span class="co">//odd number</span></span>
+<span id="cb218-8"><a href="power-of-2-firebase-level-2.html#cb218-8" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb218-9"><a href="power-of-2-firebase-level-2.html#cb218-9" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb218-10"><a href="power-of-2-firebase-level-2.html#cb218-10" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">isPowOfTwo</span>(num / <span class="dv">2</span>);</span>
+<span id="cb218-11"><a href="power-of-2-firebase-level-2.html#cb218-11" aria-hidden="true"></a>    }</span>
+<span id="cb218-12"><a href="power-of-2-firebase-level-2.html#cb218-12" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---bitwise-op" class="section level3" number="10.1.4">
 <h3><span class="header-section-number">10.1.4</span> Solution - Bitwise Op</h3>
-<div id="walkthrough-149" class="section level4" number="10.1.4.1">
+<div id="walkthrough-150" class="section level4" number="10.1.4.1">
 <h4><span class="header-section-number">10.1.4.1</span> Walkthrough</h4>
 </div>
-<div id="analysis-151" class="section level4" number="10.1.4.2">
+<div id="analysis-152" class="section level4" number="10.1.4.2">
 <h4><span class="header-section-number">10.1.4.2</span> Analysis</h4>
 <p>Time complexity is constant O(1) and Auxiliary Space is O(1).</p>
 </div>
 <div id="java-code---bitwise-op" class="section level4" number="10.1.4.3">
 <h4><span class="header-section-number">10.1.4.3</span> Java Code - Bitwise Op</h4>
-<div class="sourceCode" id="cb218"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb218-1"><a href="power-of-2-firebase-level-2.html#cb218-1" aria-hidden="true"></a><span class="dt">boolean</span> <span class="fu">isPowerOfTwo</span>(<span class="dt">int</span> num) {</span>
-<span id="cb218-2"><a href="power-of-2-firebase-level-2.html#cb218-2" aria-hidden="true"></a>    <span class="kw">return</span> (num != <span class="dv">0</span>) &amp;&amp; ((num &amp; (num - <span class="dv">1</span>)) == <span class="dv">0</span>);</span>
-<span id="cb218-3"><a href="power-of-2-firebase-level-2.html#cb218-3" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb219-1"><a href="power-of-2-firebase-level-2.html#cb219-1" aria-hidden="true"></a><span class="dt">boolean</span> <span class="fu">isPowerOfTwo</span>(<span class="dt">int</span> num) {</span>
+<span id="cb219-2"><a href="power-of-2-firebase-level-2.html#cb219-2" aria-hidden="true"></a>    <span class="kw">return</span> (num != <span class="dv">0</span>) &amp;&amp; ((num &amp; (num - <span class="dv">1</span>)) == <span class="dv">0</span>);</span>
+<span id="cb219-3"><a href="power-of-2-firebase-level-2.html#cb219-3" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

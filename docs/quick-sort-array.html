@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1055,7 +1056,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution-80" class="section level3" number="8.4.3">
 <h3><span class="header-section-number">8.4.3</span> Solution</h3>
-<div id="walkthrough-133" class="section level4" number="8.4.3.1">
+<div id="walkthrough-134" class="section level4" number="8.4.3.1">
 <h4><span class="header-section-number">8.4.3.1</span> Walkthrough</h4>
 <p>First, we check the indices and continue only if there are still elements to be sorted. We get the index of the sorted
 pivot and use it to recursively call partition() method with the same parameters as the quickSort() method, but with
@@ -1065,54 +1066,54 @@ it before the pivot if its value is smaller. By the end of the partitioning, all
 the left of it and all elements greater then the pivot are on the right of it. The pivot is at its final sorted
 position and the function returns this position.</p>
 </div>
-<div id="analysis-135" class="section level4" number="8.4.3.2">
+<div id="analysis-136" class="section level4" number="8.4.3.2">
 <h4><span class="header-section-number">8.4.3.2</span> Analysis</h4>
 <p>The worst case occurs when the partition process always picks greatest or smallest element as pivot and can be <span class="math inline">\(O(n^2)\)</span>.
 In average case, the time complexity is <span class="math inline">\(O(n \cdot log(n))\)</span></p>
 </div>
-<div id="algorithm-140" class="section level4" number="8.4.3.3">
+<div id="algorithm-141" class="section level4" number="8.4.3.3">
 <h4><span class="header-section-number">8.4.3.3</span> Algorithm</h4>
 <p>qs <a href="glossary-of-algorithm.html#qs">1.2.14</a></p>
 </div>
-<div id="java-code-82" class="section level4" number="8.4.3.4">
+<div id="java-code-84" class="section level4" number="8.4.3.4">
 <h4><span class="header-section-number">8.4.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb201"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb201-1"><a href="quick-sort-array.html#cb201-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">quickSort</span>(<span class="dt">int</span> arr[], <span class="dt">int</span> begin, <span class="dt">int</span> end) {</span>
-<span id="cb201-2"><a href="quick-sort-array.html#cb201-2" aria-hidden="true"></a>    <span class="kw">if</span> (begin &lt; end) {</span>
-<span id="cb201-3"><a href="quick-sort-array.html#cb201-3" aria-hidden="true"></a>        <span class="dt">int</span> partitionIndex = <span class="fu">partition</span>(arr, begin, end);</span>
-<span id="cb201-4"><a href="quick-sort-array.html#cb201-4" aria-hidden="true"></a></span>
-<span id="cb201-5"><a href="quick-sort-array.html#cb201-5" aria-hidden="true"></a>        <span class="fu">quickSort</span>(arr, begin, partitionIndex-<span class="dv">1</span>);</span>
-<span id="cb201-6"><a href="quick-sort-array.html#cb201-6" aria-hidden="true"></a>        <span class="fu">quickSort</span>(arr, partitionIndex+<span class="dv">1</span>, end);</span>
-<span id="cb201-7"><a href="quick-sort-array.html#cb201-7" aria-hidden="true"></a>    }</span>
-<span id="cb201-8"><a href="quick-sort-array.html#cb201-8" aria-hidden="true"></a>}</span>
-<span id="cb201-9"><a href="quick-sort-array.html#cb201-9" aria-hidden="true"></a></span>
-<span id="cb201-10"><a href="quick-sort-array.html#cb201-10" aria-hidden="true"></a><span class="co">//smaller elements go left side of pivot</span></span>
-<span id="cb201-11"><a href="quick-sort-array.html#cb201-11" aria-hidden="true"></a><span class="co">//larger elements go right side of pivot</span></span>
-<span id="cb201-12"><a href="quick-sort-array.html#cb201-12" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">int</span> <span class="fu">partition</span>(<span class="dt">int</span> arr[], <span class="dt">int</span> begin, <span class="dt">int</span> end) {</span>
-<span id="cb201-13"><a href="quick-sort-array.html#cb201-13" aria-hidden="true"></a>    <span class="dt">int</span> pivot = arr[end];</span>
-<span id="cb201-14"><a href="quick-sort-array.html#cb201-14" aria-hidden="true"></a></span>
-<span id="cb201-15"><a href="quick-sort-array.html#cb201-15" aria-hidden="true"></a>    <span class="co">//index of smaller element</span></span>
-<span id="cb201-16"><a href="quick-sort-array.html#cb201-16" aria-hidden="true"></a>    <span class="dt">int</span> i = (begin - <span class="dv">1</span>);</span>
-<span id="cb201-17"><a href="quick-sort-array.html#cb201-17" aria-hidden="true"></a></span>
-<span id="cb201-18"><a href="quick-sort-array.html#cb201-18" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> j = begin; j &lt; end; j++) {</span>
-<span id="cb201-19"><a href="quick-sort-array.html#cb201-19" aria-hidden="true"></a>        <span class="co">/*</span></span>
-<span id="cb201-20"><a href="quick-sort-array.html#cb201-20" aria-hidden="true"></a><span class="co">         * swap if element is smaller than pivot</span></span>
-<span id="cb201-21"><a href="quick-sort-array.html#cb201-21" aria-hidden="true"></a><span class="co">         */</span></span>
-<span id="cb201-22"><a href="quick-sort-array.html#cb201-22" aria-hidden="true"></a>        <span class="kw">if</span> (arr[j] &lt;= pivot) {</span>
-<span id="cb201-23"><a href="quick-sort-array.html#cb201-23" aria-hidden="true"></a>            i++;</span>
-<span id="cb201-24"><a href="quick-sort-array.html#cb201-24" aria-hidden="true"></a></span>
-<span id="cb201-25"><a href="quick-sort-array.html#cb201-25" aria-hidden="true"></a>            <span class="dt">int</span> swapTemp = arr[i];</span>
-<span id="cb201-26"><a href="quick-sort-array.html#cb201-26" aria-hidden="true"></a>            arr[i] = arr[j];</span>
-<span id="cb201-27"><a href="quick-sort-array.html#cb201-27" aria-hidden="true"></a>            arr[j] = swapTemp;</span>
-<span id="cb201-28"><a href="quick-sort-array.html#cb201-28" aria-hidden="true"></a>        }</span>
-<span id="cb201-29"><a href="quick-sort-array.html#cb201-29" aria-hidden="true"></a>    }</span>
-<span id="cb201-30"><a href="quick-sort-array.html#cb201-30" aria-hidden="true"></a></span>
-<span id="cb201-31"><a href="quick-sort-array.html#cb201-31" aria-hidden="true"></a>    <span class="co">//swap a[i + 1] and a[end]</span></span>
-<span id="cb201-32"><a href="quick-sort-array.html#cb201-32" aria-hidden="true"></a>    <span class="dt">int</span> swapTemp = arr[i + <span class="dv">1</span>];</span>
-<span id="cb201-33"><a href="quick-sort-array.html#cb201-33" aria-hidden="true"></a>    arr[i + <span class="dv">1</span>] = arr[end];</span>
-<span id="cb201-34"><a href="quick-sort-array.html#cb201-34" aria-hidden="true"></a>    arr[end] = swapTemp;</span>
-<span id="cb201-35"><a href="quick-sort-array.html#cb201-35" aria-hidden="true"></a></span>
-<span id="cb201-36"><a href="quick-sort-array.html#cb201-36" aria-hidden="true"></a>    <span class="kw">return</span> i + <span class="dv">1</span>;</span>
-<span id="cb201-37"><a href="quick-sort-array.html#cb201-37" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb202"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb202-1"><a href="quick-sort-array.html#cb202-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">quickSort</span>(<span class="dt">int</span> arr[], <span class="dt">int</span> begin, <span class="dt">int</span> end) {</span>
+<span id="cb202-2"><a href="quick-sort-array.html#cb202-2" aria-hidden="true"></a>    <span class="kw">if</span> (begin &lt; end) {</span>
+<span id="cb202-3"><a href="quick-sort-array.html#cb202-3" aria-hidden="true"></a>        <span class="dt">int</span> partitionIndex = <span class="fu">partition</span>(arr, begin, end);</span>
+<span id="cb202-4"><a href="quick-sort-array.html#cb202-4" aria-hidden="true"></a></span>
+<span id="cb202-5"><a href="quick-sort-array.html#cb202-5" aria-hidden="true"></a>        <span class="fu">quickSort</span>(arr, begin, partitionIndex-<span class="dv">1</span>);</span>
+<span id="cb202-6"><a href="quick-sort-array.html#cb202-6" aria-hidden="true"></a>        <span class="fu">quickSort</span>(arr, partitionIndex+<span class="dv">1</span>, end);</span>
+<span id="cb202-7"><a href="quick-sort-array.html#cb202-7" aria-hidden="true"></a>    }</span>
+<span id="cb202-8"><a href="quick-sort-array.html#cb202-8" aria-hidden="true"></a>}</span>
+<span id="cb202-9"><a href="quick-sort-array.html#cb202-9" aria-hidden="true"></a></span>
+<span id="cb202-10"><a href="quick-sort-array.html#cb202-10" aria-hidden="true"></a><span class="co">//smaller elements go left side of pivot</span></span>
+<span id="cb202-11"><a href="quick-sort-array.html#cb202-11" aria-hidden="true"></a><span class="co">//larger elements go right side of pivot</span></span>
+<span id="cb202-12"><a href="quick-sort-array.html#cb202-12" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">int</span> <span class="fu">partition</span>(<span class="dt">int</span> arr[], <span class="dt">int</span> begin, <span class="dt">int</span> end) {</span>
+<span id="cb202-13"><a href="quick-sort-array.html#cb202-13" aria-hidden="true"></a>    <span class="dt">int</span> pivot = arr[end];</span>
+<span id="cb202-14"><a href="quick-sort-array.html#cb202-14" aria-hidden="true"></a></span>
+<span id="cb202-15"><a href="quick-sort-array.html#cb202-15" aria-hidden="true"></a>    <span class="co">//index of smaller element</span></span>
+<span id="cb202-16"><a href="quick-sort-array.html#cb202-16" aria-hidden="true"></a>    <span class="dt">int</span> i = (begin - <span class="dv">1</span>);</span>
+<span id="cb202-17"><a href="quick-sort-array.html#cb202-17" aria-hidden="true"></a></span>
+<span id="cb202-18"><a href="quick-sort-array.html#cb202-18" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> j = begin; j &lt; end; j++) {</span>
+<span id="cb202-19"><a href="quick-sort-array.html#cb202-19" aria-hidden="true"></a>        <span class="co">/*</span></span>
+<span id="cb202-20"><a href="quick-sort-array.html#cb202-20" aria-hidden="true"></a><span class="co">         * swap if element is smaller than pivot</span></span>
+<span id="cb202-21"><a href="quick-sort-array.html#cb202-21" aria-hidden="true"></a><span class="co">         */</span></span>
+<span id="cb202-22"><a href="quick-sort-array.html#cb202-22" aria-hidden="true"></a>        <span class="kw">if</span> (arr[j] &lt;= pivot) {</span>
+<span id="cb202-23"><a href="quick-sort-array.html#cb202-23" aria-hidden="true"></a>            i++;</span>
+<span id="cb202-24"><a href="quick-sort-array.html#cb202-24" aria-hidden="true"></a></span>
+<span id="cb202-25"><a href="quick-sort-array.html#cb202-25" aria-hidden="true"></a>            <span class="dt">int</span> swapTemp = arr[i];</span>
+<span id="cb202-26"><a href="quick-sort-array.html#cb202-26" aria-hidden="true"></a>            arr[i] = arr[j];</span>
+<span id="cb202-27"><a href="quick-sort-array.html#cb202-27" aria-hidden="true"></a>            arr[j] = swapTemp;</span>
+<span id="cb202-28"><a href="quick-sort-array.html#cb202-28" aria-hidden="true"></a>        }</span>
+<span id="cb202-29"><a href="quick-sort-array.html#cb202-29" aria-hidden="true"></a>    }</span>
+<span id="cb202-30"><a href="quick-sort-array.html#cb202-30" aria-hidden="true"></a></span>
+<span id="cb202-31"><a href="quick-sort-array.html#cb202-31" aria-hidden="true"></a>    <span class="co">//swap a[i + 1] and a[end]</span></span>
+<span id="cb202-32"><a href="quick-sort-array.html#cb202-32" aria-hidden="true"></a>    <span class="dt">int</span> swapTemp = arr[i + <span class="dv">1</span>];</span>
+<span id="cb202-33"><a href="quick-sort-array.html#cb202-33" aria-hidden="true"></a>    arr[i + <span class="dv">1</span>] = arr[end];</span>
+<span id="cb202-34"><a href="quick-sort-array.html#cb202-34" aria-hidden="true"></a>    arr[end] = swapTemp;</span>
+<span id="cb202-35"><a href="quick-sort-array.html#cb202-35" aria-hidden="true"></a></span>
+<span id="cb202-36"><a href="quick-sort-array.html#cb202-36" aria-hidden="true"></a>    <span class="kw">return</span> i + <span class="dv">1</span>;</span>
+<span id="cb202-37"><a href="quick-sort-array.html#cb202-37" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

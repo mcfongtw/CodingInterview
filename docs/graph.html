@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1077,33 +1078,33 @@ traverse an entire row of length V in the matrix to discover all its outgoing ed
 0, 0, 1, 1, 0, 1, 0, 1
 0, 0, 0, 1, 0, 0, 1, 0</code></pre>
 <p>In addition, a “visited” array that we’ll use to keep track of which vertices have been visited.</p>
-<div class="sourceCode" id="cb148"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb148-1"><a href="graph.html#cb148-1" aria-hidden="true"></a><span class="kw">class</span> Graph  {</span>
-<span id="cb148-2"><a href="graph.html#cb148-2" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> numOfVertices;   <span class="co">//No. of vertices</span></span>
-<span id="cb148-3"><a href="graph.html#cb148-3" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; adj[]; <span class="co">//Adjacency List</span></span>
-<span id="cb148-4"><a href="graph.html#cb148-4" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">boolean</span>[] visited;   <span class="co">//visited mark for each vertex</span></span>
-<span id="cb148-5"><a href="graph.html#cb148-5" aria-hidden="true"></a></span>
-<span id="cb148-6"><a href="graph.html#cb148-6" aria-hidden="true"></a>    <span class="co">// Constructor</span></span>
-<span id="cb148-7"><a href="graph.html#cb148-7" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">Graph</span>(<span class="dt">int</span> num) {</span>
-<span id="cb148-8"><a href="graph.html#cb148-8" aria-hidden="true"></a>        numOfVertices = num;</span>
-<span id="cb148-9"><a href="graph.html#cb148-9" aria-hidden="true"></a>        adj = <span class="kw">new</span> <span class="bu">LinkedList</span>[v];</span>
-<span id="cb148-10"><a href="graph.html#cb148-10" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;numOfVertices; ++i) {</span>
-<span id="cb148-11"><a href="graph.html#cb148-11" aria-hidden="true"></a>            adj[i] = <span class="kw">new</span> <span class="bu">LinkedList</span>();</span>
-<span id="cb148-12"><a href="graph.html#cb148-12" aria-hidden="true"></a>        }</span>
-<span id="cb148-13"><a href="graph.html#cb148-13" aria-hidden="true"></a>    }</span>
-<span id="cb148-14"><a href="graph.html#cb148-14" aria-hidden="true"></a>    ...</span>
-<span id="cb148-15"><a href="graph.html#cb148-15" aria-hidden="true"></a>}</span></code></pre></div>
-There is an alternative implementation to represent per node with a list of adjacent nodes.
-<div class="sourceCode" id="cb149"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb149-1"><a href="graph.html#cb149-1" aria-hidden="true"></a><span class="kw">class</span> <span class="bu">Node</span> {</span>
-<span id="cb149-2"><a href="graph.html#cb149-2" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> val;</span>
-<span id="cb149-3"><a href="graph.html#cb149-3" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Node</span>&gt; neighbors;</span>
-<span id="cb149-4"><a href="graph.html#cb149-4" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">boolean</span> visited;     <span class="co">//visited mark for the vertex</span></span>
+<div class="sourceCode" id="cb149"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb149-1"><a href="graph.html#cb149-1" aria-hidden="true"></a><span class="kw">class</span> Graph  {</span>
+<span id="cb149-2"><a href="graph.html#cb149-2" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> numOfVertices;   <span class="co">//No. of vertices</span></span>
+<span id="cb149-3"><a href="graph.html#cb149-3" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; adj[]; <span class="co">//Adjacency List</span></span>
+<span id="cb149-4"><a href="graph.html#cb149-4" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">boolean</span>[] visited;   <span class="co">//visited mark for each vertex</span></span>
 <span id="cb149-5"><a href="graph.html#cb149-5" aria-hidden="true"></a></span>
-<span id="cb149-6"><a href="graph.html#cb149-6" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">Node</span>(<span class="dt">int</span> _val, <span class="bu">List</span>&lt;<span class="bu">Node</span>&gt; _neighbors) {</span>
-<span id="cb149-7"><a href="graph.html#cb149-7" aria-hidden="true"></a>        val = _val;</span>
-<span id="cb149-8"><a href="graph.html#cb149-8" aria-hidden="true"></a>        neighbors = _neighbors;</span>
-<span id="cb149-9"><a href="graph.html#cb149-9" aria-hidden="true"></a>    }</span>
-<span id="cb149-10"><a href="graph.html#cb149-10" aria-hidden="true"></a>    ...</span>
-<span id="cb149-11"><a href="graph.html#cb149-11" aria-hidden="true"></a>}</span></code></pre></div>
+<span id="cb149-6"><a href="graph.html#cb149-6" aria-hidden="true"></a>    <span class="co">// Constructor</span></span>
+<span id="cb149-7"><a href="graph.html#cb149-7" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">Graph</span>(<span class="dt">int</span> num) {</span>
+<span id="cb149-8"><a href="graph.html#cb149-8" aria-hidden="true"></a>        numOfVertices = num;</span>
+<span id="cb149-9"><a href="graph.html#cb149-9" aria-hidden="true"></a>        adj = <span class="kw">new</span> <span class="bu">LinkedList</span>[v];</span>
+<span id="cb149-10"><a href="graph.html#cb149-10" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;numOfVertices; ++i) {</span>
+<span id="cb149-11"><a href="graph.html#cb149-11" aria-hidden="true"></a>            adj[i] = <span class="kw">new</span> <span class="bu">LinkedList</span>();</span>
+<span id="cb149-12"><a href="graph.html#cb149-12" aria-hidden="true"></a>        }</span>
+<span id="cb149-13"><a href="graph.html#cb149-13" aria-hidden="true"></a>    }</span>
+<span id="cb149-14"><a href="graph.html#cb149-14" aria-hidden="true"></a>    ...</span>
+<span id="cb149-15"><a href="graph.html#cb149-15" aria-hidden="true"></a>}</span></code></pre></div>
+There is an alternative implementation to represent per node with a list of adjacent nodes.
+<div class="sourceCode" id="cb150"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb150-1"><a href="graph.html#cb150-1" aria-hidden="true"></a><span class="kw">class</span> <span class="bu">Node</span> {</span>
+<span id="cb150-2"><a href="graph.html#cb150-2" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> val;</span>
+<span id="cb150-3"><a href="graph.html#cb150-3" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Node</span>&gt; neighbors;</span>
+<span id="cb150-4"><a href="graph.html#cb150-4" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">boolean</span> visited;     <span class="co">//visited mark for the vertex</span></span>
+<span id="cb150-5"><a href="graph.html#cb150-5" aria-hidden="true"></a></span>
+<span id="cb150-6"><a href="graph.html#cb150-6" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">Node</span>(<span class="dt">int</span> _val, <span class="bu">List</span>&lt;<span class="bu">Node</span>&gt; _neighbors) {</span>
+<span id="cb150-7"><a href="graph.html#cb150-7" aria-hidden="true"></a>        val = _val;</span>
+<span id="cb150-8"><a href="graph.html#cb150-8" aria-hidden="true"></a>        neighbors = _neighbors;</span>
+<span id="cb150-9"><a href="graph.html#cb150-9" aria-hidden="true"></a>    }</span>
+<span id="cb150-10"><a href="graph.html#cb150-10" aria-hidden="true"></a>    ...</span>
+<span id="cb150-11"><a href="graph.html#cb150-11" aria-hidden="true"></a>}</span></code></pre></div>
 <div id="depth-first-traversal-1" class="section level3" number="5.0.1">
 <h3><span class="header-section-number">5.0.1</span> Depth First Traversal</h3>
 <p>A depth first traversal without labeling the visited node usually ends up in exponential time complexity. There will be
@@ -1116,29 +1117,29 @@ then, for each node, you could discover all its neighbors by traversing its adja
 For a directed graph, the sum of the sizes of the adjacency lists of all the nodes is E (total number of edges). So, the
 complexity of DFS is O(V) + O(E) = O(V + E). For an undirected graph, each edge will appear twice. Once in the adjacency
 list of either end of the edge. So, the overall complexity will be <span class="math inline">\(O(|V|) + O (2\cdot |E|) = O(|V + E|)\)</span>.</p>
-<div id="algorithm-99" class="section level4" number="5.0.1.1">
+<div id="algorithm-100" class="section level4" number="5.0.1.1">
 <h4><span class="header-section-number">5.0.1.1</span> Algorithm</h4>
 <p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
-<div class="sourceCode" id="cb150"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb150-1"><a href="graph.html#cb150-1" aria-hidden="true"></a><span class="dt">void</span> <span class="fu">helper</span>(<span class="dt">int</span> node, <span class="dt">boolean</span> visited[]) {</span>
-<span id="cb150-2"><a href="graph.html#cb150-2" aria-hidden="true"></a>    <span class="co">// Mark the current node as visited and print it</span></span>
-<span id="cb150-3"><a href="graph.html#cb150-3" aria-hidden="true"></a>    visited[node] = <span class="kw">true</span>;</span>
-<span id="cb150-4"><a href="graph.html#cb150-4" aria-hidden="true"></a></span>
-<span id="cb150-5"><a href="graph.html#cb150-5" aria-hidden="true"></a>    <span class="co">// Recur for all the vertices adjacent to this vertex</span></span>
-<span id="cb150-6"><a href="graph.html#cb150-6" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">Integer</span> adjNode: adj[node]) {</span>
-<span id="cb150-7"><a href="graph.html#cb150-7" aria-hidden="true"></a>        <span class="kw">if</span> (!visited[adjNode]) {</span>
-<span id="cb150-8"><a href="graph.html#cb150-8" aria-hidden="true"></a>            <span class="fu">helper</span>(adjNode, visited);</span>
-<span id="cb150-9"><a href="graph.html#cb150-9" aria-hidden="true"></a>        }</span>
-<span id="cb150-10"><a href="graph.html#cb150-10" aria-hidden="true"></a>    }</span>
-<span id="cb150-11"><a href="graph.html#cb150-11" aria-hidden="true"></a>}</span>
-<span id="cb150-12"><a href="graph.html#cb150-12" aria-hidden="true"></a></span>
-<span id="cb150-13"><a href="graph.html#cb150-13" aria-hidden="true"></a><span class="co">// The function to do DFS traversal. It uses recursive DFSUtil()</span></span>
-<span id="cb150-14"><a href="graph.html#cb150-14" aria-hidden="true"></a><span class="dt">void</span> <span class="fu">dfs</span>(<span class="dt">int</span> root) {</span>
-<span id="cb150-15"><a href="graph.html#cb150-15" aria-hidden="true"></a>    <span class="co">// Mark all the vertices as not visited(set as</span></span>
-<span id="cb150-16"><a href="graph.html#cb150-16" aria-hidden="true"></a>    <span class="co">// false by default in java)</span></span>
-<span id="cb150-17"><a href="graph.html#cb150-17" aria-hidden="true"></a>    <span class="dt">boolean</span> visited[] = <span class="kw">new</span> <span class="dt">boolean</span>[numOfVertices];</span>
-<span id="cb150-18"><a href="graph.html#cb150-18" aria-hidden="true"></a></span>
-<span id="cb150-19"><a href="graph.html#cb150-19" aria-hidden="true"></a>    <span class="fu">helper</span>(root, visited);</span>
-<span id="cb150-20"><a href="graph.html#cb150-20" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb151-1"><a href="graph.html#cb151-1" aria-hidden="true"></a><span class="dt">void</span> <span class="fu">helper</span>(<span class="dt">int</span> node, <span class="dt">boolean</span> visited[]) {</span>
+<span id="cb151-2"><a href="graph.html#cb151-2" aria-hidden="true"></a>    <span class="co">// Mark the current node as visited and print it</span></span>
+<span id="cb151-3"><a href="graph.html#cb151-3" aria-hidden="true"></a>    visited[node] = <span class="kw">true</span>;</span>
+<span id="cb151-4"><a href="graph.html#cb151-4" aria-hidden="true"></a></span>
+<span id="cb151-5"><a href="graph.html#cb151-5" aria-hidden="true"></a>    <span class="co">// Recur for all the vertices adjacent to this vertex</span></span>
+<span id="cb151-6"><a href="graph.html#cb151-6" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">Integer</span> adjNode: adj[node]) {</span>
+<span id="cb151-7"><a href="graph.html#cb151-7" aria-hidden="true"></a>        <span class="kw">if</span> (!visited[adjNode]) {</span>
+<span id="cb151-8"><a href="graph.html#cb151-8" aria-hidden="true"></a>            <span class="fu">helper</span>(adjNode, visited);</span>
+<span id="cb151-9"><a href="graph.html#cb151-9" aria-hidden="true"></a>        }</span>
+<span id="cb151-10"><a href="graph.html#cb151-10" aria-hidden="true"></a>    }</span>
+<span id="cb151-11"><a href="graph.html#cb151-11" aria-hidden="true"></a>}</span>
+<span id="cb151-12"><a href="graph.html#cb151-12" aria-hidden="true"></a></span>
+<span id="cb151-13"><a href="graph.html#cb151-13" aria-hidden="true"></a><span class="co">// The function to do DFS traversal. It uses recursive DFSUtil()</span></span>
+<span id="cb151-14"><a href="graph.html#cb151-14" aria-hidden="true"></a><span class="dt">void</span> <span class="fu">dfs</span>(<span class="dt">int</span> root) {</span>
+<span id="cb151-15"><a href="graph.html#cb151-15" aria-hidden="true"></a>    <span class="co">// Mark all the vertices as not visited(set as</span></span>
+<span id="cb151-16"><a href="graph.html#cb151-16" aria-hidden="true"></a>    <span class="co">// false by default in java)</span></span>
+<span id="cb151-17"><a href="graph.html#cb151-17" aria-hidden="true"></a>    <span class="dt">boolean</span> visited[] = <span class="kw">new</span> <span class="dt">boolean</span>[numOfVertices];</span>
+<span id="cb151-18"><a href="graph.html#cb151-18" aria-hidden="true"></a></span>
+<span id="cb151-19"><a href="graph.html#cb151-19" aria-hidden="true"></a>    <span class="fu">helper</span>(root, visited);</span>
+<span id="cb151-20"><a href="graph.html#cb151-20" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="bread-first-traversal" class="section level3" number="5.0.2">
@@ -1148,42 +1149,42 @@ twice (undirected graph). The time complexity for both a directed and undirected
 their edges as represented by the graph in its adjacency list representation, or <span class="math inline">\(O(|V| + |E|)\)</span></p>
 <p>The power of using breadth-first search to traverse through a graph is that it can easily tell us the shortest way to
 get from one node to another.</p>
-<div id="algorithm-100" class="section level4" number="5.0.2.1">
+<div id="algorithm-101" class="section level4" number="5.0.2.1">
 <h4><span class="header-section-number">5.0.2.1</span> Algorithm</h4>
 <p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb151-1"><a href="graph.html#cb151-1" aria-hidden="true"></a><span class="kw">class</span> Graph  {</span>
-<span id="cb151-2"><a href="graph.html#cb151-2" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> numOfVertices;   <span class="co">// No. of vertices</span></span>
-<span id="cb151-3"><a href="graph.html#cb151-3" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt; adj[]; <span class="co">//Adjacency Lists</span></span>
-<span id="cb151-4"><a href="graph.html#cb151-4" aria-hidden="true"></a></span>
-<span id="cb151-5"><a href="graph.html#cb151-5" aria-hidden="true"></a>    ...</span>
-<span id="cb151-6"><a href="graph.html#cb151-6" aria-hidden="true"></a></span>
-<span id="cb151-7"><a href="graph.html#cb151-7" aria-hidden="true"></a>    <span class="dt">void</span> <span class="fu">traversal</span>(<span class="bu">Integer</span> root)  {</span>
-<span id="cb151-8"><a href="graph.html#cb151-8" aria-hidden="true"></a>        <span class="co">// Mark all the vertices as not visited(By default</span></span>
-<span id="cb151-9"><a href="graph.html#cb151-9" aria-hidden="true"></a>        <span class="co">// set as false)</span></span>
-<span id="cb151-10"><a href="graph.html#cb151-10" aria-hidden="true"></a>        <span class="dt">boolean</span> visited[] = <span class="kw">new</span> <span class="dt">boolean</span>[numOfVertices];</span>
-<span id="cb151-11"><a href="graph.html#cb151-11" aria-hidden="true"></a></span>
-<span id="cb151-12"><a href="graph.html#cb151-12" aria-hidden="true"></a>        <span class="co">// Create a queue for BFS</span></span>
-<span id="cb151-13"><a href="graph.html#cb151-13" aria-hidden="true"></a>        <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
-<span id="cb151-14"><a href="graph.html#cb151-14" aria-hidden="true"></a></span>
-<span id="cb151-15"><a href="graph.html#cb151-15" aria-hidden="true"></a>        <span class="co">// Mark the current node as visited and enqueue it</span></span>
-<span id="cb151-16"><a href="graph.html#cb151-16" aria-hidden="true"></a>        visited[root] = <span class="kw">true</span>;</span>
-<span id="cb151-17"><a href="graph.html#cb151-17" aria-hidden="true"></a>        queue.<span class="fu">offer</span>(root);</span>
-<span id="cb151-18"><a href="graph.html#cb151-18" aria-hidden="true"></a></span>
-<span id="cb151-19"><a href="graph.html#cb151-19" aria-hidden="true"></a>        <span class="kw">while</span> (queue.<span class="fu">size</span>() != <span class="dv">0</span>) {</span>
-<span id="cb151-20"><a href="graph.html#cb151-20" aria-hidden="true"></a>            <span class="co">// Dequeue a vertex from queue and print it</span></span>
-<span id="cb151-21"><a href="graph.html#cb151-21" aria-hidden="true"></a>            <span class="bu">Integer</span> node = queue.<span class="fu">poll</span>();</span>
-<span id="cb151-22"><a href="graph.html#cb151-22" aria-hidden="true"></a></span>
-<span id="cb151-23"><a href="graph.html#cb151-23" aria-hidden="true"></a>            <span class="co">// Get all adjacent vertices of the dequeued vertex s</span></span>
-<span id="cb151-24"><a href="graph.html#cb151-24" aria-hidden="true"></a>            <span class="co">// If a adjacent has not been visited, then mark it</span></span>
-<span id="cb151-25"><a href="graph.html#cb151-25" aria-hidden="true"></a>            <span class="co">// visited and enqueue it</span></span>
-<span id="cb151-26"><a href="graph.html#cb151-26" aria-hidden="true"></a>            <span class="kw">for</span>(<span class="bu">Integer</span> adjNode : adj[node]) {</span>
-<span id="cb151-27"><a href="graph.html#cb151-27" aria-hidden="true"></a>                <span class="kw">if</span> (!visited[adjNode] &amp;&amp; !queue.<span class="fu">contain</span>(adjNode)) {</span>
-<span id="cb151-28"><a href="graph.html#cb151-28" aria-hidden="true"></a>                    queue.<span class="fu">offer</span>(adjNode);</span>
-<span id="cb151-29"><a href="graph.html#cb151-29" aria-hidden="true"></a>                }</span>
-<span id="cb151-30"><a href="graph.html#cb151-30" aria-hidden="true"></a>            }</span>
-<span id="cb151-31"><a href="graph.html#cb151-31" aria-hidden="true"></a>        }</span>
-<span id="cb151-32"><a href="graph.html#cb151-32" aria-hidden="true"></a>    }</span>
-<span id="cb151-33"><a href="graph.html#cb151-33" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb152-1"><a href="graph.html#cb152-1" aria-hidden="true"></a><span class="kw">class</span> Graph  {</span>
+<span id="cb152-2"><a href="graph.html#cb152-2" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> numOfVertices;   <span class="co">// No. of vertices</span></span>
+<span id="cb152-3"><a href="graph.html#cb152-3" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt; adj[]; <span class="co">//Adjacency Lists</span></span>
+<span id="cb152-4"><a href="graph.html#cb152-4" aria-hidden="true"></a></span>
+<span id="cb152-5"><a href="graph.html#cb152-5" aria-hidden="true"></a>    ...</span>
+<span id="cb152-6"><a href="graph.html#cb152-6" aria-hidden="true"></a></span>
+<span id="cb152-7"><a href="graph.html#cb152-7" aria-hidden="true"></a>    <span class="dt">void</span> <span class="fu">traversal</span>(<span class="bu">Integer</span> root)  {</span>
+<span id="cb152-8"><a href="graph.html#cb152-8" aria-hidden="true"></a>        <span class="co">// Mark all the vertices as not visited(By default</span></span>
+<span id="cb152-9"><a href="graph.html#cb152-9" aria-hidden="true"></a>        <span class="co">// set as false)</span></span>
+<span id="cb152-10"><a href="graph.html#cb152-10" aria-hidden="true"></a>        <span class="dt">boolean</span> visited[] = <span class="kw">new</span> <span class="dt">boolean</span>[numOfVertices];</span>
+<span id="cb152-11"><a href="graph.html#cb152-11" aria-hidden="true"></a></span>
+<span id="cb152-12"><a href="graph.html#cb152-12" aria-hidden="true"></a>        <span class="co">// Create a queue for BFS</span></span>
+<span id="cb152-13"><a href="graph.html#cb152-13" aria-hidden="true"></a>        <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
+<span id="cb152-14"><a href="graph.html#cb152-14" aria-hidden="true"></a></span>
+<span id="cb152-15"><a href="graph.html#cb152-15" aria-hidden="true"></a>        <span class="co">// Mark the current node as visited and enqueue it</span></span>
+<span id="cb152-16"><a href="graph.html#cb152-16" aria-hidden="true"></a>        visited[root] = <span class="kw">true</span>;</span>
+<span id="cb152-17"><a href="graph.html#cb152-17" aria-hidden="true"></a>        queue.<span class="fu">offer</span>(root);</span>
+<span id="cb152-18"><a href="graph.html#cb152-18" aria-hidden="true"></a></span>
+<span id="cb152-19"><a href="graph.html#cb152-19" aria-hidden="true"></a>        <span class="kw">while</span> (queue.<span class="fu">size</span>() != <span class="dv">0</span>) {</span>
+<span id="cb152-20"><a href="graph.html#cb152-20" aria-hidden="true"></a>            <span class="co">// Dequeue a vertex from queue and print it</span></span>
+<span id="cb152-21"><a href="graph.html#cb152-21" aria-hidden="true"></a>            <span class="bu">Integer</span> node = queue.<span class="fu">poll</span>();</span>
+<span id="cb152-22"><a href="graph.html#cb152-22" aria-hidden="true"></a></span>
+<span id="cb152-23"><a href="graph.html#cb152-23" aria-hidden="true"></a>            <span class="co">// Get all adjacent vertices of the dequeued vertex s</span></span>
+<span id="cb152-24"><a href="graph.html#cb152-24" aria-hidden="true"></a>            <span class="co">// If a adjacent has not been visited, then mark it</span></span>
+<span id="cb152-25"><a href="graph.html#cb152-25" aria-hidden="true"></a>            <span class="co">// visited and enqueue it</span></span>
+<span id="cb152-26"><a href="graph.html#cb152-26" aria-hidden="true"></a>            <span class="kw">for</span>(<span class="bu">Integer</span> adjNode : adj[node]) {</span>
+<span id="cb152-27"><a href="graph.html#cb152-27" aria-hidden="true"></a>                <span class="kw">if</span> (!visited[adjNode] &amp;&amp; !queue.<span class="fu">contain</span>(adjNode)) {</span>
+<span id="cb152-28"><a href="graph.html#cb152-28" aria-hidden="true"></a>                    queue.<span class="fu">offer</span>(adjNode);</span>
+<span id="cb152-29"><a href="graph.html#cb152-29" aria-hidden="true"></a>                }</span>
+<span id="cb152-30"><a href="graph.html#cb152-30" aria-hidden="true"></a>            }</span>
+<span id="cb152-31"><a href="graph.html#cb152-31" aria-hidden="true"></a>        }</span>
+<span id="cb152-32"><a href="graph.html#cb152-32" aria-hidden="true"></a>    }</span>
+<span id="cb152-33"><a href="graph.html#cb152-33" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="topological-sorting" class="section level3" number="5.0.3">
@@ -1208,47 +1209,47 @@ v         v
 <p>In topological sorting, we use a temporary stack. We don’t print the vertex immediately, we first recursively call
 topological sorting for all its adjacent vertices, then push it to a stack. Finally, print contents of stack. The
 final sequence is [5, 4, 2, 3, 1, 0]</p>
-<div id="algorithm-101" class="section level4" number="5.0.3.1">
+<div id="algorithm-102" class="section level4" number="5.0.3.1">
 <h4><span class="header-section-number">5.0.3.1</span> Algorithm</h4>
 <pre><code>topological \@ref(topological), dfs \@ref(dfs)</code></pre>
-<div class="sourceCode" id="cb154"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb154-1"><a href="graph.html#cb154-1" aria-hidden="true"></a><span class="dt">void</span> <span class="fu">helper</span>(<span class="bu">Integer</span> v, <span class="bu">Stack</span> stack) {</span>
-<span id="cb154-2"><a href="graph.html#cb154-2" aria-hidden="true"></a>    visited[v] = <span class="kw">true</span>;</span>
-<span id="cb154-3"><a href="graph.html#cb154-3" aria-hidden="true"></a></span>
-<span id="cb154-4"><a href="graph.html#cb154-4" aria-hidden="true"></a>    <span class="co">// Recur for all the vertices adjacent to this</span></span>
-<span id="cb154-5"><a href="graph.html#cb154-5" aria-hidden="true"></a>    <span class="co">// vertex</span></span>
-<span id="cb154-6"><a href="graph.html#cb154-6" aria-hidden="true"></a>    <span class="bu">Iterator</span>&lt;<span class="bu">Integer</span>&gt; it = adj[v].<span class="fu">iterator</span>();</span>
-<span id="cb154-7"><a href="graph.html#cb154-7" aria-hidden="true"></a>    <span class="kw">while</span> (it.<span class="fu">hasNext</span>()) {</span>
-<span id="cb154-8"><a href="graph.html#cb154-8" aria-hidden="true"></a>        <span class="bu">Integer</span> adjNode = it.<span class="fu">next</span>();</span>
-<span id="cb154-9"><a href="graph.html#cb154-9" aria-hidden="true"></a></span>
-<span id="cb154-10"><a href="graph.html#cb154-10" aria-hidden="true"></a>        <span class="kw">if</span> (!visited[adjNode])  {</span>
-<span id="cb154-11"><a href="graph.html#cb154-11" aria-hidden="true"></a>            <span class="fu">helper</span>(adjNode, visited, stack);</span>
-<span id="cb154-12"><a href="graph.html#cb154-12" aria-hidden="true"></a>        }</span>
-<span id="cb154-13"><a href="graph.html#cb154-13" aria-hidden="true"></a>    }</span>
-<span id="cb154-14"><a href="graph.html#cb154-14" aria-hidden="true"></a></span>
-<span id="cb154-15"><a href="graph.html#cb154-15" aria-hidden="true"></a>    <span class="co">// Push current vertex to stack which stores result</span></span>
-<span id="cb154-16"><a href="graph.html#cb154-16" aria-hidden="true"></a>    stack.<span class="fu">push</span>(<span class="kw">new</span> <span class="bu">Integer</span>(v));</span>
-<span id="cb154-17"><a href="graph.html#cb154-17" aria-hidden="true"></a>}</span>
-<span id="cb154-18"><a href="graph.html#cb154-18" aria-hidden="true"></a></span>
-<span id="cb154-19"><a href="graph.html#cb154-19" aria-hidden="true"></a><span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">topologicalSort</span>(Graph graph) {</span>
-<span id="cb154-20"><a href="graph.html#cb154-20" aria-hidden="true"></a>    <span class="bu">Stack</span>&lt;<span class="bu">Integer</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
-<span id="cb154-21"><a href="graph.html#cb154-21" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb154-22"><a href="graph.html#cb154-22" aria-hidden="true"></a></span>
-<span id="cb154-23"><a href="graph.html#cb154-23" aria-hidden="true"></a>    <span class="co">// Call the recursive helper function to store</span></span>
-<span id="cb154-24"><a href="graph.html#cb154-24" aria-hidden="true"></a>    <span class="co">// Topological Sort starting from all vertices</span></span>
-<span id="cb154-25"><a href="graph.html#cb154-25" aria-hidden="true"></a>    <span class="co">// one by one</span></span>
-<span id="cb154-26"><a href="graph.html#cb154-26" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfVertices; i++) {</span>
-<span id="cb154-27"><a href="graph.html#cb154-27" aria-hidden="true"></a>        <span class="kw">if</span> (visited[i] == <span class="kw">false</span>)  {</span>
-<span id="cb154-28"><a href="graph.html#cb154-28" aria-hidden="true"></a>            <span class="fu">helper</span>(i, visited, stack);</span>
-<span id="cb154-29"><a href="graph.html#cb154-29" aria-hidden="true"></a>        }</span>
-<span id="cb154-30"><a href="graph.html#cb154-30" aria-hidden="true"></a>    }</span>
-<span id="cb154-31"><a href="graph.html#cb154-31" aria-hidden="true"></a></span>
-<span id="cb154-32"><a href="graph.html#cb154-32" aria-hidden="true"></a>    <span class="co">//Now the stack contains the topological sorting of the graph</span></span>
-<span id="cb154-33"><a href="graph.html#cb154-33" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="bu">Integer</span> vertex : stack) {</span>
-<span id="cb154-34"><a href="graph.html#cb154-34" aria-hidden="true"></a>        result.<span class="fu">add</span>(stack.<span class="fu">pop</span>());</span>
-<span id="cb154-35"><a href="graph.html#cb154-35" aria-hidden="true"></a>    }</span>
-<span id="cb154-36"><a href="graph.html#cb154-36" aria-hidden="true"></a></span>
-<span id="cb154-37"><a href="graph.html#cb154-37" aria-hidden="true"></a>    <span class="kw">return</span> result</span>
-<span id="cb154-38"><a href="graph.html#cb154-38" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb155-1"><a href="graph.html#cb155-1" aria-hidden="true"></a><span class="dt">void</span> <span class="fu">helper</span>(<span class="bu">Integer</span> v, <span class="bu">Stack</span> stack) {</span>
+<span id="cb155-2"><a href="graph.html#cb155-2" aria-hidden="true"></a>    visited[v] = <span class="kw">true</span>;</span>
+<span id="cb155-3"><a href="graph.html#cb155-3" aria-hidden="true"></a></span>
+<span id="cb155-4"><a href="graph.html#cb155-4" aria-hidden="true"></a>    <span class="co">// Recur for all the vertices adjacent to this</span></span>
+<span id="cb155-5"><a href="graph.html#cb155-5" aria-hidden="true"></a>    <span class="co">// vertex</span></span>
+<span id="cb155-6"><a href="graph.html#cb155-6" aria-hidden="true"></a>    <span class="bu">Iterator</span>&lt;<span class="bu">Integer</span>&gt; it = adj[v].<span class="fu">iterator</span>();</span>
+<span id="cb155-7"><a href="graph.html#cb155-7" aria-hidden="true"></a>    <span class="kw">while</span> (it.<span class="fu">hasNext</span>()) {</span>
+<span id="cb155-8"><a href="graph.html#cb155-8" aria-hidden="true"></a>        <span class="bu">Integer</span> adjNode = it.<span class="fu">next</span>();</span>
+<span id="cb155-9"><a href="graph.html#cb155-9" aria-hidden="true"></a></span>
+<span id="cb155-10"><a href="graph.html#cb155-10" aria-hidden="true"></a>        <span class="kw">if</span> (!visited[adjNode])  {</span>
+<span id="cb155-11"><a href="graph.html#cb155-11" aria-hidden="true"></a>            <span class="fu">helper</span>(adjNode, visited, stack);</span>
+<span id="cb155-12"><a href="graph.html#cb155-12" aria-hidden="true"></a>        }</span>
+<span id="cb155-13"><a href="graph.html#cb155-13" aria-hidden="true"></a>    }</span>
+<span id="cb155-14"><a href="graph.html#cb155-14" aria-hidden="true"></a></span>
+<span id="cb155-15"><a href="graph.html#cb155-15" aria-hidden="true"></a>    <span class="co">// Push current vertex to stack which stores result</span></span>
+<span id="cb155-16"><a href="graph.html#cb155-16" aria-hidden="true"></a>    stack.<span class="fu">push</span>(<span class="kw">new</span> <span class="bu">Integer</span>(v));</span>
+<span id="cb155-17"><a href="graph.html#cb155-17" aria-hidden="true"></a>}</span>
+<span id="cb155-18"><a href="graph.html#cb155-18" aria-hidden="true"></a></span>
+<span id="cb155-19"><a href="graph.html#cb155-19" aria-hidden="true"></a><span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">topologicalSort</span>(Graph graph) {</span>
+<span id="cb155-20"><a href="graph.html#cb155-20" aria-hidden="true"></a>    <span class="bu">Stack</span>&lt;<span class="bu">Integer</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
+<span id="cb155-21"><a href="graph.html#cb155-21" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb155-22"><a href="graph.html#cb155-22" aria-hidden="true"></a></span>
+<span id="cb155-23"><a href="graph.html#cb155-23" aria-hidden="true"></a>    <span class="co">// Call the recursive helper function to store</span></span>
+<span id="cb155-24"><a href="graph.html#cb155-24" aria-hidden="true"></a>    <span class="co">// Topological Sort starting from all vertices</span></span>
+<span id="cb155-25"><a href="graph.html#cb155-25" aria-hidden="true"></a>    <span class="co">// one by one</span></span>
+<span id="cb155-26"><a href="graph.html#cb155-26" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfVertices; i++) {</span>
+<span id="cb155-27"><a href="graph.html#cb155-27" aria-hidden="true"></a>        <span class="kw">if</span> (visited[i] == <span class="kw">false</span>)  {</span>
+<span id="cb155-28"><a href="graph.html#cb155-28" aria-hidden="true"></a>            <span class="fu">helper</span>(i, visited, stack);</span>
+<span id="cb155-29"><a href="graph.html#cb155-29" aria-hidden="true"></a>        }</span>
+<span id="cb155-30"><a href="graph.html#cb155-30" aria-hidden="true"></a>    }</span>
+<span id="cb155-31"><a href="graph.html#cb155-31" aria-hidden="true"></a></span>
+<span id="cb155-32"><a href="graph.html#cb155-32" aria-hidden="true"></a>    <span class="co">//Now the stack contains the topological sorting of the graph</span></span>
+<span id="cb155-33"><a href="graph.html#cb155-33" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="bu">Integer</span> vertex : stack) {</span>
+<span id="cb155-34"><a href="graph.html#cb155-34" aria-hidden="true"></a>        result.<span class="fu">add</span>(stack.<span class="fu">pop</span>());</span>
+<span id="cb155-35"><a href="graph.html#cb155-35" aria-hidden="true"></a>    }</span>
+<span id="cb155-36"><a href="graph.html#cb155-36" aria-hidden="true"></a></span>
+<span id="cb155-37"><a href="graph.html#cb155-37" aria-hidden="true"></a>    <span class="kw">return</span> result</span>
+<span id="cb155-38"><a href="graph.html#cb155-38" aria-hidden="true"></a>}</span></code></pre></div>
 <p>In BFS implementation of the Topological sort we do the opposite: We look for for edges with no inbound edges
 (). And consequently in BFS implementation we don’t have to reverse the order in which we get the
 vertices, since we get the vertices in order of the topological ordering. We use First-In-First-Out data structure
@@ -1262,50 +1263,50 @@ decrementing.</p>
 <p class="caption">in-degree, out-degree</p>
 </div>
 </div>
-<div id="algorithm-102" class="section level4" number="5.0.3.2">
+<div id="algorithm-103" class="section level4" number="5.0.3.2">
 <h4><span class="header-section-number">5.0.3.2</span> Algorithm</h4>
 <p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
-<div class="sourceCode" id="cb155"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb155-1"><a href="graph.html#cb155-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span> <span class="fu">topological_sort_bfs</span>(<span class="dt">int</span>[][] graph) {</span>
-<span id="cb155-2"><a href="graph.html#cb155-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb155-3"><a href="graph.html#cb155-3" aria-hidden="true"></a>    <span class="dt">int</span>[] indegree = <span class="kw">new</span> <span class="dt">int</span>[numOfVertices];</span>
-<span id="cb155-4"><a href="graph.html#cb155-4" aria-hidden="true"></a></span>
-<span id="cb155-5"><a href="graph.html#cb155-5" aria-hidden="true"></a>    <span class="co">// compute the indegree of all the vertices in the graph</span></span>
-<span id="cb155-6"><a href="graph.html#cb155-6" aria-hidden="true"></a>    <span class="co">// For edge (0,1), indegree[1]++;</span></span>
-<span id="cb155-7"><a href="graph.html#cb155-7" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfVertices; i++) {</span>
-<span id="cb155-8"><a href="graph.html#cb155-8" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="bu">Integer</span> vertex : adj[i]) {</span>
-<span id="cb155-9"><a href="graph.html#cb155-9" aria-hidden="true"></a>            indegree[vertex]++;</span>
-<span id="cb155-10"><a href="graph.html#cb155-10" aria-hidden="true"></a>        }</span>
-<span id="cb155-11"><a href="graph.html#cb155-11" aria-hidden="true"></a>    }</span>
-<span id="cb155-12"><a href="graph.html#cb155-12" aria-hidden="true"></a></span>
-<span id="cb155-13"><a href="graph.html#cb155-13" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb155-14"><a href="graph.html#cb155-14" aria-hidden="true"></a></span>
-<span id="cb155-15"><a href="graph.html#cb155-15" aria-hidden="true"></a>    <span class="co">// initialize the queue with all the vertices with no inbound edges</span></span>
-<span id="cb155-16"><a href="graph.html#cb155-16" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="bu">Integer</span> vertex = <span class="dv">0</span>; index &lt; numOfVertices; index++) {</span>
-<span id="cb155-17"><a href="graph.html#cb155-17" aria-hidden="true"></a>        <span class="kw">if</span> (indegree[vertex] == <span class="dv">0</span>) {</span>
-<span id="cb155-18"><a href="graph.html#cb155-18" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(vertex);</span>
-<span id="cb155-19"><a href="graph.html#cb155-19" aria-hidden="true"></a>        }</span>
-<span id="cb155-20"><a href="graph.html#cb155-20" aria-hidden="true"></a>    }</span>
-<span id="cb155-21"><a href="graph.html#cb155-21" aria-hidden="true"></a></span>
-<span id="cb155-22"><a href="graph.html#cb155-22" aria-hidden="true"></a>    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb155-23"><a href="graph.html#cb155-23" aria-hidden="true"></a>        <span class="bu">Integer</span> vertex = queue.<span class="fu">poll</span>();</span>
-<span id="cb155-24"><a href="graph.html#cb155-24" aria-hidden="true"></a>        result.<span class="fu">add</span>(vertex);</span>
-<span id="cb155-25"><a href="graph.html#cb155-25" aria-hidden="true"></a></span>
-<span id="cb155-26"><a href="graph.html#cb155-26" aria-hidden="true"></a>        <span class="co">// now disconnect vertex1 from the graph</span></span>
-<span id="cb155-27"><a href="graph.html#cb155-27" aria-hidden="true"></a>        <span class="co">// and decrease the indegree of the other end of the edge by 1</span></span>
-<span id="cb155-28"><a href="graph.html#cb155-28" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="bu">Integer</span> adjVertex : adj[i]) {</span>
-<span id="cb155-29"><a href="graph.html#cb155-29" aria-hidden="true"></a>            indegree[adjVertex]--;</span>
-<span id="cb155-30"><a href="graph.html#cb155-30" aria-hidden="true"></a>            <span class="kw">if</span> (indegree[adjVertex] == <span class="dv">0</span>) {</span>
-<span id="cb155-31"><a href="graph.html#cb155-31" aria-hidden="true"></a>                queue.<span class="fu">offer</span>(adjVertex);</span>
-<span id="cb155-32"><a href="graph.html#cb155-32" aria-hidden="true"></a>            }</span>
-<span id="cb155-33"><a href="graph.html#cb155-33" aria-hidden="true"></a>        }</span>
-<span id="cb155-34"><a href="graph.html#cb155-34" aria-hidden="true"></a>    }</span>
-<span id="cb155-35"><a href="graph.html#cb155-35" aria-hidden="true"></a></span>
-<span id="cb155-36"><a href="graph.html#cb155-36" aria-hidden="true"></a>    <span class="co">// check if the graph had a cycle / loop</span></span>
-<span id="cb155-37"><a href="graph.html#cb155-37" aria-hidden="true"></a>    <span class="kw">if</span> (result.<span class="fu">size</span>() != numOfVertices) {</span>
-<span id="cb155-38"><a href="graph.html#cb155-38" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
-<span id="cb155-39"><a href="graph.html#cb155-39" aria-hidden="true"></a>    }</span>
-<span id="cb155-40"><a href="graph.html#cb155-40" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb155-41"><a href="graph.html#cb155-41" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb156-1"><a href="graph.html#cb156-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span> <span class="fu">topological_sort_bfs</span>(<span class="dt">int</span>[][] graph) {</span>
+<span id="cb156-2"><a href="graph.html#cb156-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb156-3"><a href="graph.html#cb156-3" aria-hidden="true"></a>    <span class="dt">int</span>[] indegree = <span class="kw">new</span> <span class="dt">int</span>[numOfVertices];</span>
+<span id="cb156-4"><a href="graph.html#cb156-4" aria-hidden="true"></a></span>
+<span id="cb156-5"><a href="graph.html#cb156-5" aria-hidden="true"></a>    <span class="co">// compute the indegree of all the vertices in the graph</span></span>
+<span id="cb156-6"><a href="graph.html#cb156-6" aria-hidden="true"></a>    <span class="co">// For edge (0,1), indegree[1]++;</span></span>
+<span id="cb156-7"><a href="graph.html#cb156-7" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numOfVertices; i++) {</span>
+<span id="cb156-8"><a href="graph.html#cb156-8" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="bu">Integer</span> vertex : adj[i]) {</span>
+<span id="cb156-9"><a href="graph.html#cb156-9" aria-hidden="true"></a>            indegree[vertex]++;</span>
+<span id="cb156-10"><a href="graph.html#cb156-10" aria-hidden="true"></a>        }</span>
+<span id="cb156-11"><a href="graph.html#cb156-11" aria-hidden="true"></a>    }</span>
+<span id="cb156-12"><a href="graph.html#cb156-12" aria-hidden="true"></a></span>
+<span id="cb156-13"><a href="graph.html#cb156-13" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb156-14"><a href="graph.html#cb156-14" aria-hidden="true"></a></span>
+<span id="cb156-15"><a href="graph.html#cb156-15" aria-hidden="true"></a>    <span class="co">// initialize the queue with all the vertices with no inbound edges</span></span>
+<span id="cb156-16"><a href="graph.html#cb156-16" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="bu">Integer</span> vertex = <span class="dv">0</span>; index &lt; numOfVertices; index++) {</span>
+<span id="cb156-17"><a href="graph.html#cb156-17" aria-hidden="true"></a>        <span class="kw">if</span> (indegree[vertex] == <span class="dv">0</span>) {</span>
+<span id="cb156-18"><a href="graph.html#cb156-18" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(vertex);</span>
+<span id="cb156-19"><a href="graph.html#cb156-19" aria-hidden="true"></a>        }</span>
+<span id="cb156-20"><a href="graph.html#cb156-20" aria-hidden="true"></a>    }</span>
+<span id="cb156-21"><a href="graph.html#cb156-21" aria-hidden="true"></a></span>
+<span id="cb156-22"><a href="graph.html#cb156-22" aria-hidden="true"></a>    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb156-23"><a href="graph.html#cb156-23" aria-hidden="true"></a>        <span class="bu">Integer</span> vertex = queue.<span class="fu">poll</span>();</span>
+<span id="cb156-24"><a href="graph.html#cb156-24" aria-hidden="true"></a>        result.<span class="fu">add</span>(vertex);</span>
+<span id="cb156-25"><a href="graph.html#cb156-25" aria-hidden="true"></a></span>
+<span id="cb156-26"><a href="graph.html#cb156-26" aria-hidden="true"></a>        <span class="co">// now disconnect vertex1 from the graph</span></span>
+<span id="cb156-27"><a href="graph.html#cb156-27" aria-hidden="true"></a>        <span class="co">// and decrease the indegree of the other end of the edge by 1</span></span>
+<span id="cb156-28"><a href="graph.html#cb156-28" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="bu">Integer</span> adjVertex : adj[i]) {</span>
+<span id="cb156-29"><a href="graph.html#cb156-29" aria-hidden="true"></a>            indegree[adjVertex]--;</span>
+<span id="cb156-30"><a href="graph.html#cb156-30" aria-hidden="true"></a>            <span class="kw">if</span> (indegree[adjVertex] == <span class="dv">0</span>) {</span>
+<span id="cb156-31"><a href="graph.html#cb156-31" aria-hidden="true"></a>                queue.<span class="fu">offer</span>(adjVertex);</span>
+<span id="cb156-32"><a href="graph.html#cb156-32" aria-hidden="true"></a>            }</span>
+<span id="cb156-33"><a href="graph.html#cb156-33" aria-hidden="true"></a>        }</span>
+<span id="cb156-34"><a href="graph.html#cb156-34" aria-hidden="true"></a>    }</span>
+<span id="cb156-35"><a href="graph.html#cb156-35" aria-hidden="true"></a></span>
+<span id="cb156-36"><a href="graph.html#cb156-36" aria-hidden="true"></a>    <span class="co">// check if the graph had a cycle / loop</span></span>
+<span id="cb156-37"><a href="graph.html#cb156-37" aria-hidden="true"></a>    <span class="kw">if</span> (result.<span class="fu">size</span>() != numOfVertices) {</span>
+<span id="cb156-38"><a href="graph.html#cb156-38" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
+<span id="cb156-39"><a href="graph.html#cb156-39" aria-hidden="true"></a>    }</span>
+<span id="cb156-40"><a href="graph.html#cb156-40" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb156-41"><a href="graph.html#cb156-41" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

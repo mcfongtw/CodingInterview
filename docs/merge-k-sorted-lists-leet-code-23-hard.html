@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1056,11 +1057,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution---merge-lists-one-by-one" class="section level3" number="6.9.3">
 <h3><span class="header-section-number">6.9.3</span> Solution - Merge lists one by one</h3>
-<div id="walkthrough-114" class="section level4" number="6.9.3.1">
+<div id="walkthrough-115" class="section level4" number="6.9.3.1">
 <h4><span class="header-section-number">6.9.3.1</span> Walkthrough</h4>
 <p>One solution is to leverage the previous problem of merging 2 list.</p>
 </div>
-<div id="analysis-115" class="section level4" number="6.9.3.2">
+<div id="analysis-116" class="section level4" number="6.9.3.2">
 <h4><span class="header-section-number">6.9.3.2</span> Analysis</h4>
 <p>We will need to merge two lists for (k-1) times, where each
 merge() will cost O(n) in time complexity and O(1) in Auxiliary Space. The total cost for merge is
@@ -1068,59 +1069,59 @@ merge() will cost O(n) in time complexity and O(1) in Auxiliary Space. The total
 total node number in k list. and O(1) in Auxiliary Space. However, this would not be an efficient solution if k
 is large.</p>
 </div>
-<div id="algorithm-121" class="section level4" number="6.9.3.3">
+<div id="algorithm-122" class="section level4" number="6.9.3.3">
 <h4><span class="header-section-number">6.9.3.3</span> Algorithm</h4>
 </div>
 <div id="java-code---merge-lists-one-by-one" class="section level4" number="6.9.3.4">
 <h4><span class="header-section-number">6.9.3.4</span> Java Code - Merge lists one by one</h4>
-<div class="sourceCode" id="cb179"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb179-1"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">mergeKLists</span>(ListNode[] lists) {</span>
-<span id="cb179-2"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-2" aria-hidden="true"></a>    <span class="kw">if</span>(lists.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb179-3"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
-<span id="cb179-4"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-4" aria-hidden="true"></a>    }</span>
-<span id="cb179-5"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-5" aria-hidden="true"></a></span>
-<span id="cb179-6"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-6" aria-hidden="true"></a>    ListNode newHead = lists[<span class="dv">0</span>];</span>
-<span id="cb179-7"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-7" aria-hidden="true"></a></span>
-<span id="cb179-8"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-8" aria-hidden="true"></a>    <span class="co">//merge k-1 times</span></span>
-<span id="cb179-9"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; lists.<span class="fu">length</span>; i++) {</span>
-<span id="cb179-10"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-10" aria-hidden="true"></a>        newHead = <span class="fu">merge</span>(newHead, lists[i]);</span>
-<span id="cb179-11"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-11" aria-hidden="true"></a>    }</span>
-<span id="cb179-12"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-12" aria-hidden="true"></a></span>
-<span id="cb179-13"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-13" aria-hidden="true"></a>    <span class="kw">return</span> newHead;</span>
-<span id="cb179-14"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-14" aria-hidden="true"></a>}</span>
-<span id="cb179-15"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-15" aria-hidden="true"></a></span>
-<span id="cb179-16"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-16" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">merge</span>(ListNode l1, ListNode l2) {</span>
-<span id="cb179-17"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-17" aria-hidden="true"></a>    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), current = headPrev;</span>
-<span id="cb179-18"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-18" aria-hidden="true"></a></span>
-<span id="cb179-19"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-19" aria-hidden="true"></a>    <span class="kw">while</span>(l1 != <span class="kw">null</span> &amp;&amp; l2 != <span class="kw">null</span>) {</span>
-<span id="cb179-20"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-20" aria-hidden="true"></a>        <span class="kw">if</span>(l1.<span class="fu">val</span> &lt; l2.<span class="fu">val</span>) {</span>
-<span id="cb179-21"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-21" aria-hidden="true"></a>            <span class="co">//l1 &lt; l2</span></span>
-<span id="cb179-22"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-22" aria-hidden="true"></a>            current.<span class="fu">next</span> = l1;</span>
-<span id="cb179-23"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-23" aria-hidden="true"></a>            l1 = l1.<span class="fu">next</span>;</span>
-<span id="cb179-24"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-24" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb179-25"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-25" aria-hidden="true"></a>            current.<span class="fu">next</span> = l2;</span>
-<span id="cb179-26"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-26" aria-hidden="true"></a>            l2 = l2.<span class="fu">next</span>;</span>
-<span id="cb179-27"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-27" aria-hidden="true"></a>        }</span>
-<span id="cb179-28"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-28" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
-<span id="cb179-29"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-29" aria-hidden="true"></a>    }</span>
-<span id="cb179-30"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-30" aria-hidden="true"></a></span>
-<span id="cb179-31"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-31" aria-hidden="true"></a>    <span class="co">// connect to the rest of the remaining nodes</span></span>
-<span id="cb179-32"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-32" aria-hidden="true"></a>    <span class="kw">if</span>(l1 != <span class="kw">null</span>) {</span>
-<span id="cb179-33"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-33" aria-hidden="true"></a>        current.<span class="fu">next</span> = l1;</span>
-<span id="cb179-34"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-34" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb179-35"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-35" aria-hidden="true"></a>        current.<span class="fu">next</span> = l2;</span>
-<span id="cb179-36"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-36" aria-hidden="true"></a>    }</span>
-<span id="cb179-37"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-37" aria-hidden="true"></a></span>
-<span id="cb179-38"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-38" aria-hidden="true"></a>    <span class="kw">return</span> headPrev.<span class="fu">next</span>;</span>
-<span id="cb179-39"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb179-39" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb180"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb180-1"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">mergeKLists</span>(ListNode[] lists) {</span>
+<span id="cb180-2"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-2" aria-hidden="true"></a>    <span class="kw">if</span>(lists.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb180-3"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb180-4"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-4" aria-hidden="true"></a>    }</span>
+<span id="cb180-5"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-5" aria-hidden="true"></a></span>
+<span id="cb180-6"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-6" aria-hidden="true"></a>    ListNode newHead = lists[<span class="dv">0</span>];</span>
+<span id="cb180-7"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-7" aria-hidden="true"></a></span>
+<span id="cb180-8"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-8" aria-hidden="true"></a>    <span class="co">//merge k-1 times</span></span>
+<span id="cb180-9"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; lists.<span class="fu">length</span>; i++) {</span>
+<span id="cb180-10"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-10" aria-hidden="true"></a>        newHead = <span class="fu">merge</span>(newHead, lists[i]);</span>
+<span id="cb180-11"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-11" aria-hidden="true"></a>    }</span>
+<span id="cb180-12"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-12" aria-hidden="true"></a></span>
+<span id="cb180-13"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-13" aria-hidden="true"></a>    <span class="kw">return</span> newHead;</span>
+<span id="cb180-14"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-14" aria-hidden="true"></a>}</span>
+<span id="cb180-15"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-15" aria-hidden="true"></a></span>
+<span id="cb180-16"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-16" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">merge</span>(ListNode l1, ListNode l2) {</span>
+<span id="cb180-17"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-17" aria-hidden="true"></a>    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), current = headPrev;</span>
+<span id="cb180-18"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-18" aria-hidden="true"></a></span>
+<span id="cb180-19"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-19" aria-hidden="true"></a>    <span class="kw">while</span>(l1 != <span class="kw">null</span> &amp;&amp; l2 != <span class="kw">null</span>) {</span>
+<span id="cb180-20"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-20" aria-hidden="true"></a>        <span class="kw">if</span>(l1.<span class="fu">val</span> &lt; l2.<span class="fu">val</span>) {</span>
+<span id="cb180-21"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-21" aria-hidden="true"></a>            <span class="co">//l1 &lt; l2</span></span>
+<span id="cb180-22"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-22" aria-hidden="true"></a>            current.<span class="fu">next</span> = l1;</span>
+<span id="cb180-23"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-23" aria-hidden="true"></a>            l1 = l1.<span class="fu">next</span>;</span>
+<span id="cb180-24"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-24" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb180-25"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-25" aria-hidden="true"></a>            current.<span class="fu">next</span> = l2;</span>
+<span id="cb180-26"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-26" aria-hidden="true"></a>            l2 = l2.<span class="fu">next</span>;</span>
+<span id="cb180-27"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-27" aria-hidden="true"></a>        }</span>
+<span id="cb180-28"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-28" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
+<span id="cb180-29"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-29" aria-hidden="true"></a>    }</span>
+<span id="cb180-30"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-30" aria-hidden="true"></a></span>
+<span id="cb180-31"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-31" aria-hidden="true"></a>    <span class="co">// connect to the rest of the remaining nodes</span></span>
+<span id="cb180-32"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-32" aria-hidden="true"></a>    <span class="kw">if</span>(l1 != <span class="kw">null</span>) {</span>
+<span id="cb180-33"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-33" aria-hidden="true"></a>        current.<span class="fu">next</span> = l1;</span>
+<span id="cb180-34"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-34" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb180-35"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-35" aria-hidden="true"></a>        current.<span class="fu">next</span> = l2;</span>
+<span id="cb180-36"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-36" aria-hidden="true"></a>    }</span>
+<span id="cb180-37"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-37" aria-hidden="true"></a></span>
+<span id="cb180-38"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-38" aria-hidden="true"></a>    <span class="kw">return</span> headPrev.<span class="fu">next</span>;</span>
+<span id="cb180-39"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-39" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---min-heap" class="section level3" number="6.9.4">
 <h3><span class="header-section-number">6.9.4</span> Solution - Min Heap</h3>
-<div id="walkthrough-115" class="section level4" number="6.9.4.1">
+<div id="walkthrough-116" class="section level4" number="6.9.4.1">
 <h4><span class="header-section-number">6.9.4.1</span> Walkthrough</h4>
 <p>We could compare every leading elements in k lists and retrieve the node with the smallest value using Min Heap.</p>
 </div>
-<div id="analysis-116" class="section level4" number="6.9.4.2">
+<div id="analysis-117" class="section level4" number="6.9.4.2">
 <h4><span class="header-section-number">6.9.4.2</span> Analysis</h4>
 <p>Since the original k lists were sorted, therefore, we could retrieve all <span class="math inline">\(n \cdot k\)</span> elements in
 sorted order by retrieve the min element from PriorityQueue (min heap). The comparison cost is O(log k) for every pop
@@ -1128,54 +1129,54 @@ and insertion to the priority queue since there are at most k elements (from k l
 a total number of n nodes in all lists. Thus, the overall time complexity is <span class="math inline">\(O(\log k \cdot n)\)</span> and Auxiliary Space
 for the ﬁnal list is O(n), where n is the total node number in all k lists.</p>
 </div>
-<div id="algorithm-122" class="section level4" number="6.9.4.3">
+<div id="algorithm-123" class="section level4" number="6.9.4.3">
 <h4><span class="header-section-number">6.9.4.3</span> Algorithm</h4>
 <p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a>, heap <a href="glossary-of-algorithm.html#heap">1.2.15</a></p>
 </div>
 <div id="java-code---min-heap" class="section level4" number="6.9.4.4">
 <h4><span class="header-section-number">6.9.4.4</span> Java Code - Min Heap</h4>
-<div class="sourceCode" id="cb180"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb180-1"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">mergeKLists</span>(ListNode[] lists) {</span>
-<span id="cb180-2"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-2" aria-hidden="true"></a>    <span class="kw">if</span>(lists.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb180-3"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
-<span id="cb180-4"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-4" aria-hidden="true"></a>    }</span>
-<span id="cb180-5"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-5" aria-hidden="true"></a></span>
-<span id="cb180-6"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-6" aria-hidden="true"></a>    ListNode head = <span class="kw">null</span>, current = <span class="kw">null</span>;</span>
-<span id="cb180-7"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-7" aria-hidden="true"></a></span>
-<span id="cb180-8"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-8" aria-hidden="true"></a>    <span class="bu">PriorityQueue</span>&lt;ListNode&gt; queue = <span class="kw">new</span> <span class="bu">PriorityQueue</span>&lt;&gt;(<span class="kw">new</span> <span class="bu">Comparator</span>&lt;ListNode&gt;() {</span>
-<span id="cb180-9"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-9" aria-hidden="true"></a>        <span class="at">@Override</span></span>
-<span id="cb180-10"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-10" aria-hidden="true"></a>        <span class="kw">public</span> <span class="dt">int</span> <span class="fu">compare</span>(ListNode node1, ListNode node2) {</span>
-<span id="cb180-11"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-11" aria-hidden="true"></a>            <span class="kw">return</span> node1.<span class="fu">val</span> - node2.<span class="fu">val</span>;</span>
-<span id="cb180-12"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-12" aria-hidden="true"></a>        }</span>
-<span id="cb180-13"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-13" aria-hidden="true"></a>    });</span>
-<span id="cb180-14"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-14" aria-hidden="true"></a></span>
-<span id="cb180-15"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-15" aria-hidden="true"></a>    <span class="co">//insert all heads into the priority queue</span></span>
-<span id="cb180-16"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-16" aria-hidden="true"></a>    <span class="kw">for</span>(ListNode headOfList : lists) {</span>
-<span id="cb180-17"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-17" aria-hidden="true"></a>        <span class="kw">if</span>(headOfList != <span class="kw">null</span>) {</span>
-<span id="cb180-18"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-18" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(headOfList);</span>
-<span id="cb180-19"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-19" aria-hidden="true"></a>        }</span>
-<span id="cb180-20"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-20" aria-hidden="true"></a>    }</span>
-<span id="cb180-21"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-21" aria-hidden="true"></a></span>
-<span id="cb180-22"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-22" aria-hidden="true"></a></span>
-<span id="cb180-23"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-23" aria-hidden="true"></a>    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb180-24"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-24" aria-hidden="true"></a>        ListNode node = queue.<span class="fu">poll</span>();</span>
-<span id="cb180-25"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-25" aria-hidden="true"></a></span>
-<span id="cb180-26"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-26" aria-hidden="true"></a>        <span class="co">//add next node into priority queue</span></span>
-<span id="cb180-27"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-27" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">next</span> != <span class="kw">null</span>) {</span>
-<span id="cb180-28"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-28" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(node.<span class="fu">next</span>);</span>
-<span id="cb180-29"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-29" aria-hidden="true"></a>        }</span>
-<span id="cb180-30"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-30" aria-hidden="true"></a></span>
-<span id="cb180-31"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-31" aria-hidden="true"></a>        <span class="co">// construct the list with the min element from queue</span></span>
-<span id="cb180-32"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-32" aria-hidden="true"></a>        <span class="kw">if</span>(head == <span class="kw">null</span>) {</span>
-<span id="cb180-33"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-33" aria-hidden="true"></a>            head = node;</span>
-<span id="cb180-34"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-34" aria-hidden="true"></a>            current = node;</span>
-<span id="cb180-35"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-35" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb180-36"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-36" aria-hidden="true"></a>            current.<span class="fu">next</span> = node;</span>
-<span id="cb180-37"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-37" aria-hidden="true"></a>            current = current.<span class="fu">next</span>;</span>
-<span id="cb180-38"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-38" aria-hidden="true"></a>        }</span>
-<span id="cb180-39"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-39" aria-hidden="true"></a>    }</span>
-<span id="cb180-40"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-40" aria-hidden="true"></a></span>
-<span id="cb180-41"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-41" aria-hidden="true"></a>    <span class="kw">return</span> head;</span>
-<span id="cb180-42"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb180-42" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb181"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb181-1"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">mergeKLists</span>(ListNode[] lists) {</span>
+<span id="cb181-2"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-2" aria-hidden="true"></a>    <span class="kw">if</span>(lists.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb181-3"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb181-4"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-4" aria-hidden="true"></a>    }</span>
+<span id="cb181-5"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-5" aria-hidden="true"></a></span>
+<span id="cb181-6"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-6" aria-hidden="true"></a>    ListNode head = <span class="kw">null</span>, current = <span class="kw">null</span>;</span>
+<span id="cb181-7"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-7" aria-hidden="true"></a></span>
+<span id="cb181-8"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-8" aria-hidden="true"></a>    <span class="bu">PriorityQueue</span>&lt;ListNode&gt; queue = <span class="kw">new</span> <span class="bu">PriorityQueue</span>&lt;&gt;(<span class="kw">new</span> <span class="bu">Comparator</span>&lt;ListNode&gt;() {</span>
+<span id="cb181-9"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-9" aria-hidden="true"></a>        <span class="at">@Override</span></span>
+<span id="cb181-10"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-10" aria-hidden="true"></a>        <span class="kw">public</span> <span class="dt">int</span> <span class="fu">compare</span>(ListNode node1, ListNode node2) {</span>
+<span id="cb181-11"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-11" aria-hidden="true"></a>            <span class="kw">return</span> node1.<span class="fu">val</span> - node2.<span class="fu">val</span>;</span>
+<span id="cb181-12"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-12" aria-hidden="true"></a>        }</span>
+<span id="cb181-13"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-13" aria-hidden="true"></a>    });</span>
+<span id="cb181-14"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-14" aria-hidden="true"></a></span>
+<span id="cb181-15"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-15" aria-hidden="true"></a>    <span class="co">//insert all heads into the priority queue</span></span>
+<span id="cb181-16"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-16" aria-hidden="true"></a>    <span class="kw">for</span>(ListNode headOfList : lists) {</span>
+<span id="cb181-17"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-17" aria-hidden="true"></a>        <span class="kw">if</span>(headOfList != <span class="kw">null</span>) {</span>
+<span id="cb181-18"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-18" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(headOfList);</span>
+<span id="cb181-19"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-19" aria-hidden="true"></a>        }</span>
+<span id="cb181-20"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-20" aria-hidden="true"></a>    }</span>
+<span id="cb181-21"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-21" aria-hidden="true"></a></span>
+<span id="cb181-22"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-22" aria-hidden="true"></a></span>
+<span id="cb181-23"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-23" aria-hidden="true"></a>    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb181-24"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-24" aria-hidden="true"></a>        ListNode node = queue.<span class="fu">poll</span>();</span>
+<span id="cb181-25"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-25" aria-hidden="true"></a></span>
+<span id="cb181-26"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-26" aria-hidden="true"></a>        <span class="co">//add next node into priority queue</span></span>
+<span id="cb181-27"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-27" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">next</span> != <span class="kw">null</span>) {</span>
+<span id="cb181-28"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-28" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(node.<span class="fu">next</span>);</span>
+<span id="cb181-29"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-29" aria-hidden="true"></a>        }</span>
+<span id="cb181-30"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-30" aria-hidden="true"></a></span>
+<span id="cb181-31"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-31" aria-hidden="true"></a>        <span class="co">// construct the list with the min element from queue</span></span>
+<span id="cb181-32"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-32" aria-hidden="true"></a>        <span class="kw">if</span>(head == <span class="kw">null</span>) {</span>
+<span id="cb181-33"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-33" aria-hidden="true"></a>            head = node;</span>
+<span id="cb181-34"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-34" aria-hidden="true"></a>            current = node;</span>
+<span id="cb181-35"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-35" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb181-36"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-36" aria-hidden="true"></a>            current.<span class="fu">next</span> = node;</span>
+<span id="cb181-37"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-37" aria-hidden="true"></a>            current = current.<span class="fu">next</span>;</span>
+<span id="cb181-38"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-38" aria-hidden="true"></a>        }</span>
+<span id="cb181-39"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-39" aria-hidden="true"></a>    }</span>
+<span id="cb181-40"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-40" aria-hidden="true"></a></span>
+<span id="cb181-41"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-41" aria-hidden="true"></a>    <span class="kw">return</span> head;</span>
+<span id="cb181-42"><a href="merge-k-sorted-lists-leet-code-23-hard.html#cb181-42" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

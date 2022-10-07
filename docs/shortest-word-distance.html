@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1059,52 +1060,52 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution-34" class="section level3" number="2.40.3">
 <h3><span class="header-section-number">2.40.3</span> Solution</h3>
-<div id="walkthrough-43" class="section level4" number="2.40.3.1">
+<div id="walkthrough-44" class="section level4" number="2.40.3.1">
 <h4><span class="header-section-number">2.40.3.1</span> Walkthrough</h4>
 <p>Record the indices for each word. Retrieve the minimum distance between two group of indices.</p>
 </div>
-<div id="analysis-43" class="section level4" number="2.40.3.2">
+<div id="analysis-44" class="section level4" number="2.40.3.2">
 <h4><span class="header-section-number">2.40.3.2</span> Analysis</h4>
 <p>Each word in the list is visited once, and each index in both list is visited once. Thus time complexity is O(n),
 where the Auxiliary Space is O(n) for storing indices.</p>
 </div>
-<div id="algorithm-43" class="section level4" number="2.40.3.3">
+<div id="algorithm-44" class="section level4" number="2.40.3.3">
 <h4><span class="header-section-number">2.40.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-34" class="section level4" number="2.40.3.4">
+<div id="java-code-36" class="section level4" number="2.40.3.4">
 <h4><span class="header-section-number">2.40.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb57"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb57-1"><a href="shortest-word-distance.html#cb57-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">shortestDistance</span>(<span class="bu">String</span>[] words, <span class="bu">String</span> word1, <span class="bu">String</span> word2) {</span>
-<span id="cb57-2"><a href="shortest-word-distance.html#cb57-2" aria-hidden="true"></a>    <span class="co">// list of indices for word1 and word2 in the array respectively.</span></span>
-<span id="cb57-3"><a href="shortest-word-distance.html#cb57-3" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list1 = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb57-4"><a href="shortest-word-distance.html#cb57-4" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list2 = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb57-5"><a href="shortest-word-distance.html#cb57-5" aria-hidden="true"></a></span>
-<span id="cb57-6"><a href="shortest-word-distance.html#cb57-6" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; words.<span class="fu">length</span>; i++) {</span>
-<span id="cb57-7"><a href="shortest-word-distance.html#cb57-7" aria-hidden="true"></a>        <span class="kw">if</span>(words[i].<span class="fu">equals</span>(word1)) {</span>
-<span id="cb57-8"><a href="shortest-word-distance.html#cb57-8" aria-hidden="true"></a>            list1.<span class="fu">add</span>(i);</span>
-<span id="cb57-9"><a href="shortest-word-distance.html#cb57-9" aria-hidden="true"></a>        } <span class="kw">else</span> <span class="kw">if</span>(words[i].<span class="fu">equals</span>(word2)) {</span>
-<span id="cb57-10"><a href="shortest-word-distance.html#cb57-10" aria-hidden="true"></a>            list2.<span class="fu">add</span>(i);</span>
-<span id="cb57-11"><a href="shortest-word-distance.html#cb57-11" aria-hidden="true"></a>        }</span>
-<span id="cb57-12"><a href="shortest-word-distance.html#cb57-12" aria-hidden="true"></a>    }</span>
-<span id="cb57-13"><a href="shortest-word-distance.html#cb57-13" aria-hidden="true"></a></span>
-<span id="cb57-14"><a href="shortest-word-distance.html#cb57-14" aria-hidden="true"></a>    <span class="dt">int</span> min = words.<span class="fu">length</span>;</span>
-<span id="cb57-15"><a href="shortest-word-distance.html#cb57-15" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>, j = <span class="dv">0</span>; i &lt; list1.<span class="fu">size</span>() &amp;&amp; j &lt; list2.<span class="fu">size</span>();) {</span>
-<span id="cb57-16"><a href="shortest-word-distance.html#cb57-16" aria-hidden="true"></a>        <span class="dt">int</span> index1 = list1.<span class="fu">get</span>(i);</span>
-<span id="cb57-17"><a href="shortest-word-distance.html#cb57-17" aria-hidden="true"></a>        <span class="dt">int</span> index2 = list2.<span class="fu">get</span>(i);</span>
-<span id="cb57-18"><a href="shortest-word-distance.html#cb57-18" aria-hidden="true"></a></span>
-<span id="cb57-19"><a href="shortest-word-distance.html#cb57-19" aria-hidden="true"></a>        min = <span class="bu">Math</span>.<span class="fu">min</span>(min, <span class="bu">Math</span>.<span class="fu">abs</span>(index1 - index2));</span>
-<span id="cb57-20"><a href="shortest-word-distance.html#cb57-20" aria-hidden="true"></a></span>
-<span id="cb57-21"><a href="shortest-word-distance.html#cb57-21" aria-hidden="true"></a>        <span class="kw">if</span>(index1 &lt; index2) {</span>
-<span id="cb57-22"><a href="shortest-word-distance.html#cb57-22" aria-hidden="true"></a>            i++;</span>
-<span id="cb57-23"><a href="shortest-word-distance.html#cb57-23" aria-hidden="true"></a>        } <span class="kw">else</span> <span class="kw">if</span>(index1 &gt; index2) {</span>
-<span id="cb57-24"><a href="shortest-word-distance.html#cb57-24" aria-hidden="true"></a>            j++;</span>
-<span id="cb57-25"><a href="shortest-word-distance.html#cb57-25" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb57-26"><a href="shortest-word-distance.html#cb57-26" aria-hidden="true"></a>            <span class="co">// comparing the same indices</span></span>
-<span id="cb57-27"><a href="shortest-word-distance.html#cb57-27" aria-hidden="true"></a>            <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb57-28"><a href="shortest-word-distance.html#cb57-28" aria-hidden="true"></a>        }</span>
-<span id="cb57-29"><a href="shortest-word-distance.html#cb57-29" aria-hidden="true"></a>    }</span>
-<span id="cb57-30"><a href="shortest-word-distance.html#cb57-30" aria-hidden="true"></a></span>
-<span id="cb57-31"><a href="shortest-word-distance.html#cb57-31" aria-hidden="true"></a>    <span class="kw">return</span> min;</span>
-<span id="cb57-32"><a href="shortest-word-distance.html#cb57-32" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb58-1"><a href="shortest-word-distance.html#cb58-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">shortestDistance</span>(<span class="bu">String</span>[] words, <span class="bu">String</span> word1, <span class="bu">String</span> word2) {</span>
+<span id="cb58-2"><a href="shortest-word-distance.html#cb58-2" aria-hidden="true"></a>    <span class="co">// list of indices for word1 and word2 in the array respectively.</span></span>
+<span id="cb58-3"><a href="shortest-word-distance.html#cb58-3" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list1 = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb58-4"><a href="shortest-word-distance.html#cb58-4" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list2 = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb58-5"><a href="shortest-word-distance.html#cb58-5" aria-hidden="true"></a></span>
+<span id="cb58-6"><a href="shortest-word-distance.html#cb58-6" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; words.<span class="fu">length</span>; i++) {</span>
+<span id="cb58-7"><a href="shortest-word-distance.html#cb58-7" aria-hidden="true"></a>        <span class="kw">if</span>(words[i].<span class="fu">equals</span>(word1)) {</span>
+<span id="cb58-8"><a href="shortest-word-distance.html#cb58-8" aria-hidden="true"></a>            list1.<span class="fu">add</span>(i);</span>
+<span id="cb58-9"><a href="shortest-word-distance.html#cb58-9" aria-hidden="true"></a>        } <span class="kw">else</span> <span class="kw">if</span>(words[i].<span class="fu">equals</span>(word2)) {</span>
+<span id="cb58-10"><a href="shortest-word-distance.html#cb58-10" aria-hidden="true"></a>            list2.<span class="fu">add</span>(i);</span>
+<span id="cb58-11"><a href="shortest-word-distance.html#cb58-11" aria-hidden="true"></a>        }</span>
+<span id="cb58-12"><a href="shortest-word-distance.html#cb58-12" aria-hidden="true"></a>    }</span>
+<span id="cb58-13"><a href="shortest-word-distance.html#cb58-13" aria-hidden="true"></a></span>
+<span id="cb58-14"><a href="shortest-word-distance.html#cb58-14" aria-hidden="true"></a>    <span class="dt">int</span> min = words.<span class="fu">length</span>;</span>
+<span id="cb58-15"><a href="shortest-word-distance.html#cb58-15" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>, j = <span class="dv">0</span>; i &lt; list1.<span class="fu">size</span>() &amp;&amp; j &lt; list2.<span class="fu">size</span>();) {</span>
+<span id="cb58-16"><a href="shortest-word-distance.html#cb58-16" aria-hidden="true"></a>        <span class="dt">int</span> index1 = list1.<span class="fu">get</span>(i);</span>
+<span id="cb58-17"><a href="shortest-word-distance.html#cb58-17" aria-hidden="true"></a>        <span class="dt">int</span> index2 = list2.<span class="fu">get</span>(i);</span>
+<span id="cb58-18"><a href="shortest-word-distance.html#cb58-18" aria-hidden="true"></a></span>
+<span id="cb58-19"><a href="shortest-word-distance.html#cb58-19" aria-hidden="true"></a>        min = <span class="bu">Math</span>.<span class="fu">min</span>(min, <span class="bu">Math</span>.<span class="fu">abs</span>(index1 - index2));</span>
+<span id="cb58-20"><a href="shortest-word-distance.html#cb58-20" aria-hidden="true"></a></span>
+<span id="cb58-21"><a href="shortest-word-distance.html#cb58-21" aria-hidden="true"></a>        <span class="kw">if</span>(index1 &lt; index2) {</span>
+<span id="cb58-22"><a href="shortest-word-distance.html#cb58-22" aria-hidden="true"></a>            i++;</span>
+<span id="cb58-23"><a href="shortest-word-distance.html#cb58-23" aria-hidden="true"></a>        } <span class="kw">else</span> <span class="kw">if</span>(index1 &gt; index2) {</span>
+<span id="cb58-24"><a href="shortest-word-distance.html#cb58-24" aria-hidden="true"></a>            j++;</span>
+<span id="cb58-25"><a href="shortest-word-distance.html#cb58-25" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb58-26"><a href="shortest-word-distance.html#cb58-26" aria-hidden="true"></a>            <span class="co">// comparing the same indices</span></span>
+<span id="cb58-27"><a href="shortest-word-distance.html#cb58-27" aria-hidden="true"></a>            <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb58-28"><a href="shortest-word-distance.html#cb58-28" aria-hidden="true"></a>        }</span>
+<span id="cb58-29"><a href="shortest-word-distance.html#cb58-29" aria-hidden="true"></a>    }</span>
+<span id="cb58-30"><a href="shortest-word-distance.html#cb58-30" aria-hidden="true"></a></span>
+<span id="cb58-31"><a href="shortest-word-distance.html#cb58-31" aria-hidden="true"></a>    <span class="kw">return</span> min;</span>
+<span id="cb58-32"><a href="shortest-word-distance.html#cb58-32" aria-hidden="true"></a>}</span></code></pre></div>
 
 </div>
 </div>

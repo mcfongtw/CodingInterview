@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1063,7 +1064,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution---backtrack-with-memoization-1" class="section level3" number="2.16.3">
 <h3><span class="header-section-number">2.16.3</span> Solution - Backtrack with Memoization</h3>
-<div id="walkthrough-16" class="section level4" number="2.16.3.1">
+<div id="walkthrough-17" class="section level4" number="2.16.3.1">
 <h4><span class="header-section-number">2.16.3.1</span> Walkthrough</h4>
 <p>While we enumerate all possible enumerate with recursive nature, we need to maintain a visited flag for each element
 to ensure that same element (or same value) would not be processed again. Thus, we could define the following skipping
@@ -1073,57 +1074,57 @@ conditions:</p>
 <li>The current[i] element is the same (value) as the previously[i-1] visited element.</li>
 </ul>
 </div>
-<div id="analysis-16" class="section level4" number="2.16.3.2">
+<div id="analysis-17" class="section level4" number="2.16.3.2">
 <h4><span class="header-section-number">2.16.3.2</span> Analysis</h4>
 <p>Time complexity <span class="math inline">\(O(n!)\)</span> with memoization to skip some subproblems.</p>
 </div>
-<div id="algorithm-16" class="section level4" number="2.16.3.3">
+<div id="algorithm-17" class="section level4" number="2.16.3.3">
 <h4><span class="header-section-number">2.16.3.3</span> Algorithm</h4>
 <p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, memoization <a href="glossary-of-algorithm.html#memo">1.2.8</a></p>
 </div>
 <div id="java-code---backtrack-with-memoization-1" class="section level4" number="2.16.3.4">
 <h4><span class="header-section-number">2.16.3.4</span> Java Code - Backtrack with Memoization</h4>
-<div class="sourceCode" id="cb23"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb23-1"><a href="permutations-ii-leetcode-47-medium.html#cb23-1" aria-hidden="true"></a><span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result= <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb23-2"><a href="permutations-ii-leetcode-47-medium.html#cb23-2" aria-hidden="true"></a></span>
-<span id="cb23-3"><a href="permutations-ii-leetcode-47-medium.html#cb23-3" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">permuteUnique</span>(<span class="dt">int</span>[] nums) {</span>
-<span id="cb23-4"><a href="permutations-ii-leetcode-47-medium.html#cb23-4" aria-hidden="true"></a>    <span class="dt">boolean</span> visited[] = <span class="kw">new</span> <span class="dt">boolean</span>[nums.<span class="fu">length</span>];</span>
-<span id="cb23-5"><a href="permutations-ii-leetcode-47-medium.html#cb23-5" aria-hidden="true"></a></span>
-<span id="cb23-6"><a href="permutations-ii-leetcode-47-medium.html#cb23-6" aria-hidden="true"></a>    <span class="co">//Sort the array</span></span>
-<span id="cb23-7"><a href="permutations-ii-leetcode-47-medium.html#cb23-7" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">sort</span>(nums);</span>
-<span id="cb23-8"><a href="permutations-ii-leetcode-47-medium.html#cb23-8" aria-hidden="true"></a>    <span class="fu">backtrack</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(), nums, visited);</span>
-<span id="cb23-9"><a href="permutations-ii-leetcode-47-medium.html#cb23-9" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb23-10"><a href="permutations-ii-leetcode-47-medium.html#cb23-10" aria-hidden="true"></a>}</span>
-<span id="cb23-11"><a href="permutations-ii-leetcode-47-medium.html#cb23-11" aria-hidden="true"></a></span>
-<span id="cb23-12"><a href="permutations-ii-leetcode-47-medium.html#cb23-12" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">backtrack</span>(<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list, <span class="dt">int</span> [] nums, <span class="dt">boolean</span>[] visited){</span>
-<span id="cb23-13"><a href="permutations-ii-leetcode-47-medium.html#cb23-13" aria-hidden="true"></a>    <span class="kw">if</span>(list.<span class="fu">size</span>() == nums.<span class="fu">length</span>){</span>
-<span id="cb23-14"><a href="permutations-ii-leetcode-47-medium.html#cb23-14" aria-hidden="true"></a>        <span class="co">//copy elements from the current list</span></span>
-<span id="cb23-15"><a href="permutations-ii-leetcode-47-medium.html#cb23-15" aria-hidden="true"></a>        result.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(list));</span>
-<span id="cb23-16"><a href="permutations-ii-leetcode-47-medium.html#cb23-16" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
-<span id="cb23-17"><a href="permutations-ii-leetcode-47-medium.html#cb23-17" aria-hidden="true"></a>    }</span>
-<span id="cb23-18"><a href="permutations-ii-leetcode-47-medium.html#cb23-18" aria-hidden="true"></a></span>
-<span id="cb23-19"><a href="permutations-ii-leetcode-47-medium.html#cb23-19" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++){</span>
-<span id="cb23-20"><a href="permutations-ii-leetcode-47-medium.html#cb23-20" aria-hidden="true"></a>        <span class="kw">if</span>(visited[i] == <span class="kw">true</span> || (i &gt; <span class="dv">0</span> &amp;&amp; visited[i-<span class="dv">1</span>] == <span class="kw">false</span> &amp;&amp; nums[i] == nums[i-<span class="dv">1</span>])) {</span>
-<span id="cb23-21"><a href="permutations-ii-leetcode-47-medium.html#cb23-21" aria-hidden="true"></a>            <span class="co">/*</span></span>
-<span id="cb23-22"><a href="permutations-ii-leetcode-47-medium.html#cb23-22" aria-hidden="true"></a><span class="co">            * Skip the permutation if any of the condition satisifies:</span></span>
-<span id="cb23-23"><a href="permutations-ii-leetcode-47-medium.html#cb23-23" aria-hidden="true"></a><span class="co">            * 1) The current[i] element has been visited.</span></span>
-<span id="cb23-24"><a href="permutations-ii-leetcode-47-medium.html#cb23-24" aria-hidden="true"></a><span class="co">            * 2) The current[i] element is the same (value) as the previously[i-1] visited element.</span></span>
-<span id="cb23-25"><a href="permutations-ii-leetcode-47-medium.html#cb23-25" aria-hidden="true"></a><span class="co">            */</span></span>
-<span id="cb23-26"><a href="permutations-ii-leetcode-47-medium.html#cb23-26" aria-hidden="true"></a>            <span class="kw">continue</span>;</span>
-<span id="cb23-27"><a href="permutations-ii-leetcode-47-medium.html#cb23-27" aria-hidden="true"></a>        }</span>
-<span id="cb23-28"><a href="permutations-ii-leetcode-47-medium.html#cb23-28" aria-hidden="true"></a></span>
-<span id="cb23-29"><a href="permutations-ii-leetcode-47-medium.html#cb23-29" aria-hidden="true"></a>        <span class="bu">Integer</span> element = nums[i];</span>
-<span id="cb23-30"><a href="permutations-ii-leetcode-47-medium.html#cb23-30" aria-hidden="true"></a></span>
-<span id="cb23-31"><a href="permutations-ii-leetcode-47-medium.html#cb23-31" aria-hidden="true"></a>        <span class="co">//add a new element</span></span>
-<span id="cb23-32"><a href="permutations-ii-leetcode-47-medium.html#cb23-32" aria-hidden="true"></a>        list.<span class="fu">add</span>(element);</span>
-<span id="cb23-33"><a href="permutations-ii-leetcode-47-medium.html#cb23-33" aria-hidden="true"></a>        visited[i] = <span class="kw">true</span>;</span>
-<span id="cb23-34"><a href="permutations-ii-leetcode-47-medium.html#cb23-34" aria-hidden="true"></a></span>
-<span id="cb23-35"><a href="permutations-ii-leetcode-47-medium.html#cb23-35" aria-hidden="true"></a>        <span class="fu">backtrack</span>(list, nums, visited);</span>
-<span id="cb23-36"><a href="permutations-ii-leetcode-47-medium.html#cb23-36" aria-hidden="true"></a></span>
-<span id="cb23-37"><a href="permutations-ii-leetcode-47-medium.html#cb23-37" aria-hidden="true"></a>        <span class="co">//backtrack the last element</span></span>
-<span id="cb23-38"><a href="permutations-ii-leetcode-47-medium.html#cb23-38" aria-hidden="true"></a>        list.<span class="fu">remove</span>(list.<span class="fu">size</span>()-<span class="dv">1</span>);</span>
-<span id="cb23-39"><a href="permutations-ii-leetcode-47-medium.html#cb23-39" aria-hidden="true"></a>        visited[i] = <span class="kw">false</span>;</span>
-<span id="cb23-40"><a href="permutations-ii-leetcode-47-medium.html#cb23-40" aria-hidden="true"></a>    }</span>
-<span id="cb23-41"><a href="permutations-ii-leetcode-47-medium.html#cb23-41" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb24-1"><a href="permutations-ii-leetcode-47-medium.html#cb24-1" aria-hidden="true"></a><span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result= <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb24-2"><a href="permutations-ii-leetcode-47-medium.html#cb24-2" aria-hidden="true"></a></span>
+<span id="cb24-3"><a href="permutations-ii-leetcode-47-medium.html#cb24-3" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">permuteUnique</span>(<span class="dt">int</span>[] nums) {</span>
+<span id="cb24-4"><a href="permutations-ii-leetcode-47-medium.html#cb24-4" aria-hidden="true"></a>    <span class="dt">boolean</span> visited[] = <span class="kw">new</span> <span class="dt">boolean</span>[nums.<span class="fu">length</span>];</span>
+<span id="cb24-5"><a href="permutations-ii-leetcode-47-medium.html#cb24-5" aria-hidden="true"></a></span>
+<span id="cb24-6"><a href="permutations-ii-leetcode-47-medium.html#cb24-6" aria-hidden="true"></a>    <span class="co">//Sort the array</span></span>
+<span id="cb24-7"><a href="permutations-ii-leetcode-47-medium.html#cb24-7" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">sort</span>(nums);</span>
+<span id="cb24-8"><a href="permutations-ii-leetcode-47-medium.html#cb24-8" aria-hidden="true"></a>    <span class="fu">backtrack</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(), nums, visited);</span>
+<span id="cb24-9"><a href="permutations-ii-leetcode-47-medium.html#cb24-9" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb24-10"><a href="permutations-ii-leetcode-47-medium.html#cb24-10" aria-hidden="true"></a>}</span>
+<span id="cb24-11"><a href="permutations-ii-leetcode-47-medium.html#cb24-11" aria-hidden="true"></a></span>
+<span id="cb24-12"><a href="permutations-ii-leetcode-47-medium.html#cb24-12" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">backtrack</span>(<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list, <span class="dt">int</span> [] nums, <span class="dt">boolean</span>[] visited){</span>
+<span id="cb24-13"><a href="permutations-ii-leetcode-47-medium.html#cb24-13" aria-hidden="true"></a>    <span class="kw">if</span>(list.<span class="fu">size</span>() == nums.<span class="fu">length</span>){</span>
+<span id="cb24-14"><a href="permutations-ii-leetcode-47-medium.html#cb24-14" aria-hidden="true"></a>        <span class="co">//copy elements from the current list</span></span>
+<span id="cb24-15"><a href="permutations-ii-leetcode-47-medium.html#cb24-15" aria-hidden="true"></a>        result.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(list));</span>
+<span id="cb24-16"><a href="permutations-ii-leetcode-47-medium.html#cb24-16" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
+<span id="cb24-17"><a href="permutations-ii-leetcode-47-medium.html#cb24-17" aria-hidden="true"></a>    }</span>
+<span id="cb24-18"><a href="permutations-ii-leetcode-47-medium.html#cb24-18" aria-hidden="true"></a></span>
+<span id="cb24-19"><a href="permutations-ii-leetcode-47-medium.html#cb24-19" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++){</span>
+<span id="cb24-20"><a href="permutations-ii-leetcode-47-medium.html#cb24-20" aria-hidden="true"></a>        <span class="kw">if</span>(visited[i] == <span class="kw">true</span> || (i &gt; <span class="dv">0</span> &amp;&amp; visited[i-<span class="dv">1</span>] == <span class="kw">false</span> &amp;&amp; nums[i] == nums[i-<span class="dv">1</span>])) {</span>
+<span id="cb24-21"><a href="permutations-ii-leetcode-47-medium.html#cb24-21" aria-hidden="true"></a>            <span class="co">/*</span></span>
+<span id="cb24-22"><a href="permutations-ii-leetcode-47-medium.html#cb24-22" aria-hidden="true"></a><span class="co">            * Skip the permutation if any of the condition satisifies:</span></span>
+<span id="cb24-23"><a href="permutations-ii-leetcode-47-medium.html#cb24-23" aria-hidden="true"></a><span class="co">            * 1) The current[i] element has been visited.</span></span>
+<span id="cb24-24"><a href="permutations-ii-leetcode-47-medium.html#cb24-24" aria-hidden="true"></a><span class="co">            * 2) The current[i] element is the same (value) as the previously[i-1] visited element.</span></span>
+<span id="cb24-25"><a href="permutations-ii-leetcode-47-medium.html#cb24-25" aria-hidden="true"></a><span class="co">            */</span></span>
+<span id="cb24-26"><a href="permutations-ii-leetcode-47-medium.html#cb24-26" aria-hidden="true"></a>            <span class="kw">continue</span>;</span>
+<span id="cb24-27"><a href="permutations-ii-leetcode-47-medium.html#cb24-27" aria-hidden="true"></a>        }</span>
+<span id="cb24-28"><a href="permutations-ii-leetcode-47-medium.html#cb24-28" aria-hidden="true"></a></span>
+<span id="cb24-29"><a href="permutations-ii-leetcode-47-medium.html#cb24-29" aria-hidden="true"></a>        <span class="bu">Integer</span> element = nums[i];</span>
+<span id="cb24-30"><a href="permutations-ii-leetcode-47-medium.html#cb24-30" aria-hidden="true"></a></span>
+<span id="cb24-31"><a href="permutations-ii-leetcode-47-medium.html#cb24-31" aria-hidden="true"></a>        <span class="co">//add a new element</span></span>
+<span id="cb24-32"><a href="permutations-ii-leetcode-47-medium.html#cb24-32" aria-hidden="true"></a>        list.<span class="fu">add</span>(element);</span>
+<span id="cb24-33"><a href="permutations-ii-leetcode-47-medium.html#cb24-33" aria-hidden="true"></a>        visited[i] = <span class="kw">true</span>;</span>
+<span id="cb24-34"><a href="permutations-ii-leetcode-47-medium.html#cb24-34" aria-hidden="true"></a></span>
+<span id="cb24-35"><a href="permutations-ii-leetcode-47-medium.html#cb24-35" aria-hidden="true"></a>        <span class="fu">backtrack</span>(list, nums, visited);</span>
+<span id="cb24-36"><a href="permutations-ii-leetcode-47-medium.html#cb24-36" aria-hidden="true"></a></span>
+<span id="cb24-37"><a href="permutations-ii-leetcode-47-medium.html#cb24-37" aria-hidden="true"></a>        <span class="co">//backtrack the last element</span></span>
+<span id="cb24-38"><a href="permutations-ii-leetcode-47-medium.html#cb24-38" aria-hidden="true"></a>        list.<span class="fu">remove</span>(list.<span class="fu">size</span>()-<span class="dv">1</span>);</span>
+<span id="cb24-39"><a href="permutations-ii-leetcode-47-medium.html#cb24-39" aria-hidden="true"></a>        visited[i] = <span class="kw">false</span>;</span>
+<span id="cb24-40"><a href="permutations-ii-leetcode-47-medium.html#cb24-40" aria-hidden="true"></a>    }</span>
+<span id="cb24-41"><a href="permutations-ii-leetcode-47-medium.html#cb24-41" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1060,80 +1061,80 @@ Reminder: The inputs and the desired output are lists of Interval objects, and n
 </div>
 <div id="solution-18" class="section level3" number="2.22.3">
 <h3><span class="header-section-number">2.22.3</span> Solution</h3>
-<div id="walkthrough-22" class="section level4" number="2.22.3.1">
+<div id="walkthrough-23" class="section level4" number="2.22.3.1">
 <h4><span class="header-section-number">2.22.3.1</span> Walkthrough</h4>
 <p>Traverse the two lists of intervals. Merge two intervals if there is an intersection. Move the index of A if
 <span class="math inline">\(A[i]\)</span>.end <span class="math inline">\(&lt; B[i]\)</span>.end since the interval is the smaller out of comparison.</p>
 </div>
-<div id="analysis-22" class="section level4" number="2.22.3.2">
+<div id="analysis-23" class="section level4" number="2.22.3.2">
 <h4><span class="header-section-number">2.22.3.2</span> Analysis</h4>
 <p>The runtime complexity is <span class="math inline">\(O(n * m)\)</span></p>
 </div>
-<div id="algorithm-22" class="section level4" number="2.22.3.3">
+<div id="algorithm-23" class="section level4" number="2.22.3.3">
 <h4><span class="header-section-number">2.22.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-18" class="section level4" number="2.22.3.4">
+<div id="java-code-20" class="section level4" number="2.22.3.4">
 <h4><span class="header-section-number">2.22.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb31"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb31-1"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-1" aria-hidden="true"></a>LeetCode <span class="dv">986</span> / Medium</span>
-<span id="cb31-2"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-2" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> Interval {</span>
-<span id="cb31-3"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-3" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> start;</span>
-<span id="cb31-4"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-4" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> end;</span>
-<span id="cb31-5"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-5" aria-hidden="true"></a></span>
-<span id="cb31-6"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-6" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">Interval</span>(<span class="dt">int</span> s, <span class="dt">int</span> e) {</span>
-<span id="cb31-7"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-7" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">start</span> = s;</span>
-<span id="cb31-8"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-8" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">end</span> = e;</span>
-<span id="cb31-9"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-9" aria-hidden="true"></a>    }</span>
-<span id="cb31-10"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-10" aria-hidden="true"></a></span>
-<span id="cb31-11"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-11" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span>[][] <span class="fu">toArray</span>(<span class="bu">List</span>&lt;Interval&gt; list) {</span>
-<span id="cb31-12"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-12" aria-hidden="true"></a>        <span class="dt">int</span>[][] result = <span class="kw">new</span> <span class="dt">int</span>[list.<span class="fu">size</span>()][<span class="dv">2</span>];</span>
-<span id="cb31-13"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-13" aria-hidden="true"></a></span>
-<span id="cb31-14"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-14" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; list.<span class="fu">size</span>(); i++) {</span>
-<span id="cb31-15"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-15" aria-hidden="true"></a>            Interval interval = list.<span class="fu">get</span>(i);</span>
-<span id="cb31-16"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-16" aria-hidden="true"></a></span>
-<span id="cb31-17"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-17" aria-hidden="true"></a>            result[i] = <span class="kw">new</span> <span class="dt">int</span>[] {interval.<span class="fu">start</span>, interval.<span class="fu">end</span>};</span>
-<span id="cb31-18"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-18" aria-hidden="true"></a>        }</span>
-<span id="cb31-19"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-19" aria-hidden="true"></a></span>
-<span id="cb31-20"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-20" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
-<span id="cb31-21"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-21" aria-hidden="true"></a>    }</span>
-<span id="cb31-22"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-22" aria-hidden="true"></a></span>
-<span id="cb31-23"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-23" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="bu">List</span>&lt;Interval&gt; <span class="fu">toList</span>(<span class="dt">int</span>[][] array) {</span>
-<span id="cb31-24"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-24" aria-hidden="true"></a>        <span class="bu">List</span>&lt;Interval&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb31-25"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-25" aria-hidden="true"></a></span>
-<span id="cb31-26"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-26" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; array.<span class="fu">length</span>; i++) {</span>
-<span id="cb31-27"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-27" aria-hidden="true"></a>            Interval interval = <span class="kw">new</span> <span class="fu">Interval</span>(array[i][<span class="dv">0</span>], array[i][<span class="dv">1</span>]);</span>
-<span id="cb31-28"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-28" aria-hidden="true"></a></span>
-<span id="cb31-29"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-29" aria-hidden="true"></a>            result.<span class="fu">add</span>(interval);</span>
-<span id="cb31-30"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-30" aria-hidden="true"></a>        }</span>
-<span id="cb31-31"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-31" aria-hidden="true"></a></span>
-<span id="cb31-32"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-32" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
-<span id="cb31-33"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-33" aria-hidden="true"></a>    }</span>
-<span id="cb31-34"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-34" aria-hidden="true"></a></span>
-<span id="cb31-35"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-35" aria-hidden="true"></a>}</span>
-<span id="cb31-36"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-36" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span>[][] <span class="fu">intervalIntersection</span>(<span class="dt">int</span>[][] A, <span class="dt">int</span>[][] B) {</span>
-<span id="cb31-37"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-37" aria-hidden="true"></a>    <span class="bu">List</span>&lt;Interval&gt; intervalsA = Interval.<span class="fu">toList</span>(A);</span>
-<span id="cb31-38"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-38" aria-hidden="true"></a>    <span class="bu">List</span>&lt;Interval&gt; intervalsB = Interval.<span class="fu">toList</span>(B);</span>
-<span id="cb31-39"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-39" aria-hidden="true"></a>    <span class="bu">List</span>&lt;Interval&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb31-40"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-40" aria-hidden="true"></a></span>
-<span id="cb31-41"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-41" aria-hidden="true"></a>    <span class="dt">int</span> i = <span class="dv">0</span>, j = <span class="dv">0</span>;</span>
-<span id="cb31-42"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-42" aria-hidden="true"></a>    <span class="kw">while</span>( i &lt; intervalsA.<span class="fu">size</span>() &amp;&amp; j &lt; intervalsB.<span class="fu">size</span>()) {</span>
-<span id="cb31-43"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-43" aria-hidden="true"></a>        <span class="dt">int</span> highStart = <span class="bu">Math</span>.<span class="fu">max</span>(intervalsA.<span class="fu">get</span>(i).<span class="fu">start</span>, intervalsB.<span class="fu">get</span>(j).<span class="fu">start</span>);</span>
-<span id="cb31-44"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-44" aria-hidden="true"></a>        <span class="dt">int</span> lowEnd = <span class="bu">Math</span>.<span class="fu">min</span>(intervalsA.<span class="fu">get</span>(i).<span class="fu">end</span>, intervalsB.<span class="fu">get</span>(j).<span class="fu">end</span>);</span>
-<span id="cb31-45"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-45" aria-hidden="true"></a></span>
-<span id="cb31-46"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-46" aria-hidden="true"></a>        <span class="co">//there is an intersection</span></span>
-<span id="cb31-47"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-47" aria-hidden="true"></a>        <span class="kw">if</span>( highStart &lt;= lowEnd) {</span>
-<span id="cb31-48"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-48" aria-hidden="true"></a>            result.<span class="fu">add</span>( <span class="kw">new</span> <span class="fu">Interval</span>(highStart, lowEnd));</span>
-<span id="cb31-49"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-49" aria-hidden="true"></a>        }</span>
-<span id="cb31-50"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-50" aria-hidden="true"></a>        <span class="kw">if</span>( intervalsA.<span class="fu">get</span>(i).<span class="fu">end</span> &lt; intervalsB.<span class="fu">get</span>(j).<span class="fu">end</span>) {</span>
-<span id="cb31-51"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-51" aria-hidden="true"></a>            <span class="co">//move index of A[]</span></span>
-<span id="cb31-52"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-52" aria-hidden="true"></a>            i++;</span>
-<span id="cb31-53"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-53" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb31-54"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-54" aria-hidden="true"></a>            <span class="co">//move index of B[]</span></span>
-<span id="cb31-55"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-55" aria-hidden="true"></a>            j++;</span>
-<span id="cb31-56"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-56" aria-hidden="true"></a>        }</span>
-<span id="cb31-57"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-57" aria-hidden="true"></a>    }</span>
-<span id="cb31-58"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-58" aria-hidden="true"></a></span>
-<span id="cb31-59"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-59" aria-hidden="true"></a>    <span class="kw">return</span> Interval.<span class="fu">toArray</span>(result);</span>
-<span id="cb31-60"><a href="interval-list-intersections-leetcode-986-medium.html#cb31-60" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb32-1"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-1" aria-hidden="true"></a>LeetCode <span class="dv">986</span> / Medium</span>
+<span id="cb32-2"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-2" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> Interval {</span>
+<span id="cb32-3"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-3" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> start;</span>
+<span id="cb32-4"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-4" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> end;</span>
+<span id="cb32-5"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-5" aria-hidden="true"></a></span>
+<span id="cb32-6"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-6" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">Interval</span>(<span class="dt">int</span> s, <span class="dt">int</span> e) {</span>
+<span id="cb32-7"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-7" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">start</span> = s;</span>
+<span id="cb32-8"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-8" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">end</span> = e;</span>
+<span id="cb32-9"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-9" aria-hidden="true"></a>    }</span>
+<span id="cb32-10"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-10" aria-hidden="true"></a></span>
+<span id="cb32-11"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-11" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span>[][] <span class="fu">toArray</span>(<span class="bu">List</span>&lt;Interval&gt; list) {</span>
+<span id="cb32-12"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-12" aria-hidden="true"></a>        <span class="dt">int</span>[][] result = <span class="kw">new</span> <span class="dt">int</span>[list.<span class="fu">size</span>()][<span class="dv">2</span>];</span>
+<span id="cb32-13"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-13" aria-hidden="true"></a></span>
+<span id="cb32-14"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-14" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; list.<span class="fu">size</span>(); i++) {</span>
+<span id="cb32-15"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-15" aria-hidden="true"></a>            Interval interval = list.<span class="fu">get</span>(i);</span>
+<span id="cb32-16"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-16" aria-hidden="true"></a></span>
+<span id="cb32-17"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-17" aria-hidden="true"></a>            result[i] = <span class="kw">new</span> <span class="dt">int</span>[] {interval.<span class="fu">start</span>, interval.<span class="fu">end</span>};</span>
+<span id="cb32-18"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-18" aria-hidden="true"></a>        }</span>
+<span id="cb32-19"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-19" aria-hidden="true"></a></span>
+<span id="cb32-20"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-20" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
+<span id="cb32-21"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-21" aria-hidden="true"></a>    }</span>
+<span id="cb32-22"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-22" aria-hidden="true"></a></span>
+<span id="cb32-23"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-23" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="bu">List</span>&lt;Interval&gt; <span class="fu">toList</span>(<span class="dt">int</span>[][] array) {</span>
+<span id="cb32-24"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-24" aria-hidden="true"></a>        <span class="bu">List</span>&lt;Interval&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb32-25"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-25" aria-hidden="true"></a></span>
+<span id="cb32-26"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-26" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; array.<span class="fu">length</span>; i++) {</span>
+<span id="cb32-27"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-27" aria-hidden="true"></a>            Interval interval = <span class="kw">new</span> <span class="fu">Interval</span>(array[i][<span class="dv">0</span>], array[i][<span class="dv">1</span>]);</span>
+<span id="cb32-28"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-28" aria-hidden="true"></a></span>
+<span id="cb32-29"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-29" aria-hidden="true"></a>            result.<span class="fu">add</span>(interval);</span>
+<span id="cb32-30"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-30" aria-hidden="true"></a>        }</span>
+<span id="cb32-31"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-31" aria-hidden="true"></a></span>
+<span id="cb32-32"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-32" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
+<span id="cb32-33"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-33" aria-hidden="true"></a>    }</span>
+<span id="cb32-34"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-34" aria-hidden="true"></a></span>
+<span id="cb32-35"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-35" aria-hidden="true"></a>}</span>
+<span id="cb32-36"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-36" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span>[][] <span class="fu">intervalIntersection</span>(<span class="dt">int</span>[][] A, <span class="dt">int</span>[][] B) {</span>
+<span id="cb32-37"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-37" aria-hidden="true"></a>    <span class="bu">List</span>&lt;Interval&gt; intervalsA = Interval.<span class="fu">toList</span>(A);</span>
+<span id="cb32-38"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-38" aria-hidden="true"></a>    <span class="bu">List</span>&lt;Interval&gt; intervalsB = Interval.<span class="fu">toList</span>(B);</span>
+<span id="cb32-39"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-39" aria-hidden="true"></a>    <span class="bu">List</span>&lt;Interval&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb32-40"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-40" aria-hidden="true"></a></span>
+<span id="cb32-41"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-41" aria-hidden="true"></a>    <span class="dt">int</span> i = <span class="dv">0</span>, j = <span class="dv">0</span>;</span>
+<span id="cb32-42"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-42" aria-hidden="true"></a>    <span class="kw">while</span>( i &lt; intervalsA.<span class="fu">size</span>() &amp;&amp; j &lt; intervalsB.<span class="fu">size</span>()) {</span>
+<span id="cb32-43"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-43" aria-hidden="true"></a>        <span class="dt">int</span> highStart = <span class="bu">Math</span>.<span class="fu">max</span>(intervalsA.<span class="fu">get</span>(i).<span class="fu">start</span>, intervalsB.<span class="fu">get</span>(j).<span class="fu">start</span>);</span>
+<span id="cb32-44"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-44" aria-hidden="true"></a>        <span class="dt">int</span> lowEnd = <span class="bu">Math</span>.<span class="fu">min</span>(intervalsA.<span class="fu">get</span>(i).<span class="fu">end</span>, intervalsB.<span class="fu">get</span>(j).<span class="fu">end</span>);</span>
+<span id="cb32-45"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-45" aria-hidden="true"></a></span>
+<span id="cb32-46"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-46" aria-hidden="true"></a>        <span class="co">//there is an intersection</span></span>
+<span id="cb32-47"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-47" aria-hidden="true"></a>        <span class="kw">if</span>( highStart &lt;= lowEnd) {</span>
+<span id="cb32-48"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-48" aria-hidden="true"></a>            result.<span class="fu">add</span>( <span class="kw">new</span> <span class="fu">Interval</span>(highStart, lowEnd));</span>
+<span id="cb32-49"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-49" aria-hidden="true"></a>        }</span>
+<span id="cb32-50"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-50" aria-hidden="true"></a>        <span class="kw">if</span>( intervalsA.<span class="fu">get</span>(i).<span class="fu">end</span> &lt; intervalsB.<span class="fu">get</span>(j).<span class="fu">end</span>) {</span>
+<span id="cb32-51"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-51" aria-hidden="true"></a>            <span class="co">//move index of A[]</span></span>
+<span id="cb32-52"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-52" aria-hidden="true"></a>            i++;</span>
+<span id="cb32-53"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-53" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb32-54"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-54" aria-hidden="true"></a>            <span class="co">//move index of B[]</span></span>
+<span id="cb32-55"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-55" aria-hidden="true"></a>            j++;</span>
+<span id="cb32-56"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-56" aria-hidden="true"></a>        }</span>
+<span id="cb32-57"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-57" aria-hidden="true"></a>    }</span>
+<span id="cb32-58"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-58" aria-hidden="true"></a></span>
+<span id="cb32-59"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-59" aria-hidden="true"></a>    <span class="kw">return</span> Interval.<span class="fu">toArray</span>(result);</span>
+<span id="cb32-60"><a href="interval-list-intersections-leetcode-986-medium.html#cb32-60" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

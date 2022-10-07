@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1065,41 +1066,41 @@ Figure 4.20: Some caption.
 </div>
 <div id="solution---recursive-3" class="section level3" number="4.16.3">
 <h3><span class="header-section-number">4.16.3</span> Solution - Recursive</h3>
-<div id="walkthrough-80" class="section level4" number="4.16.3.1">
+<div id="walkthrough-81" class="section level4" number="4.16.3.1">
 <h4><span class="header-section-number">4.16.3.1</span> Walkthrough</h4>
 <p>If a node has a missing child (depth is  0 ), then we need to drill down to the other
 path to the leaf node recursively. If both nodes exist, take the minimum value out of the left and right subtree.</p>
 </div>
-<div id="analysis-81" class="section level4" number="4.16.3.2">
+<div id="analysis-82" class="section level4" number="4.16.3.2">
 <h4><span class="header-section-number">4.16.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-82" class="section level4" number="4.16.3.3">
+<div id="algorithm-83" class="section level4" number="4.16.3.3">
 <h4><span class="header-section-number">4.16.3.3</span> Algorithm</h4>
 <p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
 <div id="java-code---recursive-3" class="section level4" number="4.16.3.4">
 <h4><span class="header-section-number">4.16.3.4</span> Java Code - Recursive</h4>
-<div class="sourceCode" id="cb129"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb129-1"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minDepth</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb129-2"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-2" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
-<span id="cb129-3"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb129-4"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-4" aria-hidden="true"></a>    }</span>
-<span id="cb129-5"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-5" aria-hidden="true"></a></span>
-<span id="cb129-6"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-6" aria-hidden="true"></a>    <span class="kw">if</span>(root.<span class="fu">left</span> == <span class="kw">null</span>) {</span>
-<span id="cb129-7"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-7" aria-hidden="true"></a>        <span class="co">//drill down to leaf node of the other path</span></span>
-<span id="cb129-8"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-8" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">minDepth</span>(root.<span class="fu">right</span>) + <span class="dv">1</span>;</span>
-<span id="cb129-9"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-9" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(root.<span class="fu">right</span> == <span class="kw">null</span>) {</span>
-<span id="cb129-10"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-10" aria-hidden="true"></a>        <span class="co">//drill down to leaf node of the other path</span></span>
-<span id="cb129-11"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-11" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">minDepth</span>(root.<span class="fu">left</span>) + <span class="dv">1</span>;</span>
-<span id="cb129-12"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-12" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb129-13"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-13" aria-hidden="true"></a>        <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">min</span>(<span class="fu">minDepth</span>(root.<span class="fu">left</span>), <span class="fu">minDepth</span>(root.<span class="fu">right</span>)) + <span class="dv">1</span>;</span>
-<span id="cb129-14"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-14" aria-hidden="true"></a>    }</span>
-<span id="cb129-15"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb129-15" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb130-1"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minDepth</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb130-2"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-2" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
+<span id="cb130-3"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb130-4"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-4" aria-hidden="true"></a>    }</span>
+<span id="cb130-5"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-5" aria-hidden="true"></a></span>
+<span id="cb130-6"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-6" aria-hidden="true"></a>    <span class="kw">if</span>(root.<span class="fu">left</span> == <span class="kw">null</span>) {</span>
+<span id="cb130-7"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-7" aria-hidden="true"></a>        <span class="co">//drill down to leaf node of the other path</span></span>
+<span id="cb130-8"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-8" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">minDepth</span>(root.<span class="fu">right</span>) + <span class="dv">1</span>;</span>
+<span id="cb130-9"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-9" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(root.<span class="fu">right</span> == <span class="kw">null</span>) {</span>
+<span id="cb130-10"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-10" aria-hidden="true"></a>        <span class="co">//drill down to leaf node of the other path</span></span>
+<span id="cb130-11"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-11" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">minDepth</span>(root.<span class="fu">left</span>) + <span class="dv">1</span>;</span>
+<span id="cb130-12"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-12" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb130-13"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-13" aria-hidden="true"></a>        <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">min</span>(<span class="fu">minDepth</span>(root.<span class="fu">left</span>), <span class="fu">minDepth</span>(root.<span class="fu">right</span>)) + <span class="dv">1</span>;</span>
+<span id="cb130-14"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-14" aria-hidden="true"></a>    }</span>
+<span id="cb130-15"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-15" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---iterative-bfs" class="section level3" number="4.16.4">
 <h3><span class="header-section-number">4.16.4</span> Solution - Iterative BFS</h3>
-<div id="walkthrough-81" class="section level4" number="4.16.4.1">
+<div id="walkthrough-82" class="section level4" number="4.16.4.1">
 <h4><span class="header-section-number">4.16.4.1</span> Walkthrough</h4>
 <p>Iterative: With BFS strategy, use two queues. One for current level and the other for next level.</p>
 <ul>
@@ -1108,52 +1109,52 @@ path to the leaf node recursively. If both nodes exist, take the minimum value o
 Also, increment depth by 1</li>
 </ul>
 </div>
-<div id="analysis-82" class="section level4" number="4.16.4.2">
+<div id="analysis-83" class="section level4" number="4.16.4.2">
 <h4><span class="header-section-number">4.16.4.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-83" class="section level4" number="4.16.4.3">
+<div id="algorithm-84" class="section level4" number="4.16.4.3">
 <h4><span class="header-section-number">4.16.4.3</span> Algorithm</h4>
 <p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
 </div>
 <div id="java-code---iterative-bfs" class="section level4" number="4.16.4.4">
 <h4><span class="header-section-number">4.16.4.4</span> Java Code - Iterative BFS</h4>
-<div class="sourceCode" id="cb130"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb130-1"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minDepth</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb130-2"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-2" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
-<span id="cb130-3"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb130-4"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-4" aria-hidden="true"></a>    }</span>
-<span id="cb130-5"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-5" aria-hidden="true"></a></span>
-<span id="cb130-6"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-6" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; currentLevel = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb130-7"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-7" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; nextLevel = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb130-8"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-8" aria-hidden="true"></a></span>
-<span id="cb130-9"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-9" aria-hidden="true"></a>    currentLevel.<span class="fu">offer</span>(root);</span>
-<span id="cb130-10"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-10" aria-hidden="true"></a>    <span class="dt">int</span> depth = <span class="dv">1</span>;</span>
-<span id="cb130-11"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-11" aria-hidden="true"></a></span>
-<span id="cb130-12"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-12" aria-hidden="true"></a>    <span class="kw">while</span>(!currentLevel.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb130-13"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-13" aria-hidden="true"></a>        <span class="bu">TreeNode</span> node = currentLevel.<span class="fu">poll</span>();</span>
-<span id="cb130-14"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-14" aria-hidden="true"></a></span>
-<span id="cb130-15"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-15" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">left</span> == <span class="kw">null</span> &amp;&amp; node.<span class="fu">right</span> == <span class="kw">null</span>) {</span>
-<span id="cb130-16"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-16" aria-hidden="true"></a>            <span class="kw">return</span> depth;</span>
-<span id="cb130-17"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-17" aria-hidden="true"></a>        }</span>
-<span id="cb130-18"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-18" aria-hidden="true"></a></span>
-<span id="cb130-19"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-19" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
-<span id="cb130-20"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-20" aria-hidden="true"></a>            nextLevel.<span class="fu">offer</span>(node.<span class="fu">left</span>);</span>
-<span id="cb130-21"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-21" aria-hidden="true"></a>        }</span>
-<span id="cb130-22"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-22" aria-hidden="true"></a></span>
-<span id="cb130-23"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-23" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
-<span id="cb130-24"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-24" aria-hidden="true"></a>            nextLevel.<span class="fu">offer</span>(node.<span class="fu">right</span>);</span>
-<span id="cb130-25"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-25" aria-hidden="true"></a>        }</span>
-<span id="cb130-26"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-26" aria-hidden="true"></a></span>
-<span id="cb130-27"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-27" aria-hidden="true"></a>        <span class="co">//go to children level by swapping queues, increase depth</span></span>
-<span id="cb130-28"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-28" aria-hidden="true"></a>        <span class="kw">if</span>(currentLevel.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb130-29"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-29" aria-hidden="true"></a>            currentLevel = nextLevel;</span>
-<span id="cb130-30"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-30" aria-hidden="true"></a>            nextLevel = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb130-31"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-31" aria-hidden="true"></a>            depth++;</span>
-<span id="cb130-32"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-32" aria-hidden="true"></a>        }</span>
-<span id="cb130-33"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-33" aria-hidden="true"></a>    }</span>
-<span id="cb130-34"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-34" aria-hidden="true"></a></span>
-<span id="cb130-35"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-35" aria-hidden="true"></a>    <span class="kw">return</span> depth;</span>
-<span id="cb130-36"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb130-36" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb131"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb131-1"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minDepth</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb131-2"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-2" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
+<span id="cb131-3"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb131-4"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-4" aria-hidden="true"></a>    }</span>
+<span id="cb131-5"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-5" aria-hidden="true"></a></span>
+<span id="cb131-6"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-6" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; currentLevel = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb131-7"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-7" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; nextLevel = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb131-8"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-8" aria-hidden="true"></a></span>
+<span id="cb131-9"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-9" aria-hidden="true"></a>    currentLevel.<span class="fu">offer</span>(root);</span>
+<span id="cb131-10"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-10" aria-hidden="true"></a>    <span class="dt">int</span> depth = <span class="dv">1</span>;</span>
+<span id="cb131-11"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-11" aria-hidden="true"></a></span>
+<span id="cb131-12"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-12" aria-hidden="true"></a>    <span class="kw">while</span>(!currentLevel.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb131-13"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-13" aria-hidden="true"></a>        <span class="bu">TreeNode</span> node = currentLevel.<span class="fu">poll</span>();</span>
+<span id="cb131-14"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-14" aria-hidden="true"></a></span>
+<span id="cb131-15"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-15" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">left</span> == <span class="kw">null</span> &amp;&amp; node.<span class="fu">right</span> == <span class="kw">null</span>) {</span>
+<span id="cb131-16"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-16" aria-hidden="true"></a>            <span class="kw">return</span> depth;</span>
+<span id="cb131-17"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-17" aria-hidden="true"></a>        }</span>
+<span id="cb131-18"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-18" aria-hidden="true"></a></span>
+<span id="cb131-19"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-19" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
+<span id="cb131-20"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-20" aria-hidden="true"></a>            nextLevel.<span class="fu">offer</span>(node.<span class="fu">left</span>);</span>
+<span id="cb131-21"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-21" aria-hidden="true"></a>        }</span>
+<span id="cb131-22"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-22" aria-hidden="true"></a></span>
+<span id="cb131-23"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-23" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
+<span id="cb131-24"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-24" aria-hidden="true"></a>            nextLevel.<span class="fu">offer</span>(node.<span class="fu">right</span>);</span>
+<span id="cb131-25"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-25" aria-hidden="true"></a>        }</span>
+<span id="cb131-26"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-26" aria-hidden="true"></a></span>
+<span id="cb131-27"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-27" aria-hidden="true"></a>        <span class="co">//go to children level by swapping queues, increase depth</span></span>
+<span id="cb131-28"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-28" aria-hidden="true"></a>        <span class="kw">if</span>(currentLevel.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb131-29"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-29" aria-hidden="true"></a>            currentLevel = nextLevel;</span>
+<span id="cb131-30"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-30" aria-hidden="true"></a>            nextLevel = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb131-31"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-31" aria-hidden="true"></a>            depth++;</span>
+<span id="cb131-32"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-32" aria-hidden="true"></a>        }</span>
+<span id="cb131-33"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-33" aria-hidden="true"></a>    }</span>
+<span id="cb131-34"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-34" aria-hidden="true"></a></span>
+<span id="cb131-35"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-35" aria-hidden="true"></a>    <span class="kw">return</span> depth;</span>
+<span id="cb131-36"><a href="minimum-depth-of-binary-tree-leet-code-104-easy.html#cb131-36" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1070,83 +1071,83 @@ Output: [0,1,2,3] or [0,2,1,3]</p>
 </div>
 <div id="solution---topological-sort-via-bfs-1" class="section level3" number="5.5.3">
 <h3><span class="header-section-number">5.5.3</span> Solution - Topological Sort via BFS</h3>
-<div id="walkthrough-102" class="section level4" number="5.5.3.1">
+<div id="walkthrough-103" class="section level4" number="5.5.3.1">
 <h4><span class="header-section-number">5.5.3.1</span> Walkthrough</h4>
 <p>This problem can be converted to finding if a graph contains a cycle using topological sort</p>
 </div>
-<div id="analysis-103" class="section level4" number="5.5.3.2">
+<div id="analysis-104" class="section level4" number="5.5.3.2">
 <h4><span class="header-section-number">5.5.3.2</span> Analysis</h4>
 <p>A BFS would cost <span class="math inline">\(O(|V| + |E|)\)</span></p>
 </div>
-<div id="algorithm-109" class="section level4" number="5.5.3.3">
+<div id="algorithm-110" class="section level4" number="5.5.3.3">
 <h4><span class="header-section-number">5.5.3.3</span> Algorithm</h4>
 <p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
 </div>
-<div id="java-code-64" class="section level4" number="5.5.3.4">
+<div id="java-code-66" class="section level4" number="5.5.3.4">
 <h4><span class="header-section-number">5.5.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb167"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb167-1"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span>[] <span class="fu">findOrder</span>(<span class="dt">int</span> numCourses, <span class="dt">int</span>[][] prerequisites) {</span>
-<span id="cb167-2"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-2" aria-hidden="true"></a>    <span class="co">//if there is no prerequisites, return a sequence of courses</span></span>
-<span id="cb167-3"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-3" aria-hidden="true"></a>    <span class="kw">if</span>(prerequisites.<span class="fu">length</span> == <span class="dv">0</span>){</span>
-<span id="cb167-4"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-4" aria-hidden="true"></a>        <span class="dt">int</span>[] res = <span class="kw">new</span> <span class="dt">int</span>[numCourses];</span>
-<span id="cb167-5"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-5" aria-hidden="true"></a></span>
-<span id="cb167-6"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-6" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numCourses; i++){</span>
-<span id="cb167-7"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-7" aria-hidden="true"></a>            res[i] = i;</span>
-<span id="cb167-8"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-8" aria-hidden="true"></a>        }</span>
-<span id="cb167-9"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-9" aria-hidden="true"></a></span>
-<span id="cb167-10"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-10" aria-hidden="true"></a>        <span class="kw">return</span> res;</span>
-<span id="cb167-11"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-11" aria-hidden="true"></a>    }</span>
-<span id="cb167-12"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-12" aria-hidden="true"></a></span>
-<span id="cb167-13"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-13" aria-hidden="true"></a>    <span class="co">// counter for number of prerequisites</span></span>
-<span id="cb167-14"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-14" aria-hidden="true"></a>    <span class="dt">int</span>[] numPrereq = <span class="kw">new</span> <span class="dt">int</span>[numCourses];</span>
-<span id="cb167-15"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-15" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prerequisites.<span class="fu">length</span>; i++){</span>
-<span id="cb167-16"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-16" aria-hidden="true"></a>        numPrereq[prerequisites[i][<span class="dv">0</span>]]++;</span>
-<span id="cb167-17"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-17" aria-hidden="true"></a>    }</span>
-<span id="cb167-18"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-18" aria-hidden="true"></a></span>
-<span id="cb167-19"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-19" aria-hidden="true"></a>    <span class="co">//store courses that have no prerequisites</span></span>
-<span id="cb167-20"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-20" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
-<span id="cb167-21"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-21" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numCourses; i++){</span>
-<span id="cb167-22"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-22" aria-hidden="true"></a>        <span class="kw">if</span>(numPrereq[i] == <span class="dv">0</span>){</span>
-<span id="cb167-23"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-23" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(i);</span>
-<span id="cb167-24"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-24" aria-hidden="true"></a>        }</span>
-<span id="cb167-25"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-25" aria-hidden="true"></a>    }</span>
-<span id="cb167-26"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-26" aria-hidden="true"></a></span>
-<span id="cb167-27"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-27" aria-hidden="true"></a>    <span class="co">// store the topological sorting order</span></span>
-<span id="cb167-28"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-28" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; order = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb167-29"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-29" aria-hidden="true"></a></span>
-<span id="cb167-30"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-30" aria-hidden="true"></a>    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb167-31"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-31" aria-hidden="true"></a>        <span class="dt">int</span> vertex = queue.<span class="fu">poll</span>();</span>
-<span id="cb167-32"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-32" aria-hidden="true"></a>        order.<span class="fu">add</span>(vertex);</span>
-<span id="cb167-33"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-33" aria-hidden="true"></a></span>
-<span id="cb167-34"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-34" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prerequisites.<span class="fu">length</span>; i++){</span>
-<span id="cb167-35"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-35" aria-hidden="true"></a>            <span class="co">// if a course&#39;s prerequisite can be satisfied by a course in queue</span></span>
-<span id="cb167-36"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-36" aria-hidden="true"></a>            <span class="kw">if</span>(prerequisites[i][<span class="dv">1</span>] == vertex) {</span>
-<span id="cb167-37"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-37" aria-hidden="true"></a>                numPrereq[prerequisites[i][<span class="dv">0</span>]]--;</span>
-<span id="cb167-38"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-38" aria-hidden="true"></a></span>
-<span id="cb167-39"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-39" aria-hidden="true"></a>                <span class="kw">if</span>(numPrereq[prerequisites[i][<span class="dv">0</span>]] == <span class="dv">0</span>) {</span>
-<span id="cb167-40"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-40" aria-hidden="true"></a>                    queue.<span class="fu">offer</span>(prerequisites[i][<span class="dv">0</span>]);</span>
-<span id="cb167-41"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-41" aria-hidden="true"></a>                }</span>
-<span id="cb167-42"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-42" aria-hidden="true"></a>            }</span>
-<span id="cb167-43"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-43" aria-hidden="true"></a>        }</span>
-<span id="cb167-44"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-44" aria-hidden="true"></a>    }</span>
-<span id="cb167-45"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-45" aria-hidden="true"></a></span>
-<span id="cb167-46"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-46" aria-hidden="true"></a>    <span class="dt">int</span> numOfPreReq = order.<span class="fu">size</span>();</span>
-<span id="cb167-47"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-47" aria-hidden="true"></a>    <span class="kw">if</span>(numOfPreReq == numCourses) {</span>
-<span id="cb167-48"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-48" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">toArray</span>(order);</span>
-<span id="cb167-49"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-49" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb167-50"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-50" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">0</span>];</span>
-<span id="cb167-51"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-51" aria-hidden="true"></a>    }</span>
-<span id="cb167-52"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-52" aria-hidden="true"></a>}</span>
-<span id="cb167-53"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-53" aria-hidden="true"></a></span>
-<span id="cb167-54"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-54" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">int</span>[] <span class="fu">toArray</span>(<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list) {</span>
-<span id="cb167-55"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-55" aria-hidden="true"></a>    <span class="dt">int</span>[] result = <span class="kw">new</span> <span class="dt">int</span>[list.<span class="fu">size</span>()];</span>
-<span id="cb167-56"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-56" aria-hidden="true"></a></span>
-<span id="cb167-57"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-57" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; list.<span class="fu">size</span>(); i++) {</span>
-<span id="cb167-58"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-58" aria-hidden="true"></a>        <span class="dt">int</span> item = list.<span class="fu">get</span>(i);</span>
-<span id="cb167-59"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-59" aria-hidden="true"></a>        result[i] = item;</span>
-<span id="cb167-60"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-60" aria-hidden="true"></a>    }</span>
-<span id="cb167-61"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-61" aria-hidden="true"></a></span>
-<span id="cb167-62"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-62" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb167-63"><a href="course-schedule-ii-leetcode-210-medium.html#cb167-63" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb168-1"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span>[] <span class="fu">findOrder</span>(<span class="dt">int</span> numCourses, <span class="dt">int</span>[][] prerequisites) {</span>
+<span id="cb168-2"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-2" aria-hidden="true"></a>    <span class="co">//if there is no prerequisites, return a sequence of courses</span></span>
+<span id="cb168-3"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-3" aria-hidden="true"></a>    <span class="kw">if</span>(prerequisites.<span class="fu">length</span> == <span class="dv">0</span>){</span>
+<span id="cb168-4"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-4" aria-hidden="true"></a>        <span class="dt">int</span>[] res = <span class="kw">new</span> <span class="dt">int</span>[numCourses];</span>
+<span id="cb168-5"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-5" aria-hidden="true"></a></span>
+<span id="cb168-6"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-6" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numCourses; i++){</span>
+<span id="cb168-7"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-7" aria-hidden="true"></a>            res[i] = i;</span>
+<span id="cb168-8"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-8" aria-hidden="true"></a>        }</span>
+<span id="cb168-9"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-9" aria-hidden="true"></a></span>
+<span id="cb168-10"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-10" aria-hidden="true"></a>        <span class="kw">return</span> res;</span>
+<span id="cb168-11"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-11" aria-hidden="true"></a>    }</span>
+<span id="cb168-12"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-12" aria-hidden="true"></a></span>
+<span id="cb168-13"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-13" aria-hidden="true"></a>    <span class="co">// counter for number of prerequisites</span></span>
+<span id="cb168-14"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-14" aria-hidden="true"></a>    <span class="dt">int</span>[] numPrereq = <span class="kw">new</span> <span class="dt">int</span>[numCourses];</span>
+<span id="cb168-15"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-15" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prerequisites.<span class="fu">length</span>; i++){</span>
+<span id="cb168-16"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-16" aria-hidden="true"></a>        numPrereq[prerequisites[i][<span class="dv">0</span>]]++;</span>
+<span id="cb168-17"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-17" aria-hidden="true"></a>    }</span>
+<span id="cb168-18"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-18" aria-hidden="true"></a></span>
+<span id="cb168-19"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-19" aria-hidden="true"></a>    <span class="co">//store courses that have no prerequisites</span></span>
+<span id="cb168-20"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-20" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
+<span id="cb168-21"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-21" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numCourses; i++){</span>
+<span id="cb168-22"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-22" aria-hidden="true"></a>        <span class="kw">if</span>(numPrereq[i] == <span class="dv">0</span>){</span>
+<span id="cb168-23"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-23" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(i);</span>
+<span id="cb168-24"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-24" aria-hidden="true"></a>        }</span>
+<span id="cb168-25"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-25" aria-hidden="true"></a>    }</span>
+<span id="cb168-26"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-26" aria-hidden="true"></a></span>
+<span id="cb168-27"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-27" aria-hidden="true"></a>    <span class="co">// store the topological sorting order</span></span>
+<span id="cb168-28"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-28" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; order = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb168-29"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-29" aria-hidden="true"></a></span>
+<span id="cb168-30"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-30" aria-hidden="true"></a>    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb168-31"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-31" aria-hidden="true"></a>        <span class="dt">int</span> vertex = queue.<span class="fu">poll</span>();</span>
+<span id="cb168-32"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-32" aria-hidden="true"></a>        order.<span class="fu">add</span>(vertex);</span>
+<span id="cb168-33"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-33" aria-hidden="true"></a></span>
+<span id="cb168-34"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-34" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prerequisites.<span class="fu">length</span>; i++){</span>
+<span id="cb168-35"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-35" aria-hidden="true"></a>            <span class="co">// if a course&#39;s prerequisite can be satisfied by a course in queue</span></span>
+<span id="cb168-36"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-36" aria-hidden="true"></a>            <span class="kw">if</span>(prerequisites[i][<span class="dv">1</span>] == vertex) {</span>
+<span id="cb168-37"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-37" aria-hidden="true"></a>                numPrereq[prerequisites[i][<span class="dv">0</span>]]--;</span>
+<span id="cb168-38"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-38" aria-hidden="true"></a></span>
+<span id="cb168-39"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-39" aria-hidden="true"></a>                <span class="kw">if</span>(numPrereq[prerequisites[i][<span class="dv">0</span>]] == <span class="dv">0</span>) {</span>
+<span id="cb168-40"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-40" aria-hidden="true"></a>                    queue.<span class="fu">offer</span>(prerequisites[i][<span class="dv">0</span>]);</span>
+<span id="cb168-41"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-41" aria-hidden="true"></a>                }</span>
+<span id="cb168-42"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-42" aria-hidden="true"></a>            }</span>
+<span id="cb168-43"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-43" aria-hidden="true"></a>        }</span>
+<span id="cb168-44"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-44" aria-hidden="true"></a>    }</span>
+<span id="cb168-45"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-45" aria-hidden="true"></a></span>
+<span id="cb168-46"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-46" aria-hidden="true"></a>    <span class="dt">int</span> numOfPreReq = order.<span class="fu">size</span>();</span>
+<span id="cb168-47"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-47" aria-hidden="true"></a>    <span class="kw">if</span>(numOfPreReq == numCourses) {</span>
+<span id="cb168-48"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-48" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">toArray</span>(order);</span>
+<span id="cb168-49"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-49" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb168-50"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-50" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">0</span>];</span>
+<span id="cb168-51"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-51" aria-hidden="true"></a>    }</span>
+<span id="cb168-52"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-52" aria-hidden="true"></a>}</span>
+<span id="cb168-53"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-53" aria-hidden="true"></a></span>
+<span id="cb168-54"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-54" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">int</span>[] <span class="fu">toArray</span>(<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list) {</span>
+<span id="cb168-55"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-55" aria-hidden="true"></a>    <span class="dt">int</span>[] result = <span class="kw">new</span> <span class="dt">int</span>[list.<span class="fu">size</span>()];</span>
+<span id="cb168-56"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-56" aria-hidden="true"></a></span>
+<span id="cb168-57"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-57" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; list.<span class="fu">size</span>(); i++) {</span>
+<span id="cb168-58"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-58" aria-hidden="true"></a>        <span class="dt">int</span> item = list.<span class="fu">get</span>(i);</span>
+<span id="cb168-59"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-59" aria-hidden="true"></a>        result[i] = item;</span>
+<span id="cb168-60"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-60" aria-hidden="true"></a>    }</span>
+<span id="cb168-61"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-61" aria-hidden="true"></a></span>
+<span id="cb168-62"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-62" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb168-63"><a href="course-schedule-ii-leetcode-210-medium.html#cb168-63" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

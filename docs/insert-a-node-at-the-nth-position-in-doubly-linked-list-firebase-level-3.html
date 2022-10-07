@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1078,82 +1079,82 @@ Figure 6.34: Some caption.
 </div>
 <div id="solution-72" class="section level3" number="6.13.3">
 <h3><span class="header-section-number">6.13.3</span> Solution</h3>
-<div id="walkthrough-120" class="section level4" number="6.13.3.1">
+<div id="walkthrough-121" class="section level4" number="6.13.3.1">
 <h4><span class="header-section-number">6.13.3.1</span> Walkthrough</h4>
 <p>The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list and
 check if the request position is over the lenght limit. The second iteration is to traverse to the previous insertion
 position, begining from a dummy node headPrev. Finally, we need to check if we are inserting a head / a tail or an
 intermediate node.</p>
 </div>
-<div id="analysis-121" class="section level4" number="6.13.3.2">
+<div id="analysis-122" class="section level4" number="6.13.3.2">
 <h4><span class="header-section-number">6.13.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-126" class="section level4" number="6.13.3.3">
+<div id="algorithm-127" class="section level4" number="6.13.3.3">
 <h4><span class="header-section-number">6.13.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-74" class="section level4" number="6.13.3.4">
+<div id="java-code-76" class="section level4" number="6.13.3.4">
 <h4><span class="header-section-number">6.13.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb185"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb185-1"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-1" aria-hidden="true"></a><span class="kw">public</span> DoublyLinkedNode <span class="fu">insertAtPos</span>(DoublyLinkedNode head, <span class="dt">int</span> data, <span class="dt">int</span> pos) {</span>
-<span id="cb185-2"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-2" aria-hidden="true"></a>    DoublyLinkedNode newNode = <span class="kw">new</span> <span class="fu">DoublyLinkedNode</span>(data);</span>
-<span id="cb185-3"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-3" aria-hidden="true"></a></span>
-<span id="cb185-4"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-4" aria-hidden="true"></a>    <span class="co">//Quick check if we are inserting the only node in the list</span></span>
-<span id="cb185-5"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-5" aria-hidden="true"></a>    <span class="kw">if</span>(head == <span class="kw">null</span>) {</span>
-<span id="cb185-6"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-6" aria-hidden="true"></a>        <span class="kw">if</span>(pos == <span class="dv">1</span>) {</span>
-<span id="cb185-7"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-7" aria-hidden="true"></a>            <span class="kw">return</span> newNode;</span>
-<span id="cb185-8"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-8" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb185-9"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-9" aria-hidden="true"></a>            <span class="kw">return</span> head;</span>
-<span id="cb185-10"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-10" aria-hidden="true"></a>        }</span>
-<span id="cb185-11"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-11" aria-hidden="true"></a>    }</span>
-<span id="cb185-12"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-12" aria-hidden="true"></a></span>
-<span id="cb185-13"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-13" aria-hidden="true"></a></span>
-<span id="cb185-14"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-14" aria-hidden="true"></a>    <span class="dt">int</span> len = <span class="dv">1</span>;</span>
-<span id="cb185-15"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-15" aria-hidden="true"></a></span>
-<span id="cb185-16"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-16" aria-hidden="true"></a>    <span class="co">//1st pass: to get length of the list</span></span>
-<span id="cb185-17"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-17" aria-hidden="true"></a>    <span class="kw">for</span>(DoublyLinkedNode current = head; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>) {</span>
-<span id="cb185-18"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-18" aria-hidden="true"></a>        len++;</span>
-<span id="cb185-19"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-19" aria-hidden="true"></a>    }</span>
-<span id="cb185-20"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-20" aria-hidden="true"></a></span>
-<span id="cb185-21"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-21" aria-hidden="true"></a>    <span class="co">//pos is over list length</span></span>
-<span id="cb185-22"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-22" aria-hidden="true"></a>    <span class="kw">if</span>(pos &gt; len) {</span>
-<span id="cb185-23"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-23" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
-<span id="cb185-24"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-24" aria-hidden="true"></a>    }</span>
-<span id="cb185-25"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-25" aria-hidden="true"></a></span>
-<span id="cb185-26"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-26" aria-hidden="true"></a>    DoublyLinkedNode headPrev = <span class="kw">new</span> <span class="fu">DoublyLinkedNode</span>(<span class="dv">0</span>);</span>
-<span id="cb185-27"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-27" aria-hidden="true"></a>    headPrev.<span class="fu">next</span> = head;</span>
-<span id="cb185-28"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-28" aria-hidden="true"></a>    head.<span class="fu">prev</span> = headPrev;</span>
-<span id="cb185-29"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-29" aria-hidden="true"></a>    DoublyLinkedNode insertPrev = headPrev;</span>
-<span id="cb185-30"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-30" aria-hidden="true"></a></span>
-<span id="cb185-31"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-31" aria-hidden="true"></a></span>
-<span id="cb185-32"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-32" aria-hidden="true"></a>    <span class="co">//2nd pass: move to before the insertion position</span></span>
-<span id="cb185-33"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-33" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; (pos - <span class="dv">1</span>); i++) {</span>
-<span id="cb185-34"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-34" aria-hidden="true"></a>        insertPrev = insertPrev.<span class="fu">next</span>;</span>
-<span id="cb185-35"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-35" aria-hidden="true"></a>    }</span>
-<span id="cb185-36"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-36" aria-hidden="true"></a></span>
-<span id="cb185-37"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-37" aria-hidden="true"></a>    <span class="kw">if</span>(insertPrev == headPrev) {</span>
-<span id="cb185-38"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-38" aria-hidden="true"></a>        <span class="co">// insert head</span></span>
-<span id="cb185-39"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-39" aria-hidden="true"></a>        head.<span class="fu">prev</span> = newNode;</span>
-<span id="cb185-40"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-40" aria-hidden="true"></a>        newNode.<span class="fu">next</span> = head;</span>
-<span id="cb185-41"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-41" aria-hidden="true"></a></span>
-<span id="cb185-42"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-42" aria-hidden="true"></a>        <span class="kw">return</span> newNode;</span>
-<span id="cb185-43"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-43" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(insertPrev.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
-<span id="cb185-44"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-44" aria-hidden="true"></a>        <span class="co">// insert tail</span></span>
-<span id="cb185-45"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-45" aria-hidden="true"></a>        insertPrev.<span class="fu">next</span> = newNode;</span>
-<span id="cb185-46"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-46" aria-hidden="true"></a>        newNode.<span class="fu">prev</span> = insertPrev;</span>
-<span id="cb185-47"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-47" aria-hidden="true"></a></span>
-<span id="cb185-48"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-48" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
-<span id="cb185-49"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-49" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb185-50"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-50" aria-hidden="true"></a>        <span class="co">// insert intermediate</span></span>
-<span id="cb185-51"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-51" aria-hidden="true"></a>        DoublyLinkedNode insertNext = insertPrev.<span class="fu">next</span>;</span>
-<span id="cb185-52"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-52" aria-hidden="true"></a></span>
-<span id="cb185-53"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-53" aria-hidden="true"></a>        insertPrev.<span class="fu">next</span> = newNode;</span>
-<span id="cb185-54"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-54" aria-hidden="true"></a>        newNode.<span class="fu">prev</span> = insertPrev;</span>
-<span id="cb185-55"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-55" aria-hidden="true"></a>        newNode.<span class="fu">next</span> = insertNext;</span>
-<span id="cb185-56"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-56" aria-hidden="true"></a>        insertNext.<span class="fu">prev</span> = newNode;</span>
-<span id="cb185-57"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-57" aria-hidden="true"></a></span>
-<span id="cb185-58"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-58" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
-<span id="cb185-59"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-59" aria-hidden="true"></a>    }</span>
-<span id="cb185-60"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb185-60" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb186"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb186-1"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-1" aria-hidden="true"></a><span class="kw">public</span> DoublyLinkedNode <span class="fu">insertAtPos</span>(DoublyLinkedNode head, <span class="dt">int</span> data, <span class="dt">int</span> pos) {</span>
+<span id="cb186-2"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-2" aria-hidden="true"></a>    DoublyLinkedNode newNode = <span class="kw">new</span> <span class="fu">DoublyLinkedNode</span>(data);</span>
+<span id="cb186-3"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-3" aria-hidden="true"></a></span>
+<span id="cb186-4"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-4" aria-hidden="true"></a>    <span class="co">//Quick check if we are inserting the only node in the list</span></span>
+<span id="cb186-5"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-5" aria-hidden="true"></a>    <span class="kw">if</span>(head == <span class="kw">null</span>) {</span>
+<span id="cb186-6"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-6" aria-hidden="true"></a>        <span class="kw">if</span>(pos == <span class="dv">1</span>) {</span>
+<span id="cb186-7"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-7" aria-hidden="true"></a>            <span class="kw">return</span> newNode;</span>
+<span id="cb186-8"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-8" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb186-9"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-9" aria-hidden="true"></a>            <span class="kw">return</span> head;</span>
+<span id="cb186-10"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-10" aria-hidden="true"></a>        }</span>
+<span id="cb186-11"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-11" aria-hidden="true"></a>    }</span>
+<span id="cb186-12"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-12" aria-hidden="true"></a></span>
+<span id="cb186-13"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-13" aria-hidden="true"></a></span>
+<span id="cb186-14"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-14" aria-hidden="true"></a>    <span class="dt">int</span> len = <span class="dv">1</span>;</span>
+<span id="cb186-15"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-15" aria-hidden="true"></a></span>
+<span id="cb186-16"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-16" aria-hidden="true"></a>    <span class="co">//1st pass: to get length of the list</span></span>
+<span id="cb186-17"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-17" aria-hidden="true"></a>    <span class="kw">for</span>(DoublyLinkedNode current = head; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>) {</span>
+<span id="cb186-18"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-18" aria-hidden="true"></a>        len++;</span>
+<span id="cb186-19"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-19" aria-hidden="true"></a>    }</span>
+<span id="cb186-20"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-20" aria-hidden="true"></a></span>
+<span id="cb186-21"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-21" aria-hidden="true"></a>    <span class="co">//pos is over list length</span></span>
+<span id="cb186-22"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-22" aria-hidden="true"></a>    <span class="kw">if</span>(pos &gt; len) {</span>
+<span id="cb186-23"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-23" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
+<span id="cb186-24"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-24" aria-hidden="true"></a>    }</span>
+<span id="cb186-25"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-25" aria-hidden="true"></a></span>
+<span id="cb186-26"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-26" aria-hidden="true"></a>    DoublyLinkedNode headPrev = <span class="kw">new</span> <span class="fu">DoublyLinkedNode</span>(<span class="dv">0</span>);</span>
+<span id="cb186-27"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-27" aria-hidden="true"></a>    headPrev.<span class="fu">next</span> = head;</span>
+<span id="cb186-28"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-28" aria-hidden="true"></a>    head.<span class="fu">prev</span> = headPrev;</span>
+<span id="cb186-29"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-29" aria-hidden="true"></a>    DoublyLinkedNode insertPrev = headPrev;</span>
+<span id="cb186-30"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-30" aria-hidden="true"></a></span>
+<span id="cb186-31"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-31" aria-hidden="true"></a></span>
+<span id="cb186-32"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-32" aria-hidden="true"></a>    <span class="co">//2nd pass: move to before the insertion position</span></span>
+<span id="cb186-33"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-33" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; (pos - <span class="dv">1</span>); i++) {</span>
+<span id="cb186-34"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-34" aria-hidden="true"></a>        insertPrev = insertPrev.<span class="fu">next</span>;</span>
+<span id="cb186-35"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-35" aria-hidden="true"></a>    }</span>
+<span id="cb186-36"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-36" aria-hidden="true"></a></span>
+<span id="cb186-37"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-37" aria-hidden="true"></a>    <span class="kw">if</span>(insertPrev == headPrev) {</span>
+<span id="cb186-38"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-38" aria-hidden="true"></a>        <span class="co">// insert head</span></span>
+<span id="cb186-39"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-39" aria-hidden="true"></a>        head.<span class="fu">prev</span> = newNode;</span>
+<span id="cb186-40"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-40" aria-hidden="true"></a>        newNode.<span class="fu">next</span> = head;</span>
+<span id="cb186-41"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-41" aria-hidden="true"></a></span>
+<span id="cb186-42"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-42" aria-hidden="true"></a>        <span class="kw">return</span> newNode;</span>
+<span id="cb186-43"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-43" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(insertPrev.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
+<span id="cb186-44"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-44" aria-hidden="true"></a>        <span class="co">// insert tail</span></span>
+<span id="cb186-45"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-45" aria-hidden="true"></a>        insertPrev.<span class="fu">next</span> = newNode;</span>
+<span id="cb186-46"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-46" aria-hidden="true"></a>        newNode.<span class="fu">prev</span> = insertPrev;</span>
+<span id="cb186-47"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-47" aria-hidden="true"></a></span>
+<span id="cb186-48"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-48" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
+<span id="cb186-49"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-49" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb186-50"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-50" aria-hidden="true"></a>        <span class="co">// insert intermediate</span></span>
+<span id="cb186-51"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-51" aria-hidden="true"></a>        DoublyLinkedNode insertNext = insertPrev.<span class="fu">next</span>;</span>
+<span id="cb186-52"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-52" aria-hidden="true"></a></span>
+<span id="cb186-53"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-53" aria-hidden="true"></a>        insertPrev.<span class="fu">next</span> = newNode;</span>
+<span id="cb186-54"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-54" aria-hidden="true"></a>        newNode.<span class="fu">prev</span> = insertPrev;</span>
+<span id="cb186-55"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-55" aria-hidden="true"></a>        newNode.<span class="fu">next</span> = insertNext;</span>
+<span id="cb186-56"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-56" aria-hidden="true"></a>        insertNext.<span class="fu">prev</span> = newNode;</span>
+<span id="cb186-57"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-57" aria-hidden="true"></a></span>
+<span id="cb186-58"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-58" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
+<span id="cb186-59"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-59" aria-hidden="true"></a>    }</span>
+<span id="cb186-60"><a href="insert-a-node-at-the-nth-position-in-doubly-linked-list-firebase-level-3.html#cb186-60" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

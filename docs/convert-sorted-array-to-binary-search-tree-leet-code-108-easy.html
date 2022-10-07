@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1064,38 +1065,38 @@ Figure 4.35: Some caption.
 </div>
 <div id="solution-58" class="section level3" number="4.27.3">
 <h3><span class="header-section-number">4.27.3</span> Solution</h3>
-<div id="walkthrough-93" class="section level4" number="4.27.3.1">
+<div id="walkthrough-94" class="section level4" number="4.27.3.1">
 <h4><span class="header-section-number">4.27.3.1</span> Walkthrough</h4>
 <p>To create a tree of minimal height, we need to mathch the number of nodes in the left subtree to the number of the
 nodes in the right subtree as much as possible. This means that we want the root to be the middle of the 
 array, since this would mean that half the elements would be less than the root and half wood be greater than it.</p>
 </div>
-<div id="analysis-94" class="section level4" number="4.27.3.2">
+<div id="analysis-95" class="section level4" number="4.27.3.2">
 <h4><span class="header-section-number">4.27.3.2</span> Analysis</h4>
 <p>The overal time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-96" class="section level4" number="4.27.3.3">
+<div id="algorithm-97" class="section level4" number="4.27.3.3">
 <h4><span class="header-section-number">4.27.3.3</span> Algorithm</h4>
 <p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
-<div id="java-code-57" class="section level4" number="4.27.3.4">
+<div id="java-code-59" class="section level4" number="4.27.3.4">
 <h4><span class="header-section-number">4.27.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb142"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb142-1"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">sortedArrayToBST</span>(<span class="dt">int</span>[] nums) {</span>
-<span id="cb142-2"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-2" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">buildHeightBalancedBST</span>(nums, <span class="dv">0</span>, nums.<span class="fu">length</span> -<span class="dv">1</span>);</span>
-<span id="cb142-3"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-3" aria-hidden="true"></a>}</span>
-<span id="cb142-4"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-4" aria-hidden="true"></a></span>
-<span id="cb142-5"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-5" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">buildHeightBalancedBST</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> start, <span class="dt">int</span> end) {</span>
-<span id="cb142-6"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-6" aria-hidden="true"></a>    <span class="kw">if</span>(start &gt; end) {</span>
-<span id="cb142-7"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-7" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
-<span id="cb142-8"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-8" aria-hidden="true"></a>    }</span>
-<span id="cb142-9"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-9" aria-hidden="true"></a></span>
-<span id="cb142-10"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-10" aria-hidden="true"></a>    <span class="dt">int</span> mid = (start + end) / <span class="dv">2</span>;</span>
-<span id="cb142-11"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-11" aria-hidden="true"></a>    <span class="bu">TreeNode</span> node = <span class="kw">new</span> <span class="bu">TreeNode</span>(nums[mid]);</span>
-<span id="cb142-12"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-12" aria-hidden="true"></a>    node.<span class="fu">left</span> = <span class="fu">buildHeightBalancedBST</span>(nums, start, mid - <span class="dv">1</span>);</span>
-<span id="cb142-13"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-13" aria-hidden="true"></a>    node.<span class="fu">right</span> = <span class="fu">buildHeightBalancedBST</span>(nums, mid + <span class="dv">1</span>, end);</span>
-<span id="cb142-14"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-14" aria-hidden="true"></a></span>
-<span id="cb142-15"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-15" aria-hidden="true"></a>    <span class="kw">return</span> node;</span>
-<span id="cb142-16"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb142-16" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb143-1"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">sortedArrayToBST</span>(<span class="dt">int</span>[] nums) {</span>
+<span id="cb143-2"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-2" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">buildHeightBalancedBST</span>(nums, <span class="dv">0</span>, nums.<span class="fu">length</span> -<span class="dv">1</span>);</span>
+<span id="cb143-3"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-3" aria-hidden="true"></a>}</span>
+<span id="cb143-4"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-4" aria-hidden="true"></a></span>
+<span id="cb143-5"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-5" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">buildHeightBalancedBST</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> start, <span class="dt">int</span> end) {</span>
+<span id="cb143-6"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-6" aria-hidden="true"></a>    <span class="kw">if</span>(start &gt; end) {</span>
+<span id="cb143-7"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-7" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb143-8"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-8" aria-hidden="true"></a>    }</span>
+<span id="cb143-9"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-9" aria-hidden="true"></a></span>
+<span id="cb143-10"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-10" aria-hidden="true"></a>    <span class="dt">int</span> mid = (start + end) / <span class="dv">2</span>;</span>
+<span id="cb143-11"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-11" aria-hidden="true"></a>    <span class="bu">TreeNode</span> node = <span class="kw">new</span> <span class="bu">TreeNode</span>(nums[mid]);</span>
+<span id="cb143-12"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-12" aria-hidden="true"></a>    node.<span class="fu">left</span> = <span class="fu">buildHeightBalancedBST</span>(nums, start, mid - <span class="dv">1</span>);</span>
+<span id="cb143-13"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-13" aria-hidden="true"></a>    node.<span class="fu">right</span> = <span class="fu">buildHeightBalancedBST</span>(nums, mid + <span class="dv">1</span>, end);</span>
+<span id="cb143-14"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-14" aria-hidden="true"></a></span>
+<span id="cb143-15"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-15" aria-hidden="true"></a>    <span class="kw">return</span> node;</span>
+<span id="cb143-16"><a href="convert-sorted-array-to-binary-search-tree-leet-code-108-easy.html#cb143-16" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

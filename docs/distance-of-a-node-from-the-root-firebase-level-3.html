@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1068,55 +1069,55 @@ Figure 4.12: Some caption.
 </div>
 <div id="solution-44" class="section level3" number="4.8.3">
 <h3><span class="header-section-number">4.8.3</span> Solution</h3>
-<div id="walkthrough-67" class="section level4" number="4.8.3.1">
+<div id="walkthrough-68" class="section level4" number="4.8.3.1">
 <h4><span class="header-section-number">4.8.3.1</span> Walkthrough</h4>
 <p>Have a global variable of ArrayList to remember the path. Create a helper function to recursively traverse the tree.
 If the target does not lie either in the left or right subtree of the current node.Thus, remove current node’s value
 from trace list.</p>
 </div>
-<div id="analysis-68" class="section level4" number="4.8.3.2">
+<div id="analysis-69" class="section level4" number="4.8.3.2">
 <h4><span class="header-section-number">4.8.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-70" class="section level4" number="4.8.3.3">
+<div id="algorithm-71" class="section level4" number="4.8.3.3">
 <h4><span class="header-section-number">4.8.3.3</span> Algorithm</h4>
 <p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
-<div id="java-code-43" class="section level4" number="4.8.3.4">
+<div id="java-code-45" class="section level4" number="4.8.3.4">
 <h4><span class="header-section-number">4.8.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb113"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb113-1"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-1" aria-hidden="true"></a><span class="bu">List</span>&lt;<span class="bu">TreeNode</span>&gt; trace = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb113-2"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-2" aria-hidden="true"></a></span>
-<span id="cb113-3"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-3" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">pathLengthFromRoot</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> target) {</span>
-<span id="cb113-4"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-4" aria-hidden="true"></a>    path.<span class="fu">clear</span>();</span>
-<span id="cb113-5"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-5" aria-hidden="true"></a></span>
-<span id="cb113-6"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-6" aria-hidden="true"></a>    <span class="dt">boolean</span> result = <span class="fu">backtrack</span>(root, target);</span>
-<span id="cb113-7"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-7" aria-hidden="true"></a></span>
-<span id="cb113-8"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-8" aria-hidden="true"></a>    <span class="kw">if</span>(result) {</span>
-<span id="cb113-9"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-9" aria-hidden="true"></a>        <span class="kw">return</span> trace.<span class="fu">size</span>();</span>
-<span id="cb113-10"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-10" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb113-11"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-11" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb113-12"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-12" aria-hidden="true"></a>    }</span>
-<span id="cb113-13"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-13" aria-hidden="true"></a>}</span>
-<span id="cb113-14"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-14" aria-hidden="true"></a></span>
-<span id="cb113-15"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-15" aria-hidden="true"></a><span class="dt">boolean</span> <span class="fu">backtrack</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> target) {</span>
-<span id="cb113-16"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-16" aria-hidden="true"></a>    trace.<span class="fu">add</span>(root);</span>
-<span id="cb113-17"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-17" aria-hidden="true"></a></span>
-<span id="cb113-18"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-18" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
-<span id="cb113-19"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-19" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb113-20"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-20" aria-hidden="true"></a>    }</span>
-<span id="cb113-21"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-21" aria-hidden="true"></a>    <span class="kw">if</span>(root.<span class="fu">data</span> == target) {</span>
-<span id="cb113-22"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-22" aria-hidden="true"></a>        <span class="co">//found the node</span></span>
-<span id="cb113-23"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-23" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb113-24"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-24" aria-hidden="true"></a>    }</span>
-<span id="cb113-25"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-25" aria-hidden="true"></a></span>
-<span id="cb113-26"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-26" aria-hidden="true"></a>    <span class="kw">if</span>(<span class="fu">backtrack</span>(root.<span class="fu">left</span>, target) || <span class="fu">backtrack</span>(root.<span class="fu">right</span>, target) ) {</span>
-<span id="cb113-27"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-27" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb113-28"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-28" aria-hidden="true"></a>    }</span>
-<span id="cb113-29"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-29" aria-hidden="true"></a></span>
-<span id="cb113-30"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-30" aria-hidden="true"></a>    <span class="co">//not in current path, backtrack</span></span>
-<span id="cb113-31"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-31" aria-hidden="true"></a>    trace.<span class="fu">remove</span>(path.<span class="fu">size</span>() - <span class="dv">1</span>);</span>
-<span id="cb113-32"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-32" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb113-33"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb113-33" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb114-1"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-1" aria-hidden="true"></a><span class="bu">List</span>&lt;<span class="bu">TreeNode</span>&gt; trace = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb114-2"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-2" aria-hidden="true"></a></span>
+<span id="cb114-3"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-3" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">pathLengthFromRoot</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> target) {</span>
+<span id="cb114-4"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-4" aria-hidden="true"></a>    path.<span class="fu">clear</span>();</span>
+<span id="cb114-5"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-5" aria-hidden="true"></a></span>
+<span id="cb114-6"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-6" aria-hidden="true"></a>    <span class="dt">boolean</span> result = <span class="fu">backtrack</span>(root, target);</span>
+<span id="cb114-7"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-7" aria-hidden="true"></a></span>
+<span id="cb114-8"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-8" aria-hidden="true"></a>    <span class="kw">if</span>(result) {</span>
+<span id="cb114-9"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-9" aria-hidden="true"></a>        <span class="kw">return</span> trace.<span class="fu">size</span>();</span>
+<span id="cb114-10"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-10" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb114-11"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-11" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb114-12"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-12" aria-hidden="true"></a>    }</span>
+<span id="cb114-13"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-13" aria-hidden="true"></a>}</span>
+<span id="cb114-14"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-14" aria-hidden="true"></a></span>
+<span id="cb114-15"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-15" aria-hidden="true"></a><span class="dt">boolean</span> <span class="fu">backtrack</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> target) {</span>
+<span id="cb114-16"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-16" aria-hidden="true"></a>    trace.<span class="fu">add</span>(root);</span>
+<span id="cb114-17"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-17" aria-hidden="true"></a></span>
+<span id="cb114-18"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-18" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
+<span id="cb114-19"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-19" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb114-20"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-20" aria-hidden="true"></a>    }</span>
+<span id="cb114-21"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-21" aria-hidden="true"></a>    <span class="kw">if</span>(root.<span class="fu">data</span> == target) {</span>
+<span id="cb114-22"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-22" aria-hidden="true"></a>        <span class="co">//found the node</span></span>
+<span id="cb114-23"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-23" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb114-24"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-24" aria-hidden="true"></a>    }</span>
+<span id="cb114-25"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-25" aria-hidden="true"></a></span>
+<span id="cb114-26"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-26" aria-hidden="true"></a>    <span class="kw">if</span>(<span class="fu">backtrack</span>(root.<span class="fu">left</span>, target) || <span class="fu">backtrack</span>(root.<span class="fu">right</span>, target) ) {</span>
+<span id="cb114-27"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-27" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb114-28"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-28" aria-hidden="true"></a>    }</span>
+<span id="cb114-29"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-29" aria-hidden="true"></a></span>
+<span id="cb114-30"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-30" aria-hidden="true"></a>    <span class="co">//not in current path, backtrack</span></span>
+<span id="cb114-31"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-31" aria-hidden="true"></a>    trace.<span class="fu">remove</span>(path.<span class="fu">size</span>() - <span class="dv">1</span>);</span>
+<span id="cb114-32"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-32" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb114-33"><a href="distance-of-a-node-from-the-root-firebase-level-3.html#cb114-33" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1064,44 +1065,44 @@ Figure 4.30: Some caption.
 </div>
 <div id="solution-53" class="section level3" number="4.22.3">
 <h3><span class="header-section-number">4.22.3</span> Solution</h3>
-<div id="walkthrough-88" class="section level4" number="4.22.3.1">
+<div id="walkthrough-89" class="section level4" number="4.22.3.1">
 <h4><span class="header-section-number">4.22.3.1</span> Walkthrough</h4>
 <p>For each node, compute maximum level (leaf node is -1) out of recursive call to left and right subtree + 1.
 If level increases, add a new list and add the node.val into the list – list.add(node.val)</p>
 </div>
-<div id="analysis-89" class="section level4" number="4.22.3.2">
+<div id="analysis-90" class="section level4" number="4.22.3.2">
 <h4><span class="header-section-number">4.22.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-90" class="section level4" number="4.22.3.3">
+<div id="algorithm-91" class="section level4" number="4.22.3.3">
 <h4><span class="header-section-number">4.22.3.3</span> Algorithm</h4>
 <p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
-<div id="java-code-52" class="section level4" number="4.22.3.4">
+<div id="java-code-54" class="section level4" number="4.22.3.4">
 <h4><span class="header-section-number">4.22.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb137"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb137-1"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">findLeaves</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb137-2"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt;();</span>
-<span id="cb137-3"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-3" aria-hidden="true"></a>    <span class="fu">helper</span>(root, result);</span>
-<span id="cb137-4"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-4" aria-hidden="true"></a></span>
-<span id="cb137-5"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-5" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb137-6"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-6" aria-hidden="true"></a>}</span>
-<span id="cb137-7"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-7" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">int</span> <span class="fu">helper</span>(<span class="bu">TreeNode</span> root, <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result) {</span>
-<span id="cb137-8"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-8" aria-hidden="true"></a>    <span class="kw">if</span> (root == <span class="kw">null</span>) {</span>
-<span id="cb137-9"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-9" aria-hidden="true"></a>        <span class="kw">return</span> -<span class="dv">1</span>;</span>
-<span id="cb137-10"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-10" aria-hidden="true"></a>    }</span>
-<span id="cb137-11"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-11" aria-hidden="true"></a></span>
-<span id="cb137-12"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-12" aria-hidden="true"></a>    <span class="dt">int</span> level = <span class="bu">Math</span>.<span class="fu">max</span>(<span class="fu">helper</span>(root.<span class="fu">left</span>, result), <span class="fu">helper</span>(root.<span class="fu">right</span>, result)) + <span class="dv">1</span>;</span>
-<span id="cb137-13"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-13" aria-hidden="true"></a></span>
-<span id="cb137-14"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-14" aria-hidden="true"></a>    <span class="co">//add a new level if level increases</span></span>
-<span id="cb137-15"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-15" aria-hidden="true"></a>    <span class="kw">if</span> (result.<span class="fu">size</span>() &lt;= level) {</span>
-<span id="cb137-16"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-16" aria-hidden="true"></a>        result.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;());</span>
-<span id="cb137-17"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-17" aria-hidden="true"></a>    }</span>
-<span id="cb137-18"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-18" aria-hidden="true"></a></span>
-<span id="cb137-19"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-19" aria-hidden="true"></a>    <span class="co">//add root.val</span></span>
-<span id="cb137-20"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-20" aria-hidden="true"></a>    result.<span class="fu">get</span>(level).<span class="fu">add</span>(root.<span class="fu">val</span>);</span>
-<span id="cb137-21"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-21" aria-hidden="true"></a></span>
-<span id="cb137-22"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-22" aria-hidden="true"></a>    <span class="kw">return</span> level;</span>
-<span id="cb137-23"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb137-23" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb138-1"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">findLeaves</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb138-2"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt;();</span>
+<span id="cb138-3"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-3" aria-hidden="true"></a>    <span class="fu">helper</span>(root, result);</span>
+<span id="cb138-4"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-4" aria-hidden="true"></a></span>
+<span id="cb138-5"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-5" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb138-6"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-6" aria-hidden="true"></a>}</span>
+<span id="cb138-7"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-7" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">int</span> <span class="fu">helper</span>(<span class="bu">TreeNode</span> root, <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result) {</span>
+<span id="cb138-8"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-8" aria-hidden="true"></a>    <span class="kw">if</span> (root == <span class="kw">null</span>) {</span>
+<span id="cb138-9"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-9" aria-hidden="true"></a>        <span class="kw">return</span> -<span class="dv">1</span>;</span>
+<span id="cb138-10"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-10" aria-hidden="true"></a>    }</span>
+<span id="cb138-11"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-11" aria-hidden="true"></a></span>
+<span id="cb138-12"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-12" aria-hidden="true"></a>    <span class="dt">int</span> level = <span class="bu">Math</span>.<span class="fu">max</span>(<span class="fu">helper</span>(root.<span class="fu">left</span>, result), <span class="fu">helper</span>(root.<span class="fu">right</span>, result)) + <span class="dv">1</span>;</span>
+<span id="cb138-13"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-13" aria-hidden="true"></a></span>
+<span id="cb138-14"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-14" aria-hidden="true"></a>    <span class="co">//add a new level if level increases</span></span>
+<span id="cb138-15"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-15" aria-hidden="true"></a>    <span class="kw">if</span> (result.<span class="fu">size</span>() &lt;= level) {</span>
+<span id="cb138-16"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-16" aria-hidden="true"></a>        result.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;());</span>
+<span id="cb138-17"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-17" aria-hidden="true"></a>    }</span>
+<span id="cb138-18"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-18" aria-hidden="true"></a></span>
+<span id="cb138-19"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-19" aria-hidden="true"></a>    <span class="co">//add root.val</span></span>
+<span id="cb138-20"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-20" aria-hidden="true"></a>    result.<span class="fu">get</span>(level).<span class="fu">add</span>(root.<span class="fu">val</span>);</span>
+<span id="cb138-21"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-21" aria-hidden="true"></a></span>
+<span id="cb138-22"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-22" aria-hidden="true"></a>    <span class="kw">return</span> level;</span>
+<span id="cb138-23"><a href="find-leaves-of-binary-tree-leet-code-366-medium.html#cb138-23" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1085,19 +1086,19 @@ Figure 10.1: Some caption.
 </div>
 <p>There are many duplicated subproblems.</p>
 </div>
-<div id="analysis-155" class="section level4" number="10.5.3.2">
+<div id="analysis-156" class="section level4" number="10.5.3.2">
 <h4><span class="header-section-number">10.5.3.2</span> Analysis</h4>
 <p>Thus, the overall time complexity is expensive, O(2^{h})</p>
 </div>
-<div id="algorithm-159" class="section level4" number="10.5.3.3">
+<div id="algorithm-160" class="section level4" number="10.5.3.3">
 <h4><span class="header-section-number">10.5.3.3</span> Algorithm</h4>
 <p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
 </div>
 <div id="java-code---top-down-recursion" class="section level4" number="10.5.3.4">
 <h4><span class="header-section-number">10.5.3.4</span> Java Code - Top-down Recursion</h4>
-<div class="sourceCode" id="cb222"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb222-1"><a href="fibonacci-sequence-firecode-level-2.html#cb222-1" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fib</span>(<span class="dt">int</span> x) {</span>
-<span id="cb222-2"><a href="fibonacci-sequence-firecode-level-2.html#cb222-2" aria-hidden="true"></a>    <span class="kw">return</span> (x == <span class="dv">0</span> || x == <span class="dv">1</span>) ? x : <span class="fu">fib</span>(x - <span class="dv">1</span>) + <span class="fu">fib</span>(x - <span class="dv">2</span>);</span>
-<span id="cb222-3"><a href="fibonacci-sequence-firecode-level-2.html#cb222-3" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb223-1"><a href="fibonacci-sequence-firecode-level-2.html#cb223-1" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fib</span>(<span class="dt">int</span> x) {</span>
+<span id="cb223-2"><a href="fibonacci-sequence-firecode-level-2.html#cb223-2" aria-hidden="true"></a>    <span class="kw">return</span> (x == <span class="dv">0</span> || x == <span class="dv">1</span>) ? x : <span class="fu">fib</span>(x - <span class="dv">1</span>) + <span class="fu">fib</span>(x - <span class="dv">2</span>);</span>
+<span id="cb223-3"><a href="fibonacci-sequence-firecode-level-2.html#cb223-3" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---tail-recursion" class="section level3" number="10.5.4">
@@ -1105,65 +1106,65 @@ Figure 10.1: Some caption.
 <div id="walkthough-1" class="section level4" number="10.5.4.1">
 <h4><span class="header-section-number">10.5.4.1</span> Walkthough</h4>
 </div>
-<div id="algorithm-160" class="section level4" number="10.5.4.2">
+<div id="algorithm-161" class="section level4" number="10.5.4.2">
 <h4><span class="header-section-number">10.5.4.2</span> Algorithm</h4>
 <p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
 </div>
 <div id="java-code---tail-recursion" class="section level4" number="10.5.4.3">
 <h4><span class="header-section-number">10.5.4.3</span> Java Code - Tail Recursion</h4>
-<div class="sourceCode" id="cb223"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb223-1"><a href="fibonacci-sequence-firecode-level-2.html#cb223-1" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fib</span>(<span class="dt">int</span> x) {</span>
-<span id="cb223-2"><a href="fibonacci-sequence-firecode-level-2.html#cb223-2" aria-hidden="true"></a>    <span class="kw">if</span>(x &lt;= <span class="dv">2</span>) {</span>
-<span id="cb223-3"><a href="fibonacci-sequence-firecode-level-2.html#cb223-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">2</span>;</span>
-<span id="cb223-4"><a href="fibonacci-sequence-firecode-level-2.html#cb223-4" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb223-5"><a href="fibonacci-sequence-firecode-level-2.html#cb223-5" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">fibTailRec</span>(x, <span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb223-6"><a href="fibonacci-sequence-firecode-level-2.html#cb223-6" aria-hidden="true"></a>    }</span>
-<span id="cb223-7"><a href="fibonacci-sequence-firecode-level-2.html#cb223-7" aria-hidden="true"></a>}</span>
-<span id="cb223-8"><a href="fibonacci-sequence-firecode-level-2.html#cb223-8" aria-hidden="true"></a></span>
-<span id="cb223-9"><a href="fibonacci-sequence-firecode-level-2.html#cb223-9" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fibTailRec</span>(<span class="dt">int</span> x, <span class="dt">int</span> fMinus1, <span class="dt">int</span> fMinus2) {</span>
-<span id="cb223-10"><a href="fibonacci-sequence-firecode-level-2.html#cb223-10" aria-hidden="true"></a>    <span class="kw">if</span>(x == <span class="dv">0</span>) {</span>
-<span id="cb223-11"><a href="fibonacci-sequence-firecode-level-2.html#cb223-11" aria-hidden="true"></a>        <span class="kw">return</span> fMinus1;</span>
-<span id="cb223-12"><a href="fibonacci-sequence-firecode-level-2.html#cb223-12" aria-hidden="true"></a>    }</span>
-<span id="cb223-13"><a href="fibonacci-sequence-firecode-level-2.html#cb223-13" aria-hidden="true"></a></span>
-<span id="cb223-14"><a href="fibonacci-sequence-firecode-level-2.html#cb223-14" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">fibTailRec</span>(x - <span class="dv">1</span>, fMinus2, fMinus1 + fMinus2);</span>
-<span id="cb223-15"><a href="fibonacci-sequence-firecode-level-2.html#cb223-15" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb224"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb224-1"><a href="fibonacci-sequence-firecode-level-2.html#cb224-1" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fib</span>(<span class="dt">int</span> x) {</span>
+<span id="cb224-2"><a href="fibonacci-sequence-firecode-level-2.html#cb224-2" aria-hidden="true"></a>    <span class="kw">if</span>(x &lt;= <span class="dv">2</span>) {</span>
+<span id="cb224-3"><a href="fibonacci-sequence-firecode-level-2.html#cb224-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">2</span>;</span>
+<span id="cb224-4"><a href="fibonacci-sequence-firecode-level-2.html#cb224-4" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb224-5"><a href="fibonacci-sequence-firecode-level-2.html#cb224-5" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">fibTailRec</span>(x, <span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb224-6"><a href="fibonacci-sequence-firecode-level-2.html#cb224-6" aria-hidden="true"></a>    }</span>
+<span id="cb224-7"><a href="fibonacci-sequence-firecode-level-2.html#cb224-7" aria-hidden="true"></a>}</span>
+<span id="cb224-8"><a href="fibonacci-sequence-firecode-level-2.html#cb224-8" aria-hidden="true"></a></span>
+<span id="cb224-9"><a href="fibonacci-sequence-firecode-level-2.html#cb224-9" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fibTailRec</span>(<span class="dt">int</span> x, <span class="dt">int</span> fMinus1, <span class="dt">int</span> fMinus2) {</span>
+<span id="cb224-10"><a href="fibonacci-sequence-firecode-level-2.html#cb224-10" aria-hidden="true"></a>    <span class="kw">if</span>(x == <span class="dv">0</span>) {</span>
+<span id="cb224-11"><a href="fibonacci-sequence-firecode-level-2.html#cb224-11" aria-hidden="true"></a>        <span class="kw">return</span> fMinus1;</span>
+<span id="cb224-12"><a href="fibonacci-sequence-firecode-level-2.html#cb224-12" aria-hidden="true"></a>    }</span>
+<span id="cb224-13"><a href="fibonacci-sequence-firecode-level-2.html#cb224-13" aria-hidden="true"></a></span>
+<span id="cb224-14"><a href="fibonacci-sequence-firecode-level-2.html#cb224-14" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">fibTailRec</span>(x - <span class="dv">1</span>, fMinus2, fMinus1 + fMinus2);</span>
+<span id="cb224-15"><a href="fibonacci-sequence-firecode-level-2.html#cb224-15" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---dynamic-programming-bottom-up-iteration" class="section level3" number="10.5.5">
 <h3><span class="header-section-number">10.5.5</span> Solution - Dynamic Programming (Bottom-up Iteration)</h3>
-<div id="walkthrough-153" class="section level4" number="10.5.5.1">
+<div id="walkthrough-154" class="section level4" number="10.5.5.1">
 <h4><span class="header-section-number">10.5.5.1</span> Walkthrough</h4>
 <p>Define n0 and n1 and another variable to add n0 + n1. Have a loop to iterate the compute these three values from
 2 to n. return n1.</p>
 </div>
-<div id="analysis-156" class="section level4" number="10.5.5.2">
+<div id="analysis-157" class="section level4" number="10.5.5.2">
 <h4><span class="header-section-number">10.5.5.2</span> Analysis</h4>
 <p>Time Complexity is O(n) since this is the number of computation performed.</p>
 </div>
-<div id="algorithm-161" class="section level4" number="10.5.5.3">
+<div id="algorithm-162" class="section level4" number="10.5.5.3">
 <h4><span class="header-section-number">10.5.5.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
 </div>
 <div id="java-code---dynamic-programming-bottom-up-iteration" class="section level4" number="10.5.5.4">
 <h4><span class="header-section-number">10.5.5.4</span> Java Code - Dynamic Programming (Bottom-up Iteration)</h4>
-<div class="sourceCode" id="cb224"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb224-1"><a href="fibonacci-sequence-firecode-level-2.html#cb224-1" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fib</span>(<span class="dt">int</span> n) {</span>
-<span id="cb224-2"><a href="fibonacci-sequence-firecode-level-2.html#cb224-2" aria-hidden="true"></a>    <span class="kw">if</span>(n == <span class="dv">0</span>) {</span>
-<span id="cb224-3"><a href="fibonacci-sequence-firecode-level-2.html#cb224-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb224-4"><a href="fibonacci-sequence-firecode-level-2.html#cb224-4" aria-hidden="true"></a>    }</span>
-<span id="cb224-5"><a href="fibonacci-sequence-firecode-level-2.html#cb224-5" aria-hidden="true"></a></span>
-<span id="cb224-6"><a href="fibonacci-sequence-firecode-level-2.html#cb224-6" aria-hidden="true"></a>    <span class="kw">if</span>(n == <span class="dv">1</span>) {</span>
-<span id="cb224-7"><a href="fibonacci-sequence-firecode-level-2.html#cb224-7" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">1</span>;</span>
-<span id="cb224-8"><a href="fibonacci-sequence-firecode-level-2.html#cb224-8" aria-hidden="true"></a>    }</span>
-<span id="cb224-9"><a href="fibonacci-sequence-firecode-level-2.html#cb224-9" aria-hidden="true"></a></span>
-<span id="cb224-10"><a href="fibonacci-sequence-firecode-level-2.html#cb224-10" aria-hidden="true"></a>    <span class="dt">int</span> n0 = <span class="dv">0</span>, n1 = <span class="dv">1</span>, temp = <span class="dv">0</span>;</span>
-<span id="cb224-11"><a href="fibonacci-sequence-firecode-level-2.html#cb224-11" aria-hidden="true"></a></span>
-<span id="cb224-12"><a href="fibonacci-sequence-firecode-level-2.html#cb224-12" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">2</span>; i &lt;= n; i++) {</span>
-<span id="cb224-13"><a href="fibonacci-sequence-firecode-level-2.html#cb224-13" aria-hidden="true"></a>        temp = n0 + n1;</span>
-<span id="cb224-14"><a href="fibonacci-sequence-firecode-level-2.html#cb224-14" aria-hidden="true"></a>        n0 = n1;</span>
-<span id="cb224-15"><a href="fibonacci-sequence-firecode-level-2.html#cb224-15" aria-hidden="true"></a>        n1 = temp;</span>
-<span id="cb224-16"><a href="fibonacci-sequence-firecode-level-2.html#cb224-16" aria-hidden="true"></a>    }</span>
-<span id="cb224-17"><a href="fibonacci-sequence-firecode-level-2.html#cb224-17" aria-hidden="true"></a></span>
-<span id="cb224-18"><a href="fibonacci-sequence-firecode-level-2.html#cb224-18" aria-hidden="true"></a>    <span class="kw">return</span> n1;</span>
-<span id="cb224-19"><a href="fibonacci-sequence-firecode-level-2.html#cb224-19" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb225"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb225-1"><a href="fibonacci-sequence-firecode-level-2.html#cb225-1" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fib</span>(<span class="dt">int</span> n) {</span>
+<span id="cb225-2"><a href="fibonacci-sequence-firecode-level-2.html#cb225-2" aria-hidden="true"></a>    <span class="kw">if</span>(n == <span class="dv">0</span>) {</span>
+<span id="cb225-3"><a href="fibonacci-sequence-firecode-level-2.html#cb225-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb225-4"><a href="fibonacci-sequence-firecode-level-2.html#cb225-4" aria-hidden="true"></a>    }</span>
+<span id="cb225-5"><a href="fibonacci-sequence-firecode-level-2.html#cb225-5" aria-hidden="true"></a></span>
+<span id="cb225-6"><a href="fibonacci-sequence-firecode-level-2.html#cb225-6" aria-hidden="true"></a>    <span class="kw">if</span>(n == <span class="dv">1</span>) {</span>
+<span id="cb225-7"><a href="fibonacci-sequence-firecode-level-2.html#cb225-7" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">1</span>;</span>
+<span id="cb225-8"><a href="fibonacci-sequence-firecode-level-2.html#cb225-8" aria-hidden="true"></a>    }</span>
+<span id="cb225-9"><a href="fibonacci-sequence-firecode-level-2.html#cb225-9" aria-hidden="true"></a></span>
+<span id="cb225-10"><a href="fibonacci-sequence-firecode-level-2.html#cb225-10" aria-hidden="true"></a>    <span class="dt">int</span> n0 = <span class="dv">0</span>, n1 = <span class="dv">1</span>, temp = <span class="dv">0</span>;</span>
+<span id="cb225-11"><a href="fibonacci-sequence-firecode-level-2.html#cb225-11" aria-hidden="true"></a></span>
+<span id="cb225-12"><a href="fibonacci-sequence-firecode-level-2.html#cb225-12" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">2</span>; i &lt;= n; i++) {</span>
+<span id="cb225-13"><a href="fibonacci-sequence-firecode-level-2.html#cb225-13" aria-hidden="true"></a>        temp = n0 + n1;</span>
+<span id="cb225-14"><a href="fibonacci-sequence-firecode-level-2.html#cb225-14" aria-hidden="true"></a>        n0 = n1;</span>
+<span id="cb225-15"><a href="fibonacci-sequence-firecode-level-2.html#cb225-15" aria-hidden="true"></a>        n1 = temp;</span>
+<span id="cb225-16"><a href="fibonacci-sequence-firecode-level-2.html#cb225-16" aria-hidden="true"></a>    }</span>
+<span id="cb225-17"><a href="fibonacci-sequence-firecode-level-2.html#cb225-17" aria-hidden="true"></a></span>
+<span id="cb225-18"><a href="fibonacci-sequence-firecode-level-2.html#cb225-18" aria-hidden="true"></a>    <span class="kw">return</span> n1;</span>
+<span id="cb225-19"><a href="fibonacci-sequence-firecode-level-2.html#cb225-19" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---dynamic-programming-with-memoization" class="section level3" number="10.5.6">
@@ -1172,31 +1173,31 @@ Figure 10.1: Some caption.
 <h4><span class="header-section-number">10.5.6.1</span> Walkthough</h4>
 <p>The strategy is to avoid overlapping subproblems using cache.</p>
 </div>
-<div id="analysis-157" class="section level4" number="10.5.6.2">
+<div id="analysis-158" class="section level4" number="10.5.6.2">
 <h4><span class="header-section-number">10.5.6.2</span> Analysis</h4>
 <p>There will only be n + 1 subproblems computed. The time complexity is <span class="math inline">\(O(n)\)</span></p>
 </div>
-<div id="algorithm-162" class="section level4" number="10.5.6.3">
+<div id="algorithm-163" class="section level4" number="10.5.6.3">
 <h4><span class="header-section-number">10.5.6.3</span> Algorithm</h4>
 <p>memo <a href="glossary-of-algorithm.html#memo">1.2.8</a>, recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a>, dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
 </div>
 <div id="java-code---dynamic-programming-with-memoization" class="section level4" number="10.5.6.4">
 <h4><span class="header-section-number">10.5.6.4</span> Java Code - Dynamic Programming with Memoization</h4>
-<div class="sourceCode" id="cb225"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb225-1"><a href="fibonacci-sequence-firecode-level-2.html#cb225-1" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fib</span>(<span class="dt">int</span> x) {</span>
-<span id="cb225-2"><a href="fibonacci-sequence-firecode-level-2.html#cb225-2" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">fibMemoization</span>(x, <span class="kw">new</span> <span class="dt">int</span>[x + <span class="dv">1</span>]);</span>
-<span id="cb225-3"><a href="fibonacci-sequence-firecode-level-2.html#cb225-3" aria-hidden="true"></a>}</span>
-<span id="cb225-4"><a href="fibonacci-sequence-firecode-level-2.html#cb225-4" aria-hidden="true"></a></span>
-<span id="cb225-5"><a href="fibonacci-sequence-firecode-level-2.html#cb225-5" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fibMemoization</span>(<span class="dt">int</span> x, <span class="dt">int</span>[] mem) {</span>
-<span id="cb225-6"><a href="fibonacci-sequence-firecode-level-2.html#cb225-6" aria-hidden="true"></a>    <span class="kw">if</span> (mem[x] != <span class="dv">0</span>) {</span>
-<span id="cb225-7"><a href="fibonacci-sequence-firecode-level-2.html#cb225-7" aria-hidden="true"></a>        <span class="kw">return</span> mem[x];</span>
-<span id="cb225-8"><a href="fibonacci-sequence-firecode-level-2.html#cb225-8" aria-hidden="true"></a>    }</span>
-<span id="cb225-9"><a href="fibonacci-sequence-firecode-level-2.html#cb225-9" aria-hidden="true"></a>    <span class="kw">if</span> (x == <span class="dv">1</span> || x == <span class="dv">2</span>)  {</span>
-<span id="cb225-10"><a href="fibonacci-sequence-firecode-level-2.html#cb225-10" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">1</span>;</span>
-<span id="cb225-11"><a href="fibonacci-sequence-firecode-level-2.html#cb225-11" aria-hidden="true"></a>    }</span>
-<span id="cb225-12"><a href="fibonacci-sequence-firecode-level-2.html#cb225-12" aria-hidden="true"></a>    <span class="dt">int</span> n = <span class="fu">fibMemoization</span>(x - <span class="dv">1</span>, mem) + <span class="fu">fibMemoization</span>(x - <span class="dv">2</span>,mem);</span>
-<span id="cb225-13"><a href="fibonacci-sequence-firecode-level-2.html#cb225-13" aria-hidden="true"></a>    mem[x] = n;</span>
-<span id="cb225-14"><a href="fibonacci-sequence-firecode-level-2.html#cb225-14" aria-hidden="true"></a>    <span class="kw">return</span> n;</span>
-<span id="cb225-15"><a href="fibonacci-sequence-firecode-level-2.html#cb225-15" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb226"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb226-1"><a href="fibonacci-sequence-firecode-level-2.html#cb226-1" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fib</span>(<span class="dt">int</span> x) {</span>
+<span id="cb226-2"><a href="fibonacci-sequence-firecode-level-2.html#cb226-2" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">fibMemoization</span>(x, <span class="kw">new</span> <span class="dt">int</span>[x + <span class="dv">1</span>]);</span>
+<span id="cb226-3"><a href="fibonacci-sequence-firecode-level-2.html#cb226-3" aria-hidden="true"></a>}</span>
+<span id="cb226-4"><a href="fibonacci-sequence-firecode-level-2.html#cb226-4" aria-hidden="true"></a></span>
+<span id="cb226-5"><a href="fibonacci-sequence-firecode-level-2.html#cb226-5" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">fibMemoization</span>(<span class="dt">int</span> x, <span class="dt">int</span>[] mem) {</span>
+<span id="cb226-6"><a href="fibonacci-sequence-firecode-level-2.html#cb226-6" aria-hidden="true"></a>    <span class="kw">if</span> (mem[x] != <span class="dv">0</span>) {</span>
+<span id="cb226-7"><a href="fibonacci-sequence-firecode-level-2.html#cb226-7" aria-hidden="true"></a>        <span class="kw">return</span> mem[x];</span>
+<span id="cb226-8"><a href="fibonacci-sequence-firecode-level-2.html#cb226-8" aria-hidden="true"></a>    }</span>
+<span id="cb226-9"><a href="fibonacci-sequence-firecode-level-2.html#cb226-9" aria-hidden="true"></a>    <span class="kw">if</span> (x == <span class="dv">1</span> || x == <span class="dv">2</span>)  {</span>
+<span id="cb226-10"><a href="fibonacci-sequence-firecode-level-2.html#cb226-10" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">1</span>;</span>
+<span id="cb226-11"><a href="fibonacci-sequence-firecode-level-2.html#cb226-11" aria-hidden="true"></a>    }</span>
+<span id="cb226-12"><a href="fibonacci-sequence-firecode-level-2.html#cb226-12" aria-hidden="true"></a>    <span class="dt">int</span> n = <span class="fu">fibMemoization</span>(x - <span class="dv">1</span>, mem) + <span class="fu">fibMemoization</span>(x - <span class="dv">2</span>,mem);</span>
+<span id="cb226-13"><a href="fibonacci-sequence-firecode-level-2.html#cb226-13" aria-hidden="true"></a>    mem[x] = n;</span>
+<span id="cb226-14"><a href="fibonacci-sequence-firecode-level-2.html#cb226-14" aria-hidden="true"></a>    <span class="kw">return</span> n;</span>
+<span id="cb226-15"><a href="fibonacci-sequence-firecode-level-2.html#cb226-15" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

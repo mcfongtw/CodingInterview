@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1061,7 +1062,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution---array" class="section level3" number="12.3.3">
 <h3><span class="header-section-number">12.3.3</span> Solution - Array</h3>
-<div id="walkthrough-159" class="section level4" number="12.3.3.1">
+<div id="walkthrough-160" class="section level4" number="12.3.3.1">
 <h4><span class="header-section-number">12.3.3.1</span> Walkthrough</h4>
 <p>With array implementation, there is a need to resize when enqueueing exceeds limits. Thus, in average
 case, enqueue is constatnt time but will be O(n) in worst case.</p>
@@ -1074,98 +1075,98 @@ this immutable implementation into a new queue.</p>
 <li>search(val) takes O(n) as it traverse all elements.</li>
 </ul>
 </div>
-<div id="algorithm-168" class="section level4" number="12.3.3.2">
+<div id="algorithm-169" class="section level4" number="12.3.3.2">
 <h4><span class="header-section-number">12.3.3.2</span> Algorithm</h4>
 </div>
 <div id="java-code---array" class="section level4" number="12.3.3.3">
 <h4><span class="header-section-number">12.3.3.3</span> Java Code - Array</h4>
-<div class="sourceCode" id="cb233"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb233-1"><a href="design-a-queue.html#cb233-1" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> MyArrayQueue&lt;T&gt; {</span>
-<span id="cb233-2"><a href="design-a-queue.html#cb233-2" aria-hidden="true"></a></span>
-<span id="cb233-3"><a href="design-a-queue.html#cb233-3" aria-hidden="true"></a>    <span class="kw">private</span> T [] array;</span>
-<span id="cb233-4"><a href="design-a-queue.html#cb233-4" aria-hidden="true"></a></span>
-<span id="cb233-5"><a href="design-a-queue.html#cb233-5" aria-hidden="true"></a>    <span class="co">// position of last element</span></span>
-<span id="cb233-6"><a href="design-a-queue.html#cb233-6" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> endPos = -<span class="dv">1</span>;</span>
-<span id="cb233-7"><a href="design-a-queue.html#cb233-7" aria-hidden="true"></a></span>
-<span id="cb233-8"><a href="design-a-queue.html#cb233-8" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> DEFAULT_INITIAL_CAPACITY = <span class="dv">10</span>;</span>
-<span id="cb233-9"><a href="design-a-queue.html#cb233-9" aria-hidden="true"></a></span>
-<span id="cb233-10"><a href="design-a-queue.html#cb233-10" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">MyArrayQueue</span>() {</span>
-<span id="cb233-11"><a href="design-a-queue.html#cb233-11" aria-hidden="true"></a>        array = (T[]) <span class="kw">new</span> <span class="bu">Object</span>[DEFAULT_INITIAL_CAPACITY];</span>
-<span id="cb233-12"><a href="design-a-queue.html#cb233-12" aria-hidden="true"></a>    }</span>
-<span id="cb233-13"><a href="design-a-queue.html#cb233-13" aria-hidden="true"></a></span>
-<span id="cb233-14"><a href="design-a-queue.html#cb233-14" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">MyArrayQueue</span>(<span class="dt">int</span> initialCapacity) {</span>
-<span id="cb233-15"><a href="design-a-queue.html#cb233-15" aria-hidden="true"></a>        array = (T[]) <span class="kw">new</span> <span class="bu">Object</span>[initialCapacity];</span>
-<span id="cb233-16"><a href="design-a-queue.html#cb233-16" aria-hidden="true"></a>    }</span>
-<span id="cb233-17"><a href="design-a-queue.html#cb233-17" aria-hidden="true"></a></span>
-<span id="cb233-18"><a href="design-a-queue.html#cb233-18" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isEmpty</span>() {</span>
-<span id="cb233-19"><a href="design-a-queue.html#cb233-19" aria-hidden="true"></a>        <span class="kw">return</span> endPos == -<span class="dv">1</span>;</span>
-<span id="cb233-20"><a href="design-a-queue.html#cb233-20" aria-hidden="true"></a>    }</span>
-<span id="cb233-21"><a href="design-a-queue.html#cb233-21" aria-hidden="true"></a></span>
-<span id="cb233-22"><a href="design-a-queue.html#cb233-22" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {</span>
-<span id="cb233-23"><a href="design-a-queue.html#cb233-23" aria-hidden="true"></a>        <span class="kw">return</span> endPos + <span class="dv">1</span>;</span>
-<span id="cb233-24"><a href="design-a-queue.html#cb233-24" aria-hidden="true"></a>    }</span>
-<span id="cb233-25"><a href="design-a-queue.html#cb233-25" aria-hidden="true"></a></span>
-<span id="cb233-26"><a href="design-a-queue.html#cb233-26" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">resize</span>(<span class="dt">int</span> newSize) {</span>
-<span id="cb233-27"><a href="design-a-queue.html#cb233-27" aria-hidden="true"></a>        <span class="bu">System</span>.<span class="fu">out</span>.<span class="fu">println</span>(<span class="st">&quot;Resizing from &quot;</span> + array.<span class="fu">length</span> + <span class="st">&quot; to &quot;</span> + newSize);</span>
-<span id="cb233-28"><a href="design-a-queue.html#cb233-28" aria-hidden="true"></a>        T[] newArray = <span class="bu">Arrays</span>.<span class="fu">copyOfRange</span>(array, <span class="dv">0</span>, newSize);</span>
-<span id="cb233-29"><a href="design-a-queue.html#cb233-29" aria-hidden="true"></a>        array = newArray;</span>
-<span id="cb233-30"><a href="design-a-queue.html#cb233-30" aria-hidden="true"></a>    }</span>
-<span id="cb233-31"><a href="design-a-queue.html#cb233-31" aria-hidden="true"></a></span>
-<span id="cb233-32"><a href="design-a-queue.html#cb233-32" aria-hidden="true"></a>    <span class="co">// add the item</span></span>
-<span id="cb233-33"><a href="design-a-queue.html#cb233-33" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">enqueue</span>(T item) {</span>
-<span id="cb233-34"><a href="design-a-queue.html#cb233-34" aria-hidden="true"></a>        Objects.<span class="fu">requireNonNull</span>(item);</span>
-<span id="cb233-35"><a href="design-a-queue.html#cb233-35" aria-hidden="true"></a></span>
-<span id="cb233-36"><a href="design-a-queue.html#cb233-36" aria-hidden="true"></a>        <span class="kw">if</span>( (endPos + <span class="dv">1</span>) &gt;= array.<span class="fu">length</span>) {</span>
-<span id="cb233-37"><a href="design-a-queue.html#cb233-37" aria-hidden="true"></a>            <span class="fu">resize</span>(<span class="dv">2</span> * array.<span class="fu">length</span>);</span>
-<span id="cb233-38"><a href="design-a-queue.html#cb233-38" aria-hidden="true"></a>        }</span>
-<span id="cb233-39"><a href="design-a-queue.html#cb233-39" aria-hidden="true"></a></span>
-<span id="cb233-40"><a href="design-a-queue.html#cb233-40" aria-hidden="true"></a>        endPos++;</span>
-<span id="cb233-41"><a href="design-a-queue.html#cb233-41" aria-hidden="true"></a>        array[endPos] = item;</span>
-<span id="cb233-42"><a href="design-a-queue.html#cb233-42" aria-hidden="true"></a>    }</span>
-<span id="cb233-43"><a href="design-a-queue.html#cb233-43" aria-hidden="true"></a></span>
-<span id="cb233-44"><a href="design-a-queue.html#cb233-44" aria-hidden="true"></a>    <span class="co">// remove first item</span></span>
-<span id="cb233-45"><a href="design-a-queue.html#cb233-45" aria-hidden="true"></a>    <span class="kw">public</span> T <span class="fu">dequeue</span>() {</span>
-<span id="cb233-46"><a href="design-a-queue.html#cb233-46" aria-hidden="true"></a>        <span class="kw">if</span>(endPos == -<span class="dv">1</span>) {</span>
-<span id="cb233-47"><a href="design-a-queue.html#cb233-47" aria-hidden="true"></a>            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();</span>
-<span id="cb233-48"><a href="design-a-queue.html#cb233-48" aria-hidden="true"></a>        }</span>
-<span id="cb233-49"><a href="design-a-queue.html#cb233-49" aria-hidden="true"></a></span>
-<span id="cb233-50"><a href="design-a-queue.html#cb233-50" aria-hidden="true"></a>        <span class="co">// return the first element</span></span>
-<span id="cb233-51"><a href="design-a-queue.html#cb233-51" aria-hidden="true"></a>        T result = array[<span class="dv">0</span>];</span>
-<span id="cb233-52"><a href="design-a-queue.html#cb233-52" aria-hidden="true"></a></span>
-<span id="cb233-53"><a href="design-a-queue.html#cb233-53" aria-hidden="true"></a>        <span class="co">//move the element one backward</span></span>
-<span id="cb233-54"><a href="design-a-queue.html#cb233-54" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; endPos; i++) {</span>
-<span id="cb233-55"><a href="design-a-queue.html#cb233-55" aria-hidden="true"></a>            array[i] = array[i+<span class="dv">1</span>];</span>
-<span id="cb233-56"><a href="design-a-queue.html#cb233-56" aria-hidden="true"></a>        }</span>
-<span id="cb233-57"><a href="design-a-queue.html#cb233-57" aria-hidden="true"></a></span>
-<span id="cb233-58"><a href="design-a-queue.html#cb233-58" aria-hidden="true"></a>        <span class="co">//nullify last position</span></span>
-<span id="cb233-59"><a href="design-a-queue.html#cb233-59" aria-hidden="true"></a>        array[endPos] = <span class="kw">null</span>;</span>
-<span id="cb233-60"><a href="design-a-queue.html#cb233-60" aria-hidden="true"></a>        endPos--;</span>
-<span id="cb233-61"><a href="design-a-queue.html#cb233-61" aria-hidden="true"></a></span>
-<span id="cb233-62"><a href="design-a-queue.html#cb233-62" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
-<span id="cb233-63"><a href="design-a-queue.html#cb233-63" aria-hidden="true"></a>    }</span>
-<span id="cb233-64"><a href="design-a-queue.html#cb233-64" aria-hidden="true"></a></span>
-<span id="cb233-65"><a href="design-a-queue.html#cb233-65" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">search</span>(<span class="dt">int</span> val) {</span>
-<span id="cb233-66"><a href="design-a-queue.html#cb233-66" aria-hidden="true"></a>        <span class="kw">if</span>(index &gt; endPos) {</span>
-<span id="cb233-67"><a href="design-a-queue.html#cb233-67" aria-hidden="true"></a>            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();</span>
-<span id="cb233-68"><a href="design-a-queue.html#cb233-68" aria-hidden="true"></a>        }</span>
-<span id="cb233-69"><a href="design-a-queue.html#cb233-69" aria-hidden="true"></a></span>
-<span id="cb233-70"><a href="design-a-queue.html#cb233-70" aria-hidden="true"></a></span>
-<span id="cb233-71"><a href="design-a-queue.html#cb233-71" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= endPos; i++) {</span>
-<span id="cb233-72"><a href="design-a-queue.html#cb233-72" aria-hidden="true"></a>            <span class="kw">if</span>(array[i] == val) {</span>
-<span id="cb233-73"><a href="design-a-queue.html#cb233-73" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb233-74"><a href="design-a-queue.html#cb233-74" aria-hidden="true"></a>            }</span>
-<span id="cb233-75"><a href="design-a-queue.html#cb233-75" aria-hidden="true"></a>        }</span>
-<span id="cb233-76"><a href="design-a-queue.html#cb233-76" aria-hidden="true"></a></span>
-<span id="cb233-77"><a href="design-a-queue.html#cb233-77" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb233-78"><a href="design-a-queue.html#cb233-78" aria-hidden="true"></a>    }</span>
-<span id="cb233-79"><a href="design-a-queue.html#cb233-79" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb234"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb234-1"><a href="design-a-queue.html#cb234-1" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> MyArrayQueue&lt;T&gt; {</span>
+<span id="cb234-2"><a href="design-a-queue.html#cb234-2" aria-hidden="true"></a></span>
+<span id="cb234-3"><a href="design-a-queue.html#cb234-3" aria-hidden="true"></a>    <span class="kw">private</span> T [] array;</span>
+<span id="cb234-4"><a href="design-a-queue.html#cb234-4" aria-hidden="true"></a></span>
+<span id="cb234-5"><a href="design-a-queue.html#cb234-5" aria-hidden="true"></a>    <span class="co">// position of last element</span></span>
+<span id="cb234-6"><a href="design-a-queue.html#cb234-6" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> endPos = -<span class="dv">1</span>;</span>
+<span id="cb234-7"><a href="design-a-queue.html#cb234-7" aria-hidden="true"></a></span>
+<span id="cb234-8"><a href="design-a-queue.html#cb234-8" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> DEFAULT_INITIAL_CAPACITY = <span class="dv">10</span>;</span>
+<span id="cb234-9"><a href="design-a-queue.html#cb234-9" aria-hidden="true"></a></span>
+<span id="cb234-10"><a href="design-a-queue.html#cb234-10" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">MyArrayQueue</span>() {</span>
+<span id="cb234-11"><a href="design-a-queue.html#cb234-11" aria-hidden="true"></a>        array = (T[]) <span class="kw">new</span> <span class="bu">Object</span>[DEFAULT_INITIAL_CAPACITY];</span>
+<span id="cb234-12"><a href="design-a-queue.html#cb234-12" aria-hidden="true"></a>    }</span>
+<span id="cb234-13"><a href="design-a-queue.html#cb234-13" aria-hidden="true"></a></span>
+<span id="cb234-14"><a href="design-a-queue.html#cb234-14" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">MyArrayQueue</span>(<span class="dt">int</span> initialCapacity) {</span>
+<span id="cb234-15"><a href="design-a-queue.html#cb234-15" aria-hidden="true"></a>        array = (T[]) <span class="kw">new</span> <span class="bu">Object</span>[initialCapacity];</span>
+<span id="cb234-16"><a href="design-a-queue.html#cb234-16" aria-hidden="true"></a>    }</span>
+<span id="cb234-17"><a href="design-a-queue.html#cb234-17" aria-hidden="true"></a></span>
+<span id="cb234-18"><a href="design-a-queue.html#cb234-18" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isEmpty</span>() {</span>
+<span id="cb234-19"><a href="design-a-queue.html#cb234-19" aria-hidden="true"></a>        <span class="kw">return</span> endPos == -<span class="dv">1</span>;</span>
+<span id="cb234-20"><a href="design-a-queue.html#cb234-20" aria-hidden="true"></a>    }</span>
+<span id="cb234-21"><a href="design-a-queue.html#cb234-21" aria-hidden="true"></a></span>
+<span id="cb234-22"><a href="design-a-queue.html#cb234-22" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {</span>
+<span id="cb234-23"><a href="design-a-queue.html#cb234-23" aria-hidden="true"></a>        <span class="kw">return</span> endPos + <span class="dv">1</span>;</span>
+<span id="cb234-24"><a href="design-a-queue.html#cb234-24" aria-hidden="true"></a>    }</span>
+<span id="cb234-25"><a href="design-a-queue.html#cb234-25" aria-hidden="true"></a></span>
+<span id="cb234-26"><a href="design-a-queue.html#cb234-26" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">resize</span>(<span class="dt">int</span> newSize) {</span>
+<span id="cb234-27"><a href="design-a-queue.html#cb234-27" aria-hidden="true"></a>        <span class="bu">System</span>.<span class="fu">out</span>.<span class="fu">println</span>(<span class="st">&quot;Resizing from &quot;</span> + array.<span class="fu">length</span> + <span class="st">&quot; to &quot;</span> + newSize);</span>
+<span id="cb234-28"><a href="design-a-queue.html#cb234-28" aria-hidden="true"></a>        T[] newArray = <span class="bu">Arrays</span>.<span class="fu">copyOfRange</span>(array, <span class="dv">0</span>, newSize);</span>
+<span id="cb234-29"><a href="design-a-queue.html#cb234-29" aria-hidden="true"></a>        array = newArray;</span>
+<span id="cb234-30"><a href="design-a-queue.html#cb234-30" aria-hidden="true"></a>    }</span>
+<span id="cb234-31"><a href="design-a-queue.html#cb234-31" aria-hidden="true"></a></span>
+<span id="cb234-32"><a href="design-a-queue.html#cb234-32" aria-hidden="true"></a>    <span class="co">// add the item</span></span>
+<span id="cb234-33"><a href="design-a-queue.html#cb234-33" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">enqueue</span>(T item) {</span>
+<span id="cb234-34"><a href="design-a-queue.html#cb234-34" aria-hidden="true"></a>        Objects.<span class="fu">requireNonNull</span>(item);</span>
+<span id="cb234-35"><a href="design-a-queue.html#cb234-35" aria-hidden="true"></a></span>
+<span id="cb234-36"><a href="design-a-queue.html#cb234-36" aria-hidden="true"></a>        <span class="kw">if</span>( (endPos + <span class="dv">1</span>) &gt;= array.<span class="fu">length</span>) {</span>
+<span id="cb234-37"><a href="design-a-queue.html#cb234-37" aria-hidden="true"></a>            <span class="fu">resize</span>(<span class="dv">2</span> * array.<span class="fu">length</span>);</span>
+<span id="cb234-38"><a href="design-a-queue.html#cb234-38" aria-hidden="true"></a>        }</span>
+<span id="cb234-39"><a href="design-a-queue.html#cb234-39" aria-hidden="true"></a></span>
+<span id="cb234-40"><a href="design-a-queue.html#cb234-40" aria-hidden="true"></a>        endPos++;</span>
+<span id="cb234-41"><a href="design-a-queue.html#cb234-41" aria-hidden="true"></a>        array[endPos] = item;</span>
+<span id="cb234-42"><a href="design-a-queue.html#cb234-42" aria-hidden="true"></a>    }</span>
+<span id="cb234-43"><a href="design-a-queue.html#cb234-43" aria-hidden="true"></a></span>
+<span id="cb234-44"><a href="design-a-queue.html#cb234-44" aria-hidden="true"></a>    <span class="co">// remove first item</span></span>
+<span id="cb234-45"><a href="design-a-queue.html#cb234-45" aria-hidden="true"></a>    <span class="kw">public</span> T <span class="fu">dequeue</span>() {</span>
+<span id="cb234-46"><a href="design-a-queue.html#cb234-46" aria-hidden="true"></a>        <span class="kw">if</span>(endPos == -<span class="dv">1</span>) {</span>
+<span id="cb234-47"><a href="design-a-queue.html#cb234-47" aria-hidden="true"></a>            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();</span>
+<span id="cb234-48"><a href="design-a-queue.html#cb234-48" aria-hidden="true"></a>        }</span>
+<span id="cb234-49"><a href="design-a-queue.html#cb234-49" aria-hidden="true"></a></span>
+<span id="cb234-50"><a href="design-a-queue.html#cb234-50" aria-hidden="true"></a>        <span class="co">// return the first element</span></span>
+<span id="cb234-51"><a href="design-a-queue.html#cb234-51" aria-hidden="true"></a>        T result = array[<span class="dv">0</span>];</span>
+<span id="cb234-52"><a href="design-a-queue.html#cb234-52" aria-hidden="true"></a></span>
+<span id="cb234-53"><a href="design-a-queue.html#cb234-53" aria-hidden="true"></a>        <span class="co">//move the element one backward</span></span>
+<span id="cb234-54"><a href="design-a-queue.html#cb234-54" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; endPos; i++) {</span>
+<span id="cb234-55"><a href="design-a-queue.html#cb234-55" aria-hidden="true"></a>            array[i] = array[i+<span class="dv">1</span>];</span>
+<span id="cb234-56"><a href="design-a-queue.html#cb234-56" aria-hidden="true"></a>        }</span>
+<span id="cb234-57"><a href="design-a-queue.html#cb234-57" aria-hidden="true"></a></span>
+<span id="cb234-58"><a href="design-a-queue.html#cb234-58" aria-hidden="true"></a>        <span class="co">//nullify last position</span></span>
+<span id="cb234-59"><a href="design-a-queue.html#cb234-59" aria-hidden="true"></a>        array[endPos] = <span class="kw">null</span>;</span>
+<span id="cb234-60"><a href="design-a-queue.html#cb234-60" aria-hidden="true"></a>        endPos--;</span>
+<span id="cb234-61"><a href="design-a-queue.html#cb234-61" aria-hidden="true"></a></span>
+<span id="cb234-62"><a href="design-a-queue.html#cb234-62" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
+<span id="cb234-63"><a href="design-a-queue.html#cb234-63" aria-hidden="true"></a>    }</span>
+<span id="cb234-64"><a href="design-a-queue.html#cb234-64" aria-hidden="true"></a></span>
+<span id="cb234-65"><a href="design-a-queue.html#cb234-65" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">search</span>(<span class="dt">int</span> val) {</span>
+<span id="cb234-66"><a href="design-a-queue.html#cb234-66" aria-hidden="true"></a>        <span class="kw">if</span>(index &gt; endPos) {</span>
+<span id="cb234-67"><a href="design-a-queue.html#cb234-67" aria-hidden="true"></a>            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();</span>
+<span id="cb234-68"><a href="design-a-queue.html#cb234-68" aria-hidden="true"></a>        }</span>
+<span id="cb234-69"><a href="design-a-queue.html#cb234-69" aria-hidden="true"></a></span>
+<span id="cb234-70"><a href="design-a-queue.html#cb234-70" aria-hidden="true"></a></span>
+<span id="cb234-71"><a href="design-a-queue.html#cb234-71" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= endPos; i++) {</span>
+<span id="cb234-72"><a href="design-a-queue.html#cb234-72" aria-hidden="true"></a>            <span class="kw">if</span>(array[i] == val) {</span>
+<span id="cb234-73"><a href="design-a-queue.html#cb234-73" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb234-74"><a href="design-a-queue.html#cb234-74" aria-hidden="true"></a>            }</span>
+<span id="cb234-75"><a href="design-a-queue.html#cb234-75" aria-hidden="true"></a>        }</span>
+<span id="cb234-76"><a href="design-a-queue.html#cb234-76" aria-hidden="true"></a></span>
+<span id="cb234-77"><a href="design-a-queue.html#cb234-77" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb234-78"><a href="design-a-queue.html#cb234-78" aria-hidden="true"></a>    }</span>
+<span id="cb234-79"><a href="design-a-queue.html#cb234-79" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---linkedlist" class="section level3" number="12.3.4">
 <h3><span class="header-section-number">12.3.4</span> Solution - LinkedList</h3>
-<div id="walkthrough-160" class="section level4" number="12.3.4.1">
+<div id="walkthrough-161" class="section level4" number="12.3.4.1">
 <h4><span class="header-section-number">12.3.4.1</span> Walkthrough</h4>
 </div>
-<div id="analysis-163" class="section level4" number="12.3.4.2">
+<div id="analysis-164" class="section level4" number="12.3.4.2">
 <h4><span class="header-section-number">12.3.4.2</span> Analysis</h4>
 <pre><code>*  enqueue(item) takes O(1) time.
 %*  enqueue(i, item) takes O(n) time to traverse to the previous element.
@@ -1173,158 +1174,158 @@ this immutable implementation into a new queue.</p>
 %*  dequeue(i) takes O(n) time to traverse to the previous element.
 *  search(val) takes O(n) as it traverses all elements.</code></pre>
 </div>
-<div id="algorithm-169" class="section level4" number="12.3.4.3">
+<div id="algorithm-170" class="section level4" number="12.3.4.3">
 <h4><span class="header-section-number">12.3.4.3</span> Algorithm</h4>
 </div>
-<div id="java-code-89" class="section level4" number="12.3.4.4">
+<div id="java-code-91" class="section level4" number="12.3.4.4">
 <h4><span class="header-section-number">12.3.4.4</span> Java Code</h4>
-<div class="sourceCode" id="cb235"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb235-1"><a href="design-a-queue.html#cb235-1" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> MyLinkedQueue&lt;T&gt; {</span>
-<span id="cb235-2"><a href="design-a-queue.html#cb235-2" aria-hidden="true"></a></span>
-<span id="cb235-3"><a href="design-a-queue.html#cb235-3" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> <span class="bu">Node</span>&lt;T&gt; {</span>
-<span id="cb235-4"><a href="design-a-queue.html#cb235-4" aria-hidden="true"></a>        <span class="bu">Node</span> next;</span>
-<span id="cb235-5"><a href="design-a-queue.html#cb235-5" aria-hidden="true"></a>        T data;</span>
-<span id="cb235-6"><a href="design-a-queue.html#cb235-6" aria-hidden="true"></a>    }</span>
-<span id="cb235-7"><a href="design-a-queue.html#cb235-7" aria-hidden="true"></a></span>
-<span id="cb235-8"><a href="design-a-queue.html#cb235-8" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span>&lt;T&gt; head;</span>
-<span id="cb235-9"><a href="design-a-queue.html#cb235-9" aria-hidden="true"></a></span>
-<span id="cb235-10"><a href="design-a-queue.html#cb235-10" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span>&lt;T&gt; tail;</span>
-<span id="cb235-11"><a href="design-a-queue.html#cb235-11" aria-hidden="true"></a></span>
-<span id="cb235-12"><a href="design-a-queue.html#cb235-12" aria-hidden="true"></a>    <span class="co">// position of last element</span></span>
-<span id="cb235-13"><a href="design-a-queue.html#cb235-13" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> endPos = -<span class="dv">1</span>;</span>
-<span id="cb235-14"><a href="design-a-queue.html#cb235-14" aria-hidden="true"></a></span>
-<span id="cb235-15"><a href="design-a-queue.html#cb235-15" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> DEFAULT_INITIAL_CAPACITY = <span class="dv">10</span>;</span>
-<span id="cb235-16"><a href="design-a-queue.html#cb235-16" aria-hidden="true"></a></span>
-<span id="cb235-17"><a href="design-a-queue.html#cb235-17" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isEmpty</span>() {</span>
-<span id="cb235-18"><a href="design-a-queue.html#cb235-18" aria-hidden="true"></a>        <span class="kw">return</span> endPos == -<span class="dv">1</span>;</span>
-<span id="cb235-19"><a href="design-a-queue.html#cb235-19" aria-hidden="true"></a>    }</span>
-<span id="cb235-20"><a href="design-a-queue.html#cb235-20" aria-hidden="true"></a></span>
-<span id="cb235-21"><a href="design-a-queue.html#cb235-21" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {</span>
-<span id="cb235-22"><a href="design-a-queue.html#cb235-22" aria-hidden="true"></a>        <span class="kw">return</span> endPos + <span class="dv">1</span>;</span>
-<span id="cb235-23"><a href="design-a-queue.html#cb235-23" aria-hidden="true"></a>    }</span>
-<span id="cb235-24"><a href="design-a-queue.html#cb235-24" aria-hidden="true"></a></span>
-<span id="cb235-25"><a href="design-a-queue.html#cb235-25" aria-hidden="true"></a>    <span class="co">// add the item</span></span>
-<span id="cb235-26"><a href="design-a-queue.html#cb235-26" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">enqueue</span>(T item) {</span>
-<span id="cb235-27"><a href="design-a-queue.html#cb235-27" aria-hidden="true"></a>        Objects.<span class="fu">requireNonNull</span>(item);</span>
-<span id="cb235-28"><a href="design-a-queue.html#cb235-28" aria-hidden="true"></a></span>
-<span id="cb235-29"><a href="design-a-queue.html#cb235-29" aria-hidden="true"></a>        endPos++;</span>
-<span id="cb235-30"><a href="design-a-queue.html#cb235-30" aria-hidden="true"></a>        <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>();</span>
-<span id="cb235-31"><a href="design-a-queue.html#cb235-31" aria-hidden="true"></a>        newNode.<span class="fu">data</span> = item;</span>
-<span id="cb235-32"><a href="design-a-queue.html#cb235-32" aria-hidden="true"></a></span>
-<span id="cb235-33"><a href="design-a-queue.html#cb235-33" aria-hidden="true"></a>        <span class="kw">if</span>(head == <span class="kw">null</span>) {</span>
-<span id="cb235-34"><a href="design-a-queue.html#cb235-34" aria-hidden="true"></a>            head = newNode;</span>
-<span id="cb235-35"><a href="design-a-queue.html#cb235-35" aria-hidden="true"></a>        }</span>
-<span id="cb235-36"><a href="design-a-queue.html#cb235-36" aria-hidden="true"></a></span>
-<span id="cb235-37"><a href="design-a-queue.html#cb235-37" aria-hidden="true"></a>        <span class="kw">if</span>(tail == <span class="kw">null</span>) {</span>
-<span id="cb235-38"><a href="design-a-queue.html#cb235-38" aria-hidden="true"></a>            tail = newNode;</span>
-<span id="cb235-39"><a href="design-a-queue.html#cb235-39" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb235-40"><a href="design-a-queue.html#cb235-40" aria-hidden="true"></a>            <span class="co">//insert to the tail of the list</span></span>
-<span id="cb235-41"><a href="design-a-queue.html#cb235-41" aria-hidden="true"></a>            tail.<span class="fu">next</span> = newNode;</span>
-<span id="cb235-42"><a href="design-a-queue.html#cb235-42" aria-hidden="true"></a>            tail = newNode;</span>
-<span id="cb235-43"><a href="design-a-queue.html#cb235-43" aria-hidden="true"></a>        }</span>
-<span id="cb235-44"><a href="design-a-queue.html#cb235-44" aria-hidden="true"></a>    }</span>
-<span id="cb235-45"><a href="design-a-queue.html#cb235-45" aria-hidden="true"></a></span>
-<span id="cb235-46"><a href="design-a-queue.html#cb235-46" aria-hidden="true"></a>    <span class="co">// remove and return a random item</span></span>
-<span id="cb235-47"><a href="design-a-queue.html#cb235-47" aria-hidden="true"></a>    <span class="kw">public</span> T <span class="fu">dequeue</span>() {</span>
-<span id="cb235-48"><a href="design-a-queue.html#cb235-48" aria-hidden="true"></a>        <span class="kw">if</span>(endPos == -<span class="dv">1</span>) {</span>
-<span id="cb235-49"><a href="design-a-queue.html#cb235-49" aria-hidden="true"></a>            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();</span>
-<span id="cb235-50"><a href="design-a-queue.html#cb235-50" aria-hidden="true"></a>        }</span>
-<span id="cb235-51"><a href="design-a-queue.html#cb235-51" aria-hidden="true"></a></span>
-<span id="cb235-52"><a href="design-a-queue.html#cb235-52" aria-hidden="true"></a>        <span class="co">// return the first node</span></span>
-<span id="cb235-53"><a href="design-a-queue.html#cb235-53" aria-hidden="true"></a>        <span class="bu">Node</span> dieNode = head;</span>
-<span id="cb235-54"><a href="design-a-queue.html#cb235-54" aria-hidden="true"></a></span>
-<span id="cb235-55"><a href="design-a-queue.html#cb235-55" aria-hidden="true"></a>        <span class="co">//head == tail</span></span>
-<span id="cb235-56"><a href="design-a-queue.html#cb235-56" aria-hidden="true"></a>        <span class="kw">if</span>(head.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
-<span id="cb235-57"><a href="design-a-queue.html#cb235-57" aria-hidden="true"></a>            head = <span class="kw">null</span>;</span>
-<span id="cb235-58"><a href="design-a-queue.html#cb235-58" aria-hidden="true"></a>            tail = <span class="kw">null</span>;</span>
-<span id="cb235-59"><a href="design-a-queue.html#cb235-59" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb235-60"><a href="design-a-queue.html#cb235-60" aria-hidden="true"></a>            head = head.<span class="fu">next</span>;</span>
-<span id="cb235-61"><a href="design-a-queue.html#cb235-61" aria-hidden="true"></a>        }</span>
-<span id="cb235-62"><a href="design-a-queue.html#cb235-62" aria-hidden="true"></a>        endPos--;</span>
-<span id="cb235-63"><a href="design-a-queue.html#cb235-63" aria-hidden="true"></a></span>
-<span id="cb235-64"><a href="design-a-queue.html#cb235-64" aria-hidden="true"></a>        <span class="kw">return</span> (T) dieNode.<span class="fu">data</span>;</span>
-<span id="cb235-65"><a href="design-a-queue.html#cb235-65" aria-hidden="true"></a>    }</span>
-<span id="cb235-66"><a href="design-a-queue.html#cb235-66" aria-hidden="true"></a></span>
-<span id="cb235-67"><a href="design-a-queue.html#cb235-67" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">search</span>(<span class="dt">int</span> val) {</span>
-<span id="cb235-68"><a href="design-a-queue.html#cb235-68" aria-hidden="true"></a>        <span class="kw">if</span>(index &gt; endPos) {</span>
-<span id="cb235-69"><a href="design-a-queue.html#cb235-69" aria-hidden="true"></a>            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();</span>
-<span id="cb235-70"><a href="design-a-queue.html#cb235-70" aria-hidden="true"></a>        }</span>
-<span id="cb235-71"><a href="design-a-queue.html#cb235-71" aria-hidden="true"></a></span>
-<span id="cb235-72"><a href="design-a-queue.html#cb235-72" aria-hidden="true"></a>        <span class="bu">Node</span> cursor = head;</span>
-<span id="cb235-73"><a href="design-a-queue.html#cb235-73" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= endPos; i++) {</span>
-<span id="cb235-74"><a href="design-a-queue.html#cb235-74" aria-hidden="true"></a>            <span class="kw">if</span>(cursor.<span class="fu">data</span> == val) {</span>
-<span id="cb235-75"><a href="design-a-queue.html#cb235-75" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb235-76"><a href="design-a-queue.html#cb235-76" aria-hidden="true"></a>            }</span>
-<span id="cb235-77"><a href="design-a-queue.html#cb235-77" aria-hidden="true"></a>            cursor = cursor.<span class="fu">next</span>;</span>
-<span id="cb235-78"><a href="design-a-queue.html#cb235-78" aria-hidden="true"></a>        }</span>
-<span id="cb235-79"><a href="design-a-queue.html#cb235-79" aria-hidden="true"></a></span>
-<span id="cb235-80"><a href="design-a-queue.html#cb235-80" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb235-81"><a href="design-a-queue.html#cb235-81" aria-hidden="true"></a>    }</span>
-<span id="cb235-82"><a href="design-a-queue.html#cb235-82" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb236"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb236-1"><a href="design-a-queue.html#cb236-1" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> MyLinkedQueue&lt;T&gt; {</span>
+<span id="cb236-2"><a href="design-a-queue.html#cb236-2" aria-hidden="true"></a></span>
+<span id="cb236-3"><a href="design-a-queue.html#cb236-3" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> <span class="bu">Node</span>&lt;T&gt; {</span>
+<span id="cb236-4"><a href="design-a-queue.html#cb236-4" aria-hidden="true"></a>        <span class="bu">Node</span> next;</span>
+<span id="cb236-5"><a href="design-a-queue.html#cb236-5" aria-hidden="true"></a>        T data;</span>
+<span id="cb236-6"><a href="design-a-queue.html#cb236-6" aria-hidden="true"></a>    }</span>
+<span id="cb236-7"><a href="design-a-queue.html#cb236-7" aria-hidden="true"></a></span>
+<span id="cb236-8"><a href="design-a-queue.html#cb236-8" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span>&lt;T&gt; head;</span>
+<span id="cb236-9"><a href="design-a-queue.html#cb236-9" aria-hidden="true"></a></span>
+<span id="cb236-10"><a href="design-a-queue.html#cb236-10" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span>&lt;T&gt; tail;</span>
+<span id="cb236-11"><a href="design-a-queue.html#cb236-11" aria-hidden="true"></a></span>
+<span id="cb236-12"><a href="design-a-queue.html#cb236-12" aria-hidden="true"></a>    <span class="co">// position of last element</span></span>
+<span id="cb236-13"><a href="design-a-queue.html#cb236-13" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> endPos = -<span class="dv">1</span>;</span>
+<span id="cb236-14"><a href="design-a-queue.html#cb236-14" aria-hidden="true"></a></span>
+<span id="cb236-15"><a href="design-a-queue.html#cb236-15" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> DEFAULT_INITIAL_CAPACITY = <span class="dv">10</span>;</span>
+<span id="cb236-16"><a href="design-a-queue.html#cb236-16" aria-hidden="true"></a></span>
+<span id="cb236-17"><a href="design-a-queue.html#cb236-17" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isEmpty</span>() {</span>
+<span id="cb236-18"><a href="design-a-queue.html#cb236-18" aria-hidden="true"></a>        <span class="kw">return</span> endPos == -<span class="dv">1</span>;</span>
+<span id="cb236-19"><a href="design-a-queue.html#cb236-19" aria-hidden="true"></a>    }</span>
+<span id="cb236-20"><a href="design-a-queue.html#cb236-20" aria-hidden="true"></a></span>
+<span id="cb236-21"><a href="design-a-queue.html#cb236-21" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {</span>
+<span id="cb236-22"><a href="design-a-queue.html#cb236-22" aria-hidden="true"></a>        <span class="kw">return</span> endPos + <span class="dv">1</span>;</span>
+<span id="cb236-23"><a href="design-a-queue.html#cb236-23" aria-hidden="true"></a>    }</span>
+<span id="cb236-24"><a href="design-a-queue.html#cb236-24" aria-hidden="true"></a></span>
+<span id="cb236-25"><a href="design-a-queue.html#cb236-25" aria-hidden="true"></a>    <span class="co">// add the item</span></span>
+<span id="cb236-26"><a href="design-a-queue.html#cb236-26" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">enqueue</span>(T item) {</span>
+<span id="cb236-27"><a href="design-a-queue.html#cb236-27" aria-hidden="true"></a>        Objects.<span class="fu">requireNonNull</span>(item);</span>
+<span id="cb236-28"><a href="design-a-queue.html#cb236-28" aria-hidden="true"></a></span>
+<span id="cb236-29"><a href="design-a-queue.html#cb236-29" aria-hidden="true"></a>        endPos++;</span>
+<span id="cb236-30"><a href="design-a-queue.html#cb236-30" aria-hidden="true"></a>        <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>();</span>
+<span id="cb236-31"><a href="design-a-queue.html#cb236-31" aria-hidden="true"></a>        newNode.<span class="fu">data</span> = item;</span>
+<span id="cb236-32"><a href="design-a-queue.html#cb236-32" aria-hidden="true"></a></span>
+<span id="cb236-33"><a href="design-a-queue.html#cb236-33" aria-hidden="true"></a>        <span class="kw">if</span>(head == <span class="kw">null</span>) {</span>
+<span id="cb236-34"><a href="design-a-queue.html#cb236-34" aria-hidden="true"></a>            head = newNode;</span>
+<span id="cb236-35"><a href="design-a-queue.html#cb236-35" aria-hidden="true"></a>        }</span>
+<span id="cb236-36"><a href="design-a-queue.html#cb236-36" aria-hidden="true"></a></span>
+<span id="cb236-37"><a href="design-a-queue.html#cb236-37" aria-hidden="true"></a>        <span class="kw">if</span>(tail == <span class="kw">null</span>) {</span>
+<span id="cb236-38"><a href="design-a-queue.html#cb236-38" aria-hidden="true"></a>            tail = newNode;</span>
+<span id="cb236-39"><a href="design-a-queue.html#cb236-39" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb236-40"><a href="design-a-queue.html#cb236-40" aria-hidden="true"></a>            <span class="co">//insert to the tail of the list</span></span>
+<span id="cb236-41"><a href="design-a-queue.html#cb236-41" aria-hidden="true"></a>            tail.<span class="fu">next</span> = newNode;</span>
+<span id="cb236-42"><a href="design-a-queue.html#cb236-42" aria-hidden="true"></a>            tail = newNode;</span>
+<span id="cb236-43"><a href="design-a-queue.html#cb236-43" aria-hidden="true"></a>        }</span>
+<span id="cb236-44"><a href="design-a-queue.html#cb236-44" aria-hidden="true"></a>    }</span>
+<span id="cb236-45"><a href="design-a-queue.html#cb236-45" aria-hidden="true"></a></span>
+<span id="cb236-46"><a href="design-a-queue.html#cb236-46" aria-hidden="true"></a>    <span class="co">// remove and return a random item</span></span>
+<span id="cb236-47"><a href="design-a-queue.html#cb236-47" aria-hidden="true"></a>    <span class="kw">public</span> T <span class="fu">dequeue</span>() {</span>
+<span id="cb236-48"><a href="design-a-queue.html#cb236-48" aria-hidden="true"></a>        <span class="kw">if</span>(endPos == -<span class="dv">1</span>) {</span>
+<span id="cb236-49"><a href="design-a-queue.html#cb236-49" aria-hidden="true"></a>            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();</span>
+<span id="cb236-50"><a href="design-a-queue.html#cb236-50" aria-hidden="true"></a>        }</span>
+<span id="cb236-51"><a href="design-a-queue.html#cb236-51" aria-hidden="true"></a></span>
+<span id="cb236-52"><a href="design-a-queue.html#cb236-52" aria-hidden="true"></a>        <span class="co">// return the first node</span></span>
+<span id="cb236-53"><a href="design-a-queue.html#cb236-53" aria-hidden="true"></a>        <span class="bu">Node</span> dieNode = head;</span>
+<span id="cb236-54"><a href="design-a-queue.html#cb236-54" aria-hidden="true"></a></span>
+<span id="cb236-55"><a href="design-a-queue.html#cb236-55" aria-hidden="true"></a>        <span class="co">//head == tail</span></span>
+<span id="cb236-56"><a href="design-a-queue.html#cb236-56" aria-hidden="true"></a>        <span class="kw">if</span>(head.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
+<span id="cb236-57"><a href="design-a-queue.html#cb236-57" aria-hidden="true"></a>            head = <span class="kw">null</span>;</span>
+<span id="cb236-58"><a href="design-a-queue.html#cb236-58" aria-hidden="true"></a>            tail = <span class="kw">null</span>;</span>
+<span id="cb236-59"><a href="design-a-queue.html#cb236-59" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb236-60"><a href="design-a-queue.html#cb236-60" aria-hidden="true"></a>            head = head.<span class="fu">next</span>;</span>
+<span id="cb236-61"><a href="design-a-queue.html#cb236-61" aria-hidden="true"></a>        }</span>
+<span id="cb236-62"><a href="design-a-queue.html#cb236-62" aria-hidden="true"></a>        endPos--;</span>
+<span id="cb236-63"><a href="design-a-queue.html#cb236-63" aria-hidden="true"></a></span>
+<span id="cb236-64"><a href="design-a-queue.html#cb236-64" aria-hidden="true"></a>        <span class="kw">return</span> (T) dieNode.<span class="fu">data</span>;</span>
+<span id="cb236-65"><a href="design-a-queue.html#cb236-65" aria-hidden="true"></a>    }</span>
+<span id="cb236-66"><a href="design-a-queue.html#cb236-66" aria-hidden="true"></a></span>
+<span id="cb236-67"><a href="design-a-queue.html#cb236-67" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">search</span>(<span class="dt">int</span> val) {</span>
+<span id="cb236-68"><a href="design-a-queue.html#cb236-68" aria-hidden="true"></a>        <span class="kw">if</span>(index &gt; endPos) {</span>
+<span id="cb236-69"><a href="design-a-queue.html#cb236-69" aria-hidden="true"></a>            <span class="kw">throw</span> <span class="kw">new</span> <span class="bu">IllegalStateException</span>();</span>
+<span id="cb236-70"><a href="design-a-queue.html#cb236-70" aria-hidden="true"></a>        }</span>
+<span id="cb236-71"><a href="design-a-queue.html#cb236-71" aria-hidden="true"></a></span>
+<span id="cb236-72"><a href="design-a-queue.html#cb236-72" aria-hidden="true"></a>        <span class="bu">Node</span> cursor = head;</span>
+<span id="cb236-73"><a href="design-a-queue.html#cb236-73" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;= endPos; i++) {</span>
+<span id="cb236-74"><a href="design-a-queue.html#cb236-74" aria-hidden="true"></a>            <span class="kw">if</span>(cursor.<span class="fu">data</span> == val) {</span>
+<span id="cb236-75"><a href="design-a-queue.html#cb236-75" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb236-76"><a href="design-a-queue.html#cb236-76" aria-hidden="true"></a>            }</span>
+<span id="cb236-77"><a href="design-a-queue.html#cb236-77" aria-hidden="true"></a>            cursor = cursor.<span class="fu">next</span>;</span>
+<span id="cb236-78"><a href="design-a-queue.html#cb236-78" aria-hidden="true"></a>        }</span>
+<span id="cb236-79"><a href="design-a-queue.html#cb236-79" aria-hidden="true"></a></span>
+<span id="cb236-80"><a href="design-a-queue.html#cb236-80" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb236-81"><a href="design-a-queue.html#cb236-81" aria-hidden="true"></a>    }</span>
+<span id="cb236-82"><a href="design-a-queue.html#cb236-82" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---stack" class="section level3" number="12.3.5">
 <h3><span class="header-section-number">12.3.5</span> Solution - Stack</h3>
-<div id="walkthrough-161" class="section level4" number="12.3.5.1">
+<div id="walkthrough-162" class="section level4" number="12.3.5.1">
 <h4><span class="header-section-number">12.3.5.1</span> Walkthrough</h4>
 <p>Since a Stack is LIFO, that is last element will be processed first. Thus, we want to keep
 the top element to be inserted last. To achieve that, we could use a temp Stack to reverse
 the order after pushing the added item into the stack first (will be processed last).</p>
 </div>
-<div id="analysis-164" class="section level4" number="12.3.5.2">
+<div id="analysis-165" class="section level4" number="12.3.5.2">
 <h4><span class="header-section-number">12.3.5.2</span> Analysis</h4>
 <ul>
 <li>enqueue(item) takes O(n) time.</li>
 <li>dequeue() takes O(1) as it is only popping the top element.</li>
 </ul>
 </div>
-<div id="algorithm-170" class="section level4" number="12.3.5.3">
+<div id="algorithm-171" class="section level4" number="12.3.5.3">
 <h4><span class="header-section-number">12.3.5.3</span> Algorithm</h4>
 </div>
 <div id="java-code---stack" class="section level4" number="12.3.5.4">
 <h4><span class="header-section-number">12.3.5.4</span> Java Code - Stack</h4>
-<div class="sourceCode" id="cb236"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb236-1"><a href="design-a-queue.html#cb236-1" aria-hidden="true"></a><span class="kw">class</span> MyStackBasedQueue&lt;T&gt;() {</span>
-<span id="cb236-2"><a href="design-a-queue.html#cb236-2" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Stack</span>&lt;T&gt; value = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
-<span id="cb236-3"><a href="design-a-queue.html#cb236-3" aria-hidden="true"></a></span>
-<span id="cb236-4"><a href="design-a-queue.html#cb236-4" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">enqueue</span>(T item) {</span>
-<span id="cb236-5"><a href="design-a-queue.html#cb236-5" aria-hidden="true"></a>        <span class="kw">if</span>(value.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb236-6"><a href="design-a-queue.html#cb236-6" aria-hidden="true"></a>            <span class="co">// first element</span></span>
-<span id="cb236-7"><a href="design-a-queue.html#cb236-7" aria-hidden="true"></a>            value.<span class="fu">push</span>(item);</span>
-<span id="cb236-8"><a href="design-a-queue.html#cb236-8" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb236-9"><a href="design-a-queue.html#cb236-9" aria-hidden="true"></a>            <span class="bu">Stack</span>&lt;T&gt; temp = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
-<span id="cb236-10"><a href="design-a-queue.html#cb236-10" aria-hidden="true"></a>            <span class="co">//1. Store previous element in temp</span></span>
-<span id="cb236-11"><a href="design-a-queue.html#cb236-11" aria-hidden="true"></a>            <span class="kw">while</span>(!value.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb236-12"><a href="design-a-queue.html#cb236-12" aria-hidden="true"></a>                temp.<span class="fu">push</span>(value.<span class="fu">pop</span>());</span>
-<span id="cb236-13"><a href="design-a-queue.html#cb236-13" aria-hidden="true"></a>            }</span>
-<span id="cb236-14"><a href="design-a-queue.html#cb236-14" aria-hidden="true"></a></span>
-<span id="cb236-15"><a href="design-a-queue.html#cb236-15" aria-hidden="true"></a>            <span class="co">//2. push item to the back of the stack</span></span>
-<span id="cb236-16"><a href="design-a-queue.html#cb236-16" aria-hidden="true"></a>            value.<span class="fu">push</span>(item);</span>
-<span id="cb236-17"><a href="design-a-queue.html#cb236-17" aria-hidden="true"></a></span>
-<span id="cb236-18"><a href="design-a-queue.html#cb236-18" aria-hidden="true"></a>            <span class="co">//3. reload the previous elements</span></span>
-<span id="cb236-19"><a href="design-a-queue.html#cb236-19" aria-hidden="true"></a>            <span class="kw">while</span>(!temp.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb236-20"><a href="design-a-queue.html#cb236-20" aria-hidden="true"></a>                value.<span class="fu">push</span>(temp.<span class="fu">pop</span>());</span>
-<span id="cb236-21"><a href="design-a-queue.html#cb236-21" aria-hidden="true"></a>            }</span>
-<span id="cb236-22"><a href="design-a-queue.html#cb236-22" aria-hidden="true"></a>        }</span>
-<span id="cb236-23"><a href="design-a-queue.html#cb236-23" aria-hidden="true"></a>    }</span>
-<span id="cb236-24"><a href="design-a-queue.html#cb236-24" aria-hidden="true"></a></span>
-<span id="cb236-25"><a href="design-a-queue.html#cb236-25" aria-hidden="true"></a>    <span class="kw">public</span> T <span class="fu">dequeue</span>() {</span>
-<span id="cb236-26"><a href="design-a-queue.html#cb236-26" aria-hidden="true"></a>        T result = value.<span class="fu">top</span>();</span>
-<span id="cb236-27"><a href="design-a-queue.html#cb236-27" aria-hidden="true"></a>        value.<span class="fu">pop</span>();</span>
-<span id="cb236-28"><a href="design-a-queue.html#cb236-28" aria-hidden="true"></a></span>
-<span id="cb236-29"><a href="design-a-queue.html#cb236-29" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
-<span id="cb236-30"><a href="design-a-queue.html#cb236-30" aria-hidden="true"></a>    }</span>
-<span id="cb236-31"><a href="design-a-queue.html#cb236-31" aria-hidden="true"></a></span>
-<span id="cb236-32"><a href="design-a-queue.html#cb236-32" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {</span>
-<span id="cb236-33"><a href="design-a-queue.html#cb236-33" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">size</span>();</span>
-<span id="cb236-34"><a href="design-a-queue.html#cb236-34" aria-hidden="true"></a>    }</span>
-<span id="cb236-35"><a href="design-a-queue.html#cb236-35" aria-hidden="true"></a></span>
-<span id="cb236-36"><a href="design-a-queue.html#cb236-36" aria-hidden="true"></a>    <span class="kw">public</span> T <span class="fu">peek</span>() {</span>
-<span id="cb236-37"><a href="design-a-queue.html#cb236-37" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">top</span>();</span>
-<span id="cb236-38"><a href="design-a-queue.html#cb236-38" aria-hidden="true"></a>    }</span>
-<span id="cb236-39"><a href="design-a-queue.html#cb236-39" aria-hidden="true"></a></span>
-<span id="cb236-40"><a href="design-a-queue.html#cb236-40" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">empty</span>() {</span>
-<span id="cb236-41"><a href="design-a-queue.html#cb236-41" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">isEmpty</span>();</span>
-<span id="cb236-42"><a href="design-a-queue.html#cb236-42" aria-hidden="true"></a>    }</span>
-<span id="cb236-43"><a href="design-a-queue.html#cb236-43" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb237-1"><a href="design-a-queue.html#cb237-1" aria-hidden="true"></a><span class="kw">class</span> MyStackBasedQueue&lt;T&gt;() {</span>
+<span id="cb237-2"><a href="design-a-queue.html#cb237-2" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Stack</span>&lt;T&gt; value = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
+<span id="cb237-3"><a href="design-a-queue.html#cb237-3" aria-hidden="true"></a></span>
+<span id="cb237-4"><a href="design-a-queue.html#cb237-4" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">enqueue</span>(T item) {</span>
+<span id="cb237-5"><a href="design-a-queue.html#cb237-5" aria-hidden="true"></a>        <span class="kw">if</span>(value.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb237-6"><a href="design-a-queue.html#cb237-6" aria-hidden="true"></a>            <span class="co">// first element</span></span>
+<span id="cb237-7"><a href="design-a-queue.html#cb237-7" aria-hidden="true"></a>            value.<span class="fu">push</span>(item);</span>
+<span id="cb237-8"><a href="design-a-queue.html#cb237-8" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb237-9"><a href="design-a-queue.html#cb237-9" aria-hidden="true"></a>            <span class="bu">Stack</span>&lt;T&gt; temp = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
+<span id="cb237-10"><a href="design-a-queue.html#cb237-10" aria-hidden="true"></a>            <span class="co">//1. Store previous element in temp</span></span>
+<span id="cb237-11"><a href="design-a-queue.html#cb237-11" aria-hidden="true"></a>            <span class="kw">while</span>(!value.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb237-12"><a href="design-a-queue.html#cb237-12" aria-hidden="true"></a>                temp.<span class="fu">push</span>(value.<span class="fu">pop</span>());</span>
+<span id="cb237-13"><a href="design-a-queue.html#cb237-13" aria-hidden="true"></a>            }</span>
+<span id="cb237-14"><a href="design-a-queue.html#cb237-14" aria-hidden="true"></a></span>
+<span id="cb237-15"><a href="design-a-queue.html#cb237-15" aria-hidden="true"></a>            <span class="co">//2. push item to the back of the stack</span></span>
+<span id="cb237-16"><a href="design-a-queue.html#cb237-16" aria-hidden="true"></a>            value.<span class="fu">push</span>(item);</span>
+<span id="cb237-17"><a href="design-a-queue.html#cb237-17" aria-hidden="true"></a></span>
+<span id="cb237-18"><a href="design-a-queue.html#cb237-18" aria-hidden="true"></a>            <span class="co">//3. reload the previous elements</span></span>
+<span id="cb237-19"><a href="design-a-queue.html#cb237-19" aria-hidden="true"></a>            <span class="kw">while</span>(!temp.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb237-20"><a href="design-a-queue.html#cb237-20" aria-hidden="true"></a>                value.<span class="fu">push</span>(temp.<span class="fu">pop</span>());</span>
+<span id="cb237-21"><a href="design-a-queue.html#cb237-21" aria-hidden="true"></a>            }</span>
+<span id="cb237-22"><a href="design-a-queue.html#cb237-22" aria-hidden="true"></a>        }</span>
+<span id="cb237-23"><a href="design-a-queue.html#cb237-23" aria-hidden="true"></a>    }</span>
+<span id="cb237-24"><a href="design-a-queue.html#cb237-24" aria-hidden="true"></a></span>
+<span id="cb237-25"><a href="design-a-queue.html#cb237-25" aria-hidden="true"></a>    <span class="kw">public</span> T <span class="fu">dequeue</span>() {</span>
+<span id="cb237-26"><a href="design-a-queue.html#cb237-26" aria-hidden="true"></a>        T result = value.<span class="fu">top</span>();</span>
+<span id="cb237-27"><a href="design-a-queue.html#cb237-27" aria-hidden="true"></a>        value.<span class="fu">pop</span>();</span>
+<span id="cb237-28"><a href="design-a-queue.html#cb237-28" aria-hidden="true"></a></span>
+<span id="cb237-29"><a href="design-a-queue.html#cb237-29" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
+<span id="cb237-30"><a href="design-a-queue.html#cb237-30" aria-hidden="true"></a>    }</span>
+<span id="cb237-31"><a href="design-a-queue.html#cb237-31" aria-hidden="true"></a></span>
+<span id="cb237-32"><a href="design-a-queue.html#cb237-32" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {</span>
+<span id="cb237-33"><a href="design-a-queue.html#cb237-33" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">size</span>();</span>
+<span id="cb237-34"><a href="design-a-queue.html#cb237-34" aria-hidden="true"></a>    }</span>
+<span id="cb237-35"><a href="design-a-queue.html#cb237-35" aria-hidden="true"></a></span>
+<span id="cb237-36"><a href="design-a-queue.html#cb237-36" aria-hidden="true"></a>    <span class="kw">public</span> T <span class="fu">peek</span>() {</span>
+<span id="cb237-37"><a href="design-a-queue.html#cb237-37" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">top</span>();</span>
+<span id="cb237-38"><a href="design-a-queue.html#cb237-38" aria-hidden="true"></a>    }</span>
+<span id="cb237-39"><a href="design-a-queue.html#cb237-39" aria-hidden="true"></a></span>
+<span id="cb237-40"><a href="design-a-queue.html#cb237-40" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">empty</span>() {</span>
+<span id="cb237-41"><a href="design-a-queue.html#cb237-41" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">isEmpty</span>();</span>
+<span id="cb237-42"><a href="design-a-queue.html#cb237-42" aria-hidden="true"></a>    }</span>
+<span id="cb237-43"><a href="design-a-queue.html#cb237-43" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

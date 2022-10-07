@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1059,51 +1060,51 @@ The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).</p>
 </div>
 <div id="solution-5" class="section level3" number="2.7.3">
 <h3><span class="header-section-number">2.7.3</span> Solution</h3>
-<div id="walkthrough-7" class="section level4" number="2.7.3.1">
+<div id="walkthrough-8" class="section level4" number="2.7.3.1">
 <h4><span class="header-section-number">2.7.3.1</span> Walkthrough</h4>
 <p>Looping the array with index i, while searching for the other two elements from both ends, with indices
 left incrementally and right decrmentally, find the sum = nums[i] + nums[left] + nums[right]. Return sum if existed;
 otherwise, keep for the closest tuple of (nums[i], nums[left], nums[right]) against target using Math.abs().</p>
 </div>
-<div id="analysis-7" class="section level4" number="2.7.3.2">
+<div id="analysis-8" class="section level4" number="2.7.3.2">
 <h4><span class="header-section-number">2.7.3.2</span> Analysis</h4>
 <p>There are two nested loops, the time complexity is <span class="math inline">\(O(n^2)\)</span>, and Auxiliary Space is O(1) since it is returning the closest answer.</p>
 </div>
-<div id="algorithm-7" class="section level4" number="2.7.3.3">
+<div id="algorithm-8" class="section level4" number="2.7.3.3">
 <h4><span class="header-section-number">2.7.3.3</span> Algorithm</h4>
-<div id="java-code-5" class="section level5" number="2.7.3.3.1">
+<div id="java-code-7" class="section level5" number="2.7.3.3.1">
 <h5><span class="header-section-number">2.7.3.3.1</span> Java Code</h5>
-<div class="sourceCode" id="cb12"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb12-1"><a href="sum-closest-leetcode-16-medium.html#cb12-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">threeSumClosest</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> target) {</span>
-<span id="cb12-2"><a href="sum-closest-leetcode-16-medium.html#cb12-2" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">sort</span>(num); <span class="co">//sort</span></span>
-<span id="cb12-3"><a href="sum-closest-leetcode-16-medium.html#cb12-3" aria-hidden="true"></a>    <span class="dt">int</span> minDelta = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>, result = <span class="dv">0</span>;</span>
-<span id="cb12-4"><a href="sum-closest-leetcode-16-medium.html#cb12-4" aria-hidden="true"></a></span>
-<span id="cb12-5"><a href="sum-closest-leetcode-16-medium.html#cb12-5" aria-hidden="true"></a>    <span class="co">//last possible pair is [i=len - 3, left=len - 2, right=len - 1]</span></span>
-<span id="cb12-6"><a href="sum-closest-leetcode-16-medium.html#cb12-6" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; num.<span class="fu">length</span> - <span class="dv">2</span>; i++) {</span>
-<span id="cb12-7"><a href="sum-closest-leetcode-16-medium.html#cb12-7" aria-hidden="true"></a>        <span class="dt">int</span> left = i + <span class="dv">1</span>, right = num.<span class="fu">length</span> - <span class="dv">1</span>;</span>
-<span id="cb12-8"><a href="sum-closest-leetcode-16-medium.html#cb12-8" aria-hidden="true"></a></span>
-<span id="cb12-9"><a href="sum-closest-leetcode-16-medium.html#cb12-9" aria-hidden="true"></a>        <span class="kw">while</span> (left &lt; right) {</span>
-<span id="cb12-10"><a href="sum-closest-leetcode-16-medium.html#cb12-10" aria-hidden="true"></a>            <span class="dt">int</span> sum = num[i] + num[left] + num[right];</span>
-<span id="cb12-11"><a href="sum-closest-leetcode-16-medium.html#cb12-11" aria-hidden="true"></a></span>
-<span id="cb12-12"><a href="sum-closest-leetcode-16-medium.html#cb12-12" aria-hidden="true"></a>            <span class="kw">if</span> (sum == target) {</span>
-<span id="cb12-13"><a href="sum-closest-leetcode-16-medium.html#cb12-13" aria-hidden="true"></a>                <span class="co">//find exact match</span></span>
-<span id="cb12-14"><a href="sum-closest-leetcode-16-medium.html#cb12-14" aria-hidden="true"></a>                <span class="kw">return</span> sum;</span>
-<span id="cb12-15"><a href="sum-closest-leetcode-16-medium.html#cb12-15" aria-hidden="true"></a>            } <span class="kw">else</span> <span class="kw">if</span> (sum &lt; target) {</span>
-<span id="cb12-16"><a href="sum-closest-leetcode-16-medium.html#cb12-16" aria-hidden="true"></a>                left++;</span>
-<span id="cb12-17"><a href="sum-closest-leetcode-16-medium.html#cb12-17" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
-<span id="cb12-18"><a href="sum-closest-leetcode-16-medium.html#cb12-18" aria-hidden="true"></a>                <span class="co">// sum &gt; target</span></span>
-<span id="cb12-19"><a href="sum-closest-leetcode-16-medium.html#cb12-19" aria-hidden="true"></a>                right--;</span>
-<span id="cb12-20"><a href="sum-closest-leetcode-16-medium.html#cb12-20" aria-hidden="true"></a>            }</span>
-<span id="cb12-21"><a href="sum-closest-leetcode-16-medium.html#cb12-21" aria-hidden="true"></a></span>
-<span id="cb12-22"><a href="sum-closest-leetcode-16-medium.html#cb12-22" aria-hidden="true"></a>            <span class="dt">int</span> delta = <span class="bu">Math</span>.<span class="fu">abs</span>(sum - target);</span>
-<span id="cb12-23"><a href="sum-closest-leetcode-16-medium.html#cb12-23" aria-hidden="true"></a>            <span class="kw">if</span>(delta &lt; minDelta) {</span>
-<span id="cb12-24"><a href="sum-closest-leetcode-16-medium.html#cb12-24" aria-hidden="true"></a>                minDelta = delta;</span>
-<span id="cb12-25"><a href="sum-closest-leetcode-16-medium.html#cb12-25" aria-hidden="true"></a>                result = sum;</span>
-<span id="cb12-26"><a href="sum-closest-leetcode-16-medium.html#cb12-26" aria-hidden="true"></a>            }</span>
-<span id="cb12-27"><a href="sum-closest-leetcode-16-medium.html#cb12-27" aria-hidden="true"></a>        }</span>
-<span id="cb12-28"><a href="sum-closest-leetcode-16-medium.html#cb12-28" aria-hidden="true"></a>    }</span>
-<span id="cb12-29"><a href="sum-closest-leetcode-16-medium.html#cb12-29" aria-hidden="true"></a></span>
-<span id="cb12-30"><a href="sum-closest-leetcode-16-medium.html#cb12-30" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb12-31"><a href="sum-closest-leetcode-16-medium.html#cb12-31" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb13-1"><a href="sum-closest-leetcode-16-medium.html#cb13-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">threeSumClosest</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> target) {</span>
+<span id="cb13-2"><a href="sum-closest-leetcode-16-medium.html#cb13-2" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">sort</span>(num); <span class="co">//sort</span></span>
+<span id="cb13-3"><a href="sum-closest-leetcode-16-medium.html#cb13-3" aria-hidden="true"></a>    <span class="dt">int</span> minDelta = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>, result = <span class="dv">0</span>;</span>
+<span id="cb13-4"><a href="sum-closest-leetcode-16-medium.html#cb13-4" aria-hidden="true"></a></span>
+<span id="cb13-5"><a href="sum-closest-leetcode-16-medium.html#cb13-5" aria-hidden="true"></a>    <span class="co">//last possible pair is [i=len - 3, left=len - 2, right=len - 1]</span></span>
+<span id="cb13-6"><a href="sum-closest-leetcode-16-medium.html#cb13-6" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; num.<span class="fu">length</span> - <span class="dv">2</span>; i++) {</span>
+<span id="cb13-7"><a href="sum-closest-leetcode-16-medium.html#cb13-7" aria-hidden="true"></a>        <span class="dt">int</span> left = i + <span class="dv">1</span>, right = num.<span class="fu">length</span> - <span class="dv">1</span>;</span>
+<span id="cb13-8"><a href="sum-closest-leetcode-16-medium.html#cb13-8" aria-hidden="true"></a></span>
+<span id="cb13-9"><a href="sum-closest-leetcode-16-medium.html#cb13-9" aria-hidden="true"></a>        <span class="kw">while</span> (left &lt; right) {</span>
+<span id="cb13-10"><a href="sum-closest-leetcode-16-medium.html#cb13-10" aria-hidden="true"></a>            <span class="dt">int</span> sum = num[i] + num[left] + num[right];</span>
+<span id="cb13-11"><a href="sum-closest-leetcode-16-medium.html#cb13-11" aria-hidden="true"></a></span>
+<span id="cb13-12"><a href="sum-closest-leetcode-16-medium.html#cb13-12" aria-hidden="true"></a>            <span class="kw">if</span> (sum == target) {</span>
+<span id="cb13-13"><a href="sum-closest-leetcode-16-medium.html#cb13-13" aria-hidden="true"></a>                <span class="co">//find exact match</span></span>
+<span id="cb13-14"><a href="sum-closest-leetcode-16-medium.html#cb13-14" aria-hidden="true"></a>                <span class="kw">return</span> sum;</span>
+<span id="cb13-15"><a href="sum-closest-leetcode-16-medium.html#cb13-15" aria-hidden="true"></a>            } <span class="kw">else</span> <span class="kw">if</span> (sum &lt; target) {</span>
+<span id="cb13-16"><a href="sum-closest-leetcode-16-medium.html#cb13-16" aria-hidden="true"></a>                left++;</span>
+<span id="cb13-17"><a href="sum-closest-leetcode-16-medium.html#cb13-17" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
+<span id="cb13-18"><a href="sum-closest-leetcode-16-medium.html#cb13-18" aria-hidden="true"></a>                <span class="co">// sum &gt; target</span></span>
+<span id="cb13-19"><a href="sum-closest-leetcode-16-medium.html#cb13-19" aria-hidden="true"></a>                right--;</span>
+<span id="cb13-20"><a href="sum-closest-leetcode-16-medium.html#cb13-20" aria-hidden="true"></a>            }</span>
+<span id="cb13-21"><a href="sum-closest-leetcode-16-medium.html#cb13-21" aria-hidden="true"></a></span>
+<span id="cb13-22"><a href="sum-closest-leetcode-16-medium.html#cb13-22" aria-hidden="true"></a>            <span class="dt">int</span> delta = <span class="bu">Math</span>.<span class="fu">abs</span>(sum - target);</span>
+<span id="cb13-23"><a href="sum-closest-leetcode-16-medium.html#cb13-23" aria-hidden="true"></a>            <span class="kw">if</span>(delta &lt; minDelta) {</span>
+<span id="cb13-24"><a href="sum-closest-leetcode-16-medium.html#cb13-24" aria-hidden="true"></a>                minDelta = delta;</span>
+<span id="cb13-25"><a href="sum-closest-leetcode-16-medium.html#cb13-25" aria-hidden="true"></a>                result = sum;</span>
+<span id="cb13-26"><a href="sum-closest-leetcode-16-medium.html#cb13-26" aria-hidden="true"></a>            }</span>
+<span id="cb13-27"><a href="sum-closest-leetcode-16-medium.html#cb13-27" aria-hidden="true"></a>        }</span>
+<span id="cb13-28"><a href="sum-closest-leetcode-16-medium.html#cb13-28" aria-hidden="true"></a>    }</span>
+<span id="cb13-29"><a href="sum-closest-leetcode-16-medium.html#cb13-29" aria-hidden="true"></a></span>
+<span id="cb13-30"><a href="sum-closest-leetcode-16-medium.html#cb13-30" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb13-31"><a href="sum-closest-leetcode-16-medium.html#cb13-31" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

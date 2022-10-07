@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1075,98 +1076,98 @@ Figure 4.23: Some caption.
 </div>
 <div id="solution---recursive-4" class="section level3" number="4.18.3">
 <h3><span class="header-section-number">4.18.3</span> Solution - Recursive</h3>
-<div id="walkthrough-83" class="section level4" number="4.18.3.1">
+<div id="walkthrough-84" class="section level4" number="4.18.3.1">
 <h4><span class="header-section-number">4.18.3.1</span> Walkthrough</h4>
 <p>For recursive, define a numeric lower and upper bounds for each validation - initially, (long) (Integer.MIN_VALUE - 1)
 and (long) (Integer.MAX_VALUE + 1). Recursively validate the node boundary by replacing with left and right nodes.</p>
 </div>
-<div id="analysis-84" class="section level4" number="4.18.3.2">
+<div id="analysis-85" class="section level4" number="4.18.3.2">
 <h4><span class="header-section-number">4.18.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-85" class="section level4" number="4.18.3.3">
+<div id="algorithm-86" class="section level4" number="4.18.3.3">
 <h4><span class="header-section-number">4.18.3.3</span> Algorithm</h4>
 <p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
 <div id="java-code---recursive-4" class="section level4" number="4.18.3.4">
 <h4><span class="header-section-number">4.18.3.4</span> Java Code - Recursive</h4>
-<div class="sourceCode" id="cb132"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb132-1"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isValidBST</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb132-2"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-2" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">isValidBST</span>(root, (<span class="dt">long</span>) <span class="bu">Integer</span>.<span class="fu">MIN_VALUE</span> - <span class="dv">1</span>, (<span class="dt">long</span>) <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span> + <span class="dv">1</span>);</span>
-<span id="cb132-3"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-3" aria-hidden="true"></a>}</span>
-<span id="cb132-4"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-4" aria-hidden="true"></a></span>
-<span id="cb132-5"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-5" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isValidBST</span>(<span class="bu">TreeNode</span> root, <span class="dt">long</span> lowerBound, <span class="dt">long</span> upperBound) {</span>
-<span id="cb132-6"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-6" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
-<span id="cb132-7"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-7" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb132-8"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-8" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb132-9"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-9" aria-hidden="true"></a>        <span class="dt">boolean</span> result = root.<span class="fu">val</span> &gt; lowerBound &amp;&amp; root.<span class="fu">val</span> &lt; upperBound;</span>
-<span id="cb132-10"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-10" aria-hidden="true"></a>        <span class="kw">return</span> result &amp;&amp; <span class="fu">isValidBST</span>(root.<span class="fu">left</span>, lowerBound, root.<span class="fu">val</span>) &amp;&amp;</span>
-<span id="cb132-11"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-11" aria-hidden="true"></a>            <span class="fu">isValidBST</span>(root.<span class="fu">right</span>, root.<span class="fu">val</span>, upperBound);</span>
-<span id="cb132-12"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-12" aria-hidden="true"></a>    }</span>
-<span id="cb132-13"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb132-13" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb133-1"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isValidBST</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb133-2"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-2" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">isValidBST</span>(root, (<span class="dt">long</span>) <span class="bu">Integer</span>.<span class="fu">MIN_VALUE</span> - <span class="dv">1</span>, (<span class="dt">long</span>) <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span> + <span class="dv">1</span>);</span>
+<span id="cb133-3"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-3" aria-hidden="true"></a>}</span>
+<span id="cb133-4"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-4" aria-hidden="true"></a></span>
+<span id="cb133-5"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-5" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isValidBST</span>(<span class="bu">TreeNode</span> root, <span class="dt">long</span> lowerBound, <span class="dt">long</span> upperBound) {</span>
+<span id="cb133-6"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-6" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
+<span id="cb133-7"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-7" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb133-8"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-8" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb133-9"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-9" aria-hidden="true"></a>        <span class="dt">boolean</span> result = root.<span class="fu">val</span> &gt; lowerBound &amp;&amp; root.<span class="fu">val</span> &lt; upperBound;</span>
+<span id="cb133-10"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-10" aria-hidden="true"></a>        <span class="kw">return</span> result &amp;&amp; <span class="fu">isValidBST</span>(root.<span class="fu">left</span>, lowerBound, root.<span class="fu">val</span>) &amp;&amp;</span>
+<span id="cb133-11"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-11" aria-hidden="true"></a>            <span class="fu">isValidBST</span>(root.<span class="fu">right</span>, root.<span class="fu">val</span>, upperBound);</span>
+<span id="cb133-12"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-12" aria-hidden="true"></a>    }</span>
+<span id="cb133-13"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-13" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---iterative-bfs-1" class="section level3" number="4.18.4">
 <h3><span class="header-section-number">4.18.4</span> Solution - Iterative BFS</h3>
-<div id="walkthrough-84" class="section level4" number="4.18.4.1">
+<div id="walkthrough-85" class="section level4" number="4.18.4.1">
 <h4><span class="header-section-number">4.18.4.1</span> Walkthrough</h4>
 <p>For iterative, we have a wrapper to hold upper and lower bounds for each nodes. Use BFS to iteratively traverse the tree and
 add left or right nodes with proper boundaries accordingly.</p>
 </div>
-<div id="analysis-85" class="section level4" number="4.18.4.2">
+<div id="analysis-86" class="section level4" number="4.18.4.2">
 <h4><span class="header-section-number">4.18.4.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-86" class="section level4" number="4.18.4.3">
+<div id="algorithm-87" class="section level4" number="4.18.4.3">
 <h4><span class="header-section-number">4.18.4.3</span> Algorithm</h4>
 <p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
 </div>
 <div id="java-code---iterative-bfs-1" class="section level4" number="4.18.4.4">
 <h4><span class="header-section-number">4.18.4.4</span> Java Code - Iterative BFS</h4>
-<div class="sourceCode" id="cb133"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb133-1"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-1" aria-hidden="true"></a><span class="co">//Decorator pattern</span></span>
-<span id="cb133-2"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-2" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> BoundedTreeNode <span class="kw">extends</span> <span class="bu">TreeNode</span> {</span>
-<span id="cb133-3"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-3" aria-hidden="true"></a>    <span class="dt">int</span> upper;</span>
-<span id="cb133-4"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-4" aria-hidden="true"></a></span>
-<span id="cb133-5"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-5" aria-hidden="true"></a>    <span class="dt">int</span> lower;</span>
-<span id="cb133-6"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-6" aria-hidden="true"></a></span>
-<span id="cb133-7"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-7" aria-hidden="true"></a>    <span class="bu">TreeNode</span> proxy;</span>
-<span id="cb133-8"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-8" aria-hidden="true"></a></span>
-<span id="cb133-9"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-9" aria-hidden="true"></a>    <span class="fu">BoundedTreeNode</span>(<span class="bu">TreeNode</span> node, <span class="dt">int</span> max, <span class="dt">int</span> min) {</span>
-<span id="cb133-10"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-10" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">proxy</span> = node;</span>
-<span id="cb133-11"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-11" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">upper</span> = max;</span>
-<span id="cb133-12"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-12" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">lower</span> = min;</span>
-<span id="cb133-13"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-13" aria-hidden="true"></a>    }</span>
-<span id="cb133-14"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-14" aria-hidden="true"></a>}</span>
-<span id="cb133-15"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-15" aria-hidden="true"></a></span>
-<span id="cb133-16"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-16" aria-hidden="true"></a></span>
-<span id="cb133-17"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-17" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">static</span> <span class="dt">boolean</span> <span class="fu">validateBSTItr</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb133-18"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-18" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
-<span id="cb133-19"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-19" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb133-20"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-20" aria-hidden="true"></a>    }</span>
-<span id="cb133-21"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-21" aria-hidden="true"></a></span>
-<span id="cb133-22"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-22" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;BoundedTreeNode&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb133-23"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-23" aria-hidden="true"></a></span>
-<span id="cb133-24"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-24" aria-hidden="true"></a>    queue.<span class="fu">offer</span>(<span class="kw">new</span> <span class="fu">BoundedTreeNode</span>(root, <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>, <span class="bu">Integer</span>.<span class="fu">MIN_VALUE</span>));</span>
-<span id="cb133-25"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-25" aria-hidden="true"></a></span>
-<span id="cb133-26"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-26" aria-hidden="true"></a>    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb133-27"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-27" aria-hidden="true"></a>        BoundedTreeNode node = queue.<span class="fu">poll</span>();</span>
-<span id="cb133-28"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-28" aria-hidden="true"></a></span>
-<span id="cb133-29"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-29" aria-hidden="true"></a></span>
-<span id="cb133-30"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-30" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">proxy</span>.<span class="fu">data</span> &gt; node.<span class="fu">upper</span> || node.<span class="fu">proxy</span>.<span class="fu">data</span> &lt; node.<span class="fu">lower</span>) {</span>
-<span id="cb133-31"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-31" aria-hidden="true"></a>            <span class="co">// out of boundary</span></span>
-<span id="cb133-32"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-32" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb133-33"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-33" aria-hidden="true"></a>        }</span>
-<span id="cb133-34"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-34" aria-hidden="true"></a></span>
-<span id="cb133-35"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-35" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">proxy</span>.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
-<span id="cb133-36"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-36" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(<span class="kw">new</span> <span class="fu">BoundedTreeNode</span>(node.<span class="fu">proxy</span>.<span class="fu">left</span>, node.<span class="fu">proxy</span>.<span class="fu">data</span>, node.<span class="fu">lower</span>));</span>
-<span id="cb133-37"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-37" aria-hidden="true"></a>        }</span>
-<span id="cb133-38"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-38" aria-hidden="true"></a></span>
-<span id="cb133-39"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-39" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">proxy</span>.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
-<span id="cb133-40"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-40" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(<span class="kw">new</span> <span class="fu">BoundedTreeNode</span>(node.<span class="fu">proxy</span>.<span class="fu">right</span>, node.<span class="fu">upper</span>, node.<span class="fu">proxy</span>.<span class="fu">data</span>));</span>
-<span id="cb133-41"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-41" aria-hidden="true"></a>        }</span>
-<span id="cb133-42"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-42" aria-hidden="true"></a>    }</span>
-<span id="cb133-43"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-43" aria-hidden="true"></a></span>
-<span id="cb133-44"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-44" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb133-45"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb133-45" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb134-1"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-1" aria-hidden="true"></a><span class="co">//Decorator pattern</span></span>
+<span id="cb134-2"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-2" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> BoundedTreeNode <span class="kw">extends</span> <span class="bu">TreeNode</span> {</span>
+<span id="cb134-3"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-3" aria-hidden="true"></a>    <span class="dt">int</span> upper;</span>
+<span id="cb134-4"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-4" aria-hidden="true"></a></span>
+<span id="cb134-5"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-5" aria-hidden="true"></a>    <span class="dt">int</span> lower;</span>
+<span id="cb134-6"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-6" aria-hidden="true"></a></span>
+<span id="cb134-7"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-7" aria-hidden="true"></a>    <span class="bu">TreeNode</span> proxy;</span>
+<span id="cb134-8"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-8" aria-hidden="true"></a></span>
+<span id="cb134-9"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-9" aria-hidden="true"></a>    <span class="fu">BoundedTreeNode</span>(<span class="bu">TreeNode</span> node, <span class="dt">int</span> max, <span class="dt">int</span> min) {</span>
+<span id="cb134-10"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-10" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">proxy</span> = node;</span>
+<span id="cb134-11"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-11" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">upper</span> = max;</span>
+<span id="cb134-12"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-12" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">lower</span> = min;</span>
+<span id="cb134-13"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-13" aria-hidden="true"></a>    }</span>
+<span id="cb134-14"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-14" aria-hidden="true"></a>}</span>
+<span id="cb134-15"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-15" aria-hidden="true"></a></span>
+<span id="cb134-16"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-16" aria-hidden="true"></a></span>
+<span id="cb134-17"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-17" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">static</span> <span class="dt">boolean</span> <span class="fu">validateBSTItr</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb134-18"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-18" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
+<span id="cb134-19"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-19" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb134-20"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-20" aria-hidden="true"></a>    }</span>
+<span id="cb134-21"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-21" aria-hidden="true"></a></span>
+<span id="cb134-22"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-22" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;BoundedTreeNode&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb134-23"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-23" aria-hidden="true"></a></span>
+<span id="cb134-24"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-24" aria-hidden="true"></a>    queue.<span class="fu">offer</span>(<span class="kw">new</span> <span class="fu">BoundedTreeNode</span>(root, <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>, <span class="bu">Integer</span>.<span class="fu">MIN_VALUE</span>));</span>
+<span id="cb134-25"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-25" aria-hidden="true"></a></span>
+<span id="cb134-26"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-26" aria-hidden="true"></a>    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb134-27"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-27" aria-hidden="true"></a>        BoundedTreeNode node = queue.<span class="fu">poll</span>();</span>
+<span id="cb134-28"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-28" aria-hidden="true"></a></span>
+<span id="cb134-29"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-29" aria-hidden="true"></a></span>
+<span id="cb134-30"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-30" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">proxy</span>.<span class="fu">data</span> &gt; node.<span class="fu">upper</span> || node.<span class="fu">proxy</span>.<span class="fu">data</span> &lt; node.<span class="fu">lower</span>) {</span>
+<span id="cb134-31"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-31" aria-hidden="true"></a>            <span class="co">// out of boundary</span></span>
+<span id="cb134-32"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-32" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb134-33"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-33" aria-hidden="true"></a>        }</span>
+<span id="cb134-34"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-34" aria-hidden="true"></a></span>
+<span id="cb134-35"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-35" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">proxy</span>.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
+<span id="cb134-36"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-36" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(<span class="kw">new</span> <span class="fu">BoundedTreeNode</span>(node.<span class="fu">proxy</span>.<span class="fu">left</span>, node.<span class="fu">proxy</span>.<span class="fu">data</span>, node.<span class="fu">lower</span>));</span>
+<span id="cb134-37"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-37" aria-hidden="true"></a>        }</span>
+<span id="cb134-38"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-38" aria-hidden="true"></a></span>
+<span id="cb134-39"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-39" aria-hidden="true"></a>        <span class="kw">if</span>(node.<span class="fu">proxy</span>.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
+<span id="cb134-40"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-40" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(<span class="kw">new</span> <span class="fu">BoundedTreeNode</span>(node.<span class="fu">proxy</span>.<span class="fu">right</span>, node.<span class="fu">upper</span>, node.<span class="fu">proxy</span>.<span class="fu">data</span>));</span>
+<span id="cb134-41"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-41" aria-hidden="true"></a>        }</span>
+<span id="cb134-42"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-42" aria-hidden="true"></a>    }</span>
+<span id="cb134-43"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-43" aria-hidden="true"></a></span>
+<span id="cb134-44"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-44" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb134-45"><a href="validate-binary-search-tree-leet-code-98-medium.html#cb134-45" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

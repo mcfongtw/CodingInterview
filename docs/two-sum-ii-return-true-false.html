@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1058,36 +1059,36 @@ sums to exactly k.</p>
 </div>
 <div id="solution-1" class="section level3" number="2.3.3">
 <h3><span class="header-section-number">2.3.3</span> Solution</h3>
-<div id="walkthrough-3" class="section level4" number="2.3.3.1">
+<div id="walkthrough-4" class="section level4" number="2.3.3.1">
 <h4><span class="header-section-number">2.3.3.1</span> Walkthrough</h4>
 <p>Have a HashSet to iterate through the array while compute the difference (target - a[i]). Check if the diff exist.
 Return true if exists; false otherwise. HashSet essentially uses less space than HashTable.</p>
 </div>
-<div id="analysis-3" class="section level4" number="2.3.3.2">
+<div id="analysis-4" class="section level4" number="2.3.3.2">
 <h4><span class="header-section-number">2.3.3.2</span> Analysis</h4>
 <p>Each insertion and get operation from hashmap takes O(1) and there are n elements. The total time
 complexity costs O(n) and Auxiliary Space takes O(n)</p>
 </div>
-<div id="algorithm-3" class="section level4" number="2.3.3.3">
+<div id="algorithm-4" class="section level4" number="2.3.3.3">
 <h4><span class="header-section-number">2.3.3.3</span> Algorithm</h4>
-<div id="java-code-1" class="section level5" number="2.3.3.3.1">
+<div id="java-code-3" class="section level5" number="2.3.3.3.1">
 <h5><span class="header-section-number">2.3.3.3.1</span> Java Code</h5>
-<div class="sourceCode" id="cb8"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb8-1"><a href="two-sum-ii-return-true-false.html#cb8-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">sumsToTarget</span>(<span class="dt">int</span>[] arr, <span class="dt">int</span> target) {</span>
-<span id="cb8-2"><a href="two-sum-ii-return-true-false.html#cb8-2" aria-hidden="true"></a>    <span class="bu">Set</span>&lt;<span class="bu">Integer</span>&gt; values = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;<span class="bu">Integer</span>&gt;();</span>
-<span id="cb8-3"><a href="two-sum-ii-return-true-false.html#cb8-3" aria-hidden="true"></a></span>
-<span id="cb8-4"><a href="two-sum-ii-return-true-false.html#cb8-4" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; arr.<span class="fu">length</span>; i++) {</span>
-<span id="cb8-5"><a href="two-sum-ii-return-true-false.html#cb8-5" aria-hidden="true"></a>        <span class="dt">int</span> diff = target - arr[i];</span>
-<span id="cb8-6"><a href="two-sum-ii-return-true-false.html#cb8-6" aria-hidden="true"></a></span>
-<span id="cb8-7"><a href="two-sum-ii-return-true-false.html#cb8-7" aria-hidden="true"></a>        <span class="co">//if hash set contains the difference</span></span>
-<span id="cb8-8"><a href="two-sum-ii-return-true-false.html#cb8-8" aria-hidden="true"></a>        <span class="kw">if</span> (values.<span class="fu">contains</span>(diff)) {</span>
-<span id="cb8-9"><a href="two-sum-ii-return-true-false.html#cb8-9" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb8-10"><a href="two-sum-ii-return-true-false.html#cb8-10" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb8-11"><a href="two-sum-ii-return-true-false.html#cb8-11" aria-hidden="true"></a>            values.<span class="fu">add</span>(arr[i]);</span>
-<span id="cb8-12"><a href="two-sum-ii-return-true-false.html#cb8-12" aria-hidden="true"></a>        }</span>
-<span id="cb8-13"><a href="two-sum-ii-return-true-false.html#cb8-13" aria-hidden="true"></a>    }</span>
-<span id="cb8-14"><a href="two-sum-ii-return-true-false.html#cb8-14" aria-hidden="true"></a></span>
-<span id="cb8-15"><a href="two-sum-ii-return-true-false.html#cb8-15" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb8-16"><a href="two-sum-ii-return-true-false.html#cb8-16" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb9-1"><a href="two-sum-ii-return-true-false.html#cb9-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">sumsToTarget</span>(<span class="dt">int</span>[] arr, <span class="dt">int</span> target) {</span>
+<span id="cb9-2"><a href="two-sum-ii-return-true-false.html#cb9-2" aria-hidden="true"></a>    <span class="bu">Set</span>&lt;<span class="bu">Integer</span>&gt; values = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;<span class="bu">Integer</span>&gt;();</span>
+<span id="cb9-3"><a href="two-sum-ii-return-true-false.html#cb9-3" aria-hidden="true"></a></span>
+<span id="cb9-4"><a href="two-sum-ii-return-true-false.html#cb9-4" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; arr.<span class="fu">length</span>; i++) {</span>
+<span id="cb9-5"><a href="two-sum-ii-return-true-false.html#cb9-5" aria-hidden="true"></a>        <span class="dt">int</span> diff = target - arr[i];</span>
+<span id="cb9-6"><a href="two-sum-ii-return-true-false.html#cb9-6" aria-hidden="true"></a></span>
+<span id="cb9-7"><a href="two-sum-ii-return-true-false.html#cb9-7" aria-hidden="true"></a>        <span class="co">//if hash set contains the difference</span></span>
+<span id="cb9-8"><a href="two-sum-ii-return-true-false.html#cb9-8" aria-hidden="true"></a>        <span class="kw">if</span> (values.<span class="fu">contains</span>(diff)) {</span>
+<span id="cb9-9"><a href="two-sum-ii-return-true-false.html#cb9-9" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb9-10"><a href="two-sum-ii-return-true-false.html#cb9-10" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb9-11"><a href="two-sum-ii-return-true-false.html#cb9-11" aria-hidden="true"></a>            values.<span class="fu">add</span>(arr[i]);</span>
+<span id="cb9-12"><a href="two-sum-ii-return-true-false.html#cb9-12" aria-hidden="true"></a>        }</span>
+<span id="cb9-13"><a href="two-sum-ii-return-true-false.html#cb9-13" aria-hidden="true"></a>    }</span>
+<span id="cb9-14"><a href="two-sum-ii-return-true-false.html#cb9-14" aria-hidden="true"></a></span>
+<span id="cb9-15"><a href="two-sum-ii-return-true-false.html#cb9-15" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb9-16"><a href="two-sum-ii-return-true-false.html#cb9-16" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

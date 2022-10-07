@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1055,20 +1056,20 @@ Note: The solution set must not contain duplicate subsets.</p>
 <div id="example-15" class="section level3" number="2.17.2">
 <h3><span class="header-section-number">2.17.2</span> Example</h3>
 <p>Input: nums = [1,2,3], Output:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb24-1"><a href="subsets-leetcode-78-medium.html#cb24-1" aria-hidden="true"></a>[</span>
-<span id="cb24-2"><a href="subsets-leetcode-78-medium.html#cb24-2" aria-hidden="true"></a>    [<span class="dv">3</span>],</span>
-<span id="cb24-3"><a href="subsets-leetcode-78-medium.html#cb24-3" aria-hidden="true"></a>    [<span class="dv">1</span>],</span>
-<span id="cb24-4"><a href="subsets-leetcode-78-medium.html#cb24-4" aria-hidden="true"></a>    [<span class="dv">2</span>],</span>
-<span id="cb24-5"><a href="subsets-leetcode-78-medium.html#cb24-5" aria-hidden="true"></a>    [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],</span>
-<span id="cb24-6"><a href="subsets-leetcode-78-medium.html#cb24-6" aria-hidden="true"></a>    [<span class="dv">1</span>,<span class="dv">3</span>],</span>
-<span id="cb24-7"><a href="subsets-leetcode-78-medium.html#cb24-7" aria-hidden="true"></a>    [<span class="dv">2</span>,<span class="dv">3</span>],</span>
-<span id="cb24-8"><a href="subsets-leetcode-78-medium.html#cb24-8" aria-hidden="true"></a>    [<span class="dv">1</span>,<span class="dv">2</span>],</span>
-<span id="cb24-9"><a href="subsets-leetcode-78-medium.html#cb24-9" aria-hidden="true"></a>    []</span>
-<span id="cb24-10"><a href="subsets-leetcode-78-medium.html#cb24-10" aria-hidden="true"></a>]</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb25-1"><a href="subsets-leetcode-78-medium.html#cb25-1" aria-hidden="true"></a>[</span>
+<span id="cb25-2"><a href="subsets-leetcode-78-medium.html#cb25-2" aria-hidden="true"></a>    [<span class="dv">3</span>],</span>
+<span id="cb25-3"><a href="subsets-leetcode-78-medium.html#cb25-3" aria-hidden="true"></a>    [<span class="dv">1</span>],</span>
+<span id="cb25-4"><a href="subsets-leetcode-78-medium.html#cb25-4" aria-hidden="true"></a>    [<span class="dv">2</span>],</span>
+<span id="cb25-5"><a href="subsets-leetcode-78-medium.html#cb25-5" aria-hidden="true"></a>    [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],</span>
+<span id="cb25-6"><a href="subsets-leetcode-78-medium.html#cb25-6" aria-hidden="true"></a>    [<span class="dv">1</span>,<span class="dv">3</span>],</span>
+<span id="cb25-7"><a href="subsets-leetcode-78-medium.html#cb25-7" aria-hidden="true"></a>    [<span class="dv">2</span>,<span class="dv">3</span>],</span>
+<span id="cb25-8"><a href="subsets-leetcode-78-medium.html#cb25-8" aria-hidden="true"></a>    [<span class="dv">1</span>,<span class="dv">2</span>],</span>
+<span id="cb25-9"><a href="subsets-leetcode-78-medium.html#cb25-9" aria-hidden="true"></a>    []</span>
+<span id="cb25-10"><a href="subsets-leetcode-78-medium.html#cb25-10" aria-hidden="true"></a>]</span></code></pre></div>
 </div>
 <div id="solution-13" class="section level3" number="2.17.3">
 <h3><span class="header-section-number">2.17.3</span> Solution</h3>
-<div id="walkthrough-17" class="section level4" number="2.17.3.1">
+<div id="walkthrough-18" class="section level4" number="2.17.3.1">
 <h4><span class="header-section-number">2.17.3.1</span> Walkthrough</h4>
 <p>The enumeration tree is as the following:</p>
 <div class="figure"><span id="fig:unnamed-chunk-2"></span>
@@ -1080,42 +1081,42 @@ Figure 2.2: Some caption.
 <p>Enumerate all possible result by adding a new element that is greater than current element while traversing the array.
 Remember to backtrack.</p>
 </div>
-<div id="analysis-17" class="section level4" number="2.17.3.2">
+<div id="analysis-18" class="section level4" number="2.17.3.2">
 <h4><span class="header-section-number">2.17.3.2</span> Analysis</h4>
 <p>Time complexity between <span class="math inline">\(O(2^{n})\)</span> as there are at most <span class="math inline">\(2^n\)</span> subsets.</p>
 </div>
-<div id="algorithm-17" class="section level4" number="2.17.3.3">
+<div id="algorithm-18" class="section level4" number="2.17.3.3">
 <h4><span class="header-section-number">2.17.3.3</span> Algorithm</h4>
 <p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
 </div>
-<div id="java-code-13" class="section level4" number="2.17.3.4">
+<div id="java-code-15" class="section level4" number="2.17.3.4">
 <h4><span class="header-section-number">2.17.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb25"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb25-1"><a href="subsets-leetcode-78-medium.html#cb25-1" aria-hidden="true"></a><span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb25-2"><a href="subsets-leetcode-78-medium.html#cb25-2" aria-hidden="true"></a></span>
-<span id="cb25-3"><a href="subsets-leetcode-78-medium.html#cb25-3" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">subsets</span>(<span class="dt">int</span>[] nums) {</span>
-<span id="cb25-4"><a href="subsets-leetcode-78-medium.html#cb25-4" aria-hidden="true"></a>    <span class="kw">if</span> (nums.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb25-5"><a href="subsets-leetcode-78-medium.html#cb25-5" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
-<span id="cb25-6"><a href="subsets-leetcode-78-medium.html#cb25-6" aria-hidden="true"></a>    }</span>
-<span id="cb25-7"><a href="subsets-leetcode-78-medium.html#cb25-7" aria-hidden="true"></a></span>
-<span id="cb25-8"><a href="subsets-leetcode-78-medium.html#cb25-8" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">sort</span>(nums);</span>
-<span id="cb25-9"><a href="subsets-leetcode-78-medium.html#cb25-9" aria-hidden="true"></a></span>
-<span id="cb25-10"><a href="subsets-leetcode-78-medium.html#cb25-10" aria-hidden="true"></a>    <span class="fu">backtrack</span>(nums, <span class="dv">0</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;());</span>
-<span id="cb25-11"><a href="subsets-leetcode-78-medium.html#cb25-11" aria-hidden="true"></a></span>
-<span id="cb25-12"><a href="subsets-leetcode-78-medium.html#cb25-12" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb25-13"><a href="subsets-leetcode-78-medium.html#cb25-13" aria-hidden="true"></a>}</span>
-<span id="cb25-14"><a href="subsets-leetcode-78-medium.html#cb25-14" aria-hidden="true"></a></span>
-<span id="cb25-15"><a href="subsets-leetcode-78-medium.html#cb25-15" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">backtrack</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> index, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list) {</span>
-<span id="cb25-16"><a href="subsets-leetcode-78-medium.html#cb25-16" aria-hidden="true"></a>    <span class="co">//copy elements from the current list</span></span>
-<span id="cb25-17"><a href="subsets-leetcode-78-medium.html#cb25-17" aria-hidden="true"></a>    result.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(list));</span>
-<span id="cb25-18"><a href="subsets-leetcode-78-medium.html#cb25-18" aria-hidden="true"></a></span>
-<span id="cb25-19"><a href="subsets-leetcode-78-medium.html#cb25-19" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = index; i &lt; nums.<span class="fu">length</span>; i++) {</span>
-<span id="cb25-20"><a href="subsets-leetcode-78-medium.html#cb25-20" aria-hidden="true"></a>        list.<span class="fu">add</span>(nums[i]);</span>
-<span id="cb25-21"><a href="subsets-leetcode-78-medium.html#cb25-21" aria-hidden="true"></a>        <span class="fu">backtrack</span>(nums, i + <span class="dv">1</span>, list);</span>
-<span id="cb25-22"><a href="subsets-leetcode-78-medium.html#cb25-22" aria-hidden="true"></a></span>
-<span id="cb25-23"><a href="subsets-leetcode-78-medium.html#cb25-23" aria-hidden="true"></a>        <span class="co">//remove last element to backtrack</span></span>
-<span id="cb25-24"><a href="subsets-leetcode-78-medium.html#cb25-24" aria-hidden="true"></a>        list.<span class="fu">remove</span>(list.<span class="fu">size</span>() - <span class="dv">1</span>);</span>
-<span id="cb25-25"><a href="subsets-leetcode-78-medium.html#cb25-25" aria-hidden="true"></a>    }</span>
-<span id="cb25-26"><a href="subsets-leetcode-78-medium.html#cb25-26" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb26-1"><a href="subsets-leetcode-78-medium.html#cb26-1" aria-hidden="true"></a><span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb26-2"><a href="subsets-leetcode-78-medium.html#cb26-2" aria-hidden="true"></a></span>
+<span id="cb26-3"><a href="subsets-leetcode-78-medium.html#cb26-3" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">subsets</span>(<span class="dt">int</span>[] nums) {</span>
+<span id="cb26-4"><a href="subsets-leetcode-78-medium.html#cb26-4" aria-hidden="true"></a>    <span class="kw">if</span> (nums.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb26-5"><a href="subsets-leetcode-78-medium.html#cb26-5" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
+<span id="cb26-6"><a href="subsets-leetcode-78-medium.html#cb26-6" aria-hidden="true"></a>    }</span>
+<span id="cb26-7"><a href="subsets-leetcode-78-medium.html#cb26-7" aria-hidden="true"></a></span>
+<span id="cb26-8"><a href="subsets-leetcode-78-medium.html#cb26-8" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">sort</span>(nums);</span>
+<span id="cb26-9"><a href="subsets-leetcode-78-medium.html#cb26-9" aria-hidden="true"></a></span>
+<span id="cb26-10"><a href="subsets-leetcode-78-medium.html#cb26-10" aria-hidden="true"></a>    <span class="fu">backtrack</span>(nums, <span class="dv">0</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;());</span>
+<span id="cb26-11"><a href="subsets-leetcode-78-medium.html#cb26-11" aria-hidden="true"></a></span>
+<span id="cb26-12"><a href="subsets-leetcode-78-medium.html#cb26-12" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb26-13"><a href="subsets-leetcode-78-medium.html#cb26-13" aria-hidden="true"></a>}</span>
+<span id="cb26-14"><a href="subsets-leetcode-78-medium.html#cb26-14" aria-hidden="true"></a></span>
+<span id="cb26-15"><a href="subsets-leetcode-78-medium.html#cb26-15" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">backtrack</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> index, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list) {</span>
+<span id="cb26-16"><a href="subsets-leetcode-78-medium.html#cb26-16" aria-hidden="true"></a>    <span class="co">//copy elements from the current list</span></span>
+<span id="cb26-17"><a href="subsets-leetcode-78-medium.html#cb26-17" aria-hidden="true"></a>    result.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(list));</span>
+<span id="cb26-18"><a href="subsets-leetcode-78-medium.html#cb26-18" aria-hidden="true"></a></span>
+<span id="cb26-19"><a href="subsets-leetcode-78-medium.html#cb26-19" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = index; i &lt; nums.<span class="fu">length</span>; i++) {</span>
+<span id="cb26-20"><a href="subsets-leetcode-78-medium.html#cb26-20" aria-hidden="true"></a>        list.<span class="fu">add</span>(nums[i]);</span>
+<span id="cb26-21"><a href="subsets-leetcode-78-medium.html#cb26-21" aria-hidden="true"></a>        <span class="fu">backtrack</span>(nums, i + <span class="dv">1</span>, list);</span>
+<span id="cb26-22"><a href="subsets-leetcode-78-medium.html#cb26-22" aria-hidden="true"></a></span>
+<span id="cb26-23"><a href="subsets-leetcode-78-medium.html#cb26-23" aria-hidden="true"></a>        <span class="co">//remove last element to backtrack</span></span>
+<span id="cb26-24"><a href="subsets-leetcode-78-medium.html#cb26-24" aria-hidden="true"></a>        list.<span class="fu">remove</span>(list.<span class="fu">size</span>() - <span class="dv">1</span>);</span>
+<span id="cb26-25"><a href="subsets-leetcode-78-medium.html#cb26-25" aria-hidden="true"></a>    }</span>
+<span id="cb26-26"><a href="subsets-leetcode-78-medium.html#cb26-26" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1066,7 +1067,7 @@ Total amount you can rob = 2 + 9 + 1 = 12.</p>
 </div>
 <div id="solution-29" class="section level3" number="2.34.3">
 <h3><span class="header-section-number">2.34.3</span> Solution</h3>
-<div id="walkthrough-35" class="section level4" number="2.34.3.1">
+<div id="walkthrough-36" class="section level4" number="2.34.3.1">
 <h4><span class="header-section-number">2.34.3.1</span> Walkthrough</h4>
 <p>Create an array of same length of nums. While looping through the array, compute the max profit of:</p>
 <pre><code>* Rob this house plus every two houses before : nums[i] + dp[i-2]
@@ -1074,31 +1075,31 @@ Total amount you can rob = 2 + 9 + 1 = 12.</p>
 <p>\end{itemize}
 Finally, return the final outcome, which is the dp[n-1]</p>
 </div>
-<div id="analysis-35" class="section level4" number="2.34.3.2">
+<div id="analysis-36" class="section level4" number="2.34.3.2">
 <h4><span class="header-section-number">2.34.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every element is visited once.</p>
 </div>
-<div id="algorithm-35" class="section level4" number="2.34.3.3">
+<div id="algorithm-36" class="section level4" number="2.34.3.3">
 <h4><span class="header-section-number">2.34.3.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
 </div>
-<div id="java-code-29" class="section level4" number="2.34.3.4">
+<div id="java-code-31" class="section level4" number="2.34.3.4">
 <h4><span class="header-section-number">2.34.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb45"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb45-1"><a href="house-robber-leet-code-198-easy.html#cb45-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">rob</span>(<span class="dt">int</span>[] nums) {</span>
-<span id="cb45-2"><a href="house-robber-leet-code-198-easy.html#cb45-2" aria-hidden="true"></a>    <span class="dt">int</span> n = nums.<span class="fu">length</span>;</span>
-<span id="cb45-3"><a href="house-robber-leet-code-198-easy.html#cb45-3" aria-hidden="true"></a>    <span class="kw">if</span>(n == <span class="dv">0</span>) {</span>
-<span id="cb45-4"><a href="house-robber-leet-code-198-easy.html#cb45-4" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb45-5"><a href="house-robber-leet-code-198-easy.html#cb45-5" aria-hidden="true"></a>    }</span>
-<span id="cb45-6"><a href="house-robber-leet-code-198-easy.html#cb45-6" aria-hidden="true"></a></span>
-<span id="cb45-7"><a href="house-robber-leet-code-198-easy.html#cb45-7" aria-hidden="true"></a>    <span class="dt">int</span>[] dp = <span class="kw">new</span> <span class="dt">int</span>[n];</span>
-<span id="cb45-8"><a href="house-robber-leet-code-198-easy.html#cb45-8" aria-hidden="true"></a>    <span class="dt">int</span> max = <span class="dv">0</span>;</span>
-<span id="cb45-9"><a href="house-robber-leet-code-198-easy.html#cb45-9" aria-hidden="true"></a></span>
-<span id="cb45-10"><a href="house-robber-leet-code-198-easy.html#cb45-10" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++) {</span>
-<span id="cb45-11"><a href="house-robber-leet-code-198-easy.html#cb45-11" aria-hidden="true"></a>        dp[i] = <span class="bu">Math</span>.<span class="fu">max</span>(nums[i] + (i &gt;= <span class="dv">2</span> ? dp[i-<span class="dv">2</span>] : <span class="dv">0</span>), (i &gt;= <span class="dv">1</span> ? dp[i-<span class="dv">1</span>]: <span class="dv">0</span>));</span>
-<span id="cb45-12"><a href="house-robber-leet-code-198-easy.html#cb45-12" aria-hidden="true"></a>    }</span>
-<span id="cb45-13"><a href="house-robber-leet-code-198-easy.html#cb45-13" aria-hidden="true"></a></span>
-<span id="cb45-14"><a href="house-robber-leet-code-198-easy.html#cb45-14" aria-hidden="true"></a>    <span class="kw">return</span> dp[n-<span class="dv">1</span>];</span>
-<span id="cb45-15"><a href="house-robber-leet-code-198-easy.html#cb45-15" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb46-1"><a href="house-robber-leet-code-198-easy.html#cb46-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">rob</span>(<span class="dt">int</span>[] nums) {</span>
+<span id="cb46-2"><a href="house-robber-leet-code-198-easy.html#cb46-2" aria-hidden="true"></a>    <span class="dt">int</span> n = nums.<span class="fu">length</span>;</span>
+<span id="cb46-3"><a href="house-robber-leet-code-198-easy.html#cb46-3" aria-hidden="true"></a>    <span class="kw">if</span>(n == <span class="dv">0</span>) {</span>
+<span id="cb46-4"><a href="house-robber-leet-code-198-easy.html#cb46-4" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb46-5"><a href="house-robber-leet-code-198-easy.html#cb46-5" aria-hidden="true"></a>    }</span>
+<span id="cb46-6"><a href="house-robber-leet-code-198-easy.html#cb46-6" aria-hidden="true"></a></span>
+<span id="cb46-7"><a href="house-robber-leet-code-198-easy.html#cb46-7" aria-hidden="true"></a>    <span class="dt">int</span>[] dp = <span class="kw">new</span> <span class="dt">int</span>[n];</span>
+<span id="cb46-8"><a href="house-robber-leet-code-198-easy.html#cb46-8" aria-hidden="true"></a>    <span class="dt">int</span> max = <span class="dv">0</span>;</span>
+<span id="cb46-9"><a href="house-robber-leet-code-198-easy.html#cb46-9" aria-hidden="true"></a></span>
+<span id="cb46-10"><a href="house-robber-leet-code-198-easy.html#cb46-10" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++) {</span>
+<span id="cb46-11"><a href="house-robber-leet-code-198-easy.html#cb46-11" aria-hidden="true"></a>        dp[i] = <span class="bu">Math</span>.<span class="fu">max</span>(nums[i] + (i &gt;= <span class="dv">2</span> ? dp[i-<span class="dv">2</span>] : <span class="dv">0</span>), (i &gt;= <span class="dv">1</span> ? dp[i-<span class="dv">1</span>]: <span class="dv">0</span>));</span>
+<span id="cb46-12"><a href="house-robber-leet-code-198-easy.html#cb46-12" aria-hidden="true"></a>    }</span>
+<span id="cb46-13"><a href="house-robber-leet-code-198-easy.html#cb46-13" aria-hidden="true"></a></span>
+<span id="cb46-14"><a href="house-robber-leet-code-198-easy.html#cb46-14" aria-hidden="true"></a>    <span class="kw">return</span> dp[n-<span class="dv">1</span>];</span>
+<span id="cb46-15"><a href="house-robber-leet-code-198-easy.html#cb46-15" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1071,63 +1072,63 @@ beginWord = “hit”, endWord = “cog”, wordList = [“hot”,“dot”,“d
 </div>
 <div id="solution---bfs-2" class="section level3" number="9.3.3">
 <h3><span class="header-section-number">9.3.3</span> Solution - BFS</h3>
-<div id="walkthrough-139" class="section level4" number="9.3.3.1">
+<div id="walkthrough-140" class="section level4" number="9.3.3.1">
 <h4><span class="header-section-number">9.3.3.1</span> Walkthrough</h4>
 <p>Use a queue to grow the tree that beginWord could possibly ‘mutate’ to, each time with a different character.
 Find the first path that generate endWord; otherwise, continue enumeration until all possibilities exhaust.</p>
 </div>
-<div id="analysis-141" class="section level4" number="9.3.3.2">
+<div id="analysis-142" class="section level4" number="9.3.3.2">
 <h4><span class="header-section-number">9.3.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as each word is processed once.</p>
 </div>
-<div id="algorithm-146" class="section level4" number="9.3.3.3">
+<div id="algorithm-147" class="section level4" number="9.3.3.3">
 <h4><span class="header-section-number">9.3.3.3</span> Algorithm</h4>
 <p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
 </div>
 <div id="java-code---bfs-1" class="section level4" number="9.3.3.4">
 <h4><span class="header-section-number">9.3.3.4</span> Java Code - BFS</h4>
-<div class="sourceCode" id="cb208"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb208-1"><a href="word-ladder-leetcode-127-medium.html#cb208-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">ladderLength</span>(<span class="bu">String</span> beginWord, <span class="bu">String</span> endWord, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; wordList) {</span>
-<span id="cb208-2"><a href="word-ladder-leetcode-127-medium.html#cb208-2" aria-hidden="true"></a>    <span class="bu">Set</span>&lt;<span class="bu">String</span>&gt; dict = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;(wordList);</span>
-<span id="cb208-3"><a href="word-ladder-leetcode-127-medium.html#cb208-3" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">String</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb208-4"><a href="word-ladder-leetcode-127-medium.html#cb208-4" aria-hidden="true"></a>    queue.<span class="fu">offer</span>(beginWord);</span>
-<span id="cb208-5"><a href="word-ladder-leetcode-127-medium.html#cb208-5" aria-hidden="true"></a>    <span class="dt">int</span> level = <span class="dv">1</span>;</span>
-<span id="cb208-6"><a href="word-ladder-leetcode-127-medium.html#cb208-6" aria-hidden="true"></a></span>
-<span id="cb208-7"><a href="word-ladder-leetcode-127-medium.html#cb208-7" aria-hidden="true"></a>    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb208-8"><a href="word-ladder-leetcode-127-medium.html#cb208-8" aria-hidden="true"></a>        <span class="co">//Since we are adding element into queue dynamically, it is better to invoke</span></span>
-<span id="cb208-9"><a href="word-ladder-leetcode-127-medium.html#cb208-9" aria-hidden="true"></a>        <span class="co">//queue.size() at beginning b/c queue size would change on the fly.</span></span>
-<span id="cb208-10"><a href="word-ladder-leetcode-127-medium.html#cb208-10" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> i = queue.<span class="fu">size</span>(); i &gt; <span class="dv">0</span>; i--) {</span>
-<span id="cb208-11"><a href="word-ladder-leetcode-127-medium.html#cb208-11" aria-hidden="true"></a>            <span class="bu">String</span> word = queue.<span class="fu">poll</span>();</span>
-<span id="cb208-12"><a href="word-ladder-leetcode-127-medium.html#cb208-12" aria-hidden="true"></a></span>
-<span id="cb208-13"><a href="word-ladder-leetcode-127-medium.html#cb208-13" aria-hidden="true"></a>            <span class="kw">if</span> (word.<span class="fu">equals</span>(endWord)) {</span>
-<span id="cb208-14"><a href="word-ladder-leetcode-127-medium.html#cb208-14" aria-hidden="true"></a>                <span class="co">//find match to endWord</span></span>
-<span id="cb208-15"><a href="word-ladder-leetcode-127-medium.html#cb208-15" aria-hidden="true"></a>                <span class="kw">return</span> level;</span>
-<span id="cb208-16"><a href="word-ladder-leetcode-127-medium.html#cb208-16" aria-hidden="true"></a>            }</span>
-<span id="cb208-17"><a href="word-ladder-leetcode-127-medium.html#cb208-17" aria-hidden="true"></a></span>
-<span id="cb208-18"><a href="word-ladder-leetcode-127-medium.html#cb208-18" aria-hidden="true"></a>            <span class="co">//Enumerate all OTHER possible chars against word</span></span>
-<span id="cb208-19"><a href="word-ladder-leetcode-127-medium.html#cb208-19" aria-hidden="true"></a>            <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; word.<span class="fu">length</span>(); j++) {</span>
-<span id="cb208-20"><a href="word-ladder-leetcode-127-medium.html#cb208-20" aria-hidden="true"></a>                <span class="dt">char</span>[] array = word.<span class="fu">toCharArray</span>();</span>
-<span id="cb208-21"><a href="word-ladder-leetcode-127-medium.html#cb208-21" aria-hidden="true"></a></span>
-<span id="cb208-22"><a href="word-ladder-leetcode-127-medium.html#cb208-22" aria-hidden="true"></a>                <span class="kw">for</span> (<span class="dt">char</span> c = <span class="ch">&#39;a&#39;</span>; c &lt;= <span class="ch">&#39;z&#39;</span>; c++) {</span>
-<span id="cb208-23"><a href="word-ladder-leetcode-127-medium.html#cb208-23" aria-hidden="true"></a>                    <span class="co">//Skip on the same character</span></span>
-<span id="cb208-24"><a href="word-ladder-leetcode-127-medium.html#cb208-24" aria-hidden="true"></a>                    <span class="kw">if</span> (c == word.<span class="fu">charAt</span>(j)) {</span>
-<span id="cb208-25"><a href="word-ladder-leetcode-127-medium.html#cb208-25" aria-hidden="true"></a>                        <span class="kw">continue</span>;</span>
-<span id="cb208-26"><a href="word-ladder-leetcode-127-medium.html#cb208-26" aria-hidden="true"></a>                    }</span>
-<span id="cb208-27"><a href="word-ladder-leetcode-127-medium.html#cb208-27" aria-hidden="true"></a></span>
-<span id="cb208-28"><a href="word-ladder-leetcode-127-medium.html#cb208-28" aria-hidden="true"></a>                    array[j] = c;</span>
-<span id="cb208-29"><a href="word-ladder-leetcode-127-medium.html#cb208-29" aria-hidden="true"></a>                    <span class="bu">String</span> guess = <span class="bu">String</span>.<span class="fu">valueOf</span>(array);</span>
-<span id="cb208-30"><a href="word-ladder-leetcode-127-medium.html#cb208-30" aria-hidden="true"></a>                    <span class="kw">if</span> (dict.<span class="fu">remove</span>(guess)) {</span>
-<span id="cb208-31"><a href="word-ladder-leetcode-127-medium.html#cb208-31" aria-hidden="true"></a>                        <span class="co">//if dict contains element, return true</span></span>
-<span id="cb208-32"><a href="word-ladder-leetcode-127-medium.html#cb208-32" aria-hidden="true"></a>                        queue.<span class="fu">offer</span>(guess);</span>
-<span id="cb208-33"><a href="word-ladder-leetcode-127-medium.html#cb208-33" aria-hidden="true"></a>                    }</span>
-<span id="cb208-34"><a href="word-ladder-leetcode-127-medium.html#cb208-34" aria-hidden="true"></a>                }</span>
-<span id="cb208-35"><a href="word-ladder-leetcode-127-medium.html#cb208-35" aria-hidden="true"></a>            }</span>
-<span id="cb208-36"><a href="word-ladder-leetcode-127-medium.html#cb208-36" aria-hidden="true"></a>        }</span>
-<span id="cb208-37"><a href="word-ladder-leetcode-127-medium.html#cb208-37" aria-hidden="true"></a></span>
-<span id="cb208-38"><a href="word-ladder-leetcode-127-medium.html#cb208-38" aria-hidden="true"></a>        level++;</span>
-<span id="cb208-39"><a href="word-ladder-leetcode-127-medium.html#cb208-39" aria-hidden="true"></a>    }</span>
-<span id="cb208-40"><a href="word-ladder-leetcode-127-medium.html#cb208-40" aria-hidden="true"></a></span>
-<span id="cb208-41"><a href="word-ladder-leetcode-127-medium.html#cb208-41" aria-hidden="true"></a>    <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb208-42"><a href="word-ladder-leetcode-127-medium.html#cb208-42" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb209-1"><a href="word-ladder-leetcode-127-medium.html#cb209-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">ladderLength</span>(<span class="bu">String</span> beginWord, <span class="bu">String</span> endWord, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; wordList) {</span>
+<span id="cb209-2"><a href="word-ladder-leetcode-127-medium.html#cb209-2" aria-hidden="true"></a>    <span class="bu">Set</span>&lt;<span class="bu">String</span>&gt; dict = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;(wordList);</span>
+<span id="cb209-3"><a href="word-ladder-leetcode-127-medium.html#cb209-3" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">String</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb209-4"><a href="word-ladder-leetcode-127-medium.html#cb209-4" aria-hidden="true"></a>    queue.<span class="fu">offer</span>(beginWord);</span>
+<span id="cb209-5"><a href="word-ladder-leetcode-127-medium.html#cb209-5" aria-hidden="true"></a>    <span class="dt">int</span> level = <span class="dv">1</span>;</span>
+<span id="cb209-6"><a href="word-ladder-leetcode-127-medium.html#cb209-6" aria-hidden="true"></a></span>
+<span id="cb209-7"><a href="word-ladder-leetcode-127-medium.html#cb209-7" aria-hidden="true"></a>    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb209-8"><a href="word-ladder-leetcode-127-medium.html#cb209-8" aria-hidden="true"></a>        <span class="co">//Since we are adding element into queue dynamically, it is better to invoke</span></span>
+<span id="cb209-9"><a href="word-ladder-leetcode-127-medium.html#cb209-9" aria-hidden="true"></a>        <span class="co">//queue.size() at beginning b/c queue size would change on the fly.</span></span>
+<span id="cb209-10"><a href="word-ladder-leetcode-127-medium.html#cb209-10" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> i = queue.<span class="fu">size</span>(); i &gt; <span class="dv">0</span>; i--) {</span>
+<span id="cb209-11"><a href="word-ladder-leetcode-127-medium.html#cb209-11" aria-hidden="true"></a>            <span class="bu">String</span> word = queue.<span class="fu">poll</span>();</span>
+<span id="cb209-12"><a href="word-ladder-leetcode-127-medium.html#cb209-12" aria-hidden="true"></a></span>
+<span id="cb209-13"><a href="word-ladder-leetcode-127-medium.html#cb209-13" aria-hidden="true"></a>            <span class="kw">if</span> (word.<span class="fu">equals</span>(endWord)) {</span>
+<span id="cb209-14"><a href="word-ladder-leetcode-127-medium.html#cb209-14" aria-hidden="true"></a>                <span class="co">//find match to endWord</span></span>
+<span id="cb209-15"><a href="word-ladder-leetcode-127-medium.html#cb209-15" aria-hidden="true"></a>                <span class="kw">return</span> level;</span>
+<span id="cb209-16"><a href="word-ladder-leetcode-127-medium.html#cb209-16" aria-hidden="true"></a>            }</span>
+<span id="cb209-17"><a href="word-ladder-leetcode-127-medium.html#cb209-17" aria-hidden="true"></a></span>
+<span id="cb209-18"><a href="word-ladder-leetcode-127-medium.html#cb209-18" aria-hidden="true"></a>            <span class="co">//Enumerate all OTHER possible chars against word</span></span>
+<span id="cb209-19"><a href="word-ladder-leetcode-127-medium.html#cb209-19" aria-hidden="true"></a>            <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; word.<span class="fu">length</span>(); j++) {</span>
+<span id="cb209-20"><a href="word-ladder-leetcode-127-medium.html#cb209-20" aria-hidden="true"></a>                <span class="dt">char</span>[] array = word.<span class="fu">toCharArray</span>();</span>
+<span id="cb209-21"><a href="word-ladder-leetcode-127-medium.html#cb209-21" aria-hidden="true"></a></span>
+<span id="cb209-22"><a href="word-ladder-leetcode-127-medium.html#cb209-22" aria-hidden="true"></a>                <span class="kw">for</span> (<span class="dt">char</span> c = <span class="ch">&#39;a&#39;</span>; c &lt;= <span class="ch">&#39;z&#39;</span>; c++) {</span>
+<span id="cb209-23"><a href="word-ladder-leetcode-127-medium.html#cb209-23" aria-hidden="true"></a>                    <span class="co">//Skip on the same character</span></span>
+<span id="cb209-24"><a href="word-ladder-leetcode-127-medium.html#cb209-24" aria-hidden="true"></a>                    <span class="kw">if</span> (c == word.<span class="fu">charAt</span>(j)) {</span>
+<span id="cb209-25"><a href="word-ladder-leetcode-127-medium.html#cb209-25" aria-hidden="true"></a>                        <span class="kw">continue</span>;</span>
+<span id="cb209-26"><a href="word-ladder-leetcode-127-medium.html#cb209-26" aria-hidden="true"></a>                    }</span>
+<span id="cb209-27"><a href="word-ladder-leetcode-127-medium.html#cb209-27" aria-hidden="true"></a></span>
+<span id="cb209-28"><a href="word-ladder-leetcode-127-medium.html#cb209-28" aria-hidden="true"></a>                    array[j] = c;</span>
+<span id="cb209-29"><a href="word-ladder-leetcode-127-medium.html#cb209-29" aria-hidden="true"></a>                    <span class="bu">String</span> guess = <span class="bu">String</span>.<span class="fu">valueOf</span>(array);</span>
+<span id="cb209-30"><a href="word-ladder-leetcode-127-medium.html#cb209-30" aria-hidden="true"></a>                    <span class="kw">if</span> (dict.<span class="fu">remove</span>(guess)) {</span>
+<span id="cb209-31"><a href="word-ladder-leetcode-127-medium.html#cb209-31" aria-hidden="true"></a>                        <span class="co">//if dict contains element, return true</span></span>
+<span id="cb209-32"><a href="word-ladder-leetcode-127-medium.html#cb209-32" aria-hidden="true"></a>                        queue.<span class="fu">offer</span>(guess);</span>
+<span id="cb209-33"><a href="word-ladder-leetcode-127-medium.html#cb209-33" aria-hidden="true"></a>                    }</span>
+<span id="cb209-34"><a href="word-ladder-leetcode-127-medium.html#cb209-34" aria-hidden="true"></a>                }</span>
+<span id="cb209-35"><a href="word-ladder-leetcode-127-medium.html#cb209-35" aria-hidden="true"></a>            }</span>
+<span id="cb209-36"><a href="word-ladder-leetcode-127-medium.html#cb209-36" aria-hidden="true"></a>        }</span>
+<span id="cb209-37"><a href="word-ladder-leetcode-127-medium.html#cb209-37" aria-hidden="true"></a></span>
+<span id="cb209-38"><a href="word-ladder-leetcode-127-medium.html#cb209-38" aria-hidden="true"></a>        level++;</span>
+<span id="cb209-39"><a href="word-ladder-leetcode-127-medium.html#cb209-39" aria-hidden="true"></a>    }</span>
+<span id="cb209-40"><a href="word-ladder-leetcode-127-medium.html#cb209-40" aria-hidden="true"></a></span>
+<span id="cb209-41"><a href="word-ladder-leetcode-127-medium.html#cb209-41" aria-hidden="true"></a>    <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb209-42"><a href="word-ladder-leetcode-127-medium.html#cb209-42" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

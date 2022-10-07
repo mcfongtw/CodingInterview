@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1060,89 +1061,89 @@ Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].</p
 </div>
 <div id="solution-19" class="section level3" number="2.23.3">
 <h3><span class="header-section-number">2.23.3</span> Solution</h3>
-<div id="walkthrough-23" class="section level4" number="2.23.3.1">
+<div id="walkthrough-24" class="section level4" number="2.23.3.1">
 <h4><span class="header-section-number">2.23.3.1</span> Walkthrough</h4>
 <p>Leverage the merge() method to find out which intervals can be merged with new Inserted interval.</p>
 </div>
-<div id="analysis-23" class="section level4" number="2.23.3.2">
+<div id="analysis-24" class="section level4" number="2.23.3.2">
 <h4><span class="header-section-number">2.23.3.2</span> Analysis</h4>
 <p>Time complexity is <span class="math inline">\(O(n \cdot log(n))\)</span> because of sorting ahead.</p>
 </div>
-<div id="algorithm-23" class="section level4" number="2.23.3.3">
+<div id="algorithm-24" class="section level4" number="2.23.3.3">
 <h4><span class="header-section-number">2.23.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-19" class="section level4" number="2.23.3.4">
+<div id="java-code-21" class="section level4" number="2.23.3.4">
 <h4><span class="header-section-number">2.23.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb32"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb32-1"><a href="insert-interval-leetcode-57-hard.html#cb32-1" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> Interval {</span>
-<span id="cb32-2"><a href="insert-interval-leetcode-57-hard.html#cb32-2" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> start;</span>
-<span id="cb32-3"><a href="insert-interval-leetcode-57-hard.html#cb32-3" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> end;</span>
-<span id="cb32-4"><a href="insert-interval-leetcode-57-hard.html#cb32-4" aria-hidden="true"></a></span>
-<span id="cb32-5"><a href="insert-interval-leetcode-57-hard.html#cb32-5" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">Interval</span>(<span class="dt">int</span> s, <span class="dt">int</span> e) {</span>
-<span id="cb32-6"><a href="insert-interval-leetcode-57-hard.html#cb32-6" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">start</span> = s;</span>
-<span id="cb32-7"><a href="insert-interval-leetcode-57-hard.html#cb32-7" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">end</span> = e;</span>
-<span id="cb32-8"><a href="insert-interval-leetcode-57-hard.html#cb32-8" aria-hidden="true"></a>    }</span>
-<span id="cb32-9"><a href="insert-interval-leetcode-57-hard.html#cb32-9" aria-hidden="true"></a></span>
-<span id="cb32-10"><a href="insert-interval-leetcode-57-hard.html#cb32-10" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span>[][] <span class="fu">toArray</span>(<span class="bu">List</span>&lt;Interval&gt; list) {</span>
-<span id="cb32-11"><a href="insert-interval-leetcode-57-hard.html#cb32-11" aria-hidden="true"></a>        <span class="dt">int</span>[][] result = <span class="kw">new</span> <span class="dt">int</span>[list.<span class="fu">size</span>()][<span class="dv">2</span>];</span>
-<span id="cb32-12"><a href="insert-interval-leetcode-57-hard.html#cb32-12" aria-hidden="true"></a></span>
-<span id="cb32-13"><a href="insert-interval-leetcode-57-hard.html#cb32-13" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; list.<span class="fu">size</span>(); i++) {</span>
-<span id="cb32-14"><a href="insert-interval-leetcode-57-hard.html#cb32-14" aria-hidden="true"></a>            Interval interval = list.<span class="fu">get</span>(i);</span>
-<span id="cb32-15"><a href="insert-interval-leetcode-57-hard.html#cb32-15" aria-hidden="true"></a></span>
-<span id="cb32-16"><a href="insert-interval-leetcode-57-hard.html#cb32-16" aria-hidden="true"></a>            result[i] = <span class="kw">new</span> <span class="dt">int</span>[] {interval.<span class="fu">start</span>, interval.<span class="fu">end</span>};</span>
-<span id="cb32-17"><a href="insert-interval-leetcode-57-hard.html#cb32-17" aria-hidden="true"></a>        }</span>
-<span id="cb32-18"><a href="insert-interval-leetcode-57-hard.html#cb32-18" aria-hidden="true"></a></span>
-<span id="cb32-19"><a href="insert-interval-leetcode-57-hard.html#cb32-19" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
-<span id="cb32-20"><a href="insert-interval-leetcode-57-hard.html#cb32-20" aria-hidden="true"></a>    }</span>
-<span id="cb32-21"><a href="insert-interval-leetcode-57-hard.html#cb32-21" aria-hidden="true"></a></span>
-<span id="cb32-22"><a href="insert-interval-leetcode-57-hard.html#cb32-22" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="bu">List</span>&lt;Interval&gt; <span class="fu">toList</span>(<span class="dt">int</span>[][] array) {</span>
-<span id="cb32-23"><a href="insert-interval-leetcode-57-hard.html#cb32-23" aria-hidden="true"></a>        <span class="bu">List</span>&lt;Interval&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb32-24"><a href="insert-interval-leetcode-57-hard.html#cb32-24" aria-hidden="true"></a></span>
-<span id="cb32-25"><a href="insert-interval-leetcode-57-hard.html#cb32-25" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; array.<span class="fu">length</span>; i++) {</span>
-<span id="cb32-26"><a href="insert-interval-leetcode-57-hard.html#cb32-26" aria-hidden="true"></a>            Interval interval = <span class="kw">new</span> <span class="fu">Interval</span>(array[i][<span class="dv">0</span>], array[i][<span class="dv">1</span>]);</span>
-<span id="cb32-27"><a href="insert-interval-leetcode-57-hard.html#cb32-27" aria-hidden="true"></a></span>
-<span id="cb32-28"><a href="insert-interval-leetcode-57-hard.html#cb32-28" aria-hidden="true"></a>            result.<span class="fu">add</span>(interval);</span>
-<span id="cb32-29"><a href="insert-interval-leetcode-57-hard.html#cb32-29" aria-hidden="true"></a>        }</span>
-<span id="cb32-30"><a href="insert-interval-leetcode-57-hard.html#cb32-30" aria-hidden="true"></a></span>
-<span id="cb32-31"><a href="insert-interval-leetcode-57-hard.html#cb32-31" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
-<span id="cb32-32"><a href="insert-interval-leetcode-57-hard.html#cb32-32" aria-hidden="true"></a>    }</span>
-<span id="cb32-33"><a href="insert-interval-leetcode-57-hard.html#cb32-33" aria-hidden="true"></a>}</span>
-<span id="cb32-34"><a href="insert-interval-leetcode-57-hard.html#cb32-34" aria-hidden="true"></a></span>
-<span id="cb32-35"><a href="insert-interval-leetcode-57-hard.html#cb32-35" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span>[][] <span class="fu">insert</span>(<span class="dt">int</span>[][] existed, <span class="dt">int</span>[] target) {</span>
-<span id="cb32-36"><a href="insert-interval-leetcode-57-hard.html#cb32-36" aria-hidden="true"></a>    <span class="bu">List</span>&lt;Interval&gt; intervals = Interval.<span class="fu">toList</span>(existed);</span>
-<span id="cb32-37"><a href="insert-interval-leetcode-57-hard.html#cb32-37" aria-hidden="true"></a>    Interval newInterval = <span class="kw">new</span> <span class="fu">Interval</span>(target[<span class="dv">0</span>], target[<span class="dv">1</span>]);</span>
-<span id="cb32-38"><a href="insert-interval-leetcode-57-hard.html#cb32-38" aria-hidden="true"></a></span>
-<span id="cb32-39"><a href="insert-interval-leetcode-57-hard.html#cb32-39" aria-hidden="true"></a>    intervals.<span class="fu">add</span>(newInterval);</span>
-<span id="cb32-40"><a href="insert-interval-leetcode-57-hard.html#cb32-40" aria-hidden="true"></a></span>
-<span id="cb32-41"><a href="insert-interval-leetcode-57-hard.html#cb32-41" aria-hidden="true"></a>    <span class="bu">List</span>&lt;Interval&gt; merged = <span class="fu">merge</span>(intervals);</span>
-<span id="cb32-42"><a href="insert-interval-leetcode-57-hard.html#cb32-42" aria-hidden="true"></a></span>
-<span id="cb32-43"><a href="insert-interval-leetcode-57-hard.html#cb32-43" aria-hidden="true"></a>    <span class="kw">return</span> Interval.<span class="fu">toArray</span>(merged);</span>
-<span id="cb32-44"><a href="insert-interval-leetcode-57-hard.html#cb32-44" aria-hidden="true"></a>}</span>
-<span id="cb32-45"><a href="insert-interval-leetcode-57-hard.html#cb32-45" aria-hidden="true"></a></span>
-<span id="cb32-46"><a href="insert-interval-leetcode-57-hard.html#cb32-46" aria-hidden="true"></a><span class="kw">private</span> <span class="kw">class</span> IntervalComparator <span class="kw">implements</span> <span class="bu">Comparator</span>&lt;Interval&gt; {</span>
-<span id="cb32-47"><a href="insert-interval-leetcode-57-hard.html#cb32-47" aria-hidden="true"></a>    <span class="at">@Override</span></span>
-<span id="cb32-48"><a href="insert-interval-leetcode-57-hard.html#cb32-48" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">compare</span>(Interval a, Interval b) {</span>
-<span id="cb32-49"><a href="insert-interval-leetcode-57-hard.html#cb32-49" aria-hidden="true"></a>        <span class="kw">return</span> a.<span class="fu">start</span> &lt; b.<span class="fu">start</span> ? -<span class="dv">1</span> : a.<span class="fu">start</span> == b.<span class="fu">start</span> ? <span class="dv">0</span> : <span class="dv">1</span>;</span>
-<span id="cb32-50"><a href="insert-interval-leetcode-57-hard.html#cb32-50" aria-hidden="true"></a>    }</span>
-<span id="cb32-51"><a href="insert-interval-leetcode-57-hard.html#cb32-51" aria-hidden="true"></a>}</span>
-<span id="cb32-52"><a href="insert-interval-leetcode-57-hard.html#cb32-52" aria-hidden="true"></a></span>
-<span id="cb32-53"><a href="insert-interval-leetcode-57-hard.html#cb32-53" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;Interval&gt; <span class="fu">merge</span>(<span class="bu">List</span>&lt;Interval&gt; intervals) {</span>
-<span id="cb32-54"><a href="insert-interval-leetcode-57-hard.html#cb32-54" aria-hidden="true"></a>    <span class="co">//sort the list</span></span>
-<span id="cb32-55"><a href="insert-interval-leetcode-57-hard.html#cb32-55" aria-hidden="true"></a>    <span class="bu">Collections</span>.<span class="fu">sort</span>(intervals, <span class="kw">new</span> <span class="fu">IntervalComparator</span>());</span>
-<span id="cb32-56"><a href="insert-interval-leetcode-57-hard.html#cb32-56" aria-hidden="true"></a></span>
-<span id="cb32-57"><a href="insert-interval-leetcode-57-hard.html#cb32-57" aria-hidden="true"></a>    <span class="bu">LinkedList</span>&lt;Interval&gt; merged = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;Interval&gt;();</span>
-<span id="cb32-58"><a href="insert-interval-leetcode-57-hard.html#cb32-58" aria-hidden="true"></a>    <span class="kw">for</span> (Interval interval : intervals) {</span>
-<span id="cb32-59"><a href="insert-interval-leetcode-57-hard.html#cb32-59" aria-hidden="true"></a>        <span class="kw">if</span> (merged.<span class="fu">isEmpty</span>() || merged.<span class="fu">getLast</span>().<span class="fu">end</span> &lt; interval.<span class="fu">start</span>) {</span>
-<span id="cb32-60"><a href="insert-interval-leetcode-57-hard.html#cb32-60" aria-hidden="true"></a>            <span class="co">// if the list of merged intervals is empty or if the current</span></span>
-<span id="cb32-61"><a href="insert-interval-leetcode-57-hard.html#cb32-61" aria-hidden="true"></a>            <span class="co">// interval does not overlap with the previous, simply append it.</span></span>
-<span id="cb32-62"><a href="insert-interval-leetcode-57-hard.html#cb32-62" aria-hidden="true"></a>            merged.<span class="fu">add</span>(interval);</span>
-<span id="cb32-63"><a href="insert-interval-leetcode-57-hard.html#cb32-63" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb32-64"><a href="insert-interval-leetcode-57-hard.html#cb32-64" aria-hidden="true"></a>            <span class="co">// otherwise, there is overlap, so we merge the current and previous</span></span>
-<span id="cb32-65"><a href="insert-interval-leetcode-57-hard.html#cb32-65" aria-hidden="true"></a>            <span class="co">// intervals.</span></span>
-<span id="cb32-66"><a href="insert-interval-leetcode-57-hard.html#cb32-66" aria-hidden="true"></a>            merged.<span class="fu">getLast</span>().<span class="fu">end</span> = <span class="bu">Math</span>.<span class="fu">max</span>(merged.<span class="fu">getLast</span>().<span class="fu">end</span>, interval.<span class="fu">end</span>);</span>
-<span id="cb32-67"><a href="insert-interval-leetcode-57-hard.html#cb32-67" aria-hidden="true"></a>        }</span>
-<span id="cb32-68"><a href="insert-interval-leetcode-57-hard.html#cb32-68" aria-hidden="true"></a>    }</span>
-<span id="cb32-69"><a href="insert-interval-leetcode-57-hard.html#cb32-69" aria-hidden="true"></a>    <span class="kw">return</span> merged;</span>
-<span id="cb32-70"><a href="insert-interval-leetcode-57-hard.html#cb32-70" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb33-1"><a href="insert-interval-leetcode-57-hard.html#cb33-1" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> Interval {</span>
+<span id="cb33-2"><a href="insert-interval-leetcode-57-hard.html#cb33-2" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> start;</span>
+<span id="cb33-3"><a href="insert-interval-leetcode-57-hard.html#cb33-3" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> end;</span>
+<span id="cb33-4"><a href="insert-interval-leetcode-57-hard.html#cb33-4" aria-hidden="true"></a></span>
+<span id="cb33-5"><a href="insert-interval-leetcode-57-hard.html#cb33-5" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">Interval</span>(<span class="dt">int</span> s, <span class="dt">int</span> e) {</span>
+<span id="cb33-6"><a href="insert-interval-leetcode-57-hard.html#cb33-6" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">start</span> = s;</span>
+<span id="cb33-7"><a href="insert-interval-leetcode-57-hard.html#cb33-7" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">end</span> = e;</span>
+<span id="cb33-8"><a href="insert-interval-leetcode-57-hard.html#cb33-8" aria-hidden="true"></a>    }</span>
+<span id="cb33-9"><a href="insert-interval-leetcode-57-hard.html#cb33-9" aria-hidden="true"></a></span>
+<span id="cb33-10"><a href="insert-interval-leetcode-57-hard.html#cb33-10" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span>[][] <span class="fu">toArray</span>(<span class="bu">List</span>&lt;Interval&gt; list) {</span>
+<span id="cb33-11"><a href="insert-interval-leetcode-57-hard.html#cb33-11" aria-hidden="true"></a>        <span class="dt">int</span>[][] result = <span class="kw">new</span> <span class="dt">int</span>[list.<span class="fu">size</span>()][<span class="dv">2</span>];</span>
+<span id="cb33-12"><a href="insert-interval-leetcode-57-hard.html#cb33-12" aria-hidden="true"></a></span>
+<span id="cb33-13"><a href="insert-interval-leetcode-57-hard.html#cb33-13" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; list.<span class="fu">size</span>(); i++) {</span>
+<span id="cb33-14"><a href="insert-interval-leetcode-57-hard.html#cb33-14" aria-hidden="true"></a>            Interval interval = list.<span class="fu">get</span>(i);</span>
+<span id="cb33-15"><a href="insert-interval-leetcode-57-hard.html#cb33-15" aria-hidden="true"></a></span>
+<span id="cb33-16"><a href="insert-interval-leetcode-57-hard.html#cb33-16" aria-hidden="true"></a>            result[i] = <span class="kw">new</span> <span class="dt">int</span>[] {interval.<span class="fu">start</span>, interval.<span class="fu">end</span>};</span>
+<span id="cb33-17"><a href="insert-interval-leetcode-57-hard.html#cb33-17" aria-hidden="true"></a>        }</span>
+<span id="cb33-18"><a href="insert-interval-leetcode-57-hard.html#cb33-18" aria-hidden="true"></a></span>
+<span id="cb33-19"><a href="insert-interval-leetcode-57-hard.html#cb33-19" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
+<span id="cb33-20"><a href="insert-interval-leetcode-57-hard.html#cb33-20" aria-hidden="true"></a>    }</span>
+<span id="cb33-21"><a href="insert-interval-leetcode-57-hard.html#cb33-21" aria-hidden="true"></a></span>
+<span id="cb33-22"><a href="insert-interval-leetcode-57-hard.html#cb33-22" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="bu">List</span>&lt;Interval&gt; <span class="fu">toList</span>(<span class="dt">int</span>[][] array) {</span>
+<span id="cb33-23"><a href="insert-interval-leetcode-57-hard.html#cb33-23" aria-hidden="true"></a>        <span class="bu">List</span>&lt;Interval&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb33-24"><a href="insert-interval-leetcode-57-hard.html#cb33-24" aria-hidden="true"></a></span>
+<span id="cb33-25"><a href="insert-interval-leetcode-57-hard.html#cb33-25" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; array.<span class="fu">length</span>; i++) {</span>
+<span id="cb33-26"><a href="insert-interval-leetcode-57-hard.html#cb33-26" aria-hidden="true"></a>            Interval interval = <span class="kw">new</span> <span class="fu">Interval</span>(array[i][<span class="dv">0</span>], array[i][<span class="dv">1</span>]);</span>
+<span id="cb33-27"><a href="insert-interval-leetcode-57-hard.html#cb33-27" aria-hidden="true"></a></span>
+<span id="cb33-28"><a href="insert-interval-leetcode-57-hard.html#cb33-28" aria-hidden="true"></a>            result.<span class="fu">add</span>(interval);</span>
+<span id="cb33-29"><a href="insert-interval-leetcode-57-hard.html#cb33-29" aria-hidden="true"></a>        }</span>
+<span id="cb33-30"><a href="insert-interval-leetcode-57-hard.html#cb33-30" aria-hidden="true"></a></span>
+<span id="cb33-31"><a href="insert-interval-leetcode-57-hard.html#cb33-31" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
+<span id="cb33-32"><a href="insert-interval-leetcode-57-hard.html#cb33-32" aria-hidden="true"></a>    }</span>
+<span id="cb33-33"><a href="insert-interval-leetcode-57-hard.html#cb33-33" aria-hidden="true"></a>}</span>
+<span id="cb33-34"><a href="insert-interval-leetcode-57-hard.html#cb33-34" aria-hidden="true"></a></span>
+<span id="cb33-35"><a href="insert-interval-leetcode-57-hard.html#cb33-35" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span>[][] <span class="fu">insert</span>(<span class="dt">int</span>[][] existed, <span class="dt">int</span>[] target) {</span>
+<span id="cb33-36"><a href="insert-interval-leetcode-57-hard.html#cb33-36" aria-hidden="true"></a>    <span class="bu">List</span>&lt;Interval&gt; intervals = Interval.<span class="fu">toList</span>(existed);</span>
+<span id="cb33-37"><a href="insert-interval-leetcode-57-hard.html#cb33-37" aria-hidden="true"></a>    Interval newInterval = <span class="kw">new</span> <span class="fu">Interval</span>(target[<span class="dv">0</span>], target[<span class="dv">1</span>]);</span>
+<span id="cb33-38"><a href="insert-interval-leetcode-57-hard.html#cb33-38" aria-hidden="true"></a></span>
+<span id="cb33-39"><a href="insert-interval-leetcode-57-hard.html#cb33-39" aria-hidden="true"></a>    intervals.<span class="fu">add</span>(newInterval);</span>
+<span id="cb33-40"><a href="insert-interval-leetcode-57-hard.html#cb33-40" aria-hidden="true"></a></span>
+<span id="cb33-41"><a href="insert-interval-leetcode-57-hard.html#cb33-41" aria-hidden="true"></a>    <span class="bu">List</span>&lt;Interval&gt; merged = <span class="fu">merge</span>(intervals);</span>
+<span id="cb33-42"><a href="insert-interval-leetcode-57-hard.html#cb33-42" aria-hidden="true"></a></span>
+<span id="cb33-43"><a href="insert-interval-leetcode-57-hard.html#cb33-43" aria-hidden="true"></a>    <span class="kw">return</span> Interval.<span class="fu">toArray</span>(merged);</span>
+<span id="cb33-44"><a href="insert-interval-leetcode-57-hard.html#cb33-44" aria-hidden="true"></a>}</span>
+<span id="cb33-45"><a href="insert-interval-leetcode-57-hard.html#cb33-45" aria-hidden="true"></a></span>
+<span id="cb33-46"><a href="insert-interval-leetcode-57-hard.html#cb33-46" aria-hidden="true"></a><span class="kw">private</span> <span class="kw">class</span> IntervalComparator <span class="kw">implements</span> <span class="bu">Comparator</span>&lt;Interval&gt; {</span>
+<span id="cb33-47"><a href="insert-interval-leetcode-57-hard.html#cb33-47" aria-hidden="true"></a>    <span class="at">@Override</span></span>
+<span id="cb33-48"><a href="insert-interval-leetcode-57-hard.html#cb33-48" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">compare</span>(Interval a, Interval b) {</span>
+<span id="cb33-49"><a href="insert-interval-leetcode-57-hard.html#cb33-49" aria-hidden="true"></a>        <span class="kw">return</span> a.<span class="fu">start</span> &lt; b.<span class="fu">start</span> ? -<span class="dv">1</span> : a.<span class="fu">start</span> == b.<span class="fu">start</span> ? <span class="dv">0</span> : <span class="dv">1</span>;</span>
+<span id="cb33-50"><a href="insert-interval-leetcode-57-hard.html#cb33-50" aria-hidden="true"></a>    }</span>
+<span id="cb33-51"><a href="insert-interval-leetcode-57-hard.html#cb33-51" aria-hidden="true"></a>}</span>
+<span id="cb33-52"><a href="insert-interval-leetcode-57-hard.html#cb33-52" aria-hidden="true"></a></span>
+<span id="cb33-53"><a href="insert-interval-leetcode-57-hard.html#cb33-53" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;Interval&gt; <span class="fu">merge</span>(<span class="bu">List</span>&lt;Interval&gt; intervals) {</span>
+<span id="cb33-54"><a href="insert-interval-leetcode-57-hard.html#cb33-54" aria-hidden="true"></a>    <span class="co">//sort the list</span></span>
+<span id="cb33-55"><a href="insert-interval-leetcode-57-hard.html#cb33-55" aria-hidden="true"></a>    <span class="bu">Collections</span>.<span class="fu">sort</span>(intervals, <span class="kw">new</span> <span class="fu">IntervalComparator</span>());</span>
+<span id="cb33-56"><a href="insert-interval-leetcode-57-hard.html#cb33-56" aria-hidden="true"></a></span>
+<span id="cb33-57"><a href="insert-interval-leetcode-57-hard.html#cb33-57" aria-hidden="true"></a>    <span class="bu">LinkedList</span>&lt;Interval&gt; merged = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;Interval&gt;();</span>
+<span id="cb33-58"><a href="insert-interval-leetcode-57-hard.html#cb33-58" aria-hidden="true"></a>    <span class="kw">for</span> (Interval interval : intervals) {</span>
+<span id="cb33-59"><a href="insert-interval-leetcode-57-hard.html#cb33-59" aria-hidden="true"></a>        <span class="kw">if</span> (merged.<span class="fu">isEmpty</span>() || merged.<span class="fu">getLast</span>().<span class="fu">end</span> &lt; interval.<span class="fu">start</span>) {</span>
+<span id="cb33-60"><a href="insert-interval-leetcode-57-hard.html#cb33-60" aria-hidden="true"></a>            <span class="co">// if the list of merged intervals is empty or if the current</span></span>
+<span id="cb33-61"><a href="insert-interval-leetcode-57-hard.html#cb33-61" aria-hidden="true"></a>            <span class="co">// interval does not overlap with the previous, simply append it.</span></span>
+<span id="cb33-62"><a href="insert-interval-leetcode-57-hard.html#cb33-62" aria-hidden="true"></a>            merged.<span class="fu">add</span>(interval);</span>
+<span id="cb33-63"><a href="insert-interval-leetcode-57-hard.html#cb33-63" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb33-64"><a href="insert-interval-leetcode-57-hard.html#cb33-64" aria-hidden="true"></a>            <span class="co">// otherwise, there is overlap, so we merge the current and previous</span></span>
+<span id="cb33-65"><a href="insert-interval-leetcode-57-hard.html#cb33-65" aria-hidden="true"></a>            <span class="co">// intervals.</span></span>
+<span id="cb33-66"><a href="insert-interval-leetcode-57-hard.html#cb33-66" aria-hidden="true"></a>            merged.<span class="fu">getLast</span>().<span class="fu">end</span> = <span class="bu">Math</span>.<span class="fu">max</span>(merged.<span class="fu">getLast</span>().<span class="fu">end</span>, interval.<span class="fu">end</span>);</span>
+<span id="cb33-67"><a href="insert-interval-leetcode-57-hard.html#cb33-67" aria-hidden="true"></a>        }</span>
+<span id="cb33-68"><a href="insert-interval-leetcode-57-hard.html#cb33-68" aria-hidden="true"></a>    }</span>
+<span id="cb33-69"><a href="insert-interval-leetcode-57-hard.html#cb33-69" aria-hidden="true"></a>    <span class="kw">return</span> merged;</span>
+<span id="cb33-70"><a href="insert-interval-leetcode-57-hard.html#cb33-70" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

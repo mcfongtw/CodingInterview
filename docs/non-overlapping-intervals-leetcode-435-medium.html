@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1061,53 +1062,53 @@ non-overlapping.</p>
 </div>
 <div id="solution-17" class="section level3" number="2.21.3">
 <h3><span class="header-section-number">2.21.3</span> Solution</h3>
-<div id="walkthrough-21" class="section level4" number="2.21.3.1">
+<div id="walkthrough-22" class="section level4" number="2.21.3.1">
 <h4><span class="header-section-number">2.21.3.1</span> Walkthrough</h4>
 <p>First, sort the array and count non-overlapping interval - not overlapped with previous end. Finally, number of
 overlapping intervals would be n - count.</p>
 </div>
-<div id="analysis-21" class="section level4" number="2.21.3.2">
+<div id="analysis-22" class="section level4" number="2.21.3.2">
 <h4><span class="header-section-number">2.21.3.2</span> Analysis</h4>
 <p>Complexity is <span class="math inline">\(O(n \cdot log n)\)</span> because of sorting ahead.</p>
 </div>
-<div id="algorithm-21" class="section level4" number="2.21.3.3">
+<div id="algorithm-22" class="section level4" number="2.21.3.3">
 <h4><span class="header-section-number">2.21.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-17" class="section level4" number="2.21.3.4">
+<div id="java-code-19" class="section level4" number="2.21.3.4">
 <h4><span class="header-section-number">2.21.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb30"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb30-1"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">eraseOverlapIntervals</span>(<span class="dt">int</span>[][] intervals) {</span>
-<span id="cb30-2"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-2" aria-hidden="true"></a>    <span class="kw">if</span>(intervals == <span class="kw">null</span> || intervals.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb30-3"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb30-4"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-4" aria-hidden="true"></a>    }</span>
-<span id="cb30-5"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-5" aria-hidden="true"></a></span>
-<span id="cb30-6"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-6" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">sort</span>(intervals, <span class="kw">new</span> <span class="bu">Comparator</span>&lt;<span class="dt">int</span>[]&gt;() {</span>
-<span id="cb30-7"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-7" aria-hidden="true"></a>        <span class="at">@Override</span></span>
-<span id="cb30-8"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-8" aria-hidden="true"></a>        <span class="kw">public</span> <span class="dt">int</span> <span class="fu">compare</span>(<span class="dt">int</span>[] i1, <span class="dt">int</span>[] i2) {</span>
-<span id="cb30-9"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-9" aria-hidden="true"></a>            <span class="kw">if</span> (i1[<span class="dv">1</span>] != i2[<span class="dv">1</span>]){</span>
-<span id="cb30-10"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-10" aria-hidden="true"></a>                <span class="co">//compare end time</span></span>
-<span id="cb30-11"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-11" aria-hidden="true"></a>                <span class="kw">return</span> i1[<span class="dv">1</span>] - i2[<span class="dv">1</span>];</span>
-<span id="cb30-12"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-12" aria-hidden="true"></a>            }<span class="kw">else</span> {</span>
-<span id="cb30-13"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-13" aria-hidden="true"></a>                <span class="co">//compare start time</span></span>
-<span id="cb30-14"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-14" aria-hidden="true"></a>                <span class="kw">return</span> i1[<span class="dv">0</span>] - i2[<span class="dv">0</span>];</span>
-<span id="cb30-15"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-15" aria-hidden="true"></a>            }</span>
-<span id="cb30-16"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-16" aria-hidden="true"></a>        }</span>
-<span id="cb30-17"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-17" aria-hidden="true"></a>    });</span>
-<span id="cb30-18"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-18" aria-hidden="true"></a></span>
-<span id="cb30-19"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-19" aria-hidden="true"></a>    <span class="co">//end for latest non-overlapped interval</span></span>
-<span id="cb30-20"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-20" aria-hidden="true"></a>    <span class="dt">int</span> end = intervals[<span class="dv">0</span>][<span class="dv">1</span>];</span>
-<span id="cb30-21"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-21" aria-hidden="true"></a>    <span class="dt">int</span> n = intervals.<span class="fu">length</span>;</span>
-<span id="cb30-22"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-22" aria-hidden="true"></a>    <span class="dt">int</span> count = <span class="dv">1</span>;</span>
-<span id="cb30-23"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-23" aria-hidden="true"></a></span>
-<span id="cb30-24"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-24" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; n; i++) {</span>
-<span id="cb30-25"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-25" aria-hidden="true"></a>        <span class="kw">if</span> (intervals[i][<span class="dv">0</span>] &gt;= end) {</span>
-<span id="cb30-26"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-26" aria-hidden="true"></a>            <span class="co">//for any non-overlapped interval, update end &amp; count</span></span>
-<span id="cb30-27"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-27" aria-hidden="true"></a>            end = intervals[i][<span class="dv">1</span>];</span>
-<span id="cb30-28"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-28" aria-hidden="true"></a>            count++;</span>
-<span id="cb30-29"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-29" aria-hidden="true"></a>        }</span>
-<span id="cb30-30"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-30" aria-hidden="true"></a>    }</span>
-<span id="cb30-31"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-31" aria-hidden="true"></a></span>
-<span id="cb30-32"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-32" aria-hidden="true"></a>    <span class="kw">return</span> n - count;</span>
-<span id="cb30-33"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb30-33" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb31-1"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">eraseOverlapIntervals</span>(<span class="dt">int</span>[][] intervals) {</span>
+<span id="cb31-2"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-2" aria-hidden="true"></a>    <span class="kw">if</span>(intervals == <span class="kw">null</span> || intervals.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb31-3"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb31-4"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-4" aria-hidden="true"></a>    }</span>
+<span id="cb31-5"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-5" aria-hidden="true"></a></span>
+<span id="cb31-6"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-6" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">sort</span>(intervals, <span class="kw">new</span> <span class="bu">Comparator</span>&lt;<span class="dt">int</span>[]&gt;() {</span>
+<span id="cb31-7"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-7" aria-hidden="true"></a>        <span class="at">@Override</span></span>
+<span id="cb31-8"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-8" aria-hidden="true"></a>        <span class="kw">public</span> <span class="dt">int</span> <span class="fu">compare</span>(<span class="dt">int</span>[] i1, <span class="dt">int</span>[] i2) {</span>
+<span id="cb31-9"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-9" aria-hidden="true"></a>            <span class="kw">if</span> (i1[<span class="dv">1</span>] != i2[<span class="dv">1</span>]){</span>
+<span id="cb31-10"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-10" aria-hidden="true"></a>                <span class="co">//compare end time</span></span>
+<span id="cb31-11"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-11" aria-hidden="true"></a>                <span class="kw">return</span> i1[<span class="dv">1</span>] - i2[<span class="dv">1</span>];</span>
+<span id="cb31-12"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-12" aria-hidden="true"></a>            }<span class="kw">else</span> {</span>
+<span id="cb31-13"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-13" aria-hidden="true"></a>                <span class="co">//compare start time</span></span>
+<span id="cb31-14"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-14" aria-hidden="true"></a>                <span class="kw">return</span> i1[<span class="dv">0</span>] - i2[<span class="dv">0</span>];</span>
+<span id="cb31-15"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-15" aria-hidden="true"></a>            }</span>
+<span id="cb31-16"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-16" aria-hidden="true"></a>        }</span>
+<span id="cb31-17"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-17" aria-hidden="true"></a>    });</span>
+<span id="cb31-18"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-18" aria-hidden="true"></a></span>
+<span id="cb31-19"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-19" aria-hidden="true"></a>    <span class="co">//end for latest non-overlapped interval</span></span>
+<span id="cb31-20"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-20" aria-hidden="true"></a>    <span class="dt">int</span> end = intervals[<span class="dv">0</span>][<span class="dv">1</span>];</span>
+<span id="cb31-21"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-21" aria-hidden="true"></a>    <span class="dt">int</span> n = intervals.<span class="fu">length</span>;</span>
+<span id="cb31-22"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-22" aria-hidden="true"></a>    <span class="dt">int</span> count = <span class="dv">1</span>;</span>
+<span id="cb31-23"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-23" aria-hidden="true"></a></span>
+<span id="cb31-24"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-24" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; n; i++) {</span>
+<span id="cb31-25"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-25" aria-hidden="true"></a>        <span class="kw">if</span> (intervals[i][<span class="dv">0</span>] &gt;= end) {</span>
+<span id="cb31-26"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-26" aria-hidden="true"></a>            <span class="co">//for any non-overlapped interval, update end &amp; count</span></span>
+<span id="cb31-27"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-27" aria-hidden="true"></a>            end = intervals[i][<span class="dv">1</span>];</span>
+<span id="cb31-28"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-28" aria-hidden="true"></a>            count++;</span>
+<span id="cb31-29"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-29" aria-hidden="true"></a>        }</span>
+<span id="cb31-30"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-30" aria-hidden="true"></a>    }</span>
+<span id="cb31-31"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-31" aria-hidden="true"></a></span>
+<span id="cb31-32"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-32" aria-hidden="true"></a>    <span class="kw">return</span> n - count;</span>
+<span id="cb31-33"><a href="non-overlapping-intervals-leetcode-435-medium.html#cb31-33" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1067,56 +1068,56 @@ Figure 4.14: Some caption.
 </div>
 <div id="solution-46" class="section level3" number="4.10.3">
 <h3><span class="header-section-number">4.10.3</span> Solution</h3>
-<div id="walkthrough-69" class="section level4" number="4.10.3.1">
+<div id="walkthrough-70" class="section level4" number="4.10.3.1">
 <h4><span class="header-section-number">4.10.3.1</span> Walkthrough</h4>
 <p>Additional list is needed to keep track current path: adding current node on entering and removing (current) node on
 exiting. Remember and  the list if and only if current sum equals to target sum for leaf nodes.
 Need to remove the node list to back track also to help us locate more path in the tree.</p>
 </div>
-<div id="analysis-70" class="section level4" number="4.10.3.2">
+<div id="analysis-71" class="section level4" number="4.10.3.2">
 <h4><span class="header-section-number">4.10.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-72" class="section level4" number="4.10.3.3">
+<div id="algorithm-73" class="section level4" number="4.10.3.3">
 <h4><span class="header-section-number">4.10.3.3</span> Algorithm</h4>
 <p>backtrack <a href="glossary-of-algorithm.html#backtrack">1.2.6</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
-<div id="java-code-45" class="section level4" number="4.10.3.4">
+<div id="java-code-47" class="section level4" number="4.10.3.4">
 <h4><span class="header-section-number">4.10.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb116"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb116-1"><a href="path-sum-ii-leet-code-113-medium.html#cb116-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">pathSum</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> sum) {</span>
-<span id="cb116-2"><a href="path-sum-ii-leet-code-113-medium.html#cb116-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb116-3"><a href="path-sum-ii-leet-code-113-medium.html#cb116-3" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; trace = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb116-4"><a href="path-sum-ii-leet-code-113-medium.html#cb116-4" aria-hidden="true"></a>    <span class="fu">backtrack</span>(root, <span class="dv">0</span>, sum, result, trace);</span>
-<span id="cb116-5"><a href="path-sum-ii-leet-code-113-medium.html#cb116-5" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb116-6"><a href="path-sum-ii-leet-code-113-medium.html#cb116-6" aria-hidden="true"></a>}</span>
-<span id="cb116-7"><a href="path-sum-ii-leet-code-113-medium.html#cb116-7" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">backtrack</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> current, <span class="dt">int</span> target, <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; trace) {</span>
-<span id="cb116-8"><a href="path-sum-ii-leet-code-113-medium.html#cb116-8" aria-hidden="true"></a>    <span class="kw">if</span> (root == <span class="kw">null</span>) {</span>
-<span id="cb116-9"><a href="path-sum-ii-leet-code-113-medium.html#cb116-9" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
-<span id="cb116-10"><a href="path-sum-ii-leet-code-113-medium.html#cb116-10" aria-hidden="true"></a>    }</span>
-<span id="cb116-11"><a href="path-sum-ii-leet-code-113-medium.html#cb116-11" aria-hidden="true"></a>    trace.<span class="fu">add</span>(root.<span class="fu">val</span>);</span>
-<span id="cb116-12"><a href="path-sum-ii-leet-code-113-medium.html#cb116-12" aria-hidden="true"></a>    current += root.<span class="fu">val</span>;</span>
-<span id="cb116-13"><a href="path-sum-ii-leet-code-113-medium.html#cb116-13" aria-hidden="true"></a></span>
-<span id="cb116-14"><a href="path-sum-ii-leet-code-113-medium.html#cb116-14" aria-hidden="true"></a>    <span class="co">//leaf node</span></span>
-<span id="cb116-15"><a href="path-sum-ii-leet-code-113-medium.html#cb116-15" aria-hidden="true"></a>    <span class="kw">if</span> (root.<span class="fu">left</span> == <span class="kw">null</span> &amp;&amp; root.<span class="fu">right</span> == <span class="kw">null</span> &amp;&amp; current == target) {</span>
-<span id="cb116-16"><a href="path-sum-ii-leet-code-113-medium.html#cb116-16" aria-hidden="true"></a>        <span class="co">//to copy the valid list</span></span>
-<span id="cb116-17"><a href="path-sum-ii-leet-code-113-medium.html#cb116-17" aria-hidden="true"></a>        result.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;(trace));</span>
-<span id="cb116-18"><a href="path-sum-ii-leet-code-113-medium.html#cb116-18" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
-<span id="cb116-19"><a href="path-sum-ii-leet-code-113-medium.html#cb116-19" aria-hidden="true"></a>    }</span>
-<span id="cb116-20"><a href="path-sum-ii-leet-code-113-medium.html#cb116-20" aria-hidden="true"></a></span>
-<span id="cb116-21"><a href="path-sum-ii-leet-code-113-medium.html#cb116-21" aria-hidden="true"></a>    <span class="co">//otherwise - intermediate nodes</span></span>
-<span id="cb116-22"><a href="path-sum-ii-leet-code-113-medium.html#cb116-22" aria-hidden="true"></a>    <span class="kw">if</span> (root.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
-<span id="cb116-23"><a href="path-sum-ii-leet-code-113-medium.html#cb116-23" aria-hidden="true"></a>        <span class="fu">pathSum</span>(root.<span class="fu">left</span>, current, target, result, trace);</span>
-<span id="cb116-24"><a href="path-sum-ii-leet-code-113-medium.html#cb116-24" aria-hidden="true"></a></span>
-<span id="cb116-25"><a href="path-sum-ii-leet-code-113-medium.html#cb116-25" aria-hidden="true"></a>        <span class="co">//clean up last inserted left node to back track one step</span></span>
-<span id="cb116-26"><a href="path-sum-ii-leet-code-113-medium.html#cb116-26" aria-hidden="true"></a>        trace.<span class="fu">remove</span>(trace.<span class="fu">size</span>() - <span class="dv">1</span>);</span>
-<span id="cb116-27"><a href="path-sum-ii-leet-code-113-medium.html#cb116-27" aria-hidden="true"></a>    }</span>
-<span id="cb116-28"><a href="path-sum-ii-leet-code-113-medium.html#cb116-28" aria-hidden="true"></a>    <span class="kw">if</span> (root.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
-<span id="cb116-29"><a href="path-sum-ii-leet-code-113-medium.html#cb116-29" aria-hidden="true"></a>        <span class="fu">pathSum</span>(root.<span class="fu">right</span>, current, target, result, trace);</span>
-<span id="cb116-30"><a href="path-sum-ii-leet-code-113-medium.html#cb116-30" aria-hidden="true"></a></span>
-<span id="cb116-31"><a href="path-sum-ii-leet-code-113-medium.html#cb116-31" aria-hidden="true"></a>        <span class="co">//clean up last inserted right node to back track one step</span></span>
-<span id="cb116-32"><a href="path-sum-ii-leet-code-113-medium.html#cb116-32" aria-hidden="true"></a>        trace.<span class="fu">remove</span>(trace.<span class="fu">size</span>() - <span class="dv">1</span>);</span>
-<span id="cb116-33"><a href="path-sum-ii-leet-code-113-medium.html#cb116-33" aria-hidden="true"></a>    }</span>
-<span id="cb116-34"><a href="path-sum-ii-leet-code-113-medium.html#cb116-34" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb117-1"><a href="path-sum-ii-leet-code-113-medium.html#cb117-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">pathSum</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> sum) {</span>
+<span id="cb117-2"><a href="path-sum-ii-leet-code-113-medium.html#cb117-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb117-3"><a href="path-sum-ii-leet-code-113-medium.html#cb117-3" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; trace = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb117-4"><a href="path-sum-ii-leet-code-113-medium.html#cb117-4" aria-hidden="true"></a>    <span class="fu">backtrack</span>(root, <span class="dv">0</span>, sum, result, trace);</span>
+<span id="cb117-5"><a href="path-sum-ii-leet-code-113-medium.html#cb117-5" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb117-6"><a href="path-sum-ii-leet-code-113-medium.html#cb117-6" aria-hidden="true"></a>}</span>
+<span id="cb117-7"><a href="path-sum-ii-leet-code-113-medium.html#cb117-7" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">backtrack</span>(<span class="bu">TreeNode</span> root, <span class="dt">int</span> current, <span class="dt">int</span> target, <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; trace) {</span>
+<span id="cb117-8"><a href="path-sum-ii-leet-code-113-medium.html#cb117-8" aria-hidden="true"></a>    <span class="kw">if</span> (root == <span class="kw">null</span>) {</span>
+<span id="cb117-9"><a href="path-sum-ii-leet-code-113-medium.html#cb117-9" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
+<span id="cb117-10"><a href="path-sum-ii-leet-code-113-medium.html#cb117-10" aria-hidden="true"></a>    }</span>
+<span id="cb117-11"><a href="path-sum-ii-leet-code-113-medium.html#cb117-11" aria-hidden="true"></a>    trace.<span class="fu">add</span>(root.<span class="fu">val</span>);</span>
+<span id="cb117-12"><a href="path-sum-ii-leet-code-113-medium.html#cb117-12" aria-hidden="true"></a>    current += root.<span class="fu">val</span>;</span>
+<span id="cb117-13"><a href="path-sum-ii-leet-code-113-medium.html#cb117-13" aria-hidden="true"></a></span>
+<span id="cb117-14"><a href="path-sum-ii-leet-code-113-medium.html#cb117-14" aria-hidden="true"></a>    <span class="co">//leaf node</span></span>
+<span id="cb117-15"><a href="path-sum-ii-leet-code-113-medium.html#cb117-15" aria-hidden="true"></a>    <span class="kw">if</span> (root.<span class="fu">left</span> == <span class="kw">null</span> &amp;&amp; root.<span class="fu">right</span> == <span class="kw">null</span> &amp;&amp; current == target) {</span>
+<span id="cb117-16"><a href="path-sum-ii-leet-code-113-medium.html#cb117-16" aria-hidden="true"></a>        <span class="co">//to copy the valid list</span></span>
+<span id="cb117-17"><a href="path-sum-ii-leet-code-113-medium.html#cb117-17" aria-hidden="true"></a>        result.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;(trace));</span>
+<span id="cb117-18"><a href="path-sum-ii-leet-code-113-medium.html#cb117-18" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
+<span id="cb117-19"><a href="path-sum-ii-leet-code-113-medium.html#cb117-19" aria-hidden="true"></a>    }</span>
+<span id="cb117-20"><a href="path-sum-ii-leet-code-113-medium.html#cb117-20" aria-hidden="true"></a></span>
+<span id="cb117-21"><a href="path-sum-ii-leet-code-113-medium.html#cb117-21" aria-hidden="true"></a>    <span class="co">//otherwise - intermediate nodes</span></span>
+<span id="cb117-22"><a href="path-sum-ii-leet-code-113-medium.html#cb117-22" aria-hidden="true"></a>    <span class="kw">if</span> (root.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
+<span id="cb117-23"><a href="path-sum-ii-leet-code-113-medium.html#cb117-23" aria-hidden="true"></a>        <span class="fu">pathSum</span>(root.<span class="fu">left</span>, current, target, result, trace);</span>
+<span id="cb117-24"><a href="path-sum-ii-leet-code-113-medium.html#cb117-24" aria-hidden="true"></a></span>
+<span id="cb117-25"><a href="path-sum-ii-leet-code-113-medium.html#cb117-25" aria-hidden="true"></a>        <span class="co">//clean up last inserted left node to back track one step</span></span>
+<span id="cb117-26"><a href="path-sum-ii-leet-code-113-medium.html#cb117-26" aria-hidden="true"></a>        trace.<span class="fu">remove</span>(trace.<span class="fu">size</span>() - <span class="dv">1</span>);</span>
+<span id="cb117-27"><a href="path-sum-ii-leet-code-113-medium.html#cb117-27" aria-hidden="true"></a>    }</span>
+<span id="cb117-28"><a href="path-sum-ii-leet-code-113-medium.html#cb117-28" aria-hidden="true"></a>    <span class="kw">if</span> (root.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
+<span id="cb117-29"><a href="path-sum-ii-leet-code-113-medium.html#cb117-29" aria-hidden="true"></a>        <span class="fu">pathSum</span>(root.<span class="fu">right</span>, current, target, result, trace);</span>
+<span id="cb117-30"><a href="path-sum-ii-leet-code-113-medium.html#cb117-30" aria-hidden="true"></a></span>
+<span id="cb117-31"><a href="path-sum-ii-leet-code-113-medium.html#cb117-31" aria-hidden="true"></a>        <span class="co">//clean up last inserted right node to back track one step</span></span>
+<span id="cb117-32"><a href="path-sum-ii-leet-code-113-medium.html#cb117-32" aria-hidden="true"></a>        trace.<span class="fu">remove</span>(trace.<span class="fu">size</span>() - <span class="dv">1</span>);</span>
+<span id="cb117-33"><a href="path-sum-ii-leet-code-113-medium.html#cb117-33" aria-hidden="true"></a>    }</span>
+<span id="cb117-34"><a href="path-sum-ii-leet-code-113-medium.html#cb117-34" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

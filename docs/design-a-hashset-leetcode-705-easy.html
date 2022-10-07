@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1062,96 +1063,96 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution-91" class="section level3" number="12.4.3">
 <h3><span class="header-section-number">12.4.3</span> Solution</h3>
-<div id="walkthrough-162" class="section level4" number="12.4.3.1">
+<div id="walkthrough-163" class="section level4" number="12.4.3.1">
 <h4><span class="header-section-number">12.4.3.1</span> Walkthrough</h4>
 <p>A HashSet consists of an array of Node where its position is determined by a hash value / hash function. When
 there is a collision, we could chain the collided values together using a LinkedList or a Tree. For add()
 operation, we need to intensionally skip the duplicated key if the it already exists (from contains(key))</p>
 </div>
-<div id="analysis-165" class="section level4" number="12.4.3.2">
+<div id="analysis-166" class="section level4" number="12.4.3.2">
 <h4><span class="header-section-number">12.4.3.2</span> Analysis</h4>
 <p>The performance of each operation heavily depends on effectiveness of hash function. A good hash function would result
 in less collision, that is less traversal needed for the chaining list, but likely more auxiliary space required. Best
 case for each operation takes O(1). However, In worst case scenario, if it performs all elements on the same chaining
 list, all methods can take up to O(n).</p>
 </div>
-<div id="algorithm-171" class="section level4" number="12.4.3.3">
+<div id="algorithm-172" class="section level4" number="12.4.3.3">
 <h4><span class="header-section-number">12.4.3.3</span> Algorithm</h4>
 </div>
 <div id="java-code---linkedlist-for-chaining" class="section level4" number="12.4.3.4">
 <h4><span class="header-section-number">12.4.3.4</span> Java Code - LinkedList for Chaining</h4>
-<div class="sourceCode" id="cb237"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb237-1"><a href="design-a-hashset-leetcode-705-easy.html#cb237-1" aria-hidden="true"></a><span class="kw">class</span> <span class="bu">Node</span> {</span>
-<span id="cb237-2"><a href="design-a-hashset-leetcode-705-easy.html#cb237-2" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> key;</span>
-<span id="cb237-3"><a href="design-a-hashset-leetcode-705-easy.html#cb237-3" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">Node</span> next;</span>
-<span id="cb237-4"><a href="design-a-hashset-leetcode-705-easy.html#cb237-4" aria-hidden="true"></a>}</span>
-<span id="cb237-5"><a href="design-a-hashset-leetcode-705-easy.html#cb237-5" aria-hidden="true"></a></span>
-<span id="cb237-6"><a href="design-a-hashset-leetcode-705-easy.html#cb237-6" aria-hidden="true"></a><span class="kw">class</span> MyHashSet {</span>
-<span id="cb237-7"><a href="design-a-hashset-leetcode-705-easy.html#cb237-7" aria-hidden="true"></a></span>
-<span id="cb237-8"><a href="design-a-hashset-leetcode-705-easy.html#cb237-8" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span>[] list;</span>
-<span id="cb237-9"><a href="design-a-hashset-leetcode-705-easy.html#cb237-9" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> size;</span>
-<span id="cb237-10"><a href="design-a-hashset-leetcode-705-easy.html#cb237-10" aria-hidden="true"></a></span>
-<span id="cb237-11"><a href="design-a-hashset-leetcode-705-easy.html#cb237-11" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">MyHashSet</span>() {</span>
-<span id="cb237-12"><a href="design-a-hashset-leetcode-705-easy.html#cb237-12" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">size</span> = <span class="dv">10000</span>;</span>
-<span id="cb237-13"><a href="design-a-hashset-leetcode-705-easy.html#cb237-13" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">list</span> = <span class="kw">new</span> <span class="bu">Node</span>[<span class="kw">this</span>.<span class="fu">size</span>];</span>
-<span id="cb237-14"><a href="design-a-hashset-leetcode-705-easy.html#cb237-14" aria-hidden="true"></a>    }</span>
-<span id="cb237-15"><a href="design-a-hashset-leetcode-705-easy.html#cb237-15" aria-hidden="true"></a></span>
-<span id="cb237-16"><a href="design-a-hashset-leetcode-705-easy.html#cb237-16" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">add</span>(<span class="dt">int</span> key) {</span>
-<span id="cb237-17"><a href="design-a-hashset-leetcode-705-easy.html#cb237-17" aria-hidden="true"></a>        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
-<span id="cb237-18"><a href="design-a-hashset-leetcode-705-easy.html#cb237-18" aria-hidden="true"></a></span>
-<span id="cb237-19"><a href="design-a-hashset-leetcode-705-easy.html#cb237-19" aria-hidden="true"></a>        <span class="kw">if</span>(<span class="fu">contains</span>(key)){</span>
-<span id="cb237-20"><a href="design-a-hashset-leetcode-705-easy.html#cb237-20" aria-hidden="true"></a>            <span class="co">//skip for duplicated entry</span></span>
-<span id="cb237-21"><a href="design-a-hashset-leetcode-705-easy.html#cb237-21" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb237-22"><a href="design-a-hashset-leetcode-705-easy.html#cb237-22" aria-hidden="true"></a>            <span class="co">//add as head of chaining</span></span>
-<span id="cb237-23"><a href="design-a-hashset-leetcode-705-easy.html#cb237-23" aria-hidden="true"></a>            <span class="bu">Node</span> oldHead = list[index];</span>
-<span id="cb237-24"><a href="design-a-hashset-leetcode-705-easy.html#cb237-24" aria-hidden="true"></a></span>
-<span id="cb237-25"><a href="design-a-hashset-leetcode-705-easy.html#cb237-25" aria-hidden="true"></a>            <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>();</span>
-<span id="cb237-26"><a href="design-a-hashset-leetcode-705-easy.html#cb237-26" aria-hidden="true"></a>            newNode.<span class="fu">key</span> = key;</span>
-<span id="cb237-27"><a href="design-a-hashset-leetcode-705-easy.html#cb237-27" aria-hidden="true"></a>            newNode.<span class="fu">next</span> = oldHead;</span>
-<span id="cb237-28"><a href="design-a-hashset-leetcode-705-easy.html#cb237-28" aria-hidden="true"></a></span>
-<span id="cb237-29"><a href="design-a-hashset-leetcode-705-easy.html#cb237-29" aria-hidden="true"></a>            list[index] = newNode;</span>
-<span id="cb237-30"><a href="design-a-hashset-leetcode-705-easy.html#cb237-30" aria-hidden="true"></a>        }</span>
-<span id="cb237-31"><a href="design-a-hashset-leetcode-705-easy.html#cb237-31" aria-hidden="true"></a>    }</span>
-<span id="cb237-32"><a href="design-a-hashset-leetcode-705-easy.html#cb237-32" aria-hidden="true"></a></span>
-<span id="cb237-33"><a href="design-a-hashset-leetcode-705-easy.html#cb237-33" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">remove</span>(<span class="dt">int</span> key) {</span>
-<span id="cb237-34"><a href="design-a-hashset-leetcode-705-easy.html#cb237-34" aria-hidden="true"></a>        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
-<span id="cb237-35"><a href="design-a-hashset-leetcode-705-easy.html#cb237-35" aria-hidden="true"></a></span>
-<span id="cb237-36"><a href="design-a-hashset-leetcode-705-easy.html#cb237-36" aria-hidden="true"></a>        <span class="kw">if</span>(<span class="fu">contains</span>(key)) {</span>
-<span id="cb237-37"><a href="design-a-hashset-leetcode-705-easy.html#cb237-37" aria-hidden="true"></a>            <span class="bu">Node</span> current = list[index];</span>
-<span id="cb237-38"><a href="design-a-hashset-leetcode-705-easy.html#cb237-38" aria-hidden="true"></a></span>
-<span id="cb237-39"><a href="design-a-hashset-leetcode-705-easy.html#cb237-39" aria-hidden="true"></a>            <span class="kw">if</span>(current.<span class="fu">key</span> == key) {</span>
-<span id="cb237-40"><a href="design-a-hashset-leetcode-705-easy.html#cb237-40" aria-hidden="true"></a>                <span class="co">// replace head of chaining</span></span>
-<span id="cb237-41"><a href="design-a-hashset-leetcode-705-easy.html#cb237-41" aria-hidden="true"></a>                list[index] = current.<span class="fu">next</span>;</span>
-<span id="cb237-42"><a href="design-a-hashset-leetcode-705-easy.html#cb237-42" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
-<span id="cb237-43"><a href="design-a-hashset-leetcode-705-easy.html#cb237-43" aria-hidden="true"></a>                <span class="co">// replace the middle of chaining</span></span>
-<span id="cb237-44"><a href="design-a-hashset-leetcode-705-easy.html#cb237-44" aria-hidden="true"></a>                <span class="bu">Node</span> prev = current;</span>
-<span id="cb237-45"><a href="design-a-hashset-leetcode-705-easy.html#cb237-45" aria-hidden="true"></a></span>
-<span id="cb237-46"><a href="design-a-hashset-leetcode-705-easy.html#cb237-46" aria-hidden="true"></a>                <span class="kw">while</span>(current != <span class="kw">null</span> &amp;&amp; current.<span class="fu">key</span> != key) {</span>
-<span id="cb237-47"><a href="design-a-hashset-leetcode-705-easy.html#cb237-47" aria-hidden="true"></a>                    prev = current;</span>
-<span id="cb237-48"><a href="design-a-hashset-leetcode-705-easy.html#cb237-48" aria-hidden="true"></a>                    current = current.<span class="fu">next</span>;</span>
-<span id="cb237-49"><a href="design-a-hashset-leetcode-705-easy.html#cb237-49" aria-hidden="true"></a>                }</span>
-<span id="cb237-50"><a href="design-a-hashset-leetcode-705-easy.html#cb237-50" aria-hidden="true"></a>                prev.<span class="fu">next</span> = current.<span class="fu">next</span>;</span>
-<span id="cb237-51"><a href="design-a-hashset-leetcode-705-easy.html#cb237-51" aria-hidden="true"></a>            }</span>
-<span id="cb237-52"><a href="design-a-hashset-leetcode-705-easy.html#cb237-52" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb237-53"><a href="design-a-hashset-leetcode-705-easy.html#cb237-53" aria-hidden="true"></a>            <span class="co">//skip since not exist</span></span>
-<span id="cb237-54"><a href="design-a-hashset-leetcode-705-easy.html#cb237-54" aria-hidden="true"></a>        }</span>
-<span id="cb237-55"><a href="design-a-hashset-leetcode-705-easy.html#cb237-55" aria-hidden="true"></a>    }</span>
-<span id="cb237-56"><a href="design-a-hashset-leetcode-705-easy.html#cb237-56" aria-hidden="true"></a></span>
-<span id="cb237-57"><a href="design-a-hashset-leetcode-705-easy.html#cb237-57" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">contains</span>(<span class="dt">int</span> key) {</span>
-<span id="cb237-58"><a href="design-a-hashset-leetcode-705-easy.html#cb237-58" aria-hidden="true"></a>        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
-<span id="cb237-59"><a href="design-a-hashset-leetcode-705-easy.html#cb237-59" aria-hidden="true"></a></span>
-<span id="cb237-60"><a href="design-a-hashset-leetcode-705-easy.html#cb237-60" aria-hidden="true"></a>        <span class="bu">Node</span> current = list[index];</span>
-<span id="cb237-61"><a href="design-a-hashset-leetcode-705-easy.html#cb237-61" aria-hidden="true"></a></span>
-<span id="cb237-62"><a href="design-a-hashset-leetcode-705-easy.html#cb237-62" aria-hidden="true"></a>        <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
-<span id="cb237-63"><a href="design-a-hashset-leetcode-705-easy.html#cb237-63" aria-hidden="true"></a>            <span class="kw">if</span>(current.<span class="fu">key</span> == key) {</span>
-<span id="cb237-64"><a href="design-a-hashset-leetcode-705-easy.html#cb237-64" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb237-65"><a href="design-a-hashset-leetcode-705-easy.html#cb237-65" aria-hidden="true"></a>            }</span>
-<span id="cb237-66"><a href="design-a-hashset-leetcode-705-easy.html#cb237-66" aria-hidden="true"></a></span>
-<span id="cb237-67"><a href="design-a-hashset-leetcode-705-easy.html#cb237-67" aria-hidden="true"></a>            current = current.<span class="fu">next</span>;</span>
-<span id="cb237-68"><a href="design-a-hashset-leetcode-705-easy.html#cb237-68" aria-hidden="true"></a>        }</span>
-<span id="cb237-69"><a href="design-a-hashset-leetcode-705-easy.html#cb237-69" aria-hidden="true"></a></span>
-<span id="cb237-70"><a href="design-a-hashset-leetcode-705-easy.html#cb237-70" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb237-71"><a href="design-a-hashset-leetcode-705-easy.html#cb237-71" aria-hidden="true"></a>    }</span>
-<span id="cb237-72"><a href="design-a-hashset-leetcode-705-easy.html#cb237-72" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb238"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb238-1"><a href="design-a-hashset-leetcode-705-easy.html#cb238-1" aria-hidden="true"></a><span class="kw">class</span> <span class="bu">Node</span> {</span>
+<span id="cb238-2"><a href="design-a-hashset-leetcode-705-easy.html#cb238-2" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> key;</span>
+<span id="cb238-3"><a href="design-a-hashset-leetcode-705-easy.html#cb238-3" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">Node</span> next;</span>
+<span id="cb238-4"><a href="design-a-hashset-leetcode-705-easy.html#cb238-4" aria-hidden="true"></a>}</span>
+<span id="cb238-5"><a href="design-a-hashset-leetcode-705-easy.html#cb238-5" aria-hidden="true"></a></span>
+<span id="cb238-6"><a href="design-a-hashset-leetcode-705-easy.html#cb238-6" aria-hidden="true"></a><span class="kw">class</span> MyHashSet {</span>
+<span id="cb238-7"><a href="design-a-hashset-leetcode-705-easy.html#cb238-7" aria-hidden="true"></a></span>
+<span id="cb238-8"><a href="design-a-hashset-leetcode-705-easy.html#cb238-8" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span>[] list;</span>
+<span id="cb238-9"><a href="design-a-hashset-leetcode-705-easy.html#cb238-9" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> size;</span>
+<span id="cb238-10"><a href="design-a-hashset-leetcode-705-easy.html#cb238-10" aria-hidden="true"></a></span>
+<span id="cb238-11"><a href="design-a-hashset-leetcode-705-easy.html#cb238-11" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">MyHashSet</span>() {</span>
+<span id="cb238-12"><a href="design-a-hashset-leetcode-705-easy.html#cb238-12" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">size</span> = <span class="dv">10000</span>;</span>
+<span id="cb238-13"><a href="design-a-hashset-leetcode-705-easy.html#cb238-13" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">list</span> = <span class="kw">new</span> <span class="bu">Node</span>[<span class="kw">this</span>.<span class="fu">size</span>];</span>
+<span id="cb238-14"><a href="design-a-hashset-leetcode-705-easy.html#cb238-14" aria-hidden="true"></a>    }</span>
+<span id="cb238-15"><a href="design-a-hashset-leetcode-705-easy.html#cb238-15" aria-hidden="true"></a></span>
+<span id="cb238-16"><a href="design-a-hashset-leetcode-705-easy.html#cb238-16" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">add</span>(<span class="dt">int</span> key) {</span>
+<span id="cb238-17"><a href="design-a-hashset-leetcode-705-easy.html#cb238-17" aria-hidden="true"></a>        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
+<span id="cb238-18"><a href="design-a-hashset-leetcode-705-easy.html#cb238-18" aria-hidden="true"></a></span>
+<span id="cb238-19"><a href="design-a-hashset-leetcode-705-easy.html#cb238-19" aria-hidden="true"></a>        <span class="kw">if</span>(<span class="fu">contains</span>(key)){</span>
+<span id="cb238-20"><a href="design-a-hashset-leetcode-705-easy.html#cb238-20" aria-hidden="true"></a>            <span class="co">//skip for duplicated entry</span></span>
+<span id="cb238-21"><a href="design-a-hashset-leetcode-705-easy.html#cb238-21" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb238-22"><a href="design-a-hashset-leetcode-705-easy.html#cb238-22" aria-hidden="true"></a>            <span class="co">//add as head of chaining</span></span>
+<span id="cb238-23"><a href="design-a-hashset-leetcode-705-easy.html#cb238-23" aria-hidden="true"></a>            <span class="bu">Node</span> oldHead = list[index];</span>
+<span id="cb238-24"><a href="design-a-hashset-leetcode-705-easy.html#cb238-24" aria-hidden="true"></a></span>
+<span id="cb238-25"><a href="design-a-hashset-leetcode-705-easy.html#cb238-25" aria-hidden="true"></a>            <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>();</span>
+<span id="cb238-26"><a href="design-a-hashset-leetcode-705-easy.html#cb238-26" aria-hidden="true"></a>            newNode.<span class="fu">key</span> = key;</span>
+<span id="cb238-27"><a href="design-a-hashset-leetcode-705-easy.html#cb238-27" aria-hidden="true"></a>            newNode.<span class="fu">next</span> = oldHead;</span>
+<span id="cb238-28"><a href="design-a-hashset-leetcode-705-easy.html#cb238-28" aria-hidden="true"></a></span>
+<span id="cb238-29"><a href="design-a-hashset-leetcode-705-easy.html#cb238-29" aria-hidden="true"></a>            list[index] = newNode;</span>
+<span id="cb238-30"><a href="design-a-hashset-leetcode-705-easy.html#cb238-30" aria-hidden="true"></a>        }</span>
+<span id="cb238-31"><a href="design-a-hashset-leetcode-705-easy.html#cb238-31" aria-hidden="true"></a>    }</span>
+<span id="cb238-32"><a href="design-a-hashset-leetcode-705-easy.html#cb238-32" aria-hidden="true"></a></span>
+<span id="cb238-33"><a href="design-a-hashset-leetcode-705-easy.html#cb238-33" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">remove</span>(<span class="dt">int</span> key) {</span>
+<span id="cb238-34"><a href="design-a-hashset-leetcode-705-easy.html#cb238-34" aria-hidden="true"></a>        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
+<span id="cb238-35"><a href="design-a-hashset-leetcode-705-easy.html#cb238-35" aria-hidden="true"></a></span>
+<span id="cb238-36"><a href="design-a-hashset-leetcode-705-easy.html#cb238-36" aria-hidden="true"></a>        <span class="kw">if</span>(<span class="fu">contains</span>(key)) {</span>
+<span id="cb238-37"><a href="design-a-hashset-leetcode-705-easy.html#cb238-37" aria-hidden="true"></a>            <span class="bu">Node</span> current = list[index];</span>
+<span id="cb238-38"><a href="design-a-hashset-leetcode-705-easy.html#cb238-38" aria-hidden="true"></a></span>
+<span id="cb238-39"><a href="design-a-hashset-leetcode-705-easy.html#cb238-39" aria-hidden="true"></a>            <span class="kw">if</span>(current.<span class="fu">key</span> == key) {</span>
+<span id="cb238-40"><a href="design-a-hashset-leetcode-705-easy.html#cb238-40" aria-hidden="true"></a>                <span class="co">// replace head of chaining</span></span>
+<span id="cb238-41"><a href="design-a-hashset-leetcode-705-easy.html#cb238-41" aria-hidden="true"></a>                list[index] = current.<span class="fu">next</span>;</span>
+<span id="cb238-42"><a href="design-a-hashset-leetcode-705-easy.html#cb238-42" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
+<span id="cb238-43"><a href="design-a-hashset-leetcode-705-easy.html#cb238-43" aria-hidden="true"></a>                <span class="co">// replace the middle of chaining</span></span>
+<span id="cb238-44"><a href="design-a-hashset-leetcode-705-easy.html#cb238-44" aria-hidden="true"></a>                <span class="bu">Node</span> prev = current;</span>
+<span id="cb238-45"><a href="design-a-hashset-leetcode-705-easy.html#cb238-45" aria-hidden="true"></a></span>
+<span id="cb238-46"><a href="design-a-hashset-leetcode-705-easy.html#cb238-46" aria-hidden="true"></a>                <span class="kw">while</span>(current != <span class="kw">null</span> &amp;&amp; current.<span class="fu">key</span> != key) {</span>
+<span id="cb238-47"><a href="design-a-hashset-leetcode-705-easy.html#cb238-47" aria-hidden="true"></a>                    prev = current;</span>
+<span id="cb238-48"><a href="design-a-hashset-leetcode-705-easy.html#cb238-48" aria-hidden="true"></a>                    current = current.<span class="fu">next</span>;</span>
+<span id="cb238-49"><a href="design-a-hashset-leetcode-705-easy.html#cb238-49" aria-hidden="true"></a>                }</span>
+<span id="cb238-50"><a href="design-a-hashset-leetcode-705-easy.html#cb238-50" aria-hidden="true"></a>                prev.<span class="fu">next</span> = current.<span class="fu">next</span>;</span>
+<span id="cb238-51"><a href="design-a-hashset-leetcode-705-easy.html#cb238-51" aria-hidden="true"></a>            }</span>
+<span id="cb238-52"><a href="design-a-hashset-leetcode-705-easy.html#cb238-52" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb238-53"><a href="design-a-hashset-leetcode-705-easy.html#cb238-53" aria-hidden="true"></a>            <span class="co">//skip since not exist</span></span>
+<span id="cb238-54"><a href="design-a-hashset-leetcode-705-easy.html#cb238-54" aria-hidden="true"></a>        }</span>
+<span id="cb238-55"><a href="design-a-hashset-leetcode-705-easy.html#cb238-55" aria-hidden="true"></a>    }</span>
+<span id="cb238-56"><a href="design-a-hashset-leetcode-705-easy.html#cb238-56" aria-hidden="true"></a></span>
+<span id="cb238-57"><a href="design-a-hashset-leetcode-705-easy.html#cb238-57" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">contains</span>(<span class="dt">int</span> key) {</span>
+<span id="cb238-58"><a href="design-a-hashset-leetcode-705-easy.html#cb238-58" aria-hidden="true"></a>        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
+<span id="cb238-59"><a href="design-a-hashset-leetcode-705-easy.html#cb238-59" aria-hidden="true"></a></span>
+<span id="cb238-60"><a href="design-a-hashset-leetcode-705-easy.html#cb238-60" aria-hidden="true"></a>        <span class="bu">Node</span> current = list[index];</span>
+<span id="cb238-61"><a href="design-a-hashset-leetcode-705-easy.html#cb238-61" aria-hidden="true"></a></span>
+<span id="cb238-62"><a href="design-a-hashset-leetcode-705-easy.html#cb238-62" aria-hidden="true"></a>        <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
+<span id="cb238-63"><a href="design-a-hashset-leetcode-705-easy.html#cb238-63" aria-hidden="true"></a>            <span class="kw">if</span>(current.<span class="fu">key</span> == key) {</span>
+<span id="cb238-64"><a href="design-a-hashset-leetcode-705-easy.html#cb238-64" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb238-65"><a href="design-a-hashset-leetcode-705-easy.html#cb238-65" aria-hidden="true"></a>            }</span>
+<span id="cb238-66"><a href="design-a-hashset-leetcode-705-easy.html#cb238-66" aria-hidden="true"></a></span>
+<span id="cb238-67"><a href="design-a-hashset-leetcode-705-easy.html#cb238-67" aria-hidden="true"></a>            current = current.<span class="fu">next</span>;</span>
+<span id="cb238-68"><a href="design-a-hashset-leetcode-705-easy.html#cb238-68" aria-hidden="true"></a>        }</span>
+<span id="cb238-69"><a href="design-a-hashset-leetcode-705-easy.html#cb238-69" aria-hidden="true"></a></span>
+<span id="cb238-70"><a href="design-a-hashset-leetcode-705-easy.html#cb238-70" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb238-71"><a href="design-a-hashset-leetcode-705-easy.html#cb238-71" aria-hidden="true"></a>    }</span>
+<span id="cb238-72"><a href="design-a-hashset-leetcode-705-easy.html#cb238-72" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

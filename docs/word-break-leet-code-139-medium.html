@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1061,51 +1062,51 @@ contain duplicate words.</p>
 </div>
 <div id="solution---recursion-2" class="section level3" number="9.7.3">
 <h3><span class="header-section-number">9.7.3</span> Solution - Recursion</h3>
-<div id="walkthrough-143" class="section level4" number="9.7.3.1">
+<div id="walkthrough-144" class="section level4" number="9.7.3.1">
 <h4><span class="header-section-number">9.7.3.1</span> Walkthrough</h4>
 <p>Consider each prefix and search it in dictionary. If the prefix is present in dictionary, we recursively search for
 the rest of the string and AND all sub results.</p>
 </div>
-<div id="analysis-145" class="section level4" number="9.7.3.2">
+<div id="analysis-146" class="section level4" number="9.7.3.2">
 <h4><span class="header-section-number">9.7.3.2</span> Analysis</h4>
 <p>The time complexity is exponential, since there are some overlapping subproblems in the recursion tree.
 <span class="math inline">\(O(2^{log(n)})\)</span>, where n is the length of the word.</p>
 </div>
-<div id="algorithm-150" class="section level4" number="9.7.3.3">
+<div id="algorithm-151" class="section level4" number="9.7.3.3">
 <h4><span class="header-section-number">9.7.3.3</span> Algorithm</h4>
 <p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
 </div>
 <div id="java-code---recursion-2" class="section level4" number="9.7.3.4">
 <h4><span class="header-section-number">9.7.3.4</span> Java Code - Recursion</h4>
-<div class="sourceCode" id="cb212"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb212-1"><a href="word-break-leet-code-139-medium.html#cb212-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">wordBreak</span>(<span class="bu">String</span> word, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; dict) {</span>
-<span id="cb212-2"><a href="word-break-leet-code-139-medium.html#cb212-2" aria-hidden="true"></a>    <span class="dt">int</span> length = word.<span class="fu">length</span>();</span>
-<span id="cb212-3"><a href="word-break-leet-code-139-medium.html#cb212-3" aria-hidden="true"></a>    <span class="co">// base case</span></span>
-<span id="cb212-4"><a href="word-break-leet-code-139-medium.html#cb212-4" aria-hidden="true"></a>    <span class="kw">if</span> (length == <span class="dv">0</span>) {</span>
-<span id="cb212-5"><a href="word-break-leet-code-139-medium.html#cb212-5" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb212-6"><a href="word-break-leet-code-139-medium.html#cb212-6" aria-hidden="true"></a>    }</span>
-<span id="cb212-7"><a href="word-break-leet-code-139-medium.html#cb212-7" aria-hidden="true"></a></span>
-<span id="cb212-8"><a href="word-break-leet-code-139-medium.html#cb212-8" aria-hidden="true"></a>    <span class="co">//else check for all words</span></span>
-<span id="cb212-9"><a href="word-break-leet-code-139-medium.html#cb212-9" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= length; i++) {</span>
-<span id="cb212-10"><a href="word-break-leet-code-139-medium.html#cb212-10" aria-hidden="true"></a>        <span class="co">// Now we will first divide the word into two parts ,</span></span>
-<span id="cb212-11"><a href="word-break-leet-code-139-medium.html#cb212-11" aria-hidden="true"></a>        <span class="co">// the prefix will have a length of i and check if it is  </span></span>
-<span id="cb212-12"><a href="word-break-leet-code-139-medium.html#cb212-12" aria-hidden="true"></a>        <span class="co">// present in dictionary ,if yes then we will check for  </span></span>
-<span id="cb212-13"><a href="word-break-leet-code-139-medium.html#cb212-13" aria-hidden="true"></a>        <span class="co">// suffix of length size-i recursively. if both prefix and  </span></span>
-<span id="cb212-14"><a href="word-break-leet-code-139-medium.html#cb212-14" aria-hidden="true"></a>        <span class="co">// suffix are present the word is found in dictionary.</span></span>
-<span id="cb212-15"><a href="word-break-leet-code-139-medium.html#cb212-15" aria-hidden="true"></a> </span>
-<span id="cb212-16"><a href="word-break-leet-code-139-medium.html#cb212-16" aria-hidden="true"></a>        <span class="kw">if</span> (dict.<span class="fu">contains</span>(word.<span class="fu">substring</span>(<span class="dv">0</span>,i)) &amp;&amp;  </span>
-<span id="cb212-17"><a href="word-break-leet-code-139-medium.html#cb212-17" aria-hidden="true"></a>            <span class="fu">wordBreak</span>(word.<span class="fu">substring</span>(i, length), wordDict)) {</span>
-<span id="cb212-18"><a href="word-break-leet-code-139-medium.html#cb212-18" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb212-19"><a href="word-break-leet-code-139-medium.html#cb212-19" aria-hidden="true"></a>        }</span>
-<span id="cb212-20"><a href="word-break-leet-code-139-medium.html#cb212-20" aria-hidden="true"></a>    }</span>
-<span id="cb212-21"><a href="word-break-leet-code-139-medium.html#cb212-21" aria-hidden="true"></a>         </span>
-<span id="cb212-22"><a href="word-break-leet-code-139-medium.html#cb212-22" aria-hidden="true"></a>    <span class="co">// if all cases failed then return false</span></span>
-<span id="cb212-23"><a href="word-break-leet-code-139-medium.html#cb212-23" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">false</span>;        </span>
-<span id="cb212-24"><a href="word-break-leet-code-139-medium.html#cb212-24" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb213-1"><a href="word-break-leet-code-139-medium.html#cb213-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">wordBreak</span>(<span class="bu">String</span> word, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; dict) {</span>
+<span id="cb213-2"><a href="word-break-leet-code-139-medium.html#cb213-2" aria-hidden="true"></a>    <span class="dt">int</span> length = word.<span class="fu">length</span>();</span>
+<span id="cb213-3"><a href="word-break-leet-code-139-medium.html#cb213-3" aria-hidden="true"></a>    <span class="co">// base case</span></span>
+<span id="cb213-4"><a href="word-break-leet-code-139-medium.html#cb213-4" aria-hidden="true"></a>    <span class="kw">if</span> (length == <span class="dv">0</span>) {</span>
+<span id="cb213-5"><a href="word-break-leet-code-139-medium.html#cb213-5" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb213-6"><a href="word-break-leet-code-139-medium.html#cb213-6" aria-hidden="true"></a>    }</span>
+<span id="cb213-7"><a href="word-break-leet-code-139-medium.html#cb213-7" aria-hidden="true"></a></span>
+<span id="cb213-8"><a href="word-break-leet-code-139-medium.html#cb213-8" aria-hidden="true"></a>    <span class="co">//else check for all words</span></span>
+<span id="cb213-9"><a href="word-break-leet-code-139-medium.html#cb213-9" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= length; i++) {</span>
+<span id="cb213-10"><a href="word-break-leet-code-139-medium.html#cb213-10" aria-hidden="true"></a>        <span class="co">// Now we will first divide the word into two parts ,</span></span>
+<span id="cb213-11"><a href="word-break-leet-code-139-medium.html#cb213-11" aria-hidden="true"></a>        <span class="co">// the prefix will have a length of i and check if it is  </span></span>
+<span id="cb213-12"><a href="word-break-leet-code-139-medium.html#cb213-12" aria-hidden="true"></a>        <span class="co">// present in dictionary ,if yes then we will check for  </span></span>
+<span id="cb213-13"><a href="word-break-leet-code-139-medium.html#cb213-13" aria-hidden="true"></a>        <span class="co">// suffix of length size-i recursively. if both prefix and  </span></span>
+<span id="cb213-14"><a href="word-break-leet-code-139-medium.html#cb213-14" aria-hidden="true"></a>        <span class="co">// suffix are present the word is found in dictionary.</span></span>
+<span id="cb213-15"><a href="word-break-leet-code-139-medium.html#cb213-15" aria-hidden="true"></a> </span>
+<span id="cb213-16"><a href="word-break-leet-code-139-medium.html#cb213-16" aria-hidden="true"></a>        <span class="kw">if</span> (dict.<span class="fu">contains</span>(word.<span class="fu">substring</span>(<span class="dv">0</span>,i)) &amp;&amp;  </span>
+<span id="cb213-17"><a href="word-break-leet-code-139-medium.html#cb213-17" aria-hidden="true"></a>            <span class="fu">wordBreak</span>(word.<span class="fu">substring</span>(i, length), wordDict)) {</span>
+<span id="cb213-18"><a href="word-break-leet-code-139-medium.html#cb213-18" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb213-19"><a href="word-break-leet-code-139-medium.html#cb213-19" aria-hidden="true"></a>        }</span>
+<span id="cb213-20"><a href="word-break-leet-code-139-medium.html#cb213-20" aria-hidden="true"></a>    }</span>
+<span id="cb213-21"><a href="word-break-leet-code-139-medium.html#cb213-21" aria-hidden="true"></a>         </span>
+<span id="cb213-22"><a href="word-break-leet-code-139-medium.html#cb213-22" aria-hidden="true"></a>    <span class="co">// if all cases failed then return false</span></span>
+<span id="cb213-23"><a href="word-break-leet-code-139-medium.html#cb213-23" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">false</span>;        </span>
+<span id="cb213-24"><a href="word-break-leet-code-139-medium.html#cb213-24" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---dynamic-programming-2" class="section level3" number="9.7.4">
 <h3><span class="header-section-number">9.7.4</span> Solution - Dynamic Programming</h3>
-<div id="walkthrough-144" class="section level4" number="9.7.4.1">
+<div id="walkthrough-145" class="section level4" number="9.7.4.1">
 <h4><span class="header-section-number">9.7.4.1</span> Walkthrough</h4>
 <p>Create a array of (length of string + 1). In order to ensure the string contains segment of substring in the list, we
 need to ensure:</p>
@@ -1116,45 +1117,45 @@ need to ensure:</p>
 </ul>
 <p>Finally, we only need to check the value of dp[index of last segment].</p>
 </div>
-<div id="analysis-146" class="section level4" number="9.7.4.2">
+<div id="analysis-147" class="section level4" number="9.7.4.2">
 <h4><span class="header-section-number">9.7.4.2</span> Analysis</h4>
 <p>Assume there are at most m letter in the given string and n words in dictionary. The time complexity is O(m * n).</p>
 </div>
-<div id="algorithm-151" class="section level4" number="9.7.4.3">
+<div id="algorithm-152" class="section level4" number="9.7.4.3">
 <h4><span class="header-section-number">9.7.4.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
 </div>
 <div id="java-code---dynamic-programming-2" class="section level4" number="9.7.4.4">
 <h4><span class="header-section-number">9.7.4.4</span> Java Code - Dynamic Programming</h4>
-<div class="sourceCode" id="cb213"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb213-1"><a href="word-break-leet-code-139-medium.html#cb213-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">wordBreak</span>(<span class="bu">String</span> s, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; wordDict) {</span>
-<span id="cb213-2"><a href="word-break-leet-code-139-medium.html#cb213-2" aria-hidden="true"></a>    <span class="dt">int</span> n = s.<span class="fu">length</span>();</span>
-<span id="cb213-3"><a href="word-break-leet-code-139-medium.html#cb213-3" aria-hidden="true"></a>    <span class="dt">boolean</span>[] dp = <span class="kw">new</span> <span class="dt">boolean</span>[n + <span class="dv">1</span>];</span>
-<span id="cb213-4"><a href="word-break-leet-code-139-medium.html#cb213-4" aria-hidden="true"></a>    dp[<span class="dv">0</span>] = <span class="kw">true</span>;</span>
-<span id="cb213-5"><a href="word-break-leet-code-139-medium.html#cb213-5" aria-hidden="true"></a></span>
-<span id="cb213-6"><a href="word-break-leet-code-139-medium.html#cb213-6" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> endIdx = <span class="dv">1</span>; endIdx &lt;= s.<span class="fu">length</span>(); endIdx++) {</span>
-<span id="cb213-7"><a href="word-break-leet-code-139-medium.html#cb213-7" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="bu">String</span> segment : wordDict) {</span>
-<span id="cb213-8"><a href="word-break-leet-code-139-medium.html#cb213-8" aria-hidden="true"></a>            <span class="dt">int</span> prevIdx = endIdx - segment.<span class="fu">length</span>();</span>
-<span id="cb213-9"><a href="word-break-leet-code-139-medium.html#cb213-9" aria-hidden="true"></a>            <span class="co">/*</span></span>
-<span id="cb213-10"><a href="word-break-leet-code-139-medium.html#cb213-10" aria-hidden="true"></a><span class="co">            * 1. prevIdx &gt;= 0 : to avoid IndexOutOfBoundError</span></span>
-<span id="cb213-11"><a href="word-break-leet-code-139-medium.html#cb213-11" aria-hidden="true"></a><span class="co">            * 2. dp[prevIdx]  : to make sure prev word is a match</span></span>
-<span id="cb213-12"><a href="word-break-leet-code-139-medium.html#cb213-12" aria-hidden="true"></a><span class="co">            * 3. s.substring(prevIdx, endIdx).equals(segment) : to make sure current word is a match</span></span>
-<span id="cb213-13"><a href="word-break-leet-code-139-medium.html#cb213-13" aria-hidden="true"></a><span class="co">            *</span></span>
-<span id="cb213-14"><a href="word-break-leet-code-139-medium.html#cb213-14" aria-hidden="true"></a><span class="co">            * If 3 conditions match, move to next round (endIdx)</span></span>
-<span id="cb213-15"><a href="word-break-leet-code-139-medium.html#cb213-15" aria-hidden="true"></a><span class="co">            */</span></span>
-<span id="cb213-16"><a href="word-break-leet-code-139-medium.html#cb213-16" aria-hidden="true"></a>            <span class="kw">if</span> (prevIdx &gt;= <span class="dv">0</span> &amp;&amp; dp[prevIdx] &amp;&amp; s.<span class="fu">substring</span>(prevIdx, endIdx).<span class="fu">equals</span>(segment)) {</span>
-<span id="cb213-17"><a href="word-break-leet-code-139-medium.html#cb213-17" aria-hidden="true"></a>                dp[endIdx] = <span class="kw">true</span>;</span>
-<span id="cb213-18"><a href="word-break-leet-code-139-medium.html#cb213-18" aria-hidden="true"></a>                <span class="kw">break</span>;</span>
-<span id="cb213-19"><a href="word-break-leet-code-139-medium.html#cb213-19" aria-hidden="true"></a>            }</span>
-<span id="cb213-20"><a href="word-break-leet-code-139-medium.html#cb213-20" aria-hidden="true"></a>        }</span>
-<span id="cb213-21"><a href="word-break-leet-code-139-medium.html#cb213-21" aria-hidden="true"></a>    }</span>
-<span id="cb213-22"><a href="word-break-leet-code-139-medium.html#cb213-22" aria-hidden="true"></a></span>
-<span id="cb213-23"><a href="word-break-leet-code-139-medium.html#cb213-23" aria-hidden="true"></a>    <span class="kw">return</span> dp[n];</span>
-<span id="cb213-24"><a href="word-break-leet-code-139-medium.html#cb213-24" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb214-1"><a href="word-break-leet-code-139-medium.html#cb214-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">wordBreak</span>(<span class="bu">String</span> s, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; wordDict) {</span>
+<span id="cb214-2"><a href="word-break-leet-code-139-medium.html#cb214-2" aria-hidden="true"></a>    <span class="dt">int</span> n = s.<span class="fu">length</span>();</span>
+<span id="cb214-3"><a href="word-break-leet-code-139-medium.html#cb214-3" aria-hidden="true"></a>    <span class="dt">boolean</span>[] dp = <span class="kw">new</span> <span class="dt">boolean</span>[n + <span class="dv">1</span>];</span>
+<span id="cb214-4"><a href="word-break-leet-code-139-medium.html#cb214-4" aria-hidden="true"></a>    dp[<span class="dv">0</span>] = <span class="kw">true</span>;</span>
+<span id="cb214-5"><a href="word-break-leet-code-139-medium.html#cb214-5" aria-hidden="true"></a></span>
+<span id="cb214-6"><a href="word-break-leet-code-139-medium.html#cb214-6" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> endIdx = <span class="dv">1</span>; endIdx &lt;= s.<span class="fu">length</span>(); endIdx++) {</span>
+<span id="cb214-7"><a href="word-break-leet-code-139-medium.html#cb214-7" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="bu">String</span> segment : wordDict) {</span>
+<span id="cb214-8"><a href="word-break-leet-code-139-medium.html#cb214-8" aria-hidden="true"></a>            <span class="dt">int</span> prevIdx = endIdx - segment.<span class="fu">length</span>();</span>
+<span id="cb214-9"><a href="word-break-leet-code-139-medium.html#cb214-9" aria-hidden="true"></a>            <span class="co">/*</span></span>
+<span id="cb214-10"><a href="word-break-leet-code-139-medium.html#cb214-10" aria-hidden="true"></a><span class="co">            * 1. prevIdx &gt;= 0 : to avoid IndexOutOfBoundError</span></span>
+<span id="cb214-11"><a href="word-break-leet-code-139-medium.html#cb214-11" aria-hidden="true"></a><span class="co">            * 2. dp[prevIdx]  : to make sure prev word is a match</span></span>
+<span id="cb214-12"><a href="word-break-leet-code-139-medium.html#cb214-12" aria-hidden="true"></a><span class="co">            * 3. s.substring(prevIdx, endIdx).equals(segment) : to make sure current word is a match</span></span>
+<span id="cb214-13"><a href="word-break-leet-code-139-medium.html#cb214-13" aria-hidden="true"></a><span class="co">            *</span></span>
+<span id="cb214-14"><a href="word-break-leet-code-139-medium.html#cb214-14" aria-hidden="true"></a><span class="co">            * If 3 conditions match, move to next round (endIdx)</span></span>
+<span id="cb214-15"><a href="word-break-leet-code-139-medium.html#cb214-15" aria-hidden="true"></a><span class="co">            */</span></span>
+<span id="cb214-16"><a href="word-break-leet-code-139-medium.html#cb214-16" aria-hidden="true"></a>            <span class="kw">if</span> (prevIdx &gt;= <span class="dv">0</span> &amp;&amp; dp[prevIdx] &amp;&amp; s.<span class="fu">substring</span>(prevIdx, endIdx).<span class="fu">equals</span>(segment)) {</span>
+<span id="cb214-17"><a href="word-break-leet-code-139-medium.html#cb214-17" aria-hidden="true"></a>                dp[endIdx] = <span class="kw">true</span>;</span>
+<span id="cb214-18"><a href="word-break-leet-code-139-medium.html#cb214-18" aria-hidden="true"></a>                <span class="kw">break</span>;</span>
+<span id="cb214-19"><a href="word-break-leet-code-139-medium.html#cb214-19" aria-hidden="true"></a>            }</span>
+<span id="cb214-20"><a href="word-break-leet-code-139-medium.html#cb214-20" aria-hidden="true"></a>        }</span>
+<span id="cb214-21"><a href="word-break-leet-code-139-medium.html#cb214-21" aria-hidden="true"></a>    }</span>
+<span id="cb214-22"><a href="word-break-leet-code-139-medium.html#cb214-22" aria-hidden="true"></a></span>
+<span id="cb214-23"><a href="word-break-leet-code-139-medium.html#cb214-23" aria-hidden="true"></a>    <span class="kw">return</span> dp[n];</span>
+<span id="cb214-24"><a href="word-break-leet-code-139-medium.html#cb214-24" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---trie-with-dynamic-programming" class="section level3" number="9.7.5">
 <h3><span class="header-section-number">9.7.5</span> Solution - Trie with Dynamic Programming</h3>
-<div id="walkthrough-145" class="section level4" number="9.7.5.1">
+<div id="walkthrough-146" class="section level4" number="9.7.5.1">
 <h4><span class="header-section-number">9.7.5.1</span> Walkthrough</h4>
 <div class="figure"><span id="fig:unnamed-chunk-91"></span>
 <img src="tech-interview_files/figure-html/unnamed-chunk-91-1.png" alt="Some caption." width="90%" />
@@ -1166,95 +1167,95 @@ Figure 9.1: Some caption.
 construct a dynamic programming array to record if the word exists by traversing the Trie tree. Lastly, check the
 dp[lastIndex] value, true if the string constsis all valid words; false, otherwise.</p>
 </div>
-<div id="analysis-147" class="section level4" number="9.7.5.2">
+<div id="analysis-148" class="section level4" number="9.7.5.2">
 <h4><span class="header-section-number">9.7.5.2</span> Analysis</h4>
 <p>Time complexity is O(n * h), where where n is the length of the string word and h is the average length of words in
 the dictionary (average hight of the tree).</p>
 </div>
-<div id="algorithm-152" class="section level4" number="9.7.5.3">
+<div id="algorithm-153" class="section level4" number="9.7.5.3">
 <h4><span class="header-section-number">9.7.5.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
-<div class="sourceCode" id="cb214"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb214-1"><a href="word-break-leet-code-139-medium.html#cb214-1" aria-hidden="true"></a></span>
-<span id="cb214-2"><a href="word-break-leet-code-139-medium.html#cb214-2" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> TrieNode {</span>
-<span id="cb214-3"><a href="word-break-leet-code-139-medium.html#cb214-3" aria-hidden="true"></a>    <span class="dt">boolean</span> isEnd;</span>
-<span id="cb214-4"><a href="word-break-leet-code-139-medium.html#cb214-4" aria-hidden="true"></a></span>
-<span id="cb214-5"><a href="word-break-leet-code-139-medium.html#cb214-5" aria-hidden="true"></a>    <span class="co">// next characters</span></span>
-<span id="cb214-6"><a href="word-break-leet-code-139-medium.html#cb214-6" aria-hidden="true"></a>    TrieNode [] next;</span>
-<span id="cb214-7"><a href="word-break-leet-code-139-medium.html#cb214-7" aria-hidden="true"></a></span>
-<span id="cb214-8"><a href="word-break-leet-code-139-medium.html#cb214-8" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">TrieNode</span>() {</span>
-<span id="cb214-9"><a href="word-break-leet-code-139-medium.html#cb214-9" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">isEnd</span> = <span class="kw">false</span>;</span>
-<span id="cb214-10"><a href="word-break-leet-code-139-medium.html#cb214-10" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">next</span> = <span class="kw">new</span> TrieNode[<span class="dv">26</span>];</span>
-<span id="cb214-11"><a href="word-break-leet-code-139-medium.html#cb214-11" aria-hidden="true"></a>    }</span>
-<span id="cb214-12"><a href="word-break-leet-code-139-medium.html#cb214-12" aria-hidden="true"></a>}</span>
-<span id="cb214-13"><a href="word-break-leet-code-139-medium.html#cb214-13" aria-hidden="true"></a></span>
-<span id="cb214-14"><a href="word-break-leet-code-139-medium.html#cb214-14" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> Trie {</span>
-<span id="cb214-15"><a href="word-break-leet-code-139-medium.html#cb214-15" aria-hidden="true"></a>    TrieNode root;</span>
-<span id="cb214-16"><a href="word-break-leet-code-139-medium.html#cb214-16" aria-hidden="true"></a></span>
-<span id="cb214-17"><a href="word-break-leet-code-139-medium.html#cb214-17" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">Trie</span>() {</span>
-<span id="cb214-18"><a href="word-break-leet-code-139-medium.html#cb214-18" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">root</span>=<span class="kw">new</span> <span class="fu">TrieNode</span>();</span>
-<span id="cb214-19"><a href="word-break-leet-code-139-medium.html#cb214-19" aria-hidden="true"></a>    }</span>
-<span id="cb214-20"><a href="word-break-leet-code-139-medium.html#cb214-20" aria-hidden="true"></a></span>
-<span id="cb214-21"><a href="word-break-leet-code-139-medium.html#cb214-21" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">insert</span>(TrieNode root, <span class="bu">String</span> word, <span class="dt">int</span> index) {</span>
-<span id="cb214-22"><a href="word-break-leet-code-139-medium.html#cb214-22" aria-hidden="true"></a>        <span class="kw">if</span> (index == word.<span class="fu">length</span>()) {</span>
-<span id="cb214-23"><a href="word-break-leet-code-139-medium.html#cb214-23" aria-hidden="true"></a>            root.<span class="fu">isEnd</span> = <span class="kw">true</span>;</span>
-<span id="cb214-24"><a href="word-break-leet-code-139-medium.html#cb214-24" aria-hidden="true"></a>            <span class="kw">return</span>;</span>
-<span id="cb214-25"><a href="word-break-leet-code-139-medium.html#cb214-25" aria-hidden="true"></a>        }</span>
-<span id="cb214-26"><a href="word-break-leet-code-139-medium.html#cb214-26" aria-hidden="true"></a></span>
-<span id="cb214-27"><a href="word-break-leet-code-139-medium.html#cb214-27" aria-hidden="true"></a>        <span class="dt">int</span> charIndex = word.<span class="fu">charAt</span>(index) - <span class="ch">&#39;a&#39;</span>;</span>
-<span id="cb214-28"><a href="word-break-leet-code-139-medium.html#cb214-28" aria-hidden="true"></a></span>
-<span id="cb214-29"><a href="word-break-leet-code-139-medium.html#cb214-29" aria-hidden="true"></a>        <span class="kw">if</span> (root.<span class="fu">next</span>[charIndex] == <span class="kw">null</span>) {</span>
-<span id="cb214-30"><a href="word-break-leet-code-139-medium.html#cb214-30" aria-hidden="true"></a>            root.<span class="fu">next</span>[charIndex] = <span class="kw">new</span> <span class="fu">TrieNode</span>();</span>
-<span id="cb214-31"><a href="word-break-leet-code-139-medium.html#cb214-31" aria-hidden="true"></a>        }</span>
-<span id="cb214-32"><a href="word-break-leet-code-139-medium.html#cb214-32" aria-hidden="true"></a></span>
-<span id="cb214-33"><a href="word-break-leet-code-139-medium.html#cb214-33" aria-hidden="true"></a>        <span class="fu">insert</span>(root.<span class="fu">next</span>[charIndex], word, index + <span class="dv">1</span>);</span>
-<span id="cb214-34"><a href="word-break-leet-code-139-medium.html#cb214-34" aria-hidden="true"></a>    }</span>
-<span id="cb214-35"><a href="word-break-leet-code-139-medium.html#cb214-35" aria-hidden="true"></a></span>
-<span id="cb214-36"><a href="word-break-leet-code-139-medium.html#cb214-36" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">insert</span>(<span class="bu">String</span> word) {</span>
-<span id="cb214-37"><a href="word-break-leet-code-139-medium.html#cb214-37" aria-hidden="true"></a>        <span class="fu">insert</span>(root, word, <span class="dv">0</span>);</span>
-<span id="cb214-38"><a href="word-break-leet-code-139-medium.html#cb214-38" aria-hidden="true"></a>    }</span>
-<span id="cb214-39"><a href="word-break-leet-code-139-medium.html#cb214-39" aria-hidden="true"></a></span>
-<span id="cb214-40"><a href="word-break-leet-code-139-medium.html#cb214-40" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">lookUp</span>(TrieNode root, <span class="bu">String</span> str, <span class="dt">int</span> start, <span class="dt">int</span> index, <span class="dt">boolean</span> [] presence) {</span>
-<span id="cb214-41"><a href="word-break-leet-code-139-medium.html#cb214-41" aria-hidden="true"></a>        <span class="dt">int</span> nextCharInStr = start + index;</span>
-<span id="cb214-42"><a href="word-break-leet-code-139-medium.html#cb214-42" aria-hidden="true"></a></span>
-<span id="cb214-43"><a href="word-break-leet-code-139-medium.html#cb214-43" aria-hidden="true"></a>        <span class="kw">if</span> (root.<span class="fu">isEnd</span>) {</span>
-<span id="cb214-44"><a href="word-break-leet-code-139-medium.html#cb214-44" aria-hidden="true"></a>            presence[nextCharInStr] = <span class="kw">true</span>;</span>
-<span id="cb214-45"><a href="word-break-leet-code-139-medium.html#cb214-45" aria-hidden="true"></a>        }</span>
-<span id="cb214-46"><a href="word-break-leet-code-139-medium.html#cb214-46" aria-hidden="true"></a></span>
-<span id="cb214-47"><a href="word-break-leet-code-139-medium.html#cb214-47" aria-hidden="true"></a>        <span class="kw">if</span> (nextCharIndex == str.<span class="fu">length</span>()) {</span>
-<span id="cb214-48"><a href="word-break-leet-code-139-medium.html#cb214-48" aria-hidden="true"></a>            <span class="kw">return</span>;</span>
-<span id="cb214-49"><a href="word-break-leet-code-139-medium.html#cb214-49" aria-hidden="true"></a>        }</span>
-<span id="cb214-50"><a href="word-break-leet-code-139-medium.html#cb214-50" aria-hidden="true"></a></span>
-<span id="cb214-51"><a href="word-break-leet-code-139-medium.html#cb214-51" aria-hidden="true"></a>        <span class="dt">int</span> charIndex = str.<span class="fu">charAt</span>(nextCharInStr) - <span class="ch">&#39;a&#39;</span>;</span>
-<span id="cb214-52"><a href="word-break-leet-code-139-medium.html#cb214-52" aria-hidden="true"></a></span>
-<span id="cb214-53"><a href="word-break-leet-code-139-medium.html#cb214-53" aria-hidden="true"></a>        <span class="co">// traverse down the trie if TrieNode / char exists</span></span>
-<span id="cb214-54"><a href="word-break-leet-code-139-medium.html#cb214-54" aria-hidden="true"></a>        <span class="kw">if</span> (root.<span class="fu">next</span>[charIndex] != <span class="kw">null</span>) {</span>
-<span id="cb214-55"><a href="word-break-leet-code-139-medium.html#cb214-55" aria-hidden="true"></a>            <span class="fu">lookUp</span>(root.<span class="fu">next</span>[charIndex], str, start, index + <span class="dv">1</span>, presence);</span>
-<span id="cb214-56"><a href="word-break-leet-code-139-medium.html#cb214-56" aria-hidden="true"></a>        }</span>
-<span id="cb214-57"><a href="word-break-leet-code-139-medium.html#cb214-57" aria-hidden="true"></a>    }</span>
-<span id="cb214-58"><a href="word-break-leet-code-139-medium.html#cb214-58" aria-hidden="true"></a></span>
-<span id="cb214-59"><a href="word-break-leet-code-139-medium.html#cb214-59" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">lookUp</span>(<span class="bu">String</span> str, <span class="dt">int</span> start, <span class="dt">boolean</span> [] presence) {</span>
-<span id="cb214-60"><a href="word-break-leet-code-139-medium.html#cb214-60" aria-hidden="true"></a>        <span class="fu">lookUp</span>(root, str, start, <span class="dv">0</span>, presence);</span>
-<span id="cb214-61"><a href="word-break-leet-code-139-medium.html#cb214-61" aria-hidden="true"></a>    }</span>
-<span id="cb214-62"><a href="word-break-leet-code-139-medium.html#cb214-62" aria-hidden="true"></a>}</span>
-<span id="cb214-63"><a href="word-break-leet-code-139-medium.html#cb214-63" aria-hidden="true"></a></span>
-<span id="cb214-64"><a href="word-break-leet-code-139-medium.html#cb214-64" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">wordBreak</span>(<span class="bu">String</span> str, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; wordDict) {</span>
-<span id="cb214-65"><a href="word-break-leet-code-139-medium.html#cb214-65" aria-hidden="true"></a>    Trie trie = <span class="kw">new</span> <span class="fu">Trie</span>();</span>
-<span id="cb214-66"><a href="word-break-leet-code-139-medium.html#cb214-66" aria-hidden="true"></a></span>
-<span id="cb214-67"><a href="word-break-leet-code-139-medium.html#cb214-67" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="bu">String</span> word : wordDict) {</span>
-<span id="cb214-68"><a href="word-break-leet-code-139-medium.html#cb214-68" aria-hidden="true"></a>        trie.<span class="fu">insert</span>(word);</span>
-<span id="cb214-69"><a href="word-break-leet-code-139-medium.html#cb214-69" aria-hidden="true"></a>    }</span>
-<span id="cb214-70"><a href="word-break-leet-code-139-medium.html#cb214-70" aria-hidden="true"></a></span>
-<span id="cb214-71"><a href="word-break-leet-code-139-medium.html#cb214-71" aria-hidden="true"></a>    <span class="dt">boolean</span> [] presence = <span class="kw">new</span> <span class="dt">boolean</span> [str.<span class="fu">length</span>() + <span class="dv">1</span>];</span>
-<span id="cb214-72"><a href="word-break-leet-code-139-medium.html#cb214-72" aria-hidden="true"></a>    presence[<span class="dv">0</span>] = <span class="kw">true</span>;</span>
-<span id="cb214-73"><a href="word-break-leet-code-139-medium.html#cb214-73" aria-hidden="true"></a></span>
-<span id="cb214-74"><a href="word-break-leet-code-139-medium.html#cb214-74" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>;i &lt; str.<span class="fu">length</span>();i++) {</span>
-<span id="cb214-75"><a href="word-break-leet-code-139-medium.html#cb214-75" aria-hidden="true"></a>        <span class="kw">if</span> (presence[i]) {</span>
-<span id="cb214-76"><a href="word-break-leet-code-139-medium.html#cb214-76" aria-hidden="true"></a>            trie.<span class="fu">lookUp</span>(str, i, presence);</span>
-<span id="cb214-77"><a href="word-break-leet-code-139-medium.html#cb214-77" aria-hidden="true"></a>        }</span>
-<span id="cb214-78"><a href="word-break-leet-code-139-medium.html#cb214-78" aria-hidden="true"></a>    }</span>
-<span id="cb214-79"><a href="word-break-leet-code-139-medium.html#cb214-79" aria-hidden="true"></a></span>
-<span id="cb214-80"><a href="word-break-leet-code-139-medium.html#cb214-80" aria-hidden="true"></a>    <span class="kw">return</span> presence[str.<span class="fu">length</span>()];</span>
-<span id="cb214-81"><a href="word-break-leet-code-139-medium.html#cb214-81" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb215-1"><a href="word-break-leet-code-139-medium.html#cb215-1" aria-hidden="true"></a></span>
+<span id="cb215-2"><a href="word-break-leet-code-139-medium.html#cb215-2" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> TrieNode {</span>
+<span id="cb215-3"><a href="word-break-leet-code-139-medium.html#cb215-3" aria-hidden="true"></a>    <span class="dt">boolean</span> isEnd;</span>
+<span id="cb215-4"><a href="word-break-leet-code-139-medium.html#cb215-4" aria-hidden="true"></a></span>
+<span id="cb215-5"><a href="word-break-leet-code-139-medium.html#cb215-5" aria-hidden="true"></a>    <span class="co">// next characters</span></span>
+<span id="cb215-6"><a href="word-break-leet-code-139-medium.html#cb215-6" aria-hidden="true"></a>    TrieNode [] next;</span>
+<span id="cb215-7"><a href="word-break-leet-code-139-medium.html#cb215-7" aria-hidden="true"></a></span>
+<span id="cb215-8"><a href="word-break-leet-code-139-medium.html#cb215-8" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">TrieNode</span>() {</span>
+<span id="cb215-9"><a href="word-break-leet-code-139-medium.html#cb215-9" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">isEnd</span> = <span class="kw">false</span>;</span>
+<span id="cb215-10"><a href="word-break-leet-code-139-medium.html#cb215-10" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">next</span> = <span class="kw">new</span> TrieNode[<span class="dv">26</span>];</span>
+<span id="cb215-11"><a href="word-break-leet-code-139-medium.html#cb215-11" aria-hidden="true"></a>    }</span>
+<span id="cb215-12"><a href="word-break-leet-code-139-medium.html#cb215-12" aria-hidden="true"></a>}</span>
+<span id="cb215-13"><a href="word-break-leet-code-139-medium.html#cb215-13" aria-hidden="true"></a></span>
+<span id="cb215-14"><a href="word-break-leet-code-139-medium.html#cb215-14" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">static</span> <span class="kw">class</span> Trie {</span>
+<span id="cb215-15"><a href="word-break-leet-code-139-medium.html#cb215-15" aria-hidden="true"></a>    TrieNode root;</span>
+<span id="cb215-16"><a href="word-break-leet-code-139-medium.html#cb215-16" aria-hidden="true"></a></span>
+<span id="cb215-17"><a href="word-break-leet-code-139-medium.html#cb215-17" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">Trie</span>() {</span>
+<span id="cb215-18"><a href="word-break-leet-code-139-medium.html#cb215-18" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">root</span>=<span class="kw">new</span> <span class="fu">TrieNode</span>();</span>
+<span id="cb215-19"><a href="word-break-leet-code-139-medium.html#cb215-19" aria-hidden="true"></a>    }</span>
+<span id="cb215-20"><a href="word-break-leet-code-139-medium.html#cb215-20" aria-hidden="true"></a></span>
+<span id="cb215-21"><a href="word-break-leet-code-139-medium.html#cb215-21" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">insert</span>(TrieNode root, <span class="bu">String</span> word, <span class="dt">int</span> index) {</span>
+<span id="cb215-22"><a href="word-break-leet-code-139-medium.html#cb215-22" aria-hidden="true"></a>        <span class="kw">if</span> (index == word.<span class="fu">length</span>()) {</span>
+<span id="cb215-23"><a href="word-break-leet-code-139-medium.html#cb215-23" aria-hidden="true"></a>            root.<span class="fu">isEnd</span> = <span class="kw">true</span>;</span>
+<span id="cb215-24"><a href="word-break-leet-code-139-medium.html#cb215-24" aria-hidden="true"></a>            <span class="kw">return</span>;</span>
+<span id="cb215-25"><a href="word-break-leet-code-139-medium.html#cb215-25" aria-hidden="true"></a>        }</span>
+<span id="cb215-26"><a href="word-break-leet-code-139-medium.html#cb215-26" aria-hidden="true"></a></span>
+<span id="cb215-27"><a href="word-break-leet-code-139-medium.html#cb215-27" aria-hidden="true"></a>        <span class="dt">int</span> charIndex = word.<span class="fu">charAt</span>(index) - <span class="ch">&#39;a&#39;</span>;</span>
+<span id="cb215-28"><a href="word-break-leet-code-139-medium.html#cb215-28" aria-hidden="true"></a></span>
+<span id="cb215-29"><a href="word-break-leet-code-139-medium.html#cb215-29" aria-hidden="true"></a>        <span class="kw">if</span> (root.<span class="fu">next</span>[charIndex] == <span class="kw">null</span>) {</span>
+<span id="cb215-30"><a href="word-break-leet-code-139-medium.html#cb215-30" aria-hidden="true"></a>            root.<span class="fu">next</span>[charIndex] = <span class="kw">new</span> <span class="fu">TrieNode</span>();</span>
+<span id="cb215-31"><a href="word-break-leet-code-139-medium.html#cb215-31" aria-hidden="true"></a>        }</span>
+<span id="cb215-32"><a href="word-break-leet-code-139-medium.html#cb215-32" aria-hidden="true"></a></span>
+<span id="cb215-33"><a href="word-break-leet-code-139-medium.html#cb215-33" aria-hidden="true"></a>        <span class="fu">insert</span>(root.<span class="fu">next</span>[charIndex], word, index + <span class="dv">1</span>);</span>
+<span id="cb215-34"><a href="word-break-leet-code-139-medium.html#cb215-34" aria-hidden="true"></a>    }</span>
+<span id="cb215-35"><a href="word-break-leet-code-139-medium.html#cb215-35" aria-hidden="true"></a></span>
+<span id="cb215-36"><a href="word-break-leet-code-139-medium.html#cb215-36" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">insert</span>(<span class="bu">String</span> word) {</span>
+<span id="cb215-37"><a href="word-break-leet-code-139-medium.html#cb215-37" aria-hidden="true"></a>        <span class="fu">insert</span>(root, word, <span class="dv">0</span>);</span>
+<span id="cb215-38"><a href="word-break-leet-code-139-medium.html#cb215-38" aria-hidden="true"></a>    }</span>
+<span id="cb215-39"><a href="word-break-leet-code-139-medium.html#cb215-39" aria-hidden="true"></a></span>
+<span id="cb215-40"><a href="word-break-leet-code-139-medium.html#cb215-40" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">lookUp</span>(TrieNode root, <span class="bu">String</span> str, <span class="dt">int</span> start, <span class="dt">int</span> index, <span class="dt">boolean</span> [] presence) {</span>
+<span id="cb215-41"><a href="word-break-leet-code-139-medium.html#cb215-41" aria-hidden="true"></a>        <span class="dt">int</span> nextCharInStr = start + index;</span>
+<span id="cb215-42"><a href="word-break-leet-code-139-medium.html#cb215-42" aria-hidden="true"></a></span>
+<span id="cb215-43"><a href="word-break-leet-code-139-medium.html#cb215-43" aria-hidden="true"></a>        <span class="kw">if</span> (root.<span class="fu">isEnd</span>) {</span>
+<span id="cb215-44"><a href="word-break-leet-code-139-medium.html#cb215-44" aria-hidden="true"></a>            presence[nextCharInStr] = <span class="kw">true</span>;</span>
+<span id="cb215-45"><a href="word-break-leet-code-139-medium.html#cb215-45" aria-hidden="true"></a>        }</span>
+<span id="cb215-46"><a href="word-break-leet-code-139-medium.html#cb215-46" aria-hidden="true"></a></span>
+<span id="cb215-47"><a href="word-break-leet-code-139-medium.html#cb215-47" aria-hidden="true"></a>        <span class="kw">if</span> (nextCharIndex == str.<span class="fu">length</span>()) {</span>
+<span id="cb215-48"><a href="word-break-leet-code-139-medium.html#cb215-48" aria-hidden="true"></a>            <span class="kw">return</span>;</span>
+<span id="cb215-49"><a href="word-break-leet-code-139-medium.html#cb215-49" aria-hidden="true"></a>        }</span>
+<span id="cb215-50"><a href="word-break-leet-code-139-medium.html#cb215-50" aria-hidden="true"></a></span>
+<span id="cb215-51"><a href="word-break-leet-code-139-medium.html#cb215-51" aria-hidden="true"></a>        <span class="dt">int</span> charIndex = str.<span class="fu">charAt</span>(nextCharInStr) - <span class="ch">&#39;a&#39;</span>;</span>
+<span id="cb215-52"><a href="word-break-leet-code-139-medium.html#cb215-52" aria-hidden="true"></a></span>
+<span id="cb215-53"><a href="word-break-leet-code-139-medium.html#cb215-53" aria-hidden="true"></a>        <span class="co">// traverse down the trie if TrieNode / char exists</span></span>
+<span id="cb215-54"><a href="word-break-leet-code-139-medium.html#cb215-54" aria-hidden="true"></a>        <span class="kw">if</span> (root.<span class="fu">next</span>[charIndex] != <span class="kw">null</span>) {</span>
+<span id="cb215-55"><a href="word-break-leet-code-139-medium.html#cb215-55" aria-hidden="true"></a>            <span class="fu">lookUp</span>(root.<span class="fu">next</span>[charIndex], str, start, index + <span class="dv">1</span>, presence);</span>
+<span id="cb215-56"><a href="word-break-leet-code-139-medium.html#cb215-56" aria-hidden="true"></a>        }</span>
+<span id="cb215-57"><a href="word-break-leet-code-139-medium.html#cb215-57" aria-hidden="true"></a>    }</span>
+<span id="cb215-58"><a href="word-break-leet-code-139-medium.html#cb215-58" aria-hidden="true"></a></span>
+<span id="cb215-59"><a href="word-break-leet-code-139-medium.html#cb215-59" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">lookUp</span>(<span class="bu">String</span> str, <span class="dt">int</span> start, <span class="dt">boolean</span> [] presence) {</span>
+<span id="cb215-60"><a href="word-break-leet-code-139-medium.html#cb215-60" aria-hidden="true"></a>        <span class="fu">lookUp</span>(root, str, start, <span class="dv">0</span>, presence);</span>
+<span id="cb215-61"><a href="word-break-leet-code-139-medium.html#cb215-61" aria-hidden="true"></a>    }</span>
+<span id="cb215-62"><a href="word-break-leet-code-139-medium.html#cb215-62" aria-hidden="true"></a>}</span>
+<span id="cb215-63"><a href="word-break-leet-code-139-medium.html#cb215-63" aria-hidden="true"></a></span>
+<span id="cb215-64"><a href="word-break-leet-code-139-medium.html#cb215-64" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">wordBreak</span>(<span class="bu">String</span> str, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; wordDict) {</span>
+<span id="cb215-65"><a href="word-break-leet-code-139-medium.html#cb215-65" aria-hidden="true"></a>    Trie trie = <span class="kw">new</span> <span class="fu">Trie</span>();</span>
+<span id="cb215-66"><a href="word-break-leet-code-139-medium.html#cb215-66" aria-hidden="true"></a></span>
+<span id="cb215-67"><a href="word-break-leet-code-139-medium.html#cb215-67" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="bu">String</span> word : wordDict) {</span>
+<span id="cb215-68"><a href="word-break-leet-code-139-medium.html#cb215-68" aria-hidden="true"></a>        trie.<span class="fu">insert</span>(word);</span>
+<span id="cb215-69"><a href="word-break-leet-code-139-medium.html#cb215-69" aria-hidden="true"></a>    }</span>
+<span id="cb215-70"><a href="word-break-leet-code-139-medium.html#cb215-70" aria-hidden="true"></a></span>
+<span id="cb215-71"><a href="word-break-leet-code-139-medium.html#cb215-71" aria-hidden="true"></a>    <span class="dt">boolean</span> [] presence = <span class="kw">new</span> <span class="dt">boolean</span> [str.<span class="fu">length</span>() + <span class="dv">1</span>];</span>
+<span id="cb215-72"><a href="word-break-leet-code-139-medium.html#cb215-72" aria-hidden="true"></a>    presence[<span class="dv">0</span>] = <span class="kw">true</span>;</span>
+<span id="cb215-73"><a href="word-break-leet-code-139-medium.html#cb215-73" aria-hidden="true"></a></span>
+<span id="cb215-74"><a href="word-break-leet-code-139-medium.html#cb215-74" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>;i &lt; str.<span class="fu">length</span>();i++) {</span>
+<span id="cb215-75"><a href="word-break-leet-code-139-medium.html#cb215-75" aria-hidden="true"></a>        <span class="kw">if</span> (presence[i]) {</span>
+<span id="cb215-76"><a href="word-break-leet-code-139-medium.html#cb215-76" aria-hidden="true"></a>            trie.<span class="fu">lookUp</span>(str, i, presence);</span>
+<span id="cb215-77"><a href="word-break-leet-code-139-medium.html#cb215-77" aria-hidden="true"></a>        }</span>
+<span id="cb215-78"><a href="word-break-leet-code-139-medium.html#cb215-78" aria-hidden="true"></a>    }</span>
+<span id="cb215-79"><a href="word-break-leet-code-139-medium.html#cb215-79" aria-hidden="true"></a></span>
+<span id="cb215-80"><a href="word-break-leet-code-139-medium.html#cb215-80" aria-hidden="true"></a>    <span class="kw">return</span> presence[str.<span class="fu">length</span>()];</span>
+<span id="cb215-81"><a href="word-break-leet-code-139-medium.html#cb215-81" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1069,129 +1070,129 @@ Figure 4.10: Some caption.
 </div>
 <div id="solution-42" class="section level3" number="4.6.3">
 <h3><span class="header-section-number">4.6.3</span> Solution</h3>
-<div id="walkthrough-64" class="section level4" number="4.6.3.1">
+<div id="walkthrough-65" class="section level4" number="4.6.3.1">
 <h4><span class="header-section-number">4.6.3.1</span> Walkthrough</h4>
 <p>Create a queue and push node of the same level in a two dimensional array list while traversing the tree with
 BFS algorithm. While pushing the value to the level, remember the current level and evaluate the zig-zag pattern.
 That is, insert nodes for certain level at the first position at current level list.</p>
 </div>
-<div id="analysis-65" class="section level4" number="4.6.3.2">
+<div id="analysis-66" class="section level4" number="4.6.3.2">
 <h4><span class="header-section-number">4.6.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-67" class="section level4" number="4.6.3.3">
+<div id="algorithm-68" class="section level4" number="4.6.3.3">
 <h4><span class="header-section-number">4.6.3.3</span> Algorithm</h4>
 <p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
 </div>
 <div id="java-code---two-loops-1" class="section level4" number="4.6.3.4">
 <h4><span class="header-section-number">4.6.3.4</span> Java Code - Two Loops</h4>
-<div class="sourceCode" id="cb110"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb110-1"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">zigzagLevelOrder</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb110-2"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-2" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb110-3"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-3" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; levels = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb110-4"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-4" aria-hidden="true"></a></span>
-<span id="cb110-5"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-5" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
-<span id="cb110-6"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-6" aria-hidden="true"></a>        <span class="kw">return</span> levels;</span>
-<span id="cb110-7"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-7" aria-hidden="true"></a>    }</span>
-<span id="cb110-8"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-8" aria-hidden="true"></a></span>
-<span id="cb110-9"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-9" aria-hidden="true"></a>    queue.<span class="fu">offer</span>(root);</span>
-<span id="cb110-10"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-10" aria-hidden="true"></a>    <span class="dt">int</span> levelNum = <span class="dv">1</span>;</span>
-<span id="cb110-11"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-11" aria-hidden="true"></a></span>
-<span id="cb110-12"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-12" aria-hidden="true"></a>    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb110-13"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-13" aria-hidden="true"></a>        <span class="co">//number of element for this level</span></span>
-<span id="cb110-14"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-14" aria-hidden="true"></a>        <span class="dt">int</span> currentLevelSize = queue.<span class="fu">size</span>();</span>
-<span id="cb110-15"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-15" aria-hidden="true"></a>        <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; level = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb110-16"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-16" aria-hidden="true"></a></span>
-<span id="cb110-17"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-17" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; currentLevelSize; i++) {</span>
-<span id="cb110-18"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-18" aria-hidden="true"></a>            <span class="bu">TreeNode</span> node = queue.<span class="fu">poll</span>();</span>
-<span id="cb110-19"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-19" aria-hidden="true"></a></span>
-<span id="cb110-20"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-20" aria-hidden="true"></a>            <span class="kw">if</span>(levelNum % <span class="dv">2</span> != <span class="dv">0</span>) {</span>
-<span id="cb110-21"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-21" aria-hidden="true"></a>                level.<span class="fu">add</span>(node.<span class="fu">val</span>);</span>
-<span id="cb110-22"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-22" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
-<span id="cb110-23"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-23" aria-hidden="true"></a>                level.<span class="fu">add</span>(<span class="dv">0</span>, node.<span class="fu">val</span>);</span>
-<span id="cb110-24"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-24" aria-hidden="true"></a>            }</span>
-<span id="cb110-25"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-25" aria-hidden="true"></a></span>
-<span id="cb110-26"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-26" aria-hidden="true"></a>            <span class="co">// push all elements for next level</span></span>
-<span id="cb110-27"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-27" aria-hidden="true"></a>            <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
-<span id="cb110-28"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-28" aria-hidden="true"></a>                queue.<span class="fu">offer</span>(node.<span class="fu">left</span>);</span>
-<span id="cb110-29"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-29" aria-hidden="true"></a>            }</span>
-<span id="cb110-30"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-30" aria-hidden="true"></a></span>
-<span id="cb110-31"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-31" aria-hidden="true"></a>            <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
-<span id="cb110-32"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-32" aria-hidden="true"></a>                queue.<span class="fu">offer</span>(node.<span class="fu">right</span>);</span>
-<span id="cb110-33"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-33" aria-hidden="true"></a>            }</span>
-<span id="cb110-34"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-34" aria-hidden="true"></a>        }</span>
-<span id="cb110-35"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-35" aria-hidden="true"></a>        levelNum++;</span>
-<span id="cb110-36"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-36" aria-hidden="true"></a></span>
-<span id="cb110-37"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-37" aria-hidden="true"></a>        levels.<span class="fu">add</span>(level);</span>
-<span id="cb110-38"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-38" aria-hidden="true"></a>    }</span>
-<span id="cb110-39"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-39" aria-hidden="true"></a></span>
-<span id="cb110-40"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-40" aria-hidden="true"></a>    <span class="kw">return</span> levels;</span>
-<span id="cb110-41"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb110-41" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb111-1"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">zigzagLevelOrder</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb111-2"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-2" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb111-3"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-3" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; levels = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb111-4"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-4" aria-hidden="true"></a></span>
+<span id="cb111-5"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-5" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
+<span id="cb111-6"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-6" aria-hidden="true"></a>        <span class="kw">return</span> levels;</span>
+<span id="cb111-7"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-7" aria-hidden="true"></a>    }</span>
+<span id="cb111-8"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-8" aria-hidden="true"></a></span>
+<span id="cb111-9"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-9" aria-hidden="true"></a>    queue.<span class="fu">offer</span>(root);</span>
+<span id="cb111-10"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-10" aria-hidden="true"></a>    <span class="dt">int</span> levelNum = <span class="dv">1</span>;</span>
+<span id="cb111-11"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-11" aria-hidden="true"></a></span>
+<span id="cb111-12"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-12" aria-hidden="true"></a>    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb111-13"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-13" aria-hidden="true"></a>        <span class="co">//number of element for this level</span></span>
+<span id="cb111-14"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-14" aria-hidden="true"></a>        <span class="dt">int</span> currentLevelSize = queue.<span class="fu">size</span>();</span>
+<span id="cb111-15"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-15" aria-hidden="true"></a>        <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; level = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb111-16"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-16" aria-hidden="true"></a></span>
+<span id="cb111-17"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-17" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; currentLevelSize; i++) {</span>
+<span id="cb111-18"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-18" aria-hidden="true"></a>            <span class="bu">TreeNode</span> node = queue.<span class="fu">poll</span>();</span>
+<span id="cb111-19"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-19" aria-hidden="true"></a></span>
+<span id="cb111-20"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-20" aria-hidden="true"></a>            <span class="kw">if</span>(levelNum % <span class="dv">2</span> != <span class="dv">0</span>) {</span>
+<span id="cb111-21"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-21" aria-hidden="true"></a>                level.<span class="fu">add</span>(node.<span class="fu">val</span>);</span>
+<span id="cb111-22"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-22" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
+<span id="cb111-23"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-23" aria-hidden="true"></a>                level.<span class="fu">add</span>(<span class="dv">0</span>, node.<span class="fu">val</span>);</span>
+<span id="cb111-24"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-24" aria-hidden="true"></a>            }</span>
+<span id="cb111-25"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-25" aria-hidden="true"></a></span>
+<span id="cb111-26"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-26" aria-hidden="true"></a>            <span class="co">// push all elements for next level</span></span>
+<span id="cb111-27"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-27" aria-hidden="true"></a>            <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
+<span id="cb111-28"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-28" aria-hidden="true"></a>                queue.<span class="fu">offer</span>(node.<span class="fu">left</span>);</span>
+<span id="cb111-29"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-29" aria-hidden="true"></a>            }</span>
+<span id="cb111-30"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-30" aria-hidden="true"></a></span>
+<span id="cb111-31"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-31" aria-hidden="true"></a>            <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
+<span id="cb111-32"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-32" aria-hidden="true"></a>                queue.<span class="fu">offer</span>(node.<span class="fu">right</span>);</span>
+<span id="cb111-33"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-33" aria-hidden="true"></a>            }</span>
+<span id="cb111-34"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-34" aria-hidden="true"></a>        }</span>
+<span id="cb111-35"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-35" aria-hidden="true"></a>        levelNum++;</span>
+<span id="cb111-36"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-36" aria-hidden="true"></a></span>
+<span id="cb111-37"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-37" aria-hidden="true"></a>        levels.<span class="fu">add</span>(level);</span>
+<span id="cb111-38"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-38" aria-hidden="true"></a>    }</span>
+<span id="cb111-39"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-39" aria-hidden="true"></a></span>
+<span id="cb111-40"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-40" aria-hidden="true"></a>    <span class="kw">return</span> levels;</span>
+<span id="cb111-41"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-41" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
-<div id="walkthrough-65" class="section level4" number="4.6.3.5">
+<div id="walkthrough-66" class="section level4" number="4.6.3.5">
 <h4><span class="header-section-number">4.6.3.5</span> Walkthrough</h4>
 <p>Create a queue and push node of the same level in a two dimensional array list while traversing the tree with
 BFS algorithm. While pushing the value to the level, remember the current level and evaluate the zig-zag pattern.</p>
 </div>
-<div id="analysis-66" class="section level4" number="4.6.3.6">
+<div id="analysis-67" class="section level4" number="4.6.3.6">
 <h4><span class="header-section-number">4.6.3.6</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-68" class="section level4" number="4.6.3.7">
+<div id="algorithm-69" class="section level4" number="4.6.3.7">
 <h4><span class="header-section-number">4.6.3.7</span> Algorithm</h4>
 <p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
 </div>
 <div id="java-code---one-loop-1" class="section level4" number="4.6.3.8">
 <h4><span class="header-section-number">4.6.3.8</span> Java Code - One Loop</h4>
-<div class="sourceCode" id="cb111"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb111-1"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">zigzagLevelOrder</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb111-2"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; levels = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb111-3"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-3" aria-hidden="true"></a>    <span class="kw">if</span> (root == <span class="kw">null</span>) {</span>
-<span id="cb111-4"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-4" aria-hidden="true"></a>        <span class="kw">return</span> levels;</span>
-<span id="cb111-5"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-5" aria-hidden="true"></a>    }</span>
-<span id="cb111-6"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-6" aria-hidden="true"></a></span>
-<span id="cb111-7"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-7" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; currentLevelQueue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">TreeNode</span>&gt;();</span>
-<span id="cb111-8"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-8" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; nextLevelQueue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">TreeNode</span>&gt;();</span>
-<span id="cb111-9"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-9" aria-hidden="true"></a>    currentLevelQueue.<span class="fu">offer</span>(root);</span>
-<span id="cb111-10"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-10" aria-hidden="true"></a>    <span class="co">//init level = null</span></span>
-<span id="cb111-11"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-11" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; level = <span class="kw">null</span>;</span>
-<span id="cb111-12"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-12" aria-hidden="true"></a>    <span class="dt">int</span> levelNum = <span class="dv">1</span>;</span>
-<span id="cb111-13"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-13" aria-hidden="true"></a></span>
-<span id="cb111-14"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-14" aria-hidden="true"></a>    <span class="kw">while</span> (currentLevelQueue.<span class="fu">isEmpty</span>() == <span class="kw">false</span>) {</span>
-<span id="cb111-15"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-15" aria-hidden="true"></a>        <span class="bu">TreeNode</span> node = currentLevelQueue.<span class="fu">poll</span>();</span>
-<span id="cb111-16"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-16" aria-hidden="true"></a></span>
-<span id="cb111-17"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-17" aria-hidden="true"></a>        <span class="co">//starting a new level</span></span>
-<span id="cb111-18"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-18" aria-hidden="true"></a>        <span class="kw">if</span> (level == <span class="kw">null</span>) {</span>
-<span id="cb111-19"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-19" aria-hidden="true"></a>            level = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
-<span id="cb111-20"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-20" aria-hidden="true"></a>            levels.<span class="fu">add</span>(level);</span>
-<span id="cb111-21"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-21" aria-hidden="true"></a>        }</span>
-<span id="cb111-22"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-22" aria-hidden="true"></a></span>
-<span id="cb111-23"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-23" aria-hidden="true"></a>        <span class="kw">if</span>(levelNum % <span class="dv">2</span> != <span class="dv">0</span>) {</span>
-<span id="cb111-24"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-24" aria-hidden="true"></a>            level.<span class="fu">add</span>(node.<span class="fu">val</span>);</span>
-<span id="cb111-25"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-25" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb111-26"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-26" aria-hidden="true"></a>            level.<span class="fu">add</span>(<span class="dv">0</span>, node.<span class="fu">val</span>);</span>
-<span id="cb111-27"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-27" aria-hidden="true"></a>        }</span>
-<span id="cb111-28"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-28" aria-hidden="true"></a></span>
-<span id="cb111-29"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-29" aria-hidden="true"></a>        <span class="co">//push children to next level queue</span></span>
-<span id="cb111-30"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-30" aria-hidden="true"></a>        <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
-<span id="cb111-31"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-31" aria-hidden="true"></a>            nextLevelQueue.<span class="fu">offer</span>(node.<span class="fu">left</span>);</span>
-<span id="cb111-32"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-32" aria-hidden="true"></a>        }</span>
-<span id="cb111-33"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-33" aria-hidden="true"></a></span>
-<span id="cb111-34"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-34" aria-hidden="true"></a>        <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
-<span id="cb111-35"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-35" aria-hidden="true"></a>            nextLevelQueue.<span class="fu">offer</span>(node.<span class="fu">right</span>);</span>
-<span id="cb111-36"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-36" aria-hidden="true"></a>        }</span>
-<span id="cb111-37"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-37" aria-hidden="true"></a></span>
-<span id="cb111-38"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-38" aria-hidden="true"></a>        <span class="co">//swap queue and next, where next collects all nodes for next level</span></span>
-<span id="cb111-39"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-39" aria-hidden="true"></a>        <span class="kw">if</span> (currentLevelQueue.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb111-40"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-40" aria-hidden="true"></a>            <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; temp = currentLevelQueue;</span>
-<span id="cb111-41"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-41" aria-hidden="true"></a>            currentLevelQueue = nextLevelQueue;</span>
-<span id="cb111-42"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-42" aria-hidden="true"></a>            nextLevelQueue = temp;</span>
-<span id="cb111-43"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-43" aria-hidden="true"></a>            <span class="co">//init level = null</span></span>
-<span id="cb111-44"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-44" aria-hidden="true"></a>            level = <span class="kw">null</span>;</span>
-<span id="cb111-45"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-45" aria-hidden="true"></a>            levelNum++;</span>
-<span id="cb111-46"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-46" aria-hidden="true"></a>        }</span>
-<span id="cb111-47"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-47" aria-hidden="true"></a>    }</span>
-<span id="cb111-48"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-48" aria-hidden="true"></a></span>
-<span id="cb111-49"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-49" aria-hidden="true"></a>    <span class="kw">return</span> levels;</span>
-<span id="cb111-50"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb111-50" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb112-1"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">zigzagLevelOrder</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb112-2"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; levels = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb112-3"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-3" aria-hidden="true"></a>    <span class="kw">if</span> (root == <span class="kw">null</span>) {</span>
+<span id="cb112-4"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-4" aria-hidden="true"></a>        <span class="kw">return</span> levels;</span>
+<span id="cb112-5"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-5" aria-hidden="true"></a>    }</span>
+<span id="cb112-6"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-6" aria-hidden="true"></a></span>
+<span id="cb112-7"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-7" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; currentLevelQueue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">TreeNode</span>&gt;();</span>
+<span id="cb112-8"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-8" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; nextLevelQueue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">TreeNode</span>&gt;();</span>
+<span id="cb112-9"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-9" aria-hidden="true"></a>    currentLevelQueue.<span class="fu">offer</span>(root);</span>
+<span id="cb112-10"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-10" aria-hidden="true"></a>    <span class="co">//init level = null</span></span>
+<span id="cb112-11"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-11" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; level = <span class="kw">null</span>;</span>
+<span id="cb112-12"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-12" aria-hidden="true"></a>    <span class="dt">int</span> levelNum = <span class="dv">1</span>;</span>
+<span id="cb112-13"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-13" aria-hidden="true"></a></span>
+<span id="cb112-14"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-14" aria-hidden="true"></a>    <span class="kw">while</span> (currentLevelQueue.<span class="fu">isEmpty</span>() == <span class="kw">false</span>) {</span>
+<span id="cb112-15"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-15" aria-hidden="true"></a>        <span class="bu">TreeNode</span> node = currentLevelQueue.<span class="fu">poll</span>();</span>
+<span id="cb112-16"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-16" aria-hidden="true"></a></span>
+<span id="cb112-17"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-17" aria-hidden="true"></a>        <span class="co">//starting a new level</span></span>
+<span id="cb112-18"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-18" aria-hidden="true"></a>        <span class="kw">if</span> (level == <span class="kw">null</span>) {</span>
+<span id="cb112-19"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-19" aria-hidden="true"></a>            level = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
+<span id="cb112-20"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-20" aria-hidden="true"></a>            levels.<span class="fu">add</span>(level);</span>
+<span id="cb112-21"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-21" aria-hidden="true"></a>        }</span>
+<span id="cb112-22"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-22" aria-hidden="true"></a></span>
+<span id="cb112-23"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-23" aria-hidden="true"></a>        <span class="kw">if</span>(levelNum % <span class="dv">2</span> != <span class="dv">0</span>) {</span>
+<span id="cb112-24"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-24" aria-hidden="true"></a>            level.<span class="fu">add</span>(node.<span class="fu">val</span>);</span>
+<span id="cb112-25"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-25" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb112-26"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-26" aria-hidden="true"></a>            level.<span class="fu">add</span>(<span class="dv">0</span>, node.<span class="fu">val</span>);</span>
+<span id="cb112-27"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-27" aria-hidden="true"></a>        }</span>
+<span id="cb112-28"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-28" aria-hidden="true"></a></span>
+<span id="cb112-29"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-29" aria-hidden="true"></a>        <span class="co">//push children to next level queue</span></span>
+<span id="cb112-30"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-30" aria-hidden="true"></a>        <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
+<span id="cb112-31"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-31" aria-hidden="true"></a>            nextLevelQueue.<span class="fu">offer</span>(node.<span class="fu">left</span>);</span>
+<span id="cb112-32"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-32" aria-hidden="true"></a>        }</span>
+<span id="cb112-33"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-33" aria-hidden="true"></a></span>
+<span id="cb112-34"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-34" aria-hidden="true"></a>        <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
+<span id="cb112-35"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-35" aria-hidden="true"></a>            nextLevelQueue.<span class="fu">offer</span>(node.<span class="fu">right</span>);</span>
+<span id="cb112-36"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-36" aria-hidden="true"></a>        }</span>
+<span id="cb112-37"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-37" aria-hidden="true"></a></span>
+<span id="cb112-38"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-38" aria-hidden="true"></a>        <span class="co">//swap queue and next, where next collects all nodes for next level</span></span>
+<span id="cb112-39"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-39" aria-hidden="true"></a>        <span class="kw">if</span> (currentLevelQueue.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb112-40"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-40" aria-hidden="true"></a>            <span class="bu">Queue</span>&lt;<span class="bu">TreeNode</span>&gt; temp = currentLevelQueue;</span>
+<span id="cb112-41"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-41" aria-hidden="true"></a>            currentLevelQueue = nextLevelQueue;</span>
+<span id="cb112-42"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-42" aria-hidden="true"></a>            nextLevelQueue = temp;</span>
+<span id="cb112-43"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-43" aria-hidden="true"></a>            <span class="co">//init level = null</span></span>
+<span id="cb112-44"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-44" aria-hidden="true"></a>            level = <span class="kw">null</span>;</span>
+<span id="cb112-45"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-45" aria-hidden="true"></a>            levelNum++;</span>
+<span id="cb112-46"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-46" aria-hidden="true"></a>        }</span>
+<span id="cb112-47"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-47" aria-hidden="true"></a>    }</span>
+<span id="cb112-48"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-48" aria-hidden="true"></a></span>
+<span id="cb112-49"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-49" aria-hidden="true"></a>    <span class="kw">return</span> levels;</span>
+<span id="cb112-50"><a href="binary-tree-zigzag-level-order-traversal-leet-code-103-medium.html#cb112-50" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1056,21 +1057,21 @@ put(key, value) - Set or insert the value if the key is not already present. Whe
 should invalidate the least recently used item before inserting a new item.</p>
 <p>The cache is initialized with a positive capacity.
 ### Example</p>
-<div class="sourceCode" id="cb229"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb229-1"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-1" aria-hidden="true"></a>LRUCache cache = <span class="kw">new</span> <span class="fu">LRUCache</span>( <span class="dv">2</span> <span class="co">/* capacity */</span> );</span>
-<span id="cb229-2"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-2" aria-hidden="true"></a></span>
-<span id="cb229-3"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-3" aria-hidden="true"></a>cache.<span class="fu">put</span>(<span class="dv">1</span>, <span class="dv">1</span>);</span>
-<span id="cb229-4"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-4" aria-hidden="true"></a>cache.<span class="fu">put</span>(<span class="dv">2</span>, <span class="dv">2</span>);</span>
-<span id="cb229-5"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-5" aria-hidden="true"></a>cache.<span class="fu">get</span>(<span class="dv">1</span>);       <span class="co">// returns 1</span></span>
-<span id="cb229-6"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-6" aria-hidden="true"></a>cache.<span class="fu">put</span>(<span class="dv">3</span>, <span class="dv">3</span>);    <span class="co">// evicts key 2</span></span>
-<span id="cb229-7"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-7" aria-hidden="true"></a>cache.<span class="fu">get</span>(<span class="dv">2</span>);       <span class="co">// returns -1 (not found)</span></span>
-<span id="cb229-8"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-8" aria-hidden="true"></a>cache.<span class="fu">put</span>(<span class="dv">4</span>, <span class="dv">4</span>);    <span class="co">// evicts key 1</span></span>
-<span id="cb229-9"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-9" aria-hidden="true"></a>cache.<span class="fu">get</span>(<span class="dv">1</span>);       <span class="co">// returns -1 (not found)</span></span>
-<span id="cb229-10"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-10" aria-hidden="true"></a>cache.<span class="fu">get</span>(<span class="dv">3</span>);       <span class="co">// returns 3</span></span>
-<span id="cb229-11"><a href="design-a-lru-cache-leetcode-146-medium.html#cb229-11" aria-hidden="true"></a>cache.<span class="fu">get</span>(<span class="dv">4</span>);       <span class="co">// returns 4</span></span></code></pre></div>
+<div class="sourceCode" id="cb230"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb230-1"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-1" aria-hidden="true"></a>LRUCache cache = <span class="kw">new</span> <span class="fu">LRUCache</span>( <span class="dv">2</span> <span class="co">/* capacity */</span> );</span>
+<span id="cb230-2"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-2" aria-hidden="true"></a></span>
+<span id="cb230-3"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-3" aria-hidden="true"></a>cache.<span class="fu">put</span>(<span class="dv">1</span>, <span class="dv">1</span>);</span>
+<span id="cb230-4"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-4" aria-hidden="true"></a>cache.<span class="fu">put</span>(<span class="dv">2</span>, <span class="dv">2</span>);</span>
+<span id="cb230-5"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-5" aria-hidden="true"></a>cache.<span class="fu">get</span>(<span class="dv">1</span>);       <span class="co">// returns 1</span></span>
+<span id="cb230-6"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-6" aria-hidden="true"></a>cache.<span class="fu">put</span>(<span class="dv">3</span>, <span class="dv">3</span>);    <span class="co">// evicts key 2</span></span>
+<span id="cb230-7"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-7" aria-hidden="true"></a>cache.<span class="fu">get</span>(<span class="dv">2</span>);       <span class="co">// returns -1 (not found)</span></span>
+<span id="cb230-8"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-8" aria-hidden="true"></a>cache.<span class="fu">put</span>(<span class="dv">4</span>, <span class="dv">4</span>);    <span class="co">// evicts key 1</span></span>
+<span id="cb230-9"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-9" aria-hidden="true"></a>cache.<span class="fu">get</span>(<span class="dv">1</span>);       <span class="co">// returns -1 (not found)</span></span>
+<span id="cb230-10"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-10" aria-hidden="true"></a>cache.<span class="fu">get</span>(<span class="dv">3</span>);       <span class="co">// returns 3</span></span>
+<span id="cb230-11"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-11" aria-hidden="true"></a>cache.<span class="fu">get</span>(<span class="dv">4</span>);       <span class="co">// returns 4</span></span></code></pre></div>
 </div>
 <div id="solution---naive" class="section level3" number="12.1.2">
 <h3><span class="header-section-number">12.1.2</span> Solution - Naive</h3>
-<div id="walkthrough-156" class="section level4" number="12.1.2.1">
+<div id="walkthrough-157" class="section level4" number="12.1.2.1">
 <h4><span class="header-section-number">12.1.2.1</span> Walkthrough</h4>
 Have a internal map to store cache data and doubly linked list to keep track history of data usage. The head
 node indicate it was recently used where the tail node represents data that were .
@@ -1089,162 +1090,162 @@ Figure 12.2: Some caption.
 </p>
 </div>
 </div>
-<div id="analysis-160" class="section level4" number="12.1.2.2">
+<div id="analysis-161" class="section level4" number="12.1.2.2">
 <h4><span class="header-section-number">12.1.2.2</span> Analysis</h4>
 <p>There is a Map used as internal cache and each public method will leverage this internal cache as storage, and thus
 each public method cost O(1) overhead. The Auxiliary Space is O(n)</p>
 </div>
-<div id="algorithm-165" class="section level4" number="12.1.2.3">
+<div id="algorithm-166" class="section level4" number="12.1.2.3">
 <h4><span class="header-section-number">12.1.2.3</span> Algorithm</h4>
 </div>
 <div id="java-code---naive" class="section level4" number="12.1.2.4">
 <h4><span class="header-section-number">12.1.2.4</span> Java Code - Naive</h4>
-<div class="sourceCode" id="cb230"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb230-1"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-1" aria-hidden="true"></a><span class="kw">class</span> LRUCache {</span>
-<span id="cb230-2"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-2" aria-hidden="true"></a></span>
-<span id="cb230-3"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-3" aria-hidden="true"></a>    <span class="co">// Doubly Linked List</span></span>
-<span id="cb230-4"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-4" aria-hidden="true"></a>    <span class="kw">class</span> <span class="bu">Node</span> {</span>
-<span id="cb230-5"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-5" aria-hidden="true"></a>        <span class="dt">int</span> key;</span>
-<span id="cb230-6"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-6" aria-hidden="true"></a></span>
-<span id="cb230-7"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-7" aria-hidden="true"></a>        <span class="dt">int</span> data;</span>
-<span id="cb230-8"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-8" aria-hidden="true"></a></span>
-<span id="cb230-9"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-9" aria-hidden="true"></a>        <span class="kw">private</span> <span class="bu">Node</span> prev;</span>
-<span id="cb230-10"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-10" aria-hidden="true"></a></span>
-<span id="cb230-11"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-11" aria-hidden="true"></a>        <span class="kw">private</span> <span class="bu">Node</span> next;</span>
-<span id="cb230-12"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-12" aria-hidden="true"></a></span>
-<span id="cb230-13"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-13" aria-hidden="true"></a>        <span class="kw">public</span> <span class="bu">Node</span>(<span class="dt">int</span> key, <span class="dt">int</span> data) {</span>
-<span id="cb230-14"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-14" aria-hidden="true"></a>            <span class="kw">this</span>.<span class="fu">key</span> = key;</span>
-<span id="cb230-15"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-15" aria-hidden="true"></a>            <span class="kw">this</span>.<span class="fu">data</span> = data;</span>
-<span id="cb230-16"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-16" aria-hidden="true"></a>        }</span>
-<span id="cb230-17"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-17" aria-hidden="true"></a>    }</span>
-<span id="cb230-18"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-18" aria-hidden="true"></a></span>
-<span id="cb230-19"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-19" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> capacity;</span>
-<span id="cb230-20"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-20" aria-hidden="true"></a></span>
-<span id="cb230-21"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-21" aria-hidden="true"></a>    <span class="co">// internal cache</span></span>
-<span id="cb230-22"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-22" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Node</span>&gt; cache = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
-<span id="cb230-23"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-23" aria-hidden="true"></a></span>
-<span id="cb230-24"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-24" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span> head;</span>
-<span id="cb230-25"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-25" aria-hidden="true"></a></span>
-<span id="cb230-26"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-26" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span> tail;</span>
-<span id="cb230-27"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-27" aria-hidden="true"></a></span>
-<span id="cb230-28"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-28" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> capacity) {</span>
-<span id="cb230-29"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-29" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">capacity</span> = capacity;</span>
-<span id="cb230-30"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-30" aria-hidden="true"></a>    }</span>
-<span id="cb230-31"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-31" aria-hidden="true"></a></span>
-<span id="cb230-32"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-32" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">get</span>(<span class="dt">int</span> key) {</span>
-<span id="cb230-33"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-33" aria-hidden="true"></a>        <span class="kw">if</span> (cache.<span class="fu">containsKey</span>(key)) {</span>
-<span id="cb230-34"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-34" aria-hidden="true"></a>            <span class="bu">Node</span> node = cache.<span class="fu">get</span>(key);</span>
-<span id="cb230-35"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-35" aria-hidden="true"></a></span>
-<span id="cb230-36"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-36" aria-hidden="true"></a>            <span class="co">//Reset the node to head position</span></span>
-<span id="cb230-37"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-37" aria-hidden="true"></a>            <span class="fu">remove</span>(node);</span>
-<span id="cb230-38"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-38" aria-hidden="true"></a>            <span class="fu">setHead</span>(node);</span>
-<span id="cb230-39"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-39" aria-hidden="true"></a></span>
-<span id="cb230-40"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-40" aria-hidden="true"></a>            <span class="kw">return</span> node.<span class="fu">data</span>;</span>
-<span id="cb230-41"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-41" aria-hidden="true"></a>        }</span>
-<span id="cb230-42"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-42" aria-hidden="true"></a></span>
-<span id="cb230-43"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-43" aria-hidden="true"></a>        <span class="kw">return</span> -<span class="dv">1</span>;</span>
-<span id="cb230-44"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-44" aria-hidden="true"></a>    }</span>
-<span id="cb230-45"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-45" aria-hidden="true"></a></span>
-<span id="cb230-46"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-46" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">put</span>(<span class="dt">int</span> key, <span class="dt">int</span> value) {</span>
-<span id="cb230-47"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-47" aria-hidden="true"></a>        <span class="kw">if</span> (cache.<span class="fu">containsKey</span>(key)) {</span>
-<span id="cb230-48"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-48" aria-hidden="true"></a>            <span class="bu">Node</span> old = cache.<span class="fu">get</span>(key);</span>
-<span id="cb230-49"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-49" aria-hidden="true"></a>            old.<span class="fu">data</span> = value;</span>
-<span id="cb230-50"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-50" aria-hidden="true"></a></span>
-<span id="cb230-51"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-51" aria-hidden="true"></a>            <span class="co">//Reset the node to head position</span></span>
-<span id="cb230-52"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-52" aria-hidden="true"></a>            <span class="fu">remove</span>(old);</span>
-<span id="cb230-53"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-53" aria-hidden="true"></a>            <span class="fu">setHead</span>(old);</span>
-<span id="cb230-54"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-54" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb230-55"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-55" aria-hidden="true"></a>            <span class="co">// Put new &lt;key, val&gt;</span></span>
-<span id="cb230-56"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-56" aria-hidden="true"></a>            <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>(key, value);</span>
-<span id="cb230-57"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-57" aria-hidden="true"></a></span>
-<span id="cb230-58"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-58" aria-hidden="true"></a>            <span class="kw">if</span> (cache.<span class="fu">size</span>() &gt;= capacity) {</span>
-<span id="cb230-59"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-59" aria-hidden="true"></a>                <span class="co">//Cache is FULL. Remove tail</span></span>
-<span id="cb230-60"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-60" aria-hidden="true"></a>                cache.<span class="fu">remove</span>(tail.<span class="fu">key</span>); <span class="co">// remove LRU data from cache.</span></span>
-<span id="cb230-61"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-61" aria-hidden="true"></a>                <span class="fu">remove</span>(tail);</span>
-<span id="cb230-62"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-62" aria-hidden="true"></a>                <span class="fu">setHead</span>(newNode);</span>
-<span id="cb230-63"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-63" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
-<span id="cb230-64"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-64" aria-hidden="true"></a>                <span class="fu">setHead</span>(newNode);</span>
-<span id="cb230-65"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-65" aria-hidden="true"></a>            }</span>
-<span id="cb230-66"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-66" aria-hidden="true"></a></span>
-<span id="cb230-67"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-67" aria-hidden="true"></a>            cache.<span class="fu">put</span>(key, newNode);</span>
-<span id="cb230-68"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-68" aria-hidden="true"></a>        }</span>
-<span id="cb230-69"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-69" aria-hidden="true"></a>    }</span>
-<span id="cb230-70"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-70" aria-hidden="true"></a></span>
-<span id="cb230-71"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-71" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">remove</span>(<span class="bu">Node</span> node) {</span>
-<span id="cb230-72"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-72" aria-hidden="true"></a>        <span class="kw">if</span> (node == head) {</span>
-<span id="cb230-73"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-73" aria-hidden="true"></a>            <span class="co">// remove a head</span></span>
-<span id="cb230-74"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-74" aria-hidden="true"></a>            head = node.<span class="fu">next</span>;</span>
-<span id="cb230-75"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-75" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb230-76"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-76" aria-hidden="true"></a>            <span class="co">// remove a non-head</span></span>
-<span id="cb230-77"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-77" aria-hidden="true"></a>            node.<span class="fu">prev</span>.<span class="fu">next</span> = node.<span class="fu">next</span>;</span>
-<span id="cb230-78"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-78" aria-hidden="true"></a>        }</span>
-<span id="cb230-79"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-79" aria-hidden="true"></a></span>
-<span id="cb230-80"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-80" aria-hidden="true"></a>        <span class="kw">if</span> (node == tail) {</span>
-<span id="cb230-81"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-81" aria-hidden="true"></a>            <span class="co">// remove a tail</span></span>
-<span id="cb230-82"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-82" aria-hidden="true"></a>            tail = node.<span class="fu">prev</span>;</span>
-<span id="cb230-83"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-83" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb230-84"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-84" aria-hidden="true"></a>            <span class="co">// remove a non-head</span></span>
-<span id="cb230-85"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-85" aria-hidden="true"></a>            node.<span class="fu">next</span>.<span class="fu">prev</span> = node.<span class="fu">prev</span>;</span>
-<span id="cb230-86"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-86" aria-hidden="true"></a>        }</span>
-<span id="cb230-87"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-87" aria-hidden="true"></a>    }</span>
-<span id="cb230-88"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-88" aria-hidden="true"></a></span>
-<span id="cb230-89"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-89" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">setHead</span>(<span class="bu">Node</span> node) {</span>
-<span id="cb230-90"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-90" aria-hidden="true"></a>        node.<span class="fu">next</span> = head;</span>
-<span id="cb230-91"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-91" aria-hidden="true"></a>        node.<span class="fu">prev</span> = <span class="kw">null</span>;</span>
-<span id="cb230-92"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-92" aria-hidden="true"></a></span>
-<span id="cb230-93"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-93" aria-hidden="true"></a>        <span class="kw">if</span> (head != <span class="kw">null</span>) {</span>
-<span id="cb230-94"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-94" aria-hidden="true"></a>            <span class="co">// insert a new head node</span></span>
-<span id="cb230-95"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-95" aria-hidden="true"></a>            head.<span class="fu">prev</span> = node;</span>
-<span id="cb230-96"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-96" aria-hidden="true"></a>        }</span>
-<span id="cb230-97"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-97" aria-hidden="true"></a>        head = node;</span>
-<span id="cb230-98"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-98" aria-hidden="true"></a></span>
-<span id="cb230-99"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-99" aria-hidden="true"></a>        <span class="kw">if</span> (tail == <span class="kw">null</span>) {</span>
-<span id="cb230-100"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-100" aria-hidden="true"></a>            <span class="co">// insert first tail node</span></span>
-<span id="cb230-101"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-101" aria-hidden="true"></a>            tail = head;</span>
-<span id="cb230-102"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-102" aria-hidden="true"></a>        }</span>
-<span id="cb230-103"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-103" aria-hidden="true"></a>    }</span>
-<span id="cb230-104"><a href="design-a-lru-cache-leetcode-146-medium.html#cb230-104" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb231"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb231-1"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-1" aria-hidden="true"></a><span class="kw">class</span> LRUCache {</span>
+<span id="cb231-2"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-2" aria-hidden="true"></a></span>
+<span id="cb231-3"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-3" aria-hidden="true"></a>    <span class="co">// Doubly Linked List</span></span>
+<span id="cb231-4"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-4" aria-hidden="true"></a>    <span class="kw">class</span> <span class="bu">Node</span> {</span>
+<span id="cb231-5"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-5" aria-hidden="true"></a>        <span class="dt">int</span> key;</span>
+<span id="cb231-6"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-6" aria-hidden="true"></a></span>
+<span id="cb231-7"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-7" aria-hidden="true"></a>        <span class="dt">int</span> data;</span>
+<span id="cb231-8"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-8" aria-hidden="true"></a></span>
+<span id="cb231-9"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-9" aria-hidden="true"></a>        <span class="kw">private</span> <span class="bu">Node</span> prev;</span>
+<span id="cb231-10"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-10" aria-hidden="true"></a></span>
+<span id="cb231-11"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-11" aria-hidden="true"></a>        <span class="kw">private</span> <span class="bu">Node</span> next;</span>
+<span id="cb231-12"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-12" aria-hidden="true"></a></span>
+<span id="cb231-13"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-13" aria-hidden="true"></a>        <span class="kw">public</span> <span class="bu">Node</span>(<span class="dt">int</span> key, <span class="dt">int</span> data) {</span>
+<span id="cb231-14"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-14" aria-hidden="true"></a>            <span class="kw">this</span>.<span class="fu">key</span> = key;</span>
+<span id="cb231-15"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-15" aria-hidden="true"></a>            <span class="kw">this</span>.<span class="fu">data</span> = data;</span>
+<span id="cb231-16"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-16" aria-hidden="true"></a>        }</span>
+<span id="cb231-17"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-17" aria-hidden="true"></a>    }</span>
+<span id="cb231-18"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-18" aria-hidden="true"></a></span>
+<span id="cb231-19"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-19" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> capacity;</span>
+<span id="cb231-20"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-20" aria-hidden="true"></a></span>
+<span id="cb231-21"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-21" aria-hidden="true"></a>    <span class="co">// internal cache</span></span>
+<span id="cb231-22"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-22" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Node</span>&gt; cache = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
+<span id="cb231-23"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-23" aria-hidden="true"></a></span>
+<span id="cb231-24"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-24" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span> head;</span>
+<span id="cb231-25"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-25" aria-hidden="true"></a></span>
+<span id="cb231-26"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-26" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span> tail;</span>
+<span id="cb231-27"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-27" aria-hidden="true"></a></span>
+<span id="cb231-28"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-28" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> capacity) {</span>
+<span id="cb231-29"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-29" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">capacity</span> = capacity;</span>
+<span id="cb231-30"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-30" aria-hidden="true"></a>    }</span>
+<span id="cb231-31"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-31" aria-hidden="true"></a></span>
+<span id="cb231-32"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-32" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">get</span>(<span class="dt">int</span> key) {</span>
+<span id="cb231-33"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-33" aria-hidden="true"></a>        <span class="kw">if</span> (cache.<span class="fu">containsKey</span>(key)) {</span>
+<span id="cb231-34"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-34" aria-hidden="true"></a>            <span class="bu">Node</span> node = cache.<span class="fu">get</span>(key);</span>
+<span id="cb231-35"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-35" aria-hidden="true"></a></span>
+<span id="cb231-36"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-36" aria-hidden="true"></a>            <span class="co">//Reset the node to head position</span></span>
+<span id="cb231-37"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-37" aria-hidden="true"></a>            <span class="fu">remove</span>(node);</span>
+<span id="cb231-38"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-38" aria-hidden="true"></a>            <span class="fu">setHead</span>(node);</span>
+<span id="cb231-39"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-39" aria-hidden="true"></a></span>
+<span id="cb231-40"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-40" aria-hidden="true"></a>            <span class="kw">return</span> node.<span class="fu">data</span>;</span>
+<span id="cb231-41"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-41" aria-hidden="true"></a>        }</span>
+<span id="cb231-42"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-42" aria-hidden="true"></a></span>
+<span id="cb231-43"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-43" aria-hidden="true"></a>        <span class="kw">return</span> -<span class="dv">1</span>;</span>
+<span id="cb231-44"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-44" aria-hidden="true"></a>    }</span>
+<span id="cb231-45"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-45" aria-hidden="true"></a></span>
+<span id="cb231-46"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-46" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">put</span>(<span class="dt">int</span> key, <span class="dt">int</span> value) {</span>
+<span id="cb231-47"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-47" aria-hidden="true"></a>        <span class="kw">if</span> (cache.<span class="fu">containsKey</span>(key)) {</span>
+<span id="cb231-48"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-48" aria-hidden="true"></a>            <span class="bu">Node</span> old = cache.<span class="fu">get</span>(key);</span>
+<span id="cb231-49"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-49" aria-hidden="true"></a>            old.<span class="fu">data</span> = value;</span>
+<span id="cb231-50"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-50" aria-hidden="true"></a></span>
+<span id="cb231-51"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-51" aria-hidden="true"></a>            <span class="co">//Reset the node to head position</span></span>
+<span id="cb231-52"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-52" aria-hidden="true"></a>            <span class="fu">remove</span>(old);</span>
+<span id="cb231-53"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-53" aria-hidden="true"></a>            <span class="fu">setHead</span>(old);</span>
+<span id="cb231-54"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-54" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb231-55"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-55" aria-hidden="true"></a>            <span class="co">// Put new &lt;key, val&gt;</span></span>
+<span id="cb231-56"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-56" aria-hidden="true"></a>            <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>(key, value);</span>
+<span id="cb231-57"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-57" aria-hidden="true"></a></span>
+<span id="cb231-58"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-58" aria-hidden="true"></a>            <span class="kw">if</span> (cache.<span class="fu">size</span>() &gt;= capacity) {</span>
+<span id="cb231-59"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-59" aria-hidden="true"></a>                <span class="co">//Cache is FULL. Remove tail</span></span>
+<span id="cb231-60"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-60" aria-hidden="true"></a>                cache.<span class="fu">remove</span>(tail.<span class="fu">key</span>); <span class="co">// remove LRU data from cache.</span></span>
+<span id="cb231-61"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-61" aria-hidden="true"></a>                <span class="fu">remove</span>(tail);</span>
+<span id="cb231-62"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-62" aria-hidden="true"></a>                <span class="fu">setHead</span>(newNode);</span>
+<span id="cb231-63"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-63" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
+<span id="cb231-64"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-64" aria-hidden="true"></a>                <span class="fu">setHead</span>(newNode);</span>
+<span id="cb231-65"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-65" aria-hidden="true"></a>            }</span>
+<span id="cb231-66"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-66" aria-hidden="true"></a></span>
+<span id="cb231-67"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-67" aria-hidden="true"></a>            cache.<span class="fu">put</span>(key, newNode);</span>
+<span id="cb231-68"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-68" aria-hidden="true"></a>        }</span>
+<span id="cb231-69"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-69" aria-hidden="true"></a>    }</span>
+<span id="cb231-70"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-70" aria-hidden="true"></a></span>
+<span id="cb231-71"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-71" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">remove</span>(<span class="bu">Node</span> node) {</span>
+<span id="cb231-72"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-72" aria-hidden="true"></a>        <span class="kw">if</span> (node == head) {</span>
+<span id="cb231-73"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-73" aria-hidden="true"></a>            <span class="co">// remove a head</span></span>
+<span id="cb231-74"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-74" aria-hidden="true"></a>            head = node.<span class="fu">next</span>;</span>
+<span id="cb231-75"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-75" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb231-76"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-76" aria-hidden="true"></a>            <span class="co">// remove a non-head</span></span>
+<span id="cb231-77"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-77" aria-hidden="true"></a>            node.<span class="fu">prev</span>.<span class="fu">next</span> = node.<span class="fu">next</span>;</span>
+<span id="cb231-78"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-78" aria-hidden="true"></a>        }</span>
+<span id="cb231-79"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-79" aria-hidden="true"></a></span>
+<span id="cb231-80"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-80" aria-hidden="true"></a>        <span class="kw">if</span> (node == tail) {</span>
+<span id="cb231-81"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-81" aria-hidden="true"></a>            <span class="co">// remove a tail</span></span>
+<span id="cb231-82"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-82" aria-hidden="true"></a>            tail = node.<span class="fu">prev</span>;</span>
+<span id="cb231-83"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-83" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb231-84"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-84" aria-hidden="true"></a>            <span class="co">// remove a non-head</span></span>
+<span id="cb231-85"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-85" aria-hidden="true"></a>            node.<span class="fu">next</span>.<span class="fu">prev</span> = node.<span class="fu">prev</span>;</span>
+<span id="cb231-86"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-86" aria-hidden="true"></a>        }</span>
+<span id="cb231-87"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-87" aria-hidden="true"></a>    }</span>
+<span id="cb231-88"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-88" aria-hidden="true"></a></span>
+<span id="cb231-89"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-89" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">void</span> <span class="fu">setHead</span>(<span class="bu">Node</span> node) {</span>
+<span id="cb231-90"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-90" aria-hidden="true"></a>        node.<span class="fu">next</span> = head;</span>
+<span id="cb231-91"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-91" aria-hidden="true"></a>        node.<span class="fu">prev</span> = <span class="kw">null</span>;</span>
+<span id="cb231-92"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-92" aria-hidden="true"></a></span>
+<span id="cb231-93"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-93" aria-hidden="true"></a>        <span class="kw">if</span> (head != <span class="kw">null</span>) {</span>
+<span id="cb231-94"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-94" aria-hidden="true"></a>            <span class="co">// insert a new head node</span></span>
+<span id="cb231-95"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-95" aria-hidden="true"></a>            head.<span class="fu">prev</span> = node;</span>
+<span id="cb231-96"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-96" aria-hidden="true"></a>        }</span>
+<span id="cb231-97"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-97" aria-hidden="true"></a>        head = node;</span>
+<span id="cb231-98"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-98" aria-hidden="true"></a></span>
+<span id="cb231-99"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-99" aria-hidden="true"></a>        <span class="kw">if</span> (tail == <span class="kw">null</span>) {</span>
+<span id="cb231-100"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-100" aria-hidden="true"></a>            <span class="co">// insert first tail node</span></span>
+<span id="cb231-101"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-101" aria-hidden="true"></a>            tail = head;</span>
+<span id="cb231-102"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-102" aria-hidden="true"></a>        }</span>
+<span id="cb231-103"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-103" aria-hidden="true"></a>    }</span>
+<span id="cb231-104"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-104" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---linkedhashmap" class="section level3" number="12.1.3">
 <h3><span class="header-section-number">12.1.3</span> Solution - LinkedHashMap</h3>
-<div id="walkthrough-157" class="section level4" number="12.1.3.1">
+<div id="walkthrough-158" class="section level4" number="12.1.3.1">
 <h4><span class="header-section-number">12.1.3.1</span> Walkthrough</h4>
 <p>An extended LinkedHashMap is to retrieve elements in the order in which they were last accessed.
 A special constructor is used to create this type of LinkedHashMap:
 new LinkedHashMap(initialCapacity, loadFactor, true) - the true means “accessOrder” instead of the “insertionOrder”.</p>
 </div>
-<div id="analysis-161" class="section level4" number="12.1.3.2">
+<div id="analysis-162" class="section level4" number="12.1.3.2">
 <h4><span class="header-section-number">12.1.3.2</span> Analysis</h4>
 </div>
-<div id="algorithm-166" class="section level4" number="12.1.3.3">
+<div id="algorithm-167" class="section level4" number="12.1.3.3">
 <h4><span class="header-section-number">12.1.3.3</span> Algorithm</h4>
 </div>
 <div id="java-code---linkedhashmap" class="section level4" number="12.1.3.4">
 <h4><span class="header-section-number">12.1.3.4</span> Java Code - LinkedHashMap</h4>
-<div class="sourceCode" id="cb231"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb231-1"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-1" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> LRUCache&lt;K, V&gt; <span class="kw">extends</span> <span class="bu">LinkedHashMap</span>&lt;K, V&gt; {</span>
-<span id="cb231-2"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-2" aria-hidden="true"></a>    <span class="co">// indicate the capacity of cache.</span></span>
-<span id="cb231-3"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-3" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">final</span> <span class="dt">int</span> maxEntries;</span>
-<span id="cb231-4"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-4" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> DEFAULT_INITIAL_CAPACITY = <span class="dv">16</span>;</span>
-<span id="cb231-5"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-5" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">float</span> DEFAULT_LOAD_FACTOR = <span class="fl">0.75f</span>;</span>
-<span id="cb231-6"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-6" aria-hidden="true"></a></span>
-<span id="cb231-7"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-7" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> initialCapacity, <span class="dt">float</span> loadFactor, <span class="dt">int</span> maxEntries) {</span>
-<span id="cb231-8"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-8" aria-hidden="true"></a>        <span class="kw">super</span>(initialCapacity, loadFactor, <span class="kw">true</span>);</span>
-<span id="cb231-9"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-9" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">maxEntries</span> = maxEntries;</span>
-<span id="cb231-10"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-10" aria-hidden="true"></a>    }</span>
-<span id="cb231-11"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-11" aria-hidden="true"></a></span>
-<span id="cb231-12"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-12" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> initialCapacity, <span class="dt">int</span> maxEntries) {</span>
-<span id="cb231-13"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-13" aria-hidden="true"></a>        <span class="kw">this</span>(initialCapacity, DEFAULT_LOAD_FACTOR, maxEntries);</span>
-<span id="cb231-14"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-14" aria-hidden="true"></a>    }</span>
-<span id="cb231-15"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-15" aria-hidden="true"></a></span>
-<span id="cb231-16"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-16" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> maxEntries) {</span>
-<span id="cb231-17"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-17" aria-hidden="true"></a>        <span class="kw">this</span>(DEFAULT_INITIAL_CAPACITY, maxEntries);</span>
-<span id="cb231-18"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-18" aria-hidden="true"></a>    }</span>
-<span id="cb231-19"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-19" aria-hidden="true"></a></span>
-<span id="cb231-20"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-20" aria-hidden="true"></a>    <span class="kw">protected</span> <span class="dt">boolean</span> <span class="fu">removeEldestEntry</span>(<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;K, V&gt; eldest) {</span>
-<span id="cb231-21"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-21" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">size</span>() &gt; maxEntries;</span>
-<span id="cb231-22"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-22" aria-hidden="true"></a>    }</span>
-<span id="cb231-23"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-23" aria-hidden="true"></a></span>
-<span id="cb231-24"><a href="design-a-lru-cache-leetcode-146-medium.html#cb231-24" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb232-1"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-1" aria-hidden="true"></a><span class="kw">public</span> <span class="kw">class</span> LRUCache&lt;K, V&gt; <span class="kw">extends</span> <span class="bu">LinkedHashMap</span>&lt;K, V&gt; {</span>
+<span id="cb232-2"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-2" aria-hidden="true"></a>    <span class="co">// indicate the capacity of cache.</span></span>
+<span id="cb232-3"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-3" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">final</span> <span class="dt">int</span> maxEntries;</span>
+<span id="cb232-4"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-4" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">int</span> DEFAULT_INITIAL_CAPACITY = <span class="dv">16</span>;</span>
+<span id="cb232-5"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-5" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">float</span> DEFAULT_LOAD_FACTOR = <span class="fl">0.75f</span>;</span>
+<span id="cb232-6"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-6" aria-hidden="true"></a></span>
+<span id="cb232-7"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-7" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> initialCapacity, <span class="dt">float</span> loadFactor, <span class="dt">int</span> maxEntries) {</span>
+<span id="cb232-8"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-8" aria-hidden="true"></a>        <span class="kw">super</span>(initialCapacity, loadFactor, <span class="kw">true</span>);</span>
+<span id="cb232-9"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-9" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">maxEntries</span> = maxEntries;</span>
+<span id="cb232-10"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-10" aria-hidden="true"></a>    }</span>
+<span id="cb232-11"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-11" aria-hidden="true"></a></span>
+<span id="cb232-12"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-12" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> initialCapacity, <span class="dt">int</span> maxEntries) {</span>
+<span id="cb232-13"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-13" aria-hidden="true"></a>        <span class="kw">this</span>(initialCapacity, DEFAULT_LOAD_FACTOR, maxEntries);</span>
+<span id="cb232-14"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-14" aria-hidden="true"></a>    }</span>
+<span id="cb232-15"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-15" aria-hidden="true"></a></span>
+<span id="cb232-16"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-16" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">LRUCache</span>(<span class="dt">int</span> maxEntries) {</span>
+<span id="cb232-17"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-17" aria-hidden="true"></a>        <span class="kw">this</span>(DEFAULT_INITIAL_CAPACITY, maxEntries);</span>
+<span id="cb232-18"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-18" aria-hidden="true"></a>    }</span>
+<span id="cb232-19"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-19" aria-hidden="true"></a></span>
+<span id="cb232-20"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-20" aria-hidden="true"></a>    <span class="kw">protected</span> <span class="dt">boolean</span> <span class="fu">removeEldestEntry</span>(<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;K, V&gt; eldest) {</span>
+<span id="cb232-21"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-21" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">size</span>() &gt; maxEntries;</span>
+<span id="cb232-22"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-22" aria-hidden="true"></a>    }</span>
+<span id="cb232-23"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-23" aria-hidden="true"></a></span>
+<span id="cb232-24"><a href="design-a-lru-cache-leetcode-146-medium.html#cb232-24" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

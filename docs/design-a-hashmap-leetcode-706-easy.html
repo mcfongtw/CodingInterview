@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1062,116 +1063,116 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution-92" class="section level3" number="12.5.3">
 <h3><span class="header-section-number">12.5.3</span> Solution</h3>
-<div id="walkthrough-163" class="section level4" number="12.5.3.1">
+<div id="walkthrough-164" class="section level4" number="12.5.3.1">
 <h4><span class="header-section-number">12.5.3.1</span> Walkthrough</h4>
 <p>A HashMap consists of an array of Node where its position is determined by a hash value / hash function. When
 there is a collision, we could chain the collided values together using a LinkedList or a Tree. One thing different
 from HashSet implementation is that we need to update the (key, val) entry if key already exists.</p>
 </div>
-<div id="analysis-166" class="section level4" number="12.5.3.2">
+<div id="analysis-167" class="section level4" number="12.5.3.2">
 <h4><span class="header-section-number">12.5.3.2</span> Analysis</h4>
 <pre><code>*  add() : Best case takes O(1).
 *  get(): Best case takes O(1)
 *  remove(): Best case takes O(1).</code></pre>
 <p>However, In worst case scenario, if it performs all elements on the same chaining list, all methods can be O(n).</p>
 </div>
-<div id="algorithm-172" class="section level4" number="12.5.3.3">
+<div id="algorithm-173" class="section level4" number="12.5.3.3">
 <h4><span class="header-section-number">12.5.3.3</span> Algorithm</h4>
 </div>
 <div id="java-code---linkedlist-for-chaining-1" class="section level4" number="12.5.3.4">
 <h4><span class="header-section-number">12.5.3.4</span> Java Code - LinkedList for Chaining</h4>
-<div class="sourceCode" id="cb239"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb239-1"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-1" aria-hidden="true"></a><span class="kw">class</span> <span class="bu">Node</span> {</span>
-<span id="cb239-2"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-2" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> key;</span>
-<span id="cb239-3"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-3" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> val;</span>
-<span id="cb239-4"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-4" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">Node</span> next;</span>
-<span id="cb239-5"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-5" aria-hidden="true"></a>}</span>
-<span id="cb239-6"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-6" aria-hidden="true"></a></span>
-<span id="cb239-7"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-7" aria-hidden="true"></a><span class="kw">class</span> MyHashMap {</span>
-<span id="cb239-8"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-8" aria-hidden="true"></a></span>
-<span id="cb239-9"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-9" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span>[] list;</span>
-<span id="cb239-10"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-10" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> size;</span>
-<span id="cb239-11"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-11" aria-hidden="true"></a></span>
-<span id="cb239-12"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-12" aria-hidden="true"></a>    <span class="co">/**</span> Initialize your data structure here<span class="co">. */</span></span>
-<span id="cb239-13"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-13" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">MyHashMap</span>() {</span>
-<span id="cb239-14"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-14" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">size</span> = <span class="dv">10000</span>;</span>
-<span id="cb239-15"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-15" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">list</span> = <span class="kw">new</span> <span class="bu">Node</span>[<span class="kw">this</span>.<span class="fu">size</span>];</span>
-<span id="cb239-16"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-16" aria-hidden="true"></a>    }</span>
-<span id="cb239-17"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-17" aria-hidden="true"></a></span>
-<span id="cb239-18"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-18" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">put</span>(<span class="dt">int</span> key, <span class="dt">int</span> val) {</span>
-<span id="cb239-19"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-19" aria-hidden="true"></a>        <span class="bu">Node</span> result = <span class="fu">getNode</span>(key);</span>
-<span id="cb239-20"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-20" aria-hidden="true"></a></span>
-<span id="cb239-21"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-21" aria-hidden="true"></a>        <span class="kw">if</span>(result != <span class="kw">null</span>){</span>
-<span id="cb239-22"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-22" aria-hidden="true"></a>            <span class="co">//if exist, update value</span></span>
-<span id="cb239-23"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-23" aria-hidden="true"></a>            result.<span class="fu">val</span> = val;</span>
-<span id="cb239-24"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-24" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb239-25"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-25" aria-hidden="true"></a>            <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>();</span>
-<span id="cb239-26"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-26" aria-hidden="true"></a>            newNode.<span class="fu">key</span> = key;</span>
-<span id="cb239-27"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-27" aria-hidden="true"></a>            newNode.<span class="fu">val</span> = val;</span>
-<span id="cb239-28"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-28" aria-hidden="true"></a></span>
-<span id="cb239-29"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-29" aria-hidden="true"></a>            <span class="co">//add as head of chaining</span></span>
-<span id="cb239-30"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-30" aria-hidden="true"></a>            <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
-<span id="cb239-31"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-31" aria-hidden="true"></a>            <span class="bu">Node</span> oldHead = list[index];</span>
-<span id="cb239-32"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-32" aria-hidden="true"></a>            newNode.<span class="fu">next</span> = oldHead;</span>
-<span id="cb239-33"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-33" aria-hidden="true"></a></span>
-<span id="cb239-34"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-34" aria-hidden="true"></a>            list[index] = newNode;</span>
-<span id="cb239-35"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-35" aria-hidden="true"></a>        }</span>
-<span id="cb239-36"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-36" aria-hidden="true"></a>    }</span>
-<span id="cb239-37"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-37" aria-hidden="true"></a></span>
-<span id="cb239-38"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-38" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">get</span>(<span class="dt">int</span> key) {</span>
-<span id="cb239-39"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-39" aria-hidden="true"></a>        <span class="bu">Node</span> result = <span class="fu">getNode</span>(key);</span>
-<span id="cb239-40"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-40" aria-hidden="true"></a></span>
-<span id="cb239-41"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-41" aria-hidden="true"></a>        <span class="kw">if</span>(result != <span class="kw">null</span>) {</span>
-<span id="cb239-42"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-42" aria-hidden="true"></a>            <span class="kw">return</span> result.<span class="fu">val</span>;</span>
-<span id="cb239-43"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-43" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb239-44"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-44" aria-hidden="true"></a>            <span class="kw">return</span> -<span class="dv">1</span>;</span>
-<span id="cb239-45"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-45" aria-hidden="true"></a>        }</span>
-<span id="cb239-46"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-46" aria-hidden="true"></a>    }</span>
-<span id="cb239-47"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-47" aria-hidden="true"></a></span>
-<span id="cb239-48"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-48" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">remove</span>(<span class="dt">int</span> key) {</span>
-<span id="cb239-49"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-49" aria-hidden="true"></a>        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
-<span id="cb239-50"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-50" aria-hidden="true"></a></span>
-<span id="cb239-51"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-51" aria-hidden="true"></a>        <span class="kw">if</span>(<span class="fu">exist</span>(key)) {</span>
-<span id="cb239-52"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-52" aria-hidden="true"></a>            <span class="bu">Node</span> head = list[index];</span>
-<span id="cb239-53"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-53" aria-hidden="true"></a></span>
-<span id="cb239-54"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-54" aria-hidden="true"></a>            <span class="kw">if</span>(head.<span class="fu">key</span> == key) {</span>
-<span id="cb239-55"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-55" aria-hidden="true"></a>                <span class="co">// replace head of chaining</span></span>
-<span id="cb239-56"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-56" aria-hidden="true"></a>                list[index] = head.<span class="fu">next</span>;</span>
-<span id="cb239-57"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-57" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
-<span id="cb239-58"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-58" aria-hidden="true"></a>                <span class="co">// replace the middle of chaining</span></span>
-<span id="cb239-59"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-59" aria-hidden="true"></a>                <span class="bu">Node</span> current = head;</span>
-<span id="cb239-60"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-60" aria-hidden="true"></a>                <span class="bu">Node</span> prev = head;</span>
-<span id="cb239-61"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-61" aria-hidden="true"></a></span>
-<span id="cb239-62"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-62" aria-hidden="true"></a>                <span class="kw">while</span>(current != <span class="kw">null</span> &amp;&amp; current.<span class="fu">key</span> != key) {</span>
-<span id="cb239-63"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-63" aria-hidden="true"></a>                    prev = current;</span>
-<span id="cb239-64"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-64" aria-hidden="true"></a>                    current = current.<span class="fu">next</span>;</span>
-<span id="cb239-65"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-65" aria-hidden="true"></a>                }</span>
-<span id="cb239-66"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-66" aria-hidden="true"></a>                prev.<span class="fu">next</span> = current.<span class="fu">next</span>;</span>
-<span id="cb239-67"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-67" aria-hidden="true"></a>            }</span>
-<span id="cb239-68"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-68" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb239-69"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-69" aria-hidden="true"></a>            <span class="co">//skip since not exist</span></span>
-<span id="cb239-70"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-70" aria-hidden="true"></a>        }</span>
-<span id="cb239-71"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-71" aria-hidden="true"></a>    }</span>
-<span id="cb239-72"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-72" aria-hidden="true"></a></span>
-<span id="cb239-73"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-73" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">exist</span>(<span class="dt">int</span> key) {</span>
-<span id="cb239-74"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-74" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">getNode</span>(key) != <span class="kw">null</span>;</span>
-<span id="cb239-75"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-75" aria-hidden="true"></a>    }</span>
-<span id="cb239-76"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-76" aria-hidden="true"></a></span>
-<span id="cb239-77"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-77" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span> <span class="fu">getNode</span>(<span class="dt">int</span> key) {</span>
-<span id="cb239-78"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-78" aria-hidden="true"></a>        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
-<span id="cb239-79"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-79" aria-hidden="true"></a></span>
-<span id="cb239-80"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-80" aria-hidden="true"></a>        <span class="bu">Node</span> current = list[index];</span>
-<span id="cb239-81"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-81" aria-hidden="true"></a></span>
-<span id="cb239-82"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-82" aria-hidden="true"></a>        <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
-<span id="cb239-83"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-83" aria-hidden="true"></a>            <span class="kw">if</span>(current.<span class="fu">key</span> == key) {</span>
-<span id="cb239-84"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-84" aria-hidden="true"></a>                <span class="kw">return</span> current;</span>
-<span id="cb239-85"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-85" aria-hidden="true"></a>            }</span>
-<span id="cb239-86"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-86" aria-hidden="true"></a></span>
-<span id="cb239-87"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-87" aria-hidden="true"></a>            current = current.<span class="fu">next</span>;</span>
-<span id="cb239-88"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-88" aria-hidden="true"></a>        }</span>
-<span id="cb239-89"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-89" aria-hidden="true"></a></span>
-<span id="cb239-90"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-90" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
-<span id="cb239-91"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-91" aria-hidden="true"></a>    }</span>
-<span id="cb239-92"><a href="design-a-hashmap-leetcode-706-easy.html#cb239-92" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb240-1"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-1" aria-hidden="true"></a><span class="kw">class</span> <span class="bu">Node</span> {</span>
+<span id="cb240-2"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-2" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> key;</span>
+<span id="cb240-3"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-3" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> val;</span>
+<span id="cb240-4"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-4" aria-hidden="true"></a>    <span class="kw">public</span> <span class="bu">Node</span> next;</span>
+<span id="cb240-5"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-5" aria-hidden="true"></a>}</span>
+<span id="cb240-6"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-6" aria-hidden="true"></a></span>
+<span id="cb240-7"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-7" aria-hidden="true"></a><span class="kw">class</span> MyHashMap {</span>
+<span id="cb240-8"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-8" aria-hidden="true"></a></span>
+<span id="cb240-9"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-9" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span>[] list;</span>
+<span id="cb240-10"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-10" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">int</span> size;</span>
+<span id="cb240-11"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-11" aria-hidden="true"></a></span>
+<span id="cb240-12"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-12" aria-hidden="true"></a>    <span class="co">/**</span> Initialize your data structure here<span class="co">. */</span></span>
+<span id="cb240-13"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-13" aria-hidden="true"></a>    <span class="kw">public</span> <span class="fu">MyHashMap</span>() {</span>
+<span id="cb240-14"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-14" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">size</span> = <span class="dv">10000</span>;</span>
+<span id="cb240-15"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-15" aria-hidden="true"></a>        <span class="kw">this</span>.<span class="fu">list</span> = <span class="kw">new</span> <span class="bu">Node</span>[<span class="kw">this</span>.<span class="fu">size</span>];</span>
+<span id="cb240-16"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-16" aria-hidden="true"></a>    }</span>
+<span id="cb240-17"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-17" aria-hidden="true"></a></span>
+<span id="cb240-18"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-18" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">put</span>(<span class="dt">int</span> key, <span class="dt">int</span> val) {</span>
+<span id="cb240-19"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-19" aria-hidden="true"></a>        <span class="bu">Node</span> result = <span class="fu">getNode</span>(key);</span>
+<span id="cb240-20"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-20" aria-hidden="true"></a></span>
+<span id="cb240-21"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-21" aria-hidden="true"></a>        <span class="kw">if</span>(result != <span class="kw">null</span>){</span>
+<span id="cb240-22"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-22" aria-hidden="true"></a>            <span class="co">//if exist, update value</span></span>
+<span id="cb240-23"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-23" aria-hidden="true"></a>            result.<span class="fu">val</span> = val;</span>
+<span id="cb240-24"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-24" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb240-25"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-25" aria-hidden="true"></a>            <span class="bu">Node</span> newNode = <span class="kw">new</span> <span class="bu">Node</span>();</span>
+<span id="cb240-26"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-26" aria-hidden="true"></a>            newNode.<span class="fu">key</span> = key;</span>
+<span id="cb240-27"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-27" aria-hidden="true"></a>            newNode.<span class="fu">val</span> = val;</span>
+<span id="cb240-28"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-28" aria-hidden="true"></a></span>
+<span id="cb240-29"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-29" aria-hidden="true"></a>            <span class="co">//add as head of chaining</span></span>
+<span id="cb240-30"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-30" aria-hidden="true"></a>            <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
+<span id="cb240-31"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-31" aria-hidden="true"></a>            <span class="bu">Node</span> oldHead = list[index];</span>
+<span id="cb240-32"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-32" aria-hidden="true"></a>            newNode.<span class="fu">next</span> = oldHead;</span>
+<span id="cb240-33"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-33" aria-hidden="true"></a></span>
+<span id="cb240-34"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-34" aria-hidden="true"></a>            list[index] = newNode;</span>
+<span id="cb240-35"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-35" aria-hidden="true"></a>        }</span>
+<span id="cb240-36"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-36" aria-hidden="true"></a>    }</span>
+<span id="cb240-37"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-37" aria-hidden="true"></a></span>
+<span id="cb240-38"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-38" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">get</span>(<span class="dt">int</span> key) {</span>
+<span id="cb240-39"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-39" aria-hidden="true"></a>        <span class="bu">Node</span> result = <span class="fu">getNode</span>(key);</span>
+<span id="cb240-40"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-40" aria-hidden="true"></a></span>
+<span id="cb240-41"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-41" aria-hidden="true"></a>        <span class="kw">if</span>(result != <span class="kw">null</span>) {</span>
+<span id="cb240-42"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-42" aria-hidden="true"></a>            <span class="kw">return</span> result.<span class="fu">val</span>;</span>
+<span id="cb240-43"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-43" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb240-44"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-44" aria-hidden="true"></a>            <span class="kw">return</span> -<span class="dv">1</span>;</span>
+<span id="cb240-45"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-45" aria-hidden="true"></a>        }</span>
+<span id="cb240-46"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-46" aria-hidden="true"></a>    }</span>
+<span id="cb240-47"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-47" aria-hidden="true"></a></span>
+<span id="cb240-48"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-48" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">remove</span>(<span class="dt">int</span> key) {</span>
+<span id="cb240-49"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-49" aria-hidden="true"></a>        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
+<span id="cb240-50"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-50" aria-hidden="true"></a></span>
+<span id="cb240-51"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-51" aria-hidden="true"></a>        <span class="kw">if</span>(<span class="fu">exist</span>(key)) {</span>
+<span id="cb240-52"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-52" aria-hidden="true"></a>            <span class="bu">Node</span> head = list[index];</span>
+<span id="cb240-53"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-53" aria-hidden="true"></a></span>
+<span id="cb240-54"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-54" aria-hidden="true"></a>            <span class="kw">if</span>(head.<span class="fu">key</span> == key) {</span>
+<span id="cb240-55"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-55" aria-hidden="true"></a>                <span class="co">// replace head of chaining</span></span>
+<span id="cb240-56"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-56" aria-hidden="true"></a>                list[index] = head.<span class="fu">next</span>;</span>
+<span id="cb240-57"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-57" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
+<span id="cb240-58"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-58" aria-hidden="true"></a>                <span class="co">// replace the middle of chaining</span></span>
+<span id="cb240-59"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-59" aria-hidden="true"></a>                <span class="bu">Node</span> current = head;</span>
+<span id="cb240-60"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-60" aria-hidden="true"></a>                <span class="bu">Node</span> prev = head;</span>
+<span id="cb240-61"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-61" aria-hidden="true"></a></span>
+<span id="cb240-62"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-62" aria-hidden="true"></a>                <span class="kw">while</span>(current != <span class="kw">null</span> &amp;&amp; current.<span class="fu">key</span> != key) {</span>
+<span id="cb240-63"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-63" aria-hidden="true"></a>                    prev = current;</span>
+<span id="cb240-64"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-64" aria-hidden="true"></a>                    current = current.<span class="fu">next</span>;</span>
+<span id="cb240-65"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-65" aria-hidden="true"></a>                }</span>
+<span id="cb240-66"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-66" aria-hidden="true"></a>                prev.<span class="fu">next</span> = current.<span class="fu">next</span>;</span>
+<span id="cb240-67"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-67" aria-hidden="true"></a>            }</span>
+<span id="cb240-68"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-68" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb240-69"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-69" aria-hidden="true"></a>            <span class="co">//skip since not exist</span></span>
+<span id="cb240-70"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-70" aria-hidden="true"></a>        }</span>
+<span id="cb240-71"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-71" aria-hidden="true"></a>    }</span>
+<span id="cb240-72"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-72" aria-hidden="true"></a></span>
+<span id="cb240-73"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-73" aria-hidden="true"></a>    <span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">exist</span>(<span class="dt">int</span> key) {</span>
+<span id="cb240-74"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-74" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">getNode</span>(key) != <span class="kw">null</span>;</span>
+<span id="cb240-75"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-75" aria-hidden="true"></a>    }</span>
+<span id="cb240-76"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-76" aria-hidden="true"></a></span>
+<span id="cb240-77"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-77" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Node</span> <span class="fu">getNode</span>(<span class="dt">int</span> key) {</span>
+<span id="cb240-78"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-78" aria-hidden="true"></a>        <span class="dt">int</span> index = key % <span class="kw">this</span>.<span class="fu">size</span>;</span>
+<span id="cb240-79"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-79" aria-hidden="true"></a></span>
+<span id="cb240-80"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-80" aria-hidden="true"></a>        <span class="bu">Node</span> current = list[index];</span>
+<span id="cb240-81"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-81" aria-hidden="true"></a></span>
+<span id="cb240-82"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-82" aria-hidden="true"></a>        <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
+<span id="cb240-83"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-83" aria-hidden="true"></a>            <span class="kw">if</span>(current.<span class="fu">key</span> == key) {</span>
+<span id="cb240-84"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-84" aria-hidden="true"></a>                <span class="kw">return</span> current;</span>
+<span id="cb240-85"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-85" aria-hidden="true"></a>            }</span>
+<span id="cb240-86"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-86" aria-hidden="true"></a></span>
+<span id="cb240-87"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-87" aria-hidden="true"></a>            current = current.<span class="fu">next</span>;</span>
+<span id="cb240-88"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-88" aria-hidden="true"></a>        }</span>
+<span id="cb240-89"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-89" aria-hidden="true"></a></span>
+<span id="cb240-90"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-90" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb240-91"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-91" aria-hidden="true"></a>    }</span>
+<span id="cb240-92"><a href="design-a-hashmap-leetcode-706-easy.html#cb240-92" aria-hidden="true"></a>}</span></code></pre></div>
 
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1049,7 +1050,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">2.2</span> Two Sum II - Input Array Is Sorted / LeetCode 167 / Medium</h2>
 <div id="description-2" class="section level3" number="2.2.1">
 <h3><span class="header-section-number">2.2.1</span> Description</h3>
-<p>Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 &lt;= index1 &lt; index2 &lt;= numbers.length.</p>
+<p>Given a 0-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 0 &lt;= index1 &lt; index2 &lt; numbers.length.</p>
 <p>Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2] of length 2.</p>
 <p>The tests are generated such that there is exactly one solution. You may not use the same element twice.</p>
 <p>Your solution must use only constant extra space.</p>
@@ -1058,13 +1059,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">2.2.2</span> Examples</h3>
 <p>Input: numbers = [2,7,11,15], target = 9
 Output: [1,2]
-Explanation: The sum of 2 and 7 is 9. Therefore, index1 = 1, index2 = 2. We return [1, 2].</p>
+Explanation: The sum of 2 and 7 is 9. Therefore, index1 = 1, index2 = 2. We return [0, 1].</p>
 </div>
-<div id="solution---searching-target-sum-from-sorted-array" class="section level3" number="2.2.3">
-<h3><span class="header-section-number">2.2.3</span> Solution - Searching Target Sum from Sorted Array</h3>
+<div id="solution---searching-target-sum-from-sorted-array-usng-two-pointers" class="section level3" number="2.2.3">
+<h3><span class="header-section-number">2.2.3</span> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</h3>
 <div id="walkthrough-2" class="section level4" number="2.2.3.1">
 <h4><span class="header-section-number">2.2.3.1</span> Walkthrough</h4>
-<p>This solution is valid only on  array. Have two indices pointed to left most and right most position
+<p>This solution is valid only on <strong>sorted</strong> array. Have two indices pointed to left most and right most position
 of array. Start comparing the sum against the target. If sum meets, return the indices; otherwise, move indices
 inward.</p>
 </div>
@@ -1074,8 +1075,8 @@ inward.</p>
 </div>
 <div id="algorithm-2" class="section level4" number="2.2.3.3">
 <h4><span class="header-section-number">2.2.3.3</span> Algorithm</h4>
-<div id="java-code---searching-target-sum-from-sorted-array" class="section level5" number="2.2.3.3.1">
-<h5><span class="header-section-number">2.2.3.3.1</span> Java Code - Searching Target Sum from Sorted Array</h5>
+<div id="java-code-1" class="section level5" number="2.2.3.3.1">
+<h5><span class="header-section-number">2.2.3.3.1</span> Java Code</h5>
 <div class="sourceCode" id="cb7"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb7-1"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span>[] <span class="fu">twoSum</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> target) {</span>
 <span id="cb7-2"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-2" aria-hidden="true"></a>    <span class="dt">int</span> left = <span class="dv">0</span>, right = nums.<span class="fu">length</span> - <span class="dv">1</span>;</span>
 <span id="cb7-3"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-3" aria-hidden="true"></a></span>
@@ -1083,7 +1084,7 @@ inward.</p>
 <span id="cb7-5"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-5" aria-hidden="true"></a>        <span class="dt">int</span> sum = nums[left] + nums[right];</span>
 <span id="cb7-6"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-6" aria-hidden="true"></a></span>
 <span id="cb7-7"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-7" aria-hidden="true"></a>        <span class="kw">if</span>(sum == target) {</span>
-<span id="cb7-8"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-8" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">new</span> <span class="dt">int</span>[]{left+<span class="dv">1</span>, right+<span class="dv">1</span>};</span>
+<span id="cb7-8"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-8" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">new</span> <span class="dt">int</span>[]{left, right};</span>
 <span id="cb7-9"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-9" aria-hidden="true"></a>        }</span>
 <span id="cb7-10"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-10" aria-hidden="true"></a></span>
 <span id="cb7-11"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-11" aria-hidden="true"></a>        <span class="kw">if</span>(target &gt; sum) {</span>
@@ -1097,6 +1098,59 @@ inward.</p>
 <span id="cb7-19"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-19" aria-hidden="true"></a></span>
 <span id="cb7-20"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-20" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">null</span>;</span>
 <span id="cb7-21"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb7-21" aria-hidden="true"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="solution---searching-target-sum-from-sorted-array-usng-binary-search" class="section level3" number="2.2.4">
+<h3><span class="header-section-number">2.2.4</span> Solution - Searching Target Sum from Sorted Array Usng Binary Search</h3>
+<div id="walkthrough-3" class="section level4" number="2.2.4.1">
+<h4><span class="header-section-number">2.2.4.1</span> Walkthrough</h4>
+<p>This solution is valid only on <strong>sorted</strong> array. Start from left most element, and for each elemy ents, search for <span class="math inline">\(target - element\)</span> using binary search.</p>
+</div>
+<div id="analysis-3" class="section level4" number="2.2.4.2">
+<h4><span class="header-section-number">2.2.4.2</span> Analysis</h4>
+<p>Time complexity is O(log(n)) for each binary search and there are n elements. Thus, the total time complexity is <span class="math inline">\(O(n\cdot log(n))\)</span> since every element is visited, and Auxiliary Space is O(1)</p>
+</div>
+<div id="algorithm-3" class="section level4" number="2.2.4.3">
+<h4><span class="header-section-number">2.2.4.3</span> Algorithm</h4>
+<div id="java-code-2" class="section level5" number="2.2.4.3.1">
+<h5><span class="header-section-number">2.2.4.3.1</span> Java Code</h5>
+<div class="sourceCode" id="cb8"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb8-1"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span>[] <span class="fu">twoSum</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> target) {</span>
+<span id="cb8-2"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-2" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span> - <span class="dv">1</span>; i++) {</span>
+<span id="cb8-3"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-3" aria-hidden="true"></a>        <span class="dt">int</span> diff = target - nums[i];</span>
+<span id="cb8-4"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-4" aria-hidden="true"></a>        <span class="dt">int</span> foundIdx = <span class="fu">binarySearch</span>(nums, i+<span class="dv">1</span>, nums.<span class="fu">length</span> - <span class="dv">1</span>,  diff);</span>
+<span id="cb8-5"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-5" aria-hidden="true"></a></span>
+<span id="cb8-6"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-6" aria-hidden="true"></a>        <span class="kw">if</span>(foundIdx &gt; <span class="dv">0</span>)</span>
+<span id="cb8-7"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-7" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">new</span> <span class="dt">int</span>[]{i, foundIdx};</span>
+<span id="cb8-8"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-8" aria-hidden="true"></a>    }</span>
+<span id="cb8-9"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-9" aria-hidden="true"></a></span>
+<span id="cb8-10"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-10" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb8-11"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-11" aria-hidden="true"></a>}</span>
+<span id="cb8-12"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-12" aria-hidden="true"></a></span>
+<span id="cb8-13"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-13" aria-hidden="true"></a></span>
+<span id="cb8-14"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-14" aria-hidden="true"></a><span class="dt">int</span> <span class="fu">binarySearch</span>(<span class="dt">int</span> arr[], <span class="dt">int</span> l, <span class="dt">int</span> r, <span class="dt">int</span> x) {</span>
+<span id="cb8-15"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-15" aria-hidden="true"></a>    <span class="kw">if</span> (r &gt;= l) {</span>
+<span id="cb8-16"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-16" aria-hidden="true"></a>        <span class="dt">int</span> mid = l + (r - l) / <span class="dv">2</span>;</span>
+<span id="cb8-17"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-17" aria-hidden="true"></a></span>
+<span id="cb8-18"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-18" aria-hidden="true"></a>        <span class="co">// If the element is present at the</span></span>
+<span id="cb8-19"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-19" aria-hidden="true"></a>        <span class="co">// middle itself</span></span>
+<span id="cb8-20"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-20" aria-hidden="true"></a>        <span class="kw">if</span> (arr[mid] == x)</span>
+<span id="cb8-21"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-21" aria-hidden="true"></a>            <span class="kw">return</span> mid;</span>
+<span id="cb8-22"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-22" aria-hidden="true"></a></span>
+<span id="cb8-23"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-23" aria-hidden="true"></a>        <span class="co">// If element is smaller than mid, then</span></span>
+<span id="cb8-24"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-24" aria-hidden="true"></a>        <span class="co">// it can only be present in left subarray</span></span>
+<span id="cb8-25"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-25" aria-hidden="true"></a>        <span class="kw">if</span> (arr[mid] &gt; x)</span>
+<span id="cb8-26"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-26" aria-hidden="true"></a>            <span class="kw">return</span> <span class="fu">binarySearch</span>(arr, l, mid - <span class="dv">1</span>, x);</span>
+<span id="cb8-27"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-27" aria-hidden="true"></a></span>
+<span id="cb8-28"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-28" aria-hidden="true"></a>        <span class="co">// Else the element can only be present</span></span>
+<span id="cb8-29"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-29" aria-hidden="true"></a>        <span class="co">// in right subarray</span></span>
+<span id="cb8-30"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-30" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">binarySearch</span>(arr, mid + <span class="dv">1</span>, r, x);</span>
+<span id="cb8-31"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-31" aria-hidden="true"></a>    }</span>
+<span id="cb8-32"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-32" aria-hidden="true"></a></span>
+<span id="cb8-33"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-33" aria-hidden="true"></a>    <span class="co">// We reach here when element is not present</span></span>
+<span id="cb8-34"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-34" aria-hidden="true"></a>    <span class="co">// in array</span></span>
+<span id="cb8-35"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-35" aria-hidden="true"></a>    <span class="kw">return</span> -<span class="dv">1</span>;</span>
+<span id="cb8-36"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#cb8-36" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

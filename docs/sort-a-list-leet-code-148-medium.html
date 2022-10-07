@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1070,7 +1071,7 @@ Figure 8.2: Some caption.
 </div>
 <div id="solution-77" class="section level3" number="8.1.3">
 <h3><span class="header-section-number">8.1.3</span> Solution</h3>
-<div id="walkthrough-130" class="section level4" number="8.1.3.1">
+<div id="walkthrough-131" class="section level4" number="8.1.3.1">
 <h4><span class="header-section-number">8.1.3.1</span> Walkthrough</h4>
 <p>With the idea of Merge sort:</p>
 <ul>
@@ -1079,74 +1080,74 @@ Figure 8.2: Some caption.
 <li>Merge and sort against two sub-lists and return head of the list.</li>
 </ul>
 </div>
-<div id="analysis-132" class="section level4" number="8.1.3.2">
+<div id="analysis-133" class="section level4" number="8.1.3.2">
 <h4><span class="header-section-number">8.1.3.2</span> Analysis</h4>
 <p>In such recursive call to sortList() - O(log(n)) and merge() - O(n), each call creates constant number of temporary
 nodes. For all rounds, it will require <span class="math inline">\(O(1)\)</span> of Auxiliary Space. (Unlike time complexity, storage space in recusive
 scenario can be reused; and thus, will remain <span class="math inline">\(O(1)\)</span> for all rounds)</p>
 </div>
-<div id="algorithm-137" class="section level4" number="8.1.3.3">
+<div id="algorithm-138" class="section level4" number="8.1.3.3">
 <h4><span class="header-section-number">8.1.3.3</span> Algorithm</h4>
 <p>dnc <a href="glossary-of-algorithm.html#dnc">1.2.10</a>, recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a>, ms <a href="glossary-of-algorithm.html#ms">1.2.12</a></p>
 </div>
-<div id="java-code-79" class="section level4" number="8.1.3.4">
+<div id="java-code-81" class="section level4" number="8.1.3.4">
 <h4><span class="header-section-number">8.1.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb197"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb197-1"><a href="sort-a-list-leet-code-148-medium.html#cb197-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">sortList</span>(ListNode head) {</span>
-<span id="cb197-2"><a href="sort-a-list-leet-code-148-medium.html#cb197-2" aria-hidden="true"></a>    <span class="kw">if</span> (head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
-<span id="cb197-3"><a href="sort-a-list-leet-code-148-medium.html#cb197-3" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
-<span id="cb197-4"><a href="sort-a-list-leet-code-148-medium.html#cb197-4" aria-hidden="true"></a>    }</span>
-<span id="cb197-5"><a href="sort-a-list-leet-code-148-medium.html#cb197-5" aria-hidden="true"></a></span>
-<span id="cb197-6"><a href="sort-a-list-leet-code-148-medium.html#cb197-6" aria-hidden="true"></a>    ListNode midPrev = <span class="kw">null</span>, mid = head, tail = head;</span>
-<span id="cb197-7"><a href="sort-a-list-leet-code-148-medium.html#cb197-7" aria-hidden="true"></a></span>
-<span id="cb197-8"><a href="sort-a-list-leet-code-148-medium.html#cb197-8" aria-hidden="true"></a>    <span class="kw">while</span> (tail != <span class="kw">null</span> &amp;&amp; tail.<span class="fu">next</span> != <span class="kw">null</span>) {</span>
-<span id="cb197-9"><a href="sort-a-list-leet-code-148-medium.html#cb197-9" aria-hidden="true"></a>        midPrev = mid;</span>
-<span id="cb197-10"><a href="sort-a-list-leet-code-148-medium.html#cb197-10" aria-hidden="true"></a></span>
-<span id="cb197-11"><a href="sort-a-list-leet-code-148-medium.html#cb197-11" aria-hidden="true"></a>        <span class="co">//mid moves one node at a time</span></span>
-<span id="cb197-12"><a href="sort-a-list-leet-code-148-medium.html#cb197-12" aria-hidden="true"></a>        mid = mid.<span class="fu">next</span>;</span>
-<span id="cb197-13"><a href="sort-a-list-leet-code-148-medium.html#cb197-13" aria-hidden="true"></a></span>
-<span id="cb197-14"><a href="sort-a-list-leet-code-148-medium.html#cb197-14" aria-hidden="true"></a>        <span class="co">//tail moves two node at a time</span></span>
-<span id="cb197-15"><a href="sort-a-list-leet-code-148-medium.html#cb197-15" aria-hidden="true"></a>        tail = tail.<span class="fu">next</span>.<span class="fu">next</span>;</span>
-<span id="cb197-16"><a href="sort-a-list-leet-code-148-medium.html#cb197-16" aria-hidden="true"></a>    }</span>
-<span id="cb197-17"><a href="sort-a-list-leet-code-148-medium.html#cb197-17" aria-hidden="true"></a></span>
-<span id="cb197-18"><a href="sort-a-list-leet-code-148-medium.html#cb197-18" aria-hidden="true"></a>    <span class="co">//Remove the link of middle node which previously links to mid - likely the last node in the 1st</span></span>
-<span id="cb197-19"><a href="sort-a-list-leet-code-148-medium.html#cb197-19" aria-hidden="true"></a>    <span class="co">//half list</span></span>
-<span id="cb197-20"><a href="sort-a-list-leet-code-148-medium.html#cb197-20" aria-hidden="true"></a>    midPrev.<span class="fu">next</span> = <span class="kw">null</span>;</span>
-<span id="cb197-21"><a href="sort-a-list-leet-code-148-medium.html#cb197-21" aria-hidden="true"></a></span>
-<span id="cb197-22"><a href="sort-a-list-leet-code-148-medium.html#cb197-22" aria-hidden="true"></a>    <span class="co">// call sortList() recursively</span></span>
-<span id="cb197-23"><a href="sort-a-list-leet-code-148-medium.html#cb197-23" aria-hidden="true"></a>    ListNode l1 = <span class="fu">sortList</span>(head);</span>
-<span id="cb197-24"><a href="sort-a-list-leet-code-148-medium.html#cb197-24" aria-hidden="true"></a>    ListNode l2 = <span class="fu">sortList</span>(mid);</span>
-<span id="cb197-25"><a href="sort-a-list-leet-code-148-medium.html#cb197-25" aria-hidden="true"></a></span>
-<span id="cb197-26"><a href="sort-a-list-leet-code-148-medium.html#cb197-26" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">merge</span>(l1, l2);</span>
-<span id="cb197-27"><a href="sort-a-list-leet-code-148-medium.html#cb197-27" aria-hidden="true"></a>}</span>
-<span id="cb197-28"><a href="sort-a-list-leet-code-148-medium.html#cb197-28" aria-hidden="true"></a></span>
-<span id="cb197-29"><a href="sort-a-list-leet-code-148-medium.html#cb197-29" aria-hidden="true"></a><span class="co">// merge l1 and l2 in sorted order and return the head of sorted list.</span></span>
-<span id="cb197-30"><a href="sort-a-list-leet-code-148-medium.html#cb197-30" aria-hidden="true"></a><span class="kw">private</span> ListNode <span class="fu">merge</span>(ListNode l1, ListNode l2) {</span>
-<span id="cb197-31"><a href="sort-a-list-leet-code-148-medium.html#cb197-31" aria-hidden="true"></a>    <span class="co">//Two helper nodes, headPrev.next points to the head of merged list</span></span>
-<span id="cb197-32"><a href="sort-a-list-leet-code-148-medium.html#cb197-32" aria-hidden="true"></a>    ListNode current = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), headPrev = current;</span>
-<span id="cb197-33"><a href="sort-a-list-leet-code-148-medium.html#cb197-33" aria-hidden="true"></a></span>
-<span id="cb197-34"><a href="sort-a-list-leet-code-148-medium.html#cb197-34" aria-hidden="true"></a>    <span class="kw">while</span> (l1 != <span class="kw">null</span> &amp;&amp; l2 != <span class="kw">null</span>) {</span>
-<span id="cb197-35"><a href="sort-a-list-leet-code-148-medium.html#cb197-35" aria-hidden="true"></a>        <span class="kw">if</span> (l1.<span class="fu">val</span> &lt; l2.<span class="fu">val</span>) {</span>
-<span id="cb197-36"><a href="sort-a-list-leet-code-148-medium.html#cb197-36" aria-hidden="true"></a>            current.<span class="fu">next</span> = l1;</span>
-<span id="cb197-37"><a href="sort-a-list-leet-code-148-medium.html#cb197-37" aria-hidden="true"></a>            l1 = l1.<span class="fu">next</span>;</span>
-<span id="cb197-38"><a href="sort-a-list-leet-code-148-medium.html#cb197-38" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb197-39"><a href="sort-a-list-leet-code-148-medium.html#cb197-39" aria-hidden="true"></a>            current.<span class="fu">next</span> = l2;</span>
-<span id="cb197-40"><a href="sort-a-list-leet-code-148-medium.html#cb197-40" aria-hidden="true"></a>            l2 = l2.<span class="fu">next</span>;</span>
-<span id="cb197-41"><a href="sort-a-list-leet-code-148-medium.html#cb197-41" aria-hidden="true"></a>        }</span>
-<span id="cb197-42"><a href="sort-a-list-leet-code-148-medium.html#cb197-42" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
-<span id="cb197-43"><a href="sort-a-list-leet-code-148-medium.html#cb197-43" aria-hidden="true"></a>    }</span>
-<span id="cb197-44"><a href="sort-a-list-leet-code-148-medium.html#cb197-44" aria-hidden="true"></a></span>
-<span id="cb197-45"><a href="sort-a-list-leet-code-148-medium.html#cb197-45" aria-hidden="true"></a>    <span class="co">// l2 is empty with l1 remaining</span></span>
-<span id="cb197-46"><a href="sort-a-list-leet-code-148-medium.html#cb197-46" aria-hidden="true"></a>    <span class="kw">if</span> (l1 != <span class="kw">null</span>) {</span>
-<span id="cb197-47"><a href="sort-a-list-leet-code-148-medium.html#cb197-47" aria-hidden="true"></a>        current.<span class="fu">next</span> = l1;</span>
-<span id="cb197-48"><a href="sort-a-list-leet-code-148-medium.html#cb197-48" aria-hidden="true"></a>    }</span>
-<span id="cb197-49"><a href="sort-a-list-leet-code-148-medium.html#cb197-49" aria-hidden="true"></a></span>
-<span id="cb197-50"><a href="sort-a-list-leet-code-148-medium.html#cb197-50" aria-hidden="true"></a>    <span class="co">// l1 is empty with l2 remaining</span></span>
-<span id="cb197-51"><a href="sort-a-list-leet-code-148-medium.html#cb197-51" aria-hidden="true"></a>    <span class="kw">if</span> (l2 != <span class="kw">null</span>) {</span>
-<span id="cb197-52"><a href="sort-a-list-leet-code-148-medium.html#cb197-52" aria-hidden="true"></a>        current.<span class="fu">next</span> = l2;</span>
-<span id="cb197-53"><a href="sort-a-list-leet-code-148-medium.html#cb197-53" aria-hidden="true"></a>    }</span>
-<span id="cb197-54"><a href="sort-a-list-leet-code-148-medium.html#cb197-54" aria-hidden="true"></a></span>
-<span id="cb197-55"><a href="sort-a-list-leet-code-148-medium.html#cb197-55" aria-hidden="true"></a>    <span class="kw">return</span> headPrev.<span class="fu">next</span>;</span>
-<span id="cb197-56"><a href="sort-a-list-leet-code-148-medium.html#cb197-56" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb198"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb198-1"><a href="sort-a-list-leet-code-148-medium.html#cb198-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">sortList</span>(ListNode head) {</span>
+<span id="cb198-2"><a href="sort-a-list-leet-code-148-medium.html#cb198-2" aria-hidden="true"></a>    <span class="kw">if</span> (head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
+<span id="cb198-3"><a href="sort-a-list-leet-code-148-medium.html#cb198-3" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
+<span id="cb198-4"><a href="sort-a-list-leet-code-148-medium.html#cb198-4" aria-hidden="true"></a>    }</span>
+<span id="cb198-5"><a href="sort-a-list-leet-code-148-medium.html#cb198-5" aria-hidden="true"></a></span>
+<span id="cb198-6"><a href="sort-a-list-leet-code-148-medium.html#cb198-6" aria-hidden="true"></a>    ListNode midPrev = <span class="kw">null</span>, mid = head, tail = head;</span>
+<span id="cb198-7"><a href="sort-a-list-leet-code-148-medium.html#cb198-7" aria-hidden="true"></a></span>
+<span id="cb198-8"><a href="sort-a-list-leet-code-148-medium.html#cb198-8" aria-hidden="true"></a>    <span class="kw">while</span> (tail != <span class="kw">null</span> &amp;&amp; tail.<span class="fu">next</span> != <span class="kw">null</span>) {</span>
+<span id="cb198-9"><a href="sort-a-list-leet-code-148-medium.html#cb198-9" aria-hidden="true"></a>        midPrev = mid;</span>
+<span id="cb198-10"><a href="sort-a-list-leet-code-148-medium.html#cb198-10" aria-hidden="true"></a></span>
+<span id="cb198-11"><a href="sort-a-list-leet-code-148-medium.html#cb198-11" aria-hidden="true"></a>        <span class="co">//mid moves one node at a time</span></span>
+<span id="cb198-12"><a href="sort-a-list-leet-code-148-medium.html#cb198-12" aria-hidden="true"></a>        mid = mid.<span class="fu">next</span>;</span>
+<span id="cb198-13"><a href="sort-a-list-leet-code-148-medium.html#cb198-13" aria-hidden="true"></a></span>
+<span id="cb198-14"><a href="sort-a-list-leet-code-148-medium.html#cb198-14" aria-hidden="true"></a>        <span class="co">//tail moves two node at a time</span></span>
+<span id="cb198-15"><a href="sort-a-list-leet-code-148-medium.html#cb198-15" aria-hidden="true"></a>        tail = tail.<span class="fu">next</span>.<span class="fu">next</span>;</span>
+<span id="cb198-16"><a href="sort-a-list-leet-code-148-medium.html#cb198-16" aria-hidden="true"></a>    }</span>
+<span id="cb198-17"><a href="sort-a-list-leet-code-148-medium.html#cb198-17" aria-hidden="true"></a></span>
+<span id="cb198-18"><a href="sort-a-list-leet-code-148-medium.html#cb198-18" aria-hidden="true"></a>    <span class="co">//Remove the link of middle node which previously links to mid - likely the last node in the 1st</span></span>
+<span id="cb198-19"><a href="sort-a-list-leet-code-148-medium.html#cb198-19" aria-hidden="true"></a>    <span class="co">//half list</span></span>
+<span id="cb198-20"><a href="sort-a-list-leet-code-148-medium.html#cb198-20" aria-hidden="true"></a>    midPrev.<span class="fu">next</span> = <span class="kw">null</span>;</span>
+<span id="cb198-21"><a href="sort-a-list-leet-code-148-medium.html#cb198-21" aria-hidden="true"></a></span>
+<span id="cb198-22"><a href="sort-a-list-leet-code-148-medium.html#cb198-22" aria-hidden="true"></a>    <span class="co">// call sortList() recursively</span></span>
+<span id="cb198-23"><a href="sort-a-list-leet-code-148-medium.html#cb198-23" aria-hidden="true"></a>    ListNode l1 = <span class="fu">sortList</span>(head);</span>
+<span id="cb198-24"><a href="sort-a-list-leet-code-148-medium.html#cb198-24" aria-hidden="true"></a>    ListNode l2 = <span class="fu">sortList</span>(mid);</span>
+<span id="cb198-25"><a href="sort-a-list-leet-code-148-medium.html#cb198-25" aria-hidden="true"></a></span>
+<span id="cb198-26"><a href="sort-a-list-leet-code-148-medium.html#cb198-26" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">merge</span>(l1, l2);</span>
+<span id="cb198-27"><a href="sort-a-list-leet-code-148-medium.html#cb198-27" aria-hidden="true"></a>}</span>
+<span id="cb198-28"><a href="sort-a-list-leet-code-148-medium.html#cb198-28" aria-hidden="true"></a></span>
+<span id="cb198-29"><a href="sort-a-list-leet-code-148-medium.html#cb198-29" aria-hidden="true"></a><span class="co">// merge l1 and l2 in sorted order and return the head of sorted list.</span></span>
+<span id="cb198-30"><a href="sort-a-list-leet-code-148-medium.html#cb198-30" aria-hidden="true"></a><span class="kw">private</span> ListNode <span class="fu">merge</span>(ListNode l1, ListNode l2) {</span>
+<span id="cb198-31"><a href="sort-a-list-leet-code-148-medium.html#cb198-31" aria-hidden="true"></a>    <span class="co">//Two helper nodes, headPrev.next points to the head of merged list</span></span>
+<span id="cb198-32"><a href="sort-a-list-leet-code-148-medium.html#cb198-32" aria-hidden="true"></a>    ListNode current = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), headPrev = current;</span>
+<span id="cb198-33"><a href="sort-a-list-leet-code-148-medium.html#cb198-33" aria-hidden="true"></a></span>
+<span id="cb198-34"><a href="sort-a-list-leet-code-148-medium.html#cb198-34" aria-hidden="true"></a>    <span class="kw">while</span> (l1 != <span class="kw">null</span> &amp;&amp; l2 != <span class="kw">null</span>) {</span>
+<span id="cb198-35"><a href="sort-a-list-leet-code-148-medium.html#cb198-35" aria-hidden="true"></a>        <span class="kw">if</span> (l1.<span class="fu">val</span> &lt; l2.<span class="fu">val</span>) {</span>
+<span id="cb198-36"><a href="sort-a-list-leet-code-148-medium.html#cb198-36" aria-hidden="true"></a>            current.<span class="fu">next</span> = l1;</span>
+<span id="cb198-37"><a href="sort-a-list-leet-code-148-medium.html#cb198-37" aria-hidden="true"></a>            l1 = l1.<span class="fu">next</span>;</span>
+<span id="cb198-38"><a href="sort-a-list-leet-code-148-medium.html#cb198-38" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb198-39"><a href="sort-a-list-leet-code-148-medium.html#cb198-39" aria-hidden="true"></a>            current.<span class="fu">next</span> = l2;</span>
+<span id="cb198-40"><a href="sort-a-list-leet-code-148-medium.html#cb198-40" aria-hidden="true"></a>            l2 = l2.<span class="fu">next</span>;</span>
+<span id="cb198-41"><a href="sort-a-list-leet-code-148-medium.html#cb198-41" aria-hidden="true"></a>        }</span>
+<span id="cb198-42"><a href="sort-a-list-leet-code-148-medium.html#cb198-42" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
+<span id="cb198-43"><a href="sort-a-list-leet-code-148-medium.html#cb198-43" aria-hidden="true"></a>    }</span>
+<span id="cb198-44"><a href="sort-a-list-leet-code-148-medium.html#cb198-44" aria-hidden="true"></a></span>
+<span id="cb198-45"><a href="sort-a-list-leet-code-148-medium.html#cb198-45" aria-hidden="true"></a>    <span class="co">// l2 is empty with l1 remaining</span></span>
+<span id="cb198-46"><a href="sort-a-list-leet-code-148-medium.html#cb198-46" aria-hidden="true"></a>    <span class="kw">if</span> (l1 != <span class="kw">null</span>) {</span>
+<span id="cb198-47"><a href="sort-a-list-leet-code-148-medium.html#cb198-47" aria-hidden="true"></a>        current.<span class="fu">next</span> = l1;</span>
+<span id="cb198-48"><a href="sort-a-list-leet-code-148-medium.html#cb198-48" aria-hidden="true"></a>    }</span>
+<span id="cb198-49"><a href="sort-a-list-leet-code-148-medium.html#cb198-49" aria-hidden="true"></a></span>
+<span id="cb198-50"><a href="sort-a-list-leet-code-148-medium.html#cb198-50" aria-hidden="true"></a>    <span class="co">// l1 is empty with l2 remaining</span></span>
+<span id="cb198-51"><a href="sort-a-list-leet-code-148-medium.html#cb198-51" aria-hidden="true"></a>    <span class="kw">if</span> (l2 != <span class="kw">null</span>) {</span>
+<span id="cb198-52"><a href="sort-a-list-leet-code-148-medium.html#cb198-52" aria-hidden="true"></a>        current.<span class="fu">next</span> = l2;</span>
+<span id="cb198-53"><a href="sort-a-list-leet-code-148-medium.html#cb198-53" aria-hidden="true"></a>    }</span>
+<span id="cb198-54"><a href="sort-a-list-leet-code-148-medium.html#cb198-54" aria-hidden="true"></a></span>
+<span id="cb198-55"><a href="sort-a-list-leet-code-148-medium.html#cb198-55" aria-hidden="true"></a>    <span class="kw">return</span> headPrev.<span class="fu">next</span>;</span>
+<span id="cb198-56"><a href="sort-a-list-leet-code-148-medium.html#cb198-56" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1057,43 +1058,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution-23" class="section level3" number="2.27.3">
 <h3><span class="header-section-number">2.27.3</span> Solution</h3>
-<div id="walkthrough-27" class="section level4" number="2.27.3.1">
+<div id="walkthrough-28" class="section level4" number="2.27.3.1">
 <h4><span class="header-section-number">2.27.3.1</span> Walkthrough</h4>
 <p>While traversing the array dp[i], add the current element dp[i] with the previous element dp[i] if and only if
 previous element <span class="math inline">\(dp[i-1] &gt; 0\)</span>. In the meantime, compute the max value out of current element dp[i].</p>
 </div>
-<div id="analysis-27" class="section level4" number="2.27.3.2">
+<div id="analysis-28" class="section level4" number="2.27.3.2">
 <h4><span class="header-section-number">2.27.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every element is visited once.</p>
 </div>
-<div id="algorithm-27" class="section level4" number="2.27.3.3">
+<div id="algorithm-28" class="section level4" number="2.27.3.3">
 <h4><span class="header-section-number">2.27.3.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
 </div>
-<div id="java-code-23" class="section level4" number="2.27.3.4">
+<div id="java-code-25" class="section level4" number="2.27.3.4">
 <h4><span class="header-section-number">2.27.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb36"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb36-1"><a href="maximum-subarray-leet-code-53-easy.html#cb36-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">maxSubArray</span>(<span class="dt">int</span>[] nums) {</span>
-<span id="cb36-2"><a href="maximum-subarray-leet-code-53-easy.html#cb36-2" aria-hidden="true"></a>    <span class="kw">if</span>(nums.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb36-3"><a href="maximum-subarray-leet-code-53-easy.html#cb36-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb36-4"><a href="maximum-subarray-leet-code-53-easy.html#cb36-4" aria-hidden="true"></a>    }</span>
-<span id="cb36-5"><a href="maximum-subarray-leet-code-53-easy.html#cb36-5" aria-hidden="true"></a>    <span class="dt">int</span>[] dp = <span class="kw">new</span> <span class="dt">int</span>[nums.<span class="fu">length</span>];</span>
-<span id="cb36-6"><a href="maximum-subarray-leet-code-53-easy.html#cb36-6" aria-hidden="true"></a>    <span class="dt">int</span> max = <span class="bu">Integer</span>.<span class="fu">MIN_VALUE</span>;</span>
-<span id="cb36-7"><a href="maximum-subarray-leet-code-53-easy.html#cb36-7" aria-hidden="true"></a></span>
-<span id="cb36-8"><a href="maximum-subarray-leet-code-53-easy.html#cb36-8" aria-hidden="true"></a>    <span class="co">//init dp[]</span></span>
-<span id="cb36-9"><a href="maximum-subarray-leet-code-53-easy.html#cb36-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++) {</span>
-<span id="cb36-10"><a href="maximum-subarray-leet-code-53-easy.html#cb36-10" aria-hidden="true"></a>        dp[i] = nums[i];</span>
-<span id="cb36-11"><a href="maximum-subarray-leet-code-53-easy.html#cb36-11" aria-hidden="true"></a>    }</span>
-<span id="cb36-12"><a href="maximum-subarray-leet-code-53-easy.html#cb36-12" aria-hidden="true"></a></span>
-<span id="cb36-13"><a href="maximum-subarray-leet-code-53-easy.html#cb36-13" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++) {</span>
-<span id="cb36-14"><a href="maximum-subarray-leet-code-53-easy.html#cb36-14" aria-hidden="true"></a>        <span class="co">//keep summing up with positive integer until a max is found</span></span>
-<span id="cb36-15"><a href="maximum-subarray-leet-code-53-easy.html#cb36-15" aria-hidden="true"></a>        <span class="kw">if</span>(i &gt; <span class="dv">0</span> &amp;&amp; dp[i-<span class="dv">1</span>] &gt; <span class="dv">0</span>) {</span>
-<span id="cb36-16"><a href="maximum-subarray-leet-code-53-easy.html#cb36-16" aria-hidden="true"></a>            dp[i] += dp[i - <span class="dv">1</span>];</span>
-<span id="cb36-17"><a href="maximum-subarray-leet-code-53-easy.html#cb36-17" aria-hidden="true"></a>        }</span>
-<span id="cb36-18"><a href="maximum-subarray-leet-code-53-easy.html#cb36-18" aria-hidden="true"></a>        max = <span class="bu">Math</span>.<span class="fu">max</span>(dp[i], max);</span>
-<span id="cb36-19"><a href="maximum-subarray-leet-code-53-easy.html#cb36-19" aria-hidden="true"></a>    }</span>
-<span id="cb36-20"><a href="maximum-subarray-leet-code-53-easy.html#cb36-20" aria-hidden="true"></a></span>
-<span id="cb36-21"><a href="maximum-subarray-leet-code-53-easy.html#cb36-21" aria-hidden="true"></a>    <span class="kw">return</span> max;</span>
-<span id="cb36-22"><a href="maximum-subarray-leet-code-53-easy.html#cb36-22" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb37-1"><a href="maximum-subarray-leet-code-53-easy.html#cb37-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">maxSubArray</span>(<span class="dt">int</span>[] nums) {</span>
+<span id="cb37-2"><a href="maximum-subarray-leet-code-53-easy.html#cb37-2" aria-hidden="true"></a>    <span class="kw">if</span>(nums.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb37-3"><a href="maximum-subarray-leet-code-53-easy.html#cb37-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb37-4"><a href="maximum-subarray-leet-code-53-easy.html#cb37-4" aria-hidden="true"></a>    }</span>
+<span id="cb37-5"><a href="maximum-subarray-leet-code-53-easy.html#cb37-5" aria-hidden="true"></a>    <span class="dt">int</span>[] dp = <span class="kw">new</span> <span class="dt">int</span>[nums.<span class="fu">length</span>];</span>
+<span id="cb37-6"><a href="maximum-subarray-leet-code-53-easy.html#cb37-6" aria-hidden="true"></a>    <span class="dt">int</span> max = <span class="bu">Integer</span>.<span class="fu">MIN_VALUE</span>;</span>
+<span id="cb37-7"><a href="maximum-subarray-leet-code-53-easy.html#cb37-7" aria-hidden="true"></a></span>
+<span id="cb37-8"><a href="maximum-subarray-leet-code-53-easy.html#cb37-8" aria-hidden="true"></a>    <span class="co">//init dp[]</span></span>
+<span id="cb37-9"><a href="maximum-subarray-leet-code-53-easy.html#cb37-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++) {</span>
+<span id="cb37-10"><a href="maximum-subarray-leet-code-53-easy.html#cb37-10" aria-hidden="true"></a>        dp[i] = nums[i];</span>
+<span id="cb37-11"><a href="maximum-subarray-leet-code-53-easy.html#cb37-11" aria-hidden="true"></a>    }</span>
+<span id="cb37-12"><a href="maximum-subarray-leet-code-53-easy.html#cb37-12" aria-hidden="true"></a></span>
+<span id="cb37-13"><a href="maximum-subarray-leet-code-53-easy.html#cb37-13" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++) {</span>
+<span id="cb37-14"><a href="maximum-subarray-leet-code-53-easy.html#cb37-14" aria-hidden="true"></a>        <span class="co">//keep summing up with positive integer until a max is found</span></span>
+<span id="cb37-15"><a href="maximum-subarray-leet-code-53-easy.html#cb37-15" aria-hidden="true"></a>        <span class="kw">if</span>(i &gt; <span class="dv">0</span> &amp;&amp; dp[i-<span class="dv">1</span>] &gt; <span class="dv">0</span>) {</span>
+<span id="cb37-16"><a href="maximum-subarray-leet-code-53-easy.html#cb37-16" aria-hidden="true"></a>            dp[i] += dp[i - <span class="dv">1</span>];</span>
+<span id="cb37-17"><a href="maximum-subarray-leet-code-53-easy.html#cb37-17" aria-hidden="true"></a>        }</span>
+<span id="cb37-18"><a href="maximum-subarray-leet-code-53-easy.html#cb37-18" aria-hidden="true"></a>        max = <span class="bu">Math</span>.<span class="fu">max</span>(dp[i], max);</span>
+<span id="cb37-19"><a href="maximum-subarray-leet-code-53-easy.html#cb37-19" aria-hidden="true"></a>    }</span>
+<span id="cb37-20"><a href="maximum-subarray-leet-code-53-easy.html#cb37-20" aria-hidden="true"></a></span>
+<span id="cb37-21"><a href="maximum-subarray-leet-code-53-easy.html#cb37-21" aria-hidden="true"></a>    <span class="kw">return</span> max;</span>
+<span id="cb37-22"><a href="maximum-subarray-leet-code-53-easy.html#cb37-22" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

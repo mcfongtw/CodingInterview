@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1055,7 +1056,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution-79" class="section level3" number="8.3.3">
 <h3><span class="header-section-number">8.3.3</span> Solution</h3>
-<div id="walkthrough-132" class="section level4" number="8.3.3.1">
+<div id="walkthrough-133" class="section level4" number="8.3.3.1">
 <h4><span class="header-section-number">8.3.3.1</span> Walkthrough</h4>
 <p>Have two nested loops, outer loop move one by one indicating the boundary of unsorted subarray [i…j-1] vs [j … n (or n-1)],
 where the inner loop is to find the minimum element in unsorted array j = [i+1, … ,n-1]. Swap the found minimum
@@ -1063,39 +1064,39 @@ element with the current element i.</p>
 <pre><code>[[(1), 5, 6], 2, ...], min_idx = (0)
 [[1, 2, 5, 6], ...]</code></pre>
 </div>
-<div id="analysis-134" class="section level4" number="8.3.3.2">
+<div id="analysis-135" class="section level4" number="8.3.3.2">
 <h4><span class="header-section-number">8.3.3.2</span> Analysis</h4>
 <p>There are two loops, thus time complexity is <span class="math inline">\(O(n^2)\)</span></p>
 </div>
-<div id="algorithm-139" class="section level4" number="8.3.3.3">
+<div id="algorithm-140" class="section level4" number="8.3.3.3">
 <h4><span class="header-section-number">8.3.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-81" class="section level4" number="8.3.3.4">
+<div id="java-code-83" class="section level4" number="8.3.3.4">
 <h4><span class="header-section-number">8.3.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb200"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb200-1"><a href="selection-sort-array-firecode-level-2.html#cb200-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span>[] <span class="fu">selectionSortArray</span>(<span class="dt">int</span>[] arr){</span>
-<span id="cb200-2"><a href="selection-sort-array-firecode-level-2.html#cb200-2" aria-hidden="true"></a>    <span class="dt">int</span> n = arr.<span class="fu">length</span>;</span>
-<span id="cb200-3"><a href="selection-sort-array-firecode-level-2.html#cb200-3" aria-hidden="true"></a></span>
-<span id="cb200-4"><a href="selection-sort-array-firecode-level-2.html#cb200-4" aria-hidden="true"></a>    <span class="co">// One by one move boundary of unsorted subarray [i...j-1] vs [j ... n]</span></span>
-<span id="cb200-5"><a href="selection-sort-array-firecode-level-2.html#cb200-5" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++)</span>
-<span id="cb200-6"><a href="selection-sort-array-firecode-level-2.html#cb200-6" aria-hidden="true"></a>    {</span>
-<span id="cb200-7"><a href="selection-sort-array-firecode-level-2.html#cb200-7" aria-hidden="true"></a>        <span class="co">// Find the minimum element in unsorted array j = [i+1, ... ,n-1]</span></span>
-<span id="cb200-8"><a href="selection-sort-array-firecode-level-2.html#cb200-8" aria-hidden="true"></a>        <span class="dt">int</span> min_idx = i;</span>
-<span id="cb200-9"><a href="selection-sort-array-firecode-level-2.html#cb200-9" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> j = i+<span class="dv">1</span>; j &lt; n; j++) {</span>
-<span id="cb200-10"><a href="selection-sort-array-firecode-level-2.html#cb200-10" aria-hidden="true"></a>            <span class="kw">if</span> (arr[j] &lt; arr[min_idx]) {</span>
-<span id="cb200-11"><a href="selection-sort-array-firecode-level-2.html#cb200-11" aria-hidden="true"></a>                min_idx = j;</span>
-<span id="cb200-12"><a href="selection-sort-array-firecode-level-2.html#cb200-12" aria-hidden="true"></a>            }</span>
-<span id="cb200-13"><a href="selection-sort-array-firecode-level-2.html#cb200-13" aria-hidden="true"></a>        }</span>
-<span id="cb200-14"><a href="selection-sort-array-firecode-level-2.html#cb200-14" aria-hidden="true"></a></span>
-<span id="cb200-15"><a href="selection-sort-array-firecode-level-2.html#cb200-15" aria-hidden="true"></a>        <span class="co">// Swap the found minimum element with the current element</span></span>
-<span id="cb200-16"><a href="selection-sort-array-firecode-level-2.html#cb200-16" aria-hidden="true"></a>        <span class="dt">int</span> temp = arr[min_idx];</span>
-<span id="cb200-17"><a href="selection-sort-array-firecode-level-2.html#cb200-17" aria-hidden="true"></a>        arr[min_idx] = arr[i];</span>
-<span id="cb200-18"><a href="selection-sort-array-firecode-level-2.html#cb200-18" aria-hidden="true"></a>        arr[i] = temp;</span>
-<span id="cb200-19"><a href="selection-sort-array-firecode-level-2.html#cb200-19" aria-hidden="true"></a>    }</span>
-<span id="cb200-20"><a href="selection-sort-array-firecode-level-2.html#cb200-20" aria-hidden="true"></a></span>
-<span id="cb200-21"><a href="selection-sort-array-firecode-level-2.html#cb200-21" aria-hidden="true"></a></span>
-<span id="cb200-22"><a href="selection-sort-array-firecode-level-2.html#cb200-22" aria-hidden="true"></a></span>
-<span id="cb200-23"><a href="selection-sort-array-firecode-level-2.html#cb200-23" aria-hidden="true"></a>    <span class="kw">return</span> arr;</span>
-<span id="cb200-24"><a href="selection-sort-array-firecode-level-2.html#cb200-24" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb201"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb201-1"><a href="selection-sort-array-firecode-level-2.html#cb201-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span>[] <span class="fu">selectionSortArray</span>(<span class="dt">int</span>[] arr){</span>
+<span id="cb201-2"><a href="selection-sort-array-firecode-level-2.html#cb201-2" aria-hidden="true"></a>    <span class="dt">int</span> n = arr.<span class="fu">length</span>;</span>
+<span id="cb201-3"><a href="selection-sort-array-firecode-level-2.html#cb201-3" aria-hidden="true"></a></span>
+<span id="cb201-4"><a href="selection-sort-array-firecode-level-2.html#cb201-4" aria-hidden="true"></a>    <span class="co">// One by one move boundary of unsorted subarray [i...j-1] vs [j ... n]</span></span>
+<span id="cb201-5"><a href="selection-sort-array-firecode-level-2.html#cb201-5" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++)</span>
+<span id="cb201-6"><a href="selection-sort-array-firecode-level-2.html#cb201-6" aria-hidden="true"></a>    {</span>
+<span id="cb201-7"><a href="selection-sort-array-firecode-level-2.html#cb201-7" aria-hidden="true"></a>        <span class="co">// Find the minimum element in unsorted array j = [i+1, ... ,n-1]</span></span>
+<span id="cb201-8"><a href="selection-sort-array-firecode-level-2.html#cb201-8" aria-hidden="true"></a>        <span class="dt">int</span> min_idx = i;</span>
+<span id="cb201-9"><a href="selection-sort-array-firecode-level-2.html#cb201-9" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> j = i+<span class="dv">1</span>; j &lt; n; j++) {</span>
+<span id="cb201-10"><a href="selection-sort-array-firecode-level-2.html#cb201-10" aria-hidden="true"></a>            <span class="kw">if</span> (arr[j] &lt; arr[min_idx]) {</span>
+<span id="cb201-11"><a href="selection-sort-array-firecode-level-2.html#cb201-11" aria-hidden="true"></a>                min_idx = j;</span>
+<span id="cb201-12"><a href="selection-sort-array-firecode-level-2.html#cb201-12" aria-hidden="true"></a>            }</span>
+<span id="cb201-13"><a href="selection-sort-array-firecode-level-2.html#cb201-13" aria-hidden="true"></a>        }</span>
+<span id="cb201-14"><a href="selection-sort-array-firecode-level-2.html#cb201-14" aria-hidden="true"></a></span>
+<span id="cb201-15"><a href="selection-sort-array-firecode-level-2.html#cb201-15" aria-hidden="true"></a>        <span class="co">// Swap the found minimum element with the current element</span></span>
+<span id="cb201-16"><a href="selection-sort-array-firecode-level-2.html#cb201-16" aria-hidden="true"></a>        <span class="dt">int</span> temp = arr[min_idx];</span>
+<span id="cb201-17"><a href="selection-sort-array-firecode-level-2.html#cb201-17" aria-hidden="true"></a>        arr[min_idx] = arr[i];</span>
+<span id="cb201-18"><a href="selection-sort-array-firecode-level-2.html#cb201-18" aria-hidden="true"></a>        arr[i] = temp;</span>
+<span id="cb201-19"><a href="selection-sort-array-firecode-level-2.html#cb201-19" aria-hidden="true"></a>    }</span>
+<span id="cb201-20"><a href="selection-sort-array-firecode-level-2.html#cb201-20" aria-hidden="true"></a></span>
+<span id="cb201-21"><a href="selection-sort-array-firecode-level-2.html#cb201-21" aria-hidden="true"></a></span>
+<span id="cb201-22"><a href="selection-sort-array-firecode-level-2.html#cb201-22" aria-hidden="true"></a></span>
+<span id="cb201-23"><a href="selection-sort-array-firecode-level-2.html#cb201-23" aria-hidden="true"></a>    <span class="kw">return</span> arr;</span>
+<span id="cb201-24"><a href="selection-sort-array-firecode-level-2.html#cb201-24" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

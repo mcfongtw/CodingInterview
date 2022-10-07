@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1062,60 +1063,60 @@ A solution set is:
 </div>
 <div id="solution-4" class="section level3" number="2.6.3">
 <h3><span class="header-section-number">2.6.3</span> Solution</h3>
-<div id="walkthrough-6" class="section level4" number="2.6.3.1">
+<div id="walkthrough-7" class="section level4" number="2.6.3.1">
 <h4><span class="header-section-number">2.6.3.1</span> Walkthrough</h4>
 <p>Looping the array with index i, while searching for the other two elements from both ends, with indices
 left incrementally and right decrmentally, find the sum = nums[i] + nums[left] + nums[right] == 0. Since the array is
 sorted, we need to avoid duplicated entry by moving forward the index while searching.</p>
 </div>
-<div id="analysis-6" class="section level4" number="2.6.3.2">
+<div id="analysis-7" class="section level4" number="2.6.3.2">
 <h4><span class="header-section-number">2.6.3.2</span> Analysis</h4>
 <p>There are two nested loops, the time complexity is <span class="math inline">\(O(n^2)\)</span>, and Auxiliary Space is is <span class="math inline">\(O(n^2)\)</span> since one member of any
 triplet is uniquely determined by the other two members. If the numbers are not distinct, the Auxiliary Space as large as
 <span class="math inline">\(O(\binom{n}{3}) = O(\frac{n!}{3!\cdot (n-3)!}) = O(\frac{n\cdot (n-1)\cdot(n-2)}{3}) = O(n^3)\)</span></p>
 </div>
-<div id="algorithm-6" class="section level4" number="2.6.3.3">
+<div id="algorithm-7" class="section level4" number="2.6.3.3">
 <h4><span class="header-section-number">2.6.3.3</span> Algorithm</h4>
-<div id="java-code-4" class="section level5" number="2.6.3.3.1">
+<div id="java-code-6" class="section level5" number="2.6.3.3.1">
 <h5><span class="header-section-number">2.6.3.3.1</span> Java Code</h5>
-<div class="sourceCode" id="cb11"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb11-1"><a href="sum-leet-code-15-medium.html#cb11-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">threeSum</span>(<span class="dt">int</span>[] num) {</span>
-<span id="cb11-2"><a href="sum-leet-code-15-medium.html#cb11-2" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">sort</span>(num); <span class="co">//sort</span></span>
-<span id="cb11-3"><a href="sum-leet-code-15-medium.html#cb11-3" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb11-4"><a href="sum-leet-code-15-medium.html#cb11-4" aria-hidden="true"></a></span>
-<span id="cb11-5"><a href="sum-leet-code-15-medium.html#cb11-5" aria-hidden="true"></a>    <span class="co">//last possible pair is [i=len - 3, left=len - 2, right=len - 1]</span></span>
-<span id="cb11-6"><a href="sum-leet-code-15-medium.html#cb11-6" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; num.<span class="fu">length</span> - <span class="dv">2</span>; i++) {</span>
-<span id="cb11-7"><a href="sum-leet-code-15-medium.html#cb11-7" aria-hidden="true"></a>        <span class="co">// Since the array is sorted, we need to avoid duplicated entry by moving forward the index</span></span>
-<span id="cb11-8"><a href="sum-leet-code-15-medium.html#cb11-8" aria-hidden="true"></a>        <span class="kw">if</span> (i == <span class="dv">0</span> || (i &gt; <span class="dv">0</span> &amp;&amp; num[i] != num[i-<span class="dv">1</span>])) {</span>
-<span id="cb11-9"><a href="sum-leet-code-15-medium.html#cb11-9" aria-hidden="true"></a>            <span class="dt">int</span> left = i + <span class="dv">1</span>, right = num.<span class="fu">length</span>-<span class="dv">1</span>;</span>
-<span id="cb11-10"><a href="sum-leet-code-15-medium.html#cb11-10" aria-hidden="true"></a></span>
-<span id="cb11-11"><a href="sum-leet-code-15-medium.html#cb11-11" aria-hidden="true"></a>            <span class="kw">while</span> (left &lt; right) {</span>
-<span id="cb11-12"><a href="sum-leet-code-15-medium.html#cb11-12" aria-hidden="true"></a>                <span class="dt">int</span> sum = num[i] + num[left] + num[right];</span>
-<span id="cb11-13"><a href="sum-leet-code-15-medium.html#cb11-13" aria-hidden="true"></a></span>
-<span id="cb11-14"><a href="sum-leet-code-15-medium.html#cb11-14" aria-hidden="true"></a>                <span class="kw">if</span> (sum == <span class="dv">0</span>) {</span>
-<span id="cb11-15"><a href="sum-leet-code-15-medium.html#cb11-15" aria-hidden="true"></a>                    result.<span class="fu">add</span>(<span class="bu">Arrays</span>.<span class="fu">asList</span>(num[i], num[left], num[right]));</span>
-<span id="cb11-16"><a href="sum-leet-code-15-medium.html#cb11-16" aria-hidden="true"></a></span>
-<span id="cb11-17"><a href="sum-leet-code-15-medium.html#cb11-17" aria-hidden="true"></a>                    <span class="co">//avoid duplicated entry by moving forward the index</span></span>
-<span id="cb11-18"><a href="sum-leet-code-15-medium.html#cb11-18" aria-hidden="true"></a>                    <span class="kw">while</span> (left &lt; right &amp;&amp; num[left] == num[left + <span class="dv">1</span>]) {</span>
-<span id="cb11-19"><a href="sum-leet-code-15-medium.html#cb11-19" aria-hidden="true"></a>                        left++;</span>
-<span id="cb11-20"><a href="sum-leet-code-15-medium.html#cb11-20" aria-hidden="true"></a>                    }</span>
-<span id="cb11-21"><a href="sum-leet-code-15-medium.html#cb11-21" aria-hidden="true"></a>                    <span class="kw">while</span> (left &lt; right &amp;&amp; num[right] == num[right - <span class="dv">1</span>]) {</span>
-<span id="cb11-22"><a href="sum-leet-code-15-medium.html#cb11-22" aria-hidden="true"></a>                        right--;</span>
-<span id="cb11-23"><a href="sum-leet-code-15-medium.html#cb11-23" aria-hidden="true"></a>                    }</span>
-<span id="cb11-24"><a href="sum-leet-code-15-medium.html#cb11-24" aria-hidden="true"></a></span>
-<span id="cb11-25"><a href="sum-leet-code-15-medium.html#cb11-25" aria-hidden="true"></a>                    left++;</span>
-<span id="cb11-26"><a href="sum-leet-code-15-medium.html#cb11-26" aria-hidden="true"></a>                    right--;</span>
-<span id="cb11-27"><a href="sum-leet-code-15-medium.html#cb11-27" aria-hidden="true"></a>                } <span class="kw">else</span> <span class="kw">if</span> (sum &lt; <span class="dv">0</span>) {</span>
-<span id="cb11-28"><a href="sum-leet-code-15-medium.html#cb11-28" aria-hidden="true"></a>                    left++;</span>
-<span id="cb11-29"><a href="sum-leet-code-15-medium.html#cb11-29" aria-hidden="true"></a>                } <span class="kw">else</span> {</span>
-<span id="cb11-30"><a href="sum-leet-code-15-medium.html#cb11-30" aria-hidden="true"></a>                    <span class="co">// sum &gt; 0</span></span>
-<span id="cb11-31"><a href="sum-leet-code-15-medium.html#cb11-31" aria-hidden="true"></a>                    right--;</span>
-<span id="cb11-32"><a href="sum-leet-code-15-medium.html#cb11-32" aria-hidden="true"></a>                }</span>
-<span id="cb11-33"><a href="sum-leet-code-15-medium.html#cb11-33" aria-hidden="true"></a>            }</span>
-<span id="cb11-34"><a href="sum-leet-code-15-medium.html#cb11-34" aria-hidden="true"></a>        }</span>
-<span id="cb11-35"><a href="sum-leet-code-15-medium.html#cb11-35" aria-hidden="true"></a>    }</span>
-<span id="cb11-36"><a href="sum-leet-code-15-medium.html#cb11-36" aria-hidden="true"></a></span>
-<span id="cb11-37"><a href="sum-leet-code-15-medium.html#cb11-37" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb11-38"><a href="sum-leet-code-15-medium.html#cb11-38" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb12-1"><a href="sum-leet-code-15-medium.html#cb12-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; <span class="fu">threeSum</span>(<span class="dt">int</span>[] num) {</span>
+<span id="cb12-2"><a href="sum-leet-code-15-medium.html#cb12-2" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">sort</span>(num); <span class="co">//sort</span></span>
+<span id="cb12-3"><a href="sum-leet-code-15-medium.html#cb12-3" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb12-4"><a href="sum-leet-code-15-medium.html#cb12-4" aria-hidden="true"></a></span>
+<span id="cb12-5"><a href="sum-leet-code-15-medium.html#cb12-5" aria-hidden="true"></a>    <span class="co">//last possible pair is [i=len - 3, left=len - 2, right=len - 1]</span></span>
+<span id="cb12-6"><a href="sum-leet-code-15-medium.html#cb12-6" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; num.<span class="fu">length</span> - <span class="dv">2</span>; i++) {</span>
+<span id="cb12-7"><a href="sum-leet-code-15-medium.html#cb12-7" aria-hidden="true"></a>        <span class="co">// Since the array is sorted, we need to avoid duplicated entry by moving forward the index</span></span>
+<span id="cb12-8"><a href="sum-leet-code-15-medium.html#cb12-8" aria-hidden="true"></a>        <span class="kw">if</span> (i == <span class="dv">0</span> || (i &gt; <span class="dv">0</span> &amp;&amp; num[i] != num[i-<span class="dv">1</span>])) {</span>
+<span id="cb12-9"><a href="sum-leet-code-15-medium.html#cb12-9" aria-hidden="true"></a>            <span class="dt">int</span> left = i + <span class="dv">1</span>, right = num.<span class="fu">length</span>-<span class="dv">1</span>;</span>
+<span id="cb12-10"><a href="sum-leet-code-15-medium.html#cb12-10" aria-hidden="true"></a></span>
+<span id="cb12-11"><a href="sum-leet-code-15-medium.html#cb12-11" aria-hidden="true"></a>            <span class="kw">while</span> (left &lt; right) {</span>
+<span id="cb12-12"><a href="sum-leet-code-15-medium.html#cb12-12" aria-hidden="true"></a>                <span class="dt">int</span> sum = num[i] + num[left] + num[right];</span>
+<span id="cb12-13"><a href="sum-leet-code-15-medium.html#cb12-13" aria-hidden="true"></a></span>
+<span id="cb12-14"><a href="sum-leet-code-15-medium.html#cb12-14" aria-hidden="true"></a>                <span class="kw">if</span> (sum == <span class="dv">0</span>) {</span>
+<span id="cb12-15"><a href="sum-leet-code-15-medium.html#cb12-15" aria-hidden="true"></a>                    result.<span class="fu">add</span>(<span class="bu">Arrays</span>.<span class="fu">asList</span>(num[i], num[left], num[right]));</span>
+<span id="cb12-16"><a href="sum-leet-code-15-medium.html#cb12-16" aria-hidden="true"></a></span>
+<span id="cb12-17"><a href="sum-leet-code-15-medium.html#cb12-17" aria-hidden="true"></a>                    <span class="co">//avoid duplicated entry by moving forward the index</span></span>
+<span id="cb12-18"><a href="sum-leet-code-15-medium.html#cb12-18" aria-hidden="true"></a>                    <span class="kw">while</span> (left &lt; right &amp;&amp; num[left] == num[left + <span class="dv">1</span>]) {</span>
+<span id="cb12-19"><a href="sum-leet-code-15-medium.html#cb12-19" aria-hidden="true"></a>                        left++;</span>
+<span id="cb12-20"><a href="sum-leet-code-15-medium.html#cb12-20" aria-hidden="true"></a>                    }</span>
+<span id="cb12-21"><a href="sum-leet-code-15-medium.html#cb12-21" aria-hidden="true"></a>                    <span class="kw">while</span> (left &lt; right &amp;&amp; num[right] == num[right - <span class="dv">1</span>]) {</span>
+<span id="cb12-22"><a href="sum-leet-code-15-medium.html#cb12-22" aria-hidden="true"></a>                        right--;</span>
+<span id="cb12-23"><a href="sum-leet-code-15-medium.html#cb12-23" aria-hidden="true"></a>                    }</span>
+<span id="cb12-24"><a href="sum-leet-code-15-medium.html#cb12-24" aria-hidden="true"></a></span>
+<span id="cb12-25"><a href="sum-leet-code-15-medium.html#cb12-25" aria-hidden="true"></a>                    left++;</span>
+<span id="cb12-26"><a href="sum-leet-code-15-medium.html#cb12-26" aria-hidden="true"></a>                    right--;</span>
+<span id="cb12-27"><a href="sum-leet-code-15-medium.html#cb12-27" aria-hidden="true"></a>                } <span class="kw">else</span> <span class="kw">if</span> (sum &lt; <span class="dv">0</span>) {</span>
+<span id="cb12-28"><a href="sum-leet-code-15-medium.html#cb12-28" aria-hidden="true"></a>                    left++;</span>
+<span id="cb12-29"><a href="sum-leet-code-15-medium.html#cb12-29" aria-hidden="true"></a>                } <span class="kw">else</span> {</span>
+<span id="cb12-30"><a href="sum-leet-code-15-medium.html#cb12-30" aria-hidden="true"></a>                    <span class="co">// sum &gt; 0</span></span>
+<span id="cb12-31"><a href="sum-leet-code-15-medium.html#cb12-31" aria-hidden="true"></a>                    right--;</span>
+<span id="cb12-32"><a href="sum-leet-code-15-medium.html#cb12-32" aria-hidden="true"></a>                }</span>
+<span id="cb12-33"><a href="sum-leet-code-15-medium.html#cb12-33" aria-hidden="true"></a>            }</span>
+<span id="cb12-34"><a href="sum-leet-code-15-medium.html#cb12-34" aria-hidden="true"></a>        }</span>
+<span id="cb12-35"><a href="sum-leet-code-15-medium.html#cb12-35" aria-hidden="true"></a>    }</span>
+<span id="cb12-36"><a href="sum-leet-code-15-medium.html#cb12-36" aria-hidden="true"></a></span>
+<span id="cb12-37"><a href="sum-leet-code-15-medium.html#cb12-37" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb12-38"><a href="sum-leet-code-15-medium.html#cb12-38" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

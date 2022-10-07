@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1053,14 +1054,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 of all numbers along its path. You can only move either down or right at any point in time.
 ### Example
 Input:</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb75-1"><a href="minimum-path-sum-leetcode-64-medium.html#cb75-1" aria-hidden="true"></a>[<span class="dv">1</span>],[<span class="dv">3</span>],[<span class="dv">1</span>],</span>
-<span id="cb75-2"><a href="minimum-path-sum-leetcode-64-medium.html#cb75-2" aria-hidden="true"></a> <span class="dv">1</span>,  <span class="dv">5</span>, [<span class="dv">1</span>],</span>
-<span id="cb75-3"><a href="minimum-path-sum-leetcode-64-medium.html#cb75-3" aria-hidden="true"></a> <span class="dv">4</span>,  <span class="dv">2</span>, [<span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb76-1"><a href="minimum-path-sum-leetcode-64-medium.html#cb76-1" aria-hidden="true"></a>[<span class="dv">1</span>],[<span class="dv">3</span>],[<span class="dv">1</span>],</span>
+<span id="cb76-2"><a href="minimum-path-sum-leetcode-64-medium.html#cb76-2" aria-hidden="true"></a> <span class="dv">1</span>,  <span class="dv">5</span>, [<span class="dv">1</span>],</span>
+<span id="cb76-3"><a href="minimum-path-sum-leetcode-64-medium.html#cb76-3" aria-hidden="true"></a> <span class="dv">4</span>,  <span class="dv">2</span>, [<span class="dv">1</span>]</span></code></pre></div>
 <p>Output: 7, because the path <span class="math inline">\(1 -&gt; 3 -&gt; 1 -&gt; 1 -&gt; 1\)</span> minimizes the sum.</p>
 </div>
 <div id="solution---recursive" class="section level3" number="3.6.2">
 <h3><span class="header-section-number">3.6.2</span> Solution - Recursive</h3>
-<div id="walkthrough-47" class="section level4" number="3.6.2.1">
+<div id="walkthrough-48" class="section level4" number="3.6.2.1">
 <h4><span class="header-section-number">3.6.2.1</span> Walkthrough</h4>
 <p>Time Complexity is exponential.</p>
 <div class="figure"><span id="fig:unnamed-chunk-5"></span>
@@ -1071,102 +1072,102 @@ Figure 3.1: Some caption.
 </div>
 <p>See the above recursion tree, there are many nodes which apear more than once.
 Final cost matrix:</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb76-1"><a href="minimum-path-sum-leetcode-64-medium.html#cb76-1" aria-hidden="true"></a>[<span class="dv">1</span>], [<span class="dv">4</span>], [<span class="dv">5</span>]</span>
-<span id="cb76-2"><a href="minimum-path-sum-leetcode-64-medium.html#cb76-2" aria-hidden="true"></a><span class="dv">2</span>,   <span class="dv">7</span>,   [<span class="dv">6</span>]</span>
-<span id="cb76-3"><a href="minimum-path-sum-leetcode-64-medium.html#cb76-3" aria-hidden="true"></a><span class="dv">6</span>,   <span class="dv">8</span>,   [<span class="dv">7</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb77-1"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-1" aria-hidden="true"></a>[<span class="dv">1</span>], [<span class="dv">4</span>], [<span class="dv">5</span>]</span>
+<span id="cb77-2"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-2" aria-hidden="true"></a><span class="dv">2</span>,   <span class="dv">7</span>,   [<span class="dv">6</span>]</span>
+<span id="cb77-3"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-3" aria-hidden="true"></a><span class="dv">6</span>,   <span class="dv">8</span>,   [<span class="dv">7</span>]</span></code></pre></div>
 </div>
-<div id="analysis-48" class="section level4" number="3.6.2.2">
+<div id="analysis-49" class="section level4" number="3.6.2.2">
 <h4><span class="header-section-number">3.6.2.2</span> Analysis</h4>
 <p>There will be <span class="math inline">\(2^{h + 1} - 1 = 2^{log(m*n) + 1} - 1\)</span> subproblems, including the overlapping subproblems, which means
 the same subproblem has been computed again and gain. Thus, the time complexity is <span class="math inline">\(O(2^{log(m * n)})\)</span></p>
 </div>
-<div id="algorithm-48" class="section level4" number="3.6.2.3">
+<div id="algorithm-49" class="section level4" number="3.6.2.3">
 <h4><span class="header-section-number">3.6.2.3</span> Algorithm</h4>
 <p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
 </div>
 <div id="java-code---recursive" class="section level4" number="3.6.2.4">
 <h4><span class="header-section-number">3.6.2.4</span> Java Code - Recursive</h4>
-<div class="sourceCode" id="cb77"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb77-1"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minPathSum</span>(<span class="dt">int</span>[][] grid) {</span>
-<span id="cb77-2"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-2" aria-hidden="true"></a>    <span class="kw">if</span>(grid == <span class="kw">null</span> || grid.<span class="fu">length</span>==<span class="dv">0</span>) {</span>
-<span id="cb77-3"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb77-4"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-4" aria-hidden="true"></a>    }</span>
-<span id="cb77-5"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-5" aria-hidden="true"></a></span>
-<span id="cb77-6"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-6" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">rec</span>(<span class="dv">0</span>,<span class="dv">0</span>,grid);</span>
-<span id="cb77-7"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-7" aria-hidden="true"></a>}</span>
-<span id="cb77-8"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-8" aria-hidden="true"></a></span>
-<span id="cb77-9"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-9" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">rec</span>(<span class="dt">int</span> i, <span class="dt">int</span> j, <span class="dt">int</span>[][] grid){</span>
-<span id="cb77-10"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-10" aria-hidden="true"></a>    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;</span>
-<span id="cb77-11"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-11" aria-hidden="true"></a>    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb77-12"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-12" aria-hidden="true"></a></span>
-<span id="cb77-13"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-13" aria-hidden="true"></a></span>
-<span id="cb77-14"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-14" aria-hidden="true"></a>    <span class="kw">if</span>(i == (rows - <span class="dv">1</span>) &amp;&amp; j == (cols - <span class="dv">1</span>)){</span>
-<span id="cb77-15"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-15" aria-hidden="true"></a>        <span class="co">//at bottom right</span></span>
-<span id="cb77-16"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-16" aria-hidden="true"></a>        <span class="kw">return</span> grid[i][j];</span>
-<span id="cb77-17"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-17" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(i &lt; (rows - <span class="dv">1</span>) &amp;&amp; j == (cols - <span class="dv">1</span>)) {</span>
-<span id="cb77-18"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-18" aria-hidden="true"></a>        <span class="co">//at last column, moving downward</span></span>
-<span id="cb77-19"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-19" aria-hidden="true"></a>        <span class="kw">return</span> grid[i][j] + <span class="fu">dfs</span>(i+<span class="dv">1</span>, j, grid);</span>
-<span id="cb77-20"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-20" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(i == (rows - <span class="dv">1</span>) &amp;&amp; j &lt; (cols - <span class="dv">1</span>)) {</span>
-<span id="cb77-21"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-21" aria-hidden="true"></a>        <span class="co">//at last row, moving rightward</span></span>
-<span id="cb77-22"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-22" aria-hidden="true"></a>        <span class="kw">return</span> grid[i][j] + <span class="fu">dfs</span>(i, j+<span class="dv">1</span>, grid);</span>
-<span id="cb77-23"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-23" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb77-24"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-24" aria-hidden="true"></a>        <span class="co">//other place, get min of downward and rightward</span></span>
-<span id="cb77-25"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-25" aria-hidden="true"></a>        <span class="dt">int</span> r1 = grid[i][j] + <span class="fu">rec</span>(i+<span class="dv">1</span>, j, grid);</span>
-<span id="cb77-26"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-26" aria-hidden="true"></a>        <span class="dt">int</span> r2 = grid[i][j] + <span class="fu">rec</span>(i, j+<span class="dv">1</span>, grid);</span>
-<span id="cb77-27"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-27" aria-hidden="true"></a>        <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">min</span>(r1,r2);</span>
-<span id="cb77-28"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-28" aria-hidden="true"></a>    }</span>
-<span id="cb77-29"><a href="minimum-path-sum-leetcode-64-medium.html#cb77-29" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb78-1"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minPathSum</span>(<span class="dt">int</span>[][] grid) {</span>
+<span id="cb78-2"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-2" aria-hidden="true"></a>    <span class="kw">if</span>(grid == <span class="kw">null</span> || grid.<span class="fu">length</span>==<span class="dv">0</span>) {</span>
+<span id="cb78-3"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb78-4"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-4" aria-hidden="true"></a>    }</span>
+<span id="cb78-5"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-5" aria-hidden="true"></a></span>
+<span id="cb78-6"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-6" aria-hidden="true"></a>    <span class="kw">return</span> <span class="fu">rec</span>(<span class="dv">0</span>,<span class="dv">0</span>,grid);</span>
+<span id="cb78-7"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-7" aria-hidden="true"></a>}</span>
+<span id="cb78-8"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-8" aria-hidden="true"></a></span>
+<span id="cb78-9"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-9" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">rec</span>(<span class="dt">int</span> i, <span class="dt">int</span> j, <span class="dt">int</span>[][] grid){</span>
+<span id="cb78-10"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-10" aria-hidden="true"></a>    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;</span>
+<span id="cb78-11"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-11" aria-hidden="true"></a>    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb78-12"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-12" aria-hidden="true"></a></span>
+<span id="cb78-13"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-13" aria-hidden="true"></a></span>
+<span id="cb78-14"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-14" aria-hidden="true"></a>    <span class="kw">if</span>(i == (rows - <span class="dv">1</span>) &amp;&amp; j == (cols - <span class="dv">1</span>)){</span>
+<span id="cb78-15"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-15" aria-hidden="true"></a>        <span class="co">//at bottom right</span></span>
+<span id="cb78-16"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-16" aria-hidden="true"></a>        <span class="kw">return</span> grid[i][j];</span>
+<span id="cb78-17"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-17" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(i &lt; (rows - <span class="dv">1</span>) &amp;&amp; j == (cols - <span class="dv">1</span>)) {</span>
+<span id="cb78-18"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-18" aria-hidden="true"></a>        <span class="co">//at last column, moving downward</span></span>
+<span id="cb78-19"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-19" aria-hidden="true"></a>        <span class="kw">return</span> grid[i][j] + <span class="fu">dfs</span>(i+<span class="dv">1</span>, j, grid);</span>
+<span id="cb78-20"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-20" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(i == (rows - <span class="dv">1</span>) &amp;&amp; j &lt; (cols - <span class="dv">1</span>)) {</span>
+<span id="cb78-21"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-21" aria-hidden="true"></a>        <span class="co">//at last row, moving rightward</span></span>
+<span id="cb78-22"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-22" aria-hidden="true"></a>        <span class="kw">return</span> grid[i][j] + <span class="fu">dfs</span>(i, j+<span class="dv">1</span>, grid);</span>
+<span id="cb78-23"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-23" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb78-24"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-24" aria-hidden="true"></a>        <span class="co">//other place, get min of downward and rightward</span></span>
+<span id="cb78-25"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-25" aria-hidden="true"></a>        <span class="dt">int</span> r1 = grid[i][j] + <span class="fu">rec</span>(i+<span class="dv">1</span>, j, grid);</span>
+<span id="cb78-26"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-26" aria-hidden="true"></a>        <span class="dt">int</span> r2 = grid[i][j] + <span class="fu">rec</span>(i, j+<span class="dv">1</span>, grid);</span>
+<span id="cb78-27"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-27" aria-hidden="true"></a>        <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">min</span>(r1,r2);</span>
+<span id="cb78-28"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-28" aria-hidden="true"></a>    }</span>
+<span id="cb78-29"><a href="minimum-path-sum-leetcode-64-medium.html#cb78-29" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---dynamic-programming" class="section level3" number="3.6.3">
 <h3><span class="header-section-number">3.6.3</span> Solution - Dynamic Programming</h3>
-<div id="walkthrough-48" class="section level4" number="3.6.3.1">
+<div id="walkthrough-49" class="section level4" number="3.6.3.1">
 <h4><span class="header-section-number">3.6.3.1</span> Walkthrough</h4>
 <pre><code>*  create a cost matrix of the same size
 *  init cost[0][0] to be grid[0][0]
 *  init first row and first column, previous cell cost plus current cell cost
 *  For each other cell, determine the minimum cost of previous top or left cell plus current cell cost.</code></pre>
 </div>
-<div id="analysis-49" class="section level4" number="3.6.3.2">
+<div id="analysis-50" class="section level4" number="3.6.3.2">
 <h4><span class="header-section-number">3.6.3.2</span> Analysis</h4>
 <p>Complexity: O(n * m) since each cell is visited once</p>
 </div>
-<div id="algorithm-49" class="section level4" number="3.6.3.3">
+<div id="algorithm-50" class="section level4" number="3.6.3.3">
 <h4><span class="header-section-number">3.6.3.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
 </div>
 <div id="java-code---dynamic-programming" class="section level4" number="3.6.3.4">
 <h4><span class="header-section-number">3.6.3.4</span> Java Code - Dynamic Programming</h4>
-<div class="sourceCode" id="cb79"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb79-1"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minPathSum</span>(<span class="dt">int</span>[][] grid) {</span>
-<span id="cb79-2"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-2" aria-hidden="true"></a>    <span class="kw">if</span>(grid == <span class="kw">null</span> || grid.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb79-3"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb79-4"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-4" aria-hidden="true"></a>    }</span>
-<span id="cb79-5"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-5" aria-hidden="true"></a></span>
-<span id="cb79-6"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-6" aria-hidden="true"></a>    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;</span>
-<span id="cb79-7"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-7" aria-hidden="true"></a>    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb79-8"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-8" aria-hidden="true"></a></span>
-<span id="cb79-9"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-9" aria-hidden="true"></a>    <span class="dt">int</span>[][] dp = <span class="kw">new</span> <span class="dt">int</span>[rows][cols];</span>
-<span id="cb79-10"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-10" aria-hidden="true"></a>    dp[<span class="dv">0</span>][<span class="dv">0</span>] = grid[<span class="dv">0</span>][<span class="dv">0</span>];</span>
-<span id="cb79-11"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-11" aria-hidden="true"></a></span>
-<span id="cb79-12"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-12" aria-hidden="true"></a>    <span class="co">// initialize first row</span></span>
-<span id="cb79-13"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-13" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> c = <span class="dv">1</span>; c &lt; cols; c++){</span>
-<span id="cb79-14"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-14" aria-hidden="true"></a>        dp[<span class="dv">0</span>][c] = dp[<span class="dv">0</span>][c - <span class="dv">1</span>] + grid[<span class="dv">0</span>][c];</span>
-<span id="cb79-15"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-15" aria-hidden="true"></a>    }</span>
-<span id="cb79-16"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-16" aria-hidden="true"></a></span>
-<span id="cb79-17"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-17" aria-hidden="true"></a>    <span class="co">// initialize first column</span></span>
-<span id="cb79-18"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-18" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> r = <span class="dv">1</span>; r &lt; rows; r++){</span>
-<span id="cb79-19"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-19" aria-hidden="true"></a>        dp[r][<span class="dv">0</span>] = dp[r - <span class="dv">1</span>][<span class="dv">0</span>] + grid[r][<span class="dv">0</span>];</span>
-<span id="cb79-20"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-20" aria-hidden="true"></a>    }</span>
-<span id="cb79-21"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-21" aria-hidden="true"></a></span>
-<span id="cb79-22"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-22" aria-hidden="true"></a>    <span class="co">// fill up the dp table</span></span>
-<span id="cb79-23"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-23" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; rows; i++){</span>
-<span id="cb79-24"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-24" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">1</span>; j &lt; cols; j++){</span>
-<span id="cb79-25"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-25" aria-hidden="true"></a>            <span class="dt">int</span> minNeighbor = <span class="bu">Math</span>.<span class="fu">min</span>(dp[i - <span class="dv">1</span>][j], dp[i][j - <span class="dv">1</span>]);</span>
-<span id="cb79-26"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-26" aria-hidden="true"></a>            dp[i][j] = minNeighbor + grid[i][j];</span>
-<span id="cb79-27"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-27" aria-hidden="true"></a>        }</span>
-<span id="cb79-28"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-28" aria-hidden="true"></a>    }</span>
-<span id="cb79-29"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-29" aria-hidden="true"></a></span>
-<span id="cb79-30"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-30" aria-hidden="true"></a>    <span class="kw">return</span> dp[rows - <span class="dv">1</span>][cols - <span class="dv">1</span>];</span>
-<span id="cb79-31"><a href="minimum-path-sum-leetcode-64-medium.html#cb79-31" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb80-1"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minPathSum</span>(<span class="dt">int</span>[][] grid) {</span>
+<span id="cb80-2"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-2" aria-hidden="true"></a>    <span class="kw">if</span>(grid == <span class="kw">null</span> || grid.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb80-3"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb80-4"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-4" aria-hidden="true"></a>    }</span>
+<span id="cb80-5"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-5" aria-hidden="true"></a></span>
+<span id="cb80-6"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-6" aria-hidden="true"></a>    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;</span>
+<span id="cb80-7"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-7" aria-hidden="true"></a>    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb80-8"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-8" aria-hidden="true"></a></span>
+<span id="cb80-9"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-9" aria-hidden="true"></a>    <span class="dt">int</span>[][] dp = <span class="kw">new</span> <span class="dt">int</span>[rows][cols];</span>
+<span id="cb80-10"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-10" aria-hidden="true"></a>    dp[<span class="dv">0</span>][<span class="dv">0</span>] = grid[<span class="dv">0</span>][<span class="dv">0</span>];</span>
+<span id="cb80-11"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-11" aria-hidden="true"></a></span>
+<span id="cb80-12"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-12" aria-hidden="true"></a>    <span class="co">// initialize first row</span></span>
+<span id="cb80-13"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-13" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> c = <span class="dv">1</span>; c &lt; cols; c++){</span>
+<span id="cb80-14"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-14" aria-hidden="true"></a>        dp[<span class="dv">0</span>][c] = dp[<span class="dv">0</span>][c - <span class="dv">1</span>] + grid[<span class="dv">0</span>][c];</span>
+<span id="cb80-15"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-15" aria-hidden="true"></a>    }</span>
+<span id="cb80-16"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-16" aria-hidden="true"></a></span>
+<span id="cb80-17"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-17" aria-hidden="true"></a>    <span class="co">// initialize first column</span></span>
+<span id="cb80-18"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-18" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> r = <span class="dv">1</span>; r &lt; rows; r++){</span>
+<span id="cb80-19"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-19" aria-hidden="true"></a>        dp[r][<span class="dv">0</span>] = dp[r - <span class="dv">1</span>][<span class="dv">0</span>] + grid[r][<span class="dv">0</span>];</span>
+<span id="cb80-20"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-20" aria-hidden="true"></a>    }</span>
+<span id="cb80-21"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-21" aria-hidden="true"></a></span>
+<span id="cb80-22"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-22" aria-hidden="true"></a>    <span class="co">// fill up the dp table</span></span>
+<span id="cb80-23"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-23" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; rows; i++){</span>
+<span id="cb80-24"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-24" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">1</span>; j &lt; cols; j++){</span>
+<span id="cb80-25"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-25" aria-hidden="true"></a>            <span class="dt">int</span> minNeighbor = <span class="bu">Math</span>.<span class="fu">min</span>(dp[i - <span class="dv">1</span>][j], dp[i][j - <span class="dv">1</span>]);</span>
+<span id="cb80-26"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-26" aria-hidden="true"></a>            dp[i][j] = minNeighbor + grid[i][j];</span>
+<span id="cb80-27"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-27" aria-hidden="true"></a>        }</span>
+<span id="cb80-28"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-28" aria-hidden="true"></a>    }</span>
+<span id="cb80-29"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-29" aria-hidden="true"></a></span>
+<span id="cb80-30"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-30" aria-hidden="true"></a>    <span class="kw">return</span> dp[rows - <span class="dv">1</span>][cols - <span class="dv">1</span>];</span>
+<span id="cb80-31"><a href="minimum-path-sum-leetcode-64-medium.html#cb80-31" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

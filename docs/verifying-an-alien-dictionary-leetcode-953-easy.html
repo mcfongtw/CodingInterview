@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1067,7 +1068,7 @@ character which is less than any other character.</p>
 </div>
 <div id="solution-85" class="section level3" number="9.8.3">
 <h3><span class="header-section-number">9.8.3</span> Solution</h3>
-<div id="walkthrough-146" class="section level4" number="9.8.3.1">
+<div id="walkthrough-147" class="section level4" number="9.8.3.1">
 <h4><span class="header-section-number">9.8.3.1</span> Walkthrough</h4>
 <p>For each pair of words, return false if</p>
 <ul>
@@ -1076,49 +1077,49 @@ character which is less than any other character.</p>
 </ul>
 <p>Otherwise, compare pair of words until end of list</p>
 </div>
-<div id="analysis-148" class="section level4" number="9.8.3.2">
+<div id="analysis-149" class="section level4" number="9.8.3.2">
 <h4><span class="header-section-number">9.8.3.2</span> Analysis</h4>
 <p>Assume there are n words, and maximum word length is m. Thus the time complexity is O(n * m).</p>
 </div>
-<div id="algorithm-153" class="section level4" number="9.8.3.3">
+<div id="algorithm-154" class="section level4" number="9.8.3.3">
 <h4><span class="header-section-number">9.8.3.3</span> Algorithm</h4>
-<div class="sourceCode" id="cb215"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb215-1"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isAlienSorted</span>(<span class="bu">String</span>[] words, <span class="bu">String</span> order) {</span>
-<span id="cb215-2"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-2" aria-hidden="true"></a>    <span class="co">//compare word by word</span></span>
-<span id="cb215-3"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-3" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; words.<span class="fu">length</span> - <span class="dv">1</span>; i++) {</span>
-<span id="cb215-4"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-4" aria-hidden="true"></a>        <span class="bu">String</span> w1 = words[i];</span>
-<span id="cb215-5"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-5" aria-hidden="true"></a>        <span class="bu">String</span> w2 = words[i + <span class="dv">1</span>];</span>
-<span id="cb215-6"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-6" aria-hidden="true"></a></span>
-<span id="cb215-7"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-7" aria-hidden="true"></a>        <span class="dt">int</span> maxLen = <span class="bu">Math</span>.<span class="fu">max</span>(w1.<span class="fu">length</span>(), w2.<span class="fu">length</span>());</span>
-<span id="cb215-8"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-8" aria-hidden="true"></a></span>
-<span id="cb215-9"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-9" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; maxLen; j++) {</span>
-<span id="cb215-10"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-10" aria-hidden="true"></a>            <span class="dt">char</span> c1 = j &lt; w1.<span class="fu">length</span>() ? w1.<span class="fu">charAt</span>(j) : <span class="dv">0</span>;</span>
-<span id="cb215-11"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-11" aria-hidden="true"></a>            <span class="dt">char</span> c2 = j &lt; w2.<span class="fu">length</span>() ? w2.<span class="fu">charAt</span>(j) : <span class="dv">0</span>;</span>
-<span id="cb215-12"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-12" aria-hidden="true"></a></span>
-<span id="cb215-13"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-13" aria-hidden="true"></a>            <span class="co">//find the first pair of different chars</span></span>
-<span id="cb215-14"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-14" aria-hidden="true"></a>            <span class="kw">if</span>(c1 != c2) {</span>
-<span id="cb215-15"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-15" aria-hidden="true"></a>                <span class="kw">if</span>(<span class="fu">isSorted</span>(c1, c2, order)) {</span>
-<span id="cb215-16"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-16" aria-hidden="true"></a>                    <span class="co">//sorted on the first pair of different chars</span></span>
-<span id="cb215-17"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-17" aria-hidden="true"></a>                    <span class="kw">break</span>;</span>
-<span id="cb215-18"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-18" aria-hidden="true"></a>                } <span class="kw">else</span> {</span>
-<span id="cb215-19"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-19" aria-hidden="true"></a>                    <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb215-20"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-20" aria-hidden="true"></a>                }</span>
-<span id="cb215-21"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-21" aria-hidden="true"></a>            }</span>
-<span id="cb215-22"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-22" aria-hidden="true"></a>        }</span>
-<span id="cb215-23"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-23" aria-hidden="true"></a>    }</span>
-<span id="cb215-24"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-24" aria-hidden="true"></a></span>
-<span id="cb215-25"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-25" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb215-26"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-26" aria-hidden="true"></a>}</span>
-<span id="cb215-27"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-27" aria-hidden="true"></a></span>
-<span id="cb215-28"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-28" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">isSorted</span>(<span class="dt">char</span> first, <span class="dt">char</span> second, <span class="bu">String</span> order) {</span>
-<span id="cb215-29"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-29" aria-hidden="true"></a>    <span class="kw">if</span>(first != <span class="dv">0</span> &amp;&amp; second != <span class="dv">0</span>) {</span>
-<span id="cb215-30"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-30" aria-hidden="true"></a>        <span class="kw">return</span> order.<span class="fu">indexOf</span>(first) &lt;= order.<span class="fu">indexOf</span>(second);</span>
-<span id="cb215-31"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-31" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(first == <span class="dv">0</span>) {</span>
-<span id="cb215-32"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-32" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb215-33"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-33" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb215-34"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-34" aria-hidden="true"></a>        <span class="co">//second == 0</span></span>
-<span id="cb215-35"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-35" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb215-36"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-36" aria-hidden="true"></a>    }</span>
-<span id="cb215-37"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb215-37" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb216"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb216-1"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isAlienSorted</span>(<span class="bu">String</span>[] words, <span class="bu">String</span> order) {</span>
+<span id="cb216-2"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-2" aria-hidden="true"></a>    <span class="co">//compare word by word</span></span>
+<span id="cb216-3"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-3" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; words.<span class="fu">length</span> - <span class="dv">1</span>; i++) {</span>
+<span id="cb216-4"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-4" aria-hidden="true"></a>        <span class="bu">String</span> w1 = words[i];</span>
+<span id="cb216-5"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-5" aria-hidden="true"></a>        <span class="bu">String</span> w2 = words[i + <span class="dv">1</span>];</span>
+<span id="cb216-6"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-6" aria-hidden="true"></a></span>
+<span id="cb216-7"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-7" aria-hidden="true"></a>        <span class="dt">int</span> maxLen = <span class="bu">Math</span>.<span class="fu">max</span>(w1.<span class="fu">length</span>(), w2.<span class="fu">length</span>());</span>
+<span id="cb216-8"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-8" aria-hidden="true"></a></span>
+<span id="cb216-9"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-9" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; maxLen; j++) {</span>
+<span id="cb216-10"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-10" aria-hidden="true"></a>            <span class="dt">char</span> c1 = j &lt; w1.<span class="fu">length</span>() ? w1.<span class="fu">charAt</span>(j) : <span class="dv">0</span>;</span>
+<span id="cb216-11"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-11" aria-hidden="true"></a>            <span class="dt">char</span> c2 = j &lt; w2.<span class="fu">length</span>() ? w2.<span class="fu">charAt</span>(j) : <span class="dv">0</span>;</span>
+<span id="cb216-12"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-12" aria-hidden="true"></a></span>
+<span id="cb216-13"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-13" aria-hidden="true"></a>            <span class="co">//find the first pair of different chars</span></span>
+<span id="cb216-14"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-14" aria-hidden="true"></a>            <span class="kw">if</span>(c1 != c2) {</span>
+<span id="cb216-15"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-15" aria-hidden="true"></a>                <span class="kw">if</span>(<span class="fu">isSorted</span>(c1, c2, order)) {</span>
+<span id="cb216-16"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-16" aria-hidden="true"></a>                    <span class="co">//sorted on the first pair of different chars</span></span>
+<span id="cb216-17"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-17" aria-hidden="true"></a>                    <span class="kw">break</span>;</span>
+<span id="cb216-18"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-18" aria-hidden="true"></a>                } <span class="kw">else</span> {</span>
+<span id="cb216-19"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-19" aria-hidden="true"></a>                    <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb216-20"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-20" aria-hidden="true"></a>                }</span>
+<span id="cb216-21"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-21" aria-hidden="true"></a>            }</span>
+<span id="cb216-22"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-22" aria-hidden="true"></a>        }</span>
+<span id="cb216-23"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-23" aria-hidden="true"></a>    }</span>
+<span id="cb216-24"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-24" aria-hidden="true"></a></span>
+<span id="cb216-25"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-25" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb216-26"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-26" aria-hidden="true"></a>}</span>
+<span id="cb216-27"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-27" aria-hidden="true"></a></span>
+<span id="cb216-28"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-28" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">isSorted</span>(<span class="dt">char</span> first, <span class="dt">char</span> second, <span class="bu">String</span> order) {</span>
+<span id="cb216-29"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-29" aria-hidden="true"></a>    <span class="kw">if</span>(first != <span class="dv">0</span> &amp;&amp; second != <span class="dv">0</span>) {</span>
+<span id="cb216-30"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-30" aria-hidden="true"></a>        <span class="kw">return</span> order.<span class="fu">indexOf</span>(first) &lt;= order.<span class="fu">indexOf</span>(second);</span>
+<span id="cb216-31"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-31" aria-hidden="true"></a>    } <span class="kw">else</span> <span class="kw">if</span>(first == <span class="dv">0</span>) {</span>
+<span id="cb216-32"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-32" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb216-33"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-33" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb216-34"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-34" aria-hidden="true"></a>        <span class="co">//second == 0</span></span>
+<span id="cb216-35"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-35" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb216-36"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-36" aria-hidden="true"></a>    }</span>
+<span id="cb216-37"><a href="verifying-an-alien-dictionary-leetcode-953-easy.html#cb216-37" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

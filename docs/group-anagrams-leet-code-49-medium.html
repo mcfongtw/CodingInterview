@@ -24,14 +24,14 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="common-data-structure-set-stack-heap-treemap.html"/>
+<link rel="prev" href="common-data-structure.html"/>
 <link rel="next" href="longest-substring-without-repeating-characters-leetcode-3-medium.html"/>
 <script src="libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1062,46 +1063,46 @@ Output:
 </div>
 <div id="solution-75" class="section level3" number="7.1.3">
 <h3><span class="header-section-number">7.1.3</span> Solution</h3>
-<div id="walkthrough-125" class="section level4" number="7.1.3.1">
+<div id="walkthrough-126" class="section level4" number="7.1.3.1">
 <h4><span class="header-section-number">7.1.3.1</span> Walkthrough</h4>
 <p>Assume they are all anagrams, and we keeps a map to store the list of anagrams associated with their unique pattern
 , i.e. sorted string; that is, <span class="math inline">\(&lt;\)</span>sorted_str, List of anagram<span class="math inline">\(&gt;\)</span>. Finally, we collect the list of anagram in another list
 to return.</p>
 </div>
-<div id="analysis-126" class="section level4" number="7.1.3.2">
+<div id="analysis-127" class="section level4" number="7.1.3.2">
 <h4><span class="header-section-number">7.1.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every word is processed once.</p>
 </div>
-<div id="algorithm-131" class="section level4" number="7.1.3.3">
+<div id="algorithm-132" class="section level4" number="7.1.3.3">
 <h4><span class="header-section-number">7.1.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-77" class="section level4" number="7.1.3.4">
+<div id="java-code-79" class="section level4" number="7.1.3.4">
 <h4><span class="header-section-number">7.1.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb190"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb190-1"><a href="group-anagrams-leet-code-49-medium.html#cb190-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">String</span>&gt;&gt; <span class="fu">groupAnagrams</span>(<span class="bu">String</span>[] strs) {</span>
-<span id="cb190-2"><a href="group-anagrams-leet-code-49-medium.html#cb190-2" aria-hidden="true"></a>    <span class="bu">Map</span>&lt;<span class="bu">String</span>, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt;&gt; index = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
-<span id="cb190-3"><a href="group-anagrams-leet-code-49-medium.html#cb190-3" aria-hidden="true"></a></span>
-<span id="cb190-4"><a href="group-anagrams-leet-code-49-medium.html#cb190-4" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">String</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb190-5"><a href="group-anagrams-leet-code-49-medium.html#cb190-5" aria-hidden="true"></a>    <span class="kw">if</span>(strs == <span class="kw">null</span> || strs.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb190-6"><a href="group-anagrams-leet-code-49-medium.html#cb190-6" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
-<span id="cb190-7"><a href="group-anagrams-leet-code-49-medium.html#cb190-7" aria-hidden="true"></a>    }</span>
-<span id="cb190-8"><a href="group-anagrams-leet-code-49-medium.html#cb190-8" aria-hidden="true"></a></span>
-<span id="cb190-9"><a href="group-anagrams-leet-code-49-medium.html#cb190-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">String</span> str : strs) {</span>
-<span id="cb190-10"><a href="group-anagrams-leet-code-49-medium.html#cb190-10" aria-hidden="true"></a>        <span class="dt">char</span>[] chars = str.<span class="fu">toCharArray</span>();</span>
-<span id="cb190-11"><a href="group-anagrams-leet-code-49-medium.html#cb190-11" aria-hidden="true"></a>        <span class="bu">Arrays</span>.<span class="fu">sort</span>(chars);</span>
-<span id="cb190-12"><a href="group-anagrams-leet-code-49-medium.html#cb190-12" aria-hidden="true"></a>        <span class="bu">String</span> sortedStr = <span class="kw">new</span> <span class="bu">String</span>(chars);</span>
-<span id="cb190-13"><a href="group-anagrams-leet-code-49-medium.html#cb190-13" aria-hidden="true"></a></span>
-<span id="cb190-14"><a href="group-anagrams-leet-code-49-medium.html#cb190-14" aria-hidden="true"></a>        <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; list = index.<span class="fu">getOrDefault</span>(sortedStr, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;());</span>
-<span id="cb190-15"><a href="group-anagrams-leet-code-49-medium.html#cb190-15" aria-hidden="true"></a>        list.<span class="fu">add</span>(str);</span>
-<span id="cb190-16"><a href="group-anagrams-leet-code-49-medium.html#cb190-16" aria-hidden="true"></a>        <span class="co">// only insert if key was asbsent</span></span>
-<span id="cb190-17"><a href="group-anagrams-leet-code-49-medium.html#cb190-17" aria-hidden="true"></a>        index.<span class="fu">putIfAbsent</span>(sortedStr, list);</span>
-<span id="cb190-18"><a href="group-anagrams-leet-code-49-medium.html#cb190-18" aria-hidden="true"></a>    }</span>
-<span id="cb190-19"><a href="group-anagrams-leet-code-49-medium.html#cb190-19" aria-hidden="true"></a></span>
-<span id="cb190-20"><a href="group-anagrams-leet-code-49-medium.html#cb190-20" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;<span class="bu">String</span>, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt;&gt; entry : index.<span class="fu">entrySet</span>()) {</span>
-<span id="cb190-21"><a href="group-anagrams-leet-code-49-medium.html#cb190-21" aria-hidden="true"></a>        result.<span class="fu">add</span>(entry.<span class="fu">getValue</span>());</span>
-<span id="cb190-22"><a href="group-anagrams-leet-code-49-medium.html#cb190-22" aria-hidden="true"></a>    }</span>
-<span id="cb190-23"><a href="group-anagrams-leet-code-49-medium.html#cb190-23" aria-hidden="true"></a></span>
-<span id="cb190-24"><a href="group-anagrams-leet-code-49-medium.html#cb190-24" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb190-25"><a href="group-anagrams-leet-code-49-medium.html#cb190-25" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb191"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb191-1"><a href="group-anagrams-leet-code-49-medium.html#cb191-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">String</span>&gt;&gt; <span class="fu">groupAnagrams</span>(<span class="bu">String</span>[] strs) {</span>
+<span id="cb191-2"><a href="group-anagrams-leet-code-49-medium.html#cb191-2" aria-hidden="true"></a>    <span class="bu">Map</span>&lt;<span class="bu">String</span>, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt;&gt; index = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
+<span id="cb191-3"><a href="group-anagrams-leet-code-49-medium.html#cb191-3" aria-hidden="true"></a></span>
+<span id="cb191-4"><a href="group-anagrams-leet-code-49-medium.html#cb191-4" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">List</span>&lt;<span class="bu">String</span>&gt;&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb191-5"><a href="group-anagrams-leet-code-49-medium.html#cb191-5" aria-hidden="true"></a>    <span class="kw">if</span>(strs == <span class="kw">null</span> || strs.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb191-6"><a href="group-anagrams-leet-code-49-medium.html#cb191-6" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
+<span id="cb191-7"><a href="group-anagrams-leet-code-49-medium.html#cb191-7" aria-hidden="true"></a>    }</span>
+<span id="cb191-8"><a href="group-anagrams-leet-code-49-medium.html#cb191-8" aria-hidden="true"></a></span>
+<span id="cb191-9"><a href="group-anagrams-leet-code-49-medium.html#cb191-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">String</span> str : strs) {</span>
+<span id="cb191-10"><a href="group-anagrams-leet-code-49-medium.html#cb191-10" aria-hidden="true"></a>        <span class="dt">char</span>[] chars = str.<span class="fu">toCharArray</span>();</span>
+<span id="cb191-11"><a href="group-anagrams-leet-code-49-medium.html#cb191-11" aria-hidden="true"></a>        <span class="bu">Arrays</span>.<span class="fu">sort</span>(chars);</span>
+<span id="cb191-12"><a href="group-anagrams-leet-code-49-medium.html#cb191-12" aria-hidden="true"></a>        <span class="bu">String</span> sortedStr = <span class="kw">new</span> <span class="bu">String</span>(chars);</span>
+<span id="cb191-13"><a href="group-anagrams-leet-code-49-medium.html#cb191-13" aria-hidden="true"></a></span>
+<span id="cb191-14"><a href="group-anagrams-leet-code-49-medium.html#cb191-14" aria-hidden="true"></a>        <span class="bu">List</span>&lt;<span class="bu">String</span>&gt; list = index.<span class="fu">getOrDefault</span>(sortedStr, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;());</span>
+<span id="cb191-15"><a href="group-anagrams-leet-code-49-medium.html#cb191-15" aria-hidden="true"></a>        list.<span class="fu">add</span>(str);</span>
+<span id="cb191-16"><a href="group-anagrams-leet-code-49-medium.html#cb191-16" aria-hidden="true"></a>        <span class="co">// only insert if key was asbsent</span></span>
+<span id="cb191-17"><a href="group-anagrams-leet-code-49-medium.html#cb191-17" aria-hidden="true"></a>        index.<span class="fu">putIfAbsent</span>(sortedStr, list);</span>
+<span id="cb191-18"><a href="group-anagrams-leet-code-49-medium.html#cb191-18" aria-hidden="true"></a>    }</span>
+<span id="cb191-19"><a href="group-anagrams-leet-code-49-medium.html#cb191-19" aria-hidden="true"></a></span>
+<span id="cb191-20"><a href="group-anagrams-leet-code-49-medium.html#cb191-20" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;<span class="bu">String</span>, <span class="bu">List</span>&lt;<span class="bu">String</span>&gt;&gt; entry : index.<span class="fu">entrySet</span>()) {</span>
+<span id="cb191-21"><a href="group-anagrams-leet-code-49-medium.html#cb191-21" aria-hidden="true"></a>        result.<span class="fu">add</span>(entry.<span class="fu">getValue</span>());</span>
+<span id="cb191-22"><a href="group-anagrams-leet-code-49-medium.html#cb191-22" aria-hidden="true"></a>    }</span>
+<span id="cb191-23"><a href="group-anagrams-leet-code-49-medium.html#cb191-23" aria-hidden="true"></a></span>
+<span id="cb191-24"><a href="group-anagrams-leet-code-49-medium.html#cb191-24" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb191-25"><a href="group-anagrams-leet-code-49-medium.html#cb191-25" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -1110,7 +1111,7 @@ to return.</p>
           </div>
         </div>
       </div>
-<a href="common-data-structure-set-stack-heap-treemap.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="common-data-structure.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="longest-substring-without-repeating-characters-leetcode-3-medium.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

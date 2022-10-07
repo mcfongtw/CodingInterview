@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1072,7 +1073,7 @@ Figure 6.26: Some caption.
 </div>
 <div id="solution-70" class="section level3" number="6.10.3">
 <h3><span class="header-section-number">6.10.3</span> Solution</h3>
-<div id="walkthrough-116" class="section level4" number="6.10.3.1">
+<div id="walkthrough-117" class="section level4" number="6.10.3.1">
 <h4><span class="header-section-number">6.10.3.1</span> Walkthrough</h4>
 <p>Locate the mid node, and use that to reverse the 2nd half of the list. We will have two sublists: [o, …, m] and
 [r, …, m].</p>
@@ -1093,64 +1094,64 @@ Figure 6.28: Some caption.
 <p>Traverse the two sublists, beginning at head of original and head of reversed sublists respectively. If any node is
 not equal, then it is NOT palindrome.</p>
 </div>
-<div id="analysis-117" class="section level4" number="6.10.3.2">
+<div id="analysis-118" class="section level4" number="6.10.3.2">
 <h4><span class="header-section-number">6.10.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-123" class="section level4" number="6.10.3.3">
+<div id="algorithm-124" class="section level4" number="6.10.3.3">
 <h4><span class="header-section-number">6.10.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-72" class="section level4" number="6.10.3.4">
+<div id="java-code-74" class="section level4" number="6.10.3.4">
 <h4><span class="header-section-number">6.10.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb181"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb181-1"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isPalindrome</span>(ListNode head) {</span>
-<span id="cb181-2"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-2" aria-hidden="true"></a>    <span class="kw">if</span>(head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
-<span id="cb181-3"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb181-4"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-4" aria-hidden="true"></a>    }</span>
-<span id="cb181-5"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-5" aria-hidden="true"></a></span>
-<span id="cb181-6"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-6" aria-hidden="true"></a>    ListNode mid = head, tail = head;</span>
-<span id="cb181-7"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-7" aria-hidden="true"></a></span>
-<span id="cb181-8"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-8" aria-hidden="true"></a>    <span class="co">//locating mid and tail nodes</span></span>
-<span id="cb181-9"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-9" aria-hidden="true"></a>    <span class="kw">while</span>(tail.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; tail.<span class="fu">next</span>.<span class="fu">next</span> != <span class="kw">null</span>) {</span>
-<span id="cb181-10"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-10" aria-hidden="true"></a>        mid = mid.<span class="fu">next</span>;</span>
-<span id="cb181-11"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-11" aria-hidden="true"></a>        tail = tail.<span class="fu">next</span>.<span class="fu">next</span>;</span>
-<span id="cb181-12"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-12" aria-hidden="true"></a>    }</span>
-<span id="cb181-13"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-13" aria-hidden="true"></a></span>
-<span id="cb181-14"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-14" aria-hidden="true"></a>    <span class="co">// retrieve the head of reversed 2nd half sublist</span></span>
-<span id="cb181-15"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-15" aria-hidden="true"></a>    ListNode reversed2ndHalfHead = <span class="fu">reverse</span>(mid);</span>
-<span id="cb181-16"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-16" aria-hidden="true"></a></span>
-<span id="cb181-17"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-17" aria-hidden="true"></a>    ListNode currentOrg = head, currentRev = reversed2ndHalfHead;</span>
-<span id="cb181-18"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-18" aria-hidden="true"></a></span>
-<span id="cb181-19"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-19" aria-hidden="true"></a>    <span class="kw">while</span>(currentOrg != <span class="kw">null</span> &amp;&amp; currentRev != <span class="kw">null</span>) {</span>
-<span id="cb181-20"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-20" aria-hidden="true"></a>        <span class="co">//if any in original 1st half does not match reversed 2nd half</span></span>
-<span id="cb181-21"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-21" aria-hidden="true"></a>        <span class="kw">if</span>(currentOrg.<span class="fu">val</span> != currentRev.<span class="fu">val</span>) {</span>
-<span id="cb181-22"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-22" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb181-23"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-23" aria-hidden="true"></a>        }</span>
-<span id="cb181-24"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-24" aria-hidden="true"></a></span>
-<span id="cb181-25"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-25" aria-hidden="true"></a>        currentOrg = currentOrg.<span class="fu">next</span>;</span>
-<span id="cb181-26"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-26" aria-hidden="true"></a>        currentRev = currentRev.<span class="fu">next</span>;</span>
-<span id="cb181-27"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-27" aria-hidden="true"></a>    }</span>
-<span id="cb181-28"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-28" aria-hidden="true"></a></span>
-<span id="cb181-29"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-29" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb181-30"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-30" aria-hidden="true"></a>}</span>
-<span id="cb181-31"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-31" aria-hidden="true"></a></span>
-<span id="cb181-32"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-32" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">reverse</span>(ListNode head) {</span>
-<span id="cb181-33"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-33" aria-hidden="true"></a>    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);</span>
-<span id="cb181-34"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-34" aria-hidden="true"></a>    ListNode current = head;</span>
-<span id="cb181-35"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-35" aria-hidden="true"></a></span>
-<span id="cb181-36"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-36" aria-hidden="true"></a>    <span class="co">//reverse links between current and prev</span></span>
-<span id="cb181-37"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-37" aria-hidden="true"></a>    <span class="kw">while</span> (current != <span class="kw">null</span>) {</span>
-<span id="cb181-38"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-38" aria-hidden="true"></a>        ListNode next = current.<span class="fu">next</span>;</span>
-<span id="cb181-39"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-39" aria-hidden="true"></a></span>
-<span id="cb181-40"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-40" aria-hidden="true"></a>        <span class="co">/*</span></span>
-<span id="cb181-41"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-41" aria-hidden="true"></a><span class="co">        * swap links between current and prev</span></span>
-<span id="cb181-42"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-42" aria-hidden="true"></a><span class="co">        */</span></span>
-<span id="cb181-43"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-43" aria-hidden="true"></a>        current.<span class="fu">next</span> = headPrev.<span class="fu">next</span>;</span>
-<span id="cb181-44"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-44" aria-hidden="true"></a>        headPrev.<span class="fu">next</span> = current;</span>
-<span id="cb181-45"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-45" aria-hidden="true"></a>        current = next;</span>
-<span id="cb181-46"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-46" aria-hidden="true"></a>    }</span>
-<span id="cb181-47"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-47" aria-hidden="true"></a></span>
-<span id="cb181-48"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-48" aria-hidden="true"></a>    <span class="kw">return</span> headPrev.<span class="fu">next</span>;</span>
-<span id="cb181-49"><a href="palindrome-linked-list-leet-code-234-easy.html#cb181-49" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb182"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb182-1"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">isPalindrome</span>(ListNode head) {</span>
+<span id="cb182-2"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-2" aria-hidden="true"></a>    <span class="kw">if</span>(head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
+<span id="cb182-3"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb182-4"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-4" aria-hidden="true"></a>    }</span>
+<span id="cb182-5"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-5" aria-hidden="true"></a></span>
+<span id="cb182-6"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-6" aria-hidden="true"></a>    ListNode mid = head, tail = head;</span>
+<span id="cb182-7"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-7" aria-hidden="true"></a></span>
+<span id="cb182-8"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-8" aria-hidden="true"></a>    <span class="co">//locating mid and tail nodes</span></span>
+<span id="cb182-9"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-9" aria-hidden="true"></a>    <span class="kw">while</span>(tail.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; tail.<span class="fu">next</span>.<span class="fu">next</span> != <span class="kw">null</span>) {</span>
+<span id="cb182-10"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-10" aria-hidden="true"></a>        mid = mid.<span class="fu">next</span>;</span>
+<span id="cb182-11"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-11" aria-hidden="true"></a>        tail = tail.<span class="fu">next</span>.<span class="fu">next</span>;</span>
+<span id="cb182-12"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-12" aria-hidden="true"></a>    }</span>
+<span id="cb182-13"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-13" aria-hidden="true"></a></span>
+<span id="cb182-14"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-14" aria-hidden="true"></a>    <span class="co">// retrieve the head of reversed 2nd half sublist</span></span>
+<span id="cb182-15"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-15" aria-hidden="true"></a>    ListNode reversed2ndHalfHead = <span class="fu">reverse</span>(mid);</span>
+<span id="cb182-16"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-16" aria-hidden="true"></a></span>
+<span id="cb182-17"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-17" aria-hidden="true"></a>    ListNode currentOrg = head, currentRev = reversed2ndHalfHead;</span>
+<span id="cb182-18"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-18" aria-hidden="true"></a></span>
+<span id="cb182-19"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-19" aria-hidden="true"></a>    <span class="kw">while</span>(currentOrg != <span class="kw">null</span> &amp;&amp; currentRev != <span class="kw">null</span>) {</span>
+<span id="cb182-20"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-20" aria-hidden="true"></a>        <span class="co">//if any in original 1st half does not match reversed 2nd half</span></span>
+<span id="cb182-21"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-21" aria-hidden="true"></a>        <span class="kw">if</span>(currentOrg.<span class="fu">val</span> != currentRev.<span class="fu">val</span>) {</span>
+<span id="cb182-22"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-22" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb182-23"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-23" aria-hidden="true"></a>        }</span>
+<span id="cb182-24"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-24" aria-hidden="true"></a></span>
+<span id="cb182-25"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-25" aria-hidden="true"></a>        currentOrg = currentOrg.<span class="fu">next</span>;</span>
+<span id="cb182-26"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-26" aria-hidden="true"></a>        currentRev = currentRev.<span class="fu">next</span>;</span>
+<span id="cb182-27"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-27" aria-hidden="true"></a>    }</span>
+<span id="cb182-28"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-28" aria-hidden="true"></a></span>
+<span id="cb182-29"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-29" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb182-30"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-30" aria-hidden="true"></a>}</span>
+<span id="cb182-31"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-31" aria-hidden="true"></a></span>
+<span id="cb182-32"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-32" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">reverse</span>(ListNode head) {</span>
+<span id="cb182-33"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-33" aria-hidden="true"></a>    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);</span>
+<span id="cb182-34"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-34" aria-hidden="true"></a>    ListNode current = head;</span>
+<span id="cb182-35"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-35" aria-hidden="true"></a></span>
+<span id="cb182-36"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-36" aria-hidden="true"></a>    <span class="co">//reverse links between current and prev</span></span>
+<span id="cb182-37"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-37" aria-hidden="true"></a>    <span class="kw">while</span> (current != <span class="kw">null</span>) {</span>
+<span id="cb182-38"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-38" aria-hidden="true"></a>        ListNode next = current.<span class="fu">next</span>;</span>
+<span id="cb182-39"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-39" aria-hidden="true"></a></span>
+<span id="cb182-40"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-40" aria-hidden="true"></a>        <span class="co">/*</span></span>
+<span id="cb182-41"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-41" aria-hidden="true"></a><span class="co">        * swap links between current and prev</span></span>
+<span id="cb182-42"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-42" aria-hidden="true"></a><span class="co">        */</span></span>
+<span id="cb182-43"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-43" aria-hidden="true"></a>        current.<span class="fu">next</span> = headPrev.<span class="fu">next</span>;</span>
+<span id="cb182-44"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-44" aria-hidden="true"></a>        headPrev.<span class="fu">next</span> = current;</span>
+<span id="cb182-45"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-45" aria-hidden="true"></a>        current = next;</span>
+<span id="cb182-46"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-46" aria-hidden="true"></a>    }</span>
+<span id="cb182-47"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-47" aria-hidden="true"></a></span>
+<span id="cb182-48"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-48" aria-hidden="true"></a>    <span class="kw">return</span> headPrev.<span class="fu">next</span>;</span>
+<span id="cb182-49"><a href="palindrome-linked-list-leet-code-234-easy.html#cb182-49" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

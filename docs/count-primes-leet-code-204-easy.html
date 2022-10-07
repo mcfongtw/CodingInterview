@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1056,38 +1057,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution-88" class="section level3" number="10.3.3">
 <h3><span class="header-section-number">10.3.3</span> Solution</h3>
-<div id="walkthrough-151" class="section level4" number="10.3.3.1">
+<div id="walkthrough-152" class="section level4" number="10.3.3.1">
 <h4><span class="header-section-number">10.3.3.1</span> Walkthrough</h4>
 </div>
-<div id="analysis-153" class="section level4" number="10.3.3.2">
+<div id="analysis-154" class="section level4" number="10.3.3.2">
 <h4><span class="header-section-number">10.3.3.2</span> Analysis</h4>
 <p>Time Complexity is O() since this is the number of computation performed.</p>
 </div>
-<div id="algorithm-157" class="section level4" number="10.3.3.3">
+<div id="algorithm-158" class="section level4" number="10.3.3.3">
 <h4><span class="header-section-number">10.3.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-85" class="section level4" number="10.3.3.4">
+<div id="java-code-87" class="section level4" number="10.3.3.4">
 <h4><span class="header-section-number">10.3.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb220"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb220-1"><a href="count-primes-leet-code-204-easy.html#cb220-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">countPrimes</span>(<span class="dt">int</span> n) {</span>
-<span id="cb220-2"><a href="count-primes-leet-code-204-easy.html#cb220-2" aria-hidden="true"></a>    <span class="kw">if</span> (n&lt;=<span class="dv">2</span>) {</span>
-<span id="cb220-3"><a href="count-primes-leet-code-204-easy.html#cb220-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb220-4"><a href="count-primes-leet-code-204-easy.html#cb220-4" aria-hidden="true"></a>    }</span>
-<span id="cb220-5"><a href="count-primes-leet-code-204-easy.html#cb220-5" aria-hidden="true"></a>    <span class="kw">if</span> (n==<span class="dv">3</span>) {</span>
-<span id="cb220-6"><a href="count-primes-leet-code-204-easy.html#cb220-6" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">1</span>;</span>
-<span id="cb220-7"><a href="count-primes-leet-code-204-easy.html#cb220-7" aria-hidden="true"></a>    }</span>
-<span id="cb220-8"><a href="count-primes-leet-code-204-easy.html#cb220-8" aria-hidden="true"></a>    <span class="dt">int</span> r = n-<span class="dv">2</span>;</span>
-<span id="cb220-9"><a href="count-primes-leet-code-204-easy.html#cb220-9" aria-hidden="true"></a></span>
-<span id="cb220-10"><a href="count-primes-leet-code-204-easy.html#cb220-10" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i=<span class="dv">4</span>; i&lt;n; i++){</span>
-<span id="cb220-11"><a href="count-primes-leet-code-204-easy.html#cb220-11" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> j=<span class="dv">2</span>; j&lt;=i/j; j++){</span>
-<span id="cb220-12"><a href="count-primes-leet-code-204-easy.html#cb220-12" aria-hidden="true"></a>            <span class="kw">if</span> (i%j==<span class="dv">0</span>) {</span>
-<span id="cb220-13"><a href="count-primes-leet-code-204-easy.html#cb220-13" aria-hidden="true"></a>                r--;</span>
-<span id="cb220-14"><a href="count-primes-leet-code-204-easy.html#cb220-14" aria-hidden="true"></a>                <span class="kw">break</span>;</span>
-<span id="cb220-15"><a href="count-primes-leet-code-204-easy.html#cb220-15" aria-hidden="true"></a>            }</span>
-<span id="cb220-16"><a href="count-primes-leet-code-204-easy.html#cb220-16" aria-hidden="true"></a>        }</span>
-<span id="cb220-17"><a href="count-primes-leet-code-204-easy.html#cb220-17" aria-hidden="true"></a>    }</span>
-<span id="cb220-18"><a href="count-primes-leet-code-204-easy.html#cb220-18" aria-hidden="true"></a></span>
-<span id="cb220-19"><a href="count-primes-leet-code-204-easy.html#cb220-19" aria-hidden="true"></a>    <span class="kw">return</span> r;</span>
-<span id="cb220-20"><a href="count-primes-leet-code-204-easy.html#cb220-20" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb221-1"><a href="count-primes-leet-code-204-easy.html#cb221-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">countPrimes</span>(<span class="dt">int</span> n) {</span>
+<span id="cb221-2"><a href="count-primes-leet-code-204-easy.html#cb221-2" aria-hidden="true"></a>    <span class="kw">if</span> (n&lt;=<span class="dv">2</span>) {</span>
+<span id="cb221-3"><a href="count-primes-leet-code-204-easy.html#cb221-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb221-4"><a href="count-primes-leet-code-204-easy.html#cb221-4" aria-hidden="true"></a>    }</span>
+<span id="cb221-5"><a href="count-primes-leet-code-204-easy.html#cb221-5" aria-hidden="true"></a>    <span class="kw">if</span> (n==<span class="dv">3</span>) {</span>
+<span id="cb221-6"><a href="count-primes-leet-code-204-easy.html#cb221-6" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">1</span>;</span>
+<span id="cb221-7"><a href="count-primes-leet-code-204-easy.html#cb221-7" aria-hidden="true"></a>    }</span>
+<span id="cb221-8"><a href="count-primes-leet-code-204-easy.html#cb221-8" aria-hidden="true"></a>    <span class="dt">int</span> r = n-<span class="dv">2</span>;</span>
+<span id="cb221-9"><a href="count-primes-leet-code-204-easy.html#cb221-9" aria-hidden="true"></a></span>
+<span id="cb221-10"><a href="count-primes-leet-code-204-easy.html#cb221-10" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i=<span class="dv">4</span>; i&lt;n; i++){</span>
+<span id="cb221-11"><a href="count-primes-leet-code-204-easy.html#cb221-11" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> j=<span class="dv">2</span>; j&lt;=i/j; j++){</span>
+<span id="cb221-12"><a href="count-primes-leet-code-204-easy.html#cb221-12" aria-hidden="true"></a>            <span class="kw">if</span> (i%j==<span class="dv">0</span>) {</span>
+<span id="cb221-13"><a href="count-primes-leet-code-204-easy.html#cb221-13" aria-hidden="true"></a>                r--;</span>
+<span id="cb221-14"><a href="count-primes-leet-code-204-easy.html#cb221-14" aria-hidden="true"></a>                <span class="kw">break</span>;</span>
+<span id="cb221-15"><a href="count-primes-leet-code-204-easy.html#cb221-15" aria-hidden="true"></a>            }</span>
+<span id="cb221-16"><a href="count-primes-leet-code-204-easy.html#cb221-16" aria-hidden="true"></a>        }</span>
+<span id="cb221-17"><a href="count-primes-leet-code-204-easy.html#cb221-17" aria-hidden="true"></a>    }</span>
+<span id="cb221-18"><a href="count-primes-leet-code-204-easy.html#cb221-18" aria-hidden="true"></a></span>
+<span id="cb221-19"><a href="count-primes-leet-code-204-easy.html#cb221-19" aria-hidden="true"></a>    <span class="kw">return</span> r;</span>
+<span id="cb221-20"><a href="count-primes-leet-code-204-easy.html#cb221-20" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1062,7 +1063,7 @@ another 2D matrix and do the rotation.</p>
 </div>
 <div id="solution-36" class="section level3" number="3.2.3">
 <h3><span class="header-section-number">3.2.3</span> Solution</h3>
-<div id="walkthrough-45" class="section level4" number="3.2.3.1">
+<div id="walkthrough-46" class="section level4" number="3.2.3.1">
 <h4><span class="header-section-number">3.2.3.1</span> Walkthrough</h4>
 <p>Take this matrix as example,</p>
 <pre><code>[1,2,3],
@@ -1077,33 +1078,33 @@ another 2D matrix and do the rotation.</p>
 [8,|5|,2],
 [9,|6|,3]</code></pre>
 </div>
-<div id="analysis-45" class="section level4" number="3.2.3.2">
+<div id="analysis-46" class="section level4" number="3.2.3.2">
 <h4><span class="header-section-number">3.2.3.2</span> Analysis</h4>
 <p>Time complexity is <span class="math inline">\(O(n^2)\)</span> as there are two loops</p>
 </div>
-<div id="algorithm-45" class="section level4" number="3.2.3.3">
+<div id="algorithm-46" class="section level4" number="3.2.3.3">
 <h4><span class="header-section-number">3.2.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-36" class="section level4" number="3.2.3.4">
+<div id="java-code-38" class="section level4" number="3.2.3.4">
 <h4><span class="header-section-number">3.2.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb63"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb63-1"><a href="rotate-image-leet-code-48-medium.html#cb63-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">rotate</span>(<span class="dt">int</span>[][] matrix) {</span>
-<span id="cb63-2"><a href="rotate-image-leet-code-48-medium.html#cb63-2" aria-hidden="true"></a>    <span class="co">//Swap symmetric element via diagnal</span></span>
-<span id="cb63-3"><a href="rotate-image-leet-code-48-medium.html#cb63-3" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;  matrix.<span class="fu">length</span>; i++) {</span>
-<span id="cb63-4"><a href="rotate-image-leet-code-48-medium.html#cb63-4" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; i; j++) {</span>
-<span id="cb63-5"><a href="rotate-image-leet-code-48-medium.html#cb63-5" aria-hidden="true"></a>            <span class="dt">int</span> temp = matrix[i][j];</span>
-<span id="cb63-6"><a href="rotate-image-leet-code-48-medium.html#cb63-6" aria-hidden="true"></a>            matrix[i][j] = matrix[j][i];</span>
-<span id="cb63-7"><a href="rotate-image-leet-code-48-medium.html#cb63-7" aria-hidden="true"></a>            matrix[j][i] = temp;</span>
-<span id="cb63-8"><a href="rotate-image-leet-code-48-medium.html#cb63-8" aria-hidden="true"></a>        }</span>
-<span id="cb63-9"><a href="rotate-image-leet-code-48-medium.html#cb63-9" aria-hidden="true"></a>    }</span>
-<span id="cb63-10"><a href="rotate-image-leet-code-48-medium.html#cb63-10" aria-hidden="true"></a>    <span class="co">//Swap columns via centeral vertical line</span></span>
-<span id="cb63-11"><a href="rotate-image-leet-code-48-medium.html#cb63-11" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>, j = matrix.<span class="fu">length</span> - <span class="dv">1</span>; i &lt; matrix.<span class="fu">length</span> / <span class="dv">2</span>; i++, j--) {</span>
-<span id="cb63-12"><a href="rotate-image-leet-code-48-medium.html#cb63-12" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> k = <span class="dv">0</span>; k &lt; matrix.<span class="fu">length</span>; k++) {</span>
-<span id="cb63-13"><a href="rotate-image-leet-code-48-medium.html#cb63-13" aria-hidden="true"></a>            <span class="dt">int</span> temp = matrix[k][i];</span>
-<span id="cb63-14"><a href="rotate-image-leet-code-48-medium.html#cb63-14" aria-hidden="true"></a>            matrix[k][i] = matrix[k][j];</span>
-<span id="cb63-15"><a href="rotate-image-leet-code-48-medium.html#cb63-15" aria-hidden="true"></a>            matrix[k][j] = temp;</span>
-<span id="cb63-16"><a href="rotate-image-leet-code-48-medium.html#cb63-16" aria-hidden="true"></a>        }</span>
-<span id="cb63-17"><a href="rotate-image-leet-code-48-medium.html#cb63-17" aria-hidden="true"></a>    }</span>
-<span id="cb63-18"><a href="rotate-image-leet-code-48-medium.html#cb63-18" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb64-1"><a href="rotate-image-leet-code-48-medium.html#cb64-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">rotate</span>(<span class="dt">int</span>[][] matrix) {</span>
+<span id="cb64-2"><a href="rotate-image-leet-code-48-medium.html#cb64-2" aria-hidden="true"></a>    <span class="co">//Swap symmetric element via diagnal</span></span>
+<span id="cb64-3"><a href="rotate-image-leet-code-48-medium.html#cb64-3" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt;  matrix.<span class="fu">length</span>; i++) {</span>
+<span id="cb64-4"><a href="rotate-image-leet-code-48-medium.html#cb64-4" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; i; j++) {</span>
+<span id="cb64-5"><a href="rotate-image-leet-code-48-medium.html#cb64-5" aria-hidden="true"></a>            <span class="dt">int</span> temp = matrix[i][j];</span>
+<span id="cb64-6"><a href="rotate-image-leet-code-48-medium.html#cb64-6" aria-hidden="true"></a>            matrix[i][j] = matrix[j][i];</span>
+<span id="cb64-7"><a href="rotate-image-leet-code-48-medium.html#cb64-7" aria-hidden="true"></a>            matrix[j][i] = temp;</span>
+<span id="cb64-8"><a href="rotate-image-leet-code-48-medium.html#cb64-8" aria-hidden="true"></a>        }</span>
+<span id="cb64-9"><a href="rotate-image-leet-code-48-medium.html#cb64-9" aria-hidden="true"></a>    }</span>
+<span id="cb64-10"><a href="rotate-image-leet-code-48-medium.html#cb64-10" aria-hidden="true"></a>    <span class="co">//Swap columns via centeral vertical line</span></span>
+<span id="cb64-11"><a href="rotate-image-leet-code-48-medium.html#cb64-11" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>, j = matrix.<span class="fu">length</span> - <span class="dv">1</span>; i &lt; matrix.<span class="fu">length</span> / <span class="dv">2</span>; i++, j--) {</span>
+<span id="cb64-12"><a href="rotate-image-leet-code-48-medium.html#cb64-12" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> k = <span class="dv">0</span>; k &lt; matrix.<span class="fu">length</span>; k++) {</span>
+<span id="cb64-13"><a href="rotate-image-leet-code-48-medium.html#cb64-13" aria-hidden="true"></a>            <span class="dt">int</span> temp = matrix[k][i];</span>
+<span id="cb64-14"><a href="rotate-image-leet-code-48-medium.html#cb64-14" aria-hidden="true"></a>            matrix[k][i] = matrix[k][j];</span>
+<span id="cb64-15"><a href="rotate-image-leet-code-48-medium.html#cb64-15" aria-hidden="true"></a>            matrix[k][j] = temp;</span>
+<span id="cb64-16"><a href="rotate-image-leet-code-48-medium.html#cb64-16" aria-hidden="true"></a>        }</span>
+<span id="cb64-17"><a href="rotate-image-leet-code-48-medium.html#cb64-17" aria-hidden="true"></a>    }</span>
+<span id="cb64-18"><a href="rotate-image-leet-code-48-medium.html#cb64-18" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

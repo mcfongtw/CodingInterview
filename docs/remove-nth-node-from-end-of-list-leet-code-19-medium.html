@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1071,129 +1072,129 @@ Figure 6.31: Some caption.
 </div>
 <div id="solution---two-pass" class="section level3" number="6.12.3">
 <h3><span class="header-section-number">6.12.3</span> Solution - TWO Pass</h3>
-<div id="walkthrough-118" class="section level4" number="6.12.3.1">
+<div id="walkthrough-119" class="section level4" number="6.12.3.1">
 <h4><span class="header-section-number">6.12.3.1</span> Walkthrough</h4>
 <p>The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list,
 whileas the second iteration is to iterate to the node posiion <span class="math inline">\(length -n + 1\)</span> or prev node position <span class="math inline">\(length - n\)</span>,
 begining from a dummy node headPrev. Finally, we need to check and move the head node appropriately if we are deleting
 it.</p>
 </div>
-<div id="analysis-119" class="section level4" number="6.12.3.2">
+<div id="analysis-120" class="section level4" number="6.12.3.2">
 <h4><span class="header-section-number">6.12.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-125" class="section level4" number="6.12.3.3">
+<div id="algorithm-126" class="section level4" number="6.12.3.3">
 <h4><span class="header-section-number">6.12.3.3</span> Algorithm</h4>
 </div>
 <div id="java-code---two-pass" class="section level4" number="6.12.3.4">
 <h4><span class="header-section-number">6.12.3.4</span> Java Code - TWO Pass</h4>
-<div class="sourceCode" id="cb183"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb183-1"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">removeNthFromEnd</span>(ListNode head, <span class="dt">int</span> n) {</span>
-<span id="cb183-2"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-2" aria-hidden="true"></a>    <span class="kw">if</span>(head == <span class="kw">null</span>) {</span>
-<span id="cb183-3"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
-<span id="cb183-4"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-4" aria-hidden="true"></a>    }</span>
-<span id="cb183-5"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-5" aria-hidden="true"></a></span>
-<span id="cb183-6"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-6" aria-hidden="true"></a>    <span class="co">//Quick check to see if we are deleting the only node in the list</span></span>
-<span id="cb183-7"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-7" aria-hidden="true"></a>    <span class="kw">if</span> (head.<span class="fu">next</span> == <span class="kw">null</span> &amp;&amp; n &lt;= <span class="dv">1</span>){</span>
-<span id="cb183-8"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-8" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
-<span id="cb183-9"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-9" aria-hidden="true"></a>    }</span>
-<span id="cb183-10"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-10" aria-hidden="true"></a></span>
-<span id="cb183-11"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-11" aria-hidden="true"></a>    <span class="dt">int</span> length = <span class="dv">0</span>;</span>
-<span id="cb183-12"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-12" aria-hidden="true"></a></span>
-<span id="cb183-13"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-13" aria-hidden="true"></a>    <span class="co">//1st pass: to get length of the list</span></span>
-<span id="cb183-14"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-14" aria-hidden="true"></a>    <span class="kw">for</span>(ListNode current = head; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>) {</span>
-<span id="cb183-15"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-15" aria-hidden="true"></a>        length++;</span>
-<span id="cb183-16"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-16" aria-hidden="true"></a>    }</span>
-<span id="cb183-17"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-17" aria-hidden="true"></a></span>
-<span id="cb183-18"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-18" aria-hidden="true"></a>    <span class="co">// removal position is over list length</span></span>
-<span id="cb183-19"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-19" aria-hidden="true"></a>    <span class="kw">if</span>(n &gt; length) {</span>
-<span id="cb183-20"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-20" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
-<span id="cb183-21"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-21" aria-hidden="true"></a>    }</span>
-<span id="cb183-22"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-22" aria-hidden="true"></a></span>
-<span id="cb183-23"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-23" aria-hidden="true"></a>    <span class="co">//move to the position before the target</span></span>
-<span id="cb183-24"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-24" aria-hidden="true"></a>    <span class="dt">int</span> position = length - n;</span>
-<span id="cb183-25"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-25" aria-hidden="true"></a></span>
-<span id="cb183-26"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-26" aria-hidden="true"></a>    <span class="co">//keep track of current traversed # of nodes</span></span>
-<span id="cb183-27"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-27" aria-hidden="true"></a>    <span class="dt">int</span> count = <span class="dv">0</span>;</span>
-<span id="cb183-28"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-28" aria-hidden="true"></a></span>
-<span id="cb183-29"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-29" aria-hidden="true"></a>    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);</span>
-<span id="cb183-30"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-30" aria-hidden="true"></a>    headPrev.<span class="fu">next</span> = head;</span>
-<span id="cb183-31"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-31" aria-hidden="true"></a>    ListNode removedPrev = headPrev;</span>
-<span id="cb183-32"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-32" aria-hidden="true"></a></span>
-<span id="cb183-33"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-33" aria-hidden="true"></a>    <span class="co">//2nd pass: move to the one before target</span></span>
-<span id="cb183-34"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-34" aria-hidden="true"></a>    <span class="kw">while</span>( count &lt; position) {</span>
-<span id="cb183-35"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-35" aria-hidden="true"></a>        removedPrev = removedPrev.<span class="fu">next</span>;</span>
-<span id="cb183-36"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-36" aria-hidden="true"></a>        count++;</span>
-<span id="cb183-37"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-37" aria-hidden="true"></a>    }</span>
-<span id="cb183-38"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-38" aria-hidden="true"></a></span>
-<span id="cb183-39"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-39" aria-hidden="true"></a>    removedPrev.<span class="fu">next</span> = removedPrev.<span class="fu">next</span>.<span class="fu">next</span>;</span>
-<span id="cb183-40"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-40" aria-hidden="true"></a></span>
-<span id="cb183-41"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-41" aria-hidden="true"></a>    <span class="co">//if removing head, renew head</span></span>
-<span id="cb183-42"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-42" aria-hidden="true"></a>    <span class="kw">if</span>(removedPrev == headPrev) {</span>
-<span id="cb183-43"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-43" aria-hidden="true"></a>        head = removedPrev.<span class="fu">next</span>;</span>
-<span id="cb183-44"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-44" aria-hidden="true"></a>    }</span>
-<span id="cb183-45"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-45" aria-hidden="true"></a></span>
-<span id="cb183-46"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-46" aria-hidden="true"></a></span>
-<span id="cb183-47"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-47" aria-hidden="true"></a>    <span class="kw">return</span> head;</span>
-<span id="cb183-48"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb183-48" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb184"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb184-1"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">removeNthFromEnd</span>(ListNode head, <span class="dt">int</span> n) {</span>
+<span id="cb184-2"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-2" aria-hidden="true"></a>    <span class="kw">if</span>(head == <span class="kw">null</span>) {</span>
+<span id="cb184-3"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb184-4"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-4" aria-hidden="true"></a>    }</span>
+<span id="cb184-5"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-5" aria-hidden="true"></a></span>
+<span id="cb184-6"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-6" aria-hidden="true"></a>    <span class="co">//Quick check to see if we are deleting the only node in the list</span></span>
+<span id="cb184-7"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-7" aria-hidden="true"></a>    <span class="kw">if</span> (head.<span class="fu">next</span> == <span class="kw">null</span> &amp;&amp; n &lt;= <span class="dv">1</span>){</span>
+<span id="cb184-8"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-8" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb184-9"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-9" aria-hidden="true"></a>    }</span>
+<span id="cb184-10"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-10" aria-hidden="true"></a></span>
+<span id="cb184-11"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-11" aria-hidden="true"></a>    <span class="dt">int</span> length = <span class="dv">0</span>;</span>
+<span id="cb184-12"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-12" aria-hidden="true"></a></span>
+<span id="cb184-13"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-13" aria-hidden="true"></a>    <span class="co">//1st pass: to get length of the list</span></span>
+<span id="cb184-14"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-14" aria-hidden="true"></a>    <span class="kw">for</span>(ListNode current = head; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>) {</span>
+<span id="cb184-15"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-15" aria-hidden="true"></a>        length++;</span>
+<span id="cb184-16"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-16" aria-hidden="true"></a>    }</span>
+<span id="cb184-17"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-17" aria-hidden="true"></a></span>
+<span id="cb184-18"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-18" aria-hidden="true"></a>    <span class="co">// removal position is over list length</span></span>
+<span id="cb184-19"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-19" aria-hidden="true"></a>    <span class="kw">if</span>(n &gt; length) {</span>
+<span id="cb184-20"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-20" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
+<span id="cb184-21"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-21" aria-hidden="true"></a>    }</span>
+<span id="cb184-22"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-22" aria-hidden="true"></a></span>
+<span id="cb184-23"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-23" aria-hidden="true"></a>    <span class="co">//move to the position before the target</span></span>
+<span id="cb184-24"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-24" aria-hidden="true"></a>    <span class="dt">int</span> position = length - n;</span>
+<span id="cb184-25"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-25" aria-hidden="true"></a></span>
+<span id="cb184-26"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-26" aria-hidden="true"></a>    <span class="co">//keep track of current traversed # of nodes</span></span>
+<span id="cb184-27"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-27" aria-hidden="true"></a>    <span class="dt">int</span> count = <span class="dv">0</span>;</span>
+<span id="cb184-28"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-28" aria-hidden="true"></a></span>
+<span id="cb184-29"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-29" aria-hidden="true"></a>    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);</span>
+<span id="cb184-30"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-30" aria-hidden="true"></a>    headPrev.<span class="fu">next</span> = head;</span>
+<span id="cb184-31"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-31" aria-hidden="true"></a>    ListNode removedPrev = headPrev;</span>
+<span id="cb184-32"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-32" aria-hidden="true"></a></span>
+<span id="cb184-33"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-33" aria-hidden="true"></a>    <span class="co">//2nd pass: move to the one before target</span></span>
+<span id="cb184-34"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-34" aria-hidden="true"></a>    <span class="kw">while</span>( count &lt; position) {</span>
+<span id="cb184-35"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-35" aria-hidden="true"></a>        removedPrev = removedPrev.<span class="fu">next</span>;</span>
+<span id="cb184-36"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-36" aria-hidden="true"></a>        count++;</span>
+<span id="cb184-37"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-37" aria-hidden="true"></a>    }</span>
+<span id="cb184-38"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-38" aria-hidden="true"></a></span>
+<span id="cb184-39"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-39" aria-hidden="true"></a>    removedPrev.<span class="fu">next</span> = removedPrev.<span class="fu">next</span>.<span class="fu">next</span>;</span>
+<span id="cb184-40"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-40" aria-hidden="true"></a></span>
+<span id="cb184-41"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-41" aria-hidden="true"></a>    <span class="co">//if removing head, renew head</span></span>
+<span id="cb184-42"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-42" aria-hidden="true"></a>    <span class="kw">if</span>(removedPrev == headPrev) {</span>
+<span id="cb184-43"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-43" aria-hidden="true"></a>        head = removedPrev.<span class="fu">next</span>;</span>
+<span id="cb184-44"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-44" aria-hidden="true"></a>    }</span>
+<span id="cb184-45"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-45" aria-hidden="true"></a></span>
+<span id="cb184-46"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-46" aria-hidden="true"></a></span>
+<span id="cb184-47"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-47" aria-hidden="true"></a>    <span class="kw">return</span> head;</span>
+<span id="cb184-48"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-48" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---one-pass" class="section level3" number="6.12.4">
 <h3><span class="header-section-number">6.12.4</span> Solution - ONE Pass</h3>
-<div id="walkthrough-119" class="section level4" number="6.12.4.1">
+<div id="walkthrough-120" class="section level4" number="6.12.4.1">
 <h4><span class="header-section-number">6.12.4.1</span> Walkthrough</h4>
 <p>The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list,
 whileas the second iteration is to iterate to the node posiion <span class="math inline">\(length -n + 1\)</span> or prev node position <span class="math inline">\(length - n\)</span>,
 begining from a dummy node headPrev. Finally, we need to check and move the head node appropriately if we are deleting
 it.</p>
 </div>
-<div id="analysis-120" class="section level4" number="6.12.4.2">
+<div id="analysis-121" class="section level4" number="6.12.4.2">
 <h4><span class="header-section-number">6.12.4.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
 <div id="java-code---one-pass" class="section level4" number="6.12.4.3">
 <h4><span class="header-section-number">6.12.4.3</span> Java Code - ONE Pass</h4>
-<div class="sourceCode" id="cb184"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb184-1"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">removeNthFromEnd</span>(ListNode head, <span class="dt">int</span> n) {</span>
-<span id="cb184-2"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-2" aria-hidden="true"></a>    <span class="co">//Quick check to see if we are deleting the only node in the list</span></span>
-<span id="cb184-3"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-3" aria-hidden="true"></a>    <span class="kw">if</span> (head.<span class="fu">next</span> == <span class="kw">null</span> &amp;&amp; n == <span class="dv">1</span>){</span>
-<span id="cb184-4"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-4" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
-<span id="cb184-5"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-5" aria-hidden="true"></a>    }</span>
-<span id="cb184-6"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-6" aria-hidden="true"></a></span>
-<span id="cb184-7"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-7" aria-hidden="true"></a>    <span class="co">//keep track of current traversed # of nodes</span></span>
-<span id="cb184-8"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-8" aria-hidden="true"></a>    <span class="dt">int</span> count = <span class="dv">0</span>;</span>
-<span id="cb184-9"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-9" aria-hidden="true"></a></span>
-<span id="cb184-10"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-10" aria-hidden="true"></a>    <span class="co">//Add a node to the begining of our linked list to make deletions easier at the top</span></span>
-<span id="cb184-11"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-11" aria-hidden="true"></a>    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);</span>
-<span id="cb184-12"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-12" aria-hidden="true"></a>    headPrev.<span class="fu">next</span> = head;</span>
-<span id="cb184-13"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-13" aria-hidden="true"></a></span>
-<span id="cb184-14"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-14" aria-hidden="true"></a>    ListNode current = headPrev;</span>
-<span id="cb184-15"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-15" aria-hidden="true"></a>    ListNode removedPrev = headPrev;</span>
-<span id="cb184-16"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-16" aria-hidden="true"></a></span>
-<span id="cb184-17"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-17" aria-hidden="true"></a>    <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
-<span id="cb184-18"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-18" aria-hidden="true"></a>        count++;</span>
-<span id="cb184-19"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-19" aria-hidden="true"></a></span>
-<span id="cb184-20"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-20" aria-hidden="true"></a>        <span class="kw">if</span>( (count - n) &gt; <span class="dv">1</span> ) {</span>
-<span id="cb184-21"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-21" aria-hidden="true"></a>            removedPrev = removedPrev.<span class="fu">next</span>;</span>
-<span id="cb184-22"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-22" aria-hidden="true"></a>        }</span>
-<span id="cb184-23"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-23" aria-hidden="true"></a></span>
-<span id="cb184-24"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-24" aria-hidden="true"></a>        <span class="kw">if</span>(current.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
-<span id="cb184-25"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-25" aria-hidden="true"></a>            <span class="co">//the last node, removedPrev is also at the right position</span></span>
-<span id="cb184-26"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-26" aria-hidden="true"></a></span>
-<span id="cb184-27"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-27" aria-hidden="true"></a>            <span class="kw">if</span>(removedPrev.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; removedPrev.<span class="fu">next</span>.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
-<span id="cb184-28"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-28" aria-hidden="true"></a>                <span class="co">//to remove tail node</span></span>
-<span id="cb184-29"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-29" aria-hidden="true"></a>                removedPrev.<span class="fu">next</span> = <span class="kw">null</span>;</span>
-<span id="cb184-30"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-30" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
-<span id="cb184-31"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-31" aria-hidden="true"></a>                <span class="co">// to remove non-tail node (including head)</span></span>
-<span id="cb184-32"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-32" aria-hidden="true"></a>                removedPrev.<span class="fu">next</span> = removedPrev.<span class="fu">next</span>.<span class="fu">next</span>;</span>
-<span id="cb184-33"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-33" aria-hidden="true"></a>            }</span>
-<span id="cb184-34"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-34" aria-hidden="true"></a></span>
-<span id="cb184-35"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-35" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
-<span id="cb184-36"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-36" aria-hidden="true"></a>        }</span>
-<span id="cb184-37"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-37" aria-hidden="true"></a></span>
-<span id="cb184-38"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-38" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
-<span id="cb184-39"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-39" aria-hidden="true"></a>    }</span>
-<span id="cb184-40"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-40" aria-hidden="true"></a></span>
-<span id="cb184-41"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-41" aria-hidden="true"></a>    <span class="kw">return</span> headPrev.<span class="fu">next</span>;</span>
-<span id="cb184-42"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb184-42" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb185"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb185-1"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">removeNthFromEnd</span>(ListNode head, <span class="dt">int</span> n) {</span>
+<span id="cb185-2"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-2" aria-hidden="true"></a>    <span class="co">//Quick check to see if we are deleting the only node in the list</span></span>
+<span id="cb185-3"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-3" aria-hidden="true"></a>    <span class="kw">if</span> (head.<span class="fu">next</span> == <span class="kw">null</span> &amp;&amp; n == <span class="dv">1</span>){</span>
+<span id="cb185-4"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-4" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb185-5"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-5" aria-hidden="true"></a>    }</span>
+<span id="cb185-6"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-6" aria-hidden="true"></a></span>
+<span id="cb185-7"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-7" aria-hidden="true"></a>    <span class="co">//keep track of current traversed # of nodes</span></span>
+<span id="cb185-8"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-8" aria-hidden="true"></a>    <span class="dt">int</span> count = <span class="dv">0</span>;</span>
+<span id="cb185-9"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-9" aria-hidden="true"></a></span>
+<span id="cb185-10"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-10" aria-hidden="true"></a>    <span class="co">//Add a node to the begining of our linked list to make deletions easier at the top</span></span>
+<span id="cb185-11"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-11" aria-hidden="true"></a>    ListNode headPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>);</span>
+<span id="cb185-12"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-12" aria-hidden="true"></a>    headPrev.<span class="fu">next</span> = head;</span>
+<span id="cb185-13"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-13" aria-hidden="true"></a></span>
+<span id="cb185-14"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-14" aria-hidden="true"></a>    ListNode current = headPrev;</span>
+<span id="cb185-15"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-15" aria-hidden="true"></a>    ListNode removedPrev = headPrev;</span>
+<span id="cb185-16"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-16" aria-hidden="true"></a></span>
+<span id="cb185-17"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-17" aria-hidden="true"></a>    <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
+<span id="cb185-18"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-18" aria-hidden="true"></a>        count++;</span>
+<span id="cb185-19"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-19" aria-hidden="true"></a></span>
+<span id="cb185-20"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-20" aria-hidden="true"></a>        <span class="kw">if</span>( (count - n) &gt; <span class="dv">1</span> ) {</span>
+<span id="cb185-21"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-21" aria-hidden="true"></a>            removedPrev = removedPrev.<span class="fu">next</span>;</span>
+<span id="cb185-22"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-22" aria-hidden="true"></a>        }</span>
+<span id="cb185-23"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-23" aria-hidden="true"></a></span>
+<span id="cb185-24"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-24" aria-hidden="true"></a>        <span class="kw">if</span>(current.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
+<span id="cb185-25"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-25" aria-hidden="true"></a>            <span class="co">//the last node, removedPrev is also at the right position</span></span>
+<span id="cb185-26"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-26" aria-hidden="true"></a></span>
+<span id="cb185-27"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-27" aria-hidden="true"></a>            <span class="kw">if</span>(removedPrev.<span class="fu">next</span> != <span class="kw">null</span> &amp;&amp; removedPrev.<span class="fu">next</span>.<span class="fu">next</span> == <span class="kw">null</span>) {</span>
+<span id="cb185-28"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-28" aria-hidden="true"></a>                <span class="co">//to remove tail node</span></span>
+<span id="cb185-29"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-29" aria-hidden="true"></a>                removedPrev.<span class="fu">next</span> = <span class="kw">null</span>;</span>
+<span id="cb185-30"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-30" aria-hidden="true"></a>            } <span class="kw">else</span> {</span>
+<span id="cb185-31"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-31" aria-hidden="true"></a>                <span class="co">// to remove non-tail node (including head)</span></span>
+<span id="cb185-32"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-32" aria-hidden="true"></a>                removedPrev.<span class="fu">next</span> = removedPrev.<span class="fu">next</span>.<span class="fu">next</span>;</span>
+<span id="cb185-33"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-33" aria-hidden="true"></a>            }</span>
+<span id="cb185-34"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-34" aria-hidden="true"></a></span>
+<span id="cb185-35"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-35" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
+<span id="cb185-36"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-36" aria-hidden="true"></a>        }</span>
+<span id="cb185-37"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-37" aria-hidden="true"></a></span>
+<span id="cb185-38"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-38" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
+<span id="cb185-39"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-39" aria-hidden="true"></a>    }</span>
+<span id="cb185-40"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-40" aria-hidden="true"></a></span>
+<span id="cb185-41"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-41" aria-hidden="true"></a>    <span class="kw">return</span> headPrev.<span class="fu">next</span>;</span>
+<span id="cb185-42"><a href="remove-nth-node-from-end-of-list-leet-code-19-medium.html#cb185-42" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

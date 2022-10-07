@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1064,39 +1065,39 @@ Figure 4.16: Some caption.
 </div>
 <div id="solution---iterative-i" class="section level3" number="4.12.3">
 <h3><span class="header-section-number">4.12.3</span> Solution - Iterative I</h3>
-<div id="walkthrough-71" class="section level4" number="4.12.3.1">
+<div id="walkthrough-72" class="section level4" number="4.12.3.1">
 <h4><span class="header-section-number">4.12.3.1</span> Walkthrough</h4>
 <p>For iterative solution, use a stack to store the root node that will be used to retrieve root.right for later use. For
 initial loop condiition, be sure to include (root != null) to make sure loop starts since stack initially is empty.</p>
 </div>
-<div id="analysis-72" class="section level4" number="4.12.3.2">
+<div id="analysis-73" class="section level4" number="4.12.3.2">
 <h4><span class="header-section-number">4.12.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.
 #### Algorithm</p>
 </div>
 <div id="java-code---iterative-i" class="section level4" number="4.12.3.3">
 <h4><span class="header-section-number">4.12.3.3</span> Java Code - Iterative I</h4>
-<div class="sourceCode" id="cb120"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb120-1"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">preorderTraversal</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb120-2"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb120-3"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-3" aria-hidden="true"></a>    <span class="co">//stack is used to store the root node that will be used access root.right later</span></span>
-<span id="cb120-4"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-4" aria-hidden="true"></a>    <span class="bu">Stack</span>&lt;<span class="bu">TreeNode</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
-<span id="cb120-5"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-5" aria-hidden="true"></a></span>
-<span id="cb120-6"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-6" aria-hidden="true"></a>    <span class="kw">while</span>(!stack.<span class="fu">isEmpty</span>() || root != <span class="kw">null</span>) {</span>
-<span id="cb120-7"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-7" aria-hidden="true"></a>        <span class="kw">if</span>(root != <span class="kw">null</span>) {</span>
-<span id="cb120-8"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-8" aria-hidden="true"></a>            stack.<span class="fu">push</span>(root);</span>
-<span id="cb120-9"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-9" aria-hidden="true"></a>            result.<span class="fu">add</span>(root.<span class="fu">val</span>); <span class="co">// Add before going to children</span></span>
-<span id="cb120-10"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-10" aria-hidden="true"></a>            root = root.<span class="fu">left</span>;</span>
-<span id="cb120-11"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-11" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb120-12"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-12" aria-hidden="true"></a>            root = stack.<span class="fu">pop</span>().<span class="fu">right</span>;</span>
-<span id="cb120-13"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-13" aria-hidden="true"></a>        }</span>
-<span id="cb120-14"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-14" aria-hidden="true"></a>    }</span>
-<span id="cb120-15"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-15" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb120-16"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb120-16" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb121-1"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">preorderTraversal</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb121-2"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb121-3"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-3" aria-hidden="true"></a>    <span class="co">//stack is used to store the root node that will be used access root.right later</span></span>
+<span id="cb121-4"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-4" aria-hidden="true"></a>    <span class="bu">Stack</span>&lt;<span class="bu">TreeNode</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
+<span id="cb121-5"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-5" aria-hidden="true"></a></span>
+<span id="cb121-6"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-6" aria-hidden="true"></a>    <span class="kw">while</span>(!stack.<span class="fu">isEmpty</span>() || root != <span class="kw">null</span>) {</span>
+<span id="cb121-7"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-7" aria-hidden="true"></a>        <span class="kw">if</span>(root != <span class="kw">null</span>) {</span>
+<span id="cb121-8"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-8" aria-hidden="true"></a>            stack.<span class="fu">push</span>(root);</span>
+<span id="cb121-9"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-9" aria-hidden="true"></a>            result.<span class="fu">add</span>(root.<span class="fu">val</span>); <span class="co">// Add before going to children</span></span>
+<span id="cb121-10"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-10" aria-hidden="true"></a>            root = root.<span class="fu">left</span>;</span>
+<span id="cb121-11"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-11" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb121-12"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-12" aria-hidden="true"></a>            root = stack.<span class="fu">pop</span>().<span class="fu">right</span>;</span>
+<span id="cb121-13"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-13" aria-hidden="true"></a>        }</span>
+<span id="cb121-14"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-14" aria-hidden="true"></a>    }</span>
+<span id="cb121-15"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-15" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb121-16"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-16" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---iterative-ii" class="section level3" number="4.12.4">
 <h3><span class="header-section-number">4.12.4</span> Solution - Iterative II</h3>
-<div id="walkthrough-72" class="section level4" number="4.12.4.1">
+<div id="walkthrough-73" class="section level4" number="4.12.4.1">
 <h4><span class="header-section-number">4.12.4.1</span> Walkthrough</h4>
 <p>To convert an inherently recursive procedures to iterative, we need an explicit stack, and do following
 while the stack is not empty:</p>
@@ -1108,46 +1109,46 @@ while the stack is not empty:</p>
 <p>Since stack is a LIFO, when the right child node is pushed before the left child node to a stack, the left
 child node would be processed before the right child node.</p>
 </div>
-<div id="analysis-73" class="section level4" number="4.12.4.2">
+<div id="analysis-74" class="section level4" number="4.12.4.2">
 <h4><span class="header-section-number">4.12.4.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-74" class="section level4" number="4.12.4.3">
+<div id="algorithm-75" class="section level4" number="4.12.4.3">
 <h4><span class="header-section-number">4.12.4.3</span> Algorithm</h4>
 </div>
 <div id="java-code---iterative-ii" class="section level4" number="4.12.4.4">
 <h4><span class="header-section-number">4.12.4.4</span> Java Code - Iterative II</h4>
-<div class="sourceCode" id="cb121"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb121-1"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">preorderTraversal</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb121-2"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb121-3"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-3" aria-hidden="true"></a>    <span class="co">//stack is used to store the root node that will be used access root.right later</span></span>
-<span id="cb121-4"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-4" aria-hidden="true"></a>    <span class="bu">Stack</span>&lt;<span class="bu">TreeNode</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
-<span id="cb121-5"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-5" aria-hidden="true"></a></span>
-<span id="cb121-6"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-6" aria-hidden="true"></a>    <span class="kw">if</span> (root == <span class="kw">null</span>) {</span>
-<span id="cb121-7"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-7" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
-<span id="cb121-8"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-8" aria-hidden="true"></a>    }</span>
-<span id="cb121-9"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-9" aria-hidden="true"></a>    stack.<span class="fu">push</span>(root);</span>
-<span id="cb121-10"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-10" aria-hidden="true"></a></span>
-<span id="cb121-11"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-11" aria-hidden="true"></a>    <span class="kw">while</span> (!stack.<span class="fu">empty</span>()) {</span>
-<span id="cb121-12"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-12" aria-hidden="true"></a>        <span class="bu">Node</span> node = nodeStack.<span class="fu">pop</span>();</span>
-<span id="cb121-13"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-13" aria-hidden="true"></a>        result.<span class="fu">add</span>(node.<span class="fu">val</span>);</span>
-<span id="cb121-14"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-14" aria-hidden="true"></a></span>
-<span id="cb121-15"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-15" aria-hidden="true"></a>        <span class="co">// Push the RIGHT child of the popped node to stack</span></span>
-<span id="cb121-16"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-16" aria-hidden="true"></a>        <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
-<span id="cb121-17"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-17" aria-hidden="true"></a>            stack.<span class="fu">push</span>(node.<span class="fu">right</span>);</span>
-<span id="cb121-18"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-18" aria-hidden="true"></a>        }</span>
-<span id="cb121-19"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-19" aria-hidden="true"></a>        <span class="co">// Push the LEFT child of the popped node to stack</span></span>
-<span id="cb121-20"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-20" aria-hidden="true"></a>        <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
-<span id="cb121-21"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-21" aria-hidden="true"></a>            stack.<span class="fu">push</span>(node.<span class="fu">left</span>);</span>
-<span id="cb121-22"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-22" aria-hidden="true"></a>        }</span>
-<span id="cb121-23"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-23" aria-hidden="true"></a>    }</span>
-<span id="cb121-24"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-24" aria-hidden="true"></a></span>
-<span id="cb121-25"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-25" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb121-26"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb121-26" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb122-1"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">preorderTraversal</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb122-2"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb122-3"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-3" aria-hidden="true"></a>    <span class="co">//stack is used to store the root node that will be used access root.right later</span></span>
+<span id="cb122-4"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-4" aria-hidden="true"></a>    <span class="bu">Stack</span>&lt;<span class="bu">TreeNode</span>&gt; stack = <span class="kw">new</span> <span class="bu">Stack</span>&lt;&gt;();</span>
+<span id="cb122-5"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-5" aria-hidden="true"></a></span>
+<span id="cb122-6"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-6" aria-hidden="true"></a>    <span class="kw">if</span> (root == <span class="kw">null</span>) {</span>
+<span id="cb122-7"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-7" aria-hidden="true"></a>        <span class="kw">return</span> result;</span>
+<span id="cb122-8"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-8" aria-hidden="true"></a>    }</span>
+<span id="cb122-9"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-9" aria-hidden="true"></a>    stack.<span class="fu">push</span>(root);</span>
+<span id="cb122-10"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-10" aria-hidden="true"></a></span>
+<span id="cb122-11"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-11" aria-hidden="true"></a>    <span class="kw">while</span> (!stack.<span class="fu">empty</span>()) {</span>
+<span id="cb122-12"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-12" aria-hidden="true"></a>        <span class="bu">Node</span> node = nodeStack.<span class="fu">pop</span>();</span>
+<span id="cb122-13"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-13" aria-hidden="true"></a>        result.<span class="fu">add</span>(node.<span class="fu">val</span>);</span>
+<span id="cb122-14"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-14" aria-hidden="true"></a></span>
+<span id="cb122-15"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-15" aria-hidden="true"></a>        <span class="co">// Push the RIGHT child of the popped node to stack</span></span>
+<span id="cb122-16"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-16" aria-hidden="true"></a>        <span class="kw">if</span> (node.<span class="fu">right</span> != <span class="kw">null</span>) {</span>
+<span id="cb122-17"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-17" aria-hidden="true"></a>            stack.<span class="fu">push</span>(node.<span class="fu">right</span>);</span>
+<span id="cb122-18"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-18" aria-hidden="true"></a>        }</span>
+<span id="cb122-19"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-19" aria-hidden="true"></a>        <span class="co">// Push the LEFT child of the popped node to stack</span></span>
+<span id="cb122-20"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-20" aria-hidden="true"></a>        <span class="kw">if</span> (node.<span class="fu">left</span> != <span class="kw">null</span>) {</span>
+<span id="cb122-21"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-21" aria-hidden="true"></a>            stack.<span class="fu">push</span>(node.<span class="fu">left</span>);</span>
+<span id="cb122-22"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-22" aria-hidden="true"></a>        }</span>
+<span id="cb122-23"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-23" aria-hidden="true"></a>    }</span>
+<span id="cb122-24"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-24" aria-hidden="true"></a></span>
+<span id="cb122-25"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-25" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb122-26"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-26" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---recursive-1" class="section level3" number="4.12.5">
 <h3><span class="header-section-number">4.12.5</span> Solution - Recursive</h3>
-<div id="walkthrough-73" class="section level4" number="4.12.5.1">
+<div id="walkthrough-74" class="section level4" number="4.12.5.1">
 <h4><span class="header-section-number">4.12.5.1</span> Walkthrough</h4>
 <p>For recursive implementation, do the following step</p>
 <ul>
@@ -1156,33 +1157,33 @@ child node would be processed before the right child node.</p>
 <li>Recursively invoke right child node.</li>
 </ul>
 </div>
-<div id="analysis-74" class="section level4" number="4.12.5.2">
+<div id="analysis-75" class="section level4" number="4.12.5.2">
 <h4><span class="header-section-number">4.12.5.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once. Auxiliary Space is O(1) if we do not consider the size of stacks
 for function calls, otherwise O(n).</p>
 </div>
-<div id="algorithm-75" class="section level4" number="4.12.5.3">
+<div id="algorithm-76" class="section level4" number="4.12.5.3">
 <h4><span class="header-section-number">4.12.5.3</span> Algorithm</h4>
 <p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
 <div id="java-code---recursive-1" class="section level4" number="4.12.5.4">
 <h4><span class="header-section-number">4.12.5.4</span> Java Code - Recursive</h4>
-<div class="sourceCode" id="cb122"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb122-1"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">preorderTraversal</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb122-2"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb122-3"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-3" aria-hidden="true"></a>    <span class="fu">traversalHelper</span>(root, result);</span>
-<span id="cb122-4"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-4" aria-hidden="true"></a></span>
-<span id="cb122-5"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-5" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb122-6"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-6" aria-hidden="true"></a>}</span>
-<span id="cb122-7"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-7" aria-hidden="true"></a></span>
-<span id="cb122-8"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-8" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">traversalHelper</span>(<span class="bu">TreeNode</span> root, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list) {</span>
-<span id="cb122-9"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-9" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
-<span id="cb122-10"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-10" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
-<span id="cb122-11"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-11" aria-hidden="true"></a>    }</span>
-<span id="cb122-12"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-12" aria-hidden="true"></a></span>
-<span id="cb122-13"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-13" aria-hidden="true"></a>    list.<span class="fu">add</span>(root.<span class="fu">val</span>);</span>
-<span id="cb122-14"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-14" aria-hidden="true"></a>    <span class="fu">traversalHelper</span>(root.<span class="fu">left</span>, list);</span>
-<span id="cb122-15"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-15" aria-hidden="true"></a>    <span class="fu">traversalHelper</span>(root.<span class="fu">right</span>, list);</span>
-<span id="cb122-16"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb122-16" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb123-1"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">preorderTraversal</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb123-2"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-2" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb123-3"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-3" aria-hidden="true"></a>    <span class="fu">traversalHelper</span>(root, result);</span>
+<span id="cb123-4"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-4" aria-hidden="true"></a></span>
+<span id="cb123-5"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-5" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb123-6"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-6" aria-hidden="true"></a>}</span>
+<span id="cb123-7"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-7" aria-hidden="true"></a></span>
+<span id="cb123-8"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-8" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">traversalHelper</span>(<span class="bu">TreeNode</span> root, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list) {</span>
+<span id="cb123-9"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-9" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span>) {</span>
+<span id="cb123-10"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-10" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
+<span id="cb123-11"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-11" aria-hidden="true"></a>    }</span>
+<span id="cb123-12"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-12" aria-hidden="true"></a></span>
+<span id="cb123-13"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-13" aria-hidden="true"></a>    list.<span class="fu">add</span>(root.<span class="fu">val</span>);</span>
+<span id="cb123-14"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-14" aria-hidden="true"></a>    <span class="fu">traversalHelper</span>(root.<span class="fu">left</span>, list);</span>
+<span id="cb123-15"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-15" aria-hidden="true"></a>    <span class="fu">traversalHelper</span>(root.<span class="fu">right</span>, list);</span>
+<span id="cb123-16"><a href="binary-tree-preorder-traversal-leet-code-144-medium.html#cb123-16" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

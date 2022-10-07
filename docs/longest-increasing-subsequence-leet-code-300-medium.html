@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1060,7 +1061,7 @@ LIS combination, it is only necessary for you to return the length.</p>
 </div>
 <div id="solution--brute-force" class="section level3" number="2.30.3">
 <h3><span class="header-section-number">2.30.3</span> Solution- Brute Force</h3>
-<div id="walkthrough-30" class="section level4" number="2.30.3.1">
+<div id="walkthrough-31" class="section level4" number="2.30.3.1">
 <h4><span class="header-section-number">2.30.3.1</span> Walkthrough</h4>
 <p>Create an array of length of nums to store length of subsequences. Create a nested loop where two indices, stopIdx
 from 0 to length -1 and from startIdx from 0 to stopIdx - 1. First check if it is a increasing subsequence if
@@ -1068,73 +1069,73 @@ from 0 to length -1 and from startIdx from 0 to stopIdx - 1. First check if it i
 However, it is possible that dp[stopIdx] is larger than dp[startIdx] + 1 for previously traversed subsequence. Thus,
 we need to take the maximum out of both cases. Finally, we evaluate the final length out of dp[] array.</p>
 </div>
-<div id="analysis-30" class="section level4" number="2.30.3.2">
+<div id="analysis-31" class="section level4" number="2.30.3.2">
 <h4><span class="header-section-number">2.30.3.2</span> Analysis</h4>
 <p>There are two loops, thus, the time complexity is <span class="math inline">\(O(n^2)\)</span></p>
 </div>
-<div id="algorithm-30" class="section level4" number="2.30.3.3">
+<div id="algorithm-31" class="section level4" number="2.30.3.3">
 <h4><span class="header-section-number">2.30.3.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
 </div>
 <div id="java-code---brute-force" class="section level4" number="2.30.3.4">
 <h4><span class="header-section-number">2.30.3.4</span> Java Code - Brute Force</h4>
-<div class="sourceCode" id="cb39"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb39-1"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">lengthOfLIS</span>(<span class="dt">int</span>[] nums) {</span>
-<span id="cb39-2"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-2" aria-hidden="true"></a>    <span class="dt">int</span> dp[] = <span class="kw">new</span> <span class="dt">int</span>[nums.<span class="fu">length</span>];</span>
-<span id="cb39-3"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-3" aria-hidden="true"></a></span>
-<span id="cb39-4"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-4" aria-hidden="true"></a>    <span class="kw">if</span>(nums.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
-<span id="cb39-5"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-5" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
-<span id="cb39-6"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-6" aria-hidden="true"></a>    }</span>
-<span id="cb39-7"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-7" aria-hidden="true"></a></span>
-<span id="cb39-8"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-8" aria-hidden="true"></a>    <span class="co">//init</span></span>
-<span id="cb39-9"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-9" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">fill</span>(dp, <span class="dv">1</span>);</span>
-<span id="cb39-10"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-10" aria-hidden="true"></a></span>
-<span id="cb39-11"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-11" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> stopIdx = <span class="dv">0</span>; stopIdx &lt; nums.<span class="fu">length</span>; stopIdx++) {</span>
-<span id="cb39-12"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-12" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> startIdx = <span class="dv">0</span>; startIdx &lt; stopIdx; startIdx++) {</span>
-<span id="cb39-13"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-13" aria-hidden="true"></a>            <span class="co">//Valid Increasing Subsequence</span></span>
-<span id="cb39-14"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-14" aria-hidden="true"></a>            <span class="kw">if</span>(nums[startIdx] &lt; nums[stopIdx]) {</span>
-<span id="cb39-15"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-15" aria-hidden="true"></a>                dp[stopIdx] = <span class="bu">Math</span>.<span class="fu">max</span>(dp[startIdx] + <span class="dv">1</span>, dp[stopIdx]);</span>
-<span id="cb39-16"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-16" aria-hidden="true"></a>            }</span>
-<span id="cb39-17"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-17" aria-hidden="true"></a>        }</span>
-<span id="cb39-18"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-18" aria-hidden="true"></a>    }</span>
-<span id="cb39-19"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-19" aria-hidden="true"></a></span>
-<span id="cb39-20"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-20" aria-hidden="true"></a>    <span class="dt">int</span> maxLength = <span class="dv">0</span>;</span>
-<span id="cb39-21"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-21" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; dp.<span class="fu">length</span>; i++) {</span>
-<span id="cb39-22"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-22" aria-hidden="true"></a>        maxLength = <span class="bu">Math</span>.<span class="fu">max</span>(maxLength, dp[i]);</span>
-<span id="cb39-23"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-23" aria-hidden="true"></a>    }</span>
-<span id="cb39-24"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-24" aria-hidden="true"></a></span>
-<span id="cb39-25"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-25" aria-hidden="true"></a>    <span class="kw">return</span> maxLength;</span>
-<span id="cb39-26"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb39-26" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb40-1"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">lengthOfLIS</span>(<span class="dt">int</span>[] nums) {</span>
+<span id="cb40-2"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-2" aria-hidden="true"></a>    <span class="dt">int</span> dp[] = <span class="kw">new</span> <span class="dt">int</span>[nums.<span class="fu">length</span>];</span>
+<span id="cb40-3"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-3" aria-hidden="true"></a></span>
+<span id="cb40-4"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-4" aria-hidden="true"></a>    <span class="kw">if</span>(nums.<span class="fu">length</span> == <span class="dv">0</span>) {</span>
+<span id="cb40-5"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-5" aria-hidden="true"></a>        <span class="kw">return</span> <span class="dv">0</span>;</span>
+<span id="cb40-6"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-6" aria-hidden="true"></a>    }</span>
+<span id="cb40-7"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-7" aria-hidden="true"></a></span>
+<span id="cb40-8"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-8" aria-hidden="true"></a>    <span class="co">//init</span></span>
+<span id="cb40-9"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-9" aria-hidden="true"></a>    <span class="bu">Arrays</span>.<span class="fu">fill</span>(dp, <span class="dv">1</span>);</span>
+<span id="cb40-10"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-10" aria-hidden="true"></a></span>
+<span id="cb40-11"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-11" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> stopIdx = <span class="dv">0</span>; stopIdx &lt; nums.<span class="fu">length</span>; stopIdx++) {</span>
+<span id="cb40-12"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-12" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> startIdx = <span class="dv">0</span>; startIdx &lt; stopIdx; startIdx++) {</span>
+<span id="cb40-13"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-13" aria-hidden="true"></a>            <span class="co">//Valid Increasing Subsequence</span></span>
+<span id="cb40-14"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-14" aria-hidden="true"></a>            <span class="kw">if</span>(nums[startIdx] &lt; nums[stopIdx]) {</span>
+<span id="cb40-15"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-15" aria-hidden="true"></a>                dp[stopIdx] = <span class="bu">Math</span>.<span class="fu">max</span>(dp[startIdx] + <span class="dv">1</span>, dp[stopIdx]);</span>
+<span id="cb40-16"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-16" aria-hidden="true"></a>            }</span>
+<span id="cb40-17"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-17" aria-hidden="true"></a>        }</span>
+<span id="cb40-18"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-18" aria-hidden="true"></a>    }</span>
+<span id="cb40-19"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-19" aria-hidden="true"></a></span>
+<span id="cb40-20"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-20" aria-hidden="true"></a>    <span class="dt">int</span> maxLength = <span class="dv">0</span>;</span>
+<span id="cb40-21"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-21" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; dp.<span class="fu">length</span>; i++) {</span>
+<span id="cb40-22"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-22" aria-hidden="true"></a>        maxLength = <span class="bu">Math</span>.<span class="fu">max</span>(maxLength, dp[i]);</span>
+<span id="cb40-23"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-23" aria-hidden="true"></a>    }</span>
+<span id="cb40-24"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-24" aria-hidden="true"></a></span>
+<span id="cb40-25"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-25" aria-hidden="true"></a>    <span class="kw">return</span> maxLength;</span>
+<span id="cb40-26"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-26" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---binary-search" class="section level3" number="2.30.4">
 <h3><span class="header-section-number">2.30.4</span> Solution - Binary Search</h3>
-<div id="walkthrough-31" class="section level4" number="2.30.4.1">
+<div id="walkthrough-32" class="section level4" number="2.30.4.1">
 <h4><span class="header-section-number">2.30.4.1</span> Walkthrough</h4>
 </div>
-<div id="analysis-31" class="section level4" number="2.30.4.2">
+<div id="analysis-32" class="section level4" number="2.30.4.2">
 <h4><span class="header-section-number">2.30.4.2</span> Analysis</h4>
 <p>For each element, we search for the index using binary search which cost <span class="math inline">\(O(log(n))\)</span>. The overall time complexity is
 <span class="math inline">\(O(n \cdot log(n))\)</span></p>
 </div>
-<div id="algorithm-31" class="section level4" number="2.30.4.3">
+<div id="algorithm-32" class="section level4" number="2.30.4.3">
 <h4><span class="header-section-number">2.30.4.3</span> Algorithm</h4>
 </div>
 <div id="java-code---binary-search" class="section level4" number="2.30.4.4">
 <h4><span class="header-section-number">2.30.4.4</span> Java Code - Binary Search</h4>
-<div class="sourceCode" id="cb40"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb40-1"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">lengthOfLIS</span>(<span class="dt">int</span>[] nums) {</span>
-<span id="cb40-2"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-2" aria-hidden="true"></a>    <span class="dt">int</span> len = <span class="dv">1</span>;</span>
-<span id="cb40-3"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-3" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++) {</span>
-<span id="cb40-4"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-4" aria-hidden="true"></a>        <span class="dt">int</span> k = <span class="bu">Arrays</span>.<span class="fu">binarySearch</span>(nums, <span class="dv">0</span>, len, nums[i]);</span>
-<span id="cb40-5"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-5" aria-hidden="true"></a>        <span class="kw">if</span> (k &lt; <span class="dv">0</span>) {</span>
-<span id="cb40-6"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-6" aria-hidden="true"></a>            k = -(k + <span class="dv">1</span>);</span>
-<span id="cb40-7"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-7" aria-hidden="true"></a>            <span class="kw">if</span> (k == len) {</span>
-<span id="cb40-8"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-8" aria-hidden="true"></a>                len++;</span>
-<span id="cb40-9"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-9" aria-hidden="true"></a>            }</span>
-<span id="cb40-10"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-10" aria-hidden="true"></a>            nums[k] = nums[i];</span>
-<span id="cb40-11"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-11" aria-hidden="true"></a>        }</span>
-<span id="cb40-12"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-12" aria-hidden="true"></a>    }</span>
-<span id="cb40-13"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-13" aria-hidden="true"></a>    <span class="kw">return</span> len;</span>
-<span id="cb40-14"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb40-14" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb41-1"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">lengthOfLIS</span>(<span class="dt">int</span>[] nums) {</span>
+<span id="cb41-2"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-2" aria-hidden="true"></a>    <span class="dt">int</span> len = <span class="dv">1</span>;</span>
+<span id="cb41-3"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-3" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; nums.<span class="fu">length</span>; i++) {</span>
+<span id="cb41-4"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-4" aria-hidden="true"></a>        <span class="dt">int</span> k = <span class="bu">Arrays</span>.<span class="fu">binarySearch</span>(nums, <span class="dv">0</span>, len, nums[i]);</span>
+<span id="cb41-5"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-5" aria-hidden="true"></a>        <span class="kw">if</span> (k &lt; <span class="dv">0</span>) {</span>
+<span id="cb41-6"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-6" aria-hidden="true"></a>            k = -(k + <span class="dv">1</span>);</span>
+<span id="cb41-7"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-7" aria-hidden="true"></a>            <span class="kw">if</span> (k == len) {</span>
+<span id="cb41-8"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-8" aria-hidden="true"></a>                len++;</span>
+<span id="cb41-9"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-9" aria-hidden="true"></a>            }</span>
+<span id="cb41-10"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-10" aria-hidden="true"></a>            nums[k] = nums[i];</span>
+<span id="cb41-11"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-11" aria-hidden="true"></a>        }</span>
+<span id="cb41-12"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-12" aria-hidden="true"></a>    }</span>
+<span id="cb41-13"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-13" aria-hidden="true"></a>    <span class="kw">return</span> len;</span>
+<span id="cb41-14"><a href="longest-increasing-subsequence-leet-code-300-medium.html#cb41-14" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

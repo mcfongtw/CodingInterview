@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1076,49 +1077,49 @@ intersected node in B.</p>
 </div>
 <div id="solution-71" class="section level3" number="6.11.3">
 <h3><span class="header-section-number">6.11.3</span> Solution</h3>
-<div id="walkthrough-117" class="section level4" number="6.11.3.1">
+<div id="walkthrough-118" class="section level4" number="6.11.3.1">
 <h4><span class="header-section-number">6.11.3.1</span> Walkthrough</h4>
 <p>First we compute the length of both list and we get rid of the leading extra node of the longer list.
 For the # of remaining nodes of the longer list should equal to the # of shorter list. We traverse
 both list, and determine when (p1 == p2) - instead of (p1.val == p2.val)</p>
 </div>
-<div id="analysis-118" class="section level4" number="6.11.3.2">
+<div id="analysis-119" class="section level4" number="6.11.3.2">
 <h4><span class="header-section-number">6.11.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-124" class="section level4" number="6.11.3.3">
+<div id="algorithm-125" class="section level4" number="6.11.3.3">
 <h4><span class="header-section-number">6.11.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-73" class="section level4" number="6.11.3.4">
+<div id="java-code-75" class="section level4" number="6.11.3.4">
 <h4><span class="header-section-number">6.11.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb182"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb182-1"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">getIntersectionNode</span>(ListNode headA, ListNode headB) {</span>
-<span id="cb182-2"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-2" aria-hidden="true"></a>    <span class="dt">int</span> lenA = <span class="dv">0</span>, lenB = <span class="dv">0</span>;</span>
-<span id="cb182-3"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-3" aria-hidden="true"></a></span>
-<span id="cb182-4"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-4" aria-hidden="true"></a>    <span class="co">//compute length of both lists</span></span>
-<span id="cb182-5"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-5" aria-hidden="true"></a>    <span class="kw">for</span>(ListNode current = headA; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>, lenA++);</span>
-<span id="cb182-6"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-6" aria-hidden="true"></a>    <span class="kw">for</span>(ListNode current = headB; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>, lenB++);</span>
-<span id="cb182-7"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-7" aria-hidden="true"></a></span>
-<span id="cb182-8"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-8" aria-hidden="true"></a>    <span class="co">//both conditions need to be the same</span></span>
-<span id="cb182-9"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-9" aria-hidden="true"></a>    ListNode currentLonger = lenA &gt; lenB ? headA : headB;</span>
-<span id="cb182-10"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-10" aria-hidden="true"></a>    ListNode currentShorter = lenA &gt; lenB ? headB : headA;</span>
-<span id="cb182-11"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-11" aria-hidden="true"></a></span>
-<span id="cb182-12"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-12" aria-hidden="true"></a>    <span class="co">//Move currentLonger to the position where remaining of nodes equal to len(currentShorter)</span></span>
-<span id="cb182-13"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-13" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="bu">Math</span>.<span class="fu">abs</span>(lenA - lenB); i++, currentLonger = currentLonger.<span class="fu">next</span>);</span>
-<span id="cb182-14"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-14" aria-hidden="true"></a></span>
-<span id="cb182-15"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-15" aria-hidden="true"></a>    <span class="kw">while</span>(currentLonger != <span class="kw">null</span> &amp;&amp; currentShorter != <span class="kw">null</span>) {</span>
-<span id="cb182-16"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-16" aria-hidden="true"></a>        <span class="co">//If the node intersect, nodeA == nodeB</span></span>
-<span id="cb182-17"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-17" aria-hidden="true"></a>        <span class="kw">if</span>(currentLonger == currentShorter) {</span>
-<span id="cb182-18"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-18" aria-hidden="true"></a>            <span class="co">//return current node</span></span>
-<span id="cb182-19"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-19" aria-hidden="true"></a>            <span class="kw">return</span> currentLonger;</span>
-<span id="cb182-20"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-20" aria-hidden="true"></a>        }</span>
-<span id="cb182-21"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-21" aria-hidden="true"></a></span>
-<span id="cb182-22"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-22" aria-hidden="true"></a>        currentLonger = currentLonger.<span class="fu">next</span>;</span>
-<span id="cb182-23"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-23" aria-hidden="true"></a>        currentShorter = currentShorter.<span class="fu">next</span>;</span>
-<span id="cb182-24"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-24" aria-hidden="true"></a>    }</span>
-<span id="cb182-25"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-25" aria-hidden="true"></a></span>
-<span id="cb182-26"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-26" aria-hidden="true"></a>    <span class="co">//no match</span></span>
-<span id="cb182-27"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-27" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">null</span>;</span>
-<span id="cb182-28"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb182-28" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb183"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb183-1"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">getIntersectionNode</span>(ListNode headA, ListNode headB) {</span>
+<span id="cb183-2"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-2" aria-hidden="true"></a>    <span class="dt">int</span> lenA = <span class="dv">0</span>, lenB = <span class="dv">0</span>;</span>
+<span id="cb183-3"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-3" aria-hidden="true"></a></span>
+<span id="cb183-4"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-4" aria-hidden="true"></a>    <span class="co">//compute length of both lists</span></span>
+<span id="cb183-5"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-5" aria-hidden="true"></a>    <span class="kw">for</span>(ListNode current = headA; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>, lenA++);</span>
+<span id="cb183-6"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-6" aria-hidden="true"></a>    <span class="kw">for</span>(ListNode current = headB; current != <span class="kw">null</span>; current = current.<span class="fu">next</span>, lenB++);</span>
+<span id="cb183-7"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-7" aria-hidden="true"></a></span>
+<span id="cb183-8"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-8" aria-hidden="true"></a>    <span class="co">//both conditions need to be the same</span></span>
+<span id="cb183-9"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-9" aria-hidden="true"></a>    ListNode currentLonger = lenA &gt; lenB ? headA : headB;</span>
+<span id="cb183-10"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-10" aria-hidden="true"></a>    ListNode currentShorter = lenA &gt; lenB ? headB : headA;</span>
+<span id="cb183-11"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-11" aria-hidden="true"></a></span>
+<span id="cb183-12"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-12" aria-hidden="true"></a>    <span class="co">//Move currentLonger to the position where remaining of nodes equal to len(currentShorter)</span></span>
+<span id="cb183-13"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-13" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="bu">Math</span>.<span class="fu">abs</span>(lenA - lenB); i++, currentLonger = currentLonger.<span class="fu">next</span>);</span>
+<span id="cb183-14"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-14" aria-hidden="true"></a></span>
+<span id="cb183-15"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-15" aria-hidden="true"></a>    <span class="kw">while</span>(currentLonger != <span class="kw">null</span> &amp;&amp; currentShorter != <span class="kw">null</span>) {</span>
+<span id="cb183-16"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-16" aria-hidden="true"></a>        <span class="co">//If the node intersect, nodeA == nodeB</span></span>
+<span id="cb183-17"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-17" aria-hidden="true"></a>        <span class="kw">if</span>(currentLonger == currentShorter) {</span>
+<span id="cb183-18"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-18" aria-hidden="true"></a>            <span class="co">//return current node</span></span>
+<span id="cb183-19"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-19" aria-hidden="true"></a>            <span class="kw">return</span> currentLonger;</span>
+<span id="cb183-20"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-20" aria-hidden="true"></a>        }</span>
+<span id="cb183-21"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-21" aria-hidden="true"></a></span>
+<span id="cb183-22"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-22" aria-hidden="true"></a>        currentLonger = currentLonger.<span class="fu">next</span>;</span>
+<span id="cb183-23"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-23" aria-hidden="true"></a>        currentShorter = currentShorter.<span class="fu">next</span>;</span>
+<span id="cb183-24"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-24" aria-hidden="true"></a>    }</span>
+<span id="cb183-25"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-25" aria-hidden="true"></a></span>
+<span id="cb183-26"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-26" aria-hidden="true"></a>    <span class="co">//no match</span></span>
+<span id="cb183-27"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-27" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">null</span>;</span>
+<span id="cb183-28"><a href="intersection-of-two-linked-lists-leet-code-160-easy.html#cb183-28" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

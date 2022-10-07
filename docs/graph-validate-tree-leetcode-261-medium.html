@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1057,121 +1058,121 @@ edges form a valid tree.</p>
 </div>
 <div id="solution---topological-sorting-via-dfs" class="section level3" number="5.6.3">
 <h3><span class="header-section-number">5.6.3</span> Solution - Topological Sorting via DFS</h3>
-<div id="walkthrough-103" class="section level4" number="5.6.3.1">
+<div id="walkthrough-104" class="section level4" number="5.6.3.1">
 <h4><span class="header-section-number">5.6.3.1</span> Walkthrough</h4>
 <p>This problem can be converted to finding the cycle from a graph using Topological Sorting</p>
 </div>
-<div id="analysis-104" class="section level4" number="5.6.3.2">
+<div id="analysis-105" class="section level4" number="5.6.3.2">
 <h4><span class="header-section-number">5.6.3.2</span> Analysis</h4>
 <p>A DFS would cost <span class="math inline">\(O(|V| + |E|)\)</span></p>
 </div>
-<div id="algorithm-110" class="section level4" number="5.6.3.3">
+<div id="algorithm-111" class="section level4" number="5.6.3.3">
 <h4><span class="header-section-number">5.6.3.3</span> Algorithm</h4>
 <p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
 <div id="java-code---topological-sorting-via-dfs" class="section level4" number="5.6.3.4">
 <h4><span class="header-section-number">5.6.3.4</span> Java Code - Topological Sorting via DFS</h4>
-<div class="sourceCode" id="cb168"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb168-1"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">validTree</span>(<span class="dt">int</span> n, <span class="dt">int</span>[][] edges) {</span>
-<span id="cb168-2"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-2" aria-hidden="true"></a>    <span class="bu">HashMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt;();</span>
-<span id="cb168-3"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-3" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;n; i++){</span>
-<span id="cb168-4"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-4" aria-hidden="true"></a>        <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt; list = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
-<span id="cb168-5"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-5" aria-hidden="true"></a>        map.<span class="fu">put</span>(i, list);</span>
-<span id="cb168-6"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-6" aria-hidden="true"></a>    }</span>
-<span id="cb168-7"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-7" aria-hidden="true"></a></span>
-<span id="cb168-8"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-8" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span>[] edge: edges){</span>
-<span id="cb168-9"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-9" aria-hidden="true"></a>        map.<span class="fu">get</span>(edge[<span class="dv">0</span>]).<span class="fu">add</span>(edge[<span class="dv">1</span>]);</span>
-<span id="cb168-10"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-10" aria-hidden="true"></a>        map.<span class="fu">get</span>(edge[<span class="dv">1</span>]).<span class="fu">add</span>(edge[<span class="dv">0</span>]);</span>
-<span id="cb168-11"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-11" aria-hidden="true"></a>    }</span>
-<span id="cb168-12"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-12" aria-hidden="true"></a></span>
-<span id="cb168-13"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-13" aria-hidden="true"></a>    <span class="dt">boolean</span>[] visited = <span class="kw">new</span> <span class="dt">boolean</span>[n];</span>
-<span id="cb168-14"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-14" aria-hidden="true"></a></span>
-<span id="cb168-15"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-15" aria-hidden="true"></a>    <span class="kw">if</span>(!<span class="fu">helper</span>(<span class="dv">0</span>, -<span class="dv">1</span>, map, visited))</span>
-<span id="cb168-16"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-16" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb168-17"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-17" aria-hidden="true"></a></span>
-<span id="cb168-18"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-18" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">boolean</span> b: visited){</span>
-<span id="cb168-19"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-19" aria-hidden="true"></a>        <span class="kw">if</span>(!b)</span>
-<span id="cb168-20"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-20" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb168-21"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-21" aria-hidden="true"></a>    }</span>
-<span id="cb168-22"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-22" aria-hidden="true"></a></span>
-<span id="cb168-23"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-23" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb168-24"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-24" aria-hidden="true"></a>}</span>
-<span id="cb168-25"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-25" aria-hidden="true"></a></span>
-<span id="cb168-26"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-26" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">helper</span>(<span class="dt">int</span> curr, <span class="dt">int</span> parent,</span>
-<span id="cb168-27"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-27" aria-hidden="true"></a>    <span class="bu">HashMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt; map, <span class="dt">boolean</span>[] visited){</span>
-<span id="cb168-28"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-28" aria-hidden="true"></a>    <span class="kw">if</span>(visited[curr])</span>
-<span id="cb168-29"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-29" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb168-30"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-30" aria-hidden="true"></a></span>
-<span id="cb168-31"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-31" aria-hidden="true"></a>    visited[curr] = <span class="kw">true</span>;</span>
-<span id="cb168-32"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-32" aria-hidden="true"></a></span>
-<span id="cb168-33"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-33" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i: map.<span class="fu">get</span>(curr)){</span>
-<span id="cb168-34"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-34" aria-hidden="true"></a>        <span class="kw">if</span>(i!=parent &amp;&amp; !<span class="fu">helper</span>(i, curr, map, visited)){</span>
-<span id="cb168-35"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-35" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb168-36"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-36" aria-hidden="true"></a>        }</span>
-<span id="cb168-37"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-37" aria-hidden="true"></a>    }</span>
-<span id="cb168-38"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-38" aria-hidden="true"></a></span>
-<span id="cb168-39"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-39" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb168-40"><a href="graph-validate-tree-leetcode-261-medium.html#cb168-40" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb169"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb169-1"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">validTree</span>(<span class="dt">int</span> n, <span class="dt">int</span>[][] edges) {</span>
+<span id="cb169-2"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-2" aria-hidden="true"></a>    <span class="bu">HashMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt;();</span>
+<span id="cb169-3"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-3" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;n; i++){</span>
+<span id="cb169-4"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-4" aria-hidden="true"></a>        <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt; list = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
+<span id="cb169-5"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-5" aria-hidden="true"></a>        map.<span class="fu">put</span>(i, list);</span>
+<span id="cb169-6"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-6" aria-hidden="true"></a>    }</span>
+<span id="cb169-7"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-7" aria-hidden="true"></a></span>
+<span id="cb169-8"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-8" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span>[] edge: edges){</span>
+<span id="cb169-9"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-9" aria-hidden="true"></a>        map.<span class="fu">get</span>(edge[<span class="dv">0</span>]).<span class="fu">add</span>(edge[<span class="dv">1</span>]);</span>
+<span id="cb169-10"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-10" aria-hidden="true"></a>        map.<span class="fu">get</span>(edge[<span class="dv">1</span>]).<span class="fu">add</span>(edge[<span class="dv">0</span>]);</span>
+<span id="cb169-11"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-11" aria-hidden="true"></a>    }</span>
+<span id="cb169-12"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-12" aria-hidden="true"></a></span>
+<span id="cb169-13"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-13" aria-hidden="true"></a>    <span class="dt">boolean</span>[] visited = <span class="kw">new</span> <span class="dt">boolean</span>[n];</span>
+<span id="cb169-14"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-14" aria-hidden="true"></a></span>
+<span id="cb169-15"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-15" aria-hidden="true"></a>    <span class="kw">if</span>(!<span class="fu">helper</span>(<span class="dv">0</span>, -<span class="dv">1</span>, map, visited))</span>
+<span id="cb169-16"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-16" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb169-17"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-17" aria-hidden="true"></a></span>
+<span id="cb169-18"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-18" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">boolean</span> b: visited){</span>
+<span id="cb169-19"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-19" aria-hidden="true"></a>        <span class="kw">if</span>(!b)</span>
+<span id="cb169-20"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-20" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb169-21"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-21" aria-hidden="true"></a>    }</span>
+<span id="cb169-22"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-22" aria-hidden="true"></a></span>
+<span id="cb169-23"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-23" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb169-24"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-24" aria-hidden="true"></a>}</span>
+<span id="cb169-25"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-25" aria-hidden="true"></a></span>
+<span id="cb169-26"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-26" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">helper</span>(<span class="dt">int</span> curr, <span class="dt">int</span> parent,</span>
+<span id="cb169-27"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-27" aria-hidden="true"></a>    <span class="bu">HashMap</span>&lt;<span class="bu">Integer</span>, <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt; map, <span class="dt">boolean</span>[] visited){</span>
+<span id="cb169-28"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-28" aria-hidden="true"></a>    <span class="kw">if</span>(visited[curr])</span>
+<span id="cb169-29"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-29" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb169-30"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-30" aria-hidden="true"></a></span>
+<span id="cb169-31"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-31" aria-hidden="true"></a>    visited[curr] = <span class="kw">true</span>;</span>
+<span id="cb169-32"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-32" aria-hidden="true"></a></span>
+<span id="cb169-33"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-33" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i: map.<span class="fu">get</span>(curr)){</span>
+<span id="cb169-34"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-34" aria-hidden="true"></a>        <span class="kw">if</span>(i!=parent &amp;&amp; !<span class="fu">helper</span>(i, curr, map, visited)){</span>
+<span id="cb169-35"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-35" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb169-36"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-36" aria-hidden="true"></a>        }</span>
+<span id="cb169-37"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-37" aria-hidden="true"></a>    }</span>
+<span id="cb169-38"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-38" aria-hidden="true"></a></span>
+<span id="cb169-39"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-39" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb169-40"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-40" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---topological-sorting-via-bfs" class="section level3" number="5.6.4">
 <h3><span class="header-section-number">5.6.4</span> Solution - Topological Sorting via BFS</h3>
-<div id="walkthrough-104" class="section level4" number="5.6.4.1">
+<div id="walkthrough-105" class="section level4" number="5.6.4.1">
 <h4><span class="header-section-number">5.6.4.1</span> Walkthrough</h4>
 <p>This problem can be converted to finding the cycle from a graph using Topological Sorting</p>
 </div>
-<div id="analysis-105" class="section level4" number="5.6.4.2">
+<div id="analysis-106" class="section level4" number="5.6.4.2">
 <h4><span class="header-section-number">5.6.4.2</span> Analysis</h4>
 <p>A BFS cost <span class="math inline">\(O(|V| + |E|)\)</span></p>
 </div>
-<div id="algorithm-111" class="section level4" number="5.6.4.3">
+<div id="algorithm-112" class="section level4" number="5.6.4.3">
 <h4><span class="header-section-number">5.6.4.3</span> Algorithm</h4>
 <p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
 </div>
 <div id="java-code---topological-sorting-via-bfs" class="section level4" number="5.6.4.4">
 <h4><span class="header-section-number">5.6.4.4</span> Java Code - Topological Sorting via BFS</h4>
-<div class="sourceCode" id="cb169"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb169-1"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">validTree</span>(<span class="dt">int</span> n, <span class="dt">int</span>[][] edges) {</span>
-<span id="cb169-2"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-2" aria-hidden="true"></a>    <span class="bu">ArrayList</span>&lt;<span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt; list = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb169-3"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-3" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;n; i++){</span>
-<span id="cb169-4"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-4" aria-hidden="true"></a>        list.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;());</span>
-<span id="cb169-5"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-5" aria-hidden="true"></a>    }</span>
-<span id="cb169-6"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-6" aria-hidden="true"></a></span>
-<span id="cb169-7"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-7" aria-hidden="true"></a>    <span class="co">//build the graph</span></span>
-<span id="cb169-8"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-8" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span>[] edge: edges){</span>
-<span id="cb169-9"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-9" aria-hidden="true"></a>        <span class="dt">int</span> a = edge[<span class="dv">0</span>];</span>
-<span id="cb169-10"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-10" aria-hidden="true"></a>        <span class="dt">int</span> b = edge[<span class="dv">1</span>];</span>
-<span id="cb169-11"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-11" aria-hidden="true"></a></span>
-<span id="cb169-12"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-12" aria-hidden="true"></a>        list.<span class="fu">get</span>(a).<span class="fu">add</span>(b);</span>
-<span id="cb169-13"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-13" aria-hidden="true"></a>        list.<span class="fu">get</span>(b).<span class="fu">add</span>(a);</span>
-<span id="cb169-14"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-14" aria-hidden="true"></a>    }</span>
-<span id="cb169-15"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-15" aria-hidden="true"></a></span>
-<span id="cb169-16"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-16" aria-hidden="true"></a>    <span class="co">//use queue to traverse the graph</span></span>
-<span id="cb169-17"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-17" aria-hidden="true"></a>    <span class="bu">HashSet</span>&lt;<span class="bu">Integer</span>&gt; visited = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;();</span>
-<span id="cb169-18"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-18" aria-hidden="true"></a>    <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt; q = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb169-19"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-19" aria-hidden="true"></a>    q.<span class="fu">offer</span>(<span class="dv">0</span>);</span>
-<span id="cb169-20"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-20" aria-hidden="true"></a></span>
-<span id="cb169-21"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-21" aria-hidden="true"></a>    <span class="kw">while</span>(!q.<span class="fu">isEmpty</span>()){</span>
-<span id="cb169-22"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-22" aria-hidden="true"></a>        <span class="dt">int</span> head = q.<span class="fu">poll</span>();</span>
-<span id="cb169-23"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-23" aria-hidden="true"></a></span>
-<span id="cb169-24"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-24" aria-hidden="true"></a>        <span class="kw">if</span>(visited.<span class="fu">contains</span>(head)){</span>
-<span id="cb169-25"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-25" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb169-26"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-26" aria-hidden="true"></a>        }</span>
-<span id="cb169-27"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-27" aria-hidden="true"></a></span>
-<span id="cb169-28"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-28" aria-hidden="true"></a>        visited.<span class="fu">add</span>(head);</span>
-<span id="cb169-29"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-29" aria-hidden="true"></a></span>
-<span id="cb169-30"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-30" aria-hidden="true"></a>        <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt; vList = list.<span class="fu">get</span>(head);</span>
-<span id="cb169-31"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-31" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> v: vList){</span>
-<span id="cb169-32"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-32" aria-hidden="true"></a>            <span class="kw">if</span>(!visited.<span class="fu">contains</span>(v)){</span>
-<span id="cb169-33"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-33" aria-hidden="true"></a>                q.<span class="fu">offer</span>(v);</span>
-<span id="cb169-34"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-34" aria-hidden="true"></a>            }</span>
-<span id="cb169-35"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-35" aria-hidden="true"></a>        }</span>
-<span id="cb169-36"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-36" aria-hidden="true"></a>    }</span>
-<span id="cb169-37"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-37" aria-hidden="true"></a></span>
-<span id="cb169-38"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-38" aria-hidden="true"></a>    <span class="kw">if</span>(visited.<span class="fu">size</span>()&lt;n){</span>
-<span id="cb169-39"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-39" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb169-40"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-40" aria-hidden="true"></a>    }</span>
-<span id="cb169-41"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-41" aria-hidden="true"></a></span>
-<span id="cb169-42"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-42" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb169-43"><a href="graph-validate-tree-leetcode-261-medium.html#cb169-43" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb170-1"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">validTree</span>(<span class="dt">int</span> n, <span class="dt">int</span>[][] edges) {</span>
+<span id="cb170-2"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-2" aria-hidden="true"></a>    <span class="bu">ArrayList</span>&lt;<span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;&gt; list = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb170-3"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-3" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;n; i++){</span>
+<span id="cb170-4"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-4" aria-hidden="true"></a>        list.<span class="fu">add</span>(<span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;());</span>
+<span id="cb170-5"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-5" aria-hidden="true"></a>    }</span>
+<span id="cb170-6"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-6" aria-hidden="true"></a></span>
+<span id="cb170-7"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-7" aria-hidden="true"></a>    <span class="co">//build the graph</span></span>
+<span id="cb170-8"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-8" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span>[] edge: edges){</span>
+<span id="cb170-9"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-9" aria-hidden="true"></a>        <span class="dt">int</span> a = edge[<span class="dv">0</span>];</span>
+<span id="cb170-10"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-10" aria-hidden="true"></a>        <span class="dt">int</span> b = edge[<span class="dv">1</span>];</span>
+<span id="cb170-11"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-11" aria-hidden="true"></a></span>
+<span id="cb170-12"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-12" aria-hidden="true"></a>        list.<span class="fu">get</span>(a).<span class="fu">add</span>(b);</span>
+<span id="cb170-13"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-13" aria-hidden="true"></a>        list.<span class="fu">get</span>(b).<span class="fu">add</span>(a);</span>
+<span id="cb170-14"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-14" aria-hidden="true"></a>    }</span>
+<span id="cb170-15"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-15" aria-hidden="true"></a></span>
+<span id="cb170-16"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-16" aria-hidden="true"></a>    <span class="co">//use queue to traverse the graph</span></span>
+<span id="cb170-17"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-17" aria-hidden="true"></a>    <span class="bu">HashSet</span>&lt;<span class="bu">Integer</span>&gt; visited = <span class="kw">new</span> <span class="bu">HashSet</span>&lt;&gt;();</span>
+<span id="cb170-18"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-18" aria-hidden="true"></a>    <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt; q = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb170-19"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-19" aria-hidden="true"></a>    q.<span class="fu">offer</span>(<span class="dv">0</span>);</span>
+<span id="cb170-20"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-20" aria-hidden="true"></a></span>
+<span id="cb170-21"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-21" aria-hidden="true"></a>    <span class="kw">while</span>(!q.<span class="fu">isEmpty</span>()){</span>
+<span id="cb170-22"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-22" aria-hidden="true"></a>        <span class="dt">int</span> head = q.<span class="fu">poll</span>();</span>
+<span id="cb170-23"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-23" aria-hidden="true"></a></span>
+<span id="cb170-24"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-24" aria-hidden="true"></a>        <span class="kw">if</span>(visited.<span class="fu">contains</span>(head)){</span>
+<span id="cb170-25"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-25" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb170-26"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-26" aria-hidden="true"></a>        }</span>
+<span id="cb170-27"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-27" aria-hidden="true"></a></span>
+<span id="cb170-28"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-28" aria-hidden="true"></a>        visited.<span class="fu">add</span>(head);</span>
+<span id="cb170-29"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-29" aria-hidden="true"></a></span>
+<span id="cb170-30"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-30" aria-hidden="true"></a>        <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt; vList = list.<span class="fu">get</span>(head);</span>
+<span id="cb170-31"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-31" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> v: vList){</span>
+<span id="cb170-32"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-32" aria-hidden="true"></a>            <span class="kw">if</span>(!visited.<span class="fu">contains</span>(v)){</span>
+<span id="cb170-33"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-33" aria-hidden="true"></a>                q.<span class="fu">offer</span>(v);</span>
+<span id="cb170-34"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-34" aria-hidden="true"></a>            }</span>
+<span id="cb170-35"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-35" aria-hidden="true"></a>        }</span>
+<span id="cb170-36"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-36" aria-hidden="true"></a>    }</span>
+<span id="cb170-37"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-37" aria-hidden="true"></a></span>
+<span id="cb170-38"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-38" aria-hidden="true"></a>    <span class="kw">if</span>(visited.<span class="fu">size</span>()&lt;n){</span>
+<span id="cb170-39"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-39" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb170-40"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-40" aria-hidden="true"></a>    }</span>
+<span id="cb170-41"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-41" aria-hidden="true"></a></span>
+<span id="cb170-42"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-42" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb170-43"><a href="graph-validate-tree-leetcode-261-medium.html#cb170-43" aria-hidden="true"></a>}</span></code></pre></div>
 
 </div>
 </div>

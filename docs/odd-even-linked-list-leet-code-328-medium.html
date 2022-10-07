@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1072,53 +1073,53 @@ Figure 6.24: Some caption.
 </div>
 <div id="solution-68" class="section level3" number="6.7.3">
 <h3><span class="header-section-number">6.7.3</span> Solution</h3>
-<div id="walkthrough-112" class="section level4" number="6.7.3.1">
+<div id="walkthrough-113" class="section level4" number="6.7.3.1">
 <h4><span class="header-section-number">6.7.3.1</span> Walkthrough</h4>
 <p>Have two helper pointers to construct to list: one for odd nodes and one for even nodes. Assign those nodes
 accordingly while traversing the list. Finally, connect odd nodes list to even nodes list.</p>
 </div>
-<div id="analysis-113" class="section level4" number="6.7.3.2">
+<div id="analysis-114" class="section level4" number="6.7.3.2">
 <h4><span class="header-section-number">6.7.3.2</span> Analysis</h4>
 <p>The program should run in O(1) Auxiliary Space and O(n) time complexity.</p>
 </div>
-<div id="algorithm-119" class="section level4" number="6.7.3.3">
+<div id="algorithm-120" class="section level4" number="6.7.3.3">
 <h4><span class="header-section-number">6.7.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-70" class="section level4" number="6.7.3.4">
+<div id="java-code-72" class="section level4" number="6.7.3.4">
 <h4><span class="header-section-number">6.7.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb177"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb177-1"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">oddEvenList</span>(ListNode head) {</span>
-<span id="cb177-2"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-2" aria-hidden="true"></a>    <span class="kw">if</span>(head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span> || head.<span class="fu">next</span>.<span class="fu">next</span> == <span class="kw">null</span> ) {</span>
-<span id="cb177-3"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-3" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
-<span id="cb177-4"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-4" aria-hidden="true"></a>    }</span>
-<span id="cb177-5"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-5" aria-hidden="true"></a></span>
-<span id="cb177-6"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-6" aria-hidden="true"></a>    ListNode oddHeadPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), currentOdd = oddHeadPrev;</span>
-<span id="cb177-7"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-7" aria-hidden="true"></a>    ListNode evnHeadPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), currentEvn = evnHeadPrev;</span>
-<span id="cb177-8"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-8" aria-hidden="true"></a>    ListNode current = head;</span>
-<span id="cb177-9"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-9" aria-hidden="true"></a></span>
-<span id="cb177-10"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-10" aria-hidden="true"></a>    <span class="dt">int</span> index = <span class="dv">1</span>;</span>
-<span id="cb177-11"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-11" aria-hidden="true"></a></span>
-<span id="cb177-12"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-12" aria-hidden="true"></a>    <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
-<span id="cb177-13"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-13" aria-hidden="true"></a>        <span class="co">// Same as index % 2 == 1</span></span>
-<span id="cb177-14"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-14" aria-hidden="true"></a>        <span class="kw">if</span>( (index &amp; <span class="dv">1</span>) &gt; <span class="dv">0</span> ) {</span>
-<span id="cb177-15"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-15" aria-hidden="true"></a>            currentOdd.<span class="fu">next</span> = current;</span>
-<span id="cb177-16"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-16" aria-hidden="true"></a>            currentOdd = currentOdd.<span class="fu">next</span>;</span>
-<span id="cb177-17"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-17" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb177-18"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-18" aria-hidden="true"></a>            currentEvn.<span class="fu">next</span> = current;</span>
-<span id="cb177-19"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-19" aria-hidden="true"></a>            currentEvn = currentEvn.<span class="fu">next</span>;</span>
-<span id="cb177-20"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-20" aria-hidden="true"></a>        }</span>
-<span id="cb177-21"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-21" aria-hidden="true"></a></span>
-<span id="cb177-22"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-22" aria-hidden="true"></a>        index++;</span>
-<span id="cb177-23"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-23" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
-<span id="cb177-24"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-24" aria-hidden="true"></a>    }</span>
-<span id="cb177-25"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-25" aria-hidden="true"></a></span>
-<span id="cb177-26"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-26" aria-hidden="true"></a>    <span class="co">//connect odd nodes list with even nodes list</span></span>
-<span id="cb177-27"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-27" aria-hidden="true"></a>    currentOdd.<span class="fu">next</span> = evnHeadPrev.<span class="fu">next</span>;</span>
-<span id="cb177-28"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-28" aria-hidden="true"></a></span>
-<span id="cb177-29"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-29" aria-hidden="true"></a>    <span class="co">//connect event nodes to null</span></span>
-<span id="cb177-30"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-30" aria-hidden="true"></a>    currentEvn.<span class="fu">next</span> = <span class="kw">null</span>;</span>
-<span id="cb177-31"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-31" aria-hidden="true"></a></span>
-<span id="cb177-32"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-32" aria-hidden="true"></a>    <span class="kw">return</span> oddHeadPrev.<span class="fu">next</span>;</span>
-<span id="cb177-33"><a href="odd-even-linked-list-leet-code-328-medium.html#cb177-33" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb178"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb178-1"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-1" aria-hidden="true"></a><span class="kw">public</span> ListNode <span class="fu">oddEvenList</span>(ListNode head) {</span>
+<span id="cb178-2"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-2" aria-hidden="true"></a>    <span class="kw">if</span>(head == <span class="kw">null</span> || head.<span class="fu">next</span> == <span class="kw">null</span> || head.<span class="fu">next</span>.<span class="fu">next</span> == <span class="kw">null</span> ) {</span>
+<span id="cb178-3"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-3" aria-hidden="true"></a>        <span class="kw">return</span> head;</span>
+<span id="cb178-4"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-4" aria-hidden="true"></a>    }</span>
+<span id="cb178-5"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-5" aria-hidden="true"></a></span>
+<span id="cb178-6"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-6" aria-hidden="true"></a>    ListNode oddHeadPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), currentOdd = oddHeadPrev;</span>
+<span id="cb178-7"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-7" aria-hidden="true"></a>    ListNode evnHeadPrev = <span class="kw">new</span> <span class="fu">ListNode</span>(<span class="dv">0</span>), currentEvn = evnHeadPrev;</span>
+<span id="cb178-8"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-8" aria-hidden="true"></a>    ListNode current = head;</span>
+<span id="cb178-9"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-9" aria-hidden="true"></a></span>
+<span id="cb178-10"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-10" aria-hidden="true"></a>    <span class="dt">int</span> index = <span class="dv">1</span>;</span>
+<span id="cb178-11"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-11" aria-hidden="true"></a></span>
+<span id="cb178-12"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-12" aria-hidden="true"></a>    <span class="kw">while</span>(current != <span class="kw">null</span>) {</span>
+<span id="cb178-13"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-13" aria-hidden="true"></a>        <span class="co">// Same as index % 2 == 1</span></span>
+<span id="cb178-14"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-14" aria-hidden="true"></a>        <span class="kw">if</span>( (index &amp; <span class="dv">1</span>) &gt; <span class="dv">0</span> ) {</span>
+<span id="cb178-15"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-15" aria-hidden="true"></a>            currentOdd.<span class="fu">next</span> = current;</span>
+<span id="cb178-16"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-16" aria-hidden="true"></a>            currentOdd = currentOdd.<span class="fu">next</span>;</span>
+<span id="cb178-17"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-17" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb178-18"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-18" aria-hidden="true"></a>            currentEvn.<span class="fu">next</span> = current;</span>
+<span id="cb178-19"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-19" aria-hidden="true"></a>            currentEvn = currentEvn.<span class="fu">next</span>;</span>
+<span id="cb178-20"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-20" aria-hidden="true"></a>        }</span>
+<span id="cb178-21"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-21" aria-hidden="true"></a></span>
+<span id="cb178-22"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-22" aria-hidden="true"></a>        index++;</span>
+<span id="cb178-23"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-23" aria-hidden="true"></a>        current = current.<span class="fu">next</span>;</span>
+<span id="cb178-24"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-24" aria-hidden="true"></a>    }</span>
+<span id="cb178-25"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-25" aria-hidden="true"></a></span>
+<span id="cb178-26"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-26" aria-hidden="true"></a>    <span class="co">//connect odd nodes list with even nodes list</span></span>
+<span id="cb178-27"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-27" aria-hidden="true"></a>    currentOdd.<span class="fu">next</span> = evnHeadPrev.<span class="fu">next</span>;</span>
+<span id="cb178-28"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-28" aria-hidden="true"></a></span>
+<span id="cb178-29"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-29" aria-hidden="true"></a>    <span class="co">//connect event nodes to null</span></span>
+<span id="cb178-30"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-30" aria-hidden="true"></a>    currentEvn.<span class="fu">next</span> = <span class="kw">null</span>;</span>
+<span id="cb178-31"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-31" aria-hidden="true"></a></span>
+<span id="cb178-32"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-32" aria-hidden="true"></a>    <span class="kw">return</span> oddHeadPrev.<span class="fu">next</span>;</span>
+<span id="cb178-33"><a href="odd-even-linked-list-leet-code-328-medium.html#cb178-33" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

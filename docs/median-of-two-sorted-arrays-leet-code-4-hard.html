@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1060,70 +1061,70 @@ empty.</p>
 </div>
 <div id="solution-11" class="section level3" number="2.13.3">
 <h3><span class="header-section-number">2.13.3</span> Solution</h3>
-<div id="walkthrough-13" class="section level4" number="2.13.3.1">
+<div id="walkthrough-14" class="section level4" number="2.13.3.1">
 <h4><span class="header-section-number">2.13.3.1</span> Walkthrough</h4>
 <p>Recursively find <span class="math inline">\(K^{th}\)</span> element in two sorted array by comparing and discarding the <span class="math inline">\(\frac{k}{2}\)</span> smaller
 elements.</p>
 </div>
-<div id="analysis-13" class="section level4" number="2.13.3.2">
+<div id="analysis-14" class="section level4" number="2.13.3.2">
 <h4><span class="header-section-number">2.13.3.2</span> Analysis</h4>
 <p>For each round of recursive, it is eliminating <span class="math inline">\(\frac{k}{2}\)</span> element, so total time complexity is
 <span class="math inline">\(O(log(k)) = O(log(m + n))\)</span>. Auxiliary Space is O(1).</p>
 </div>
-<div id="algorithm-13" class="section level4" number="2.13.3.3">
+<div id="algorithm-14" class="section level4" number="2.13.3.3">
 <h4><span class="header-section-number">2.13.3.3</span> Algorithm</h4>
 <p>recursion <a href="glossary-of-algorithm.html#recursion">1.2.5</a></p>
 </div>
-<div id="java-code-11" class="section level4" number="2.13.3.4">
+<div id="java-code-13" class="section level4" number="2.13.3.4">
 <h4><span class="header-section-number">2.13.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb18"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb18-1"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">double</span> <span class="fu">findMedianSortedArrays</span>(<span class="dt">int</span>[] nums1, <span class="dt">int</span>[] nums2) {</span>
-<span id="cb18-2"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-2" aria-hidden="true"></a>    <span class="dt">int</span> len1 = nums1.<span class="fu">length</span>;</span>
-<span id="cb18-3"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-3" aria-hidden="true"></a>    <span class="dt">int</span> len2 = nums2.<span class="fu">length</span>;</span>
-<span id="cb18-4"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-4" aria-hidden="true"></a>    <span class="dt">int</span> total = len1 + len2;</span>
-<span id="cb18-5"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-5" aria-hidden="true"></a></span>
-<span id="cb18-6"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-6" aria-hidden="true"></a>    <span class="kw">if</span> ((total &amp; <span class="dv">1</span>) != <span class="dv">0</span>) {</span>
-<span id="cb18-7"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-7" aria-hidden="true"></a>        <span class="co">// odd number length</span></span>
-<span id="cb18-8"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-8" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">findKth</span>(nums1, <span class="dv">0</span>, len1 - <span class="dv">1</span>, nums2, <span class="dv">0</span>, len2 - <span class="dv">1</span>, total / <span class="dv">2</span> + <span class="dv">1</span>);</span>
-<span id="cb18-9"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-9" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb18-10"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-10" aria-hidden="true"></a>        <span class="co">// even number length</span></span>
-<span id="cb18-11"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-11" aria-hidden="true"></a>        <span class="kw">return</span> (<span class="fu">findKth</span>(nums1, <span class="dv">0</span>, len1 - <span class="dv">1</span>, nums2, <span class="dv">0</span>, len2 - <span class="dv">1</span>, total / <span class="dv">2</span>) + <span class="fu">findKth</span>(nums1, <span class="dv">0</span>, len1 - <span class="dv">1</span>, nums2, <span class="dv">0</span>, len2 - <span class="dv">1</span>, total / <span class="dv">2</span> + <span class="dv">1</span>)) * <span class="fl">0.</span><span class="dv">5</span>;</span>
-<span id="cb18-12"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-12" aria-hidden="true"></a>    }</span>
-<span id="cb18-13"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-13" aria-hidden="true"></a>}</span>
-<span id="cb18-14"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-14" aria-hidden="true"></a></span>
-<span id="cb18-15"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-15" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">int</span> <span class="fu">findKth</span>(<span class="dt">int</span>[] nums1, <span class="dt">int</span> start1, <span class="dt">int</span> end1, <span class="dt">int</span>[] nums2, <span class="dt">int</span> start2, <span class="dt">int</span> end2, <span class="dt">int</span> k){</span>
-<span id="cb18-16"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-16" aria-hidden="true"></a>    <span class="dt">int</span> len1 = end1 - start1 + <span class="dv">1</span>;</span>
-<span id="cb18-17"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-17" aria-hidden="true"></a>    <span class="dt">int</span> len2 = end2 - start2 + <span class="dv">1</span>;</span>
-<span id="cb18-18"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-18" aria-hidden="true"></a></span>
-<span id="cb18-19"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-19" aria-hidden="true"></a>    <span class="co">/*</span></span>
-<span id="cb18-20"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-20" aria-hidden="true"></a><span class="co">    * swap parameters for nums1 with nums2</span></span>
-<span id="cb18-21"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-21" aria-hidden="true"></a><span class="co">    */</span></span>
-<span id="cb18-22"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-22" aria-hidden="true"></a>    <span class="kw">if</span> (len1 &gt; len2) {</span>
-<span id="cb18-23"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-23" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">findKth</span>(nums2, start2, end2, nums1, start1, end1, k);</span>
-<span id="cb18-24"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-24" aria-hidden="true"></a>    }</span>
-<span id="cb18-25"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-25" aria-hidden="true"></a></span>
-<span id="cb18-26"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-26" aria-hidden="true"></a>    <span class="kw">if</span> (len1 == <span class="dv">0</span>) {</span>
-<span id="cb18-27"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-27" aria-hidden="true"></a>        <span class="kw">return</span> nums2[start2 + k - <span class="dv">1</span>];</span>
-<span id="cb18-28"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-28" aria-hidden="true"></a>    }</span>
-<span id="cb18-29"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-29" aria-hidden="true"></a></span>
-<span id="cb18-30"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-30" aria-hidden="true"></a>    <span class="kw">if</span> (k == <span class="dv">1</span>) {</span>
-<span id="cb18-31"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-31" aria-hidden="true"></a>        <span class="co">//return the smaller element of nums1[] and nums2[]</span></span>
-<span id="cb18-32"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-32" aria-hidden="true"></a>        <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">min</span>(nums1[start1], nums2[start2]);</span>
-<span id="cb18-33"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-33" aria-hidden="true"></a>    }</span>
-<span id="cb18-34"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-34" aria-hidden="true"></a></span>
-<span id="cb18-35"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-35" aria-hidden="true"></a>    <span class="co">//Calculate number of elements to discard for next recursive</span></span>
-<span id="cb18-36"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-36" aria-hidden="true"></a>    <span class="dt">int</span> endToDiscard1 = start1 + <span class="bu">Math</span>.<span class="fu">min</span>(len1, k / <span class="dv">2</span>) - <span class="dv">1</span>;</span>
-<span id="cb18-37"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-37" aria-hidden="true"></a>    <span class="dt">int</span> endToDiscard2 = start2 + <span class="bu">Math</span>.<span class="fu">min</span>(len2, k / <span class="dv">2</span>) - <span class="dv">1</span>;</span>
-<span id="cb18-38"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-38" aria-hidden="true"></a></span>
-<span id="cb18-39"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-39" aria-hidden="true"></a>    <span class="kw">if</span> (nums1[endToDiscard1] &gt; nums2[endToDiscard2]) {</span>
-<span id="cb18-40"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-40" aria-hidden="true"></a>        <span class="co">//if nums2[] are smaller, discard, and start from following position recursively</span></span>
-<span id="cb18-41"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-41" aria-hidden="true"></a>        <span class="dt">int</span> newK = k - (endToDiscard2 - start2 + <span class="dv">1</span>);</span>
-<span id="cb18-42"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-42" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">findKth</span>(nums1, start1, end1, nums2, endToDiscard2 + <span class="dv">1</span>, end2, newK);</span>
-<span id="cb18-43"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-43" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
-<span id="cb18-44"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-44" aria-hidden="true"></a>        <span class="co">//if nums1[] are smaller, discard, and start from following position recursively</span></span>
-<span id="cb18-45"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-45" aria-hidden="true"></a>        <span class="dt">int</span> newK = k - (endToDiscard1 - start1 + <span class="dv">1</span>);</span>
-<span id="cb18-46"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-46" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">findKth</span>(nums1, endToDiscard1 + <span class="dv">1</span>, end1, nums2, start2, end2, newK);</span>
-<span id="cb18-47"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-47" aria-hidden="true"></a>    }</span>
-<span id="cb18-48"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb18-48" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb19-1"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">double</span> <span class="fu">findMedianSortedArrays</span>(<span class="dt">int</span>[] nums1, <span class="dt">int</span>[] nums2) {</span>
+<span id="cb19-2"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-2" aria-hidden="true"></a>    <span class="dt">int</span> len1 = nums1.<span class="fu">length</span>;</span>
+<span id="cb19-3"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-3" aria-hidden="true"></a>    <span class="dt">int</span> len2 = nums2.<span class="fu">length</span>;</span>
+<span id="cb19-4"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-4" aria-hidden="true"></a>    <span class="dt">int</span> total = len1 + len2;</span>
+<span id="cb19-5"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-5" aria-hidden="true"></a></span>
+<span id="cb19-6"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-6" aria-hidden="true"></a>    <span class="kw">if</span> ((total &amp; <span class="dv">1</span>) != <span class="dv">0</span>) {</span>
+<span id="cb19-7"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-7" aria-hidden="true"></a>        <span class="co">// odd number length</span></span>
+<span id="cb19-8"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-8" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">findKth</span>(nums1, <span class="dv">0</span>, len1 - <span class="dv">1</span>, nums2, <span class="dv">0</span>, len2 - <span class="dv">1</span>, total / <span class="dv">2</span> + <span class="dv">1</span>);</span>
+<span id="cb19-9"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-9" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb19-10"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-10" aria-hidden="true"></a>        <span class="co">// even number length</span></span>
+<span id="cb19-11"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-11" aria-hidden="true"></a>        <span class="kw">return</span> (<span class="fu">findKth</span>(nums1, <span class="dv">0</span>, len1 - <span class="dv">1</span>, nums2, <span class="dv">0</span>, len2 - <span class="dv">1</span>, total / <span class="dv">2</span>) + <span class="fu">findKth</span>(nums1, <span class="dv">0</span>, len1 - <span class="dv">1</span>, nums2, <span class="dv">0</span>, len2 - <span class="dv">1</span>, total / <span class="dv">2</span> + <span class="dv">1</span>)) * <span class="fl">0.</span><span class="dv">5</span>;</span>
+<span id="cb19-12"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-12" aria-hidden="true"></a>    }</span>
+<span id="cb19-13"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-13" aria-hidden="true"></a>}</span>
+<span id="cb19-14"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-14" aria-hidden="true"></a></span>
+<span id="cb19-15"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-15" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">int</span> <span class="fu">findKth</span>(<span class="dt">int</span>[] nums1, <span class="dt">int</span> start1, <span class="dt">int</span> end1, <span class="dt">int</span>[] nums2, <span class="dt">int</span> start2, <span class="dt">int</span> end2, <span class="dt">int</span> k){</span>
+<span id="cb19-16"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-16" aria-hidden="true"></a>    <span class="dt">int</span> len1 = end1 - start1 + <span class="dv">1</span>;</span>
+<span id="cb19-17"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-17" aria-hidden="true"></a>    <span class="dt">int</span> len2 = end2 - start2 + <span class="dv">1</span>;</span>
+<span id="cb19-18"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-18" aria-hidden="true"></a></span>
+<span id="cb19-19"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-19" aria-hidden="true"></a>    <span class="co">/*</span></span>
+<span id="cb19-20"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-20" aria-hidden="true"></a><span class="co">    * swap parameters for nums1 with nums2</span></span>
+<span id="cb19-21"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-21" aria-hidden="true"></a><span class="co">    */</span></span>
+<span id="cb19-22"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-22" aria-hidden="true"></a>    <span class="kw">if</span> (len1 &gt; len2) {</span>
+<span id="cb19-23"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-23" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">findKth</span>(nums2, start2, end2, nums1, start1, end1, k);</span>
+<span id="cb19-24"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-24" aria-hidden="true"></a>    }</span>
+<span id="cb19-25"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-25" aria-hidden="true"></a></span>
+<span id="cb19-26"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-26" aria-hidden="true"></a>    <span class="kw">if</span> (len1 == <span class="dv">0</span>) {</span>
+<span id="cb19-27"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-27" aria-hidden="true"></a>        <span class="kw">return</span> nums2[start2 + k - <span class="dv">1</span>];</span>
+<span id="cb19-28"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-28" aria-hidden="true"></a>    }</span>
+<span id="cb19-29"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-29" aria-hidden="true"></a></span>
+<span id="cb19-30"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-30" aria-hidden="true"></a>    <span class="kw">if</span> (k == <span class="dv">1</span>) {</span>
+<span id="cb19-31"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-31" aria-hidden="true"></a>        <span class="co">//return the smaller element of nums1[] and nums2[]</span></span>
+<span id="cb19-32"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-32" aria-hidden="true"></a>        <span class="kw">return</span> <span class="bu">Math</span>.<span class="fu">min</span>(nums1[start1], nums2[start2]);</span>
+<span id="cb19-33"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-33" aria-hidden="true"></a>    }</span>
+<span id="cb19-34"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-34" aria-hidden="true"></a></span>
+<span id="cb19-35"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-35" aria-hidden="true"></a>    <span class="co">//Calculate number of elements to discard for next recursive</span></span>
+<span id="cb19-36"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-36" aria-hidden="true"></a>    <span class="dt">int</span> endToDiscard1 = start1 + <span class="bu">Math</span>.<span class="fu">min</span>(len1, k / <span class="dv">2</span>) - <span class="dv">1</span>;</span>
+<span id="cb19-37"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-37" aria-hidden="true"></a>    <span class="dt">int</span> endToDiscard2 = start2 + <span class="bu">Math</span>.<span class="fu">min</span>(len2, k / <span class="dv">2</span>) - <span class="dv">1</span>;</span>
+<span id="cb19-38"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-38" aria-hidden="true"></a></span>
+<span id="cb19-39"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-39" aria-hidden="true"></a>    <span class="kw">if</span> (nums1[endToDiscard1] &gt; nums2[endToDiscard2]) {</span>
+<span id="cb19-40"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-40" aria-hidden="true"></a>        <span class="co">//if nums2[] are smaller, discard, and start from following position recursively</span></span>
+<span id="cb19-41"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-41" aria-hidden="true"></a>        <span class="dt">int</span> newK = k - (endToDiscard2 - start2 + <span class="dv">1</span>);</span>
+<span id="cb19-42"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-42" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">findKth</span>(nums1, start1, end1, nums2, endToDiscard2 + <span class="dv">1</span>, end2, newK);</span>
+<span id="cb19-43"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-43" aria-hidden="true"></a>    } <span class="kw">else</span> {</span>
+<span id="cb19-44"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-44" aria-hidden="true"></a>        <span class="co">//if nums1[] are smaller, discard, and start from following position recursively</span></span>
+<span id="cb19-45"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-45" aria-hidden="true"></a>        <span class="dt">int</span> newK = k - (endToDiscard1 - start1 + <span class="dv">1</span>);</span>
+<span id="cb19-46"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-46" aria-hidden="true"></a>        <span class="kw">return</span> <span class="fu">findKth</span>(nums1, endToDiscard1 + <span class="dv">1</span>, end1, nums2, start2, end2, newK);</span>
+<span id="cb19-47"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-47" aria-hidden="true"></a>    }</span>
+<span id="cb19-48"><a href="median-of-two-sorted-arrays-leet-code-4-hard.html#cb19-48" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

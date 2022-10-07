@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1059,7 +1060,7 @@ is the array’s size.</p>
 </div>
 <div id="solution-21" class="section level3" number="2.25.3">
 <h3><span class="header-section-number">2.25.3</span> Solution</h3>
-<div id="walkthrough-25" class="section level4" number="2.25.3.1">
+<div id="walkthrough-26" class="section level4" number="2.25.3.1">
 <h4><span class="header-section-number">2.25.3.1</span> Walkthrough</h4>
 <ul>
 <li>We first gather the frequency of integer by count with a HashMap</li>
@@ -1067,44 +1068,44 @@ is the array’s size.</p>
 <li>We could traverse the top K entries from the list in a loop.</li>
 </ul>
 </div>
-<div id="analysis-25" class="section level4" number="2.25.3.2">
+<div id="analysis-26" class="section level4" number="2.25.3.2">
 <h4><span class="header-section-number">2.25.3.2</span> Analysis</h4>
 <p>Since we sort the frequency map, thus the time complexity is <span class="math inline">\(O(n \cdot log n)\)</span>, and Auxiliary Space is <span class="math inline">\(O(n)\)</span> to
 store several maps and list.</p>
 </div>
-<div id="algorithm-25" class="section level4" number="2.25.3.3">
+<div id="algorithm-26" class="section level4" number="2.25.3.3">
 <h4><span class="header-section-number">2.25.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-21" class="section level4" number="2.25.3.4">
+<div id="java-code-23" class="section level4" number="2.25.3.4">
 <h4><span class="header-section-number">2.25.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb34"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb34-1"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">topKFrequent</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> k) {</span>
-<span id="cb34-2"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-2" aria-hidden="true"></a>    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; freq = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
-<span id="cb34-3"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-3" aria-hidden="true"></a></span>
-<span id="cb34-4"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-4" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> num : nums) {</span>
-<span id="cb34-5"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-5" aria-hidden="true"></a>        <span class="dt">int</span> count = freq.<span class="fu">getOrDefault</span>(num, <span class="dv">0</span>);</span>
-<span id="cb34-6"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-6" aria-hidden="true"></a>        freq.<span class="fu">put</span>(num, ++count);</span>
-<span id="cb34-7"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-7" aria-hidden="true"></a>    }</span>
-<span id="cb34-8"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-8" aria-hidden="true"></a></span>
-<span id="cb34-9"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-9" aria-hidden="true"></a>    <span class="co">//Sort Map.Entry by comparing by value() in descending order</span></span>
-<span id="cb34-10"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-10" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt;&gt; sortedList = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(freq.<span class="fu">entrySet</span>());</span>
-<span id="cb34-11"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-11" aria-hidden="true"></a>    sortedList.<span class="fu">sort</span>(<span class="bu">Map</span>.<span class="fu">Entry</span>.<span class="fu">comparingByValue</span>(<span class="bu">Comparator</span>.<span class="fu">reverseOrder</span>()));</span>
-<span id="cb34-12"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-12" aria-hidden="true"></a></span>
-<span id="cb34-13"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-13" aria-hidden="true"></a></span>
-<span id="cb34-14"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-14" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb34-15"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-15" aria-hidden="true"></a>    <span class="dt">int</span> topN = <span class="dv">0</span>;</span>
-<span id="cb34-16"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-16" aria-hidden="true"></a></span>
-<span id="cb34-17"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-17" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; entry : sortedList) {</span>
-<span id="cb34-18"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-18" aria-hidden="true"></a>        <span class="co">//Top K elements retrieved</span></span>
-<span id="cb34-19"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-19" aria-hidden="true"></a>        <span class="kw">if</span>(topN == k) {</span>
-<span id="cb34-20"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-20" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
-<span id="cb34-21"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-21" aria-hidden="true"></a>        }</span>
-<span id="cb34-22"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-22" aria-hidden="true"></a></span>
-<span id="cb34-23"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-23" aria-hidden="true"></a>        result.<span class="fu">add</span>(entry.<span class="fu">getKey</span>());</span>
-<span id="cb34-24"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-24" aria-hidden="true"></a>        topN++;</span>
-<span id="cb34-25"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-25" aria-hidden="true"></a>    }</span>
-<span id="cb34-26"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-26" aria-hidden="true"></a></span>
-<span id="cb34-27"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-27" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
-<span id="cb34-28"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb34-28" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb35-1"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; <span class="fu">topKFrequent</span>(<span class="dt">int</span>[] nums, <span class="dt">int</span> k) {</span>
+<span id="cb35-2"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-2" aria-hidden="true"></a>    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; freq = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
+<span id="cb35-3"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-3" aria-hidden="true"></a></span>
+<span id="cb35-4"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-4" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> num : nums) {</span>
+<span id="cb35-5"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-5" aria-hidden="true"></a>        <span class="dt">int</span> count = freq.<span class="fu">getOrDefault</span>(num, <span class="dv">0</span>);</span>
+<span id="cb35-6"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-6" aria-hidden="true"></a>        freq.<span class="fu">put</span>(num, ++count);</span>
+<span id="cb35-7"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-7" aria-hidden="true"></a>    }</span>
+<span id="cb35-8"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-8" aria-hidden="true"></a></span>
+<span id="cb35-9"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-9" aria-hidden="true"></a>    <span class="co">//Sort Map.Entry by comparing by value() in descending order</span></span>
+<span id="cb35-10"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-10" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt;&gt; sortedList = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;(freq.<span class="fu">entrySet</span>());</span>
+<span id="cb35-11"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-11" aria-hidden="true"></a>    sortedList.<span class="fu">sort</span>(<span class="bu">Map</span>.<span class="fu">Entry</span>.<span class="fu">comparingByValue</span>(<span class="bu">Comparator</span>.<span class="fu">reverseOrder</span>()));</span>
+<span id="cb35-12"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-12" aria-hidden="true"></a></span>
+<span id="cb35-13"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-13" aria-hidden="true"></a></span>
+<span id="cb35-14"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-14" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; result = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb35-15"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-15" aria-hidden="true"></a>    <span class="dt">int</span> topN = <span class="dv">0</span>;</span>
+<span id="cb35-16"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-16" aria-hidden="true"></a></span>
+<span id="cb35-17"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-17" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;<span class="bu">Integer</span>, <span class="bu">Integer</span>&gt; entry : sortedList) {</span>
+<span id="cb35-18"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-18" aria-hidden="true"></a>        <span class="co">//Top K elements retrieved</span></span>
+<span id="cb35-19"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-19" aria-hidden="true"></a>        <span class="kw">if</span>(topN == k) {</span>
+<span id="cb35-20"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-20" aria-hidden="true"></a>            <span class="kw">break</span>;</span>
+<span id="cb35-21"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-21" aria-hidden="true"></a>        }</span>
+<span id="cb35-22"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-22" aria-hidden="true"></a></span>
+<span id="cb35-23"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-23" aria-hidden="true"></a>        result.<span class="fu">add</span>(entry.<span class="fu">getKey</span>());</span>
+<span id="cb35-24"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-24" aria-hidden="true"></a>        topN++;</span>
+<span id="cb35-25"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-25" aria-hidden="true"></a>    }</span>
+<span id="cb35-26"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-26" aria-hidden="true"></a></span>
+<span id="cb35-27"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-27" aria-hidden="true"></a>    <span class="kw">return</span> result;</span>
+<span id="cb35-28"><a href="top-k-frequently-appeared-elements-leet-code-347-medium.html#cb35-28" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

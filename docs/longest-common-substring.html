@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1058,7 +1059,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution-84" class="section level3" number="9.5.3">
 <h3><span class="header-section-number">9.5.3</span> Solution</h3>
-<div id="walkthrough-141" class="section level4" number="9.5.3.1">
+<div id="walkthrough-142" class="section level4" number="9.5.3.1">
 <h4><span class="header-section-number">9.5.3.1</span> Walkthrough</h4>
 <p>We first declare a 2D array to store the length of each common substring in both strings:
 We first initialize the 1st row and 1st column of the 2D array by checking 1st character of a string against the other
@@ -1068,39 +1069,39 @@ common character at {dp[i][j]}, where i is the position from str1 and j is the p
 from {dp[i-1][j-1]} - as specified in blue color in the table.
 During the traversal, we could also retrive the longest length.</p>
 </div>
-<div id="analysis-143" class="section level4" number="9.5.3.2">
+<div id="analysis-144" class="section level4" number="9.5.3.2">
 <h4><span class="header-section-number">9.5.3.2</span> Analysis</h4>
 <p>Both space and time complexity are <span class="math inline">\(O(n^2)\)</span>, where n is the length of string</p>
 </div>
-<div id="algorithm-148" class="section level4" number="9.5.3.3">
+<div id="algorithm-149" class="section level4" number="9.5.3.3">
 <h4><span class="header-section-number">9.5.3.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
-<div class="sourceCode" id="cb210"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb210-1"><a href="longest-common-substring.html#cb210-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">getLCSLength</span>(<span class="bu">String</span> str1, <span class="bu">String</span> str2){</span>
-<span id="cb210-2"><a href="longest-common-substring.html#cb210-2" aria-hidden="true"></a>    <span class="dt">int</span>[][] dp = <span class="kw">new</span> <span class="dt">int</span>[str1.<span class="fu">length</span>()][str2.<span class="fu">length</span>()]; <span class="co">//To store the length of common substring</span></span>
-<span id="cb210-3"><a href="longest-common-substring.html#cb210-3" aria-hidden="true"></a>    <span class="dt">int</span> maxLength = <span class="dv">0</span>;</span>
-<span id="cb210-4"><a href="longest-common-substring.html#cb210-4" aria-hidden="true"></a></span>
-<span id="cb210-5"><a href="longest-common-substring.html#cb210-5" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; str2.<span class="fu">length</span>(); i++){ <span class="co">//Init the first row of 2D array</span></span>
-<span id="cb210-6"><a href="longest-common-substring.html#cb210-6" aria-hidden="true"></a>        dp[<span class="dv">0</span>][i] = (str1.<span class="fu">charAt</span>(<span class="dv">0</span>) == str2.<span class="fu">charAt</span>(i)) ? <span class="dv">1</span> : <span class="dv">0</span>;</span>
-<span id="cb210-7"><a href="longest-common-substring.html#cb210-7" aria-hidden="true"></a>    }</span>
-<span id="cb210-8"><a href="longest-common-substring.html#cb210-8" aria-hidden="true"></a></span>
-<span id="cb210-9"><a href="longest-common-substring.html#cb210-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; str1.<span class="fu">length</span>(); j++){ <span class="co">//Init the first column of 2D array</span></span>
-<span id="cb210-10"><a href="longest-common-substring.html#cb210-10" aria-hidden="true"></a>        dp[j][<span class="dv">0</span>] = (str2.<span class="fu">charAt</span>(<span class="dv">0</span>) == str1.<span class="fu">charAt</span>(j)) ? <span class="dv">1</span> : <span class="dv">0</span>;</span>
-<span id="cb210-11"><a href="longest-common-substring.html#cb210-11" aria-hidden="true"></a>    }</span>
-<span id="cb210-12"><a href="longest-common-substring.html#cb210-12" aria-hidden="true"></a></span>
-<span id="cb210-13"><a href="longest-common-substring.html#cb210-13" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; str1.<span class="fu">length</span>(); i++) {</span>
-<span id="cb210-14"><a href="longest-common-substring.html#cb210-14" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">1</span>; j &lt; str2.<span class="fu">length</span>(); j++) {</span>
-<span id="cb210-15"><a href="longest-common-substring.html#cb210-15" aria-hidden="true"></a>            <span class="kw">if</span>(str1.<span class="fu">charAt</span>(i) == str2.<span class="fu">charAt</span>(j)){</span>
-<span id="cb210-16"><a href="longest-common-substring.html#cb210-16" aria-hidden="true"></a>                <span class="co">// a common character</span></span>
-<span id="cb210-17"><a href="longest-common-substring.html#cb210-17" aria-hidden="true"></a>                dp[i][j] = dp[i-<span class="dv">1</span>][j-<span class="dv">1</span>] + <span class="dv">1</span>;</span>
-<span id="cb210-18"><a href="longest-common-substring.html#cb210-18" aria-hidden="true"></a>                maxLength = <span class="bu">Math</span>.<span class="fu">max</span>(maxLength, dp[i][j]);</span>
-<span id="cb210-19"><a href="longest-common-substring.html#cb210-19" aria-hidden="true"></a>            } <span class="kw">else</span>{</span>
-<span id="cb210-20"><a href="longest-common-substring.html#cb210-20" aria-hidden="true"></a>                dp[i][j] = <span class="dv">0</span>;</span>
-<span id="cb210-21"><a href="longest-common-substring.html#cb210-21" aria-hidden="true"></a>            }</span>
-<span id="cb210-22"><a href="longest-common-substring.html#cb210-22" aria-hidden="true"></a>        }</span>
-<span id="cb210-23"><a href="longest-common-substring.html#cb210-23" aria-hidden="true"></a>    }</span>
-<span id="cb210-24"><a href="longest-common-substring.html#cb210-24" aria-hidden="true"></a></span>
-<span id="cb210-25"><a href="longest-common-substring.html#cb210-25" aria-hidden="true"></a>    <span class="kw">return</span> maxLength;</span>
-<span id="cb210-26"><a href="longest-common-substring.html#cb210-26" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb211"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb211-1"><a href="longest-common-substring.html#cb211-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">getLCSLength</span>(<span class="bu">String</span> str1, <span class="bu">String</span> str2){</span>
+<span id="cb211-2"><a href="longest-common-substring.html#cb211-2" aria-hidden="true"></a>    <span class="dt">int</span>[][] dp = <span class="kw">new</span> <span class="dt">int</span>[str1.<span class="fu">length</span>()][str2.<span class="fu">length</span>()]; <span class="co">//To store the length of common substring</span></span>
+<span id="cb211-3"><a href="longest-common-substring.html#cb211-3" aria-hidden="true"></a>    <span class="dt">int</span> maxLength = <span class="dv">0</span>;</span>
+<span id="cb211-4"><a href="longest-common-substring.html#cb211-4" aria-hidden="true"></a></span>
+<span id="cb211-5"><a href="longest-common-substring.html#cb211-5" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; str2.<span class="fu">length</span>(); i++){ <span class="co">//Init the first row of 2D array</span></span>
+<span id="cb211-6"><a href="longest-common-substring.html#cb211-6" aria-hidden="true"></a>        dp[<span class="dv">0</span>][i] = (str1.<span class="fu">charAt</span>(<span class="dv">0</span>) == str2.<span class="fu">charAt</span>(i)) ? <span class="dv">1</span> : <span class="dv">0</span>;</span>
+<span id="cb211-7"><a href="longest-common-substring.html#cb211-7" aria-hidden="true"></a>    }</span>
+<span id="cb211-8"><a href="longest-common-substring.html#cb211-8" aria-hidden="true"></a></span>
+<span id="cb211-9"><a href="longest-common-substring.html#cb211-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; str1.<span class="fu">length</span>(); j++){ <span class="co">//Init the first column of 2D array</span></span>
+<span id="cb211-10"><a href="longest-common-substring.html#cb211-10" aria-hidden="true"></a>        dp[j][<span class="dv">0</span>] = (str2.<span class="fu">charAt</span>(<span class="dv">0</span>) == str1.<span class="fu">charAt</span>(j)) ? <span class="dv">1</span> : <span class="dv">0</span>;</span>
+<span id="cb211-11"><a href="longest-common-substring.html#cb211-11" aria-hidden="true"></a>    }</span>
+<span id="cb211-12"><a href="longest-common-substring.html#cb211-12" aria-hidden="true"></a></span>
+<span id="cb211-13"><a href="longest-common-substring.html#cb211-13" aria-hidden="true"></a>    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; str1.<span class="fu">length</span>(); i++) {</span>
+<span id="cb211-14"><a href="longest-common-substring.html#cb211-14" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="dt">int</span> j = <span class="dv">1</span>; j &lt; str2.<span class="fu">length</span>(); j++) {</span>
+<span id="cb211-15"><a href="longest-common-substring.html#cb211-15" aria-hidden="true"></a>            <span class="kw">if</span>(str1.<span class="fu">charAt</span>(i) == str2.<span class="fu">charAt</span>(j)){</span>
+<span id="cb211-16"><a href="longest-common-substring.html#cb211-16" aria-hidden="true"></a>                <span class="co">// a common character</span></span>
+<span id="cb211-17"><a href="longest-common-substring.html#cb211-17" aria-hidden="true"></a>                dp[i][j] = dp[i-<span class="dv">1</span>][j-<span class="dv">1</span>] + <span class="dv">1</span>;</span>
+<span id="cb211-18"><a href="longest-common-substring.html#cb211-18" aria-hidden="true"></a>                maxLength = <span class="bu">Math</span>.<span class="fu">max</span>(maxLength, dp[i][j]);</span>
+<span id="cb211-19"><a href="longest-common-substring.html#cb211-19" aria-hidden="true"></a>            } <span class="kw">else</span>{</span>
+<span id="cb211-20"><a href="longest-common-substring.html#cb211-20" aria-hidden="true"></a>                dp[i][j] = <span class="dv">0</span>;</span>
+<span id="cb211-21"><a href="longest-common-substring.html#cb211-21" aria-hidden="true"></a>            }</span>
+<span id="cb211-22"><a href="longest-common-substring.html#cb211-22" aria-hidden="true"></a>        }</span>
+<span id="cb211-23"><a href="longest-common-substring.html#cb211-23" aria-hidden="true"></a>    }</span>
+<span id="cb211-24"><a href="longest-common-substring.html#cb211-24" aria-hidden="true"></a></span>
+<span id="cb211-25"><a href="longest-common-substring.html#cb211-25" aria-hidden="true"></a>    <span class="kw">return</span> maxLength;</span>
+<span id="cb211-26"><a href="longest-common-substring.html#cb211-26" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

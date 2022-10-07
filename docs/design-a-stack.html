@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1061,54 +1062,54 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="solution---queue" class="section level3" number="12.2.3">
 <h3><span class="header-section-number">12.2.3</span> Solution - Queue</h3>
-<div id="walkthrough-158" class="section level4" number="12.2.3.1">
+<div id="walkthrough-159" class="section level4" number="12.2.3.1">
 <h4><span class="header-section-number">12.2.3.1</span> Walkthrough</h4>
 <p>Since a Queue is FIFO, that is first element will be processed first. Thus, we want to keep
 the top element to be inserted first. To achieve that, we could use a temp Stack to reverse
 the order after enqueue the added item into the stack first (will be processed first).</p>
 </div>
-<div id="analysis-162" class="section level4" number="12.2.3.2">
+<div id="analysis-163" class="section level4" number="12.2.3.2">
 <h4><span class="header-section-number">12.2.3.2</span> Analysis</h4>
 <ul>
 <li>enqueue(item) takes O(n) time.</li>
 <li>dequeue() takes O(1) as it is only polling the top element.</li>
 </ul>
 </div>
-<div id="algorithm-167" class="section level4" number="12.2.3.3">
+<div id="algorithm-168" class="section level4" number="12.2.3.3">
 <h4><span class="header-section-number">12.2.3.3</span> Algorithm</h4>
 </div>
 <div id="java-code---queue" class="section level4" number="12.2.3.4">
 <h4><span class="header-section-number">12.2.3.4</span> Java Code - Queue</h4>
-<div class="sourceCode" id="cb232"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb232-1"><a href="design-a-stack.html#cb232-1" aria-hidden="true"></a><span class="kw">class</span> MyQueueBasedStack&lt;T&gt; {</span>
-<span id="cb232-2"><a href="design-a-stack.html#cb232-2" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Queue</span>&lt;T&gt; value = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb232-3"><a href="design-a-stack.html#cb232-3" aria-hidden="true"></a></span>
-<span id="cb232-4"><a href="design-a-stack.html#cb232-4" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">push</span>(T item) {</span>
-<span id="cb232-5"><a href="design-a-stack.html#cb232-5" aria-hidden="true"></a>        <span class="bu">Queue</span>&lt;T&gt; temp = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
-<span id="cb232-6"><a href="design-a-stack.html#cb232-6" aria-hidden="true"></a></span>
-<span id="cb232-7"><a href="design-a-stack.html#cb232-7" aria-hidden="true"></a>        temp.<span class="fu">enqueue</span>(item);</span>
-<span id="cb232-8"><a href="design-a-stack.html#cb232-8" aria-hidden="true"></a>        <span class="kw">while</span>(!value.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb232-9"><a href="design-a-stack.html#cb232-9" aria-hidden="true"></a>            temp.<span class="fu">enqueue</span>(value.<span class="fu">dequeue</span>());</span>
-<span id="cb232-10"><a href="design-a-stack.html#cb232-10" aria-hidden="true"></a>        }</span>
-<span id="cb232-11"><a href="design-a-stack.html#cb232-11" aria-hidden="true"></a></span>
-<span id="cb232-12"><a href="design-a-stack.html#cb232-12" aria-hidden="true"></a>        value = temp;</span>
-<span id="cb232-13"><a href="design-a-stack.html#cb232-13" aria-hidden="true"></a>    }</span>
-<span id="cb232-14"><a href="design-a-stack.html#cb232-14" aria-hidden="true"></a></span>
-<span id="cb232-15"><a href="design-a-stack.html#cb232-15" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">pop</span>() {</span>
-<span id="cb232-16"><a href="design-a-stack.html#cb232-16" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">poll</span>();</span>
-<span id="cb232-17"><a href="design-a-stack.html#cb232-17" aria-hidden="true"></a>    }</span>
-<span id="cb232-18"><a href="design-a-stack.html#cb232-18" aria-hidden="true"></a></span>
-<span id="cb232-19"><a href="design-a-stack.html#cb232-19" aria-hidden="true"></a>    <span class="kw">public</span> T <span class="fu">top</span>() {</span>
-<span id="cb232-20"><a href="design-a-stack.html#cb232-20" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">peek</span>();</span>
-<span id="cb232-21"><a href="design-a-stack.html#cb232-21" aria-hidden="true"></a>    }</span>
-<span id="cb232-22"><a href="design-a-stack.html#cb232-22" aria-hidden="true"></a></span>
-<span id="cb232-23"><a href="design-a-stack.html#cb232-23" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">empty</span>() {</span>
-<span id="cb232-24"><a href="design-a-stack.html#cb232-24" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">isEmpty</span>();</span>
-<span id="cb232-25"><a href="design-a-stack.html#cb232-25" aria-hidden="true"></a>    }</span>
-<span id="cb232-26"><a href="design-a-stack.html#cb232-26" aria-hidden="true"></a></span>
-<span id="cb232-27"><a href="design-a-stack.html#cb232-27" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {</span>
-<span id="cb232-28"><a href="design-a-stack.html#cb232-28" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">size</span>();</span>
-<span id="cb232-29"><a href="design-a-stack.html#cb232-29" aria-hidden="true"></a>    }</span>
-<span id="cb232-30"><a href="design-a-stack.html#cb232-30" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb233-1"><a href="design-a-stack.html#cb233-1" aria-hidden="true"></a><span class="kw">class</span> MyQueueBasedStack&lt;T&gt; {</span>
+<span id="cb233-2"><a href="design-a-stack.html#cb233-2" aria-hidden="true"></a>    <span class="kw">private</span> <span class="bu">Queue</span>&lt;T&gt; value = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb233-3"><a href="design-a-stack.html#cb233-3" aria-hidden="true"></a></span>
+<span id="cb233-4"><a href="design-a-stack.html#cb233-4" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">push</span>(T item) {</span>
+<span id="cb233-5"><a href="design-a-stack.html#cb233-5" aria-hidden="true"></a>        <span class="bu">Queue</span>&lt;T&gt; temp = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;&gt;();</span>
+<span id="cb233-6"><a href="design-a-stack.html#cb233-6" aria-hidden="true"></a></span>
+<span id="cb233-7"><a href="design-a-stack.html#cb233-7" aria-hidden="true"></a>        temp.<span class="fu">enqueue</span>(item);</span>
+<span id="cb233-8"><a href="design-a-stack.html#cb233-8" aria-hidden="true"></a>        <span class="kw">while</span>(!value.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb233-9"><a href="design-a-stack.html#cb233-9" aria-hidden="true"></a>            temp.<span class="fu">enqueue</span>(value.<span class="fu">dequeue</span>());</span>
+<span id="cb233-10"><a href="design-a-stack.html#cb233-10" aria-hidden="true"></a>        }</span>
+<span id="cb233-11"><a href="design-a-stack.html#cb233-11" aria-hidden="true"></a></span>
+<span id="cb233-12"><a href="design-a-stack.html#cb233-12" aria-hidden="true"></a>        value = temp;</span>
+<span id="cb233-13"><a href="design-a-stack.html#cb233-13" aria-hidden="true"></a>    }</span>
+<span id="cb233-14"><a href="design-a-stack.html#cb233-14" aria-hidden="true"></a></span>
+<span id="cb233-15"><a href="design-a-stack.html#cb233-15" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">pop</span>() {</span>
+<span id="cb233-16"><a href="design-a-stack.html#cb233-16" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">poll</span>();</span>
+<span id="cb233-17"><a href="design-a-stack.html#cb233-17" aria-hidden="true"></a>    }</span>
+<span id="cb233-18"><a href="design-a-stack.html#cb233-18" aria-hidden="true"></a></span>
+<span id="cb233-19"><a href="design-a-stack.html#cb233-19" aria-hidden="true"></a>    <span class="kw">public</span> T <span class="fu">top</span>() {</span>
+<span id="cb233-20"><a href="design-a-stack.html#cb233-20" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">peek</span>();</span>
+<span id="cb233-21"><a href="design-a-stack.html#cb233-21" aria-hidden="true"></a>    }</span>
+<span id="cb233-22"><a href="design-a-stack.html#cb233-22" aria-hidden="true"></a></span>
+<span id="cb233-23"><a href="design-a-stack.html#cb233-23" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">empty</span>() {</span>
+<span id="cb233-24"><a href="design-a-stack.html#cb233-24" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">isEmpty</span>();</span>
+<span id="cb233-25"><a href="design-a-stack.html#cb233-25" aria-hidden="true"></a>    }</span>
+<span id="cb233-26"><a href="design-a-stack.html#cb233-26" aria-hidden="true"></a></span>
+<span id="cb233-27"><a href="design-a-stack.html#cb233-27" aria-hidden="true"></a>    <span class="kw">public</span> <span class="dt">int</span> <span class="fu">size</span>() {</span>
+<span id="cb233-28"><a href="design-a-stack.html#cb233-28" aria-hidden="true"></a>        <span class="kw">return</span> value.<span class="fu">size</span>();</span>
+<span id="cb233-29"><a href="design-a-stack.html#cb233-29" aria-hidden="true"></a>    }</span>
+<span id="cb233-30"><a href="design-a-stack.html#cb233-30" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

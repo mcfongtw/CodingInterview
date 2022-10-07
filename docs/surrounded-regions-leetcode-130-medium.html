@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1069,7 +1070,7 @@ X O X X</code></pre>
 </div>
 <div id="solution---dfs-2" class="section level3" number="3.10.3">
 <h3><span class="header-section-number">3.10.3</span> Solution - DFS</h3>
-<div id="walkthrough-53" class="section level4" number="3.10.3.1">
+<div id="walkthrough-54" class="section level4" number="3.10.3.1">
 <h4><span class="header-section-number">3.10.3.1</span> Walkthrough</h4>
 <p>First preserve the border tile (or tile connected to a border ultimately) with ‘#’.</p>
 <pre><code>X X X X
@@ -1082,7 +1083,7 @@ X X X X
 X X X X
 X O X X</code></pre>
 </div>
-<div id="analysis-54" class="section level4" number="3.10.3.2">
+<div id="analysis-55" class="section level4" number="3.10.3.2">
 <h4><span class="header-section-number">3.10.3.2</span> Analysis</h4>
 <p>All cell is visited a few times, thus, O(rows * cols).
 #### Algorithm
@@ -1090,63 +1091,63 @@ dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
 <div id="java-code---dfs-2" class="section level4" number="3.10.3.3">
 <h4><span class="header-section-number">3.10.3.3</span> Java Code - DFS</h4>
-<div class="sourceCode" id="cb94"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb94-1"><a href="surrounded-regions-leetcode-130-medium.html#cb94-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">solve</span>(<span class="dt">char</span>[][] board) {</span>
-<span id="cb94-2"><a href="surrounded-regions-leetcode-130-medium.html#cb94-2" aria-hidden="true"></a>    <span class="kw">if</span>(board == <span class="kw">null</span> || board.<span class="fu">length</span>==<span class="dv">0</span>)</span>
-<span id="cb94-3"><a href="surrounded-regions-leetcode-130-medium.html#cb94-3" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
-<span id="cb94-4"><a href="surrounded-regions-leetcode-130-medium.html#cb94-4" aria-hidden="true"></a></span>
-<span id="cb94-5"><a href="surrounded-regions-leetcode-130-medium.html#cb94-5" aria-hidden="true"></a>    <span class="dt">int</span> rows = board.<span class="fu">length</span>;</span>
-<span id="cb94-6"><a href="surrounded-regions-leetcode-130-medium.html#cb94-6" aria-hidden="true"></a>    <span class="dt">int</span> cols = board[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb94-7"><a href="surrounded-regions-leetcode-130-medium.html#cb94-7" aria-hidden="true"></a></span>
-<span id="cb94-8"><a href="surrounded-regions-leetcode-130-medium.html#cb94-8" aria-hidden="true"></a>    <span class="co">//preserve O&#39;s on left &amp; right boarder</span></span>
-<span id="cb94-9"><a href="surrounded-regions-leetcode-130-medium.html#cb94-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>;i &lt; rows;i++){</span>
-<span id="cb94-10"><a href="surrounded-regions-leetcode-130-medium.html#cb94-10" aria-hidden="true"></a>        <span class="kw">if</span>(board[i][<span class="dv">0</span>] == <span class="ch">&#39;O&#39;</span>){</span>
-<span id="cb94-11"><a href="surrounded-regions-leetcode-130-medium.html#cb94-11" aria-hidden="true"></a>            <span class="fu">preserve</span>(board, i, <span class="dv">0</span>);</span>
-<span id="cb94-12"><a href="surrounded-regions-leetcode-130-medium.html#cb94-12" aria-hidden="true"></a>        }</span>
-<span id="cb94-13"><a href="surrounded-regions-leetcode-130-medium.html#cb94-13" aria-hidden="true"></a></span>
-<span id="cb94-14"><a href="surrounded-regions-leetcode-130-medium.html#cb94-14" aria-hidden="true"></a>        <span class="kw">if</span>(board[i][cols - <span class="dv">1</span>] == <span class="ch">&#39;O&#39;</span>){</span>
-<span id="cb94-15"><a href="surrounded-regions-leetcode-130-medium.html#cb94-15" aria-hidden="true"></a>            <span class="fu">preserve</span>(board, i, n - <span class="dv">1</span>);</span>
-<span id="cb94-16"><a href="surrounded-regions-leetcode-130-medium.html#cb94-16" aria-hidden="true"></a>        }</span>
-<span id="cb94-17"><a href="surrounded-regions-leetcode-130-medium.html#cb94-17" aria-hidden="true"></a>    }</span>
-<span id="cb94-18"><a href="surrounded-regions-leetcode-130-medium.html#cb94-18" aria-hidden="true"></a></span>
-<span id="cb94-19"><a href="surrounded-regions-leetcode-130-medium.html#cb94-19" aria-hidden="true"></a>    <span class="co">//preserve O&#39;s on top &amp; bottom boarder</span></span>
-<span id="cb94-20"><a href="surrounded-regions-leetcode-130-medium.html#cb94-20" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; cols; j++){</span>
-<span id="cb94-21"><a href="surrounded-regions-leetcode-130-medium.html#cb94-21" aria-hidden="true"></a>        <span class="kw">if</span>(board[<span class="dv">0</span>][j] == <span class="ch">&#39;O&#39;</span>){</span>
-<span id="cb94-22"><a href="surrounded-regions-leetcode-130-medium.html#cb94-22" aria-hidden="true"></a>            <span class="fu">preserve</span>(board, <span class="dv">0</span>, j);</span>
-<span id="cb94-23"><a href="surrounded-regions-leetcode-130-medium.html#cb94-23" aria-hidden="true"></a>        }</span>
-<span id="cb94-24"><a href="surrounded-regions-leetcode-130-medium.html#cb94-24" aria-hidden="true"></a></span>
-<span id="cb94-25"><a href="surrounded-regions-leetcode-130-medium.html#cb94-25" aria-hidden="true"></a>        <span class="kw">if</span>(board[rows - <span class="dv">1</span>][j] == <span class="ch">&#39;O&#39;</span>){</span>
-<span id="cb94-26"><a href="surrounded-regions-leetcode-130-medium.html#cb94-26" aria-hidden="true"></a>            <span class="fu">preserve</span>(board, m - <span class="dv">1</span>, j);</span>
-<span id="cb94-27"><a href="surrounded-regions-leetcode-130-medium.html#cb94-27" aria-hidden="true"></a>        }</span>
-<span id="cb94-28"><a href="surrounded-regions-leetcode-130-medium.html#cb94-28" aria-hidden="true"></a>    }</span>
-<span id="cb94-29"><a href="surrounded-regions-leetcode-130-medium.html#cb94-29" aria-hidden="true"></a></span>
-<span id="cb94-30"><a href="surrounded-regions-leetcode-130-medium.html#cb94-30" aria-hidden="true"></a>    <span class="co">//process the board</span></span>
-<span id="cb94-31"><a href="surrounded-regions-leetcode-130-medium.html#cb94-31" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>;i &lt; rows;i++) {</span>
-<span id="cb94-32"><a href="surrounded-regions-leetcode-130-medium.html#cb94-32" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; cols; j++) {</span>
-<span id="cb94-33"><a href="surrounded-regions-leetcode-130-medium.html#cb94-33" aria-hidden="true"></a>            <span class="kw">if</span>(board[i][j] == <span class="ch">&#39;O&#39;</span>) {</span>
-<span id="cb94-34"><a href="surrounded-regions-leetcode-130-medium.html#cb94-34" aria-hidden="true"></a>                board[i][j] = <span class="ch">&#39;X&#39;</span>;</span>
-<span id="cb94-35"><a href="surrounded-regions-leetcode-130-medium.html#cb94-35" aria-hidden="true"></a>            } <span class="kw">else</span> <span class="kw">if</span>(board[i][j] == <span class="ch">&#39;#&#39;</span>) {</span>
-<span id="cb94-36"><a href="surrounded-regions-leetcode-130-medium.html#cb94-36" aria-hidden="true"></a>                <span class="co">// change the preserved border tile back to &#39;O&#39;</span></span>
-<span id="cb94-37"><a href="surrounded-regions-leetcode-130-medium.html#cb94-37" aria-hidden="true"></a>                board[i][j] = <span class="ch">&#39;O&#39;</span>;</span>
-<span id="cb94-38"><a href="surrounded-regions-leetcode-130-medium.html#cb94-38" aria-hidden="true"></a>            }</span>
-<span id="cb94-39"><a href="surrounded-regions-leetcode-130-medium.html#cb94-39" aria-hidden="true"></a>        }</span>
-<span id="cb94-40"><a href="surrounded-regions-leetcode-130-medium.html#cb94-40" aria-hidden="true"></a>    }</span>
-<span id="cb94-41"><a href="surrounded-regions-leetcode-130-medium.html#cb94-41" aria-hidden="true"></a>}</span>
-<span id="cb94-42"><a href="surrounded-regions-leetcode-130-medium.html#cb94-42" aria-hidden="true"></a></span>
-<span id="cb94-43"><a href="surrounded-regions-leetcode-130-medium.html#cb94-43" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">preserve</span>(<span class="dt">char</span>[][] board, <span class="dt">int</span> i, <span class="dt">int</span> j){</span>
-<span id="cb94-44"><a href="surrounded-regions-leetcode-130-medium.html#cb94-44" aria-hidden="true"></a>    <span class="dt">int</span> rows = board.<span class="fu">length</span>;</span>
-<span id="cb94-45"><a href="surrounded-regions-leetcode-130-medium.html#cb94-45" aria-hidden="true"></a>    <span class="dt">int</span> cols = board[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb94-46"><a href="surrounded-regions-leetcode-130-medium.html#cb94-46" aria-hidden="true"></a></span>
-<span id="cb94-47"><a href="surrounded-regions-leetcode-130-medium.html#cb94-47" aria-hidden="true"></a>    <span class="kw">if</span>(i &lt; <span class="dv">0</span> || i &gt;= rows || j &lt; <span class="dv">0</span> || j &gt;= cols || board[i][j] != <span class="ch">&#39;O&#39;</span>)</span>
-<span id="cb94-48"><a href="surrounded-regions-leetcode-130-medium.html#cb94-48" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
-<span id="cb94-49"><a href="surrounded-regions-leetcode-130-medium.html#cb94-49" aria-hidden="true"></a></span>
-<span id="cb94-50"><a href="surrounded-regions-leetcode-130-medium.html#cb94-50" aria-hidden="true"></a>    board[i][j] = <span class="ch">&#39;#&#39;</span>;</span>
-<span id="cb94-51"><a href="surrounded-regions-leetcode-130-medium.html#cb94-51" aria-hidden="true"></a></span>
-<span id="cb94-52"><a href="surrounded-regions-leetcode-130-medium.html#cb94-52" aria-hidden="true"></a>    <span class="co">// recursively fill the adjacent land</span></span>
-<span id="cb94-53"><a href="surrounded-regions-leetcode-130-medium.html#cb94-53" aria-hidden="true"></a>    <span class="fu">preserve</span>(board, i - <span class="dv">1</span>, j);</span>
-<span id="cb94-54"><a href="surrounded-regions-leetcode-130-medium.html#cb94-54" aria-hidden="true"></a>    <span class="fu">preserve</span>(board, i + <span class="dv">1</span>, j);</span>
-<span id="cb94-55"><a href="surrounded-regions-leetcode-130-medium.html#cb94-55" aria-hidden="true"></a>    <span class="fu">preserve</span>(board, i, j - <span class="dv">1</span>);</span>
-<span id="cb94-56"><a href="surrounded-regions-leetcode-130-medium.html#cb94-56" aria-hidden="true"></a>    <span class="fu">preserve</span>(board, i, j + <span class="dv">1</span>);</span>
-<span id="cb94-57"><a href="surrounded-regions-leetcode-130-medium.html#cb94-57" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb95-1"><a href="surrounded-regions-leetcode-130-medium.html#cb95-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">solve</span>(<span class="dt">char</span>[][] board) {</span>
+<span id="cb95-2"><a href="surrounded-regions-leetcode-130-medium.html#cb95-2" aria-hidden="true"></a>    <span class="kw">if</span>(board == <span class="kw">null</span> || board.<span class="fu">length</span>==<span class="dv">0</span>)</span>
+<span id="cb95-3"><a href="surrounded-regions-leetcode-130-medium.html#cb95-3" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
+<span id="cb95-4"><a href="surrounded-regions-leetcode-130-medium.html#cb95-4" aria-hidden="true"></a></span>
+<span id="cb95-5"><a href="surrounded-regions-leetcode-130-medium.html#cb95-5" aria-hidden="true"></a>    <span class="dt">int</span> rows = board.<span class="fu">length</span>;</span>
+<span id="cb95-6"><a href="surrounded-regions-leetcode-130-medium.html#cb95-6" aria-hidden="true"></a>    <span class="dt">int</span> cols = board[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb95-7"><a href="surrounded-regions-leetcode-130-medium.html#cb95-7" aria-hidden="true"></a></span>
+<span id="cb95-8"><a href="surrounded-regions-leetcode-130-medium.html#cb95-8" aria-hidden="true"></a>    <span class="co">//preserve O&#39;s on left &amp; right boarder</span></span>
+<span id="cb95-9"><a href="surrounded-regions-leetcode-130-medium.html#cb95-9" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>;i &lt; rows;i++){</span>
+<span id="cb95-10"><a href="surrounded-regions-leetcode-130-medium.html#cb95-10" aria-hidden="true"></a>        <span class="kw">if</span>(board[i][<span class="dv">0</span>] == <span class="ch">&#39;O&#39;</span>){</span>
+<span id="cb95-11"><a href="surrounded-regions-leetcode-130-medium.html#cb95-11" aria-hidden="true"></a>            <span class="fu">preserve</span>(board, i, <span class="dv">0</span>);</span>
+<span id="cb95-12"><a href="surrounded-regions-leetcode-130-medium.html#cb95-12" aria-hidden="true"></a>        }</span>
+<span id="cb95-13"><a href="surrounded-regions-leetcode-130-medium.html#cb95-13" aria-hidden="true"></a></span>
+<span id="cb95-14"><a href="surrounded-regions-leetcode-130-medium.html#cb95-14" aria-hidden="true"></a>        <span class="kw">if</span>(board[i][cols - <span class="dv">1</span>] == <span class="ch">&#39;O&#39;</span>){</span>
+<span id="cb95-15"><a href="surrounded-regions-leetcode-130-medium.html#cb95-15" aria-hidden="true"></a>            <span class="fu">preserve</span>(board, i, n - <span class="dv">1</span>);</span>
+<span id="cb95-16"><a href="surrounded-regions-leetcode-130-medium.html#cb95-16" aria-hidden="true"></a>        }</span>
+<span id="cb95-17"><a href="surrounded-regions-leetcode-130-medium.html#cb95-17" aria-hidden="true"></a>    }</span>
+<span id="cb95-18"><a href="surrounded-regions-leetcode-130-medium.html#cb95-18" aria-hidden="true"></a></span>
+<span id="cb95-19"><a href="surrounded-regions-leetcode-130-medium.html#cb95-19" aria-hidden="true"></a>    <span class="co">//preserve O&#39;s on top &amp; bottom boarder</span></span>
+<span id="cb95-20"><a href="surrounded-regions-leetcode-130-medium.html#cb95-20" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; cols; j++){</span>
+<span id="cb95-21"><a href="surrounded-regions-leetcode-130-medium.html#cb95-21" aria-hidden="true"></a>        <span class="kw">if</span>(board[<span class="dv">0</span>][j] == <span class="ch">&#39;O&#39;</span>){</span>
+<span id="cb95-22"><a href="surrounded-regions-leetcode-130-medium.html#cb95-22" aria-hidden="true"></a>            <span class="fu">preserve</span>(board, <span class="dv">0</span>, j);</span>
+<span id="cb95-23"><a href="surrounded-regions-leetcode-130-medium.html#cb95-23" aria-hidden="true"></a>        }</span>
+<span id="cb95-24"><a href="surrounded-regions-leetcode-130-medium.html#cb95-24" aria-hidden="true"></a></span>
+<span id="cb95-25"><a href="surrounded-regions-leetcode-130-medium.html#cb95-25" aria-hidden="true"></a>        <span class="kw">if</span>(board[rows - <span class="dv">1</span>][j] == <span class="ch">&#39;O&#39;</span>){</span>
+<span id="cb95-26"><a href="surrounded-regions-leetcode-130-medium.html#cb95-26" aria-hidden="true"></a>            <span class="fu">preserve</span>(board, m - <span class="dv">1</span>, j);</span>
+<span id="cb95-27"><a href="surrounded-regions-leetcode-130-medium.html#cb95-27" aria-hidden="true"></a>        }</span>
+<span id="cb95-28"><a href="surrounded-regions-leetcode-130-medium.html#cb95-28" aria-hidden="true"></a>    }</span>
+<span id="cb95-29"><a href="surrounded-regions-leetcode-130-medium.html#cb95-29" aria-hidden="true"></a></span>
+<span id="cb95-30"><a href="surrounded-regions-leetcode-130-medium.html#cb95-30" aria-hidden="true"></a>    <span class="co">//process the board</span></span>
+<span id="cb95-31"><a href="surrounded-regions-leetcode-130-medium.html#cb95-31" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>;i &lt; rows;i++) {</span>
+<span id="cb95-32"><a href="surrounded-regions-leetcode-130-medium.html#cb95-32" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; j &lt; cols; j++) {</span>
+<span id="cb95-33"><a href="surrounded-regions-leetcode-130-medium.html#cb95-33" aria-hidden="true"></a>            <span class="kw">if</span>(board[i][j] == <span class="ch">&#39;O&#39;</span>) {</span>
+<span id="cb95-34"><a href="surrounded-regions-leetcode-130-medium.html#cb95-34" aria-hidden="true"></a>                board[i][j] = <span class="ch">&#39;X&#39;</span>;</span>
+<span id="cb95-35"><a href="surrounded-regions-leetcode-130-medium.html#cb95-35" aria-hidden="true"></a>            } <span class="kw">else</span> <span class="kw">if</span>(board[i][j] == <span class="ch">&#39;#&#39;</span>) {</span>
+<span id="cb95-36"><a href="surrounded-regions-leetcode-130-medium.html#cb95-36" aria-hidden="true"></a>                <span class="co">// change the preserved border tile back to &#39;O&#39;</span></span>
+<span id="cb95-37"><a href="surrounded-regions-leetcode-130-medium.html#cb95-37" aria-hidden="true"></a>                board[i][j] = <span class="ch">&#39;O&#39;</span>;</span>
+<span id="cb95-38"><a href="surrounded-regions-leetcode-130-medium.html#cb95-38" aria-hidden="true"></a>            }</span>
+<span id="cb95-39"><a href="surrounded-regions-leetcode-130-medium.html#cb95-39" aria-hidden="true"></a>        }</span>
+<span id="cb95-40"><a href="surrounded-regions-leetcode-130-medium.html#cb95-40" aria-hidden="true"></a>    }</span>
+<span id="cb95-41"><a href="surrounded-regions-leetcode-130-medium.html#cb95-41" aria-hidden="true"></a>}</span>
+<span id="cb95-42"><a href="surrounded-regions-leetcode-130-medium.html#cb95-42" aria-hidden="true"></a></span>
+<span id="cb95-43"><a href="surrounded-regions-leetcode-130-medium.html#cb95-43" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">preserve</span>(<span class="dt">char</span>[][] board, <span class="dt">int</span> i, <span class="dt">int</span> j){</span>
+<span id="cb95-44"><a href="surrounded-regions-leetcode-130-medium.html#cb95-44" aria-hidden="true"></a>    <span class="dt">int</span> rows = board.<span class="fu">length</span>;</span>
+<span id="cb95-45"><a href="surrounded-regions-leetcode-130-medium.html#cb95-45" aria-hidden="true"></a>    <span class="dt">int</span> cols = board[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb95-46"><a href="surrounded-regions-leetcode-130-medium.html#cb95-46" aria-hidden="true"></a></span>
+<span id="cb95-47"><a href="surrounded-regions-leetcode-130-medium.html#cb95-47" aria-hidden="true"></a>    <span class="kw">if</span>(i &lt; <span class="dv">0</span> || i &gt;= rows || j &lt; <span class="dv">0</span> || j &gt;= cols || board[i][j] != <span class="ch">&#39;O&#39;</span>)</span>
+<span id="cb95-48"><a href="surrounded-regions-leetcode-130-medium.html#cb95-48" aria-hidden="true"></a>        <span class="kw">return</span>;</span>
+<span id="cb95-49"><a href="surrounded-regions-leetcode-130-medium.html#cb95-49" aria-hidden="true"></a></span>
+<span id="cb95-50"><a href="surrounded-regions-leetcode-130-medium.html#cb95-50" aria-hidden="true"></a>    board[i][j] = <span class="ch">&#39;#&#39;</span>;</span>
+<span id="cb95-51"><a href="surrounded-regions-leetcode-130-medium.html#cb95-51" aria-hidden="true"></a></span>
+<span id="cb95-52"><a href="surrounded-regions-leetcode-130-medium.html#cb95-52" aria-hidden="true"></a>    <span class="co">// recursively fill the adjacent land</span></span>
+<span id="cb95-53"><a href="surrounded-regions-leetcode-130-medium.html#cb95-53" aria-hidden="true"></a>    <span class="fu">preserve</span>(board, i - <span class="dv">1</span>, j);</span>
+<span id="cb95-54"><a href="surrounded-regions-leetcode-130-medium.html#cb95-54" aria-hidden="true"></a>    <span class="fu">preserve</span>(board, i + <span class="dv">1</span>, j);</span>
+<span id="cb95-55"><a href="surrounded-regions-leetcode-130-medium.html#cb95-55" aria-hidden="true"></a>    <span class="fu">preserve</span>(board, i, j - <span class="dv">1</span>);</span>
+<span id="cb95-56"><a href="surrounded-regions-leetcode-130-medium.html#cb95-56" aria-hidden="true"></a>    <span class="fu">preserve</span>(board, i, j + <span class="dv">1</span>);</span>
+<span id="cb95-57"><a href="surrounded-regions-leetcode-130-medium.html#cb95-57" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1057,92 +1058,92 @@ graph contains a val (int) and a list (List[Node]) of its neighbors.</p>
 </div>
 <div id="solution---dfs-5" class="section level3" number="5.3.3">
 <h3><span class="header-section-number">5.3.3</span> Solution - DFS</h3>
-<div id="walkthrough-98" class="section level4" number="5.3.3.1">
+<div id="walkthrough-99" class="section level4" number="5.3.3.1">
 <h4><span class="header-section-number">5.3.3.1</span> Walkthrough</h4>
 <p>Have a map as cache to store the mapping between original and new node. Recursively walk through the each adjacent node
 and assign into the adjacency list if existed in cache; otherwise, recursively clone the node.</p>
 </div>
-<div id="analysis-99" class="section level4" number="5.3.3.2">
+<div id="analysis-100" class="section level4" number="5.3.3.2">
 <h4><span class="header-section-number">5.3.3.2</span> Analysis</h4>
 <p>Since each edge will appear twice. Once in the adjacency list of either end of the edge. So, the overall complexity
 will be <span class="math inline">\(O(|V|) + O(2 \cdot |E|) = O(|V + E|)\)</span></p>
 </div>
-<div id="algorithm-105" class="section level4" number="5.3.3.3">
+<div id="algorithm-106" class="section level4" number="5.3.3.3">
 <h4><span class="header-section-number">5.3.3.3</span> Algorithm</h4>
 <p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
-<div id="java-code-60" class="section level4" number="5.3.3.4">
+<div id="java-code-62" class="section level4" number="5.3.3.4">
 <h4><span class="header-section-number">5.3.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb163"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb163-1"><a href="clone-graph-leetcode-133-medium.html#cb163-1" aria-hidden="true"></a><span class="co">//use this map to store original and cloned node.</span></span>
-<span id="cb163-2"><a href="clone-graph-leetcode-133-medium.html#cb163-2" aria-hidden="true"></a><span class="co">//also act as visited[]</span></span>
-<span id="cb163-3"><a href="clone-graph-leetcode-133-medium.html#cb163-3" aria-hidden="true"></a><span class="bu">Map</span>&lt;<span class="bu">Node</span>, <span class="bu">Node</span>&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
-<span id="cb163-4"><a href="clone-graph-leetcode-133-medium.html#cb163-4" aria-hidden="true"></a></span>
-<span id="cb163-5"><a href="clone-graph-leetcode-133-medium.html#cb163-5" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">Node</span> <span class="fu">cloneGraph</span>(<span class="bu">Node</span> node) {</span>
-<span id="cb163-6"><a href="clone-graph-leetcode-133-medium.html#cb163-6" aria-hidden="true"></a>    map.<span class="fu">put</span>(node, <span class="kw">new</span> <span class="bu">Node</span>(node.<span class="fu">val</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Node</span>&gt;()));</span>
-<span id="cb163-7"><a href="clone-graph-leetcode-133-medium.html#cb163-7" aria-hidden="true"></a></span>
-<span id="cb163-8"><a href="clone-graph-leetcode-133-medium.html#cb163-8" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">Node</span> neighbor: node.<span class="fu">neighbors</span>){</span>
-<span id="cb163-9"><a href="clone-graph-leetcode-133-medium.html#cb163-9" aria-hidden="true"></a>        <span class="kw">if</span>(map.<span class="fu">containsKey</span>(neighbor)) {</span>
-<span id="cb163-10"><a href="clone-graph-leetcode-133-medium.html#cb163-10" aria-hidden="true"></a>            <span class="co">//if neighbor is cloned</span></span>
-<span id="cb163-11"><a href="clone-graph-leetcode-133-medium.html#cb163-11" aria-hidden="true"></a>            <span class="bu">Node</span> cloneNode = map.<span class="fu">get</span>(node);</span>
-<span id="cb163-12"><a href="clone-graph-leetcode-133-medium.html#cb163-12" aria-hidden="true"></a>            <span class="bu">Node</span> cloneNeighbor = map.<span class="fu">get</span>(neighbor);</span>
-<span id="cb163-13"><a href="clone-graph-leetcode-133-medium.html#cb163-13" aria-hidden="true"></a>            cloneNode.<span class="fu">neighbors</span>.<span class="fu">add</span>(cloneNeighbor);</span>
-<span id="cb163-14"><a href="clone-graph-leetcode-133-medium.html#cb163-14" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb163-15"><a href="clone-graph-leetcode-133-medium.html#cb163-15" aria-hidden="true"></a>            <span class="co">//recursively clone and add the neighbor</span></span>
-<span id="cb163-16"><a href="clone-graph-leetcode-133-medium.html#cb163-16" aria-hidden="true"></a>            <span class="bu">Node</span> cloneNode = map.<span class="fu">get</span>(node);</span>
-<span id="cb163-17"><a href="clone-graph-leetcode-133-medium.html#cb163-17" aria-hidden="true"></a>            cloneNode.<span class="fu">neighbors</span>.<span class="fu">add</span>(<span class="fu">cloneGraph</span>(neighbor));</span>
-<span id="cb163-18"><a href="clone-graph-leetcode-133-medium.html#cb163-18" aria-hidden="true"></a>        }</span>
-<span id="cb163-19"><a href="clone-graph-leetcode-133-medium.html#cb163-19" aria-hidden="true"></a>    }</span>
-<span id="cb163-20"><a href="clone-graph-leetcode-133-medium.html#cb163-20" aria-hidden="true"></a></span>
-<span id="cb163-21"><a href="clone-graph-leetcode-133-medium.html#cb163-21" aria-hidden="true"></a>    <span class="kw">return</span> map.<span class="fu">get</span>(node);</span>
-<span id="cb163-22"><a href="clone-graph-leetcode-133-medium.html#cb163-22" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb164-1"><a href="clone-graph-leetcode-133-medium.html#cb164-1" aria-hidden="true"></a><span class="co">//use this map to store original and cloned node.</span></span>
+<span id="cb164-2"><a href="clone-graph-leetcode-133-medium.html#cb164-2" aria-hidden="true"></a><span class="co">//also act as visited[]</span></span>
+<span id="cb164-3"><a href="clone-graph-leetcode-133-medium.html#cb164-3" aria-hidden="true"></a><span class="bu">Map</span>&lt;<span class="bu">Node</span>, <span class="bu">Node</span>&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
+<span id="cb164-4"><a href="clone-graph-leetcode-133-medium.html#cb164-4" aria-hidden="true"></a></span>
+<span id="cb164-5"><a href="clone-graph-leetcode-133-medium.html#cb164-5" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">Node</span> <span class="fu">cloneGraph</span>(<span class="bu">Node</span> node) {</span>
+<span id="cb164-6"><a href="clone-graph-leetcode-133-medium.html#cb164-6" aria-hidden="true"></a>    map.<span class="fu">put</span>(node, <span class="kw">new</span> <span class="bu">Node</span>(node.<span class="fu">val</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Node</span>&gt;()));</span>
+<span id="cb164-7"><a href="clone-graph-leetcode-133-medium.html#cb164-7" aria-hidden="true"></a></span>
+<span id="cb164-8"><a href="clone-graph-leetcode-133-medium.html#cb164-8" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">Node</span> neighbor: node.<span class="fu">neighbors</span>){</span>
+<span id="cb164-9"><a href="clone-graph-leetcode-133-medium.html#cb164-9" aria-hidden="true"></a>        <span class="kw">if</span>(map.<span class="fu">containsKey</span>(neighbor)) {</span>
+<span id="cb164-10"><a href="clone-graph-leetcode-133-medium.html#cb164-10" aria-hidden="true"></a>            <span class="co">//if neighbor is cloned</span></span>
+<span id="cb164-11"><a href="clone-graph-leetcode-133-medium.html#cb164-11" aria-hidden="true"></a>            <span class="bu">Node</span> cloneNode = map.<span class="fu">get</span>(node);</span>
+<span id="cb164-12"><a href="clone-graph-leetcode-133-medium.html#cb164-12" aria-hidden="true"></a>            <span class="bu">Node</span> cloneNeighbor = map.<span class="fu">get</span>(neighbor);</span>
+<span id="cb164-13"><a href="clone-graph-leetcode-133-medium.html#cb164-13" aria-hidden="true"></a>            cloneNode.<span class="fu">neighbors</span>.<span class="fu">add</span>(cloneNeighbor);</span>
+<span id="cb164-14"><a href="clone-graph-leetcode-133-medium.html#cb164-14" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb164-15"><a href="clone-graph-leetcode-133-medium.html#cb164-15" aria-hidden="true"></a>            <span class="co">//recursively clone and add the neighbor</span></span>
+<span id="cb164-16"><a href="clone-graph-leetcode-133-medium.html#cb164-16" aria-hidden="true"></a>            <span class="bu">Node</span> cloneNode = map.<span class="fu">get</span>(node);</span>
+<span id="cb164-17"><a href="clone-graph-leetcode-133-medium.html#cb164-17" aria-hidden="true"></a>            cloneNode.<span class="fu">neighbors</span>.<span class="fu">add</span>(<span class="fu">cloneGraph</span>(neighbor));</span>
+<span id="cb164-18"><a href="clone-graph-leetcode-133-medium.html#cb164-18" aria-hidden="true"></a>        }</span>
+<span id="cb164-19"><a href="clone-graph-leetcode-133-medium.html#cb164-19" aria-hidden="true"></a>    }</span>
+<span id="cb164-20"><a href="clone-graph-leetcode-133-medium.html#cb164-20" aria-hidden="true"></a></span>
+<span id="cb164-21"><a href="clone-graph-leetcode-133-medium.html#cb164-21" aria-hidden="true"></a>    <span class="kw">return</span> map.<span class="fu">get</span>(node);</span>
+<span id="cb164-22"><a href="clone-graph-leetcode-133-medium.html#cb164-22" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="solution---bfs-1" class="section level3" number="5.3.4">
 <h3><span class="header-section-number">5.3.4</span> Solution - BFS</h3>
-<div id="walkthrough-99" class="section level4" number="5.3.4.1">
+<div id="walkthrough-100" class="section level4" number="5.3.4.1">
 <h4><span class="header-section-number">5.3.4.1</span> Walkthrough</h4>
 <p>We use BFS to traverse the graph with a map cache to store the original and cloned node. This cache can only be used
 as visited[].</p>
 </div>
-<div id="analysis-100" class="section level4" number="5.3.4.2">
+<div id="analysis-101" class="section level4" number="5.3.4.2">
 <h4><span class="header-section-number">5.3.4.2</span> Analysis</h4>
 <p>For every single vertex in the graph, we will end up visiting its neighboring nodes only twice. The time complexity is
 the sum of the vertices and their edges as represented by the graph in its adjacency list representation: <span class="math inline">\(O(|V| + |E|)\)</span></p>
 </div>
-<div id="algorithm-106" class="section level4" number="5.3.4.3">
+<div id="algorithm-107" class="section level4" number="5.3.4.3">
 <h4><span class="header-section-number">5.3.4.3</span> Algorithm</h4>
 <p>bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
 </div>
-<div id="java-code-61" class="section level4" number="5.3.4.4">
+<div id="java-code-63" class="section level4" number="5.3.4.4">
 <h4><span class="header-section-number">5.3.4.4</span> Java Code</h4>
-<div class="sourceCode" id="cb164"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb164-1"><a href="clone-graph-leetcode-133-medium.html#cb164-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">Node</span> <span class="fu">cloneGraph</span>(<span class="bu">Node</span> root) {</span>
-<span id="cb164-2"><a href="clone-graph-leetcode-133-medium.html#cb164-2" aria-hidden="true"></a>    <span class="co">//use this map to store original and cloned node</span></span>
-<span id="cb164-3"><a href="clone-graph-leetcode-133-medium.html#cb164-3" aria-hidden="true"></a>    <span class="co">//also act as visited[]</span></span>
-<span id="cb164-4"><a href="clone-graph-leetcode-133-medium.html#cb164-4" aria-hidden="true"></a>    <span class="bu">Map</span>&lt;<span class="bu">Node</span>, <span class="bu">Node</span>&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
-<span id="cb164-5"><a href="clone-graph-leetcode-133-medium.html#cb164-5" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">Node</span>&gt; queue = <span class="kw">new</span> <span class="bu">ArrayDeque</span>&lt;&gt;();</span>
-<span id="cb164-6"><a href="clone-graph-leetcode-133-medium.html#cb164-6" aria-hidden="true"></a></span>
-<span id="cb164-7"><a href="clone-graph-leetcode-133-medium.html#cb164-7" aria-hidden="true"></a>    queue.<span class="fu">offer</span>(root);</span>
-<span id="cb164-8"><a href="clone-graph-leetcode-133-medium.html#cb164-8" aria-hidden="true"></a>    map.<span class="fu">put</span>(root, <span class="kw">new</span> <span class="bu">Node</span>(root.<span class="fu">val</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;()));</span>
-<span id="cb164-9"><a href="clone-graph-leetcode-133-medium.html#cb164-9" aria-hidden="true"></a></span>
-<span id="cb164-10"><a href="clone-graph-leetcode-133-medium.html#cb164-10" aria-hidden="true"></a>    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb164-11"><a href="clone-graph-leetcode-133-medium.html#cb164-11" aria-hidden="true"></a>        <span class="bu">Node</span> node = queue.<span class="fu">poll</span>();</span>
-<span id="cb164-12"><a href="clone-graph-leetcode-133-medium.html#cb164-12" aria-hidden="true"></a></span>
-<span id="cb164-13"><a href="clone-graph-leetcode-133-medium.html#cb164-13" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="bu">Node</span> neighbor : node.<span class="fu">neighbors</span>) {</span>
-<span id="cb164-14"><a href="clone-graph-leetcode-133-medium.html#cb164-14" aria-hidden="true"></a>            <span class="co">// neighbor node is not yet cloned</span></span>
-<span id="cb164-15"><a href="clone-graph-leetcode-133-medium.html#cb164-15" aria-hidden="true"></a>            <span class="kw">if</span> (!map.<span class="fu">containsKey</span>(neighbor)) {</span>
-<span id="cb164-16"><a href="clone-graph-leetcode-133-medium.html#cb164-16" aria-hidden="true"></a>                map.<span class="fu">put</span>(neighbor, <span class="kw">new</span> <span class="bu">Node</span>(neighbor.<span class="fu">val</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;()));</span>
-<span id="cb164-17"><a href="clone-graph-leetcode-133-medium.html#cb164-17" aria-hidden="true"></a>                queue.<span class="fu">offer</span>(neighbor);</span>
-<span id="cb164-18"><a href="clone-graph-leetcode-133-medium.html#cb164-18" aria-hidden="true"></a>            }</span>
-<span id="cb164-19"><a href="clone-graph-leetcode-133-medium.html#cb164-19" aria-hidden="true"></a></span>
-<span id="cb164-20"><a href="clone-graph-leetcode-133-medium.html#cb164-20" aria-hidden="true"></a>            <span class="co">//assign the mapping righ tafter</span></span>
-<span id="cb164-21"><a href="clone-graph-leetcode-133-medium.html#cb164-21" aria-hidden="true"></a>            <span class="bu">Node</span> cloneNode = map.<span class="fu">get</span>(node);</span>
-<span id="cb164-22"><a href="clone-graph-leetcode-133-medium.html#cb164-22" aria-hidden="true"></a>            <span class="bu">Node</span> cloneNeighbor = map.<span class="fu">get</span>(neighbor);</span>
-<span id="cb164-23"><a href="clone-graph-leetcode-133-medium.html#cb164-23" aria-hidden="true"></a>            cloneNode.<span class="fu">neighbors</span>.<span class="fu">add</span>(cloneNeighbor);</span>
-<span id="cb164-24"><a href="clone-graph-leetcode-133-medium.html#cb164-24" aria-hidden="true"></a>        }</span>
-<span id="cb164-25"><a href="clone-graph-leetcode-133-medium.html#cb164-25" aria-hidden="true"></a>    }</span>
-<span id="cb164-26"><a href="clone-graph-leetcode-133-medium.html#cb164-26" aria-hidden="true"></a></span>
-<span id="cb164-27"><a href="clone-graph-leetcode-133-medium.html#cb164-27" aria-hidden="true"></a>    <span class="kw">return</span> map.<span class="fu">get</span>(root);</span>
-<span id="cb164-28"><a href="clone-graph-leetcode-133-medium.html#cb164-28" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb165"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb165-1"><a href="clone-graph-leetcode-133-medium.html#cb165-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">Node</span> <span class="fu">cloneGraph</span>(<span class="bu">Node</span> root) {</span>
+<span id="cb165-2"><a href="clone-graph-leetcode-133-medium.html#cb165-2" aria-hidden="true"></a>    <span class="co">//use this map to store original and cloned node</span></span>
+<span id="cb165-3"><a href="clone-graph-leetcode-133-medium.html#cb165-3" aria-hidden="true"></a>    <span class="co">//also act as visited[]</span></span>
+<span id="cb165-4"><a href="clone-graph-leetcode-133-medium.html#cb165-4" aria-hidden="true"></a>    <span class="bu">Map</span>&lt;<span class="bu">Node</span>, <span class="bu">Node</span>&gt; map = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
+<span id="cb165-5"><a href="clone-graph-leetcode-133-medium.html#cb165-5" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">Node</span>&gt; queue = <span class="kw">new</span> <span class="bu">ArrayDeque</span>&lt;&gt;();</span>
+<span id="cb165-6"><a href="clone-graph-leetcode-133-medium.html#cb165-6" aria-hidden="true"></a></span>
+<span id="cb165-7"><a href="clone-graph-leetcode-133-medium.html#cb165-7" aria-hidden="true"></a>    queue.<span class="fu">offer</span>(root);</span>
+<span id="cb165-8"><a href="clone-graph-leetcode-133-medium.html#cb165-8" aria-hidden="true"></a>    map.<span class="fu">put</span>(root, <span class="kw">new</span> <span class="bu">Node</span>(root.<span class="fu">val</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;()));</span>
+<span id="cb165-9"><a href="clone-graph-leetcode-133-medium.html#cb165-9" aria-hidden="true"></a></span>
+<span id="cb165-10"><a href="clone-graph-leetcode-133-medium.html#cb165-10" aria-hidden="true"></a>    <span class="kw">while</span> (!queue.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb165-11"><a href="clone-graph-leetcode-133-medium.html#cb165-11" aria-hidden="true"></a>        <span class="bu">Node</span> node = queue.<span class="fu">poll</span>();</span>
+<span id="cb165-12"><a href="clone-graph-leetcode-133-medium.html#cb165-12" aria-hidden="true"></a></span>
+<span id="cb165-13"><a href="clone-graph-leetcode-133-medium.html#cb165-13" aria-hidden="true"></a>        <span class="kw">for</span> (<span class="bu">Node</span> neighbor : node.<span class="fu">neighbors</span>) {</span>
+<span id="cb165-14"><a href="clone-graph-leetcode-133-medium.html#cb165-14" aria-hidden="true"></a>            <span class="co">// neighbor node is not yet cloned</span></span>
+<span id="cb165-15"><a href="clone-graph-leetcode-133-medium.html#cb165-15" aria-hidden="true"></a>            <span class="kw">if</span> (!map.<span class="fu">containsKey</span>(neighbor)) {</span>
+<span id="cb165-16"><a href="clone-graph-leetcode-133-medium.html#cb165-16" aria-hidden="true"></a>                map.<span class="fu">put</span>(neighbor, <span class="kw">new</span> <span class="bu">Node</span>(neighbor.<span class="fu">val</span>, <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;()));</span>
+<span id="cb165-17"><a href="clone-graph-leetcode-133-medium.html#cb165-17" aria-hidden="true"></a>                queue.<span class="fu">offer</span>(neighbor);</span>
+<span id="cb165-18"><a href="clone-graph-leetcode-133-medium.html#cb165-18" aria-hidden="true"></a>            }</span>
+<span id="cb165-19"><a href="clone-graph-leetcode-133-medium.html#cb165-19" aria-hidden="true"></a></span>
+<span id="cb165-20"><a href="clone-graph-leetcode-133-medium.html#cb165-20" aria-hidden="true"></a>            <span class="co">//assign the mapping righ tafter</span></span>
+<span id="cb165-21"><a href="clone-graph-leetcode-133-medium.html#cb165-21" aria-hidden="true"></a>            <span class="bu">Node</span> cloneNode = map.<span class="fu">get</span>(node);</span>
+<span id="cb165-22"><a href="clone-graph-leetcode-133-medium.html#cb165-22" aria-hidden="true"></a>            <span class="bu">Node</span> cloneNeighbor = map.<span class="fu">get</span>(neighbor);</span>
+<span id="cb165-23"><a href="clone-graph-leetcode-133-medium.html#cb165-23" aria-hidden="true"></a>            cloneNode.<span class="fu">neighbors</span>.<span class="fu">add</span>(cloneNeighbor);</span>
+<span id="cb165-24"><a href="clone-graph-leetcode-133-medium.html#cb165-24" aria-hidden="true"></a>        }</span>
+<span id="cb165-25"><a href="clone-graph-leetcode-133-medium.html#cb165-25" aria-hidden="true"></a>    }</span>
+<span id="cb165-26"><a href="clone-graph-leetcode-133-medium.html#cb165-26" aria-hidden="true"></a></span>
+<span id="cb165-27"><a href="clone-graph-leetcode-133-medium.html#cb165-27" aria-hidden="true"></a>    <span class="kw">return</span> map.<span class="fu">get</span>(root);</span>
+<span id="cb165-28"><a href="clone-graph-leetcode-133-medium.html#cb165-28" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

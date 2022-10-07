@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1065,52 +1066,52 @@ distance(p1, p2) = <span class="math inline">\(|p2.x - p1.x| + |p2.y - p1.y|\)</
 </div>
 <div id="solution-38" class="section level3" number="3.11.3">
 <h3><span class="header-section-number">3.11.3</span> Solution</h3>
-<div id="walkthrough-54" class="section level4" number="3.11.3.1">
+<div id="walkthrough-55" class="section level4" number="3.11.3.1">
 <h4><span class="header-section-number">3.11.3.1</span> Walkthrough</h4>
 <p>The median points for row and col should be the optimal meeting point. We could compute the distance by substracting
 the coordinate of people by the median X and Y.</p>
 </div>
-<div id="analysis-55" class="section level4" number="3.11.3.2">
+<div id="analysis-56" class="section level4" number="3.11.3.2">
 <h4><span class="header-section-number">3.11.3.2</span> Analysis</h4>
 <p>Each cell in matrix will be visited at least once. Thus, O(rows * cols).</p>
 </div>
-<div id="algorithm-54" class="section level4" number="3.11.3.3">
+<div id="algorithm-55" class="section level4" number="3.11.3.3">
 <h4><span class="header-section-number">3.11.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-39" class="section level4" number="3.11.3.4">
+<div id="java-code-41" class="section level4" number="3.11.3.4">
 <h4><span class="header-section-number">3.11.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb96"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb96-1"><a href="best-meeting-point-leetcode-296-hard.html#cb96-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minTotalDistance</span>(<span class="dt">int</span>[][] grid) {</span>
-<span id="cb96-2"><a href="best-meeting-point-leetcode-296-hard.html#cb96-2" aria-hidden="true"></a>    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;</span>
-<span id="cb96-3"><a href="best-meeting-point-leetcode-296-hard.html#cb96-3" aria-hidden="true"></a>    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;</span>
-<span id="cb96-4"><a href="best-meeting-point-leetcode-296-hard.html#cb96-4" aria-hidden="true"></a></span>
-<span id="cb96-5"><a href="best-meeting-point-leetcode-296-hard.html#cb96-5" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; cols = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
-<span id="cb96-6"><a href="best-meeting-point-leetcode-296-hard.html#cb96-6" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; rows = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
-<span id="cb96-7"><a href="best-meeting-point-leetcode-296-hard.html#cb96-7" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; rows; i++){</span>
-<span id="cb96-8"><a href="best-meeting-point-leetcode-296-hard.html#cb96-8" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; cols &lt; n; j++){</span>
-<span id="cb96-9"><a href="best-meeting-point-leetcode-296-hard.html#cb96-9" aria-hidden="true"></a>            <span class="kw">if</span>(grid[i][j] == <span class="dv">1</span>){</span>
-<span id="cb96-10"><a href="best-meeting-point-leetcode-296-hard.html#cb96-10" aria-hidden="true"></a>                cols.<span class="fu">add</span>(j);</span>
-<span id="cb96-11"><a href="best-meeting-point-leetcode-296-hard.html#cb96-11" aria-hidden="true"></a>                rows.<span class="fu">add</span>(i);</span>
-<span id="cb96-12"><a href="best-meeting-point-leetcode-296-hard.html#cb96-12" aria-hidden="true"></a>            }</span>
-<span id="cb96-13"><a href="best-meeting-point-leetcode-296-hard.html#cb96-13" aria-hidden="true"></a>        }</span>
-<span id="cb96-14"><a href="best-meeting-point-leetcode-296-hard.html#cb96-14" aria-hidden="true"></a>    }</span>
-<span id="cb96-15"><a href="best-meeting-point-leetcode-296-hard.html#cb96-15" aria-hidden="true"></a></span>
-<span id="cb96-16"><a href="best-meeting-point-leetcode-296-hard.html#cb96-16" aria-hidden="true"></a>    <span class="dt">int</span> dist = <span class="dv">0</span>;</span>
-<span id="cb96-17"><a href="best-meeting-point-leetcode-296-hard.html#cb96-17" aria-hidden="true"></a></span>
-<span id="cb96-18"><a href="best-meeting-point-leetcode-296-hard.html#cb96-18" aria-hidden="true"></a>    <span class="dt">int</span> medianRow = rows.<span class="fu">get</span>(rows.<span class="fu">size</span>() / <span class="dv">2</span>);</span>
-<span id="cb96-19"><a href="best-meeting-point-leetcode-296-hard.html#cb96-19" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">Integer</span> r: rows){</span>
-<span id="cb96-20"><a href="best-meeting-point-leetcode-296-hard.html#cb96-20" aria-hidden="true"></a>        dist += <span class="bu">Math</span>.<span class="fu">abs</span>(r - medianRow);</span>
-<span id="cb96-21"><a href="best-meeting-point-leetcode-296-hard.html#cb96-21" aria-hidden="true"></a>    }</span>
-<span id="cb96-22"><a href="best-meeting-point-leetcode-296-hard.html#cb96-22" aria-hidden="true"></a></span>
-<span id="cb96-23"><a href="best-meeting-point-leetcode-296-hard.html#cb96-23" aria-hidden="true"></a>    <span class="co">//sort col position so that we could get median col properly</span></span>
-<span id="cb96-24"><a href="best-meeting-point-leetcode-296-hard.html#cb96-24" aria-hidden="true"></a>    <span class="bu">Collections</span>.<span class="fu">sort</span>(cols);</span>
-<span id="cb96-25"><a href="best-meeting-point-leetcode-296-hard.html#cb96-25" aria-hidden="true"></a>    <span class="dt">int</span> medianCol = cols.<span class="fu">get</span>(cols.<span class="fu">size</span>() / <span class="dv">2</span>);</span>
-<span id="cb96-26"><a href="best-meeting-point-leetcode-296-hard.html#cb96-26" aria-hidden="true"></a></span>
-<span id="cb96-27"><a href="best-meeting-point-leetcode-296-hard.html#cb96-27" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">Integer</span> c: cols){</span>
-<span id="cb96-28"><a href="best-meeting-point-leetcode-296-hard.html#cb96-28" aria-hidden="true"></a>        dist += <span class="bu">Math</span>.<span class="fu">abs</span>(c - medianCol);</span>
-<span id="cb96-29"><a href="best-meeting-point-leetcode-296-hard.html#cb96-29" aria-hidden="true"></a>    }</span>
-<span id="cb96-30"><a href="best-meeting-point-leetcode-296-hard.html#cb96-30" aria-hidden="true"></a></span>
-<span id="cb96-31"><a href="best-meeting-point-leetcode-296-hard.html#cb96-31" aria-hidden="true"></a>    <span class="kw">return</span> dist;</span>
-<span id="cb96-32"><a href="best-meeting-point-leetcode-296-hard.html#cb96-32" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb97-1"><a href="best-meeting-point-leetcode-296-hard.html#cb97-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">minTotalDistance</span>(<span class="dt">int</span>[][] grid) {</span>
+<span id="cb97-2"><a href="best-meeting-point-leetcode-296-hard.html#cb97-2" aria-hidden="true"></a>    <span class="dt">int</span> rows = grid.<span class="fu">length</span>;</span>
+<span id="cb97-3"><a href="best-meeting-point-leetcode-296-hard.html#cb97-3" aria-hidden="true"></a>    <span class="dt">int</span> cols = grid[<span class="dv">0</span>].<span class="fu">length</span>;</span>
+<span id="cb97-4"><a href="best-meeting-point-leetcode-296-hard.html#cb97-4" aria-hidden="true"></a></span>
+<span id="cb97-5"><a href="best-meeting-point-leetcode-296-hard.html#cb97-5" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; cols = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
+<span id="cb97-6"><a href="best-meeting-point-leetcode-296-hard.html#cb97-6" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; rows = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
+<span id="cb97-7"><a href="best-meeting-point-leetcode-296-hard.html#cb97-7" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; rows; i++){</span>
+<span id="cb97-8"><a href="best-meeting-point-leetcode-296-hard.html#cb97-8" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> j = <span class="dv">0</span>; cols &lt; n; j++){</span>
+<span id="cb97-9"><a href="best-meeting-point-leetcode-296-hard.html#cb97-9" aria-hidden="true"></a>            <span class="kw">if</span>(grid[i][j] == <span class="dv">1</span>){</span>
+<span id="cb97-10"><a href="best-meeting-point-leetcode-296-hard.html#cb97-10" aria-hidden="true"></a>                cols.<span class="fu">add</span>(j);</span>
+<span id="cb97-11"><a href="best-meeting-point-leetcode-296-hard.html#cb97-11" aria-hidden="true"></a>                rows.<span class="fu">add</span>(i);</span>
+<span id="cb97-12"><a href="best-meeting-point-leetcode-296-hard.html#cb97-12" aria-hidden="true"></a>            }</span>
+<span id="cb97-13"><a href="best-meeting-point-leetcode-296-hard.html#cb97-13" aria-hidden="true"></a>        }</span>
+<span id="cb97-14"><a href="best-meeting-point-leetcode-296-hard.html#cb97-14" aria-hidden="true"></a>    }</span>
+<span id="cb97-15"><a href="best-meeting-point-leetcode-296-hard.html#cb97-15" aria-hidden="true"></a></span>
+<span id="cb97-16"><a href="best-meeting-point-leetcode-296-hard.html#cb97-16" aria-hidden="true"></a>    <span class="dt">int</span> dist = <span class="dv">0</span>;</span>
+<span id="cb97-17"><a href="best-meeting-point-leetcode-296-hard.html#cb97-17" aria-hidden="true"></a></span>
+<span id="cb97-18"><a href="best-meeting-point-leetcode-296-hard.html#cb97-18" aria-hidden="true"></a>    <span class="dt">int</span> medianRow = rows.<span class="fu">get</span>(rows.<span class="fu">size</span>() / <span class="dv">2</span>);</span>
+<span id="cb97-19"><a href="best-meeting-point-leetcode-296-hard.html#cb97-19" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">Integer</span> r: rows){</span>
+<span id="cb97-20"><a href="best-meeting-point-leetcode-296-hard.html#cb97-20" aria-hidden="true"></a>        dist += <span class="bu">Math</span>.<span class="fu">abs</span>(r - medianRow);</span>
+<span id="cb97-21"><a href="best-meeting-point-leetcode-296-hard.html#cb97-21" aria-hidden="true"></a>    }</span>
+<span id="cb97-22"><a href="best-meeting-point-leetcode-296-hard.html#cb97-22" aria-hidden="true"></a></span>
+<span id="cb97-23"><a href="best-meeting-point-leetcode-296-hard.html#cb97-23" aria-hidden="true"></a>    <span class="co">//sort col position so that we could get median col properly</span></span>
+<span id="cb97-24"><a href="best-meeting-point-leetcode-296-hard.html#cb97-24" aria-hidden="true"></a>    <span class="bu">Collections</span>.<span class="fu">sort</span>(cols);</span>
+<span id="cb97-25"><a href="best-meeting-point-leetcode-296-hard.html#cb97-25" aria-hidden="true"></a>    <span class="dt">int</span> medianCol = cols.<span class="fu">get</span>(cols.<span class="fu">size</span>() / <span class="dv">2</span>);</span>
+<span id="cb97-26"><a href="best-meeting-point-leetcode-296-hard.html#cb97-26" aria-hidden="true"></a></span>
+<span id="cb97-27"><a href="best-meeting-point-leetcode-296-hard.html#cb97-27" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="bu">Integer</span> c: cols){</span>
+<span id="cb97-28"><a href="best-meeting-point-leetcode-296-hard.html#cb97-28" aria-hidden="true"></a>        dist += <span class="bu">Math</span>.<span class="fu">abs</span>(c - medianCol);</span>
+<span id="cb97-29"><a href="best-meeting-point-leetcode-296-hard.html#cb97-29" aria-hidden="true"></a>    }</span>
+<span id="cb97-30"><a href="best-meeting-point-leetcode-296-hard.html#cb97-30" aria-hidden="true"></a></span>
+<span id="cb97-31"><a href="best-meeting-point-leetcode-296-hard.html#cb97-31" aria-hidden="true"></a>    <span class="kw">return</span> dist;</span>
+<span id="cb97-32"><a href="best-meeting-point-leetcode-296-hard.html#cb97-32" aria-hidden="true"></a>}</span></code></pre></div>
 
 </div>
 </div>

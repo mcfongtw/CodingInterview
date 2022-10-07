@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1071,7 +1072,7 @@ Figure 4.25: Some caption.
 </div>
 <div id="solution-50" class="section level3" number="4.19.3">
 <h3><span class="header-section-number">4.19.3</span> Solution</h3>
-<div id="walkthrough-85" class="section level4" number="4.19.3.1">
+<div id="walkthrough-86" class="section level4" number="4.19.3.1">
 <h4><span class="header-section-number">4.19.3.1</span> Walkthrough</h4>
 The newRoot of a flipped tree will be root.left that is
 <div class="figure"><span id="fig:unnamed-chunk-32"></span>
@@ -1089,30 +1090,30 @@ Figure 4.27: Some caption.
 </div>
 <p>Additionally, we need to properly place the children of root.left.</p>
 </div>
-<div id="analysis-86" class="section level4" number="4.19.3.2">
+<div id="analysis-87" class="section level4" number="4.19.3.2">
 <h4><span class="header-section-number">4.19.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every node is visited once.</p>
 </div>
-<div id="algorithm-87" class="section level4" number="4.19.3.3">
+<div id="algorithm-88" class="section level4" number="4.19.3.3">
 <h4><span class="header-section-number">4.19.3.3</span> Algorithm</h4>
 <p>dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
 </div>
-<div id="java-code-49" class="section level4" number="4.19.3.4">
+<div id="java-code-51" class="section level4" number="4.19.3.4">
 <h4><span class="header-section-number">4.19.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb134"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb134-1"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">upsideDownBinaryTree</span>(<span class="bu">TreeNode</span> root) {</span>
-<span id="cb134-2"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-2" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span> || root.<span class="fu">left</span> == <span class="kw">null</span>) {</span>
-<span id="cb134-3"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-3" aria-hidden="true"></a>        <span class="kw">return</span> root;</span>
-<span id="cb134-4"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-4" aria-hidden="true"></a>    }</span>
-<span id="cb134-5"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-5" aria-hidden="true"></a></span>
-<span id="cb134-6"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-6" aria-hidden="true"></a>    <span class="bu">TreeNode</span> newRoot = <span class="fu">upsideDownBinaryTree</span>(root.<span class="fu">left</span>);</span>
-<span id="cb134-7"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-7" aria-hidden="true"></a>    <span class="co">//children of root.left</span></span>
-<span id="cb134-8"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-8" aria-hidden="true"></a>    root.<span class="fu">left</span>.<span class="fu">left</span> = root.<span class="fu">right</span>;</span>
-<span id="cb134-9"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-9" aria-hidden="true"></a>    root.<span class="fu">left</span>.<span class="fu">right</span> = root;</span>
-<span id="cb134-10"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-10" aria-hidden="true"></a></span>
-<span id="cb134-11"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-11" aria-hidden="true"></a>    root.<span class="fu">left</span> = <span class="kw">null</span>;</span>
-<span id="cb134-12"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-12" aria-hidden="true"></a>    root.<span class="fu">right</span> = <span class="kw">null</span>;</span>
-<span id="cb134-13"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-13" aria-hidden="true"></a>    <span class="kw">return</span> newRoot;</span>
-<span id="cb134-14"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb134-14" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb135"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb135-1"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-1" aria-hidden="true"></a><span class="kw">public</span> <span class="bu">TreeNode</span> <span class="fu">upsideDownBinaryTree</span>(<span class="bu">TreeNode</span> root) {</span>
+<span id="cb135-2"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-2" aria-hidden="true"></a>    <span class="kw">if</span>(root == <span class="kw">null</span> || root.<span class="fu">left</span> == <span class="kw">null</span>) {</span>
+<span id="cb135-3"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-3" aria-hidden="true"></a>        <span class="kw">return</span> root;</span>
+<span id="cb135-4"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-4" aria-hidden="true"></a>    }</span>
+<span id="cb135-5"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-5" aria-hidden="true"></a></span>
+<span id="cb135-6"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-6" aria-hidden="true"></a>    <span class="bu">TreeNode</span> newRoot = <span class="fu">upsideDownBinaryTree</span>(root.<span class="fu">left</span>);</span>
+<span id="cb135-7"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-7" aria-hidden="true"></a>    <span class="co">//children of root.left</span></span>
+<span id="cb135-8"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-8" aria-hidden="true"></a>    root.<span class="fu">left</span>.<span class="fu">left</span> = root.<span class="fu">right</span>;</span>
+<span id="cb135-9"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-9" aria-hidden="true"></a>    root.<span class="fu">left</span>.<span class="fu">right</span> = root;</span>
+<span id="cb135-10"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-10" aria-hidden="true"></a></span>
+<span id="cb135-11"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-11" aria-hidden="true"></a>    root.<span class="fu">left</span> = <span class="kw">null</span>;</span>
+<span id="cb135-12"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-12" aria-hidden="true"></a>    root.<span class="fu">right</span> = <span class="kw">null</span>;</span>
+<span id="cb135-13"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-13" aria-hidden="true"></a>    <span class="kw">return</span> newRoot;</span>
+<span id="cb135-14"><a href="binary-tree-upside-down-leet-code-156-medium.html#cb135-14" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

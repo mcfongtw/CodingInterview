@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1062,34 +1063,34 @@ needs to be larger than buying price.</p>
 </div>
 <div id="solution-30" class="section level3" number="2.35.3">
 <h3><span class="header-section-number">2.35.3</span> Solution</h3>
-<div id="walkthrough-36" class="section level4" number="2.35.3.1">
+<div id="walkthrough-37" class="section level4" number="2.35.3.1">
 <h4><span class="header-section-number">2.35.3.1</span> Walkthrough</h4>
 <p>While computing (sell price - buy price), we need to keep track the maximum profit as well as the minimum minimum
 buying price.</p>
 </div>
-<div id="analysis-36" class="section level4" number="2.35.3.2">
+<div id="analysis-37" class="section level4" number="2.35.3.2">
 <h4><span class="header-section-number">2.35.3.2</span> Analysis</h4>
 <p>Time complexity is O(n) as every element is visited once.</p>
 </div>
-<div id="algorithm-36" class="section level4" number="2.35.3.3">
+<div id="algorithm-37" class="section level4" number="2.35.3.3">
 <h4><span class="header-section-number">2.35.3.3</span> Algorithm</h4>
 <p>dp <a href="glossary-of-algorithm.html#dp">1.2.7</a></p>
 </div>
-<div id="java-code-30" class="section level4" number="2.35.3.4">
+<div id="java-code-32" class="section level4" number="2.35.3.4">
 <h4><span class="header-section-number">2.35.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb46"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb46-1"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">maxProfit</span>(<span class="dt">int</span>[] prices) {</span>
-<span id="cb46-2"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-2" aria-hidden="true"></a>    <span class="dt">int</span> maxProfit = <span class="dv">0</span>, minPrice = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>;</span>
-<span id="cb46-3"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-3" aria-hidden="true"></a></span>
-<span id="cb46-4"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-4" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> price : prices) {</span>
-<span id="cb46-5"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-5" aria-hidden="true"></a>        <span class="co">// profit = selling price - buying price</span></span>
-<span id="cb46-6"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-6" aria-hidden="true"></a>        <span class="dt">int</span> profit = price - minPrice;</span>
-<span id="cb46-7"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-7" aria-hidden="true"></a></span>
-<span id="cb46-8"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-8" aria-hidden="true"></a>        maxProfit = <span class="bu">Math</span>.<span class="fu">max</span>(profit, maxProfit);</span>
-<span id="cb46-9"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-9" aria-hidden="true"></a>        minPrice = <span class="bu">Math</span>.<span class="fu">min</span>(minPrice, price);</span>
-<span id="cb46-10"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-10" aria-hidden="true"></a>    }</span>
-<span id="cb46-11"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-11" aria-hidden="true"></a></span>
-<span id="cb46-12"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-12" aria-hidden="true"></a>    <span class="kw">return</span> maxProfit;</span>
-<span id="cb46-13"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb46-13" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb47-1"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">int</span> <span class="fu">maxProfit</span>(<span class="dt">int</span>[] prices) {</span>
+<span id="cb47-2"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-2" aria-hidden="true"></a>    <span class="dt">int</span> maxProfit = <span class="dv">0</span>, minPrice = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>;</span>
+<span id="cb47-3"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-3" aria-hidden="true"></a></span>
+<span id="cb47-4"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-4" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> price : prices) {</span>
+<span id="cb47-5"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-5" aria-hidden="true"></a>        <span class="co">// profit = selling price - buying price</span></span>
+<span id="cb47-6"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-6" aria-hidden="true"></a>        <span class="dt">int</span> profit = price - minPrice;</span>
+<span id="cb47-7"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-7" aria-hidden="true"></a></span>
+<span id="cb47-8"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-8" aria-hidden="true"></a>        maxProfit = <span class="bu">Math</span>.<span class="fu">max</span>(profit, maxProfit);</span>
+<span id="cb47-9"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-9" aria-hidden="true"></a>        minPrice = <span class="bu">Math</span>.<span class="fu">min</span>(minPrice, price);</span>
+<span id="cb47-10"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-10" aria-hidden="true"></a>    }</span>
+<span id="cb47-11"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-11" aria-hidden="true"></a></span>
+<span id="cb47-12"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-12" aria-hidden="true"></a>    <span class="kw">return</span> maxProfit;</span>
+<span id="cb47-13"><a href="best-time-to-buy-and-sell-stock-leet-code-121-easy.html#cb47-13" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

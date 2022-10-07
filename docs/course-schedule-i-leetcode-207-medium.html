@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1074,131 +1075,131 @@ also have finished course 1. So it is impossible.</p>
 </div>
 <div id="solution---topological-sort-via-bfs" class="section level3" number="5.4.3">
 <h3><span class="header-section-number">5.4.3</span> Solution - Topological Sort via BFS</h3>
-<div id="walkthrough-100" class="section level4" number="5.4.3.1">
+<div id="walkthrough-101" class="section level4" number="5.4.3.1">
 <h4><span class="header-section-number">5.4.3.1</span> Walkthrough</h4>
 <p>This problem can be converted to finding if a graph contains a cycle using topological sort</p>
 </div>
-<div id="analysis-101" class="section level4" number="5.4.3.2">
+<div id="analysis-102" class="section level4" number="5.4.3.2">
 <h4><span class="header-section-number">5.4.3.2</span> Analysis</h4>
 <p>A BFS would cost <span class="math inline">\(O(|V| + |E|)\)</span></p>
 </div>
-<div id="algorithm-107" class="section level4" number="5.4.3.3">
+<div id="algorithm-108" class="section level4" number="5.4.3.3">
 <h4><span class="header-section-number">5.4.3.3</span> Algorithm</h4>
 <p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, bfs <a href="glossary-of-algorithm.html#bfs">1.2.2</a></p>
 </div>
-<div id="java-code-62" class="section level4" number="5.4.3.4">
+<div id="java-code-64" class="section level4" number="5.4.3.4">
 <h4><span class="header-section-number">5.4.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb165"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb165-1"><a href="course-schedule-i-leetcode-207-medium.html#cb165-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">canFinish</span>(<span class="dt">int</span> numCourses, <span class="dt">int</span>[][] prerequisites) {</span>
-<span id="cb165-2"><a href="course-schedule-i-leetcode-207-medium.html#cb165-2" aria-hidden="true"></a>    <span class="kw">if</span>(numCourses == <span class="dv">0</span> || prerequisites.<span class="fu">length</span> == <span class="dv">0</span>){</span>
-<span id="cb165-3"><a href="course-schedule-i-leetcode-207-medium.html#cb165-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb165-4"><a href="course-schedule-i-leetcode-207-medium.html#cb165-4" aria-hidden="true"></a>    }</span>
-<span id="cb165-5"><a href="course-schedule-i-leetcode-207-medium.html#cb165-5" aria-hidden="true"></a></span>
-<span id="cb165-6"><a href="course-schedule-i-leetcode-207-medium.html#cb165-6" aria-hidden="true"></a>    <span class="co">// counter for number of prerequisites</span></span>
-<span id="cb165-7"><a href="course-schedule-i-leetcode-207-medium.html#cb165-7" aria-hidden="true"></a>    <span class="dt">int</span>[] numPrereq = <span class="kw">new</span> <span class="dt">int</span>[numCourses];</span>
-<span id="cb165-8"><a href="course-schedule-i-leetcode-207-medium.html#cb165-8" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prerequisites.<span class="fu">length</span>; i++){</span>
-<span id="cb165-9"><a href="course-schedule-i-leetcode-207-medium.html#cb165-9" aria-hidden="true"></a>        numPrereq[prerequisites[i][<span class="dv">0</span>]]++;</span>
-<span id="cb165-10"><a href="course-schedule-i-leetcode-207-medium.html#cb165-10" aria-hidden="true"></a>    }</span>
-<span id="cb165-11"><a href="course-schedule-i-leetcode-207-medium.html#cb165-11" aria-hidden="true"></a></span>
-<span id="cb165-12"><a href="course-schedule-i-leetcode-207-medium.html#cb165-12" aria-hidden="true"></a>    <span class="co">//store courses that have no prerequisites</span></span>
-<span id="cb165-13"><a href="course-schedule-i-leetcode-207-medium.html#cb165-13" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
-<span id="cb165-14"><a href="course-schedule-i-leetcode-207-medium.html#cb165-14" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numCourses; i++){</span>
-<span id="cb165-15"><a href="course-schedule-i-leetcode-207-medium.html#cb165-15" aria-hidden="true"></a>        <span class="kw">if</span>(numPrereq[i] == <span class="dv">0</span>){</span>
-<span id="cb165-16"><a href="course-schedule-i-leetcode-207-medium.html#cb165-16" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(i);</span>
-<span id="cb165-17"><a href="course-schedule-i-leetcode-207-medium.html#cb165-17" aria-hidden="true"></a>        }</span>
-<span id="cb165-18"><a href="course-schedule-i-leetcode-207-medium.html#cb165-18" aria-hidden="true"></a>    }</span>
-<span id="cb165-19"><a href="course-schedule-i-leetcode-207-medium.html#cb165-19" aria-hidden="true"></a></span>
-<span id="cb165-20"><a href="course-schedule-i-leetcode-207-medium.html#cb165-20" aria-hidden="true"></a>    <span class="co">// store the topological sorting order</span></span>
-<span id="cb165-21"><a href="course-schedule-i-leetcode-207-medium.html#cb165-21" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; order = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
-<span id="cb165-22"><a href="course-schedule-i-leetcode-207-medium.html#cb165-22" aria-hidden="true"></a></span>
-<span id="cb165-23"><a href="course-schedule-i-leetcode-207-medium.html#cb165-23" aria-hidden="true"></a>    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {</span>
-<span id="cb165-24"><a href="course-schedule-i-leetcode-207-medium.html#cb165-24" aria-hidden="true"></a>        <span class="dt">int</span> vertex = queue.<span class="fu">poll</span>();</span>
-<span id="cb165-25"><a href="course-schedule-i-leetcode-207-medium.html#cb165-25" aria-hidden="true"></a>        order.<span class="fu">add</span>(vertex);</span>
-<span id="cb165-26"><a href="course-schedule-i-leetcode-207-medium.html#cb165-26" aria-hidden="true"></a></span>
-<span id="cb165-27"><a href="course-schedule-i-leetcode-207-medium.html#cb165-27" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prerequisites.<span class="fu">length</span>; i++){</span>
-<span id="cb165-28"><a href="course-schedule-i-leetcode-207-medium.html#cb165-28" aria-hidden="true"></a>            <span class="co">// if a course&#39;s prerequisite can be satisfied by a course in queue</span></span>
-<span id="cb165-29"><a href="course-schedule-i-leetcode-207-medium.html#cb165-29" aria-hidden="true"></a>            <span class="kw">if</span>(prerequisites[i][<span class="dv">1</span>] == vertex) {</span>
-<span id="cb165-30"><a href="course-schedule-i-leetcode-207-medium.html#cb165-30" aria-hidden="true"></a>                numPrereq[prerequisites[i][<span class="dv">0</span>]]--;</span>
-<span id="cb165-31"><a href="course-schedule-i-leetcode-207-medium.html#cb165-31" aria-hidden="true"></a></span>
-<span id="cb165-32"><a href="course-schedule-i-leetcode-207-medium.html#cb165-32" aria-hidden="true"></a>                <span class="kw">if</span>(numPrereq[prerequisites[i][<span class="dv">0</span>]] == <span class="dv">0</span>) {</span>
-<span id="cb165-33"><a href="course-schedule-i-leetcode-207-medium.html#cb165-33" aria-hidden="true"></a>                    queue.<span class="fu">offer</span>(prerequisites[i][<span class="dv">0</span>]);</span>
-<span id="cb165-34"><a href="course-schedule-i-leetcode-207-medium.html#cb165-34" aria-hidden="true"></a>                }</span>
-<span id="cb165-35"><a href="course-schedule-i-leetcode-207-medium.html#cb165-35" aria-hidden="true"></a>            }</span>
-<span id="cb165-36"><a href="course-schedule-i-leetcode-207-medium.html#cb165-36" aria-hidden="true"></a>        }</span>
-<span id="cb165-37"><a href="course-schedule-i-leetcode-207-medium.html#cb165-37" aria-hidden="true"></a>    }</span>
-<span id="cb165-38"><a href="course-schedule-i-leetcode-207-medium.html#cb165-38" aria-hidden="true"></a></span>
-<span id="cb165-39"><a href="course-schedule-i-leetcode-207-medium.html#cb165-39" aria-hidden="true"></a>    <span class="kw">return</span> order.<span class="fu">size</span>() == numCourses;</span>
-<span id="cb165-40"><a href="course-schedule-i-leetcode-207-medium.html#cb165-40" aria-hidden="true"></a>}</span></code></pre></div>
-</div>
-</div>
-<div id="solution---topological-sort-via-dfs" class="section level3" number="5.4.4">
-<h3><span class="header-section-number">5.4.4</span> Solution - Topological Sort via DFS</h3>
-<div id="walkthrough-101" class="section level4" number="5.4.4.1">
-<h4><span class="header-section-number">5.4.4.1</span> Walkthrough</h4>
-</div>
-<div id="analysis-102" class="section level4" number="5.4.4.2">
-<h4><span class="header-section-number">5.4.4.2</span> Analysis</h4>
-<p>A DFS would cost <span class="math inline">\(O(|V| + |E|)\)</span></p>
-</div>
-<div id="algorithm-108" class="section level4" number="5.4.4.3">
-<h4><span class="header-section-number">5.4.4.3</span> Algorithm</h4>
-<p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
-</div>
-<div id="java-code-63" class="section level4" number="5.4.4.4">
-<h4><span class="header-section-number">5.4.4.4</span> Java Code</h4>
 <div class="sourceCode" id="cb166"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb166-1"><a href="course-schedule-i-leetcode-207-medium.html#cb166-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">canFinish</span>(<span class="dt">int</span> numCourses, <span class="dt">int</span>[][] prerequisites) {</span>
 <span id="cb166-2"><a href="course-schedule-i-leetcode-207-medium.html#cb166-2" aria-hidden="true"></a>    <span class="kw">if</span>(numCourses == <span class="dv">0</span> || prerequisites.<span class="fu">length</span> == <span class="dv">0</span>){</span>
 <span id="cb166-3"><a href="course-schedule-i-leetcode-207-medium.html#cb166-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
 <span id="cb166-4"><a href="course-schedule-i-leetcode-207-medium.html#cb166-4" aria-hidden="true"></a>    }</span>
 <span id="cb166-5"><a href="course-schedule-i-leetcode-207-medium.html#cb166-5" aria-hidden="true"></a></span>
-<span id="cb166-6"><a href="course-schedule-i-leetcode-207-medium.html#cb166-6" aria-hidden="true"></a>    <span class="co">//track state of visited courses</span></span>
-<span id="cb166-7"><a href="course-schedule-i-leetcode-207-medium.html#cb166-7" aria-hidden="true"></a>    <span class="co">// -1: VISITING</span></span>
-<span id="cb166-8"><a href="course-schedule-i-leetcode-207-medium.html#cb166-8" aria-hidden="true"></a>    <span class="co">//  1: VISITED</span></span>
-<span id="cb166-9"><a href="course-schedule-i-leetcode-207-medium.html#cb166-9" aria-hidden="true"></a>    <span class="dt">int</span>[] visited = <span class="kw">new</span> <span class="dt">int</span>[numCourses];</span>
-<span id="cb166-10"><a href="course-schedule-i-leetcode-207-medium.html#cb166-10" aria-hidden="true"></a></span>
-<span id="cb166-11"><a href="course-schedule-i-leetcode-207-medium.html#cb166-11" aria-hidden="true"></a>    <span class="co">// use the map to store what courses depend on a course</span></span>
-<span id="cb166-12"><a href="course-schedule-i-leetcode-207-medium.html#cb166-12" aria-hidden="true"></a>    <span class="co">// can transform into an adjcency list</span></span>
-<span id="cb166-13"><a href="course-schedule-i-leetcode-207-medium.html#cb166-13" aria-hidden="true"></a>    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; adjMap = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
-<span id="cb166-14"><a href="course-schedule-i-leetcode-207-medium.html#cb166-14" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span>[] edge: prerequisites){</span>
-<span id="cb166-15"><a href="course-schedule-i-leetcode-207-medium.html#cb166-15" aria-hidden="true"></a>        <span class="kw">if</span>(adjMap.<span class="fu">containsKey</span>(edge[<span class="dv">1</span>])) {</span>
-<span id="cb166-16"><a href="course-schedule-i-leetcode-207-medium.html#cb166-16" aria-hidden="true"></a>            adjMap.<span class="fu">get</span>(edge[<span class="dv">1</span>]).<span class="fu">add</span>(edge[<span class="dv">0</span>]);</span>
-<span id="cb166-17"><a href="course-schedule-i-leetcode-207-medium.html#cb166-17" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
-<span id="cb166-18"><a href="course-schedule-i-leetcode-207-medium.html#cb166-18" aria-hidden="true"></a>            <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
-<span id="cb166-19"><a href="course-schedule-i-leetcode-207-medium.html#cb166-19" aria-hidden="true"></a>            list.<span class="fu">add</span>(edge[<span class="dv">0</span>]);</span>
-<span id="cb166-20"><a href="course-schedule-i-leetcode-207-medium.html#cb166-20" aria-hidden="true"></a>            adjMap.<span class="fu">put</span>(edge[<span class="dv">1</span>], list);</span>
-<span id="cb166-21"><a href="course-schedule-i-leetcode-207-medium.html#cb166-21" aria-hidden="true"></a>        }</span>
-<span id="cb166-22"><a href="course-schedule-i-leetcode-207-medium.html#cb166-22" aria-hidden="true"></a>    }</span>
-<span id="cb166-23"><a href="course-schedule-i-leetcode-207-medium.html#cb166-23" aria-hidden="true"></a></span>
-<span id="cb166-24"><a href="course-schedule-i-leetcode-207-medium.html#cb166-24" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numCourses; i++) {</span>
-<span id="cb166-25"><a href="course-schedule-i-leetcode-207-medium.html#cb166-25" aria-hidden="true"></a>        <span class="kw">if</span>(!<span class="fu">dfs</span>(adjMap, visited, i)) {</span>
-<span id="cb166-26"><a href="course-schedule-i-leetcode-207-medium.html#cb166-26" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb166-27"><a href="course-schedule-i-leetcode-207-medium.html#cb166-27" aria-hidden="true"></a>        }</span>
-<span id="cb166-28"><a href="course-schedule-i-leetcode-207-medium.html#cb166-28" aria-hidden="true"></a>    }</span>
-<span id="cb166-29"><a href="course-schedule-i-leetcode-207-medium.html#cb166-29" aria-hidden="true"></a></span>
-<span id="cb166-30"><a href="course-schedule-i-leetcode-207-medium.html#cb166-30" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb166-31"><a href="course-schedule-i-leetcode-207-medium.html#cb166-31" aria-hidden="true"></a>}</span>
-<span id="cb166-32"><a href="course-schedule-i-leetcode-207-medium.html#cb166-32" aria-hidden="true"></a></span>
-<span id="cb166-33"><a href="course-schedule-i-leetcode-207-medium.html#cb166-33" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">dfs</span>(<span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; adjMap, <span class="dt">int</span>[] visited, <span class="bu">Integer</span> vertex){</span>
-<span id="cb166-34"><a href="course-schedule-i-leetcode-207-medium.html#cb166-34" aria-hidden="true"></a>    <span class="kw">if</span>(visited[vertex] == -<span class="dv">1</span>) {</span>
-<span id="cb166-35"><a href="course-schedule-i-leetcode-207-medium.html#cb166-35" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb166-36"><a href="course-schedule-i-leetcode-207-medium.html#cb166-36" aria-hidden="true"></a>    }</span>
-<span id="cb166-37"><a href="course-schedule-i-leetcode-207-medium.html#cb166-37" aria-hidden="true"></a>    <span class="kw">if</span>(visited[vertex] == <span class="dv">1</span>) {</span>
-<span id="cb166-38"><a href="course-schedule-i-leetcode-207-medium.html#cb166-38" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb166-39"><a href="course-schedule-i-leetcode-207-medium.html#cb166-39" aria-hidden="true"></a>    }</span>
-<span id="cb166-40"><a href="course-schedule-i-leetcode-207-medium.html#cb166-40" aria-hidden="true"></a></span>
-<span id="cb166-41"><a href="course-schedule-i-leetcode-207-medium.html#cb166-41" aria-hidden="true"></a>    visited[vertex] = -<span class="dv">1</span>;</span>
-<span id="cb166-42"><a href="course-schedule-i-leetcode-207-medium.html#cb166-42" aria-hidden="true"></a></span>
-<span id="cb166-43"><a href="course-schedule-i-leetcode-207-medium.html#cb166-43" aria-hidden="true"></a>    <span class="kw">if</span>(adjMap.<span class="fu">containsKey</span>(vertex)){</span>
-<span id="cb166-44"><a href="course-schedule-i-leetcode-207-medium.html#cb166-44" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="bu">Integer</span> adjVertex: adjMap.<span class="fu">get</span>(vertex)){</span>
-<span id="cb166-45"><a href="course-schedule-i-leetcode-207-medium.html#cb166-45" aria-hidden="true"></a>            <span class="kw">if</span>(!<span class="fu">dfs</span>(adjMap, visited, adjVertex)) {</span>
-<span id="cb166-46"><a href="course-schedule-i-leetcode-207-medium.html#cb166-46" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">false</span>;</span>
-<span id="cb166-47"><a href="course-schedule-i-leetcode-207-medium.html#cb166-47" aria-hidden="true"></a>            }</span>
-<span id="cb166-48"><a href="course-schedule-i-leetcode-207-medium.html#cb166-48" aria-hidden="true"></a>        }</span>
-<span id="cb166-49"><a href="course-schedule-i-leetcode-207-medium.html#cb166-49" aria-hidden="true"></a>    }</span>
-<span id="cb166-50"><a href="course-schedule-i-leetcode-207-medium.html#cb166-50" aria-hidden="true"></a></span>
-<span id="cb166-51"><a href="course-schedule-i-leetcode-207-medium.html#cb166-51" aria-hidden="true"></a>    visited[vertex] = <span class="dv">1</span>;</span>
-<span id="cb166-52"><a href="course-schedule-i-leetcode-207-medium.html#cb166-52" aria-hidden="true"></a></span>
-<span id="cb166-53"><a href="course-schedule-i-leetcode-207-medium.html#cb166-53" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
-<span id="cb166-54"><a href="course-schedule-i-leetcode-207-medium.html#cb166-54" aria-hidden="true"></a>}</span></code></pre></div>
+<span id="cb166-6"><a href="course-schedule-i-leetcode-207-medium.html#cb166-6" aria-hidden="true"></a>    <span class="co">// counter for number of prerequisites</span></span>
+<span id="cb166-7"><a href="course-schedule-i-leetcode-207-medium.html#cb166-7" aria-hidden="true"></a>    <span class="dt">int</span>[] numPrereq = <span class="kw">new</span> <span class="dt">int</span>[numCourses];</span>
+<span id="cb166-8"><a href="course-schedule-i-leetcode-207-medium.html#cb166-8" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prerequisites.<span class="fu">length</span>; i++){</span>
+<span id="cb166-9"><a href="course-schedule-i-leetcode-207-medium.html#cb166-9" aria-hidden="true"></a>        numPrereq[prerequisites[i][<span class="dv">0</span>]]++;</span>
+<span id="cb166-10"><a href="course-schedule-i-leetcode-207-medium.html#cb166-10" aria-hidden="true"></a>    }</span>
+<span id="cb166-11"><a href="course-schedule-i-leetcode-207-medium.html#cb166-11" aria-hidden="true"></a></span>
+<span id="cb166-12"><a href="course-schedule-i-leetcode-207-medium.html#cb166-12" aria-hidden="true"></a>    <span class="co">//store courses that have no prerequisites</span></span>
+<span id="cb166-13"><a href="course-schedule-i-leetcode-207-medium.html#cb166-13" aria-hidden="true"></a>    <span class="bu">Queue</span>&lt;<span class="bu">Integer</span>&gt; queue = <span class="kw">new</span> <span class="bu">LinkedList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
+<span id="cb166-14"><a href="course-schedule-i-leetcode-207-medium.html#cb166-14" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numCourses; i++){</span>
+<span id="cb166-15"><a href="course-schedule-i-leetcode-207-medium.html#cb166-15" aria-hidden="true"></a>        <span class="kw">if</span>(numPrereq[i] == <span class="dv">0</span>){</span>
+<span id="cb166-16"><a href="course-schedule-i-leetcode-207-medium.html#cb166-16" aria-hidden="true"></a>            queue.<span class="fu">offer</span>(i);</span>
+<span id="cb166-17"><a href="course-schedule-i-leetcode-207-medium.html#cb166-17" aria-hidden="true"></a>        }</span>
+<span id="cb166-18"><a href="course-schedule-i-leetcode-207-medium.html#cb166-18" aria-hidden="true"></a>    }</span>
+<span id="cb166-19"><a href="course-schedule-i-leetcode-207-medium.html#cb166-19" aria-hidden="true"></a></span>
+<span id="cb166-20"><a href="course-schedule-i-leetcode-207-medium.html#cb166-20" aria-hidden="true"></a>    <span class="co">// store the topological sorting order</span></span>
+<span id="cb166-21"><a href="course-schedule-i-leetcode-207-medium.html#cb166-21" aria-hidden="true"></a>    <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; order = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;&gt;();</span>
+<span id="cb166-22"><a href="course-schedule-i-leetcode-207-medium.html#cb166-22" aria-hidden="true"></a></span>
+<span id="cb166-23"><a href="course-schedule-i-leetcode-207-medium.html#cb166-23" aria-hidden="true"></a>    <span class="kw">while</span>(!queue.<span class="fu">isEmpty</span>()) {</span>
+<span id="cb166-24"><a href="course-schedule-i-leetcode-207-medium.html#cb166-24" aria-hidden="true"></a>        <span class="dt">int</span> vertex = queue.<span class="fu">poll</span>();</span>
+<span id="cb166-25"><a href="course-schedule-i-leetcode-207-medium.html#cb166-25" aria-hidden="true"></a>        order.<span class="fu">add</span>(vertex);</span>
+<span id="cb166-26"><a href="course-schedule-i-leetcode-207-medium.html#cb166-26" aria-hidden="true"></a></span>
+<span id="cb166-27"><a href="course-schedule-i-leetcode-207-medium.html#cb166-27" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; prerequisites.<span class="fu">length</span>; i++){</span>
+<span id="cb166-28"><a href="course-schedule-i-leetcode-207-medium.html#cb166-28" aria-hidden="true"></a>            <span class="co">// if a course&#39;s prerequisite can be satisfied by a course in queue</span></span>
+<span id="cb166-29"><a href="course-schedule-i-leetcode-207-medium.html#cb166-29" aria-hidden="true"></a>            <span class="kw">if</span>(prerequisites[i][<span class="dv">1</span>] == vertex) {</span>
+<span id="cb166-30"><a href="course-schedule-i-leetcode-207-medium.html#cb166-30" aria-hidden="true"></a>                numPrereq[prerequisites[i][<span class="dv">0</span>]]--;</span>
+<span id="cb166-31"><a href="course-schedule-i-leetcode-207-medium.html#cb166-31" aria-hidden="true"></a></span>
+<span id="cb166-32"><a href="course-schedule-i-leetcode-207-medium.html#cb166-32" aria-hidden="true"></a>                <span class="kw">if</span>(numPrereq[prerequisites[i][<span class="dv">0</span>]] == <span class="dv">0</span>) {</span>
+<span id="cb166-33"><a href="course-schedule-i-leetcode-207-medium.html#cb166-33" aria-hidden="true"></a>                    queue.<span class="fu">offer</span>(prerequisites[i][<span class="dv">0</span>]);</span>
+<span id="cb166-34"><a href="course-schedule-i-leetcode-207-medium.html#cb166-34" aria-hidden="true"></a>                }</span>
+<span id="cb166-35"><a href="course-schedule-i-leetcode-207-medium.html#cb166-35" aria-hidden="true"></a>            }</span>
+<span id="cb166-36"><a href="course-schedule-i-leetcode-207-medium.html#cb166-36" aria-hidden="true"></a>        }</span>
+<span id="cb166-37"><a href="course-schedule-i-leetcode-207-medium.html#cb166-37" aria-hidden="true"></a>    }</span>
+<span id="cb166-38"><a href="course-schedule-i-leetcode-207-medium.html#cb166-38" aria-hidden="true"></a></span>
+<span id="cb166-39"><a href="course-schedule-i-leetcode-207-medium.html#cb166-39" aria-hidden="true"></a>    <span class="kw">return</span> order.<span class="fu">size</span>() == numCourses;</span>
+<span id="cb166-40"><a href="course-schedule-i-leetcode-207-medium.html#cb166-40" aria-hidden="true"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="solution---topological-sort-via-dfs" class="section level3" number="5.4.4">
+<h3><span class="header-section-number">5.4.4</span> Solution - Topological Sort via DFS</h3>
+<div id="walkthrough-102" class="section level4" number="5.4.4.1">
+<h4><span class="header-section-number">5.4.4.1</span> Walkthrough</h4>
+</div>
+<div id="analysis-103" class="section level4" number="5.4.4.2">
+<h4><span class="header-section-number">5.4.4.2</span> Analysis</h4>
+<p>A DFS would cost <span class="math inline">\(O(|V| + |E|)\)</span></p>
+</div>
+<div id="algorithm-109" class="section level4" number="5.4.4.3">
+<h4><span class="header-section-number">5.4.4.3</span> Algorithm</h4>
+<p>topological <a href="glossary-of-algorithm.html#topological">1.2.3</a>, dfs <a href="glossary-of-algorithm.html#dfs">1.2.1</a></p>
+</div>
+<div id="java-code-65" class="section level4" number="5.4.4.4">
+<h4><span class="header-section-number">5.4.4.4</span> Java Code</h4>
+<div class="sourceCode" id="cb167"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb167-1"><a href="course-schedule-i-leetcode-207-medium.html#cb167-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">boolean</span> <span class="fu">canFinish</span>(<span class="dt">int</span> numCourses, <span class="dt">int</span>[][] prerequisites) {</span>
+<span id="cb167-2"><a href="course-schedule-i-leetcode-207-medium.html#cb167-2" aria-hidden="true"></a>    <span class="kw">if</span>(numCourses == <span class="dv">0</span> || prerequisites.<span class="fu">length</span> == <span class="dv">0</span>){</span>
+<span id="cb167-3"><a href="course-schedule-i-leetcode-207-medium.html#cb167-3" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb167-4"><a href="course-schedule-i-leetcode-207-medium.html#cb167-4" aria-hidden="true"></a>    }</span>
+<span id="cb167-5"><a href="course-schedule-i-leetcode-207-medium.html#cb167-5" aria-hidden="true"></a></span>
+<span id="cb167-6"><a href="course-schedule-i-leetcode-207-medium.html#cb167-6" aria-hidden="true"></a>    <span class="co">//track state of visited courses</span></span>
+<span id="cb167-7"><a href="course-schedule-i-leetcode-207-medium.html#cb167-7" aria-hidden="true"></a>    <span class="co">// -1: VISITING</span></span>
+<span id="cb167-8"><a href="course-schedule-i-leetcode-207-medium.html#cb167-8" aria-hidden="true"></a>    <span class="co">//  1: VISITED</span></span>
+<span id="cb167-9"><a href="course-schedule-i-leetcode-207-medium.html#cb167-9" aria-hidden="true"></a>    <span class="dt">int</span>[] visited = <span class="kw">new</span> <span class="dt">int</span>[numCourses];</span>
+<span id="cb167-10"><a href="course-schedule-i-leetcode-207-medium.html#cb167-10" aria-hidden="true"></a></span>
+<span id="cb167-11"><a href="course-schedule-i-leetcode-207-medium.html#cb167-11" aria-hidden="true"></a>    <span class="co">// use the map to store what courses depend on a course</span></span>
+<span id="cb167-12"><a href="course-schedule-i-leetcode-207-medium.html#cb167-12" aria-hidden="true"></a>    <span class="co">// can transform into an adjcency list</span></span>
+<span id="cb167-13"><a href="course-schedule-i-leetcode-207-medium.html#cb167-13" aria-hidden="true"></a>    <span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; adjMap = <span class="kw">new</span> <span class="bu">HashMap</span>&lt;&gt;();</span>
+<span id="cb167-14"><a href="course-schedule-i-leetcode-207-medium.html#cb167-14" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span>[] edge: prerequisites){</span>
+<span id="cb167-15"><a href="course-schedule-i-leetcode-207-medium.html#cb167-15" aria-hidden="true"></a>        <span class="kw">if</span>(adjMap.<span class="fu">containsKey</span>(edge[<span class="dv">1</span>])) {</span>
+<span id="cb167-16"><a href="course-schedule-i-leetcode-207-medium.html#cb167-16" aria-hidden="true"></a>            adjMap.<span class="fu">get</span>(edge[<span class="dv">1</span>]).<span class="fu">add</span>(edge[<span class="dv">0</span>]);</span>
+<span id="cb167-17"><a href="course-schedule-i-leetcode-207-medium.html#cb167-17" aria-hidden="true"></a>        } <span class="kw">else</span> {</span>
+<span id="cb167-18"><a href="course-schedule-i-leetcode-207-medium.html#cb167-18" aria-hidden="true"></a>            <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt; list = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Integer</span>&gt;();</span>
+<span id="cb167-19"><a href="course-schedule-i-leetcode-207-medium.html#cb167-19" aria-hidden="true"></a>            list.<span class="fu">add</span>(edge[<span class="dv">0</span>]);</span>
+<span id="cb167-20"><a href="course-schedule-i-leetcode-207-medium.html#cb167-20" aria-hidden="true"></a>            adjMap.<span class="fu">put</span>(edge[<span class="dv">1</span>], list);</span>
+<span id="cb167-21"><a href="course-schedule-i-leetcode-207-medium.html#cb167-21" aria-hidden="true"></a>        }</span>
+<span id="cb167-22"><a href="course-schedule-i-leetcode-207-medium.html#cb167-22" aria-hidden="true"></a>    }</span>
+<span id="cb167-23"><a href="course-schedule-i-leetcode-207-medium.html#cb167-23" aria-hidden="true"></a></span>
+<span id="cb167-24"><a href="course-schedule-i-leetcode-207-medium.html#cb167-24" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; numCourses; i++) {</span>
+<span id="cb167-25"><a href="course-schedule-i-leetcode-207-medium.html#cb167-25" aria-hidden="true"></a>        <span class="kw">if</span>(!<span class="fu">dfs</span>(adjMap, visited, i)) {</span>
+<span id="cb167-26"><a href="course-schedule-i-leetcode-207-medium.html#cb167-26" aria-hidden="true"></a>            <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb167-27"><a href="course-schedule-i-leetcode-207-medium.html#cb167-27" aria-hidden="true"></a>        }</span>
+<span id="cb167-28"><a href="course-schedule-i-leetcode-207-medium.html#cb167-28" aria-hidden="true"></a>    }</span>
+<span id="cb167-29"><a href="course-schedule-i-leetcode-207-medium.html#cb167-29" aria-hidden="true"></a></span>
+<span id="cb167-30"><a href="course-schedule-i-leetcode-207-medium.html#cb167-30" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb167-31"><a href="course-schedule-i-leetcode-207-medium.html#cb167-31" aria-hidden="true"></a>}</span>
+<span id="cb167-32"><a href="course-schedule-i-leetcode-207-medium.html#cb167-32" aria-hidden="true"></a></span>
+<span id="cb167-33"><a href="course-schedule-i-leetcode-207-medium.html#cb167-33" aria-hidden="true"></a><span class="kw">private</span> <span class="dt">boolean</span> <span class="fu">dfs</span>(<span class="bu">Map</span>&lt;<span class="bu">Integer</span>, <span class="bu">List</span>&lt;<span class="bu">Integer</span>&gt;&gt; adjMap, <span class="dt">int</span>[] visited, <span class="bu">Integer</span> vertex){</span>
+<span id="cb167-34"><a href="course-schedule-i-leetcode-207-medium.html#cb167-34" aria-hidden="true"></a>    <span class="kw">if</span>(visited[vertex] == -<span class="dv">1</span>) {</span>
+<span id="cb167-35"><a href="course-schedule-i-leetcode-207-medium.html#cb167-35" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb167-36"><a href="course-schedule-i-leetcode-207-medium.html#cb167-36" aria-hidden="true"></a>    }</span>
+<span id="cb167-37"><a href="course-schedule-i-leetcode-207-medium.html#cb167-37" aria-hidden="true"></a>    <span class="kw">if</span>(visited[vertex] == <span class="dv">1</span>) {</span>
+<span id="cb167-38"><a href="course-schedule-i-leetcode-207-medium.html#cb167-38" aria-hidden="true"></a>        <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb167-39"><a href="course-schedule-i-leetcode-207-medium.html#cb167-39" aria-hidden="true"></a>    }</span>
+<span id="cb167-40"><a href="course-schedule-i-leetcode-207-medium.html#cb167-40" aria-hidden="true"></a></span>
+<span id="cb167-41"><a href="course-schedule-i-leetcode-207-medium.html#cb167-41" aria-hidden="true"></a>    visited[vertex] = -<span class="dv">1</span>;</span>
+<span id="cb167-42"><a href="course-schedule-i-leetcode-207-medium.html#cb167-42" aria-hidden="true"></a></span>
+<span id="cb167-43"><a href="course-schedule-i-leetcode-207-medium.html#cb167-43" aria-hidden="true"></a>    <span class="kw">if</span>(adjMap.<span class="fu">containsKey</span>(vertex)){</span>
+<span id="cb167-44"><a href="course-schedule-i-leetcode-207-medium.html#cb167-44" aria-hidden="true"></a>        <span class="kw">for</span>(<span class="bu">Integer</span> adjVertex: adjMap.<span class="fu">get</span>(vertex)){</span>
+<span id="cb167-45"><a href="course-schedule-i-leetcode-207-medium.html#cb167-45" aria-hidden="true"></a>            <span class="kw">if</span>(!<span class="fu">dfs</span>(adjMap, visited, adjVertex)) {</span>
+<span id="cb167-46"><a href="course-schedule-i-leetcode-207-medium.html#cb167-46" aria-hidden="true"></a>                <span class="kw">return</span> <span class="kw">false</span>;</span>
+<span id="cb167-47"><a href="course-schedule-i-leetcode-207-medium.html#cb167-47" aria-hidden="true"></a>            }</span>
+<span id="cb167-48"><a href="course-schedule-i-leetcode-207-medium.html#cb167-48" aria-hidden="true"></a>        }</span>
+<span id="cb167-49"><a href="course-schedule-i-leetcode-207-medium.html#cb167-49" aria-hidden="true"></a>    }</span>
+<span id="cb167-50"><a href="course-schedule-i-leetcode-207-medium.html#cb167-50" aria-hidden="true"></a></span>
+<span id="cb167-51"><a href="course-schedule-i-leetcode-207-medium.html#cb167-51" aria-hidden="true"></a>    visited[vertex] = <span class="dv">1</span>;</span>
+<span id="cb167-52"><a href="course-schedule-i-leetcode-207-medium.html#cb167-52" aria-hidden="true"></a></span>
+<span id="cb167-53"><a href="course-schedule-i-leetcode-207-medium.html#cb167-53" aria-hidden="true"></a>    <span class="kw">return</span> <span class="kw">true</span>;</span>
+<span id="cb167-54"><a href="course-schedule-i-leetcode-207-medium.html#cb167-54" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>

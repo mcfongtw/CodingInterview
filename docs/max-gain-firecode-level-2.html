@@ -24,7 +24,7 @@
 <meta name="author" content="Michael Fong" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -172,7 +172,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#description-2"><i class="fa fa-check"></i><b>2.2.1</b> Description</a></li>
 <li class="chapter" data-level="2.2.2" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#examples-1"><i class="fa fa-check"></i><b>2.2.2</b> Examples</a></li>
-<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array</a></li>
+<li class="chapter" data-level="2.2.3" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-two-pointers"><i class="fa fa-check"></i><b>2.2.3</b> Solution - Searching Target Sum from Sorted Array Usng Two Pointers</a></li>
+<li class="chapter" data-level="2.2.4" data-path="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html"><a href="two-sum-ii-input-array-is-sorted-leetcode-167-medium.html#solution---searching-target-sum-from-sorted-array-usng-binary-search"><i class="fa fa-check"></i><b>2.2.4</b> Solution - Searching Target Sum from Sorted Array Usng Binary Search</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="two-sum-ii-return-true-false.html"><a href="two-sum-ii-return-true-false.html"><i class="fa fa-check"></i><b>2.3</b> Two Sum II - Return True / False</a>
 <ul>
@@ -811,7 +812,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.16.3" data-path="copy-list-with-random-pointer-leetcode-138-medium.html"><a href="copy-list-with-random-pointer-leetcode-138-medium.html#solution-74"><i class="fa fa-check"></i><b>6.16.3</b> Solution</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="common-data-structure-set-stack-heap-treemap.html"><a href="common-data-structure-set-stack-heap-treemap.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure : Set / Stack / Heap / TreeMap</a>
+<li class="chapter" data-level="7" data-path="common-data-structure.html"><a href="common-data-structure.html"><i class="fa fa-check"></i><b>7</b> Common Data Structure</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="group-anagrams-leet-code-49-medium.html"><a href="group-anagrams-leet-code-49-medium.html"><i class="fa fa-check"></i><b>7.1</b> Group Anagrams / Leet Code 49 / Medium</a>
 <ul>
@@ -1061,30 +1062,30 @@ gain is possible, return 0.</p>
 </div>
 <div id="solution-8" class="section level3" number="2.10.3">
 <h3><span class="header-section-number">2.10.3</span> Solution</h3>
-<div id="walkthrough-10" class="section level4" number="2.10.3.1">
+<div id="walkthrough-11" class="section level4" number="2.10.3.1">
 <h4><span class="header-section-number">2.10.3.1</span> Walkthrough</h4>
 <p>By definition, , we could do this in one pass
 by finding the minimum element and the maximum gain (so far) by Math.max(min, a[i] - min)</p>
 </div>
-<div id="analysis-10" class="section level4" number="2.10.3.2">
+<div id="analysis-11" class="section level4" number="2.10.3.2">
 <h4><span class="header-section-number">2.10.3.2</span> Analysis</h4>
 <p>The time complexity is O(n) since every element is visited in the loop.</p>
 </div>
-<div id="algorithm-10" class="section level4" number="2.10.3.3">
+<div id="algorithm-11" class="section level4" number="2.10.3.3">
 <h4><span class="header-section-number">2.10.3.3</span> Algorithm</h4>
 </div>
-<div id="java-code-8" class="section level4" number="2.10.3.4">
+<div id="java-code-10" class="section level4" number="2.10.3.4">
 <h4><span class="header-section-number">2.10.3.4</span> Java Code</h4>
-<div class="sourceCode" id="cb15"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb15-1"><a href="max-gain-firecode-level-2.html#cb15-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">maxGain</span>(<span class="dt">int</span>[] a) {</span>
-<span id="cb15-2"><a href="max-gain-firecode-level-2.html#cb15-2" aria-hidden="true"></a>    <span class="dt">int</span> min = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>, gain = <span class="dv">0</span>;</span>
-<span id="cb15-3"><a href="max-gain-firecode-level-2.html#cb15-3" aria-hidden="true"></a></span>
-<span id="cb15-4"><a href="max-gain-firecode-level-2.html#cb15-4" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; a.<span class="fu">length</span>; i++) {</span>
-<span id="cb15-5"><a href="max-gain-firecode-level-2.html#cb15-5" aria-hidden="true"></a>        min = <span class="bu">Math</span>.<span class="fu">min</span>(min, a[i]);</span>
-<span id="cb15-6"><a href="max-gain-firecode-level-2.html#cb15-6" aria-hidden="true"></a>        gain = <span class="bu">Math</span>.<span class="fu">max</span>(gain, a[i] - min);</span>
-<span id="cb15-7"><a href="max-gain-firecode-level-2.html#cb15-7" aria-hidden="true"></a>    }</span>
-<span id="cb15-8"><a href="max-gain-firecode-level-2.html#cb15-8" aria-hidden="true"></a></span>
-<span id="cb15-9"><a href="max-gain-firecode-level-2.html#cb15-9" aria-hidden="true"></a>    <span class="kw">return</span> gain;</span>
-<span id="cb15-10"><a href="max-gain-firecode-level-2.html#cb15-10" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode java"><code class="sourceCode java"><span id="cb16-1"><a href="max-gain-firecode-level-2.html#cb16-1" aria-hidden="true"></a><span class="kw">public</span> <span class="dt">static</span> <span class="dt">int</span> <span class="fu">maxGain</span>(<span class="dt">int</span>[] a) {</span>
+<span id="cb16-2"><a href="max-gain-firecode-level-2.html#cb16-2" aria-hidden="true"></a>    <span class="dt">int</span> min = <span class="bu">Integer</span>.<span class="fu">MAX_VALUE</span>, gain = <span class="dv">0</span>;</span>
+<span id="cb16-3"><a href="max-gain-firecode-level-2.html#cb16-3" aria-hidden="true"></a></span>
+<span id="cb16-4"><a href="max-gain-firecode-level-2.html#cb16-4" aria-hidden="true"></a>    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; a.<span class="fu">length</span>; i++) {</span>
+<span id="cb16-5"><a href="max-gain-firecode-level-2.html#cb16-5" aria-hidden="true"></a>        min = <span class="bu">Math</span>.<span class="fu">min</span>(min, a[i]);</span>
+<span id="cb16-6"><a href="max-gain-firecode-level-2.html#cb16-6" aria-hidden="true"></a>        gain = <span class="bu">Math</span>.<span class="fu">max</span>(gain, a[i] - min);</span>
+<span id="cb16-7"><a href="max-gain-firecode-level-2.html#cb16-7" aria-hidden="true"></a>    }</span>
+<span id="cb16-8"><a href="max-gain-firecode-level-2.html#cb16-8" aria-hidden="true"></a></span>
+<span id="cb16-9"><a href="max-gain-firecode-level-2.html#cb16-9" aria-hidden="true"></a>    <span class="kw">return</span> gain;</span>
+<span id="cb16-10"><a href="max-gain-firecode-level-2.html#cb16-10" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
 </div>
 </div>
