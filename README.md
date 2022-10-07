@@ -9,6 +9,7 @@ The coding interview book is deployed and and previewed at (https://mcfongtw.git
 sh build.sh
 ```
 which will create necessary changes in HTML page under docs/ directory. 
+
 2. Commit the change to master branch. 
 3. The Github action will deploy the static content under docs/ directory to the Github Page. 
 
