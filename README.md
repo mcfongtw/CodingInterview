@@ -1,31 +1,42 @@
-## Github Page
+# CodingInterview
 
-The coding interview book is deployed and and previewed at (https://mcfongtw.github.io/CodingInterview/)
+A technical interview preparation resource built with R Bookdown, containing coding problems and solutions organized by data structures and algorithms.
 
-## Build Process
+## Live Site
 
-1. On dev local, execute
-```
+https://mcfongtw.github.io/CodingInterview/
+
+## Getting Started
+
+For detailed setup instructions, development workflow, and contribution guidelines, see the **[Getting Started Guide](GETTING_STARTED.md)**.
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/mcfongtw/CodingInterview.git
+cd CodingInterview
+
+# Build the site
 sh build.sh
+
+# Preview locally
+open docs/index.html  # macOS
+start docs/index.html # Windows
+
+# Deploy changes
+git add *.Rmd docs/
+git commit -m "Your commit message"
+git push origin master
 ```
-which will create necessary changes in HTML page under docs/ directory. 
 
-2. Commit the change to master branch. 
-3. The Github action will deploy the static content under docs/ directory to the Github Page. 
+## Tech Stack
 
-## Dev Setup
-It's recommended to use RStudio to create a work on a new solution in (R) Markdown format. 
+- **R Bookdown** - Static site generator
+- **GitBook Theme** - Documentation interface
+- **GitHub Pages** - Hosting
+- **GitHub Actions** - Automated deployment
 
 ## Reference
-This is based off the minimal example of a bookdown (https://github.com/rstudio/bookdown). 
 
-## Work In Progress
-
-- [ ] Able to execute pandoc and rscript in build env.
-- [ ] Change build infrastructure to execute build.sh as part of deployment pipeline instead of executing build.sh offline and deploy content statically. 
-
-
-<!--
-## Leetcode Progress
-![LeetCode Stats](https://leetcard.jacoblin.cool/shannaracat?theme=dark&font=Marcellus%20SC&ext=activity)
--->
+This project is based on the [bookdown minimal example](https://github.com/rstudio/bookdown).
