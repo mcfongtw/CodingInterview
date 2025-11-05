@@ -65,26 +65,60 @@ The book is organized into topic-based chapters, each as a separate .Rmd file:
 Each problem follows this format:
 
 ```markdown
-## Problem Name / LeetCode # / Difficulty
+## Problem Title {#problem-id}
+
+### Problem Metadata
+
+- **Platform**: [LeetCode/HackerRank/Other]
+- **Problem ID**: [Number]
+- **Difficulty**: [Easy/Medium/Hard]
+- **URL**: [Direct link to problem]
+- **Tags**: [Keywords for searching]
+- **Techniques**: [Links to glossary using \@ref(technique)]
 
 ### Description
-[Problem statement]
+
+[Problem statement - describe what needs to be solved]
 
 ### Examples
-[Input/output examples]
+
+**Example 1:**
+```
+Input: [input]
+Output: [output]
+Explanation: [why]
+```
+
+### Constraints
+
+- [List constraints from problem]
 
 ### Solution
+
 #### Walkthrough
-[Explanation of approach]
+
+[Explain the approach and thought process]
 
 #### Analysis
-[Time/space complexity]
+
+- **Time Complexity**: O(?)
+- **Space Complexity**: O(?)
 
 #### Algorithm
-[Step-by-step algorithm]
+
+1. Step 1
+2. Step 2
+3. Step 3
 
 #### Java Code
-[Implementation]
+
+```java
+public class Solution {
+    public ReturnType methodName(InputType input) {
+        // Implementation
+    }
+}
+```
 ```
 
 ## Configuration Files

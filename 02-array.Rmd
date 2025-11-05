@@ -42,68 +42,122 @@ for(int i = 0, j = 0; i < A.length; j < B.length;) {
 
 
 
-## Two Sums I  / LeetCode 1  / Easy
+## Two Sums I {#two-sum-1}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/two-sum/
+- **Tags**: `Hash Table`, `Array`
+- **Techniques**: Hash Table, Two Pointers
 
 ### Description
-Given an array of integers, return indices of the two numbers such that they add  up to a specific target.
-You may assume that each input would have exactly one solution, and you may not **use the same element twice**.
+
+Given an array of integers `nums` and an integer `target`, return **indices** of the two numbers such that they add up to `target`.
+
+You may assume that each input would have **exactly one solution**, and you may **not use the same element twice**.
+
+You can return the answer in any order.
 
 ### Examples
-Given nums = [2, 7, 11, 15], target = 9. Because nums[0] + nums[1] = 2 + 7 = 9,  return [0, 1].
 
-### Solution - with HashTable
+**Example 1:**
+```
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+```
+
+**Example 2:**
+```
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+```
+
+**Example 3:**
+```
+Input: nums = [3,3], target = 6
+Output: [0,1]
+```
+
+### Constraints
+
+- `2 <= nums.length <= 10^4`
+- `-10^9 <= nums[i] <= 10^9`
+- `-10^9 <= target <= 10^9`
+- **Only one valid answer exists**
+
+### Solution - Hash Table Approach
+
 #### Walkthrough
-Use a HashMap to store each element and its associated index, that is $<$nums[i], i$>$. Then check if diff =
-(target - nums[i]) and return the pair of indices if existed.
+
+Use a HashMap to store each element and its associated index as key-value pairs $<$nums[i], i$>$.
+
+For each element `nums[i]`, calculate `diff = target - nums[i]` and check if `diff` exists in the HashMap:
+- If yes: return the indices `[map.get(diff), i]`
+- If no: store current element and index `map.put(nums[i], i)`
+
+This allows us to find the complement in O(1) time.
 
 #### Analysis
-Each insertion and get operation from hashmap takes O(1) and there are n elements. The total time complexity costs
-O(n) and Auxiliary Space takes $O(n)$
+
+- **Time Complexity**: O(n) - Single pass through array, each lookup/insert is O(1)
+- **Space Complexity**: O(n) - Hash map stores up to n elements
 
 #### Algorithm
 
-##### Java Code - with HashTable
+1. Create empty HashMap to store `<value, index>` pairs
+2. For each index `i` from 0 to n-1:
+   - Calculate `diff = target - nums[i]`
+   - If `diff` exists in map:
+     - Return `[map.get(diff), i]`
+   - Else:
+     - Store current element: `map.put(nums[i], i)`
+3. Return null (no solution found)
+
+#### Java Code
+
 ```java
 public int[] twoSum(int[] nums, int target) {
-    Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    Map<Integer, Integer> map = new HashMap<>();
 
-    //iterate through the indices
-    for(int i = 0; i < nums.length; i++) {
+    for (int i = 0; i < nums.length; i++) {
         int diff = target - nums[i];
-        Integer diffIdx = map.get(diff);
 
-        if(map.containsKey(diff) && i != diffIdx) {
-            //map contains diff value and its associated index
-            return new int[]{diffIdx, i};
-        } else {
-            //store the value and index for later use
-            map.put(nums[i], i);
+        if (map.containsKey(diff)) {
+            return new int[]{map.get(diff), i};
         }
+
+        map.put(nums[i], i);
     }
 
     return null;
 }
 ```
 
-##### Java Code - with HashTable 2
-Similar as previous answer, but instead store the diff value in hash map.
+### Alternative Solution - Storing Difference
+
+#### Walkthrough
+
+Similar to the previous approach, but instead of storing the current number, store the **difference** (target - nums[i]) in the hash map.
+
+#### Java Code
+
 ```java
 public int[] twoSum(int[] nums, int target) {
-    Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    Map<Integer, Integer> map = new HashMap<>();
 
-    //iterate through the indices
-    for(int i = 0; i < nums.length; i++) {
+    for (int i = 0; i < nums.length; i++) {
         int num = nums[i];
-        Integer diffIdx = map.get(num);
 
-        if(map.containsKey(num) && i != diffIdx) {
-            //map contains diff value and its associated index
-            return new int[]{diffIdx, i};
-        } else {
-            //store the value and index for later use
-            int diff = target - nums[i];
-            map.put(diff, i);
+        if (map.containsKey(num)) {
+            return new int[]{map.get(num), i};
         }
+
+        int diff = target - nums[i];
+        map.put(diff, i);
     }
 
     return null;

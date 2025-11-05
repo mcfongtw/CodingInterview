@@ -101,15 +101,29 @@ find a particular node. However, in the edge cases  where tree is in a list form
 
 
 
-## Balanced Binary Tree / Leet Code 110 / Easy
+## Balanced Binary Tree {#balanced-binary-tree}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 110
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/balanced-binary-tree/
+- **Tags**: `Tree`, `Binary Tree`, `DFS`
+- **Techniques**: Depth First Search \@ref(dfs), Recursion \@ref(recursion)
 
 ### Description
-Given a binary tree, determine if it is height-balanced.  For this problem, a height-balanced binary tree is defined
-as: a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
 
+Given a binary tree, determine if it is **height-balanced**.
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
+For this problem, a height-balanced binary tree is defined as:
+
+> A binary tree in which the depth of the two subtrees of **every** node never differ by more than 1.
+
+### Examples
+
+**Example 1:**
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Balanced tree example', engine.opts = list(template = "latex/tikz2pdf.tex")}
 \begin{tikzpicture}[
 level 1/.style={sibling distance=10em},
 level 2/.style={sibling distance=5em},
@@ -125,8 +139,14 @@ level distance=2.5em,
 ;
 \end{tikzpicture}
 ```
-Return true.
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
+```
+Input: root = [3,9,20,null,null,15,7]
+Output: true
+Explanation: Height of left subtree = 1, height of right subtree = 2, difference = 1 (balanced)
+```
+
+**Example 2:**
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Unbalanced tree example', engine.opts = list(template = "latex/tikz2pdf.tex")}
 \begin{tikzpicture}[
     level 1/.style={sibling distance=10em},
     level 2/.style={sibling distance=5em},
@@ -145,37 +165,60 @@ Return true.
 ;
 \end{tikzpicture}
 ```
+```
+Input: root = [1,2,2,3,3,null,null,4,4]
+Output: false
+Explanation: Left subtree has much greater depth than right subtree
+```
 
-Return false.
+**Example 3:**
+```
+Input: root = []
+Output: true
+```
 
-### Solution
+### Constraints
+
+- The number of nodes in the tree is in the range `[0, 5000]`
+- `-10^4 <= Node.val <= 10^4`
+
+### Solution - Recursive DFS
+
 #### Walkthrough
-Remember current height and recursively compute the height for the left and right subtree. In
-addition, evaluate if the absolute value of height of two subtrees is greater than 1. If yes, return false; true,
-otherwise.
+
+Use a recursive depth-first search to compute the height of each subtree.
+
+For each node:
+1. Recursively compute the height of the left subtree
+2. Recursively compute the height of the right subtree
+3. Check if the absolute difference between heights is greater than 1
+4. If unbalanced at any node, propagate `-1` upward to indicate imbalance
+5. Otherwise, return the maximum height + 1
+
+The key insight is to combine height calculation with balance checking in a single pass.
 
 #### Analysis
-Time complexity is O(n) as every node is visited once.
+
+- **Time Complexity**: O(n) - Each node is visited exactly once
+- **Space Complexity**: O(h) - Recursion call stack depth equals tree height h, where h can be log(n) for balanced trees or n for skewed trees
 
 #### Algorithm
- dfs \@ref(dfs)
+
+1. If root is null, return 0 (base case)
+2. Recursively get height of left subtree: `lHeight = getHeight(root.left)`
+3. Recursively get height of right subtree: `rHeight = getHeight(root.right)`
+4. If either subtree returned -1 (unbalanced), propagate -1 upward
+5. If `|lHeight - rHeight| > 1`, return -1 (unbalanced)
+6. Otherwise, return `max(lHeight, rHeight) + 1`
 
 #### Java Code
+
 ```java
 public boolean isBalanced(TreeNode root) {
-    if (root == null) {
-        return true;
-    }
-
-    // left height | right height > 1
-    if (getHeight(root) == -1) {
-        return false;
-    }
-
-    return true;
+    return getHeight(root) != -1;
 }
 
-public int getHeight(TreeNode root) {
+private int getHeight(TreeNode root) {
     if (root == null) {
         return 0;
     }
@@ -183,15 +226,18 @@ public int getHeight(TreeNode root) {
     int lHeight = getHeight(root.left);
     int rHeight = getHeight(root.right);
 
+    // If left or right subtree is unbalanced, propagate -1
     if (lHeight == -1 || rHeight == -1) {
         return -1;
     }
 
-    if (Math.abs(left - right) > 1) {
+    // If current node is unbalanced, return -1
+    if (Math.abs(lHeight - rHeight) > 1) {
         return -1;
     }
 
-    return Math.max(left, right) + 1;
+    // Return height of current subtree
+    return Math.max(lHeight, rHeight) + 1;
 }
 ```
 
