@@ -106,6 +106,10 @@ Explanation: [why]
 
 #### Algorithm
 
+[List of algorithm/technique labels using \@ref()]
+
+Example: \@ref(greedy), \@ref(dp), \@ref(dfs), \@ref(backtrack)
+
 1. Step 1
 2. Step 2
 3. Step 3

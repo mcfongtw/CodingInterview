@@ -3044,3 +3044,125 @@ public int shortestDistance(String[] words, String word1, String word2) {
 }
 ```
 
+
+## Minimum Operations to Make Binary Array Elements Equal to One I {#min-ops-binary-array}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 3191
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-i/
+- **Tags**: `Array`, `Greedy`, `Simulation`
+- **Techniques**: Sequential Traversal, Bit Manipulation
+
+### Description
+
+You are given a binary array `nums`. You can do the following operation on the array any number of times (possibly zero):
+
+- Choose any 3 consecutive elements from the array and flip all of them.
+
+Flipping an element means changing its value from 0 to 1, and from 1 to 0.
+
+Return the minimum number of operations required to make all elements in `nums` equal to 1. If it is impossible, return -1.
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [0,1,1,1,0,0]
+Output: 3
+Explanation: We can do the following operations:
+- Choose the elements at indices 0, 1 and 2. The resulting array is nums = [1,0,0,1,0,0].
+- Choose the elements at indices 1, 2 and 3. The resulting array is nums = [1,1,1,0,0,0].
+- Choose the elements at indices 3, 4 and 5. The resulting array is nums = [1,1,1,1,1,1].
+```
+
+**Example 2:**
+```
+Input: nums = [0,1,1,1]
+Output: -1
+Explanation: It is impossible to make all elements equal to 1.
+```
+
+### Constraints
+
+- `3 <= nums.length <= 10^5`
+- `0 <= nums[i] <= 1`
+
+### Solution - Greedy Sequential Traversal
+
+#### Walkthrough
+
+The solution uses a **greedy left-to-right approach** based on a key observation: any 0 encountered in the array must be flipped to become 1, and the optimal time to flip it is as soon as we encounter it.
+
+The algorithm works as follows:
+
+1. **Traverse left to right** (indices 0 to `len-3`): For each position `i`, if `nums[i] == 0`, we must flip the window `[i, i+1, i+2]`. We can safely iterate only up to `len-3` because we need at least 3 elements to perform a flip operation.
+
+2. **Use XOR for efficient flipping**: Instead of using `1 - nums[i]` to flip, the solution uses the XOR operator (`^= 1`) which is slightly more efficient and elegant for bit flipping.
+
+3. **Verify the last two elements**: After processing all positions up to `len-3`, we check if the last two elements are both 1. If either is 0, it's impossible to fix them (no 3-element window remaining), so we return -1.
+
+**Why this greedy approach is optimal:**
+- Any 0 must eventually be flipped
+- Flipping a 0 as soon as we encounter it (leftmost first) ensures we process the array in one pass
+- Later flips may change earlier elements, but we've already ensured all earlier positions are 1
+- The last two positions are "locked" after index `len-3`, so they determine if a solution exists
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Single pass through the array with constant-time operations per element
+- **Space Complexity**: O(1) - Only using constant extra space (count variable). The input array is modified in-place, which is acceptable for this problem.
+
+**Optimization Notes:**
+- Using XOR (`^= 1`) is more efficient than `1 - nums[i]` for bit flipping
+- The loop stops at `len-2` (excluding last 2 positions) to avoid redundant checks
+- Early continue when `nums[i] == 1` avoids unnecessary operations
+
+#### Algorithm
+
+\@ref(greedy)
+
+1. Initialize `count = 0` to track number of flip operations
+2. For each index `i` from 0 to `len-3`:
+   - If `nums[i] == 1`, continue to next iteration
+   - If `nums[i] == 0`:
+     - Set `nums[i] = 1` (no need to XOR since we know it's 0)
+     - Flip `nums[i+1]` using XOR: `nums[i+1] ^= 1`
+     - Flip `nums[i+2]` using XOR: `nums[i+2] ^= 1`
+     - Increment `count`
+3. After loop, check final state:
+   - If `nums[len-1] == 0` OR `nums[len-2] == 0`, return -1
+   - Otherwise, return `count`
+
+#### Java Code
+
+```java
+class Solution {
+    public int minOperations(int[] nums) {
+        int count = 0;
+        int len = nums.length;
+
+        for(int i = 0; i < len - 2; i++) {
+            if(nums[i] == 1)
+                continue;
+
+            // Use XOR(^) to flip
+            nums[i] = 1;
+            nums[i+1] ^= 1;
+            nums[i+2] ^= 1;
+
+            count++;
+        }
+
+        // check if the last two bits are 1, nums[len-3] is already 1
+        if(nums[len-1] == 0 || nums[len-2] == 0) {
+            return -1;
+        }
+
+        return count;
+    }
+}
+```
+
