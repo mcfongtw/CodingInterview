@@ -1,354 +1,426 @@
 # Common Data Structure
-This chapter illustrates some problem solved by common data structures, including Set / Stack / Heap / TreeMap
+This chapter illustrates problems that rely heavily on common data structures such as sets, heaps, balanced trees, and custom interval containers. In Java, a minimum heap can be implemented with `PriorityQueue`, while ordered maps such as `TreeMap` give us balanced binary-search-tree semantics out of the box.
 
-In Java,  an implementation for minmum heap is defined as PriorityQueue class.
+## Group Anagrams {#group-anagrams}
 
+### Problem Metadata
 
-
-## Group Anagrams / Leet Code 49 / Medium
+- **Platform**: LeetCode
+- **Problem ID**: 49
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/group-anagrams/
+- **Tags**: `Array`, `Hash Table`, `String`, `Sorting`
+- **Techniques**: \@ref(hash-table), \@ref(sorting)
 
 ### Description
-Given an array of strings, group anagrams together.
 
-### Example
-Input: ["eat", "tea", "tan", "ate", "nat", "bat"],
-Output:
-[
-["ate","eat","tea"],
-["nat","tan"],
-["bat"]
-]
+Given an array of strings, group the anagrams together. Two strings are anagrams if they contain the same characters with the same multiplicity, regardless of order.
 
-### Solution
+### Examples
+
+```
+Input: ["eat","tea","tan","ate","nat","bat"]
+Output: [["ate","eat","tea"],["nat","tan"],["bat"]]
+```
+
+### Constraints
+
+- `1 <= strs.length <= 10^4`
+- `0 <= strs[i].length <= 100`
+- `strs[i]` consists of lowercase English letters
+
+### Solution - Hash Signature Map
 
 #### Walkthrough
-Assume they are all anagrams, and we keeps a map to store the list of anagrams associated with their unique pattern
-, i.e. sorted string; that is, $<$sorted\_str, List of anagram$>$. Finally, we collect the list of anagram in another list
-to return.
+
+Anagrams reduce to the same canonical representation once their letters are sorted. Iterate over the strings, sort each one to derive a signature, and use a hash map that stores `signature -> list of anagrams`. Append every string to its signature bucket and finally return the map values as the grouped result.
 
 #### Analysis
-Time complexity is O(n) as every word is processed once.
+
+- **Time Complexity**: O(n * m log m) to sort each string of length `m` across `n` strings
+- **Space Complexity**: O(n * m) to store all strings inside the hash map
 
 #### Algorithm
 
+\@ref(hash-table), \@ref(sorting)
+
+1. Initialize `Map<String, List<String>> groups`.
+2. For every string `s`, sort its characters to form `key`.
+3. Append `s` to `groups.get(key)`, creating the bucket if needed.
+4. Return a list built from the map values.
+
 #### Java Code
+
 ```java
 public List<List<String>> groupAnagrams(String[] strs) {
-    Map<String, List<String>> index = new HashMap<>();
-
-    List<List<String>> result = new ArrayList<>();
-    if(strs == null || strs.length == 0) {
-        return result;
-    }
-
-    for(String str : strs) {
-        char[] chars = str.toCharArray();
+    Map<String, List<String>> groups = new HashMap<>();
+    for (String word : strs) {
+        char[] chars = word.toCharArray();
         Arrays.sort(chars);
-        String sortedStr = new String(chars);
-
-        List<String> list = index.getOrDefault(sortedStr, new ArrayList<>());
-        list.add(str);
-        // only insert if key was asbsent
-        index.putIfAbsent(sortedStr, list);
+        String signature = new String(chars);
+        groups.computeIfAbsent(signature, key -> new ArrayList<>()).add(word);
     }
-
-    for(Map.Entry<String, List<String>> entry : index.entrySet()) {
-        result.add(entry.getValue());
-    }
-
-    return result;
+    return new ArrayList<>(groups.values());
 }
 ```
 
+## Longest Substring Without Repeating Characters {#longest-substring-unique}
 
-## Longest Substring Without Repeating Characters / LeetCode 3 / Medium
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 3
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/longest-substring-without-repeating-characters/
+- **Tags**: `String`, `Sliding Window`, `Hash Table`
+- **Techniques**: \@ref(two-pointers), \@ref(hash-table)
 
 ### Description
-Given a string, find the length of the longest substring without repeating characters.
 
-### Example
-Input: "abcabcbb", Output: 3 , Explanation: The answer is "abc", with the length of 3.
+Given a string `s`, return the length of the longest substring that contains no repeated characters.
 
-Input: "bbbbb", Output: 1 , Explanation: The answer is "b", with the length of 1.
+### Examples
 
-Input: "pwwkew", Output: 3, Explanation: The answer is "wke", with the length of 3. Note that the answer must be a
-substring, "pwke" is a subsequence and not a substring.
-### Solution - Sliding Window
+```
+Input: s = "abcabcbb"
+Output: 3
+
+Input: s = "bbbbb"
+Output: 1
+
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke"; "pwke" is not valid because it is not a contiguous substring.
+```
+
+### Constraints
+
+- `0 <= s.length <= 5 * 10^4`
+- `s` consists of English letters, digits, symbols, and spaces
+
+### Solution - Sliding Window Set
+
 #### Walkthrough
-Use two indices left, and right to remember a substring (sliding window). Use a Set to check for unique characters.
-If there is unique character, move right index outward (expand substring); otherwise, move left index rightward
-(shorten substring). Measure the longest length of substring at each expansion.
+
+Maintain a sliding window `[left, right)` backed by a hash set of characters currently in the window. Expand `right` while characters are unique, updating the maximum window length. Whenever a duplicate appears, shrink from the `left` until the duplicate is removed. This ensures each character enters and leaves the window at most once.
 
 #### Analysis
-Time complexity is O(n) as every letter is visited once.
+
+- **Time Complexity**: O(n) because each character is processed at most twice
+- **Space Complexity**: O(min(n, alphabet)) for the sliding-set storage
 
 #### Algorithm
 
-#### Java Code - Sliding Window
-```java
-public int lengthOfLongestSubstring(String s) {
-    int len = s.length();
-    Set<Character> uniqueChars = new HashSet<>();
+\@ref(two-pointers), \@ref(hash-table)
 
-    int maxLen = 0, right = 0, left = 0;
-
-    while( right < len && left < len) {
-        //looking for longest repeating unique substring [left, right]
-        if(!uniqueChars.contains(s.charAt(right))) {
-            //unique char, expand substring
-            uniqueChars.add(s.charAt(right));
-            right++;
-            maxLen = Math.max(maxLen, right - left);
-        } else {
-            //not unique, shorten substring
-            uniqueChars.remove(s.charAt(left));
-            left++;
-        }
-
-    }
-
-    return maxLen;
-}
-```
-
-
-
-## Find $k^{th}$ Largest Element in an Array / LeetCode 215 / Medium
-
-### Description
-Find the $k^{th}$ largest element in an unsorted array. Note that it is the $k^{th}$ largest element in the sorted order,
-not the $k^{th}$ distinct element.
-
-### Example
-Input: [3,2,1,5,6,4] and k = 2. Output: 5
-
-Input: [3,2,3,1,2,4,5,5,6] and k = 4. Output: 4
-
-### Solution
-#### Walkthrough
-Retrieving the $k^{th}$ largest element equals to retriving smallest element in a k-sized min-heap - The value of
-each node is equal to or greater than the value of its parent node and root has the smallest value. Therefore,
-we need to maintain a min-heap (PriorityQueue in java) of \textbf{size k} while inserting new element. Below
-illustrated how to track a 2nd largest element from a min heap
-```java
-3 -> [3*]
-2 -> [2*, 3]
-1 -> 1, [2*, 3]
-5 -> 1, 2, [3*, 5]
-6 -> 1, 2, 3, [5*, 6]
-4 -> 1, 2, 3, 4, [5*, 6]
-```
-Finally, return root as it is the smallest element (*) in the heap.
-
-#### Analysis
-In addition, add() and remove() take $O(log(k))$, since there are at most k element. Thus, total time complexity is
-$O(n \cdot log(k))$. Total Auxiliary Space is O(k) due to size of the heap.
-
-#### Algorithm
- heap \@ref(heap)
+1. Initialize `Set<Character> seen`, `left = 0`, `best = 0`.
+2. Iterate `right` over the string.
+3. While `s[right]` is already in `seen`, remove `s[left]` and increment `left`.
+4. Add `s[right]`, update `best = max(best, right - left + 1)`.
+5. Return `best`.
 
 #### Java Code
+
 ```java
-public int findKthLargest(int[] nums, int k) {
-    Queue<Integer> heap = new PriorityQueue<>();
+public int lengthOfLongestSubstring(String s) {
+    Set<Character> seen = new HashSet<>();
+    int left = 0;
+    int best = 0;
 
-    for(int num: nums) {
-        helper(num, k);
+    for (int right = 0; right < s.length(); right++) {
+        char c = s.charAt(right);
+        while (seen.contains(c)) {
+            seen.remove(s.charAt(left));
+            left++;
+        }
+        seen.add(c);
+        best = Math.max(best, right - left + 1);
     }
 
-    // return the smallest element (root) from heap
-    return heap.peek();
-}
-
-private void helper(int num, int size) {
-    heap.add(num);
-
-    if(heap.size() > size) {
-        //remove smallest element from min-heap
-        heap.remove();
-    }
+    return best;
 }
 ```
 
+## Find k-th Largest Element in an Array {#kth-largest}
 
+### Problem Metadata
 
-## Merge K Sorted Arrays
+- **Platform**: LeetCode
+- **Problem ID**: 215
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/kth-largest-element-in-an-array/
+- **Tags**: `Array`, `Heap`, `Divide and Conquer`
+- **Techniques**: \@ref(heap)
 
 ### Description
 
-### Example
+Given an unsorted array `nums` and an integer `k`, return the `k`-th largest element in the array. The `k`-th largest element is the element that would appear at index `n - k` after sorting the array in ascending order.
 
-### Solution - Min Heap
+### Examples
+
+```
+Input: nums = [3,2,1,5,6,4], k = 2
+Output: 5
+
+Input: nums = [3,2,3,1,2,4,5,5,6], k = 4
+Output: 4
+```
+
+### Constraints
+
+- `1 <= k <= nums.length <= 10^5`
+- `-10^4 <= nums[i] <= 10^4`
+
+### Solution - Size-k Min Heap
+
 #### Walkthrough
-This is similar to the problem of merging K sorted list. we could compare every leading elements in k array and
-retrieve the node with the smallest value using Min Heap.
-Since the original k arrays were sorted, therefore, we could retrieve all $n \cdot k$ elements in
-sorted order by retrieve the min element from PriorityQueue.
+
+Maintain a min heap that keeps track of the current `k` largest elements seen so far. Iterate over `nums`, pushing each number into the heap and immediately popping whenever the heap size exceeds `k`. After processing all numbers, the heap root is the `k`-th largest element because every larger value is still inside the heap.
 
 #### Analysis
-The comparison cost is O(log(k)) for every pop and insertion to priority queue since there are at most k elements
-(from k arrays). Additionally, there are a total number of n nodes in all arrays. Thus, the overall time complexity
-is $O(n \cdot log(k))$ and Auxiliary Space for the ﬁnal array is O(n), where n is the total node number in all k
-arrays.
+
+- **Time Complexity**: O(n log k) because each insertion and possible removal costs `log k`
+- **Space Complexity**: O(k) for the heap
 
 #### Algorithm
- heap \@ref(heap)
 
-#### Java Code- Min Heap
+\@ref(heap)
+
+1. Initialize an empty min heap.
+2. For each `num` in `nums`, push it into the heap.
+3. If the heap size exceeds `k`, pop the smallest element.
+4. After processing, return the heap root.
+
+#### Java Code
+
 ```java
-class ArrayContainer implements Comparable<ArrayContainer> {
-    int [] array;
+public int findKthLargest(int[] nums, int k) {
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+    for (int num : nums) {
+        minHeap.offer(num);
+        if (minHeap.size() > k) {
+            minHeap.poll();
+        }
+    }
+    return minHeap.peek();
+}
+```
+
+## Merge K Sorted Arrays {#merge-k-arrays}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: N/A
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Heap`, `Divide and Conquer`
+- **Techniques**: \@ref(heap)
+
+### Description
+
+Given `k` sorted integer arrays, merge them into a single sorted array that contains all elements from the inputs.
+
+### Examples
+
+```
+Input: [[1,4,7],[2,5],[3,6,9]]
+Output: [1,2,3,4,5,6,7,9]
+```
+
+### Constraints
+
+- `1 <= k <= 10^3`
+- Total number of elements across all arrays `n <= 10^5`
+- Each array is sorted in non-decreasing order
+
+### Solution - Min Heap of Array Entries
+
+#### Walkthrough
+
+Store each array's current front element inside a min heap, keyed by value. Pop the smallest element, append it to the answer, then advance the pointer for the array it came from and push the next value (if any). Because each push/pop costs `log k` and every element is processed once, the merge preserves overall sorted order efficiently.
+
+#### Analysis
+
+- **Time Complexity**: O(n log k), where `n` is the total element count
+- **Space Complexity**: O(k) for the heap plus O(n) for the output
+
+#### Algorithm
+
+\@ref(heap)
+
+1. Compute the total element count to size the output array.
+2. Push `(arrayIndex, elementIndex)` pairs for the first element of each non-empty array into a min heap ordered by value.
+3. Repeatedly pop the smallest entry, append the value to the output, and advance that array's index.
+4. If the array still has elements, push the updated entry back into the heap.
+5. Return the filled output array.
+
+#### Java Code
+
+```java
+class ArrayEntry implements Comparable<ArrayEntry> {
+    int[] array;
     int index;
 
-    public ArrayContainer(int[] data, int idx) {
-        array = data;
-        index = idx;
+    ArrayEntry(int[] array, int index) {
+        this.array = array;
+        this.index = index;
     }
 
-    public void advanceIndex() {
-        index++;
+    int value() {
+        return array[index];
     }
 
     @Override
-    public int compareTo(ArrayContainer that) {
-        //comparing element from both arrays at index
-        return this.array[index] - that.array[index];
+    public int compareTo(ArrayEntry other) {
+        return Integer.compare(this.value(), other.value());
     }
 }
 
-int[] mergeSortedArray(int[][] arrays) {
-    Queue<ArrayContainer> queue = new PriorityQueue<ArrayContainer>();
-    int numOfElements = 0;
+public int[] mergeKSortedArrays(int[][] arrays) {
+    PriorityQueue<ArrayEntry> minHeap = new PriorityQueue<>();
+    int total = 0;
 
-    // init queue w.r.t. first element of each array
-    for(int i = 0; i < arrays.length; i++) {
-        queue.offer(new ArrayContainer(arrays[i], 0));
-        numOfElements += arrays[i].length;
-    }
-
-    int mainIdx = 0;
-    int result[] = new int[numOfElements];
-
-    while(!queue.isEmpty()) {
-        // return the array at index which is the smallest element in queue
-        ArrayContainer cantainer = queue.poll();
-
-        result[mainIndex] = cantainer.array[index];
-        mainIndex++;
-
-        // advance the index and re-add to the queue
-        if(cantainer.index < cantainer.array.length - 1) {
-            cantainer.advanceIndex();
-            queue.offer(cantainer);
+    for (int[] array : arrays) {
+        total += array.length;
+        if (array.length > 0) {
+            minHeap.offer(new ArrayEntry(array, 0));
         }
     }
 
-    return result;
+    int[] merged = new int[total];
+    int write = 0;
+
+    while (!minHeap.isEmpty()) {
+        ArrayEntry current = minHeap.poll();
+        merged[write++] = current.value();
+        current.index++;
+        if (current.index < current.array.length) {
+            minHeap.offer(current);
+        }
+    }
+
+    return merged;
 }
 ```
 
+## My Calendar I {#my-calendar-i}
 
-## My Calendar I / LeetCode 729 / Medium
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 729
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/my-calendar-i/
+- **Tags**: `Interval`, `Design`, `TreeMap`
+- **Techniques**: \@ref(greedy), \@ref(bst)
 
 ### Description
-Implement a MyCalendar class to store your events. A new event can be added if adding the event will not cause a
-double booking. Your class will have the method, book(int start, int end). Formally, this represents a booking on the
-half open interval [start, end), the range of real numbers x such that start <= x < end. A double booking happens when
-two events have some non-empty intersection (ie., there is some time that is common to both events.) For each call to
-the method MyCalendar.book, return true if the event can be added to the calendar successfully without causing a
-double booking. Otherwise, return false and do not add the event to the calendar.
 
-### Example
+Design a calendar that can add non-overlapping half-open intervals `[start, end)`. The method `book(start, end)` should return `true` when the booking does not intersect any existing booking and `false` otherwise.
 
-### Solution - Interval Data Structure
+### Examples
+
+```
+Input:
+["MyCalendar","book","book","book"]
+[[],[10,20],[15,25],[20,30]]
+
+Output:
+[null,true,false,true]
+```
+
+### Constraints
+
+- `0 <= start < end <= 10^9`
+- At most `1000` calls to `book`
+
+### Solution - Brute Force Interval Scan
+
 #### Walkthrough
-We could implment a Data Structure to illustrate a duration interval which has a method to evaluate if this
-interval is overlapping with another interval.
+
+Keep a list of existing bookings. To insert a new booking, compare it against every stored interval and reject it if any overlap occurs. Because the number of operations is bounded by 1000, a linear scan per request is acceptable.
 
 #### Analysis
-Time complexity is O(n) for each query as every booking is visited once in the list.
+
+- **Time Complexity**: O(n) per booking for `n` stored intervals
+- **Space Complexity**: O(n) to store the bookings
 
 #### Algorithm
 
-#### Java Code - Interval Data Structure
+\@ref(greedy)
+
+1. Represent each booking with a `Booking` object holding `start` and `end`.
+2. For a new interval `[s, e)`, iterate over existing bookings.
+3. If `s < existing.end` and `e > existing.start`, intervals overlap; reject.
+4. Otherwise append the interval and return `true`.
+
+#### Java Code
+
 ```java
 class Booking {
+    int start;
+    int end;
 
-    public int start;
-
-    public int end;
-
-    public Booking(int start, int end) {
+    Booking(int start, int end) {
         this.start = start;
         this.end = end;
     }
 
-    public boolean isOverlapped(Booking that) {
-        // this: |--------|
-        // that:      |------|
-        if(isBetween(this.end, that.start, that.end)) {
-            return true;
-        } else if(isBetween(that.end, this.start, this.end)) {
-        // this:      |------|
-        // that: |--------|
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private boolean isBetween(int target, int start, int end) {
-        return target > start && target <= end;
+    boolean overlaps(Booking that) {
+        return this.start < that.end && that.start < this.end;
     }
 }
 
 class MyCalendar {
-    private List<Booking> bookings = new ArrayList<>();
+    private final List<Booking> bookings = new ArrayList<>();
 
     public boolean book(int start, int end) {
-        Booking newBooking = new Booking(start, end);
-
-        for(Booking existedBooking : bookings) {
-            if(existedBooking.isOverlapped(newBooking)) {
+        Booking request = new Booking(start, end);
+        for (Booking existing : bookings) {
+            if (existing.overlaps(request)) {
                 return false;
             }
         }
-
-        bookings.add(newBooking);
-
+        bookings.add(request);
         return true;
     }
 }
 ```
 
-### Solution - TreeMap
+### Solution - TreeMap Boundary Search
+
 #### Walkthrough
-Alternatively, we could leverage TreeMap to retrieve the logical relations between keys by calling lowerKey().
-The lowerKey() method is used to find the next greatest element after the element passed as the parameter.
+
+Store bookings inside a `TreeMap` keyed by start time. To book `[start, end)`, find the neighbor with the greatest start less than `end` (using `lowerKey`) and ensure its end time is not greater than `start`. This works because overlapping intervals must have an earlier start that ends after the new start.
 
 #### Analysis
-Time complexity is O(log(n)) for each query as TreeMap takes O(log(n)) to find the location to insert.
+
+- **Time Complexity**: O(log n) per booking for TreeMap lookups and inserts
+- **Space Complexity**: O(n)
 
 #### Algorithm
 
-#### Java Code - TreeMap
+\@ref(bst)
+
+1. Maintain `TreeMap<Integer, Integer> bookings` storing `start -> end`.
+2. For a request `[s, e)`, find `prevStart = bookings.lowerKey(e)`.
+3. If `prevStart` is null or `bookings.get(prevStart) <= s`, the booking fits.
+4. Insert `[s, e)` and return `true`; otherwise return `false`.
+
+#### Java Code
+
 ```java
-class MyCalendar {
-    private TreeMap<Integer, Integer> bookings = new TreeMap<>();
+class MyCalendarTreeMap {
+    private final TreeMap<Integer, Integer> bookings = new TreeMap<>();
 
     public boolean book(int start, int end) {
-        Integer nextStart = bookings.lowerKey(end);
-
-        // check if the next closest interval of which end time is less than start time
-        if (nextStart == null || bookings.get(nextStart) <= start) {
-            // either no interval start time < end
-            // existed interval end time > start
-
+        Integer prevStart = bookings.lowerKey(end);
+        if (prevStart == null || bookings.get(prevStart) <= start) {
             bookings.put(start, end);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 }
 ```

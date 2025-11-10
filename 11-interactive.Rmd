@@ -1,130 +1,113 @@
 # Interactive Problems
 
+## Guess the Word {#guess-the-word}
 
-## Guess the Word / LeetCode 843 / Hard
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 843
+- **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/guess-the-word/
+- **Tags**: `Interactive`, `Minimax`, `Hash Table`
+- **Techniques**: \@ref(minimax), \@ref(hash-table)
 
 ### Description
-We are given a word list of unique words, each word is 6 letters long, and one word in this list is chosen as
-secret.
 
-You may call master.guess(word) to guess a word.  The guessed word should have type string and must be from the
-original list with 6 lowercase letters.
+You are given a list of unique six-letter lowercase words. One of them is the secret word. An oracle `master.guess(word)` accepts only words from the list and returns the number of positions where your guess matches the secret exactly. Guesses not in the list return `-1`. You have at most 10 guesses to find the secret word.
 
-This function returns an integer type, representing the number of exact matches (value and position) of your guess to
-the secret word.  Also, if your guess is not in the given wordlist, it will return -1 instead.
+### Examples
 
-For each test case, you have 10 guesses to guess the word. At the end of any number of calls, if you have made 10 or
-less calls to master.guess and at least one of these guesses was the secret, you pass the testcase.
+```
+wordlist = ["acckzz","ccbazz","eiowzz","abcczz"], secret = "acckzz"
+master.guess("aaaaaa") -> -1 (not in list)
+master.guess("acckzz") -> 6 (found the secret)
+master.guess("ccbazz") -> 3
+```
 
-Besides the example test case below, there will be 5 additional test cases, each with 100 words in the word list.
-The letters of each word in those testcases were chosen independently at random from 'a' to 'z', such that every word
-in the given word lists is unique.
+### Constraints
 
-### Example
-Input: secret = "acckzz", wordlist = ["acckzz","ccbazz","eiowzz","abcczz"]
+- Word list length ≤ 100
+- Each word length = 6
+- All words are lowercase letters
+- At most 10 guesses
 
-master.guess("aaaaaa") returns -1, because "aaaaaa" is not in wordlist.
-master.guess("acckzz") returns 6, because "acckzz" is secret and has all 6 matches.
-master.guess("ccbazz") returns 3, because "ccbazz" has 3 matches.
-master.guess("eiowzz") returns 2, because "eiowzz" has 2 matches.
-master.guess("abcczz") returns 4, because "abcczz" has 4 matches.
+### Solution - Minimax Filtering
 
-We made 5 calls to master.guess and one of them was the secret, so we pass the test case.
-
-### Solution
 #### Walkthrough
-At start of the game, we simply have the choice of using each word in the wordlist to call master API, but as we are
-getting more and more feedbacks from the API, we should eliminate some choice by only keeping the words that have the
-same number of character matches as the match number returned from the master API. Then we use those words as the
-possible choices in the next round.
 
-Simply adapting the above strategy should give us a pretty good performance in terms of minimizing the number of
-calls to the master API. However, we could use minimax strategy to further improve the accuracy of our guesses at
-each round by avoiding choices that has little or no effect of reducing the number of choices we have to make in the
-next round.
-
-The idea is simply to make a choice that minimizes the maximum possible number of choices (worst outcome) we have to
-make at each time that we call master.guess(word).
+Every guess partitions the remaining candidate set by the match count produced by `master`. To maximize information gained each round, evaluate each word as a potential guess and simulate its worst-case partition size: for every other word, compute the similarity score (number of matching positions) and count how many candidates would remain after such feedback. Choose the guess with the minimal worst-case bucket to shrink the search space efficiently. After receiving the match count, filter the candidate list to only words compatible with that feedback and repeat until the secret is found or guesses run out.
 
 #### Analysis
-Time Complexity is O() since this is the number of  computation performed.
+
+- **Time Complexity**: O(k * n^2 * L) in worst case (`n` words, length `L=6`, `k` guesses ≤ 10)
+- **Space Complexity**: O(n) to store candidate indices and buckets
 
 #### Algorithm
-minimax \@ref(minimax)
+
+\@ref(minimax), \@ref(hash-table)
+
+1. Track remaining candidate indices.
+2. For each guess candidate compute max bucket size by grouping other words by similarity score.
+3. Select the guess with minimal max bucket (minimax).
+4. Call `master.guess(word)`. If matches = 6, stop; otherwise filter candidates to those with the same similarity score relative to the guess.
+5. Repeat until the secret is found or attempts exhausted.
 
 #### Java Code
+
 ```java
-final int N = 6;
+class Solution {
+    private static final int WORD_LEN = 6;
 
-public void findSecretWord(String[] words, Master master) {
-    List<Integer> wordIdxList = new ArrayList<>();
+    public void findSecretWord(String[] words, Master master) {
+        List<Integer> candidates = new ArrayList<>();
+        for (int i = 0; i < words.length; i++) {
+            candidates.add(i);
+        }
 
-    //init dictionary
-    for (int idx = 0 ; idx < words.length; idx++) {
-        wordIdxList.add(idx);
+        while (!candidates.isEmpty()) {
+            int bestIdx = pickMinimaxGuess(words, candidates);
+            int matches = master.guess(words[bestIdx]);
+            if (matches == WORD_LEN) {
+                return;
+            }
+            List<Integer> next = new ArrayList<>();
+            for (int idx : candidates) {
+                if (similarity(words[idx], words[bestIdx]) == matches) {
+                    next.add(idx);
+                }
+            }
+            candidates = next;
+        }
     }
 
-    while (wordIdxList.size() > 0) {
-        int minLoss = Integer.MAX_VALUE;
-        int minIdx = -1;
-        for (int idx : wordIdxList) {
-            int loss = maxLoss(idx, words, wordIdxList);
-
-            /* minimizes the possible number of choices (worst outcome) to make at each time that we call master.guess */
-            if (loss < minLoss) {
-                minLoss = loss;
-                minIdx = idx;
+    private int pickMinimaxGuess(String[] words, List<Integer> candidates) {
+        int bestIdx = -1;
+        int minWorst = Integer.MAX_VALUE;
+        for (int guessIdx : candidates) {
+            int worstBucket = 0;
+            int[] bucket = new int[WORD_LEN + 1];
+            for (int otherIdx : candidates) {
+                if (guessIdx == otherIdx) continue;
+                int score = similarity(words[guessIdx], words[otherIdx]);
+                worstBucket = Math.max(worstBucket, ++bucket[score]);
+            }
+            if (worstBucket < minWorst) {
+                minWorst = worstBucket;
+                bestIdx = guessIdx;
             }
         }
+        return bestIdx;
+    }
 
-        int match = master.guess(words[minIdx]);
-        //made the correct guess, return
-        if (match == N) {
-            return;
-        }
-        List<Integer> nextIdxList = new ArrayList<>();
-        for (int idx: wordIdxList) {
-            if (similarity(words[minIdx], words[idx]) == match) {
-                nextIdxList.add(idx);
+    private int similarity(String a, String b) {
+        int match = 0;
+        for (int i = 0; i < WORD_LEN; i++) {
+            if (a.charAt(i) == b.charAt(i)) {
+                match++;
             }
         }
-        wordIdxList = nextIdxList;
+        return match;
     }
 }
-
-
-/*
-* Retrieve the MAX # of word from CURRENT dict that has the same similarity with
-* guessed word, where guessWord != candidateWord.
-*/
-private int maxLoss(int guessIdx, String[] words, List<Integer> wordIdxList) {
-    int[] bucket = new int[N];
-    int maxScore = 0;
-
-    for (int idx : wordIdxList) {
-        String guess = words[guessIdx];
-        String candidate = words[idx];
-
-        if (!guess.equals(candidate)) {
-            int score = similarity(guess, candidate);
-            bucket[score]++;
-        }
-    }
-
-    for(int score : bucket) {
-        maxScore = Math.max(maxScore, score);
-    }
-
-    return maxScore;
-}
-
-private int similarity(String s1, String s2) {
-    int match = 0;
-    for (int i = 0; i < N; i++) {
-        match += s1.charAt(i) == s2.charAt(i) ? 1 : 0;
-    }
-    return match;
-}
-\end{lstlisting}
 ```
 

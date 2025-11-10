@@ -204,6 +204,8 @@ The key insight is to combine height calculation with balance checking in a sing
 
 #### Algorithm
 
+Depth First Search \@ref(dfs), Recursion \@ref(recursion)
+
 1. If root is null, return 0 (base case)
 2. Recursively get height of left subtree: `lHeight = getHeight(root.left)`
 3. Recursively get height of right subtree: `rHeight = getHeight(root.right)`
@@ -246,286 +248,10 @@ private int getHeight(TreeNode root) {
 
 
 
-## Invert Binary Tree / Leet Code 226 Easy
-
-### Description
-Invert a binary tree
-
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {4}
-    child { node {2}
-        child {  node {1}}
-        child {  node {3}}
-    }
-    child { node {7}
-        child {  node {6}}
-        child {  node {9}}
-    }
-;
-\end{tikzpicture}
-```
-inverts
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=5em,
-]
-\node {4}
-    child { node {7}
-        child {  node {9}}
-        child {  node {6}}
-    }
-    child { node {2}
-        child {  node {3}}
-        child {  node {1}}
-    }
-;
-\end{tikzpicture}
-```
-
-### Solution - DFS
-#### Walkthrough
-Swap the left and right subtree with recursive strategy.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code - DFS
-```java
-public TreeNode invertTree(TreeNode root) {
-    if (root == null) {
-        return null;
-    }
-
-    //swap left and right subtrees
-    TreeNode origRight = root.right;
-    root.right = invertTree(root.left);
-    root.left = invertTree(origRight);
-
-    return root;
-}
-```
-
-### Solution - BFS
-#### Walkthrough
-Swap the left and right subtree with iterative (BFS) strategy
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- bfs \@ref(bfs)
-
-#### Java Code - BFS
-```java
-public TreeNode invertTree(TreeNode root) {
-    if (root == null) {
-        return null;
-    }
-
-    Queue<TreeNode> queue = new LinkedList<TreeNode>();
-    queue.offer(root);
-
-    while(!queue.isEmpty()) {
-        TreeNode node = queue.poll();
-
-        //swap left and right subtrees
-        TreeNode origRight = node.right;
-        node.right = node.left;
-        node.left = origRight;
-
-        if (node.left != null) {
-            queue.offer(node.left);
-        }
-        if (node.right != null) {
-            queue.offer(node.right);
-        }
-    }
-    return root;
-}
-```
 
 
-## Symmetric Tree / Leet Code 101 / Easy
 
 
-### Description
-Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
-
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-    child { node {2}
-        child {  node {3}}
-        child {  node {4}}
-    }
-    child { node {2}
-        child {  node {4}}
-        child {  node {3}}
-    }
-;
-\end{tikzpicture}
-```
-is symmetric.
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-    child { node {2}
-        child {}
-        child {  node {3}}
-    }
-    child { node {2}
-        child {}
-        child { node {3}}
-    }
-;
-\end{tikzpicture}
-```
-is NOT symmetric.
-
-### Solution
-#### Walkthrough
-If they are symmetric, compare its value and recursively call its grand children node in symmetric manner:
-
-* left.left vs right.right
-* left.right vs right.left
-
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code
-```java
-public boolean isSymmetric(TreeNode root) {
-    if (root == null) {
-        return true;
-    }
-    return isSymmetric(root.left, root.right);
-}
-private boolean isSymmetric(TreeNode left, TreeNode right) {
-    if (left == null && right == null) {
-        return true;
-    } else if (left == null || right == null) {
-        return false;
-    } else {
-        return left.val == right.val && isSymmetric(left.left, right.right)
-&& isSymmetric(left.right, right.left);
-    }
-
-}
-```
-
-
-## Binary Tree Level Order Traversal / Leet Code 102 / Medium
-
-### Description
-Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by
-level).
-
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {3}
-    child { node {9}}
-    child { node {20}
-        child { node {15}}
-        child {  node {7}}
-    }
-;
-\end{tikzpicture}
-```
-
-return its level order traversal as:
-```
-[
-    [3],
-    [9,20],
-    [15,7]
-]
-```
-### Solution - BFS with Two Loops
-#### Walkthrough
-Create a queue and push node of the same level in a two dimensional array list while traversing the tree with
-BFS algorithm.
-
-#### Analysis
-Breadth first traversal has time complexity of O(n), as every node is visited and thus  the space
-complexity is also O(n).
-
-#### Algorithm
- bfs \@ref(bfs)
-
-#### Java Code - BFS with Two Loops
-```java
-public List<List<Integer>> levelOrder(TreeNode root) {
-    Queue<TreeNode> queue = new LinkedList<>();
-    List<List<Integer>> levels = new ArrayList<>();
-
-    if(root == null) {
-        return levels;
-    }
-
-    queue.offer(root);
-
-    while(!queue.isEmpty()) {
-        //number of element for this level
-        int currentLevelSize = queue.size();
-
-        List<Integer> level = new ArrayList<>();
-        for(int i = 0; i < currentLevelSize; i++) {
-            TreeNode node = queue.poll();
-            level.add(node.val);
-
-            // push all elements for next level
-            if (node.left != null) {
-                queue.offer(node.left);
-            }
-
-            if (node.right != null) {
-                queue.offer(node.right);
-            }
-        }
-
-        //add all elements for this level
-        levels.add(level);
-    }
-
-    return levels;
-}
-```
 
 ### Solution - BFS with One Loops
 #### Walkthrough
@@ -622,299 +348,163 @@ private void traverse(TreeNode root, int level, List<List<Integer>> ans) {
 
 
 
-## Binary Tree Level Order Traversal II / Leet Code 107 / Medium
+## Binary Tree Level Order Traversal II {#level-order-bottom}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 107
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-level-order-traversal-ii/
+- **Tags**: `Tree`, `BFS`
+- **Techniques**: Breadth First Search \@ref(bfs)
 
 ### Description
-Given a binary tree, return the bottom-up level order traversal of its nodes’ values. (ie, from left to right, level by level from leaf
-to root).
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {3}
-    child { node {9}}
-    child { node {20}
-        child { node {15}}
-        child { node {7}}
-    }
-;
-\end{tikzpicture}
+Return the level order traversal of a binary tree from the bottom level up to the root.
+
+### Examples
+
 ```
-return its level order traversal as:
+Input: [3,9,20,null,null,15,7]
+Output: [[15,7],[9,20],[3]]
 ```
-[
-    [15,7],
-    [9,20],
-    [3]
-]
-```
-### Solution
+
+### Constraints
+
+- `0 <= nodes <= 2000`
+
+### Solution - Reverse BFS
+
 #### Walkthrough
-Create a queue and push node of the same level in a two dimensional array list while traversing the tree with
-BFS algorithm. In addition, we only insert nodes at the first position at current level list.
+
+Perform BFS collecting nodes level by level. Instead of appending to the end, insert each level at the front of a linked list (or append and reverse at the end).
 
 #### Analysis
-Time complexity is O(n) as every node is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
 
 #### Algorithm
- bfs \@ref(bfs)
 
-#### Java Code - Two Loops
+1. Run BFS using a queue.
+2. For each level size, dequeue nodes, record values, enqueue children.
+3. Insert level list at the start of the result.
+
+#### Java Code
 ```java
 public List<List<Integer>> levelOrderBottom(TreeNode root) {
-    Queue<TreeNode> queue = new LinkedList<>();
-    List<List<Integer>> levels = new ArrayList<>();
-
-    if(root == null) {
-        return levels;
+    LinkedList<List<Integer>> result = new LinkedList<>();
+    if (root == null) {
+        return result;
     }
 
+    Queue<TreeNode> queue = new LinkedList<>();
     queue.offer(root);
 
-    while(!queue.isEmpty()) {
-        //number of element for this level
-        int currentLevelSize = queue.size();
+    while (!queue.isEmpty()) {
+        int size = queue.size();
+        List<Integer> level = new ArrayList<>(size);
 
-        List<Integer> level = new ArrayList<>();
-        for(int i = 0; i < currentLevelSize; i++) {
+        for (int i = 0; i < size; i++) {
             TreeNode node = queue.poll();
             level.add(node.val);
-
-            // push all elements for next level
             if (node.left != null) {
                 queue.offer(node.left);
             }
-
             if (node.right != null) {
                 queue.offer(node.right);
             }
         }
 
-        // insert the head of the list
-        levels.add(0, level);
+        result.addFirst(level);
     }
 
-    return levels;
+    return result;
 }
-```
+```## Binary Tree Zigzag Level Order Traversal {#zigzag-level-order}
 
-#### Walkthrough
-Create a queue and push node of the same level in a two dimensional array list while traversing the tree with
-BFS algorithm. In addition, we only insert nodes at the first position at current level list.
+### Problem Metadata
 
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-bfs \@ref(bfs)
-
-#### Java Code - One Loop
-```java
-public List<List<Integer>> levelOrderBottom(TreeNode root) {
-    List<List<Integer>> levels = new ArrayList<>();
-    if (root == null) {
-        return levels;
-    }
-
-    Queue<TreeNode> currentLevelQueue = new LinkedList<TreeNode>();
-    Queue<TreeNode> nextLevelQueue = new LinkedList<TreeNode>();
-
-    currentLevelQueue.offer(root);
-    //init level to null
-    List<Integer> level = null;
-
-    while (!currentLevelQueue.isEmpty()) {
-        TreeNode node = currentLevelQueue.poll();
-
-        //starting a new level
-        if (level == null) {
-            level = new LinkedList<Integer>();
-            // insert to head
-            levels.add(0, level);
-        }
-        level.add(node.val);
-
-        //push children to next level queue
-        if (node.left != null) {
-            nextLevelQueue.offer(node.left);
-        }
-        if (node.right != null) {
-            nextLevelQueue.offer(node.right);
-        }
-
-        //swap queue and next, where next collects all nodes for next level
-        if (currentLevelQueue.isEmpty()) {
-            Queue<TreeNode> temp = currentLevelQueue;
-            currentLevelQueue = nextLevelQueue;
-            nextLevelQueue = temp;
-            //init level to null
-            level = null;
-        }
-    }
-    return levels;
-}
-```
-
-
-## Binary Tree Zigzag Level Order Traversal / Leet Code 103 / Medium
+- **Platform**: LeetCode
+- **Problem ID**: 103
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+- **Tags**: `Tree`, `BFS`
+- **Techniques**: Breadth First Search \@ref(bfs)
 
 ### Description
-Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then
-right to left for the next level and alternate between).
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {3}
-    child { node {9}}
-    child { node {20}
-        child {  node {15}}
-        child {  node {7}}
-    }
-;
-\end{tikzpicture}
+Return the zigzag level order traversal of a binary tree (left-to-right, then right-to-left, alternating each level).
+
+### Examples
+
 ```
-return its level order traversal as:
+Input: [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]
 ```
-[
-    [3],
-    [20,9],
-    [15,7]
-]
-```
-### Solution
+
+### Constraints
+
+- `0 <= nodes <= 2000`
+
+### Solution - BFS with Direction Flag
+
 #### Walkthrough
-Create a queue and push node of the same level in a two dimensional array list while traversing the tree with
-BFS algorithm. While pushing the value to the level, remember the current level and evaluate the zig-zag pattern.
-That is, insert nodes for certain level at the first position at current level list.
+
+Perform level-order traversal. Track a boolean indicating whether to append values normally or reversed. For every level, either append values or insert at the front, and flip the flag.
 
 #### Analysis
-Time complexity is O(n) as every node is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
 
 #### Algorithm
- bfs \@ref(bfs)
 
-#### Java Code - Two Loops
+1. Initialize queue with root and a boolean `leftToRight = true`.
+2. For each level, collect values in a list.
+3. If `leftToRight`, append; otherwise insert at front or use reverse list.
+4. Toggle `leftToRight` each level.
+
+#### Java Code
 ```java
 public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-    Queue<TreeNode> queue = new LinkedList<>();
-    List<List<Integer>> levels = new ArrayList<>();
-
-    if(root == null) {
-        return levels;
+    List<List<Integer>> result = new ArrayList<>();
+    if (root == null) {
+        return result;
     }
 
+    Queue<TreeNode> queue = new LinkedList<>();
     queue.offer(root);
-    int levelNum = 1;
+    boolean leftToRight = true;
 
-    while(!queue.isEmpty()) {
-        //number of element for this level
-        int currentLevelSize = queue.size();
-        List<Integer> level = new ArrayList<>();
+    while (!queue.isEmpty()) {
+        int size = queue.size();
+        LinkedList<Integer> level = new LinkedList<>();
 
-        for(int i = 0; i < currentLevelSize; i++) {
+        for (int i = 0; i < size; i++) {
             TreeNode node = queue.poll();
-
-            if(levelNum % 2 != 0) {
-                level.add(node.val);
+            if (leftToRight) {
+                level.addLast(node.val);
             } else {
-                level.add(0, node.val);
+                level.addFirst(node.val);
             }
 
-            // push all elements for next level
             if (node.left != null) {
                 queue.offer(node.left);
             }
-
             if (node.right != null) {
                 queue.offer(node.right);
             }
         }
-        levelNum++;
 
-        levels.add(level);
+        result.add(level);
+        leftToRight = !leftToRight;
     }
 
-    return levels;
+    return result;
 }
-```
-
-#### Walkthrough
-Create a queue and push node of the same level in a two dimensional array list while traversing the tree with
-BFS algorithm. While pushing the value to the level, remember the current level and evaluate the zig-zag pattern.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-bfs \@ref(bfs)
-
-#### Java Code - One Loop
-```java
-public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-    List<List<Integer>> levels = new ArrayList<>();
-    if (root == null) {
-        return levels;
-    }
-
-    Queue<TreeNode> currentLevelQueue = new LinkedList<TreeNode>();
-    Queue<TreeNode> nextLevelQueue = new LinkedList<TreeNode>();
-    currentLevelQueue.offer(root);
-    //init level = null
-    List<Integer> level = null;
-    int levelNum = 1;
-
-    while (currentLevelQueue.isEmpty() == false) {
-        TreeNode node = currentLevelQueue.poll();
-
-        //starting a new level
-        if (level == null) {
-            level = new LinkedList<Integer>();
-            levels.add(level);
-        }
-
-        if(levelNum % 2 != 0) {
-            level.add(node.val);
-        } else {
-            level.add(0, node.val);
-        }
-
-        //push children to next level queue
-        if (node.left != null) {
-            nextLevelQueue.offer(node.left);
-        }
-
-        if (node.right != null) {
-            nextLevelQueue.offer(node.right);
-        }
-
-        //swap queue and next, where next collects all nodes for next level
-        if (currentLevelQueue.isEmpty()) {
-            Queue<TreeNode> temp = currentLevelQueue;
-            currentLevelQueue = nextLevelQueue;
-            nextLevelQueue = temp;
-            //init level = null
-            level = null;
-            levelNum++;
-        }
-    }
-
-    return levels;
-}
-```
-
-
-## Count Complete Tree Nodes / Leet Code 222 / Medium
+```## Count Complete Tree Nodes / Leet Code 222 / Medium
 
 ### Description
 Given a complete binary tree, count the number of nodes.  In a complete binary tree every level, except possibly
@@ -978,40 +568,6 @@ public int countNodes(TreeNode root) {
 ```
 
 
-## Distance of a node from the root / Firebase / Level 3
-
-### Description
-Given the root of a Binary Tree  and an integer that represents the data value of a TreeNode present in the tree,
-write a method - pathLengthFromRoot that returns the distance between the root and that node. You can assume that the
-given key exists in the tree. The distance is defined as the minimum number of nodes that must be traversed to reach
-the target node.
-
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-child { node {2}
-    child { node {4}}
-    child { node {5}}
-}
-child { node {3}
-    child {  node {6}}
-    child {  node {7}}
-}
-;
-\end{tikzpicture}
-```
-
-pathLengthFromRoot(root,5) = 3
-
-pathLengthFromRoot(root,1) = 1
-
-pathLengthFromRoot(root,3) = 2
 
 ### Solution
 #### Walkthrough
@@ -1063,1817 +619,792 @@ boolean backtrack(TreeNode root, int target) {
 ```
 
 
-## Path Sum / Leet Code 112 / Easy
+## Path Sum {#path-sum}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 112
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/path-sum/
+- **Tags**: `Tree`, `DFS`
+- **Techniques**: Depth First Search \@ref(dfs)
 
 ### Description
-Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values
-along the path equals the given sum.
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {5}
-child { node {4}
-    child { node {11}
-        child { node {7}}
-        child { node {2}}
-    }
-}
-child { node {8}
-    child { node {13}}
-    child {  node {4}
-        child {  node {1}}
-    }
-}
-;
-\end{tikzpicture}
+Determine if a binary tree has a root-to-leaf path whose node values sum to a target.
+
+### Examples
+
+```
+Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], target = 22
+Output: true
 ```
 
-Given the below binary tree and sum = 22, return true, as there exist a root-to-leaf path $5->4->11->2$ which sum
-is 22.
+### Constraints
 
-### Solution
+- `0 <= nodes <= 5000`
+
+### Solution - DFS with Running Sum
+
 #### Walkthrough
-Has a variable to remember accumulated sum and recursively call on its left and right subtree. \textbf{Return}
-the result if and only if the accumulated sum equals to target sum or accumulate result with logical OR operator
-also only when traversal reach to leaf node.
+
+Traverse the tree, accumulating the current sum along the path. When a leaf is reached, check if the sum equals the target. Short-circuit as soon as a valid path is found.
 
 #### Analysis
-Time complexity is O(n) as every node is visited once.
 
-#### Algorithm
- dfs \@ref(dfs)
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(h)
 
 #### Java Code
-```java
-public boolean hasPathSum(TreeNode root, int sum) {
-    return hasPathSum(root, 0, sum);
-}
-
-public boolean hasPathSum(TreeNode root, int current, int target) {
+```
+public boolean hasPathSum(TreeNode root, int targetSum) {
     if (root == null) {
         return false;
     }
-
-    current += root.val;
-
     if (root.left == null && root.right == null) {
-        return current == target;
-    } else {
-        return hasPathSum(root.left, current, target) || hasPathSum(root.right, current, target);
+        return targetSum == root.val;
     }
+    int remaining = targetSum - root.val;
+    return hasPathSum(root.left, remaining) || hasPathSum(root.right, remaining);
 }
-```
+```## Path Sum II {#path-sum-ii}
 
+### Problem Metadata
 
-## Path Sum II / Leet Code 113 / Medium
+- **Platform**: LeetCode
+- **Problem ID**: 113
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/path-sum-ii/
+- **Tags**: `Tree`, `Backtracking`
+- **Techniques**: Backtracking \@ref(backtrack)
 
 ### Description
-Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {5}
-    child { node {4}
-        child { node {11}
-            child { node {7}}
-            child { node {2}}
-        }
-    }
-    child { node {8}
-        child { node {13}}
-        child {  node {4}
-            child {  node {5}}
-            child {  node {1}}
-        }
-    }
-;
-\end{tikzpicture}
-```
+Find all root-to-leaf paths where the sum of node values equals a target.
 
-Given the below binary tree and sum = 22, return:
-```
-[
-    [5,4,11,2],
-    [5,8,4,5]
-]
-```
+### Solution - Backtracking
 
-
-### Solution
 #### Walkthrough
-Additional list is needed to keep track current path:  adding current node on entering and removing (current) node on
-exiting.  Remember and \textbf{return} the list if and only if current sum equals to target sum for leaf nodes.
-Need to remove the node list to back track also to help us locate more path in the tree.
+
+Traverse the tree, maintaining the current path list and remaining sum. When a leaf reaches zero remaining sum, append a copy of the path to the answer. Backtrack after exploring each branch.
 
 #### Analysis
-Time complexity is O(n) as every node is visited once.
 
-#### Algorithm
- backtrack \@ref(backtrack), dfs \@ref(dfs)
+- **Time Complexity**: O(n * h)
+- **Space Complexity**: O(h)
 
 #### Java Code
-```java
-public List<List<Integer>> pathSum(TreeNode root, int sum) {
-    List<List<Integer>> result = new LinkedList<>();
-    List<Integer> trace = new LinkedList<>();
-    backtrack(root, 0, sum, result, trace);
+```
+public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+    List<List<Integer>> result = new ArrayList<>();
+    backtrack(root, targetSum, new ArrayList<>(), result);
     return result;
 }
-private void backtrack(TreeNode root, int current, int target, List<List<Integer>> result, List<Integer> trace) {
-    if (root == null) {
-        return;
-    }
-    trace.add(root.val);
-    current += root.val;
 
-    //leaf node
-    if (root.left == null && root.right == null && current == target) {
-        //to copy the valid list
-        result.add(new LinkedList<>(trace));
+private void backtrack(TreeNode node, int remain, List<Integer> path, List<List<Integer>> result) {
+    if (node == null) {
         return;
     }
 
-    //otherwise - intermediate nodes
-    if (root.left != null) {
-        pathSum(root.left, current, target, result, trace);
+    path.add(node.val);
+    remain -= node.val;
 
-        //clean up last inserted left node to back track one step
-        trace.remove(trace.size() - 1);
+    if (node.left == null && node.right == null && remain == 0) {
+        result.add(new ArrayList<>(path));
+    } else {
+        backtrack(node.left, remain, path, result);
+        backtrack(node.right, remain, path, result);
     }
-    if (root.right != null) {
-        pathSum(root.right, current, target, result, trace);
 
-        //clean up last inserted right node to back track one step
-        trace.remove(trace.size() - 1);
-    }
+    path.remove(path.size() - 1);
 }
-```
+```## Path Sum III {#path-sum-iii}
 
+### Problem Metadata
 
-## Path Sum III / Leet Code 437 / Easy
+- **Platform**: LeetCode
+- **Problem ID**: 437
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/path-sum-iii/
+- **Tags**: `Tree`, `Prefix Sum`
+- **Techniques**: Depth First Search \@ref(dfs)
 
 ### Description
-You are given a binary tree in which each node contains an integer value.
 
-Find the number of paths that sum to a given value.
+Count the number of paths in a binary tree that sum to a target. Paths may start and end anywhere but must go downward.
 
-The path does not need to start or end at the root or a leaf, but it must go downwards (traveling only from parent nodes to child nodes).
+### Solution - Prefix Sum DFS
 
-The tree has no more than 1,000 nodes and the values are in the range -1,000,000 to 1,000,000.
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {10}
-child { node {5}
-    child { node {3}
-        child { node {3}}
-        child { node {-2}}
-    }
-    child { node {2}
-        child { node {1}}
-    }
-}
-child { node {-3}
-    child { node {11}}
-}
-;
-\end{tikzpicture}
-```
-
-sum = 8, Return 3. The paths that sum to 8 are:
-```
-1. 5 -> 3
-2. 5 -> 2 -> 1
-3. -3 -> 11
-```
-
-### Solution
 #### Walkthrough
-Continue the recursive on left and right subtrees and \textbf{do not return} when accumulated sum equals to the
-target sum. Use a length-1 array to keep track the count of path number in the recursive. We should consider both
-cases to include root and exlude root. For instance, if there is a tree [1,-2,1,-1] and taget sum is -1. There
-are four paths combined :
-```
-1. [1,-2]
-2. [-2,1]
-3. [-1]
-4. [1,-2,1,-1]
-```
-In addition, we need to store accumulated count across recursive function calls. Thus, data type cannot be Immutable,
-since each arithmetic operation would create another object. Thus, we need to have a mutable variable that exists
-across each stack frame:
 
-* Have a int[1] to store the accumulated count.
-* Have a wrapper object to reset the value towards computation.
-* Have a shared variable declared for this purpose.
-
+Use DFS while tracking a running prefix sum and a hash map of prefix counts. For each node, check how many previous prefix sums equal `currentSum - target`. Update the map while exploring children and backtrack counts afterward.
 
 #### Analysis
-Time complexity is O(n) as every node is visited once.
 
-#### Algorithm
- dfs \@ref(dfs)
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(h)
 
 #### Java Code
-```java
-int count = 0;
-public int pathSum(TreeNode root, int sum) {
-    helperSum(root, 0, sum);
+```
+public int pathSum(TreeNode root, int targetSum) {
+    Map<Integer, Integer> prefix = new HashMap<>();
+    prefix.put(0, 1);
+    return dfs(root, 0, targetSum, prefix);
+}
+
+private int dfs(TreeNode node, int current, int target, Map<Integer, Integer> prefix) {
+    if (node == null) {
+        return 0;
+    }
+
+    current += node.val;
+    int count = prefix.getOrDefault(current - target, 0);
+    prefix.put(current, prefix.getOrDefault(current, 0) + 1);
+
+    count += dfs(node.left, current, target, prefix);
+    count += dfs(node.right, current, target, prefix);
+
+    prefix.put(current, prefix.get(current) - 1);
     return count;
 }
-private void helperSum(TreeNode root, int current, int target) {
-    if (root == null) {
-        return;
-    }
-    // root included
-    helper(root, current, target);
-    // root excluded
-    helperSum(root.left, current, target);
-    helperSum(root.right, current, target);
-}
-private void helper(TreeNode root, int current, int target) {
-    if (root == null) {
-        return;
-    }
-    current += root.val;
-    if (current == target) {
-        count++;
-        // do not return.
-    }
-    helper(root.left, current, target);
-    helper(root.right, current, target);
-}
-```
+```## Binary Tree Preorder Traversal {#preorder-traversal}
 
+### Problem Metadata
 
-## Binary Tree Preorder Traversal / Leet Code 144 / Medium
-\label{sec:depth_first_preorder}
+- **Platform**: LeetCode
+- **Problem ID**: 144
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-preorder-traversal/
+- **Tags**: `Tree`, `DFS`
+- **Techniques**: Depth First Search \@ref(dfs)
 
 ### Description
-Given a binary tree, return the preorder traversal of its nodes' values.
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-child { node {2}
-child { node {4}}
-child { node {5}}
-}
-child { node {3}}
-;
-\end{tikzpicture}
-```
-Output: [1,2,4,5,3]
+Return the preorder traversal (root-left-right) of a binary tree.
 
-### Solution - Iterative I
+### Solution - Iterative Stack
+
 #### Walkthrough
-For iterative solution, use a stack to store the root node that will be used to retrieve root.right for later use. For
-initial loop condiition, be sure to include (root != null) to make sure loop starts since stack initially is empty.
+
+Push root to a stack. Pop, record value, then push right and left children (right first so left is processed next). Repeat until stack empty.
 
 #### Analysis
-Time complexity is O(n) as every node is visited once.
-#### Algorithm
 
-#### Java Code - Iterative I
-```java
-public List<Integer> preorderTraversal(TreeNode root) {
-    List<Integer> result = new ArrayList<>();
-    //stack is used to store the root node that will be used access root.right later
-    Stack<TreeNode> stack = new Stack<>();
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
 
-    while(!stack.isEmpty() || root != null) {
-        if(root != null) {
-            stack.push(root);
-            result.add(root.val); // Add before going to children
-            root = root.left;
-        } else {
-            root = stack.pop().right;
-        }
-    }
-    return result;
-}
+#### Java Code
 ```
-
-### Solution - Iterative II
-#### Walkthrough
-To convert an inherently recursive procedures to iterative, we need an explicit stack, and do following
-while the stack is not empty:
-
-* Pop an item from stack and process it.
-* Push \textbf{right child} of popped item to stack
-* Push \textbf{left child} of popped item to stack
-
-Since stack is a LIFO, when the right child node is pushed before the  left child node to a stack, the left
-child node would be processed before the right child node.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code - Iterative II
-```java
 public List<Integer> preorderTraversal(TreeNode root) {
     List<Integer> result = new ArrayList<>();
-    //stack is used to store the root node that will be used access root.right later
-    Stack<TreeNode> stack = new Stack<>();
-
     if (root == null) {
         return result;
     }
+
+    Deque<TreeNode> stack = new ArrayDeque<>();
     stack.push(root);
 
-    while (!stack.empty()) {
-        Node node = nodeStack.pop();
+    while (!stack.isEmpty()) {
+        TreeNode node = stack.pop();
         result.add(node.val);
-
-        // Push the RIGHT child of the popped node to stack
         if (node.right != null) {
             stack.push(node.right);
         }
-        // Push the LEFT child of the popped node to stack
         if (node.left != null) {
             stack.push(node.left);
         }
     }
-
     return result;
 }
 ```
 
 ### Solution - Recursive
-#### Walkthrough
-For recursive implementation, do the following step
 
-* To process data at current node
-* Recursively invoke left child node.
-* Recursively invoke right child node.
-
-
-#### Analysis
-Time complexity is O(n) as every node is visited once. Auxiliary Space is O(1) if we do not consider the size of stacks
-for function calls, otherwise O(n).
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code - Recursive
-```java
-public List<Integer> preorderTraversal(TreeNode root) {
+```
+public List<Integer> preorderTraversalRecursive(TreeNode root) {
     List<Integer> result = new ArrayList<>();
-    traversalHelper(root, result);
-
+    dfs(root, result);
     return result;
 }
 
-public void traversalHelper(TreeNode root, List<Integer> list) {
-    if(root == null) {
+private void dfs(TreeNode node, List<Integer> list) {
+    if (node == null) {
         return;
     }
-
-    list.add(root.val);
-    traversalHelper(root.left, list);
-    traversalHelper(root.right, list);
+    list.add(node.val);
+    dfs(node.left, list);
+    dfs(node.right, list);
 }
-```
+```## Binary Tree Inorder Traversal {#inorder-traversal}
 
+### Problem Metadata
 
-
-## Binary Tree Inorder Traversal / Leet Code 94 / Medium
-\label{sec:depth_first_inorder}
+- **Platform**: LeetCode
+- **Problem ID**: 94
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-inorder-traversal/
+- **Tags**: `Tree`, `DFS`
+- **Techniques**: Depth First Search \@ref(dfs)
 
 ### Description
-Given a binary tree, return the inorder traversal of its nodes' values.
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-child { node {2}
-child { node {4}}
-child { node {5}}
-}
-child { node {3}}
-;
-\end{tikzpicture}
+Return the inorder traversal (left-root-right) of a binary tree.
+
+### Solution - Iterative Stack
+
 ```
-Output: [4, 2, 5, 1, 3]
-
-### Solution - Iterative I
-#### Walkthrough
-For iterative solution, use a stack to store the root node that will be used to retrieve root.right for later use. For
-initial loop condiition, be sure to include (root != null) to make sure loop starts since stack initially is empty.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code - Iterative I
-```java
 public List<Integer> inorderTraversal(TreeNode root) {
     List<Integer> result = new ArrayList<>();
-    //stack is used to store the root node that will be used access root.right later
-    Stack<TreeNode> stack = new Stack<>();
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    TreeNode current = root;
 
-    while(!stack.isEmpty() || root != null) {
-        if(root != null) {
-            stack.push(root);
-            root = root.left;
-        } else {
-            root = stack.pop();
-            result.add(root.val);
-            root = root.right;
+    while (current != null || !stack.isEmpty()) {
+        while (current != null) {
+            stack.push(current);
+            current = current.left;
         }
+        current = stack.pop();
+        result.add(current.val);
+        current = current.right;
     }
     return result;
 }
 ```
 
-### Solution - Inorder Recursive
-#### Walkthrough
-For recursive implementation, do the following step
+### Solution - Recursive
 
-* Recursively invoke left child node.
-* To process data at current node
-* Recursively invoke right child node.
-
-
-#### Analysis
-Time complexity is O(n) as every node is visited once. Auxiliary Space is O(1) if we do not consider the size of stacks
-for function calls, otherwise O(n).
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code - Inorder Recursive
-```java
-public List<Integer> inorderTraversal(TreeNode root) {
+```
+public List<Integer> inorderTraversalRecursive(TreeNode root) {
     List<Integer> result = new ArrayList<>();
-    traversalHelper(root, result);
-
+    dfs(root, result);
     return result;
 }
 
-public void traversalHelper(TreeNode root, List<Integer> list) {
-    if(root == null) {
+private void dfs(TreeNode node, List<Integer> list) {
+    if (node == null) {
         return;
     }
-
-    traversalHelper(root.left, list);
-    list.add(root.val);
-    traversalHelper(root.right, list);
+    dfs(node.left, list);
+    list.add(node.val);
+    dfs(node.right, list);
 }
-```
+```## Binary Tree Postorder Traversal {#postorder-traversal}
 
+### Problem Metadata
 
-
-## Binary Tree Postorder Traversal / Leet Code 145 / Hard
-\label{sec:depth_first_postorder}
+- **Platform**: LeetCode
+- **Problem ID**: 145
+- **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/binary-tree-postorder-traversal/
+- **Tags**: `Tree`, `DFS`
+- **Techniques**: Depth First Search \@ref(dfs)
 
 ### Description
-Given a binary tree, return the postorder traversal of its nodes' values.
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-child { node {2}
-child { node {4}}
-child { node {5}}
-}
-child { node {3}}
-;
-\end{tikzpicture}
+Return the postorder traversal (left-right-root) of a binary tree.
+
+### Solution - Iterative Stack
+
 ```
-Output: [4, 5, 2, 3, 1]
-
-### Solution - Iterative I
-#### Walkthrough
-For iterative solution, use a stack to store the root node that will be used to retrieve root.right for later use. For
-initial loop condiition, be sure to include (root != null) to make sure loop starts since stack initially is empty.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code - Iterative I
-```java
 public List<Integer> postorderTraversal(TreeNode root) {
-    List<Integer> result = new ArrayList<>();
-    //stack is used to store the root node that will be used access root.right later
-    Stack<TreeNode> stack = new Stack<>();
-
-    while(!stack.isEmpty() || root != null) {
-        if(root != null) {
-            stack.push(root);
-
-            //insert to head
-            result.add(0, root.val);
-            root = root.right;
-        } else {
-            root = stack.pop().left;
-        }
-    }
-    return result;
-}
-```
-
-### Solution - Iterative with Two Stacks
-#### Walkthrough
-The idea is to push reverse postorder traversal to a stack. Once we have the reversed postorder traversal in
-a stack, we can just pop all items one by one from the stack and process them; this order will be in
-postorder because of the LIFO property of stacks. To get a reversed postorder elements in a stack -
-the second stack is used for this purpose, this sequence is very similar to the preorder traversal. The only
-difference is that the right child is visited before left child, and therefore the sequence is
-"root right left" instead of "root left right".
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code - Iterative with Two Stacks
-```java
-public List<Integer> postorderTraversal(TreeNode root) {
-    List<Integer> result = new ArrayList<>();
-
-    Stack<TreeNode> stack1 = new Stack<>();
-    //stack2 is used to store the reversed postorder elements in a stack
-    Stack<TreeNode> stack2 = new Stack<>();
-
+    LinkedList<Integer> result = new LinkedList<>();
     if (root == null) {
         return result;
     }
+
+    Deque<TreeNode> stack = new ArrayDeque<>();
     stack.push(root);
-
-    while (!stack1.isEmpty()) {
-        // Pop an item from stack1 and push it to stack2
-        TreeNode node = stack1.pop();
-        stack2.push(node);
-
-        // Push LEFT child of popped item to stack1
+    while (!stack.isEmpty()) {
+        TreeNode node = stack.pop();
+        result.addFirst(node.val);
         if (node.left != null) {
-            stack1.push(node.left);
+            stack.push(node.left);
         }
-        // Push RIGHT child of popped item to stack1
         if (node.right != null) {
-            stack1.push(node.right);
+            stack.push(node.right);
         }
     }
-
-    //Traverse all reversed elements in second stack
-    while (!stack2.isEmpty()) {
-        TreeNode node = stack2.pop();
-        result.add(node.val)
-    }
-
-    return result;
-    }
-```
-
-### Solution -  Recursive
-#### Walkthrough
-For recursive implementation, do the following step
-
-* Recursively invoke left child node.
-* Recursively invoke right child node.
-* To process data at current node
-
-
-#### Analysis
-Time complexity is O(n) as every node is visited once. Auxiliary Space is O(1) if we do not consider the size of stacks
-for function calls, otherwise O(n).
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code -  Recursive
-```java
-public List<Integer> postorderTraversal(TreeNode root) {
-    List<Integer> result = new ArrayList<>();
-    traversalHelper(root, result);
-
     return result;
 }
+```
 
-public void traversalHelper(TreeNode root, List<Integer> list) {
-    if(root == null) {
+### Solution - Recursive
+
+```
+private void dfs(TreeNode node, List<Integer> list) {
+    if (node == null) {
         return;
     }
-
-    traversalHelper(root.left, list);
-    traversalHelper(root.right, list);
-    list.add(root.val);
+    dfs(node.left, list);
+    dfs(node.right, list);
+    list.add(node.val);
 }
-```
+```## Maximum Depth of Binary Tree {#max-depth}
 
+### Problem Metadata
 
-
-## Maximum Depth of Binary Tree / Leet Code 104 / Easy
+- **Platform**: LeetCode
+- **Problem ID**: 104
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/maximum-depth-of-binary-tree/
+- **Tags**: `Tree`
+- **Techniques**: DFS \@ref(dfs)
 
 ### Description
-Given a binary tree, find its maximum depth.
 
-The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf
-node.
+Return the maximum depth (number of nodes along the longest path from root down to a leaf).
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {3}
-child { node {9}}
-child { node {20}
-    child { node {15}}
-    child { node {7}}
-}
-;
-\end{tikzpicture}
+### Solution - DFS
+
 ```
-return its depth = 3.
-
-### Solution
-#### Walkthrough
-Recursively for each level:
-
-* Take the larger depth of left and right subtree.
-* add one for current level
-
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- recursion \@ref(recursion)
-
-#### Java Code
-```java
 public int maxDepth(TreeNode root) {
-    if(root == null) {
-        return 0;
-    }
-
-    int lHeight = 0, rHeight = 0;
-    if(root.left != null) {
-        lHeight = maxDepth(root.left);
-    }
-
-    if(root.right != null) {
-        rHeight = maxDepth(root.right);
-    }
-
-    return Math.max(lHeight, rHeight) + 1;
-}
-```
-
-
-## Minimum Depth of Binary Tree / Leet Code 104 / Easy
-
-### Description
-Given a binary tree, find its minimum depth.
-
-The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf
-node.
-
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {3}
-child { node {9}}
-child { node {20}
-    child { node {15}}
-    child { node {7}}
-}
-;
-\end{tikzpicture}
-```
-return its minimum depth = 2.
-
-### Solution - Recursive
-#### Walkthrough
-If a node has a missing child (depth is \textbf{NOT} 0 ), then we need to drill down to the other
-path to the leaf node recursively. If both nodes exist, take the minimum value out of the left and right subtree.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code - Recursive
-```java
-public int minDepth(TreeNode root) {
-    if(root == null) {
-        return 0;
-    }
-
-    if(root.left == null) {
-        //drill down to leaf node of the other path
-        return minDepth(root.right) + 1;
-    } else if(root.right == null) {
-        //drill down to leaf node of the other path
-        return minDepth(root.left) + 1;
-    } else {
-        return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
-    }
-}
-```
-
-### Solution - Iterative BFS
-#### Walkthrough
-Iterative: With BFS strategy, use two queues. One for current level and the other for next level.
-
-* While traversing the currentLevel queue, add left and right children to the nextLevel queue.
-* If currentLevel is empty, switch to nextLevel by currentLevel=nextLevel and nextLevel = new Queue();
-    Also, increment depth by 1
-
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- bfs \@ref(bfs)
-
-#### Java Code - Iterative BFS
-```java
-public int minDepth(TreeNode root) {
-    if(root == null) {
-        return 0;
-    }
-
-    Queue<TreeNode> currentLevel = new LinkedList<>();
-    Queue<TreeNode> nextLevel = new LinkedList<>();
-
-    currentLevel.offer(root);
-    int depth = 1;
-
-    while(!currentLevel.isEmpty()) {
-        TreeNode node = currentLevel.poll();
-
-        if(node.left == null && node.right == null) {
-            return depth;
-        }
-
-        if(node.left != null) {
-            nextLevel.offer(node.left);
-        }
-
-        if(node.right != null) {
-            nextLevel.offer(node.right);
-        }
-
-        //go to children level by swapping queues, increase depth
-        if(currentLevel.isEmpty()) {
-            currentLevel = nextLevel;
-            nextLevel = new LinkedList<>();
-            depth++;
-        }
-    }
-
-    return depth;
-}
-```
-
-
-## Count Univalue Subtrees / Leet Code 250 / Medium
-
-### Description
-Given a binary tree, count the number of uni-value subtrees. A Uni-value subtree means all nodes of the
-subtree have the same value.
-
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {5}
-child { node {1}
-    child { node {5}}
-    child { node {5}}
-}
-child { node {5}
-    child { node {5}}
-}
-;
-\end{tikzpicture}
-```
-return 4.
-
-### Solution
-#### Walkthrough
-There are \textbf{TWO} scenarios that returns true
-
-* Recursively validate left node.val and right node.val == root.val
-* A leaf node
-
-In addition, we need to store accumulated count across recursive function calls. Thus, data type cannot be Immutable,
-since each arithmetic operation would create another object. Thus, we need to have a mutable variable that exists
-across each stack frame:
-
-* Have a int[1] to store the accumulated count.
-* Have a wrapper object to reset the value towards computation.
-* Have a shared variable declared for this purpose.
-
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code
-```java
-int count = 0;
-public int countUnivalSubtrees(TreeNode root) {
-    helper(root, count);
-    return count;
-}
-boolean helper(TreeNode root) {
     if (root == null) {
+        return 0;
+    }
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}
+```## Minimum Depth of Binary Tree {#min-depth}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 111
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/minimum-depth-of-binary-tree/
+- **Tags**: `Tree`
+- **Techniques**: DFS \@ref(dfs)
+
+### Description
+
+Return the minimum depth from root to the nearest leaf.
+
+### Solution - DFS
+
+```
+public int minDepth(TreeNode root) {
+    if (root == null) {
+        return 0;
+    }
+    if (root.left == null) {
+        return 1 + minDepth(root.right);
+    }
+    if (root.right == null) {
+        return 1 + minDepth(root.left);
+    }
+    return 1 + Math.min(minDepth(root.left), minDepth(root.right));
+}
+```## Count Univalue Subtrees {#count-univalue}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 250
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/count-univalue-subtrees/
+- **Tags**: `Tree`, `DFS`
+
+### Description
+
+Count subtrees where every node has the same value.
+
+### Solution - DFS
+
+Traverse bottom-up. A node is univalue if both children are univalue and match the current value.
+
+```
+public int countUnivalSubtrees(TreeNode root) {
+    int[] count = new int[1];
+    dfs(root, count);
+    return count[0];
+}
+
+private boolean dfs(TreeNode node, int[] count) {
+    if (node == null) {
         return true;
     }
-    boolean left = helper(root.left);
-    boolean right = helper(root.right);
-    if (left && right) {
-        //validate left subtree
-        if (root.left != null && root.left.val != root.val) {
-            return false;
-        }
-        // validate right subtree
-        if (root.right != null && root.right.val != root.val) {
-            return false;
-        }
-        count++;
-        return true;
-    } else {
+    boolean left = dfs(node.left, count);
+    boolean right = dfs(node.right, count);
+    if (!left || !right) {
         return false;
     }
-}
-```
-
-
-## Validate Binary Search Tree / Leet Code 98 / Medium
-
-### Description
-Given a binary tree, determine if it is a valid binary search tree (BST). Assume a BST is defined as follows:
-
-* The left subtree of a node contains only nodes with keys less than the node's key.
-* The right subtree of a node contains only nodes with keys greater than the node's key.
-* Both the left and right subtrees must also be binary search trees.
-
-
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {2}
-child { node {1}}
-child { node {3}}
-;
-\end{tikzpicture}
-```
-Output: true
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {5}
-child { node {1}}
-child { node {4}
-    child { node {3}}
-    child { node {6}}
-}
-;
-\end{tikzpicture}
-```
-Output: false. Explanation: The root node's value is 5 but its right child's value is 4.
-
-### Solution - Recursive
-#### Walkthrough
-For recursive, define a numeric lower and upper bounds for each validation - initially, (long) (Integer.MIN\_VALUE - 1)
-and (long) (Integer.MAX\_VALUE + 1). Recursively validate the node boundary by replacing with left and right nodes.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code - Recursive
-```java
-public boolean isValidBST(TreeNode root) {
-    return isValidBST(root, (long) Integer.MIN_VALUE - 1, (long) Integer.MAX_VALUE + 1);
-}
-
-public boolean isValidBST(TreeNode root, long lowerBound, long upperBound) {
-    if(root == null) {
-        return true;
-    } else {
-        boolean result = root.val > lowerBound && root.val < upperBound;
-        return result && isValidBST(root.left, lowerBound, root.val) &&
-            isValidBST(root.right, root.val, upperBound);
+    if (node.left != null && node.left.val != node.val) {
+        return false;
     }
-}
-```
-
-### Solution - Iterative BFS
-#### Walkthrough
-For iterative, we have a wrapper to hold upper and lower bounds for each nodes. Use BFS to iteratively traverse the tree and
-add left or right nodes with proper boundaries accordingly.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- bfs \@ref(bfs)
-
-#### Java Code - Iterative BFS
-```java
-//Decorator pattern
-private static class BoundedTreeNode extends TreeNode {
-    int upper;
-
-    int lower;
-
-    TreeNode proxy;
-
-    BoundedTreeNode(TreeNode node, int max, int min) {
-        this.proxy = node;
-        this.upper = max;
-        this.lower = min;
+    if (node.right != null && node.right.val != node.val) {
+        return false;
     }
-}
-
-
-public static boolean validateBSTItr(TreeNode root) {
-    if(root == null) {
-        return true;
-    }
-
-    Queue<BoundedTreeNode> queue = new LinkedList<>();
-
-    queue.offer(new BoundedTreeNode(root, Integer.MAX_VALUE, Integer.MIN_VALUE));
-
-    while(!queue.isEmpty()) {
-        BoundedTreeNode node = queue.poll();
-
-
-        if(node.proxy.data > node.upper || node.proxy.data < node.lower) {
-            // out of boundary
-            return false;
-        }
-
-        if(node.proxy.left != null) {
-            queue.offer(new BoundedTreeNode(node.proxy.left, node.proxy.data, node.lower));
-        }
-
-        if(node.proxy.right != null) {
-            queue.offer(new BoundedTreeNode(node.proxy.right, node.upper, node.proxy.data));
-        }
-    }
-
+    count[0]++;
     return true;
 }
-```
+```## Validate Binary Search Tree {#validate-bst}
 
+### Problem Metadata
 
-## Binary Tree Upside Down / Leet Code 156 / Medium
+- **Platform**: LeetCode
+- **Problem ID**: 98
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/validate-binary-search-tree/
+- **Tags**: `Tree`, `DFS`
 
 ### Description
-Given a binary tree where all the right nodes are either leaf nodes with a sibling (a left node that shares
-the same parent node) or empty, flip it upside down and turn it into a tree where the original right nodes
-turned into left leaf nodes. Return the new root.
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-child { node {2}
-    child { node {4}}
-    child { node {5}}
-}
-child { node {3}
-}
-;
-\end{tikzpicture}
+Check whether a binary tree is a valid BST.
+
+### Solution - Inorder Bounds
+
+Use DFS while carrying min/max bounds.
+
 ```
-
-return the root of the binary tree
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {4}
-child { node {5}
-    child { node {3}}
-    child { node {1}}
+public boolean isValidBST(TreeNode root) {
+    return validate(root, null, null);
 }
-child { node {2}
+
+private boolean validate(TreeNode node, Integer low, Integer high) {
+    if (node == null) {
+        return true;
+    }
+    if ((low != null && node.val <= low) || (high != null && node.val >= high)) {
+        return false;
+    }
+    return validate(node.left, low, node.val) && validate(node.right, node.val, high);
 }
-;
-\end{tikzpicture}
+```## Binary Tree Upside Down {#upside-down}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 156
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-upside-down/
+- **Tags**: `Tree`
+
+### Description
+
+Flip the tree so that every right child becomes a left sibling.
+
+### Solution - Recursive Rotation
+
 ```
-
-### Solution
-#### Walkthrough
-The newRoot of a flipped tree will be root.left that is
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-child { node {2}}
-child { node {3}}
-;
-\end{tikzpicture}
-```
-flips to
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {2}
-child { node {3}}
-child { node {1}}
-;
-\end{tikzpicture}
-```
-Additionally, we need to properly place the children of root.left.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code
-```java
 public TreeNode upsideDownBinaryTree(TreeNode root) {
-    if(root == null || root.left == null) {
+    if (root == null || root.left == null) {
         return root;
     }
-
     TreeNode newRoot = upsideDownBinaryTree(root.left);
-    //children of root.left
     root.left.left = root.right;
     root.left.right = root;
-
     root.left = null;
     root.right = null;
     return newRoot;
 }
-```
+```## Inorder Successor in BST {#inorder-successor}
 
+### Problem Metadata
 
-## Inorder Successor in BST / Leet Code 285 / Medium
+- **Platform**: LeetCode
+- **Problem ID**: 285
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/inorder-successor-in-bst/
+- **Tags**: `Tree`
 
 ### Description
-Given a binary search tree and a node in it, find the in-order successor of that node in the BST.
-Note: If the given node has no in-order successor in the tree, return null.
 
-### Example
+Find the inorder successor of a given node in a BST.
 
+### Solution - BST Properties
 
-### Solution
-#### Walkthrough
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- bfs \@ref(bfs)
-
-#### Java Code
-```java
+```
 public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
-    Stack<TreeNode> stack = new Stack<TreeNode>();
-    TreeNode node = null, prev = null;
-    while (!stack.isEmpty() || node != null) {
-        if (node != null) {
-            stack.push(node);
-            node = node.left;
+    TreeNode succ = null;
+    while (root != null) {
+        if (p.val < root.val) {
+            succ = root;
+            root = root.left;
         } else {
-            node = stack.pop();
-            if (prev == p) {
-                return node;
-            }
-            prev = node;
-            node = node.right;
+            root = root.right;
         }
     }
-    return null;
+    return succ;
 }
-```
+```## Binary Tree Longest Consecutive Sequence {#longest-consecutive}
 
+### Problem Metadata
 
-## Binary Tree Longest Consecutive Sequence / Leet Code 298 / Medium
+- **Platform**: LeetCode
+- **Problem ID**: 298
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-longest-consecutive-sequence/
+- **Tags**: `Tree`
 
 ### Description
-Given a binary tree, find the length of the longest consecutive sequence path.
-The path refers to any sequence of nodes from some starting node to any node in the tree along the parent-child
-connections. The longest consecutive path need to be from parent to child (cannot be the reverse).
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=5em},
-level 2/.style={sibling distance=2.5em},
-level 3/.style={sibling distance=2.5em},
-level distance=2.5em,
-]
-\node {1}
-child {}
-child { node {3}
-    child { node {2}}
-    child { node {4}
-        child { node {5}}
-    }
-}
-;
-\end{tikzpicture}
+Find the length of the longest path where consecutive nodes differ by +1.
+
+### Solution - DFS Tracking
+
 ```
-Longest consecutive sequence path is 3-4-5, so return 3.
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {2}
-child {}
-child { node {3}
-    child { node {2}
-        child { node {1}}
-    }
-}
-;
-\end{tikzpicture}
-```
-Longest consecutive sequence path is 2-3,not3-2-1, so return 2.
-
-### Solution
-#### Walkthrough
-For each recursive call,
-
-* if root.val == target, length++
-* otherwise, reset length = 1
-
-Retrieve for the maximum length and recursively call on left and right subtrees with increasing sequence
-(root.val + 1).
-
-If we want longest increaing sequence, change to (root.val >= target) to verify increasing sequence.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code
-```java
-private int longest;
-
 public int longestConsecutive(TreeNode root) {
-    if (root == null) {
-        return 0;
-    }
-
-    longestConsecutive(root, 0, root.val);
-
-    return longest;
+    return dfs(root, null, 0);
 }
-public void longestConsecutive(TreeNode root, int length, int target) {
-    if (root == null) {
-        return;
-    } else if (root.val == target) {
+
+private int dfs(TreeNode node, TreeNode parent, int length) {
+    if (node == null) {
+        return length;
+    }
+    if (parent != null && node.val == parent.val + 1) {
         length++;
     } else {
         length = 1;
     }
-
-    longest = Math.max(longest, length);
-
-    //root.val + 1 for increasing sequencef
-    longestConsecutive(root.left, length, root.val + 1);
-    longestConsecutive(root.right, length, root.val + 1);
+    int left = dfs(node.left, node, length);
+    int right = dfs(node.right, node, length);
+    return Math.max(length, Math.max(left, right));
 }
-```
+```## Find Leaves of Binary Tree {#find-leaves}
 
+### Problem Metadata
 
-## Find Leaves of Binary Tree / Leet Code 366 / Medium
+- **Platform**: LeetCode
+- **Problem ID**: 366
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/find-leaves-of-binary-tree/
+- **Tags**: `Tree`
 
 ### Description
-Given a binary tree, collect a tree’s nodes as if you were doing this: Collect and remove all leaves, repeat
-until the tree is empty.
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-    child { node {2}
-        child { node {4}}
-        child { node {5}}
-}
-    child { node {3} }
-;
-\end{tikzpicture}
+Collect nodes layer by layer from leaves upward.
+
+### Solution - Height DFS
+
+Compute the height of each node (distance from leaf). Use height as index to append values to the result list.
+
 ```
-Returns [4, 5, 3], [2], [1].
-
-### Solution
-#### Walkthrough
-For each node, compute maximum level (leaf node is -1) out of recursive call to left and right subtree + 1.
-If level increases, add a new list and add the node.val into the list -- list.add(node.val)
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-
-#### Java Code
-```java
 public List<List<Integer>> findLeaves(TreeNode root) {
-    List<List<Integer>> result = new LinkedList<List<Integer>>();
-    helper(root, result);
-
+    List<List<Integer>> result = new ArrayList<>();
+    height(root, result);
     return result;
 }
-private int helper(TreeNode root, List<List<Integer>> result) {
-    if (root == null) {
+
+private int height(TreeNode node, List<List<Integer>> result) {
+    if (node == null) {
         return -1;
     }
-
-    int level = Math.max(helper(root.left, result), helper(root.right, result)) + 1;
-
-    //add a new level if level increases
-    if (result.size() <= level) {
-        result.add(new LinkedList<Integer>());
+    int h = Math.max(height(node.left, result), height(node.right, result)) + 1;
+    if (result.size() == h) {
+        result.add(new ArrayList<>());
     }
-
-    //add root.val
-    result.get(level).add(root.val);
-
-    return level;
+    result.get(h).add(node.val);
+    return h;
 }
-```
+```## Diameter of Binary Tree {#diameter}
 
+### Problem Metadata
 
-
-## Diameter of Binary Tree / Leet Code 543 / Easy
+- **Platform**: LeetCode
+- **Problem ID**: 543
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/diameter-of-binary-tree/
+- **Tags**: `Tree`
 
 ### Description
-Given a binary tree, you need to compute the length of the diameter of the tree. The diameter of a binary tree is the
-length of the longest path between any two nodes in a tree. This path may or may not pass through the root.
 
-### Example
-Given a binary tree
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-child { node {2}
-    child { node {4}}
-    child { node {5}}
-}
-child { node {3}}
+Return the length of the longest path between any two nodes.
 
-;
-\end{tikzpicture}
+### Solution - Depth Helper
+
+Use DFS to compute depth of each subtree and track the maximum `leftDepth + rightDepth`.
+
 ```
-
-Return 3, which is the length of the path [4,2,1,3] or [5,2,1,3].
-Note: The length of path between two nodes is represented by the number of edges between them.
-
-### Solution
-#### Walkthrough
-Have a help function to compute the left and right height as well as diameter (left height + right height). Find the
-maximum diameter among root, left and right.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code
-```java
 public int diameterOfBinaryTree(TreeNode root) {
-    int[] result = diameterAndHeight(root);
-    return result[0];
+    int[] diameter = new int[1];
+    depth(root, diameter);
+    return diameter[0];
 }
 
-public int[] diameterAndHeight(TreeNode root) {
-    int heightDiameter[] = { 0, 0 };          // initialize the diameter and height
-
-    if (root != null) {
-        int[] leftResult = diameterAndHeight(root.left);
-        int[] rightResult = diameterAndHeight(root.right);
-        int height = Math.max(leftResult[1], rightResult[1]) + 1;
-        int leftDiameter = leftResult[0];
-        int rightDiameter = rightResult[0];
-        int rootDiameter = leftResult[1] + rightResult[1];
-        int finalDiameter = Math.max(rootDiameter, Math.max(leftDiameter, rightDiameter));
-        heightDiameter[0] = finalDiameter;
-        heightDiameter[1] = height;
+private int depth(TreeNode node, int[] diameter) {
+    if (node == null) {
+        return 0;
     }
-    return heightDiameter;
+    int left = depth(node.left, diameter);
+    int right = depth(node.right, diameter);
+    diameter[0] = Math.max(diameter[0], left + right);
+    return Math.max(left, right) + 1;
 }
-```
+```## Binary Tree Serialization {#tree-serialization}
 
+### Problem Metadata
 
-## Binary Tree Serialization / Firecode / Level 3
+- **Platform**: Firecode/LeetCode 297
+- **Difficulty**: Medium
+- **Tags**: `Tree`
 
 ### Description
-In Computer Science, serialization is the process of converting objects or data structures into a sequence (or series)
-of characters that can be stored easily in a file / database table or transmitted across a network. Serialized objects
-need to be de-serialized to create a semantically identical clone of the original object, before being used in programs.
-You're given the root node of a binary tree - TreeNode root in the method serializeTree. This method should serialize
-the binary tree and output a String str, which is then used as an input parameter for the method restoreTree.
-restoreTree should create a Binary Tree that is structurally identical to the one you serialized and return the root
-node of the tree. Your task is to fill in the logic for these 2 methods. Don't worry about passing the serialized String
-to restoreTree - that will be done automatically when you run your code. Feel free to use any notation you prefer when
-serializing the binary tree. The choice of traversal algorithm is also open - but try and limit the time complexity of
-both methods to O(n).
 
-### Example
+Serialize a binary tree to string and deserialize back.
 
-### Solution
-#### Walkthrough
-Your serialized String will be used to restore the tree. Be sure to use the same format and notation in restoreTree
-that you use to serialize in  serializeTree. For example, the following binary tree
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-child { node {2}
-child { node {4}}
-child { node {5}}
-}
-child { node {3}}
-;
-\end{tikzpicture}
+### Solution - Preorder with Null Markers
+
 ```
-would be serialize into string "1 2 4 \# \# 5 \# \# 3 \# \# ".
+private static final String SEP = ",";
+private static final String NULL = "#";
 
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code
-```java
-public String serializeTree(TreeNode root){
+public String serialize(TreeNode root) {
     StringBuilder sb = new StringBuilder();
-
-    if (root == null) {
-        sb.append("# ");
-    } else {
-        sb.append(root.data + " ");
-        sb.append(serializeTree(root.left));
-        sb.append(serializeTree(root.right));
-    }
-
+    serialize(root, sb);
     return sb.toString();
 }
 
-public TreeNode restoreTree(String str){
-    if (str == null || str.length() == 0) {
-        return null;
+private void serialize(TreeNode node, StringBuilder sb) {
+    if (node == null) {
+        sb.append(NULL).append(SEP);
+        return;
     }
-
-    StringTokenizer tokenizer = new StringTokenizer(str, " ");
-    return deserialize(tokenizer);
+    sb.append(node.val).append(SEP);
+    serialize(node.left, sb);
+    serialize(node.right, sb);
 }
 
-private TreeNode deserialize(StringTokenizer tokenizer){
-    if (!tokenizer.hasMoreTokens()) {
-        return null;
-    }
-    String val = tokenizer.nextToken();
-
-    if (val.equals("#")) {
-        return null;
-    }
-
-    TreeNode root = new TreeNode(Integer.parseInt(val));
-    root.left = deserialize(tokenizer);
-    root.right = deserialize(tokenizer);
-
-    return root;
+public TreeNode deserialize(String data) {
+    Queue<String> queue = new LinkedList<>(Arrays.asList(data.split(SEP)));
+    return deserialize(queue);
 }
-```
 
-
-## Fill in the Ancestors of the Node in a Binary Tree / Firebase / Level 3
+private TreeNode deserialize(Queue<String> queue) {
+    String val = queue.poll();
+    if (val.equals(NULL)) {
+        return null;
+    }
+    TreeNode node = new TreeNode(Integer.parseInt(val));
+    node.left = deserialize(queue);
+    node.right = deserialize(queue);
+    return node;
+}
+```## Fill in the Ancestors of the Node {#fill-ancestors}
 
 ### Description
-Given a binary tree's root node, an empty ArrayList and an integer nodeData, write a method that finds a target
-node - N with data = nodeData and populates the ArrayList with the data of the ancestor nodes of N - added from the
-bottom - up
 
-#### Algorithm
- dfs \@ref(dfs), backtrack \@ref(backtrack)
-
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-    child { node {2}
-        child {  node {4}}
-        child {  node {5}}
-    }
-    child { node {3}
-        child {  node {6}}
-        child {  node {7}}
-    }
-;
-\end{tikzpicture}
-```
-Node: 5 = [2, 1]
+Given a node, print ancestors from root to parent.
 
 ### Solution
-#### Walkthrough
-We use an arrayList to keep the current path of TreeNode visited, also TreeNode to be removed for backtracking purposes.
-We use recurisve call and terminate on leave nodes as well as target node is found. The recursive function returns a
-boolean value when the target node / value is found on the subtree path.
 
-#### Analysis
-Time complexity is O(n) as every node is visited once.
+Do DFS and build path; when target found, print path.
 
-#### Algorithm
- dfs \@ref(dfs), backtrack \@ref(backtrack)
-
-#### Java Code
-```java
-public ArrayList<Integer> ancestorsList = new ArrayList<Integer>();
-
-public boolean printAncestors(TreeNode root, int nodeData) {
-    if(root == null) {
+```
+public boolean printAncestors(TreeNode root, int key, List<Integer> ancestors) {
+    if (root == null) {
         return false;
     }
-
-    if(root.data == nodeData) {
+    if (root.val == key) {
         return true;
-    } else {
-        ancestorsList.add(0, root.data);
+    }
+    if (printAncestors(root.left, key, ancestors) || printAncestors(root.right, key, ancestors)) {
+        ancestors.add(root.val);
+        return true;
+    }
+    return false;
+}
+```## Find the k-th Largest Node in a BST {#kth-largest}
 
-        boolean isRightSubtree = printAncestors(root.left, nodeData) || printAncestors(root.right, nodeData);
+### Description
 
-        if(!isRightSubtree) {
-            //remove the backtrack nodes
-            ancestorsList.remove(0);
+Return the k-th largest node value in a BST.
+
+### Solution - Reverse Inorder
+
+```
+public int kthLargest(TreeNode root, int k) {
+    Stack<TreeNode> stack = new Stack<>();
+    TreeNode current = root;
+    while (current != null || !stack.isEmpty()) {
+        while (current != null) {
+            stack.push(current);
+            current = current.right;
         }
-
-        return isRightSubtree;
+        current = stack.pop();
+        if (--k == 0) {
+            return current.val;
+        }
+        current = current.left;
     }
+    return -1;
 }
-```
-
-
-## Find the $k^{th}$ Largest Node in a BST / Firecode / Level 3
+```## Convert Sorted Array to BST {#sorted-array-bst}
 
 ### Description
-Given a  Binary Search Tree and an integer k, implement a method to find and return its $k^{th}$ largest node
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {4}
-    child { node {2}
-    }
-    child { node {8}
-        child {  node {5}}
-        child {  node {10}}
-    }
-;
-\end{tikzpicture}
+Convert a sorted array to a height-balanced BST.
+
+### Solution - Divide and Conquer
+
 ```
-In the above scenario, if k = 1, then the output is 10 i.e. k = 1, represents the largest element of the tree,
-k = 2, represents the second largest element and so on.
-
-### Solution
-#### Walkthrough
-First we compute the size of right subtree, and evaluate the following possibilities
-
-* if k == (sizeOfRightSubtree + 1), return this node
-* if k $<$ sizeOfRightSubtree, the target must reside in the right subtree. Drill down to right subtree
-* if k $>$ sizeOfRightSubtree, the target must reside in the left subtree. Drill down to the left subtree and
-change target position to (k - sizeOfRightSubtree - 1)
-
-
-#### Analysis
-Time complexity is O(log(n)) as a certain path of nodes will be visited since this is a BST.
-
-#### Algorithm
- dfs \@ref(dfs), bst \@ref(bst)
-
-#### Java Code
-```java
-public TreeNode findKthLargest(TreeNode root, int k) {
-    if(root == null) {
-        return null;
-    }
-
-    int rightSubtreeSize = size(root.right);
-
-    if( (rightSubtreeSize + 1) == k) {
-        return root;
-    } else if( rightSubtreeSize > k ) {
-        //drill down to the right subtree
-        return findKthLargest(root.right, k);
-    } else {
-        //drill down to the left subtree
-        return findKthLargest(root.left, k - rightSubtreeSize - 1);
-    }
-}
-```
-
-
-## Convert Sorted Array to Binary Search Tree / Leet Code 108 / Easy
-
-### Description
-Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
-
-For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of
-every node never differ by more than 1
-
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {0}
-child { node {-3}
-    child {  node {-10}}
-    child {  node {null}}
-}
-child { node {9}
-    child {  node {5}}
-    child {  node {null}}
-}
-;
-\end{tikzpicture}
-```
-
-### Solution
-#### Walkthrough
-To create a tree of minimal height, we need to mathch the number of nodes in the left subtree to the number of the
-nodes in the right subtree as much as possible. This means that we want the root to be the middle of the \textbf{sorted }
-array, since this would mean that half the elements would be less than the root and half wood be greater than it.
-
-#### Analysis
-The overal time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code
-```java
 public TreeNode sortedArrayToBST(int[] nums) {
-    return buildHeightBalancedBST(nums, 0, nums.length -1);
+    return build(nums, 0, nums.length - 1);
 }
 
-public TreeNode buildHeightBalancedBST(int[] nums, int start, int end) {
-    if(start > end) {
+private TreeNode build(int[] nums, int left, int right) {
+    if (left > right) {
         return null;
     }
-
-    int mid = (start + end) / 2;
+    int mid = left + (right - left) / 2;
     TreeNode node = new TreeNode(nums[mid]);
-    node.left = buildHeightBalancedBST(nums, start, mid - 1);
-    node.right = buildHeightBalancedBST(nums, mid + 1, end);
-
+    node.left = build(nums, left, mid - 1);
+    node.right = build(nums, mid + 1, right);
     return node;
 }
-```
-
-
-## Populating Next Right Pointers in Each Node / Leet Code 116 / Medium
+```## Populating Next Right Pointers in Each Node {#connect-next}
 
 ### Description
-You are given a perfect binary tree where all leaves are on the same level, and every parent has two children.
-Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should
-be set to NULL. Initially, all next pointers are set to NULL.
 
-### Example
+Connect each node's `next` pointer to its right neighbor on the same level in a perfect binary tree.
 
-### Solution
-#### Walkthrough
+### Solution - O(1) Level Traversal
 
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code - PreOrder Recursive
-```java
+```
 public Node connect(Node root) {
-    if(root == null){
-        return root;
+    if (root == null) {
+        return null;
     }
-
-    if(root.left == null) {
-        return root;
+    Node leftmost = root;
+    while (leftmost.left != null) {
+        Node head = leftmost;
+        while (head != null) {
+            head.left.next = head.right;
+            if (head.next != null) {
+                head.right.next = head.next.left;
+            }
+            head = head.next;
+        }
+        leftmost = leftmost.left;
     }
+    return root;
+}
+```## Construct Binary Tree from Preorder and Inorder Traversal {#build-tree}
 
-    // populate left child.next => right child
-    root.left.next=root.right;
+### Description
 
-    // previously populated, i.e. root(2)
-    if(root.next != null){
-        //root.next = 3 which connects to another branch
-        root.right.next=root.next.left;
+Build a binary tree from preorder and inorder traversals.
+
+### Solution - Hash Map Recursion
+
+```
+public TreeNode buildTree(int[] preorder, int[] inorder) {
+    Map<Integer, Integer> indexMap = new HashMap<>();
+    for (int i = 0; i < inorder.length; i++) {
+        indexMap.put(inorder[i], i);
     }
+    return build(preorder, 0, preorder.length - 1, 0, inorder.length - 1, indexMap);
+}
 
-    connect(root.left);
-    connect(root.right);
-
+private TreeNode build(int[] preorder, int preL, int preR, int inL, int inR, Map<Integer, Integer> indexMap) {
+    if (preL > preR) {
+        return null;
+    }
+    int rootVal = preorder[preL];
+    TreeNode root = new TreeNode(rootVal);
+    int inorderRootIndex = indexMap.get(rootVal);
+    int leftSize = inorderRootIndex - inL;
+    root.left = build(preorder, preL + 1, preL + leftSize, inL, inorderRootIndex - 1, indexMap);
+    root.right = build(preorder, preL + leftSize + 1, preR, inorderRootIndex + 1, inR, indexMap);
     return root;
 }
 ```
-
-
-## Construct Binary Tree from Preorder and Inorder Traversal / Leet Code 105 / Medium
-
-### Description
-Given preorder and inorder traversal of a tree, construct the binary tree. You may assume that duplicates do not
-exist in the tree.
-
-### Example
-preorder = [3,9,20,15,7]
-inorder = [9,3,15,20,7]
-
-Return the following binary tree:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {3}
-child { node {9}
-}
-child { node {20}
-child {  node {15}}
-child {  node {7}}
-}
-;
-\end{tikzpicture}
-```
-
-### Solution
-#### Walkthrough
-PreOrder array is used to construct data value of a node, whereas InOrder array is used to acknowledge the left and right boundary
-of a node. We could use a Map to store the InOrder array associated with its index (position in array) value and biuld
-tree according to the following conditions:
-
-* if startIdx $>$ endIdx  Return null. (Terminal)
-* if startIdx $==$ endIdx  The node is here. (Terminal)
-* if startIdx $>$ endIdx There should be more nodes in this branch.
-
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
- dfs \@ref(dfs)
-
-#### Java Code - PreOrder Recursive
-```java
-int preorderIndex = 0;
-
-public TreeNode buildTree(int[] preorder, int[] inorder) {
-    if (preorder.length == 0) {
-        return null;
-    }
-
-    Map<Integer, Integer> inorderIndex = new HashMap<>();
-    for (int i = 0; i < inorder.length; i++) {
-        inorderIndex.put(inorder[i], i);
-    }
-
-    return buildTree(preorder, inorderIndex, 0, inorder.length - 1);
-}
-
-private TreeNode buildTree(int[] preorder, Map<Integer, Integer> inorderIndex, int startIdx, int endIdx) {
-    if (startIdx > endIdx) {
-        return null;
-    }
-
-    int val = preorder[preorderIndex++];
-    TreeNode node = new TreeNode(val);
-
-    if (startIdx == endIdx) {
-        return node;
-    }
-
-    int inIndex = inorderIndex.get(val);
-    node.left = buildTree(preorder, inorderIndex, startIdx, inIndex - 1);
-    node.right = buildTree(preorder, inorderIndex, inIndex + 1, endIdx);
-
-    return node;
-}
-```
-
