@@ -789,3 +789,155 @@ public int firstUniqChar(String s) {
 }
 ```
 
+## Number of Substrings Containing All Three Characters {#substrings-all-three}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1358
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
+- **Tags**: `String`, `Sliding Window`
+- **Techniques**: \@ref(two-pointers)
+
+### Description
+
+Given a string `s` consisting only of characters `'a'`, `'b'`, and `'c'`, return the number of substrings containing at least one occurrence of all these three characters.
+
+### Examples
+
+```
+Input: s = "abcabc"
+Output: 10
+Explanation: The substrings containing at least one occurrence of 'a', 'b' and 'c':
+"abc", "abca", "abcab", "abcabc", "bca", "bcab", "bcabc", "cab", "cabc", "abc"
+
+Input: s = "aaacb"
+Output: 3
+Explanation: The substrings containing at least one occurrence of 'a', 'b' and 'c':
+"aaacb", "aacb", "acb"
+
+Input: s = "abc"
+Output: 1
+```
+
+### Constraints
+
+- `3 <= s.length <= 5 * 10^4`
+- `s` consists only of `'a'`, `'b'`, and `'c'` characters
+
+### Solution - Sliding Window
+
+#### Walkthrough
+
+Use a sliding window with two pointers (`l` for left, `r` for right) to track the leftmost valid substring containing all three characters. The key insight is that once a valid window is found at positions `[l, r]`, all substrings extending from this window to the end of the string are also valid. Therefore, we add `n - r` to the result rather than just counting one substring.
+
+Maintain a frequency map to track occurrences of each character. When all three characters are present, shrink the window from the left while the condition holds, adding the count of valid substrings at each step. This ensures we count all possible substrings efficiently without redundant checks.
+
+**Visual Example with `s = "abccabbac"` (n = 9):**
+
+```
+Step 1: r=0, l=0, window="a"
+  count={a:1, b:0, c:0} → uniqueAbc=1, skip
+
+Step 2: r=1, l=0, window="ab"
+  count={a:1, b:1, c:0} → uniqueAbc=2, skip
+
+Step 3: r=2, l=0, window="abc"
+  count={a:1, b:1, c:1} → uniqueAbc=3 ✓
+  Add 9-2=7 substrings starting from l=0: "abc", "abcc", "abcca", "abccab", "abccabb", "abccabba", "abccabbac"
+  Shrink: l=1, window="bc", count={a:0, b:1, c:1} → uniqueAbc=2
+
+Step 4: r=3, l=1, window="bcc"
+  count={a:0, b:1, c:2} → uniqueAbc=2, skip
+
+Step 5: r=4, l=1, window="bcca"
+  count={a:1, b:1, c:2} → uniqueAbc=3 ✓
+  Add 9-4=5 substrings starting from l=1: "bcca", "bccab", "bccabb", "bccabba", "bccabbac"
+  Shrink: l=2, window="cca", count={a:1, b:0, c:2} → uniqueAbc=2
+
+Step 6: r=5, l=2, window="ccab"
+  count={a:1, b:1, c:2} → uniqueAbc=3 ✓
+  Add 9-5=4 substrings starting from l=2: "ccab", "ccabb", "ccabba", "ccabbac"
+  Shrink: l=3, window="cab", count={a:1, b:1, c:1} → uniqueAbc=3 ✓
+  Add 9-5=4 substrings starting from l=3: "cab", "cabb", "cabba", "cabbac"
+  Shrink: l=4, window="ab", count={a:1, b:1, c:0} → uniqueAbc=2
+
+Step 7: r=6, l=4, window="abb"
+  count={a:1, b:2, c:0} → uniqueAbc=2, skip
+
+Step 8: r=7, l=4, window="abba"
+  count={a:2, b:2, c:0} → uniqueAbc=2, skip
+
+Step 9: r=8, l=4, window="abbac"
+  count={a:2, b:2, c:1} → uniqueAbc=3 ✓
+  Add 9-8=1 substring starting from l=4: "abbac"
+  Shrink: l=5, window="bbac", count={a:2, b:1, c:1} → uniqueAbc=3 ✓
+  Add 9-8=1 substring starting from l=5: "bbac"
+  Shrink: l=6, window="bac", count={a:1, b:1, c:1} → uniqueAbc=3 ✓
+  Add 9-8=1 substring starting from l=6: "bac"
+  Shrink: l=7, window="ac", count={a:1, b:0, c:1} → uniqueAbc=2
+
+Total: 7 + 5 + 4 + 4 + 1 + 1 + 1 = 23 ✓
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Each character is visited at most twice, once by the right pointer (`r`) and once by the left pointer (`l`)
+- **Space Complexity**: O(1) - Only three entries in the HashMap (constant space)
+
+#### Algorithm
+
+\@ref(sliding-window), \@ref(two-pointers)
+
+1. Initialize two pointers (`l = 0`, `r` iterates through string) and a frequency map for characters `'a'`, `'b'`, `'c'`.
+2. Expand the window by moving `r` pointer and increment the count for `s.charAt(r)`.
+3. Track the number of distinct characters with at least one occurrence (`uniqueAbc`).
+4. While all three characters are present (`uniqueAbc == 3`):
+   1. Add `n - r` to result (all substrings from current position to end are valid).
+   2. Shrink window from left: decrement count of `s.charAt(l)` and increment `l`.
+   3. If any character count becomes zero, decrement `uniqueAbc`.
+5. Return the total count.
+
+#### Java Code
+
+```java
+class Solution {
+    public int numberOfSubstrings(String s) {
+        int n = s.length();
+        int uniqueAbc = 0;
+        int result = 0;
+        int l = 0;
+
+        Map<Character, Integer> counters = new HashMap<>();
+        counters.put('a', 0);
+        counters.put('b', 0);
+        counters.put('c', 0);
+
+
+        for(int r = 0; r < n; r++) {
+            char c = s.charAt(r);
+            counters.put(c, counters.get(c) + 1);
+
+            if(counters.get(c) == 1)
+                uniqueAbc++;
+            
+            //substring starting at position l and ending at position i contains all three character
+            while(uniqueAbc == 3) {
+                result += n - r; // ALL substrings from l to any position from r to n-1 (rightward till the end) are also valid
+
+                //Shrink window from left by incrementing j until window becomes invalid again
+                c = s.charAt(l);
+                counters.put(c, counters.get(c) - 1);
+
+                if(counters.get(c) == 0)
+                    uniqueAbc--;
+
+                l++;
+            }
+        }
+
+        return result;
+    }
+}
+```
