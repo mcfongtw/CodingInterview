@@ -3597,3 +3597,135 @@ class Solution {
     }
 }
 ```
+
+
+## Number of Zero-Filled Subarrays {#zero-filled-subarrays}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 2348
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/number-of-zero-filled-subarrays/
+- **Tags**: `Array`, `Math`
+- **Techniques**: Array Traversal
+
+### Description
+
+Given an integer array `nums`, return the number of subarrays filled with `0`.
+
+A **subarray** is a contiguous non-empty sequence of elements within an array.
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [1,3,0,0,2,0,0,4]
+Output: 6
+Explanation:
+There are 4 occurrences of [0] as a subarray.
+There are 2 occurrences of [0,0] as a subarray.
+There is no occurrence of a subarray with a size more than 2 filled with 0.
+Therefore, we return 6.
+```
+
+**Example 2:**
+```
+Input: nums = [0,0,0,2,0,0]
+Output: 9
+Explanation:
+There are 5 occurrences of [0] as a subarray.
+There are 3 occurrences of [0,0] as a subarray.
+There is 1 occurrence of [0,0,0] as a subarray.
+Therefore, we return 9.
+```
+
+**Example 3:**
+```
+Input: nums = [2,10,2019]
+Output: 0
+Explanation: There is no subarray filled with 0. Therefore, we return 0.
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10^5`
+- `-10^9 <= nums[i] <= 10^9`
+
+### Solution - Triangular Number Formula
+
+#### Walkthrough
+
+The key insight is recognizing that for any sequence of `k` consecutive zeros, the number of zero-filled subarrays within that sequence follows the **triangular number formula**:
+
+```
+Number of subarrays = k * (k + 1) / 2
+```
+
+This formula counts all possible contiguous subarrays:
+- `k` subarrays of length 1: [0]
+- `k-1` subarrays of length 2: [0,0]
+- `k-2` subarrays of length 3: [0,0,0]
+- ...
+- `1` subarray of length k
+
+The sum is: `k + (k-1) + (k-2) + ... + 1 = k * (k + 1) / 2`
+
+**Algorithm Strategy:**
+
+1. Traverse the array and **count consecutive zeros** in each sequence
+2. When encountering a non-zero element (or reaching the end of the array), **apply the triangular formula** to the accumulated zero count
+3. Reset the counter and continue
+
+**Important edge case**: If the array ends with zeros, we must apply the formula one final time after the loop completes, since there's no subsequent non-zero element to trigger the calculation.
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Single pass through the array, visiting each element exactly once
+- **Space Complexity**: O(1) - Only using two variables (`zeroCount` and `result`) regardless of input size
+
+#### Algorithm
+
+Greedy \@ref(greedy)
+
+1. Initialize `zeroCount = 0` to track consecutive zeros in the current sequence.
+2. Initialize `result = 0` to accumulate the total count of zero-filled subarrays.
+3. For each element `num` in `nums`:
+   1. If `num == 0`:
+      - Increment `zeroCount`.
+   2. If `num != 0` (non-zero element):
+      - If `zeroCount > 0`:
+        - Apply triangular formula: `result += zeroCount * (zeroCount + 1) / 2`.
+        - Reset `zeroCount = 0`.
+4. After the loop, check if `zeroCount > 0` (handles arrays ending with zeros):
+   - Apply triangular formula: `result += zeroCount * (zeroCount + 1) / 2`.
+5. Return `result`.
+
+#### Java Code
+
+```java
+class Solution {
+    public long zeroFilledSubarray(int[] nums) {
+        long zeroCount = 0;
+        long result = 0;
+
+        for(int num : nums) {
+            if(num == 0) {
+                zeroCount++;
+            } else { // hit the first 1 after 0s.
+                if(zeroCount > 0) {
+                    result += zeroCount * (zeroCount + 1) / 2;
+                    zeroCount = 0;
+                }
+            }
+        }
+
+        //need to accumulate if array ends with 0s.
+        if(zeroCount > 0) {
+            result += zeroCount * (zeroCount + 1) / 2;
+        }
+
+        return result;
+    }
+}
+```
