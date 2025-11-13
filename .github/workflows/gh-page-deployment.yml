@@ -1,9 +1,13 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# Build and deploy R Bookdown site to GitHub Pages
+name: Build and Deploy to Pages
 
 on:
   # Runs on pushes targeting the default branch
   push:
+    branches: ["master"]
+
+  # Run build check on pull requests (without deploying)
+  pull_request:
     branches: ["master"]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -21,22 +25,84 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            pandoc \
+            libmagick++-dev \
+            libpoppler-cpp-dev \
+            libcurl4-openssl-dev \
+            imagemagick \
+            poppler-utils \
+            pkg-config
+
+      - name: Setup R package cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-${{ hashFiles('**/DESCRIPTION') }}
+          restore-keys: |
+            ${{ runner.os }}-r-
+
+      - name: Install R packages (base)
+        run: |
+          Rscript -e "install.packages(c('bookdown', 'knitr', 'rmarkdown', 'tinytex'), repos='https://cloud.r-project.org/', Ncpus=2)"
+
+      - name: Install magick with verbose output
+        run: |
+          Rscript -e "Sys.setenv(PKG_CONFIG_PATH='/usr/lib/x86_64-linux-gnu/pkgconfig'); install.packages('magick', repos='https://cloud.r-project.org/', configure.vars='INCLUDE_DIR=/usr/include/ImageMagick-6 LIB_DIR=/usr/lib/x86_64-linux-gnu', INSTALL_opts='--no-test-load')"
+
+      - name: Install pdftools
+        run: |
+          Rscript -e "install.packages('pdftools', repos='https://cloud.r-project.org/')"
+
+      - name: Install TinyTeX
+        run: |
+          Rscript -e "tinytex::install_tinytex()"
+          echo "$HOME/bin" >> $GITHUB_PATH
+
+      - name: Install LaTeX packages
+        run: |
+          Rscript -e "tinytex::tlmgr_install(c('preview', 'pgf', 'tikz-cd', 'standalone', 'xcolor', 'amsmath', 'amsfonts'))"
+
+      - name: Build book
+        run: sh build.sh
+
+      - name: Upload build artifact (for PR preview)
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: book-preview
+          path: ./docs/
+          retention-days: 7
+
+      - name: Upload pages artifact (for deployment)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './docs/'
+
   deploy:
+    # Only deploy on push to master, not on PRs
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup Pages
-        uses: actions/configure-pages@v1
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          # Upload entire repository
-          path: './docs/'
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@main
+        uses: actions/deploy-pages@v4
