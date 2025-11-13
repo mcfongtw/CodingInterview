@@ -39,11 +39,21 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc imagemagick poppler-utils
+          sudo apt-get install -y \
+            pandoc \
+            libmagick++-dev \
+            libpoppler-cpp-dev \
+            imagemagick \
+            poppler-utils
 
-      - name: Install R packages
+      - name: Install R packages (base)
         run: |
-          Rscript -e "install.packages(c('bookdown', 'knitr', 'rmarkdown', 'magick', 'pdftools', 'tinytex'))"
+          Rscript -e "install.packages(c('bookdown', 'knitr', 'rmarkdown', 'tinytex'), repos='https://cloud.r-project.org/')"
+
+      - name: Install R packages (with system deps)
+        run: |
+          Rscript -e "install.packages('magick', repos='https://cloud.r-project.org/')"
+          Rscript -e "install.packages('pdftools', repos='https://cloud.r-project.org/')"
 
       - name: Install TinyTeX
         run: |
@@ -52,7 +62,7 @@ jobs:
 
       - name: Install LaTeX packages
         run: |
-          Rscript -e "tinytex::tlmgr_install(c('preview', 'pgf', 'tikz-cd', 'standalone', 'xcolor'))"
+          Rscript -e "tinytex::tlmgr_install(c('preview', 'pgf', 'tikz-cd', 'standalone', 'xcolor', 'amsmath', 'amsfonts'))"
 
       - name: Build book
         run: sh build.sh
