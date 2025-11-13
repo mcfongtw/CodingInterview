@@ -6,6 +6,10 @@ on:
   push:
     branches: ["master"]
 
+  # Run build check on pull requests (without deploying)
+  pull_request:
+    branches: ["master"]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -21,10 +25,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -47,14 +48,29 @@ jobs:
       - name: Build book
         run: sh build.sh
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
+      - name: Upload build artifact (for PR preview)
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: book-preview
+          path: ./docs/
+          retention-days: 7
 
-      - name: Upload artifact
+      - name: Upload pages artifact (for deployment)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v3
         with:
           path: './docs/'
 
+  deploy:
+    # Only deploy on push to master, not on PRs
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
