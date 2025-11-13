@@ -1,172 +1,143 @@
 # Problem Index {#problem-index}
 
-This index helps you find problems by technique, data structure, or difficulty level. Use this to focus your practice on specific topics.
+This index helps you find problems by LeetCode ID, difficulty, chapter, or platform.
+
+```{r index-setup, include=FALSE}
+# Problem database - loaded from CSV file
+library(knitr)
+
+# Load all problems from CSV file (105 currently in book)
+problems <- read.csv("problems_data.csv", stringsAsFactors = FALSE)
+
+# Convert "NA" strings to actual NA values
+problems$problem_id[problems$problem_id == "NA"] <- NA
+problems$problem_id <- as.numeric(problems$problem_id)
+
+# Add HTML links for clickable problem titles
+problems$html_link <- paste0("[", problems$title, "](", problems$anchor, ".html)")
+```
 
 ---
 
-## Problems by Chapter
+## Quick Lookup by LeetCode ID
 
-A summary of problem counts across all chapters:
+Find any LeetCode problem by its problem number:
 
-| Chapter | Chapter Name | Problem Count | Topics Covered |
-|---------|--------------|---------------|----------------|
-| 02 | [Arrays](#arrays) | 42 | Two Sum variants, 3Sum, 4Sum, Intervals, Permutations, Subsets, Kadane's Algorithm, Stock Trading, Dynamic Programming |
-| 03 | [Matrix](#matrix) | 11 | 2D Array traversal, Matrix manipulation, Spiral traversal |
-| 04 | [Tree](#tree) | 3 | Binary trees, BST, Tree traversal |
-| 05 | [Graph](#graph) | 1 | Graph algorithms, BFS, DFS |
-| 06 | [Linked List](#linked-list) | 16 | List manipulation, Two pointers, Fast-slow pointers |
-| 07 | [Data Structure](#data-structure) | 5 | Stack, Queue, Heap, Priority Queue |
-| 08 | [Search and Sort](#search-and-sort) | 5 | Binary search, Sorting algorithms |
-| 09 | [String Manipulation](#string-manipulation) | 9 | String processing, Pattern matching |
-| 10 | [Math](#math) | 6 | Mathematical algorithms, Number theory |
-| 11 | [Interactive](#interactive) | 1 | Interactive problems |
-| 12 | [Advanced Data Structure](#advanced-data-structure) | 5 | Trie, Union-Find, Segment Tree |
-| **Total** | | **104** | |
+```{r lookup-by-id, echo=FALSE}
+leetcode_only <- problems[problems$platform == "LeetCode" & !is.na(problems$problem_id), ]
+leetcode_sorted <- leetcode_only[order(leetcode_only$problem_id), ]
 
-**Note**: Problem counts are updated as of the last manual count. The Arrays chapter contains the most problems, making it an excellent starting point for interview preparation.
+# Add clickable links
+leetcode_sorted$problem_link <- paste0("[", leetcode_sorted$title, "](", leetcode_sorted$anchor, ".html)")
+
+kable(leetcode_sorted[, c("problem_id", "problem_link", "difficulty", "chapter")],
+      col.names = c("ID", "Problem", "Difficulty", "Chapter"),
+      row.names = FALSE)
+```
 
 ---
 
-## By Technique
+## Lookup by Difficulty
 
-### Hash Table {#idx-hash-table}
+### Easy Problems
 
-Problems utilizing hash tables for efficient lookups:
+```{r easy-problems, echo=FALSE}
+easy <- problems[problems$difficulty == "Easy", ]
+easy$display_id <- ifelse(is.na(easy$problem_id), "-", as.character(easy$problem_id))
+easy$problem_link <- paste0("[", easy$title, "](", easy$anchor, ".html)")
+kable(easy[, c("display_id", "problem_link", "chapter", "platform")],
+      col.names = c("ID", "Problem", "Chapter", "Platform"),
+      row.names = FALSE)
+```
 
-1. [Two Sums I](#two-sum-1) - Easy - LeetCode 1
+### Medium Problems
 
-**Concept**: Hash tables provide O(1) average-case lookup time, making them ideal for complement search problems.
+```{r medium-problems, echo=FALSE}
+medium <- problems[problems$difficulty == "Medium", ]
+medium$display_id <- ifelse(is.na(medium$problem_id), "-", as.character(medium$problem_id))
+medium$problem_link <- paste0("[", medium$title, "](", medium$anchor, ".html)")
+kable(medium[, c("display_id", "problem_link", "chapter", "platform")],
+      col.names = c("ID", "Problem", "Chapter", "Platform"),
+      row.names = FALSE)
+```
 
----
+### Hard Problems
 
-### Recursion {#idx-recursion}
+```{r hard-problems, echo=FALSE}
+hard <- problems[problems$difficulty == "Hard", ]
+if(nrow(hard) > 0) {
+  hard$display_id <- ifelse(is.na(hard$problem_id), "-", as.character(hard$problem_id))
+  hard$problem_link <- paste0("[", hard$title, "](", hard$anchor, ".html)")
+  kable(hard[, c("display_id", "problem_link", "chapter", "platform")],
+        col.names = c("ID", "Problem", "Chapter", "Platform"),
+        row.names = FALSE)
+} else {
+  cat("*No hard problems currently in the database.*\n")
+}
+```
 
-Problems that use recursive approaches:
+### Unclassified Problems
 
-1. [Balanced Binary Tree](#balanced-binary-tree) - Easy - LeetCode 110
-
-**Concept**: Recursion \@ref(recursion) solves problems by breaking them into smaller subproblems.
-
----
-
-### Depth First Search (DFS) {#idx-dfs}
-
-Problems using depth-first traversal:
-
-1. [Balanced Binary Tree](#balanced-binary-tree) - Easy - LeetCode 110
-
-**Concept**: DFS \@ref(dfs) explores as far as possible along each branch before backtracking.
-
----
-
-### Two Pointers {#idx-two-pointer}
-
-Problems using the two-pointer technique:
-
-1. [Two Sums I](#two-sum-1) - Easy - LeetCode 1 (alternative solution for sorted array)
-
-**Concept**: Two pointers help reduce O(n²) brute force solutions to O(n) by traversing from both ends.
-
----
-
-## By Data Structure
-
-### Array {#idx-array}
-
-Array-based problems:
-
-1. [Two Sums I](#two-sum-1) - Easy - LeetCode 1
-
----
-
-### Tree {#idx-tree}
-
-Tree-related problems:
-
-1. [Balanced Binary Tree](#balanced-binary-tree) - Easy - LeetCode 110
-
-**Related Concepts**: Binary Search Tree \@ref(bst), DFS \@ref(dfs), BFS \@ref(bfs)
+```{r unclassified-problems, echo=FALSE}
+unclassified <- problems[problems$difficulty == "Unclassified", ]
+if(nrow(unclassified) > 0) {
+  unclassified$display_id <- ifelse(is.na(unclassified$problem_id), "-", as.character(unclassified$problem_id))
+  unclassified$problem_link <- paste0("[", unclassified$title, "](", unclassified$anchor, ".html)")
+  kable(unclassified[, c("display_id", "problem_link", "chapter", "platform")],
+        col.names = c("ID", "Problem", "Chapter", "Platform"),
+        row.names = FALSE)
+} else {
+  cat("*No unclassified problems currently in the database.*\n")
+}
+```
 
 ---
 
-## By Difficulty
+## Lookup by Chapter
 
-### Easy {#idx-easy}
-
-| Problem | Platform | ID | Techniques | Data Structures |
-|---------|----------|-----|-----------|-----------------|
-| [Two Sums I](#two-sum-1) | LeetCode | 1 | Hash Table, Two Pointers | Array, Hash Table |
-| [Balanced Binary Tree](#balanced-binary-tree) | LeetCode | 110 | DFS, Recursion | Tree |
-
-### Medium {#idx-medium}
-
-*Coming soon - problems to be indexed*
-
-### Hard {#idx-hard}
-
-*Coming soon - problems to be indexed*
+```{r by-chapter, echo=FALSE}
+by_chapter <- problems[order(problems$chapter_num, problems$problem_id, na.last = TRUE), ]
+by_chapter$display_id <- ifelse(is.na(by_chapter$problem_id), "-", as.character(by_chapter$problem_id))
+by_chapter$problem_link <- paste0("[", by_chapter$title, "](", by_chapter$anchor, ".html)")
+kable(by_chapter[, c("chapter", "problem_link", "display_id", "difficulty")],
+      col.names = c("Chapter", "Problem", "LeetCode ID", "Difficulty"),
+      row.names = FALSE)
+```
 
 ---
 
-## By Platform
+## How to Update This Index
 
-### LeetCode {#idx-leetcode}
+When you add a new problem to the book:
 
-| ID | Problem | Difficulty | Chapter |
-|----|---------|-----------|---------|
-| 1 | [Two Sums I](#two-sum-1) | Easy | Arrays |
-| 110 | [Balanced Binary Tree](#balanced-binary-tree) | Easy | Tree |
+1. Open [problems_data.csv](problems_data.csv) in a spreadsheet or text editor
+2. Add a new row with: `title,platform,problem_id,difficulty,chapter,chapter_num,anchor`
+3. Rebuild the book with `sh build.sh`
+4. All lookup tables will automatically update!
 
-### HackerRank {#idx-hackerrank}
+### Example CSV Entry
 
-*Coming soon - problems to be indexed*
-
----
-
-## Study Guide Recommendations
-
-### For Beginners
-
-Start with these fundamental techniques:
-
-1. **Hash Tables**: [Two Sums I](#two-sum-1)
-2. **Recursion**: [Balanced Binary Tree](#balanced-binary-tree)
-3. **Tree Traversal**: [Balanced Binary Tree](#balanced-binary-tree)
-
-### Practice Path by Technique
-
-**Hash Table Mastery:**
-1. [Two Sums I](#two-sum-1) - Easy
-
-**Tree Problems:**
-1. [Balanced Binary Tree](#balanced-binary-tree) - Easy (DFS + Recursion)
-
-**Recursion Practice:**
-1. [Balanced Binary Tree](#balanced-binary-tree) - Easy
+```
+Your New Problem,LeetCode,9999,Medium,Array,02,new-problem
+```
 
 ---
 
-## Quick Reference
+## Summary Statistics
 
-**Total Problems Indexed**: 2
-**By Difficulty**: Easy (2), Medium (0), Hard (0)
-**By Platform**: LeetCode (2), HackerRank (0)
-
-**Most Common Techniques**:
-- Hash Table (1 problem)
-- Recursion (1 problem)
-- DFS (1 problem)
-- Two Pointers (1 problem)
-
----
-
-## How to Use This Index
-
-1. **Study by Technique**: Choose a technique you want to master (e.g., Recursion) and work through all problems tagged with that technique
-2. **Progressive Difficulty**: Start with Easy problems and gradually move to Medium and Hard
-3. **Cross-Reference**: Use the technique links (e.g., \@ref(recursion)) to review definitions in the glossary
-4. **Platform Practice**: Find problems by platform to practice on your preferred coding site
+```{r stats, echo=FALSE}
+cat("**Total Problems:**", nrow(problems), "\n\n")
+cat("**By Difficulty:**\n")
+cat("- Easy:", sum(problems$difficulty == "Easy"), "\n")
+cat("- Medium:", sum(problems$difficulty == "Medium"), "\n")
+cat("- Hard:", sum(problems$difficulty == "Hard"), "\n")
+cat("- Unclassified:", sum(problems$difficulty == "Unclassified"), "\n\n")
+cat("**By Platform:**\n")
+for(p in unique(problems$platform)) {
+  cat("-", p, ":", sum(problems$platform == p), "\n")
+}
+```
 
 ---
 
-*Note: This index is manually maintained and will be updated as new problems are added to the book.*
+*This index is automatically generated from `problems_data.csv`. All problem titles are clickable links to the generated HTML documentation in `docs/`.*
