@@ -249,34 +249,56 @@ xdg-open docs/index.html # Linux
 Each problem follows this template:
 
 ```markdown
-## Problem Name / LeetCode # / Difficulty
+## Problem Title {#problem-id}
+
+### Problem Metadata
+
+- **Platform**: [LeetCode/HackerRank/Other]
+- **Problem ID**: [Number]
+- **Difficulty**: [Easy/Medium/Hard]
+- **URL**: [Direct link to problem]
+- **Tags**: [Keywords for searching]
+- **Techniques**: [Links to glossary using \@ref(technique)]
 
 ### Description
+
 [Problem statement - describe what needs to be solved]
 
-### Example
-**Input**:
-**Output**:
-**Explanation**:
+### Examples
+
+**Example 1:**
+```
+Input: [input]
+Output: [output]
+Explanation: [why]
+```
+
+### Constraints
+
+- [List constraints from problem]
 
 ### Solution
 
 #### Walkthrough
+
 [Explain the approach and thought process]
 
 #### Analysis
+
 - **Time Complexity**: O(?)
 - **Space Complexity**: O(?)
 
 #### Algorithm
+
 1. Step 1
 2. Step 2
 3. Step 3
 
 #### Java Code
+
 ```java
 public class Solution {
-    public int solve() {
+    public ReturnType methodName(InputType input) {
         // Implementation
     }
 }

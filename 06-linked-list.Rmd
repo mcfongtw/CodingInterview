@@ -1,2175 +1,568 @@
-
 # Linked List
 
+## Add Two Numbers {#add-two-numbers}
 
+### Problem Metadata
 
-## Add Two Numbers / Leet Code 2 / Medium
+- **Platform**: LeetCode
+- **Problem ID**: 2
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/add-two-numbers/
+- **Tags**: `Linked List`
+- **Techniques**: Simulation
 
 ### Description
-You are given two non-empty linked lists representing two non-negative integers. The digits are stored in
-reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked
-list.
 
-You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+Given two non-empty linked lists representing non-negative integers in reverse order, add the numbers and return the sum as a linked list.
 
-### Example
+### Examples
 
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {2};
-\node[list,on chain] (B) {4};
-\node[list,on chain] (C) {3};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
 ```
-+
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {5};
-\node[list,on chain] (B) {6};
-\node[list,on chain] (C) {4};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
+Input: l1 = [2,4,3], l2 = [5,6,4]
+Output: [7,0,8]
 ```
 
-Output:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
+### Constraints
 
-\node[list,on chain] (A) {7};
-\node[list,on chain] (B) {0};
-\node[list,on chain] (C) {8};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
+- `1 <= len(l1), len(l2) <= 100`
+- Digits stored in reverse order; each node contains a single digit
 
-Explanation: 342 + 465 = 807.
+### Solution - Iterative Carry Addition
 
-### Solution
 #### Walkthrough
-First add two number digit by digit until one number run out of digit. Copy the other number for the remaining
-of digits. The tip is to create a dummy node as first node with value 0, where the subsequent nodes represents the answer. The answer would be head.next .
 
+Use two pointers traversing the lists simultaneously. Maintain a `carry`. At each step sum the corresponding digits and carry, append a node with `sum % 10`, and update carry to `sum / 10`. Continue until both lists and the carry are exhausted.
 
 #### Analysis
-Time complexity is O(n + m) as every node is visited once.
+
+- **Time Complexity**: O(max(m, n))
+- **Space Complexity**: O(max(m, n)) for the output list
 
 #### Algorithm
 
+1. Initialize dummy head, `tail`, and `carry = 0`.
+2. While `l1` or `l2` is non-null or `carry > 0`, compute `sum = carry + l1.val + l2.val`.
+3. Append new node with `sum % 10`, set `carry = sum / 10`, advance pointers.
+4. Return `dummy.next`.
+
 #### Java Code
+
 ```java
 public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-    ListNode currentN1 = l1;
-    ListNode currentN2 = l2;
-    ListNode currentDigit = new ListNode(0);
-    ListNode resultHead = currentDigit;
+    ListNode dummy = new ListNode(0);
+    ListNode tail = dummy;
+    int carry = 0;
 
-    int digitCarry = 0;
-    int digitSum = 0;
-
-    while(currentN1 != null && currentN2 != null) {
-        digitSum = currentN1.val + currentN2.val + digitCarry;
-        digitCarry = digitSum / 10;
-        digitSum %= 10;
-
-        currentDigit.next = new ListNode(digitSum);
-        currentDigit = currentDigit.next;
-
-        currentN1 = currentN1.next;
-        currentN2 = currentN2.next;
+    while (l1 != null || l2 != null || carry != 0) {
+        int sum = carry;
+        if (l1 != null) {
+            sum += l1.val;
+            l1 = l1.next;
+        }
+        if (l2 != null) {
+            sum += l2.val;
+            l2 = l2.next;
+        }
+        carry = sum / 10;
+        tail.next = new ListNode(sum % 10);
+        tail = tail.next;
     }
 
-    //Copy the remaining of number 1
-    while(currentN1 != null) {
-        digitSum = currentN1.val + digitCarry;
-        digitCarry = digitSum / 10;
-        digitSum %= 10;
-
-        currentDigit.next = new ListNode(digitSum);
-        currentDigit = currentDigit.next;
-
-        currentN1 = currentN1.next;
-    }
-
-    //Copy the remaining of number 2
-    while(currentN2 != null) {
-        digitSum = currentN2.val + digitCarry;
-        digitCarry = digitSum / 10;
-        digitSum %= 10;
-
-        currentDigit.next = new ListNode(digitSum);
-        currentDigit = currentDigit.next;
-
-        currentN2 = currentN2.next;
-    }
-
-    if(digitCarry > 0) {
-        currentDigit.next = new ListNode(digitCarry);
-        currentDigit = currentDigit.next;
-    }
-
-    return resultHead.next;
+    return dummy.next;
 }
 ```
 
+## Reverse Linked List {#reverse-linked-list}
 
-## Reverse Linked List / Leet Code 206 / Easy
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 206
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/reverse-linked-list/
+- **Tags**: `Linked List`
+- **Techniques**: Two Pointers, Recursion
 
 ### Description
+
 Reverse a singly linked list.
 
-### Example
+### Solution - Iterative Two Pointers
 
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
+#### Walkthrough
 
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[list,on chain] (C) {3};
-\node[list,on chain] (D) {4};
-\node[list,on chain] (E) {3};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (E);
-\draw[*->] let \p1 = (E.center), \p2 = (E.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
+Maintain `prev`, `curr`, and `next`. Iteratively reverse the `next` pointer of each node until the list is reversed.
 
-Output:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
+#### Analysis
 
-\node[list,on chain] (A) {5};
-\node[list,on chain] (B) {4};
-\node[list,on chain] (C) {3};
-\node[list,on chain] (D) {2};
-\node[list,on chain] (E) {1};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (E);
-\draw[*->] let \p1 = (E.center), \p2 = (E.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Java Code
+
+```java
+public ListNode reverseList(ListNode head) {
+    ListNode prev = null;
+    ListNode curr = head;
+    while (curr != null) {
+        ListNode next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}
 ```
 
 ### Solution - Recursive
-#### Walkthrough
-For recursive solution, have a pointer remember original next and swap its link with the original head. Call
-the method recursively.
 
-#### Analysis
-Time complexity is O(n) since every node is visited.
-
-#### Algorithm
- recursion \@ref(recursion)
-
-#### Java Code - Recursive
 ```java
-public ListNode reverseList(ListNode node) {
-    if(node == null) {
-        return null;
-    } else if(node.next == null) {
-        return node;
-    } else {
-        ListNode origNext = node.next;
-        ListNode newNode = reverseList(origNext);
-        //origNext -> node
-        origNode.next = node;
-        //delete link
-        node.next = null;
-        return newNode;
+public ListNode reverseListRecursive(ListNode head) {
+    if (head == null || head.next == null) {
+        return head;
     }
+    ListNode newHead = reverseListRecursive(head.next);
+    head.next.next = head;
+    head.next = null;
+    return newHead;
 }
 ```
 
-### Solution - Iterative
-#### Walkthrough
-For iterative solution, have a helper pointer to remember the previous position and reverse the links between
-current and headPrev nodes while iterating the list.
+## Reverse Linked List II {#reverse-linked-list-ii}
 
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-    \node[list,on chain] (1) {};
-    \node[list,on chain] (2) {};
-    \node[list,on chain] (3) {};
-    \node[on chain,draw,inner sep=3pt] (X) {};
-    \draw (X.north east) -- (X.south west);
-    \draw (X.north west) -- (X.south east);
-    \node(p1)[above= of 1] {hp};
-    \node(p2)[below= of 2] {p};
-    \node(p3)[below= of 3] {c};
-    \node(p4)[below= of X] {n};
+### Problem Metadata
 
-    \draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-    \draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-    \draw[*->, dashed] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) -- (X);
-    \draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) to [out=30,in=90] (2);
-    \draw[*->] (p1) -- (1);
-    \draw[*->, dashed] (p2) -- (2);
-    \draw[*->, dashed] (p3) -- (3);
-    \draw[*->] (p2) -- (3);
-    \draw[*->] (p3) -- (X);
-    \draw[*->] (p4) -- (X);
-\end{tikzpicture}
-```
-Finally, reset where begin.next points to head of the list after reverse - tail of the original list, and return the
-head of the reversed list.
+- **Platform**: LeetCode
+- **Problem ID**: 92
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/reverse-linked-list-ii/
+- **Tags**: `Linked List`
+- **Techniques**: In-place reversal
 
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-    \node[list,on chain] (1) {};
-    \node[list,on chain] (2) {};
-    \node[list,on chain] (3) {};
-    \node[on chain,draw,inner sep=3pt] (X) {};
-    \draw (X.north east) -- (X.south west);
-    \draw (X.north west) -- (X.south east);
-    \node(p1)[above= of 1] {hp};
-    \node(p2)[below= of 3] {p};
-    \node(p3)[below= of X] {c};
+### Description
 
-    \draw[*->, dashed] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-    \draw[*->, dashed] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-    \draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) to [out=30,in=90] (2);
-    \draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) to [out=330,in=270] (X);
-    \draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) to [out=330,in=270] (3);
-    \draw[*->] (p1) -- (1);
-    \draw[*->] (p2) -- (3);
-    \draw[*->] (p3) -- (X);
-\end{tikzpicture}
-```
+Reverse the nodes between positions `left` and `right` (1-indexed) in a linked list.
 
-#### Analysis
-Time complexity is O(n) since every node is visited.
+### Solution - Head Insertion
 
-#### Algorithm
-
-#### Java Code - Iterative
 ```java
-public ListNode reverseList(ListNode head) {
-    if(head == null || head.next == null) {
+public ListNode reverseBetween(ListNode head, int left, int right) {
+    if (head == null || left == right) {
         return head;
     }
 
-    ListNode headPrev = new ListNode(0);
-    headPrev.next = head;
-
-    return reverse(headPrev);
-}
-
-public ListNode reverse(ListNode begin) {
-    ListNode prev = begin.next;
-    ListNode current = prev.next;
-
-    //reverse links between current and prev
-    while (current != null) {
-        ListNode next = current.next;
-        /*
-        * swap links between current and prev
-        */
-        current.next = prev;
-        prev = current;
-        current = next;
+    ListNode dummy = new ListNode(0, head);
+    ListNode prev = dummy;
+    for (int i = 1; i < left; i++) {
+        prev = prev.next;
     }
 
-    begin.next.next = current;
-    begin.next = prev;
+    ListNode curr = prev.next;
+    for (int i = 0; i < right - left; i++) {
+        ListNode next = curr.next;
+        curr.next = next.next;
+        next.next = prev.next;
+        prev.next = next;
+    }
 
-    return begin.next;
+    return dummy.next;
 }
 ```
 
+## Reverse Nodes in k-Group {#reverse-k-group}
 
+### Problem Metadata
 
-## Reverse Linked List II / Leet Code 92 / Medium
+- **Platform**: LeetCode
+- **Problem ID**: 25
+- **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/reverse-nodes-in-k-group/
+- **Tags**: `Linked List`
 
 ### Description
-Reverse a linked list from position m to n. Do it in one-pass
 
-### Example
+Reverse the list in groups of size `k`. Remaining nodes (< k) stay as-is.
 
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
+### Solution - Iterative Group Reversal
 
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[list,on chain] (C) {3};
-\node[list,on chain] (D) {4};
-\node[list,on chain] (E) {3};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (E);
-\draw[*->] let \p1 = (E.center), \p2 = (E.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-, m = 2, n = 4
-
-Output:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-    \node[list,on chain] (A) {1};
-    \node[list,on chain] (B) {4};
-    \node[list,on chain] (C) {3};
-    \node[list,on chain] (D) {2};
-    \node[list,on chain] (E) {5};
-    \node[on chain,draw,inner sep=6pt] (X) {};
-    \draw (X.north east) -- (X.south west);
-    \draw (X.north west) -- (X.south east);
-    \draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-    \draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-    \draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-    \draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (E);
-    \draw[*->] let \p1 = (E.center), \p2 = (E.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-
-### Solution
-#### Walkthrough
-Have a helper pointer to to move to (M-1) position and reverse the links between current and prev nodes while
-iterating the list for (N-M) nodes.
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-\node[list,on chain] (1) {};
-\node[list,on chain] (2) {};
-\node[list,on chain] (3) {};
-\node[list,on chain] (4) {};
-\node(p1)[above= of 1] {M-1};
-\node(p2)[below= of 2] {p};
-\node(p3)[below= of 3] {c};
-\node(p4)[below= of 4] {n};
-\node(p5)[above= of 4] {N};
-
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->, dashed] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) -- (4);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) to [out=30,in=90] (2);
-\draw[*->] (p1) -- (1);
-\draw[*->, dashed] (p2) -- (2);
-\draw[*->, dashed] (p3) -- (3);
-\draw[*->] (p2) -- (3);
-\draw[*->] (p3) -- (4);
-\draw[*->] (p4) -- (4);
-\draw[*->] (p5) -- (4);
-\end{tikzpicture}
-```
-
-Finally, reset where begin.next points to head of the list after reverse - tail of the original list, and return the
-tail of the reversed list.
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-\node[list,on chain] (1) {};
-\node[list,on chain] (2) {};
-\node[list,on chain] (3) {};
-\node[list,on chain] (4) {};
-\node(p1)[above= of 1] {M-1};
-\node(p2)[below= of 3] {p};
-\node(p3)[below= of 4] {c};
-\node(p4)[below= of 2] {t};
-\node(p5)[above= of 4] {N};
-
-\draw[*->, dashed] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->, dashed] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) to [out=30,in=90] (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) to [out=330,in=270] (4);
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) to [out=330,in=270] (3);
-\draw[*->] (p1) -- (1);
-\draw[*->] (p2) -- (3);
-\draw[*->] (p3) -- (4);
-\draw[*->] (p4) -- (2);
-\draw[*->] (p5) -- (4);
-\end{tikzpicture}
-```
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code
-```java
-public ListNode reverseBetween(ListNode head, int m, int n) {
-    if(head == null) {
-        return head;
-    }
-
-    //headHelper.next is original head
-    ListNode headPrev = new ListNode(0);
-    headPrev.next = head;
-
-    ListNode mMinus1 = headPrev;
-    //move to starting position
-    for (int i = 0; i < m - 1; i++) {
-        mMinus1 = mMinus1.next;
-    }
-
-    //reverse node between (m, n)
-    reverseList(mMinus1, n-m);
-
-    return headPrev.next;
-}
-
-public ListNode reverseList(ListNode begin, int length) {
-    ListNode prev = begin.next;
-    ListNode current = prev.next;
-
-    //reverse links between current and prev
-    int i = 0;
-    while (i < length) {
-        ListNode next = current.next;
-        /*
-        * swap links between current and prev
-        */
-        current.next = prev;
-        prev = current;
-        current = next;
-        i++;
-    }
-
-    // tail of reversed is head of original list
-    ListNode tail = begin.next;
-
-    begin.next.next = current;
-    begin.next = prev;
-
-    return tail;
-}
-```
-
-
-## Reverse Nodes in k-Group / LeetCode 25 / Hard
-
-### Description
-Given a linked list, reverse the nodes of a linked list k at a time and return its modified list. If the number of
-nodes is not a multiple of k then left-out nodes in the end should remain as it is. You may not alter the values in
-the nodes, only nodes itself may be changed.
-
-### Example
-
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (1) {1};
-\node[list,on chain] (2) {2};
-\node[list,on chain] (3) {3};
-\node[list,on chain] (4) {4};
-\node[list,on chain] (5) {5};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) -- (4);
-\draw[*->] let \p1 = (4.center), \p2 = (4.center) in (\x1,\y2) -- (5);
-\draw[*->] let \p1 = (5.center), \p2 = (5.center) in (\x1,\y2) -- (X);
-\end{tikzpicture},
-```
-
-k = 2 becomes
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (1) {2};
-\node[list,on chain] (2) {1};
-\node[list,on chain] (3) {4};
-\node[list,on chain] (4) {3};
-\node[list,on chain] (5) {5};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) -- (4);
-\draw[*->] let \p1 = (4.center), \p2 = (4.center) in (\x1,\y2) -- (5);
-\draw[*->] let \p1 = (5.center), \p2 = (5.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-
-k=3 becomes
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (1) {3};
-\node[list,on chain] (2) {2};
-\node[list,on chain] (3) {1};
-\node[list,on chain] (4) {4};
-\node[list,on chain] (5) {5};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) -- (4);
-\draw[*->] let \p1 = (4.center), \p2 = (4.center) in (\x1,\y2) -- (5);
-\draw[*->] let \p1 = (5.center), \p2 = (5.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-
-### Solution
-#### Walkthrough
-Have a index to remember when to start reversing and when to stop and reverse the links between current and prev nodes
-while iterating the list until the stop position is met.
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-\node[list,on chain] (1) {};
-\node[list,on chain] (2) {};
-\node[list,on chain] (3) {};
-\node[list,on chain] (4) {};
-\node(p1)[above= of 1] {b};
-\node(p2)[below= of 2] {p};
-\node(p3)[below= of 3] {c};
-\node(p4)[below= of 4] {n};
-\node(p5)[above= of 4] {e};
-
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->, dashed] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) -- (4);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) to [out=30,in=90] (2);
-\draw[*->] (p1) -- (1);
-\draw[*->, dashed] (p2) -- (2);
-\draw[*->, dashed] (p3) -- (3);
-\draw[*->] (p2) -- (3);
-\draw[*->] (p3) -- (4);
-\draw[*->] (p4) -- (4);
-\draw[*->] (p5) -- (4);
-\end{tikzpicture}
-```
-
-Finally, reset where begin.next points to head of the list after reverse - tail of the original list, and return the
-tail of the reversed list.
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-\node[list,on chain] (1) {};
-\node[list,on chain] (2) {};
-\node[list,on chain] (3) {};
-\node[list,on chain] (4) {};
-\node(p1)[above= of 1] {b};
-\node(p2)[below= of 3] {p};
-\node(p3)[below= of 4] {c};
-\node(p4)[below= of 2] {t};
-\node(p5)[above= of 4] {e};
-
-\draw[*->, dashed] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->, dashed] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) to [out=30,in=90] (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) to [out=330,in=270] (4);
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) to [out=330,in=270] (3);
-\draw[*->] (p1) -- (1);
-\draw[*->] (p2) -- (3);
-\draw[*->] (p3) -- (4);
-\draw[*->] (p4) -- (2);
-\draw[*->] (p5) -- (4);
-\end{tikzpicture}
-```
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code
 ```java
 public ListNode reverseKGroup(ListNode head, int k) {
-    if(head==null || k==1) {
+    if (head == null || k <= 1) {
         return head;
     }
+    ListNode dummy = new ListNode(0, head);
+    ListNode groupPrev = dummy;
 
-    ListNode headPrev = new ListNode(0);
-    headPrev.next = head;
-    ListNode prev = headPrev;
-    int i = 0;
-
-    ListNode current = head;
-    while(current!=null){
-        i++;
-        if((i % k) == 0){
-            ListNode revTail = reverseList(prev, current.next);
-            prev = revTail;
-            current = revTail.next;
-        }else{
-            current = current.next;
+    while (true) {
+        ListNode kth = getKth(groupPrev, k);
+        if (kth == null) {
+            break;
         }
+        ListNode groupNext = kth.next;
+        ListNode prev = groupNext;
+        ListNode curr = groupPrev.next;
+        while (curr != groupNext) {
+            ListNode next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        ListNode tmp = groupPrev.next;
+        groupPrev.next = kth;
+        groupPrev = tmp;
     }
 
-    return headPrev.next;
+    return dummy.next;
 }
 
-
-public ListNode reverseList(ListNode begin, ListNode end) {
-    ListNode prev = begin.next;
-    ListNode current = prev.next;
-
-    //reverse links between current and prev
-    while (current != end) {
-        ListNode next = current.next;
-        /*
-        * swap links between current and prev
-        */
-        current.next = prev;
-        prev = current;
-        current = next;
+private ListNode getKth(ListNode start, int k) {
+    while (start != null && k > 0) {
+        start = start.next;
+        k--;
     }
-
-    // tail of reversed is head of original list
-    ListNode tail = begin.next;
-
-    begin.next.next = end;
-    begin.next = prev;
-
-    return tail;
+    return start;
 }
 ```
 
+## Linked List Cycle {#linked-list-cycle}
 
-## Linked List Cycle / Leet Code 141 / Easy
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 141
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/linked-list-cycle/
+- **Tags**: `Linked List`, `Two Pointers`
 
 ### Description
-Given a linked list, determine if it has a cycle in it.
 
-To represent a cycle in the given linked list, we use an integer pos which represents the position
-(0-indexed) in the linked list where tail connects to. If pos is -1, then there is no cycle in the linked
-list.
+Detect whether a linked list has a cycle.
 
-### Example
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
+### Solution - Floyd’s Algorithm
 
-\node[list,on chain] (A) {3};
-\node[list,on chain] (B) {2};
-\node[list,on chain] (C) {0};
-\node[list,on chain] (D) {-4};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (X);
-\draw[*->] let \p1 = (X.center), \p2 = (X.center) in (\x1,\y2) to[out=60,in=150] (B);
-
-\end{tikzpicture}
-```
-
-Output: true. Explanation: There is a cycle in the linked list, where
-tail connects to the second node.
-
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (X);
-\draw[*->] let \p1 = (X.center), \p2 = (X.center) in (\x1,\y2) to[out=60,in=150] (A);
-
-\end{tikzpicture}
-```
-Output: true. Explanation: There is a cycle in the linked list, where tail
-connects to the first node.
-
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (X);
-
-\end{tikzpicture}
-```
-Output: false. Explanation: There is no cycle in the linked list.
-
-### Solution
-#### Walkthrough
-Having two pointers, one running twice as fast as the other(p1 = p1.next; p2 = p2.next.next). If there is a
-cycle, eventually (p1 == p2) representing a node in the cycle. A better traversal algorithm would make p1 at
-the middle of the cycled list whereas p2 at the tail of the cycled list.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code
 ```java
 public boolean hasCycle(ListNode head) {
-    if(head == null) {
-        return false;
-    }
-
-    ListNode fast = head, slow = head;
-
-    while(fast != null && fast.next != null) {
-        fast = fast.next.next;
+    ListNode slow = head;
+    ListNode fast = head;
+    while (fast != null && fast.next != null) {
         slow = slow.next;
-
-        if(fast == slow) {
+        fast = fast.next.next;
+        if (slow == fast) {
             return true;
         }
     }
-
     return false;
 }
 ```
 
+## Linked List Cycle II {#linked-list-cycle-ii}
 
-## Linked List Cycle II / Leet Code 142 / Medium
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 142
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/linked-list-cycle-ii/
+- **Tags**: `Linked List`, `Two Pointers`
 
 ### Description
-Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
 
-To represent a cycle in the given linked list, we use an integer pos which represents the position
-(0-indexed) in the linked list where tail connects to. If pos is -1, then there is no cycle in the linked
-list.
+Return the node where the cycle begins, or null if none.
 
-Note: Do not modify the linked list.
-
-### Example
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {3};
-\node[list,on chain] (B) {2};
-\node[list,on chain] (C) {0};
-\node[list,on chain] (D) {-4};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (X);
-\draw[*->] let \p1 = (X.center), \p2 = (X.center) in (\x1,\y2) to[out=60,in=150] (B);
-
-\end{tikzpicture}
-```
-Output: tail connects to node index 1. Explanation: There is a cycle in the linked list, where tail
-connects to the second node.
-
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (X);
-\draw[*->] let \p1 = (X.center), \p2 = (X.center) in (\x1,\y2) to[out=60,in=150] (A);
-
-\end{tikzpicture}
-```
-Output: tail connects to node index 0. Explanation: There is a cycle in the linked list, where tail
-connects to the first node.
-
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (X);
-
-\end{tikzpicture}
-```
-Output: null (no cycle). Explanation: There is no cycle in the linked list.
-
-### Solution
-#### Walkthrough
-Having two pointers, one talks twice as fast as the other. If there is a cycle (p1 == p2), p1 would be at
-the middle of the cycled list whereas p2 at the tail of the cycled list. In other words, *# of steps
-taken from header to p1 equals to # of steps taken from p1 to p2.*
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code
 ```java
 public ListNode detectCycle(ListNode head) {
-    if(head == null || head.next == null) {
-        return null;
-    }
-
-    ListNode fast = head, slow = head;
-    while(fast != null && fast.next != null) {
-        fast = fast.next.next;
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
         slow = slow.next;
-
-        if(fast == slow) {
-            break;
+        fast = fast.next.next;
+        if (slow == fast) {
+            ListNode ptr = head;
+            while (ptr != slow) {
+                ptr = ptr.next;
+                slow = slow.next;
+            }
+            return ptr;
         }
     }
-
-    if(fast == slow) {
-        ListNode cycleHead = head;
-        /*
-         * slow is at middle of CYCLED list
-         * Initially, cycleHead is at header
-         * cycleHead --> slow == slow --> fast
-         */
-        while(fast != cycleHead) {
-            fast = fast.next;
-            cycleHead = cycleHead.next;
-        }
-
-        return cycleHead;
-    } else {//no cycle
-        return null;
-    }
-}
-```
-
-
-
-## Odd Even Linked List / Leet Code 328 / Medium
-
-### Description
-Given a singly linked list, group all odd nodes together followed by the even nodes. Please note here we
-are talking about the node number and not the value in the nodes.
-You should try to do it in place.
-
-### Example
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[list,on chain] (C) {3};
-\node[list,on chain] (D) {4};
-\node[list,on chain] (E) {3};
-\node[on chain,draw,inner sep=6pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (E);
-\draw[*->] let \p1 = (E.center), \p2 = (E.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-Output:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {3};
-\node[list,on chain] (C) {5};
-\node[list,on chain] (D) {2};
-\node[list,on chain] (E) {4};
-\node[on chain,draw,inner sep=6pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (E);
-\draw[*->] let \p1 = (E.center), \p2 = (E.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-
-### Solution
-#### Walkthrough
-Have two helper pointers to construct to list: one for odd nodes and one for even nodes. Assign those nodes
-accordingly while traversing the list. Finally, connect odd nodes list to even nodes list.
-
-#### Analysis
-The program should run in O(1) Auxiliary Space and O(n) time complexity.
-
-#### Algorithm
-
-#### Java Code
-```java
-public ListNode oddEvenList(ListNode head) {
-    if(head == null || head.next == null || head.next.next == null ) {
-        return head;
-    }
-
-    ListNode oddHeadPrev = new ListNode(0), currentOdd = oddHeadPrev;
-    ListNode evnHeadPrev = new ListNode(0), currentEvn = evnHeadPrev;
-    ListNode current = head;
-
-    int index = 1;
-
-    while(current != null) {
-        // Same as index % 2 == 1
-        if( (index & 1) > 0 ) {
-            currentOdd.next = current;
-            currentOdd = currentOdd.next;
-        } else {
-            currentEvn.next = current;
-            currentEvn = currentEvn.next;
-        }
-
-        index++;
-        current = current.next;
-    }
-
-    //connect odd nodes list with even nodes list
-    currentOdd.next = evnHeadPrev.next;
-
-    //connect event nodes to null
-    currentEvn.next = null;
-
-    return oddHeadPrev.next;
-}
-```
-
-
-## Merge Two Sorted Lists / Leet Code 21 / Easy 
-
-### Description
-Merge two sorted linked lists and return it as a new list. The new list should be made by splicing
-together the nodes of the first two lists.
-
-### Example
-
-### Solution
-#### Walkthrough
-This is the same as merge() to sort a list in Leet Code 148. First we will create a new ListNode and a
-current pointer. While traversing the node, compre the nodes at each list and nodes with smaller value
-will attach to the final sorted list. Exit traversal when either list hits the end. If there are nodes
-remained in either list, connect to that remaining nodes of the list.
-
-#### Analysis
-The cost for each merge is O(n) as every node is visited once in the list. There are two lists, thus the overall time
-complexity remains O(n).
-
-#### Algorithm
-
-#### Java Code
-```java
-public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-    ListNode headPrev = new ListNode(0), current = headPrev;
-
-    while(l1 != null && l2 != null) {
-        if(l1.val < l2.val) {
-            //l1 < l2
-            current.next = l1;
-            l1 = l1.next;
-        } else {
-            current.next = l2;
-            l2 = l2.next;
-        }
-        current = current.next;
-    }
-
-    // connect to the rest of the remaining nodes
-    if(l1 != null) {
-        current.next = l1;
-    } else {
-        // l2 = remaining of list or null
-        current.next = l2;
-    }
-
-    return headPrev.next;
-}
-```
-
-
-## Merge k Sorted Lists / Leet Code 23 / Hard
-
-### Description
-Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
-
-### Example
-
-### Solution - Merge lists one by one
-#### Walkthrough
-One solution is to leverage the previous problem of merging 2 list.
-
-#### Analysis
-We will need to merge two lists for (k-1) times, where each
-merge() will cost O(n) in time complexity and O(1) in Auxiliary Space. The total cost for merge is
-$\sum_{i=1}^{k-1} (i * \frac{n}{k} + \frac{n}{k}) = O(k \cdot n)$ in time  complexity, where n is the
-total node number in k list. and O(1) in Auxiliary Space. However, this would not be an efficient solution if k
-is large.
-
-#### Algorithm
-
-#### Java Code - Merge lists one by one
-```java
-public ListNode mergeKLists(ListNode[] lists) {
-    if(lists.length == 0) {
-        return null;
-    }
-
-    ListNode newHead = lists[0];
-
-    //merge k-1 times
-    for(int i = 1; i < lists.length; i++) {
-        newHead = merge(newHead, lists[i]);
-    }
-
-    return newHead;
-}
-
-public ListNode merge(ListNode l1, ListNode l2) {
-    ListNode headPrev = new ListNode(0), current = headPrev;
-
-    while(l1 != null && l2 != null) {
-        if(l1.val < l2.val) {
-            //l1 < l2
-            current.next = l1;
-            l1 = l1.next;
-        } else {
-            current.next = l2;
-            l2 = l2.next;
-        }
-        current = current.next;
-    }
-
-    // connect to the rest of the remaining nodes
-    if(l1 != null) {
-        current.next = l1;
-    } else {
-        current.next = l2;
-    }
-
-    return headPrev.next;
-}
-```
-
-### Solution - Min Heap
-#### Walkthrough
-We could compare every leading elements in k lists and retrieve the node with the smallest value using Min Heap.
-
-#### Analysis
-Since the original k lists were sorted, therefore, we could retrieve all $n \cdot k$ elements in
-sorted order by retrieve the min element from PriorityQueue (min heap). The comparison cost is O(log k) for every pop
-and insertion to the priority queue since there are at most k elements (from k list). Additionally, there are
-a total number of n nodes in all lists. Thus, the overall time complexity is $O(\log k \cdot n)$ and Auxiliary Space
-for the ﬁnal list is O(n), where n is the total node number in all k lists.
-
-#### Algorithm
- bfs \@ref(bfs), heap \@ref(heap)
-
-#### Java Code - Min Heap
-```java
-public ListNode mergeKLists(ListNode[] lists) {
-    if(lists.length == 0) {
-        return null;
-    }
-
-    ListNode head = null, current = null;
-
-    PriorityQueue<ListNode> queue = new PriorityQueue<>(new Comparator<ListNode>() {
-        @Override
-        public int compare(ListNode node1, ListNode node2) {
-            return node1.val - node2.val;
-        }
-    });
-
-    //insert all heads into the priority queue
-    for(ListNode headOfList : lists) {
-        if(headOfList != null) {
-            queue.offer(headOfList);
-        }
-    }
-
-
-    while(!queue.isEmpty()) {
-        ListNode node = queue.poll();
-
-        //add next node into priority queue
-        if(node.next != null) {
-            queue.offer(node.next);
-        }
-
-        // construct the list with the min element from queue
-        if(head == null) {
-            head = node;
-            current = node;
-        } else {
-            current.next = node;
-            current = current.next;
-        }
-    }
-
-    return head;
-}
-```
-
-
-
-## Palindrome Linked List / Leet Code 234 / Easy
-
-### Description
-Given a singly linked list, determine if it is a palindrome.
-
-### Example
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (X);
-\end{tikzpicture} 
-```
-return false
-
-Output:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[list,on chain] (C) {2};
-\node[list,on chain] (D) {1};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (X);
-\end{tikzpicture} 
-```
-return true
-
-### Solution
-#### Walkthrough
-Locate the mid node, and use that to reverse the 2nd half of the list. We will have two sublists: [o, ..., m] and
-[r, ..., m].
-
-Event number of list:
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-\node[list,on chain] (1) {};
-\node[list,on chain] (2) {};
-\node[list,on chain] (3) {};
-\node[list,on chain] (4) {};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\node(pmid)[below= of 2] {m};
-\node(porg)[below= of 1] {o};
-\node(prev)[below= of 4] {r};
-
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) -- (4);
-\draw[*->] let \p1 = (4.center), \p2 = (4.center) in (\x1,\y2) -- (X);
-\draw[*->] (pmid) -- (2);
-\draw[*->] (porg) -- (1);
-\draw[*->] (prev) -- (4);
-\end{tikzpicture}
-```
-
-Odd number of list:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-\node[list,on chain] (1) {};
-\node[list,on chain] (2) {};
-\node[list,on chain] (3) {};
-\node[list,on chain] (4) {};
-\node[list,on chain] (5) {};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\node(pmid)[below= of 3] {m};
-\node(porg)[below= of 1] {o};
-\node(prev)[below= of 5] {r};
-
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) -- (4);
-\draw[*->] let \p1 = (4.center), \p2 = (4.center) in (\x1,\y2) -- (5);
-\draw[*->] let \p1 = (5.center), \p2 = (5.center) in (\x1,\y2) -- (X);
-\draw[*->] (pmid) -- (3);
-\draw[*->] (porg) -- (1);
-\draw[*->] (prev) -- (5);
-\end{tikzpicture}
-```
-
-Traverse the two sublists, beginning at head of original and head of reversed sublists respectively. If any node is
-not equal, then it is NOT palindrome.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code
-```java
-public boolean isPalindrome(ListNode head) {
-    if(head == null || head.next == null) {
-        return true;
-    }
-
-    ListNode mid = head, tail = head;
-
-    //locating mid and tail nodes
-    while(tail.next != null && tail.next.next != null) {
-        mid = mid.next;
-        tail = tail.next.next;
-    }
-
-    // retrieve the head of reversed 2nd half sublist
-    ListNode reversed2ndHalfHead = reverse(mid);
-
-    ListNode currentOrg = head, currentRev = reversed2ndHalfHead;
-
-    while(currentOrg != null && currentRev != null) {
-        //if any in original 1st half does not match reversed 2nd half
-        if(currentOrg.val != currentRev.val) {
-            return false;
-        }
-
-        currentOrg = currentOrg.next;
-        currentRev = currentRev.next;
-    }
-
-    return true;
-}
-
-public ListNode reverse(ListNode head) {
-    ListNode headPrev = new ListNode(0);
-    ListNode current = head;
-
-    //reverse links between current and prev
-    while (current != null) {
-        ListNode next = current.next;
-
-        /*
-        * swap links between current and prev
-        */
-        current.next = headPrev.next;
-        headPrev.next = current;
-        current = next;
-    }
-
-    return headPrev.next;
-}
-```
-
-
-## Intersection of Two Linked Lists / Leet Code 160 / Easy
-
-### Description
-Write a program to find the node at which the intersection of two singly linked lists begins.
-
-*  If the two linked lists have no intersection at all, return null.
-*  The linked lists must retain their original structure after the function returns.
-*  You may assume there are no cycles anywhere in the entire linked structure.
-*  Your code should preferably run in O(n) time and use only O(1) memory.
-*  The intersected nodes must continue to the end of both lists.
-*  If two nodes intersect, two node pointers refer to the same ListNode object in memory.
-
-
-### Example
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A1) {4};
-\node[list,on chain] (A2) {1};
-\node[list,on chain, below=of A2] (C1) {8};
-\node[list,on chain] (C2) {4};
-\node[list,on chain] (C3) {5};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\node[list,on chain, below=1cm] (B1) {5};
-\node[list,on chain] (B2) {0};
-\node[list,on chain] (B3) {1};
-
-\draw[*->] let \p1 = (A1.center), \p2 = (A1.center) in (\x1,\y2) -- (A2);
-\draw[*->] let \p1 = (A2.center), \p2 = (A2.center) in (\x1,\y2) -- (C1);
-\draw[*->] let \p1 = (B1.center), \p2 = (B1.center) in (\x1,\y2) -- (B2);
-\draw[*->] let \p1 = (B2.center), \p2 = (B2.center) in (\x1,\y2) -- (B3);
-\draw[*->] let \p1 = (B3.center), \p2 = (B3.center) in (\x1,\y2) to [out=120,in=300] (C1);
-\draw[*->] let \p1 = (C1.center), \p2 = (C1.center) in (\x1,\y2) -- (C2);
-\draw[*->] let \p1 = (C2.center), \p2 = (C2.center) in (\x1,\y2) -- (C3);
-\draw[*->] let \p1 = (C3.center), \p2 = (C3.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-
-Output: Reference of the node with value = 8
-Input Explanation: The intersected node's value is 8 (note that this must not be 0 if the two lists
-intersect). From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads as
-[5,0,1,8,4,5]. There are 2 nodes before the intersected node in A; There are 3 nodes before the
-intersected node in B.
-
-### Solution
-#### Walkthrough
-First we compute the length of both list and we get rid of the leading extra node of the longer list.
-For the # of remaining nodes of the longer list should equal to the # of shorter list. We traverse
-both list, and determine when (p1 == p2) - instead of (p1.val == p2.val)
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code
-```java
-public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-    int lenA = 0, lenB = 0;
-
-    //compute length of both lists
-    for(ListNode current = headA; current != null; current = current.next, lenA++);
-    for(ListNode current = headB; current != null; current = current.next, lenB++);
-
-    //both conditions need to be the same
-    ListNode currentLonger = lenA > lenB ? headA : headB;
-    ListNode currentShorter = lenA > lenB ? headB : headA;
-
-    //Move currentLonger to the position where remaining of nodes equal to len(currentShorter)
-    for(int i = 0; i < Math.abs(lenA - lenB); i++, currentLonger = currentLonger.next);
-
-    while(currentLonger != null && currentShorter != null) {
-        //If the node intersect, nodeA == nodeB
-        if(currentLonger == currentShorter) {
-            //return current node
-            return currentLonger;
-        }
-
-        currentLonger = currentLonger.next;
-        currentShorter = currentShorter.next;
-    }
-
-    //no match
     return null;
 }
 ```
 
+## Odd Even Linked List {#odd-even-list}
 
-## Remove Nth Node From End of List / Leet Code 19 / Medium
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 328
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/odd-even-linked-list/
 
 ### Description
-Given a linked list, remove the n-th node from the end of list and return its head.
 
-### Example
-Input:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
+Group odd-position nodes followed by even-position nodes.
 
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[list,on chain] (C) {3};
-\node[list,on chain] (D) {4};
-\node[list,on chain] (E) {5};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (E);
-\draw[*->] let \p1 = (E.center), \p2 = (E.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-, and n = 2.
-
-Output:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[list,on chain] (C) {3};
-\node[list,on chain] (D) {5};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-
-### Solution - TWO Pass
-#### Walkthrough
-The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list,
-whileas the second iteration is to iterate to the node posiion $length -n + 1$ or prev node position $length - n$,
-begining from a dummy node headPrev. Finally, we need to check and move the head node appropriately if we are deleting
-it.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code - TWO Pass
 ```java
-public ListNode removeNthFromEnd(ListNode head, int n) {
-    if(head == null) {
-        return null;
+public ListNode oddEvenList(ListNode head) {
+    if (head == null) return null;
+    ListNode odd = head;
+    ListNode even = head.next;
+    ListNode evenHead = even;
+    while (even != null && even.next != null) {
+        odd.next = even.next;
+        odd = odd.next;
+        even.next = odd.next;
+        even = even.next;
     }
-
-    //Quick check to see if we are deleting the only node in the list
-    if (head.next == null && n <= 1){
-        return null;
-    }
-
-    int length = 0;
-
-    //1st pass: to get length of the list
-    for(ListNode current = head; current != null; current = current.next) {
-        length++;
-    }
-
-    // removal position is over list length
-    if(n > length) {
-        return head;
-    }
-
-    //move to the position before the target
-    int position = length - n;
-
-    //keep track of current traversed # of nodes
-    int count = 0;
-
-    ListNode headPrev = new ListNode(0);
-    headPrev.next = head;
-    ListNode removedPrev = headPrev;
-
-    //2nd pass: move to the one before target
-    while( count < position) {
-        removedPrev = removedPrev.next;
-        count++;
-    }
-
-    removedPrev.next = removedPrev.next.next;
-
-    //if removing head, renew head
-    if(removedPrev == headPrev) {
-        head = removedPrev.next;
-    }
-
-
+    odd.next = evenHead;
     return head;
 }
 ```
 
-### Solution - ONE Pass
-#### Walkthrough
-The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list,
-whileas the second iteration is to iterate to the node posiion $length -n + 1$ or prev node position $length - n$,
-begining from a dummy node headPrev. Finally, we need to check and move the head node appropriately if we are deleting
-it.
+## Merge Two Sorted Lists {#merge-two-sorted}
 
-#### Analysis
-Time complexity is O(n) as every node is visited once.
+### Problem Metadata
 
-#### Java Code - ONE Pass
+- **Platform**: LeetCode
+- **Problem ID**: 21
+- **Difficulty**: Easy
+
+```java
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    ListNode dummy = new ListNode(0);
+    ListNode tail = dummy;
+    while (l1 != null && l2 != null) {
+        if (l1.val <= l2.val) {
+            tail.next = l1;
+            l1 = l1.next;
+        } else {
+            tail.next = l2;
+            l2 = l2.next;
+        }
+        tail = tail.next;
+    }
+    tail.next = (l1 != null) ? l1 : l2;
+    return dummy.next;
+}
+```
+
+## Merge k Sorted Lists {#merge-k-sorted}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 23
+- **Difficulty**: Hard
+
+```java
+public ListNode mergeKLists(ListNode[] lists) {
+    PriorityQueue<ListNode> pq = new PriorityQueue<>(Comparator.comparingInt(n -> n.val));
+    for (ListNode node : lists) {
+        if (node != null) {
+            pq.offer(node);
+        }
+    }
+    ListNode dummy = new ListNode(0);
+    ListNode tail = dummy;
+    while (!pq.isEmpty()) {
+        ListNode node = pq.poll();
+        tail.next = node;
+        tail = tail.next;
+        if (node.next != null) {
+            pq.offer(node.next);
+        }
+    }
+    return dummy.next;
+}
+```
+
+## Palindrome Linked List {#palindrome-list}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 234
+- **Difficulty**: Easy
+
+```java
+public boolean isPalindrome(ListNode head) {
+    if (head == null || head.next == null) return true;
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    ListNode second = reverse(slow);
+    ListNode first = head;
+    ListNode copy = second;
+    boolean result = true;
+    while (result && second != null) {
+        if (first.val != second.val) result = false;
+        first = first.next;
+        second = second.next;
+    }
+    reverse(copy);
+    return result;
+}
+```
+
+## Intersection of Two Linked Lists {#intersection-linked-lists}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 160
+- **Difficulty**: Easy
+
+```java
+public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    if (headA == null || headB == null) return null;
+    ListNode a = headA, b = headB;
+    while (a != b) {
+        a = (a == null) ? headB : a.next;
+        b = (b == null) ? headA : b.next;
+    }
+    return a;
+}
+```
+
+## Remove Nth Node From End of List {#remove-nth-node}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 19
+- **Difficulty**: Medium
+
 ```java
 public ListNode removeNthFromEnd(ListNode head, int n) {
-    //Quick check to see if we are deleting the only node in the list
-    if (head.next == null && n == 1){
-        return null;
+    ListNode dummy = new ListNode(0, head);
+    ListNode first = dummy, second = dummy;
+    for (int i = 0; i <= n; i++) {
+        first = first.next;
     }
-
-    //keep track of current traversed # of nodes
-    int count = 0;
-
-    //Add a node to the begining of our linked list to make deletions easier at the top
-    ListNode headPrev = new ListNode(0);
-    headPrev.next = head;
-
-    ListNode current = headPrev;
-    ListNode removedPrev = headPrev;
-
-    while(current != null) {
-        count++;
-
-        if( (count - n) > 1 ) {
-            removedPrev = removedPrev.next;
-        }
-
-        if(current.next == null) {
-            //the last node, removedPrev is also at the right position
-
-            if(removedPrev.next != null && removedPrev.next.next == null) {
-                //to remove tail node
-                removedPrev.next = null;
-            } else {
-                // to remove non-tail node (including head)
-                removedPrev.next = removedPrev.next.next;
-            }
-
-            break;
-        }
-
-        current = current.next;
+    while (first != null) {
+        first = first.next;
+        second = second.next;
     }
-
-    return headPrev.next;
+    second.next = second.next.next;
+    return dummy.next;
 }
 ```
 
-
-## Insert a Node at the Nth Position in Doubly Linked List / Firebase / Level 3
+## Insert Node at Position in Doubly Linked List {#insert-dll}
 
 ### Description
-In doubly linked list, implement a method to insert a node at specified position and return the list's head. Do nothing
-if insertion position is outside the bounds of the list.
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
+Insert a value at position `pos` (1-indexed) in a doubly linked list.
 
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[list,on chain] (C) {3};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (X);
-\end{tikzpicture} 
-```
-given the list, insert a new node at index 2 with value 4.
-
-Result:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {4};
-\node[list,on chain] (C) {2};
-\node[list,on chain] (D) {3};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-
-If the index exceed the length, return the list unchanged:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}, given the list, insert a new node at index 3 with value 4.
-```
-
-### Solution
-#### Walkthrough
-The simpliest solution is to do solve this problem in two passes. First round is to find out the length of the list and
-check if the request position is over the lenght limit. The second iteration is to traverse to the previous insertion
-position, begining from a dummy node headPrev. Finally, we need to check if we are inserting a head / a tail or an
-intermediate node.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code
 ```java
-public DoublyLinkedNode insertAtPos(DoublyLinkedNode head, int data, int pos) {
-    DoublyLinkedNode newNode = new DoublyLinkedNode(data);
-
-    //Quick check if we are inserting the only node in the list
-    if(head == null) {
-        if(pos == 1) {
-            return newNode;
-        } else {
-            return head;
-        }
+public DLLNode insertAt(DLLNode head, int pos, int val) {
+    DLLNode node = new DLLNode(val);
+    if (pos == 1) {
+        node.next = head;
+        if (head != null) head.prev = node;
+        return node;
     }
-
-
-    int len = 1;
-
-    //1st pass: to get length of the list
-    for(DoublyLinkedNode current = head; current != null; current = current.next) {
-        len++;
+    DLLNode curr = head;
+    for (int i = 1; curr != null && i < pos - 1; i++) {
+        curr = curr.next;
     }
-
-    //pos is over list length
-    if(pos > len) {
-        return head;
-    }
-
-    DoublyLinkedNode headPrev = new DoublyLinkedNode(0);
-    headPrev.next = head;
-    head.prev = headPrev;
-    DoublyLinkedNode insertPrev = headPrev;
-
-
-    //2nd pass: move to before the insertion position
-    for(int i = 0; i < (pos - 1); i++) {
-        insertPrev = insertPrev.next;
-    }
-
-    if(insertPrev == headPrev) {
-        // insert head
-        head.prev = newNode;
-        newNode.next = head;
-
-        return newNode;
-    } else if(insertPrev.next == null) {
-        // insert tail
-        insertPrev.next = newNode;
-        newNode.prev = insertPrev;
-
-        return head;
-    } else {
-        // insert intermediate
-        DoublyLinkedNode insertNext = insertPrev.next;
-
-        insertPrev.next = newNode;
-        newNode.prev = insertPrev;
-        newNode.next = insertNext;
-        insertNext.prev = newNode;
-
-        return head;
-    }
+    if (curr == null) return head;
+    node.next = curr.next;
+    if (curr.next != null) curr.next.prev = node;
+    curr.next = node;
+    node.prev = curr;
+    return head;
 }
 ```
 
+## Reorder List {#reorder-list}
 
-## Reorder List / Leet Code 143 / Medium
+### Problem Metadata
 
-### Description
-Given a singly linked list L:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
+- **Platform**: LeetCode
+- **Problem ID**: 143
+- **Difficulty**: Medium
 
-\node[list,on chain] (1) {$L_0$};
-\node[list,on chain] (2) {$L_1$};
-\node[list,on chain] (3) {...};
-\node[list,on chain] (4) {$L_{n-1}$};
-\node[list,on chain] (5) {$L_n$};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) -- (4);
-\draw[*->] let \p1 = (4.center), \p2 = (4.center) in (\x1,\y2) -- (5);
-\draw[*->] let \p1 = (5.center), \p2 = (5.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-, reorder it to
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (1) {$L_0$};
-\node[list,on chain] (2) {$L_n$};
-\node[list,on chain] (3) {$L_1$};
-\node[list,on chain] (4) {$L_{n-1}$};
-\node[list,on chain] (5) {...};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (1.center), \p2 = (1.center) in (\x1,\y2) -- (2);
-\draw[*->] let \p1 = (2.center), \p2 = (2.center) in (\x1,\y2) -- (3);
-\draw[*->] let \p1 = (3.center), \p2 = (3.center) in (\x1,\y2) -- (4);
-\draw[*->] let \p1 = (4.center), \p2 = (4.center) in (\x1,\y2) -- (5);
-\draw[*->] let \p1 = (5.center), \p2 = (5.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-You may not modify the values in the list's nodes, only nodes itself may be changed.
-
-### Example
-Given
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[list,on chain] (C) {3};
-\node[list,on chain] (D) {4};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-, reorder it to
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {4};
-\node[list,on chain] (C) {2};
-\node[list,on chain] (D) {3};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (D);
-\draw[*->] let \p1 = (D.center), \p2 = (D.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-
-### Solution
-#### Walkthrough
-We could do the following:
-
-*  Locate the middle and tail nodes
-*  Reverse the nodes in the 2nd half othe list \textbf[in-place]
-*  Change links between nodes in 1st and 2nd half of list, one by one.
-
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code
 ```java
 public void reorderList(ListNode head) {
-    if (head == null || head.next == null) {
-        return;
+    if (head == null || head.next == null) return;
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
     }
-
-    //locating middle and tail nodes
-    ListNode middle = head;
-    ListNode tail = head;
-    while (tail.next != null && tail.next.next != null) {
-        middle = middle.next;
-        tail = tail.next.next;
-    }
-
-
-    /*
-    * reverse nodes for the 2nd half of the list
-    * L0 > L1 > ... > Ln > L_{n-1} > ...
-    */
-    ListNode middlePrev = middle;
-    ListNode prev = middle.next;
-
-    /*
-    * reverse links between prev, current and current.next by FIXING middlePrev
-    * 7 > 8 > 9
-    * 8 > 7 > 9
-    */
-    while (prev.next != null) {
-        ListNode current = prev.next;
-        prev.next = current.next;
-        current.next = middlePrev.next;
-        middlePrev.next = current;
-    }
-
-    //change links between nodes in 1st and 2nd half, one by one.
-    ListNode current1 = head;
-    ListNode current2 = middlePrev.next;
-    while (current1 != middlePrev) {
-        middlePrev.next = current2.next;
-        current2.next = current1.next;
-        current1.next = current2;
-        current1 = current2.next;
-        current2 = middlePrev.next;
+    ListNode second = reverse(slow.next);
+    slow.next = null;
+    ListNode first = head;
+    while (second != null) {
+        ListNode tmp1 = first.next;
+        ListNode tmp2 = second.next;
+        first.next = second;
+        second.next = tmp1;
+        first = tmp1;
+        second = tmp2;
     }
 }
 ```
 
+## Remove Duplicates from Sorted List {#remove-duplicates}
 
-## Remove Duplicates from Sorted List / Leet Code 83 / Easy
+### Problem Metadata
 
-### Description
-Given a sorted linked list, delete all duplicates such that each element appear only once.
+- **Platform**: LeetCode
+- **Problem ID**: 83
+- **Difficulty**: Easy
 
-### Example
-Input
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {1};
-\node[list,on chain] (C) {2};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (C);
-\draw[*->] let \p1 = (C.center), \p2 = (C.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-Output
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (A) {1};
-\node[list,on chain] (B) {2};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (A.center), \p2 = (A.center) in (\x1,\y2) -- (B);
-\draw[*->] let \p1 = (B.center), \p2 = (B.center) in (\x1,\y2) -- (X);
-\end{tikzpicture}
-```
-
-### Solution - non sorted list
-#### Walkthrough
-If this is a non sorted list, we need to keep a record (HashSet) and a prev node. Remove the duplicate node if
-found - set.add() returns false
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code - non sorted list
-```java
-public ListNode removeDuplicates(ListNode head) {
-    ListNode prev = new ListNode(0);
-    prev.next = head;
-    ListNode current = head;
-
-    Set<Integer> set = new HashSet<>();
-
-    while(current != null) {
-        int value = current.data;
-
-        if(!set.add(value)) {
-            //duplicated entry
-            prev.next = prev.next.next;
-        } else {
-            prev = prev.next;
-        }
-        current = current.next;
-    }
-
-    return head;
-}
-```
-
-### Solution - sorted list
-#### Walkthrough
-If this is a sorted list, we could utilize the fact that if current.data == next.data. Remove the next node.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code - sorted list
 ```java
 public ListNode deleteDuplicates(ListNode head) {
-    ListNode current = head;
-
-    while(current != null) {
-        if(current.next != null && current.val == current.next.val) {
-            //remove the current node
-            current.next = current.next.next;
+    ListNode curr = head;
+    while (curr != null && curr.next != null) {
+        if (curr.val == curr.next.val) {
+            curr.next = curr.next.next;
         } else {
-            current = current.next;
+            curr = curr.next;
         }
     }
-
     return head;
 }
 ```
 
+## Copy List with Random Pointer {#copy-random-list}
 
-## Copy List with Random Pointer / LeetCode 138 / Medium
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 138
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/copy-list-with-random-pointer/
 
 ### Description
-A linked list is given such that each node contains an additional random pointer which could point to any node in the
-list or null. Return a deep copy of the list.
 
-The Linked List is represented in the input/output as a list of n nodes. Each node is represented as a pair of
-[val, random\_index] where:
+Deep copy a linked list where each node has `next` and `random` pointers.
 
-*  val: an integer representing Node.val
-*  random\_index: the index of the node (range from 0 to n-1) where random pointer points to, or null if it does not point to any node.
-
-
-### Example
-Deep copy of the following array:
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (1_1) {1};
-\node[list,on chain] (1_2) {2};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\draw[*->] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) to [out=270,in=270] (1_2);
-\draw[*->] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) -- (X);
-
-\draw[->,double] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) -- (1_2);
-\draw[->,double] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) to [out=60,in=60] (1_1);
-\end{tikzpicture}
-```
-
-### Solution
-#### Walkthrough
-We could not copy random index ($\Rightarrow$) in 1st pass, since the desginated node might not be created yet. Thus, we need to
-perform in 3 pass:
-
-*  copy every node, i.e., duplicate every node and next index ($\rightarrow$), and insert it to the list
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (1_1) {1};
-\node[list,on chain] (1_2) {2};
-\node[list,on chain] (2_1)[below= of 1_1] {\^{1}};
-\node[list,on chain] (2_2)[below= of 1_2] {\^{2}};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\node(p1)[above= of 1_1] {c};
-\node(p2)[below= of 2_1] {d};
-
-\draw[*->] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) -- (2_1);
-\draw[*->] let \p1 = (2_1.center), \p2 = (2_1.center) in (\x1,\y2) -- (1_2);
-\draw[*->] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) -- (2_2);
-\draw[*->] let \p1 = (2_2.center), \p2 = (2_2.center) in (\x1,\y2) -- (X);
-
-\draw[->,double] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) -- (1_2);
-\draw[->,double] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) to [out=60,in=60] (1_1);
-
-\draw[*->,dashed] (p1) -- (1_1);
-\draw[*->] (p1) -- (1_2);
-\draw[*->] (p2) -- (2_1);
-\end{tikzpicture}
-```
-*  copy random pointers for all newly created nodes
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}    
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (1_1) {1};
-\node[list,on chain] (1_2) {2};
-\node[list,on chain] (2_1)[below= of 1_1] {\^{1}};
-\node[list,on chain] (2_2)[below= of 1_2] {\^{2}};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\node(p1)[above= of 1_1] {c};
-\node(p2)[below= of 2_1] {d};
-
-\draw[*->] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) -- (2_1);
-\draw[*->] let \p1 = (2_1.center), \p2 = (2_1.center) in (\x1,\y2) -- (1_2);
-\draw[*->] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) -- (2_2);
-\draw[*->] let \p1 = (2_2.center), \p2 = (2_2.center) in (\x1,\y2) -- (X);
-
-\draw[->,double] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) -- (1_2);
-\draw[->,double] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) to [out=60,in=60] (1_1);
-\draw[->,double] let \p1 = (2_1.center), \p2 = (2_1.center) in (\x1,\y2) -- (2_2);
-\draw[->,double] let \p1 = (2_2.center), \p2 = (2_2.center) in (\x1,\y2) to [out=270,in=270] (2_1);
-
-\draw[*->,dashed] (p1) -- (1_1);
-\draw[*->] (p1) -- (1_2);
-\draw[*->] (p2) -- (2_1);
-\end{tikzpicture}
-```
-*  break the list to two
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (1_1) {1};
-\node[list,on chain] (1_2) {2};
-\node[list,on chain] (2_1)[below= of 1_1] {\^{1}};
-\node[list,on chain] (2_2)[below= of 1_2] {\^{2}};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\node(p1)[above= of 1_1] {c};
-\node(p2)[below= of 2_1] {d};
-
-\draw[*->, dashed] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) -- (2_1);
-\draw[*->] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) to [out=270,in=210] (1_2);
-\draw[*->, dashed] let \p1 = (2_1.center), \p2 = (2_1.center) in (\x1,\y2) -- (1_2);
-\draw[*->] let \p1 = (2_1.center), \p2 = (2_1.center) in (\x1,\y2) to [out=60,in=130] (2_2);
-\draw[*->] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) -- (2_2);
-\draw[*->] let \p1 = (2_2.center), \p2 = (2_2.center) in (\x1,\y2) -- (X);
-
-\draw[->,double] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) -- (1_2);
-\draw[->,double] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) to [out=60,in=60] (1_1);
-\draw[->,double] let \p1 = (2_1.center), \p2 = (2_1.center) in (\x1,\y2) -- (2_2);
-\draw[->,double] let \p1 = (2_2.center), \p2 = (2_2.center) in (\x1,\y2) to [out=270,in=270] (2_1);
-
-\draw[*->,dashed] (p1) -- (1_1);
-\draw[*->] (p1) -- (1_2);
-\draw[*->] (p2) -- (2_1);
-\end{tikzpicture}
-```
-* finally,
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[list/.style={rectangle split, rectangle split parts=2,
-draw, rectangle split horizontal}, >=stealth, start chain]
-
-\node[list,on chain] (1_1) {1};
-\node[list,on chain] (1_2) {2};
-\node[list,on chain] (2_1)[below= of 1_1] {\^{1}};
-\node[list,on chain] (2_2)[below= of 1_2] {\^{2}};
-\node[on chain,draw,inner sep=3pt] (X) {};
-\draw (X.north east) -- (X.south west);
-\draw (X.north west) -- (X.south east);
-\node(p1)[above= of 1_2] {c};
-\node(p2)[below= of 2_2] {d};
-
-\draw[*->] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) to [out=270,in=210] (1_2);
-\draw[*->] let \p1 = (2_1.center), \p2 = (2_1.center) in (\x1,\y2) to [out=60,in=130] (2_2);
-\draw[*->,dashed] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) -- (2_2);
-\draw[*->] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) -- (X);
-\draw[*->] let \p1 = (2_2.center), \p2 = (2_2.center) in (\x1,\y2) -- (X);
-
-\draw[->,double] let \p1 = (1_1.center), \p2 = (1_1.center) in (\x1,\y2) -- (1_2);
-\draw[->,double] let \p1 = (1_2.center), \p2 = (1_2.center) in (\x1,\y2) to [out=60,in=60] (1_1);
-\draw[->,double] let \p1 = (2_1.center), \p2 = (2_1.center) in (\x1,\y2) -- (2_2);
-\draw[->,double] let \p1 = (2_2.center), \p2 = (2_2.center) in (\x1,\y2) to [out=270,in=270] (2_1);
-
-\draw[*->,dashed] (p1) -- (1_2);
-\draw[*->] (p1) -- (X);
-\draw[*->] (p2) -- (2_2);
-
-\end{tikzpicture}
-```
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Algorithm
-
-#### Java Code
 ```java
 public Node copyRandomList(Node head) {
-    if (head == null) {
-        return null;
+    if (head == null) return null;
+    for (Node curr = head; curr != null; curr = curr.next.next) {
+        Node copy = new Node(curr.val);
+        copy.next = curr.next;
+        curr.next = copy;
     }
-
-    // copy every node and insert to list
-    Node current = head;
-    while (current != null) {
-        Node dup = new Node(current.val);
-        dup.next = current.next;
-        current.next = dup;
-        current = dup.next;
-    }
-
-    // copy random pointer for each new node
-    current = head;
-    while (current != null) {
-        Node dup = current.next;
-        if (current.random != null) {
-            dup.random = current.random.next;
+    for (Node curr = head; curr != null; curr = curr.next.next) {
+        if (curr.random != null) {
+            curr.next.random = curr.random.next;
         }
-        current = dup.next;
     }
-
-    // break list to two
-    current = head;
-    Node newHead = head.next;
-    while (current != null) {
-        Node dup = current.next;
-        current.next = dup.next;
-        if (dup.next != null) {
-            dup.next = dup.next.next;
-        }
-        current = current.next;
+    Node pseudoHead = new Node(0);
+    Node copyCurr = pseudoHead;
+    Node curr = head;
+    while (curr != null) {
+        copyCurr.next = curr.next;
+        curr.next = curr.next.next;
+        curr = curr.next;
+        copyCurr = copyCurr.next;
     }
-
-    return newHead;
+    return pseudoHead.next;
 }
 ```
-

@@ -42,223 +42,363 @@ for(int i = 0, j = 0; i < A.length; j < B.length;) {
 
 
 
-## Two Sums I  / LeetCode 1  / Easy
+
+## Two Sums I {#two-sum-1}
+
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/two-sum/
+- **Tags**: `Hash Table`, `Array`
+- **Techniques**: Hash Table, Two Pointers
+
 
 ### Description
-Given an array of integers, return indices of the two numbers such that they add  up to a specific target.
-You may assume that each input would have exactly one solution, and you may not **use the same element twice**.
+
+Given an array of integers `nums` and an integer `target`, return **indices** of the two numbers such that they add up to `target`.
+
+You may assume that each input would have **exactly one solution**, and you may **not use the same element twice**.
+
+You can return the answer in any order.
+
 
 ### Examples
-Given nums = [2, 7, 11, 15], target = 9. Because nums[0] + nums[1] = 2 + 7 = 9,  return [0, 1].
 
-### Solution - with HashTable
+**Example 1:**
+```
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+```
+
+**Example 2:**
+```
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+```
+
+**Example 3:**
+```
+Input: nums = [3,3], target = 6
+Output: [0,1]
+```
+
+
+### Constraints
+
+- `2 <= nums.length <= 10^4`
+- `-10^9 <= nums[i] <= 10^9`
+- `-10^9 <= target <= 10^9`
+- **Only one valid answer exists**
+
+
+### Solution - Hash Table Approach
+
+
 #### Walkthrough
-Use a HashMap to store each element and its associated index, that is $<$nums[i], i$>$. Then check if diff =
-(target - nums[i]) and return the pair of indices if existed.
+
+Use a HashMap to store each element and its associated index as key-value pairs $<$nums[i], i$>$.
+
+For each element `nums[i]`, calculate `diff = target - nums[i]` and check if `diff` exists in the HashMap:
+- If yes: return the indices `[map.get(diff), i]`
+- If no: store current element and index `map.put(nums[i], i)`
+
+This allows us to find the complement in O(1) time.
+
 
 #### Analysis
-Each insertion and get operation from hashmap takes O(1) and there are n elements. The total time complexity costs
-O(n) and Auxiliary Space takes $O(n)$
+
+- **Time Complexity**: O(n) - Single pass through array, each lookup/insert is O(1)
+- **Space Complexity**: O(n) - Hash map stores up to n elements
+
 
 #### Algorithm
 
-##### Java Code - with HashTable
+Hash Table \@ref(hash-table)
+
+1. Initialize an empty `HashMap<Integer, Integer>` to store `<value, index>` pairs.
+2. For each index `i` from `0` to `nums.length - 1`:
+   1. Compute `diff = target - nums[i]`.
+   2. If `diff` is already in the map, return `[map.get(diff), i]`.
+   3. Otherwise, record the current value with `map.put(nums[i], i)`.
+3. Return an empty array (the problem guarantees this line is unreachable).
+
+#### Java Code
+
 ```java
 public int[] twoSum(int[] nums, int target) {
-    Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    Map<Integer, Integer> map = new HashMap<>();
 
-    //iterate through the indices
-    for(int i = 0; i < nums.length; i++) {
+    for (int i = 0; i < nums.length; i++) {
         int diff = target - nums[i];
-        Integer diffIdx = map.get(diff);
 
-        if(map.containsKey(diff) && i != diffIdx) {
-            //map contains diff value and its associated index
-            return new int[]{diffIdx, i};
-        } else {
-            //store the value and index for later use
-            map.put(nums[i], i);
+        if (map.containsKey(diff)) {
+            return new int[]{map.get(diff), i};
         }
+
+        map.put(nums[i], i);
     }
 
     return null;
 }
 ```
 
-##### Java Code - with HashTable 2
-Similar as previous answer, but instead store the diff value in hash map.
+
+### Alternative Solution - Storing Difference
+
+
+#### Walkthrough
+
+Similar to the previous approach, but instead of storing the current number, store the **difference** (target - nums[i]) in the hash map.
+
+
+#### Java Code
+
 ```java
 public int[] twoSum(int[] nums, int target) {
-    Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    Map<Integer, Integer> map = new HashMap<>();
 
-    //iterate through the indices
-    for(int i = 0; i < nums.length; i++) {
+    for (int i = 0; i < nums.length; i++) {
         int num = nums[i];
-        Integer diffIdx = map.get(num);
 
-        if(map.containsKey(num) && i != diffIdx) {
-            //map contains diff value and its associated index
-            return new int[]{diffIdx, i};
-        } else {
-            //store the value and index for later use
-            int diff = target - nums[i];
-            map.put(diff, i);
+        if (map.containsKey(num)) {
+            return new int[]{map.get(num), i};
         }
+
+        int diff = target - nums[i];
+        map.put(diff, i);
     }
 
     return null;
 }
 ```
 
-## Two Sum II - Input Array Is Sorted / LeetCode 167 / Medium
+
+## Two Sum II - Input Array Is Sorted {#two-sum-ii-sorted}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 167
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+- **Tags**: `Array`, `Two Pointers`, `Binary Search`
+- **Techniques**: Two Pointers \@ref(two-pointers), Binary Search \@ref(binary-search)
+
 ### Description
-Given a 0-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 0 <= index1 < index2 < numbers.length.
 
-Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2] of length 2.
-
-The tests are generated such that there is exactly one solution. You may not use the same element twice.
-
-Your solution must use only constant extra space.
+Given a 0-indexed array `numbers` that is sorted in non-decreasing order, find **two** numbers such that they add up to a specific `target`. Return the **1-indexed** positions `[index1, index2]` where `0 <= index1 < index2 < numbers.length`. Exactly one valid answer exists, and each element may be used at most once.
 
 ### Examples
+
+**Example 1**
+```
 Input: numbers = [2,7,11,15], target = 9
 Output: [1,2]
-Explanation: The sum of 2 and 7 is 9. Therefore, index1 = 1, index2 = 2. We return [0, 1].
+Explanation: numbers[0] + numbers[1] = 9, so we return indices shifted by one.
+```
 
-### Solution - Searching Target Sum from Sorted Array Usng Two Pointers
+### Constraints
+
+- `2 <= numbers.length <= 3 * 10^4`
+- `-1000 <= numbers[i] <= 1000`
+- `-1000 <= target <= 1000`
+- `numbers` is sorted in non-decreasing order
+- Exactly one solution exists
+
+### Solution - Two Pointers
+
 #### Walkthrough
-This solution is valid only on **sorted** array. Have two indices pointed to left most and right most position
-of array. Start comparing the sum against the target. If sum meets, return the indices; otherwise, move indices
-inward.
+
+Use two indices, `left` at the start and `right` at the end of the array. Compare `numbers[left] + numbers[right]` with the target and shrink the window from the side that makes the sum move toward the target. Because the array is sorted, moving the pointers monotonically guarantees we visit each pair at most once.
 
 #### Analysis
-Time complexity is O(n) since every element is visited, and Auxiliary Space is O(1)
+
+- **Time Complexity**: O(n) � each pointer moves at most `numbers.length` steps
+- **Space Complexity**: O(1)
 
 #### Algorithm
 
-##### Java Code
+1. Initialize `left = 0`, `right = numbers.length - 1`.
+2. While `left < right`:
+   1. Let `current = numbers[left] + numbers[right]`.
+   2. If `current == target`, return `[left + 1, right + 1]`.
+   3. If `current < target`, increment `left` to increase the sum.
+   4. Otherwise, decrement `right` to decrease the sum.
+3. Return an empty array (the problem guarantees this branch is unreachable).
+
+#### Java Code
+
 ```java
-public int[] twoSum(int[] nums, int target) {
-    int left = 0, right = nums.length - 1;
+public int[] twoSum(int[] numbers, int target) {
+    int left = 0;
+    int right = numbers.length - 1;
 
-    while(left < right) {
-        int sum = nums[left] + nums[right];
+    while (left < right) {
+        int sum = numbers[left] + numbers[right];
 
-        if(sum == target) {
-            return new int[]{left, right};
+        if (sum == target) {
+            return new int[]{left + 1, right + 1};
         }
 
-        if(target > sum) {
-            //increase value by shifting rightward
+        if (sum < target) {
             left++;
         } else {
-            //decrease value by shifting leftward
             right--;
         }
     }
 
-    return null;
+    return new int[0];
 }
 ```
- 
-### Solution - Searching Target Sum from Sorted Array Usng Binary Search
+
+### Solution - Binary Search
+
 #### Walkthrough
-This solution is valid only on **sorted** array. Start from left most element, and for each elemy ents, search for $target - element$ using binary search.
+
+Iterate through each index `i`, treat `numbers[i]` as the first addend, and binary-search for `target - numbers[i]` in the suffix `[i + 1, n)`. Sorting guarantees binary search is valid, and we avoid reusing the same element by only searching to the right.
 
 #### Analysis
-Time complexity is O(log(n)) for each binary search and there are n elements. Thus, the total time complexity is $O(n\cdot log(n))$ since every element is visited, and Auxiliary Space is O(1)
+
+- **Time Complexity**: O(n log n) � one binary search per element
+- **Space Complexity**: O(1)
 
 #### Algorithm
 
-##### Java Code
-```java
-public int[] twoSum(int[] nums, int target) {
-    for(int i = 0; i < nums.length - 1; i++) {
-        int diff = target - nums[i];
-        int foundIdx = binarySearch(nums, i+1, nums.length - 1,  diff);
+1. Loop `i` from `0` to `numbers.length - 2`.
+2. Set `complement = target - numbers[i]`.
+3. Binary search for `complement` in `[i + 1, numbers.length)`.
+4. If found at `j`, return `[i + 1, j + 1]`.
 
-        if(foundIdx > 0)
-            return new int[]{i, foundIdx};
+#### Java Code
+
+```java
+public int[] twoSumBinarySearch(int[] numbers, int target) {
+    for (int i = 0; i < numbers.length - 1; i++) {
+        int complement = target - numbers[i];
+        int j = binarySearch(numbers, i + 1, numbers.length - 1, complement);
+
+        if (j != -1) {
+            return new int[]{i + 1, j + 1};
+        }
     }
 
-    return null;
+    return new int[0];
 }
 
+private int binarySearch(int[] numbers, int left, int right, int target) {
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
 
-int binarySearch(int arr[], int l, int r, int x) {
-    if (r >= l) {
-        int mid = l + (r - l) / 2;
-
-        // If the element is present at the
-        // middle itself
-        if (arr[mid] == x)
+        if (numbers[mid] == target) {
             return mid;
-
-        // If element is smaller than mid, then
-        // it can only be present in left subarray
-        if (arr[mid] > x)
-            return binarySearch(arr, l, mid - 1, x);
-
-        // Else the element can only be present
-        // in right subarray
-        return binarySearch(arr, mid + 1, r, x);
+        } else if (numbers[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
     }
 
-    // We reach here when element is not present
-    // in array
     return -1;
 }
 ```
 
+## Two Sum II - Return True or False {#two-sum-ii-boolean}
 
-## Two Sum II - Return True / False
+### Problem Metadata
+
+- **Platform**: Other
+- **Problem ID**: N/A
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**: `Array`, `Hash Table`
+- **Techniques**: Hash Table \@ref(hash-table)
 
 ### Description
-You are given an array of n integers and a number k. Determine whether there is a pair of elements in the array that
-sums to exactly k.
 
-### Example
-For example, given the array [1, 3, 7] and  k = 8, the answer is “yes,” but given k = 6 the answer is “no.”
+Given an integer array `nums` and an integer `k`, determine whether there exists a pair of distinct elements whose sum equals `k`. Return `true` if such a pair exists; otherwise, return `false`.
 
-### Solution
+### Examples
+
+**Example 1**
+```
+Input: nums = [1,3,7], k = 8
+Output: true
+Explanation: 1 + 7 = 8.
+```
+
+**Example 2**
+```
+Input: nums = [1,3,7], k = 6
+Output: false
+```
+
+### Constraints
+
+- `2 <= nums.length <= 10^5`
+- `-10^9 <= nums[i], k <= 10^9`
+
+### Solution - Hash Set
+
 #### Walkthrough
-Have a HashSet to iterate through the array while compute the difference (target - a[i]). Check if the diff exist.
-Return true if exists; false otherwise. HashSet essentially uses less space than HashTable.
+
+Scan the array once while storing previously seen values in a `HashSet`. For each `num`, compute `diff = k - num`. If `diff` already exists in the set, we have found a valid pair; otherwise, add `num` to the set and keep scanning.
 
 #### Analysis
-Each insertion and get operation from hashmap takes O(1) and there are n elements. The total time
-complexity costs O(n) and Auxiliary Space takes O(n)
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) � set of seen values
 
 #### Algorithm
 
-##### Java Code
+1. Create an empty `HashSet<Integer>`.
+2. For each `num` in `nums`:
+   1. Let `diff = k - num`.
+   2. If `diff` exists in the set, return `true`.
+   3. Otherwise, insert `num` into the set.
+3. Return `false`.
+
+#### Java Code
+
 ```java
-public boolean sumsToTarget(int[] arr, int target) {
-    Set<Integer> values = new HashSet<Integer>();
+public boolean sumsToTarget(int[] nums, int k) {
+    Set<Integer> seen = new HashSet<>();
 
-    for (int i = 0; i < arr.length; i++) {
-        int diff = target - arr[i];
+    for (int num : nums) {
+        int diff = k - num;
 
-        //if hash set contains the difference
-        if (values.contains(diff)) {
+        if (seen.contains(diff)) {
             return true;
-        } else {
-            values.add(arr[i]);
         }
+
+        seen.add(num);
     }
 
     return false;
 }
 ```
 
-## Two Sum IV - Input is a BST / LeetCode 653 / Easy
+## Two Sum IV - Input is a BST {#two-sum-iv-bst}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 653
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/two-sum-iv-input-is-a-bst/
+- **Tags**: `Tree`, `Binary Search Tree`, `Hash Table`
+- **Techniques**: Depth First Search \@ref(dfs), Hash Table \@ref(hash-table)
 
 ### Description
-Given a Binary Search Tree and a target number, return true if there exist two elements in the BST such that their sum
-is equal to the given target.
 
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
+Given the root of a Binary Search Tree and an integer `k`, return `true` if there exist **two distinct nodes** whose values sum to `k`. Otherwise, return `false`.
+
+### Examples
+
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='BST used in the example.', engine.opts = list(template = "latex/tikz2pdf.tex")}
 \begin{tikzpicture}[
 level 1/.style={sibling distance=10em},
 level 2/.style={sibling distance=5em},
@@ -276,96 +416,141 @@ level distance=2.5em,
 ;
 \end{tikzpicture}
 ```
-Target = 9, Output = True.
+```
+Input: root = [5,3,6,2,4,null,7], k = 9
+Output: true
+Explanation: 2 + 7 = 9.
+```
 
-### Solution
+### Constraints
+
+- `1 <= nodes <= 10^4`
+- `-10^4 <= Node.val <= 10^4`
+- BST property holds for the entire tree
+
+### Solution - DFS + HashSet
+
 #### Walkthrough
-Use a HashSet to store value of current node, that is (node.val). Then check if answer = (target - node.val)
-and return true if existed; otherwise, recursively call the same function for its left and right children.
+
+Traverse the tree with DFS while maintaining a set of seen node values. For each node:
+
+1. Compute `needed = k - node.val`.
+2. If `needed` is already in the set, return `true`.
+3. Otherwise, insert `node.val` and continue exploring the left and right subtrees.
+
+Because every value is checked exactly once, the traversal stays linear.
 
 #### Analysis
-Time complexity is O(n) since every node is visited. Auxiliary Space is O(1)
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) in the worst case due to the set + recursion stack
 
 #### Algorithm
- recursion \@ref(recursion)
 
-##### Java Code
+1. Initialize an empty `HashSet<Integer>`.
+2. Perform DFS:
+   1. If the node is `null`, return `false`.
+   2. If `set` contains `k - node.val`, return `true`.
+   3. Add `node.val` to the set.
+   4. Recurse into left or right subtrees; return `true` if either side finds a match.
+3. Return `false` if no pair exists.
+
+#### Java Code
+
 ```java
-public boolean findTarget(TreeNode root, int target) {
-    Set<Integer> set = new HashSet<>();
-    return findTarget(root, target, set);
+public boolean findTarget(TreeNode root, int k) {
+    return dfs(root, k, new HashSet<>());
 }
 
-public boolean findTarget(TreeNode node, int target, Set<Integer> set) {
-    if(node == null) {
+private boolean dfs(TreeNode node, int target, Set<Integer> seen) {
+    if (node == null) {
         return false;
-    } else if(set.contains(target - node.val)) {
-        return true;
-    } else {
-        //recursively calling
-        set.add(node.val);
-        return findTarget(node.right, target, set) || findTarget(node.left, target, set);
     }
 
+    int needed = target - node.val;
+    if (seen.contains(needed)) {
+        return true;
+    }
+
+    seen.add(node.val);
+    return dfs(node.left, target, seen) || dfs(node.right, target, seen);
 }
 ```
 
+## Two Sum V - All Unique Pairs {#two-sum-v}
 
+### Problem Metadata
 
-## TwoSum V / / 
+- **Platform**: Other
+- **Problem ID**: N/A
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Two Pointers`, `Sorting`
+- **Techniques**: Two Pointers \@ref(two-pointers)
 
 ### Description
-Given a sorted array S of n integers, are there elements a, b in S such that a + b = target? Find all unique
-pairs in the array which gives the sum of zero.  Note: The solution set must not contain duplicate triplets.
 
-### Example
-For example, given array S = [-2, -1, -1, 0, 1, 2], target = 0
-A solution set is:
-[
-[-1, 1],
-[-2, 2]
-]
+Given a **sorted** integer array `nums` and an integer `target`, find **all unique pairs** `[a, b]` such that `a + b = target`. Each pair should list the smaller element first, and duplicate pairs must be removed.
 
-### Solution
+### Examples
+
+```
+Input: nums = [-2,-1,-1,0,1,2], target = 0
+Output: [[-2,2],[-1,1]]
+```
+
+### Constraints
+
+- `2 <= nums.length <= 10^5`
+- `-10^9 <= nums[i], target <= 10^9`
+- `nums` is sorted in non-decreasing order
+
+### Solution - Two Pointers
+
 #### Walkthrough
-While searching for the other two elements from both ends, with indices left incrementally and right decrmentally, find
-the sum = nums[left] + nums[right] == target. Since the array is
-sorted, we need to avoid duplicated entry by moving forward the index while searching.
+
+Place `left` at the start and `right` at the end of the array. Compare `nums[left] + nums[right]` with `target` and move pointers inward. Whenever a valid pair is found, add it to the result and skip over duplicates on both sides to avoid repeated pairs.
 
 #### Analysis
-There are one loops, the time complexity is $O(n)$, and Auxiliary Space is $O(n)$ since one member of any pair is
-uniquely determined by the other member. If the numbers are not distinct, the Auxiliary Space as large as
-$O(\binom{n}{2}) = O(\frac{n!}{2!\cdot (n-2)!}) = O(\frac{n\cdot (n-1)}{2}) = O(n^2)$
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1) auxiliary (result list not counted)
 
 #### Algorithm
 
-##### Java Code
-```java
-public List<List<Integer>> twoSum(int[] num, int target) {
-    List<List<Integer>> result = new ArrayList<>();
+1. Initialize `left = 0`, `right = nums.length - 1`, and an empty result list.
+2. While `left < right`:
+   1. Compute `sum = nums[left] + nums[right]`.
+   2. If `sum == target`, record the pair and move both pointers past duplicate values.
+   3. If `sum < target`, increment `left`.
+   4. Otherwise, decrement `right`.
+3. Return the collected list of pairs.
 
-    int left = 0, right = num.length - 1;
+#### Java Code
+
+```java
+public List<List<Integer>> twoSumPairs(int[] nums, int target) {
+    List<List<Integer>> result = new ArrayList<>();
+    int left = 0;
+    int right = nums.length - 1;
 
     while (left < right) {
-        int sum = num[left] + num[right];
+        int sum = nums[left] + nums[right];
 
         if (sum == target) {
-            result.add(Arrays.asList(num[left], num[right]));
+            result.add(Arrays.asList(nums[left], nums[right]));
 
-            //avoid duplicated entry by moving forward the index
-            while (left < right && num[left] == num[left + 1]) {
+            int currentLeft = nums[left];
+            int currentRight = nums[right];
+            while (left < right && nums[left] == currentLeft) {
                 left++;
             }
-            while (left < right && num[right] == num[right - 1]) {
+            while (left < right && nums[right] == currentRight) {
                 right--;
             }
-
-            left++;
-            right--;
         } else if (sum < target) {
             left++;
         } else {
-            // sum > target
             right--;
         }
     }
@@ -376,125 +561,96 @@ public List<List<Integer>> twoSum(int[] num, int target) {
 
 
 
-## 3Sum / Leet Code 15 / Medium
+
+## 3Sum {#three-sum}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 15
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/3sum/
+- **Tags**: `Array`, `Sorting`, `Two Pointers`
+- **Techniques**: Sorting, Two Pointers \@ref(two-pointers)
 
 ### Description
-Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets in the array which
-gives the sum of zero.  Note: The solution set must not contain duplicate triplets.
 
-### Example
-For example, given array S = [-1, 0, 1, 2, -1, -4],
-A solution set is:
-[
-[-1, 0, 1],
-[-1, -1, 2]
-]
+Given an integer array `nums`, return all unique triplets `[nums[i], nums[j], nums[k]]` such that `i < j < k` and `nums[i] + nums[j] + nums[k] = 0`. The solution set must not contain duplicate triplets.
 
-### Solution
+### Examples
+
+```
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+Explanation: Only these two triplets sum to zero without duplication.
+```
+
+### Constraints
+
+- `3 <= nums.length <= 3000`
+- `-10^5 <= nums[i] <= 10^5`
+
+### Solution - Sort + Two Pointers
+
 #### Walkthrough
-Looping the array with index i,  while searching for the other two elements from both ends, with indices
-left incrementally and right decrmentally, find the sum = nums[i] + nums[left] + nums[right] == 0. Since the array is
-sorted, we need to avoid duplicated entry by moving forward the index while searching.
+
+1. Sort the array first so equal values appear together and two-pointer sweeps become possible.
+2. Iterate `i` across the array. For each `nums[i]`, treat it as the first element of a triplet and search for a complementary two-sum (`-nums[i]`) using two pointers `left` and `right`.
+3. Skip duplicate values for both `i` and the pointer adjustments to avoid emitting the same triplet multiple times.
 
 #### Analysis
-There are two nested loops, the time complexity is $O(n^2)$, and Auxiliary Space is is $O(n^2)$ since one member of any
-triplet is uniquely determined by the other two members. If the numbers are not distinct, the Auxiliary Space as large as
-$O(\binom{n}{3}) = O(\frac{n!}{3!\cdot (n-3)!}) = O(\frac{n\cdot (n-1)\cdot(n-2)}{3}) = O(n^3)$
+
+- **Time Complexity**: O(n�) � sorting is `O(n log n)` and the double-pointer sweep dominates
+- **Space Complexity**: O(1) auxiliary (ignoring the output list)
 
 #### Algorithm
 
-##### Java Code
+Sorting, Two Pointers \@ref(two-pointers)
+
+1. Sort `nums`.
+2. For each index `i` from `0` to `n - 3`:
+   1. If `i > 0` and `nums[i] == nums[i - 1]`, continue (skip duplicates).
+   2. Set `left = i + 1` and `right = n - 1`.
+   3. While `left < right`:
+      - Let `sum = nums[i] + nums[left] + nums[right]`.
+      - If `sum == 0`, record the triplet and move `left`/`right` past duplicates.
+      - If `sum < 0`, increment `left`.
+      - If `sum > 0`, decrement `right`.
+3. Return the collected triplets.
+
+#### Java Code
+
 ```java
-public List<List<Integer>> threeSum(int[] num) {
-    Arrays.sort(num); //sort
+public List<List<Integer>> threeSum(int[] nums) {
+    Arrays.sort(nums);
     List<List<Integer>> result = new ArrayList<>();
 
-    //last possible pair is [i=len - 3, left=len - 2, right=len - 1]
-    for (int i = 0; i < num.length - 2; i++) {
-        // Since the array is sorted, we need to avoid duplicated entry by moving forward the index
-        if (i == 0 || (i > 0 && num[i] != num[i-1])) {
-            int left = i + 1, right = num.length-1;
-
-            while (left < right) {
-                int sum = num[i] + num[left] + num[right];
-
-                if (sum == 0) {
-                    result.add(Arrays.asList(num[i], num[left], num[right]));
-
-                    //avoid duplicated entry by moving forward the index
-                    while (left < right && num[left] == num[left + 1]) {
-                        left++;
-                    }
-                    while (left < right && num[right] == num[right - 1]) {
-                        right--;
-                    }
-
-                    left++;
-                    right--;
-                } else if (sum < 0) {
-                    left++;
-                } else {
-                    // sum > 0
-                    right--;
-                }
-            }
+    for (int i = 0; i < nums.length - 2; i++) {
+        if (i > 0 && nums[i] == nums[i - 1]) {
+            continue;
         }
-    }
 
-    return result;
-}
-```
-
-
-
-##  3 Sum Closest / LeetCode 16 / Medium
-
-### Description
-Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target.
-Return the sum of the three integers. You may assume that each input would have exactly one solution.
-
-### Example
-For example, given array S = -1 2 1 -4, and target = 1.
-The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
-
-### Solution
-#### Walkthrough
-Looping the array with index i,  while searching for the other two elements from both ends, with indices
-left incrementally and right decrmentally, find the sum = nums[i] + nums[left] + nums[right]. Return sum if existed;
-otherwise, keep for the closest tuple of (nums[i], nums[left], nums[right]) against target using Math.abs().
-
-#### Analysis
-There are two nested loops, the time complexity is $O(n^2)$, and Auxiliary Space is O(1) since it is returning the closest answer.
-
-#### Algorithm
-
-##### Java Code
-```java
-public int threeSumClosest(int[] nums, int target) {
-    Arrays.sort(num); //sort
-    int minDelta = Integer.MAX_VALUE, result = 0;
-
-    //last possible pair is [i=len - 3, left=len - 2, right=len - 1]
-    for (int i = 0; i < num.length - 2; i++) {
-        int left = i + 1, right = num.length - 1;
+        int left = i + 1;
+        int right = nums.length - 1;
 
         while (left < right) {
-            int sum = num[i] + num[left] + num[right];
+            int sum = nums[i] + nums[left] + nums[right];
 
-            if (sum == target) {
-                //find exact match
-                return sum;
-            } else if (sum < target) {
+            if (sum == 0) {
+                result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+
+                int leftVal = nums[left];
+                int rightVal = nums[right];
+                while (left < right && nums[left] == leftVal) {
+                    left++;
+                }
+                while (left < right && nums[right] == rightVal) {
+                    right--;
+                }
+            } else if (sum < 0) {
                 left++;
             } else {
-                // sum > target
                 right--;
-            }
-
-            int delta = Math.abs(sum - target);
-            if(delta < minDelta) {
-                minDelta = delta;
-                result = sum;
             }
         }
     }
@@ -505,308 +661,511 @@ public int threeSumClosest(int[] nums, int target) {
 
 
 
-##  4Sum / Leet Code 18 / Medium
+
+## 3 Sum Closest {#three-sum-closest}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 16
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/3sum-closest/
+- **Tags**: `Array`, `Sorting`, `Two Pointers`
+- **Techniques**: Sorting, Two Pointers \@ref(two-pointers)
 
 ### Description
-Given an array nums of n integers and an integer target, are there elements a, b, c, and d in nums such that
-a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target. The solution set
-must not contain duplicate quadruplets.
 
-### Example
-Given array nums = [1, 0, -1, 0, -2, 2], and target = 0.
+Given an integer array `nums` and an integer `target`, return the sum of three integers in `nums` such that the sum is closest to `target`. Each input has exactly one solution.
 
-A solution set is:
-[
-[-1,  0, 0, 1],
-[-2, -1, 1, 2],
-[-2,  0, 0, 2]
-]
+### Examples
 
-### Solution
+```
+Input: nums = [-1,2,1,-4], target = 1
+Output: 2
+Explanation: The triplet [-1,2,1] sums to 2, which is closest to target.
+```
+
+### Constraints
+
+- `3 <= nums.length <= 1000`
+- `-10^3 <= nums[i], target <= 10^3`
+
+### Solution - Sort + Two Pointers
+
 #### Walkthrough
-The solution is similar to 3Sum to find the sum = nums[i] + nums[j] + nums[left] + nums[right] == target. The only
-difference is there is an extra loop as well as we need to avoid duplicated entry by moving forward the index
-during search.
+
+1. Sort the array so pointer sweeps over the interior become possible.
+2. Iterate `i` from `0` to `n - 3`. Treat `nums[i]` as the first term, then run `left`/`right` pointers to scan the remainder.
+3. Track the closest sum seen so far and update it whenever a tighter candidate appears.
 
 #### Analysis
-Overall, there are three nested loops, the time complexity is $O(n^3)$, and Auxiliary Space is $O(n^3)$ since one member
-of any quotriplet is uniquely determined by the other three member. If the numbers are not distinct, the Auxiliary
-Space as large as is $O(\binom{n}{4}) = O(n^4)$
+
+- **Time Complexity**: O(n�)
+- **Space Complexity**: O(1) auxiliary
 
 #### Algorithm
 
+Sorting, Two Pointers \@ref(two-pointers)
+
+1. Sort `nums`.
+2. Initialize `closest = nums[0] + nums[1] + nums[2]`.
+3. For each `i` in `[0, n - 3]`:
+   1. Set `left = i + 1`, `right = n - 1`.
+   2. While `left < right`:
+      - `sum = nums[i] + nums[left] + nums[right]`.
+      - If `|target - sum| < |target - closest|`, update `closest`.
+      - Move `left` or `right` inward depending on whether `sum` is less or greater than `target`.
+4. Return `closest`.
+
 #### Java Code
+
 ```java
-public List<List<Integer>> fourSum(int[] num, int target) {
-    Arrays.sort(num); //sort
-    List<List<Integer>> res = new LinkedList<>();
+public int threeSumClosest(int[] nums, int target) {
+    Arrays.sort(nums);
+    int closest = nums[0] + nums[1] + nums[2];
 
-    //last possible pair is [j=len - 4, i=len-3, left=len - 2, right=len - 1]
-    for (int j = 0; i < num.length - 3; i++) {
+    for (int i = 0; i < nums.length - 2; i++) {
+        int left = i + 1;
+        int right = nums.length - 1;
 
-        // Since the array is sorted, we need to avoid duplicated entry by moving forward the index
-        if (j == 0 || (j > 0 && num[j] != num[j - 1])) {
-            for (int i = j + 1; i < num.length - 2; i++) {
+        while (left < right) {
+            int sum = nums[i] + nums[left] + nums[right];
 
-                // Since the array is sorted, we need to avoid duplicated entry by moving forward the index
-                if (i == j + 1 || (i > 0 && num[i] != num[i - 1])) {
-                    int left = i + 1, right = num.length-1;
+            if (Math.abs(target - sum) < Math.abs(target - closest)) {
+                closest = sum;
+            }
 
-                    while (left < right) {
-                        int sum = num[i] + num[j] + num[left] + num[right];
+            if (sum < target) {
+                left++;
+            } else if (sum > target) {
+                right--;
+            } else {
+                return sum;
+            }
+        }
+    }
 
-                        if (sum == target) {
-                            res.add(Arrays.asList(num[i], num[j], num[left], num[right]));
+    return closest;
+}
+```
 
-                            //avoid duplicated entry by moving forward the index
-                            while (left < right && num[left] == num[left + 1]) {
-                                left++;
-                            }
-                            while (left < right && num[right] == num[right - 1]) {
-                                right--;
-                            }
-                            left++;
-                            right--;
-                        } else if (sum < target) {
-                            left++;
-                        } else {
-                            // sum > 0
-                            right--;
-                        }
+
+
+
+## 4Sum {#four-sum}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 18
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/4sum/
+- **Tags**: `Array`, `Sorting`, `Two Pointers`
+- **Techniques**: Sorting, Two Pointers \@ref(two-pointers)
+
+### Description
+
+Given an integer array `nums` and an integer `target`, return all unique quadruplets `[a, b, c, d]` such that `a + b + c + d = target`. No duplicate quadruplets may appear in the answer.
+
+### Examples
+
+```
+Input: nums = [1,0,-1,0,-2,2], target = 0
+Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+```
+
+### Constraints
+
+- `4 <= nums.length <= 200`
+- `-10^9 <= nums[i], target <= 10^9`
+
+### Solution - Nested Two Pointers
+
+#### Walkthrough
+
+Sort the array, then fix two indices `i` and `j`. For each pair, run a two-pointer search on the remaining suffix to find the other two numbers. Skip duplicate values for every index to avoid repeating the same quadruplet.
+
+#### Analysis
+
+- **Time Complexity**: O(n^3)
+- **Space Complexity**: O(1) auxiliary (excluding output)
+
+#### Algorithm
+
+Sorting, Two Pointers \@ref(two-pointers)
+
+1. Sort `nums`.
+2. For each `i` from `0` to `n - 4` (skipping duplicates):
+   1. For each `j` from `i + 1` to `n - 3` (skipping duplicates):
+      - Set `left = j + 1`, `right = n - 1`.
+      - While `left < right`, evaluate `sum = nums[i] + nums[j] + nums[left] + nums[right]`.
+      - If `sum == target`, record the quadruplet and move both pointers past duplicates.
+      - Otherwise shift the pointer whose movement drives the sum toward `target`.
+3. Return the list of quadruplets.
+
+#### Java Code
+
+```java
+public List<List<Integer>> fourSum(int[] nums, int target) {
+    Arrays.sort(nums);
+    List<List<Integer>> result = new ArrayList<>();
+
+    for (int i = 0; i < nums.length - 3; i++) {
+        if (i > 0 && nums[i] == nums[i - 1]) {
+            continue;
+        }
+        for (int j = i + 1; j < nums.length - 2; j++) {
+            if (j > i + 1 && nums[j] == nums[j - 1]) {
+                continue;
+            }
+
+            int left = j + 1;
+            int right = nums.length - 1;
+
+            while (left < right) {
+                long sum = (long) nums[i] + nums[j] + nums[left] + nums[right];
+
+                if (sum == target) {
+                    result.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+
+                    int leftVal = nums[left];
+                    int rightVal = nums[right];
+                    while (left < right && nums[left] == leftVal) {
+                        left++;
                     }
+                    while (left < right && nums[right] == rightVal) {
+                        right--;
+                    }
+                } else if (sum < target) {
+                    left++;
+                } else {
+                    right--;
                 }
             }
         }
     }
 
-    return res;
+    return result;
 }
 ```
 
+## 4Sum II {#four-sum-ii}
 
-##  4Sum II
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 454
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/4sum-ii/
+- **Tags**: `Array`, `Hash Table`, `Counting`
+- **Techniques**: Hash Table \@ref(hash-table)
 
 ### Description
-Given four lists A, B, C, D of integer values, compute how many tuples (i, j, k, l) there are such that
-A[i] + B[j] + C[k] + D[l] is zero.
 
-To make problem a bit easier, all A, B, C, D have same length of N where $0 <= N <= 500$. All integers are
-in the range of $-2^{28}$ to $2^{28} - 1$ and the result is guaranteed to be at most $2^{31} - 1$.
+Given four integer arrays `A`, `B`, `C`, and `D`, each of length `n`, return the number of tuples `(i, j, k, l)` such that `A[i] + B[j] + C[k] + D[l] = 0`.
 
-### Example
+### Examples
+
+```
 Input:
-A = [ 1, 2]
-B = [-2,-1]
+A = [1, 2]
+B = [-2, -1]
 C = [-1, 2]
-D = [ 0, 2]
+D = [0, 2]
 
-Output:
-2
-
+Output: 2
 Explanation:
-The two tuples are:
-1. (0, 0, 0, 1) $->$ A[0] + B[0] + C[0] + D[1] = 1 + (-2) + (-1) + 2 = 0
-2. (1, 1, 0, 0) $->$ A[1] + B[1] + C[0] + D[0] = 2 + (-1) + (-1) + 0 = 0
+(i,j,k,l) = (0,0,0,1) and (1,1,0,0) satisfy the equation.
+```
 
-### Solution
+### Constraints
+
+- `0 <= n <= 500`
+- `-2^28 <= A[i], B[i], C[i], D[i] <= 2^28 - 1`
+- Answer fits in a 32-bit signed integer
+
+### Solution - Hash Map Pair Sums
+
 #### Walkthrough
-*Rewrite the equation as A[i] + B[j] = -(C[k] + D[l]).
-Create a Map<Integer, Integer> where 'key' is A[i] + B[j] and 'value' is the number of pairs with this sum.
-For each -(C[k] + D[l]), see if this desired sum is in our map. If so, add the map's 'value' to our total count.
+
+Rearrange the equation to `(A[i] + B[j]) = -(C[k] + D[l])`. Precompute all pair sums of `A` and `B` and store their frequencies in a hash map. Then iterate over all pairs in `C` and `D`, look up the negated sum in the map, and accumulate the counts.
 
 #### Analysis
 
-There are two nested loops, the time complexity is $O(n^2)$, and Auxiliary Space for Map is O(n)
+- **Time Complexity**: O(n�)
+- **Space Complexity**: O(n�) for storing pair sums
 
 #### Algorithm
 
+Hash Table \@ref(hash-table)
+
+1. Iterate over all pairs `(i, j)` of `A` and `B`:
+   - Compute `sum = A[i] + B[j]`.
+   - Increment `map[sum]`.
+2. For every pair `(k, l)` of `C` and `D`:
+   - Compute `sum = -(C[k] + D[l])`.
+   - If `sum` exists in the map, add `map[sum]` to the answer.
+3. Return the accumulated total.
+
 #### Java Code
+
 ```java
 public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
-    int n = A.length;
+    Map<Integer, Integer> countMap = new HashMap<>();
 
-    if(n == 0) {
-        return 0;
+    for (int a : A) {
+        for (int b : B) {
+            int sum = a + b;
+            countMap.put(sum, countMap.getOrDefault(sum, 0) + 1);
+        }
     }
 
-    int[] sumOfAandB = new int[n * n];
     int result = 0;
-
-    HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
-            sumOfAandB[i*n + j] = A[i] + B[j];
-
-            //record # of pairs for this sum of [A, B]
-            int count = map.getOrDefault(sumOfAandB[i*n + j], 0) + 1;
-            map.put(sumOfAandB[i*n + j], count);
+    for (int c : C) {
+        for (int d : D) {
+            int needed = -(c + d);
+            result += countMap.getOrDefault(needed, 0);
         }
     }
-
-    //A + B = - (C + D)
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
-            int sumOfCandD = - (C[i] + D[j]);
-
-            if(map.containsKey(sumOfCandD)){
-                result += map.get(sumOfCandD);
-            }
-        }
-    }
-
 
     return result;
 }
 ```
 
 
-##  Max Gain / Firecode / Level 2
+
+## Max Gain {#max-gain}
+
+### Problem Metadata
+
+- **Platform**: Firecode
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**: `Array`, `Greedy`
+- **Techniques**: Greedy \@ref(greedy)
 
 ### Description
-Given an array of integers, write a method - maxGain - that returns the maximum gain. Maximum Gain is defined as the
-maximum difference between 2 elements in a list such that the larger element appears after the smaller element. If no
-gain is possible, return 0.
 
-### Example
-[0,50,10,100,30] returns 100
+Given an integer array, return the maximum gain, defined as the largest difference `a[j] - a[i]` such that `j > i`. If the array never increases, return 0.
 
-[100,40,20,10] returns 0
+### Examples
 
-[0,100,0,100,0,100] returns 100
+```
+Input: [0,50,10,100,30]   Output: 100
+Input: [100,40,20,10]     Output: 0
+Input: [0,100,0,100,0,100] Output: 100
+```
 
-### Solution
+### Constraints
+
+- `1 <= nums.length <= 10^5`
+- `-10^9 <= nums[i] <= 10^9`
+
+### Solution - One-Pass Greedy
+
 #### Walkthrough
-By definition, \textbf{the larger element must always appear after the smaller element}, we could do this in one pass
-by finding the minimum element and the maximum gain (so far) by Math.max(min, a[i] - min)
+
+Track the minimum value seen so far while scanning the array. For each element, compute the gain relative to this minimum and update the answer. Update the running minimum whenever a smaller value is encountered.
 
 #### Analysis
-The time complexity is O(n) since every element is visited in the loop.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
 
-#### Java Code
-```java
-public static int maxGain(int[] a) {
-    int min = Integer.MAX_VALUE, gain = 0;
+Greedy \@ref(greedy)
 
-    for(int i = 0; i < a.length; i++) {
-        min = Math.min(min, a[i]);
-        gain = Math.max(gain, a[i] - min);
+1. Initialize `minValue = +8` and `maxGain = 0`.
+2. For each element `x`:
+   1. Update `minValue = min(minValue, x)`.
+   2. Update `maxGain = max(maxGain, x - minValue)`.
+3. Return `maxGain`.
+
+#### Java Code
+
+```java
+public int maxGain(int[] nums) {
+    int minValue = Integer.MAX_VALUE;
+    int maxGain = 0;
+
+    for (int num : nums) {
+        minValue = Math.min(minValue, num);
+        maxGain = Math.max(maxGain, num - minValue);
     }
 
-    return gain;
+    return maxGain;
 }
 ```
 
 
-## Pascal's Triangle / Leet Code 118 / Easy}
+
+## Pascal's Triangle {#pascals-triangle}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 118
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/pascals-triangle/
+- **Tags**: `Array`, `Dynamic Programming`
+- **Techniques**: Dynamic Programming \@ref(dp)
 
 ### Description
-Given a non-negative integer numRows, generate the first numRows of Pascal's triangle. In Pascal's triangle, each
-number is the sum of the two numbers directly above it.
 
-### Example
+Given a non-negative integer `numRows`, generate the first `numRows` rows of Pascal's triangle. Each number is the sum of the two numbers directly above it.
 
-### Solution
+### Examples
+
+```
+Input: numRows = 5
+Output:
+[
+ [1],
+ [1,1],
+ [1,2,1],
+ [1,3,3,1],
+ [1,4,6,4,1]
+]
+```
+
+### Constraints
+
+- `0 <= numRows <= 30`
+
+### Solution - Iterative Construction
+
 #### Walkthrough
-For level 1 and level 2, add number 1. For level 3 or above if it is the first or last element, insert 1, otherwise,
-insert the sum of last two elements in the level above : [i-1][j] + [i-1][j-1].
+
+Start with the first row `[1]`, then iteratively build each subsequent row by inserting `1` at both ends and using the previous row to compute interior values (`row[j] = prevRow[j-1] + prevRow[j]`).
 
 #### Analysis
-There are two nested loops, the time complexity is $O(n^2)$$, and Auxiliary Space is $O(n^2)$.
+
+- **Time Complexity**: O(n?)
+- **Space Complexity**: O(n?) to store the triangle
 
 #### Algorithm
 
+Dynamic Programming \@ref(dp)
+
+1. If `numRows == 0`, return an empty list.
+2. Initialize the triangle with `[1]`.
+3. For each new row index from `1` to `numRows - 1`:
+   - Begin the row with `1`.
+   - For each interior position `j`, append `prevRow[j-1] + prevRow[j]`.
+   - End the row with `1` and append it to the triangle.
+4. Return the triangle.
+
 #### Java Code
+
 ```java
 public List<List<Integer>> generate(int numRows) {
     List<List<Integer>> triangle = new ArrayList<>();
 
-    for(int i = 0; i < numRows; i++) {
-        List<Integer> level = new ArrayList<>();
+    if (numRows == 0) {
+        return triangle;
+    }
 
-        for(int j = 0; j < (i+1); j++) {
-            if(i == 0 || i == 1) {
-                // for level 1 or level 2
-                level.add(1);
-            } else {
-                // for level 3 or above
-                if(j == 0 || j == i) {
-                    level.add(1);
-                } else {
-                    int op1 = triangle.get(i-1).get(j-1);
-                    int op2 = triangle.get(i-1).get(j);
-                    level.add(op1 + op2);
-                }
-            }
+    triangle.add(Collections.singletonList(1));
+
+    for (int row = 1; row < numRows; row++) {
+        List<Integer> prevRow = triangle.get(row - 1);
+        List<Integer> current = new ArrayList<>();
+        current.add(1);
+
+        for (int j = 1; j < row; j++) {
+            current.add(prevRow.get(j - 1) + prevRow.get(j));
         }
 
-        triangle.add(level);
+        current.add(1);
+        triangle.add(current);
     }
 
     return triangle;
 }
-```
+``
 
 
-##  Search in Rotated Sorted Array / Leet Code 33 / Medium 
+## Search in Rotated Sorted Array {#search-rotated-array}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 33
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/search-in-rotated-sorted-array/
+- **Tags**: `Array`, `Binary Search`
+- **Techniques**: Divide and Conquer \@ref(dnc), Binary Search \@ref(binary-search)
 
 ### Description
-Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
-(i.e., [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2]).
 
-You are given a target value to search. If found in the array return its index, otherwise return -1.  You may
-assume no duplicate exists in the array. Your algorithm's runtime complexity must be in the order of O(log n).
+Given an ascending-sorted array that has been rotated at an unknown pivot, search for a `target` value. If found, return its index; otherwise return `-1`. The array contains no duplicates, and the algorithm must run in `O(log n)`.
 
-### Example
+### Examples
+
+```
 Input: nums = [4,5,6,7,0,1,2], target = 0
 Output: 4
 
-
 Input: nums = [4,5,6,7,0,1,2], target = 3
 Output: -1
+```
 
-### Solution
+### Constraints
+
+- `1 <= nums.length <= 10^4`
+- `-10^4 <= nums[i], target <= 10^4`
+- All elements are distinct
+
+### Solution - Modified Binary Search
+
 #### Walkthrough
-The key point is to search the element in a divide-and-conquer manner. We need to repeated compare the
-mid element of index = (left + right) / 2 with target and keep shrinking the boundaries from left and right two ends
-according to the conditions. Return the mid index if found; otherwise, return -1.
+
+At each step, a sorted half still exists. Compare `nums[mid]` with `nums[left]` to detect which side is sorted. If the target lies within that half, keep it; otherwise discard it and continue searching the other half.
 
 #### Analysis
-The time complexity is O(log n) since we only pick one from half of target elements each time.
+
+- **Time Complexity**: O(log n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
- dnc \@ref(dnc)
+
+Divide and Conquer \@ref(dnc), Binary Search \@ref(binary-search)
+
+1. Set `left = 0`, `right = n - 1`.
+2. While `left <= right`:
+   1. `mid = left + (right - left) / 2`.
+   2. If `nums[mid] == target`, return `mid`.
+   3. If left half is sorted (`nums[left] <= nums[mid]`):
+      - If `target` in `[nums[left], nums[mid])`, set `right = mid - 1` else `left = mid + 1`.
+   4. Else the right half is sorted:
+      - If `target` in `(nums[mid], nums[right]]`, set `left = mid + 1` else `right = mid - 1`.
+3. Return `-1`.
 
 #### Java Code
+
 ```java
 public int search(int[] nums, int target) {
-    int left = 0, right = nums.length - 1;
+    int left = 0;
+    int right = nums.length - 1;
 
-    while(left <= right) {
-        int mid = (right - left) / 2 + left;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
 
-        if(nums[mid] == target) {
-            //Found index
+        if (nums[mid] == target) {
             return mid;
-        } else if(nums[mid] >= nums[left]) {
-            //left half of array
-            if(target >= nums[left] && target < nums[mid]) {
-                //<-- moving leftward
-                right = mid -1;
+        }
+
+        if (nums[left] <= nums[mid]) {
+            if (target >= nums[left] && target < nums[mid]) {
+                right = mid - 1;
             } else {
-                //--> moving rightward
                 left = mid + 1;
             }
         } else {
-            //nums[mid] < nums[right
-            //right half of array
-            if(target > nums[mid] && target <= nums[right]) {
-                //--> moving rightward
+            if (target > nums[mid] && target <= nums[right]) {
                 left = mid + 1;
             } else {
-                //<-- moving leftward
                 right = mid - 1;
             }
         }
@@ -814,32 +1173,59 @@ public int search(int[] nums, int target) {
 
     return -1;
 }
-```
+``
 
 
-##  Median of Two Sorted Arrays / Leet Code 4 / Hard
+## Median of Two Sorted Arrays {#median-two-sorted}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 4
+- **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/median-of-two-sorted-arrays/
+- **Tags**: `Array`, `Binary Search`, `Divide and Conquer`
+- **Techniques**: Divide and Conquer \@ref(dnc), Recursion \@ref(recursion)
 
 ### Description
-There are two sorted arrays nums1 and nums2 of size m and n respectively. Find the median of the two sorted
-arrays. The overall run time complexity should be O(log (m+n)). You may assume nums1 and nums2 cannot be both
-empty.
 
-### Example
-nums1 = [1, 3], nums2 = [2], The median is 2.0
+Given two sorted arrays `nums1` and `nums2` of lengths `m` and `n`, return the overall median. The runtime must be `O(log(m + n))`.
 
-nums1 = [1, 2], nums2 = [3, 4], The median is (2 + 3)/2 = 2.5
+### Examples
 
-### Solution
+```
+Input: nums1 = [1,3], nums2 = [2]
+Output: 2.0
+
+Input: nums1 = [1,2], nums2 = [3,4]
+Output: 2.5
+```
+
+### Constraints
+
+- `0 <= m, n <= 1000`
+- `m + n >= 1`
+- `-10^6 <= nums[i] <= 10^6`
+
+### Solution - Recursive Kth Element
+
 #### Walkthrough
-Recursively find $K^{th}$ element in two sorted array by comparing and discarding the $\frac{k}{2}$ smaller
-elements.
+
+The median can be expressed using the `k`-th smallest element where `k = (m + n + 1) / 2` (and `k + 1` when `m + n` is even). Use a helper `findKth` that discards `k/2` elements from one array at each recursion, always operating on the shorter array to keep indices valid.
 
 #### Analysis
-For each round of recursive, it is eliminating $\frac{k}{2}$ element, so total time complexity is
-$O(log(k)) = O(log(m + n))$. Auxiliary Space is O(1).
+
+- **Time Complexity**: O(log(m + n))
+- **Space Complexity**: O(1) excluding recursion stack
 
 #### Algorithm
- recursion \@ref(recursion)
+
+Divide and Conquer \@ref(dnc), Recursion \@ref(recursion)
+
+1. Let `total = m + n`.
+2. If `total` is odd, return `findKth(nums1, 0, len1 - 1, nums2, 0, len2 - 1, (total + 1) / 2)`.
+3. Otherwise compute `left = findKth(..., total / 2)` and `right = findKth(..., total / 2 + 1)` and return `(left + right) / 2`.
+4. In `findKth`, handle base cases when one array is exhausted or `k == 1`; otherwise compare the `k/2`-th elements and discard the smaller block.
 
 #### Java Code
 ```java
@@ -849,89 +1235,111 @@ public double findMedianSortedArrays(int[] nums1, int[] nums2) {
     int total = len1 + len2;
 
     if ((total & 1) != 0) {
-        // odd number length
-        return findKth(nums1, 0, len1 - 1, nums2, 0, len2 - 1, total / 2 + 1);
-    } else {
-        // even number length
-        return (findKth(nums1, 0, len1 - 1, nums2, 0, len2 - 1, total / 2) + findKth(nums1, 0, len1 - 1, nums2, 0, len2 - 1, total / 2 + 1)) * 0.5;
+        return findKth(nums1, 0, len1 - 1, nums2, 0, len2 - 1, (total + 1) / 2);
     }
+
+    double left = findKth(nums1, 0, len1 - 1, nums2, 0, len2 - 1, total / 2);
+    double right = findKth(nums1, 0, len1 - 1, nums2, 0, len2 - 1, total / 2 + 1);
+    return (left + right) / 2.0;
 }
 
-private int findKth(int[] nums1, int start1, int end1, int[] nums2, int start2, int end2, int k){
+private double findKth(int[] nums1, int start1, int end1,
+                       int[] nums2, int start2, int end2, int k) {
     int len1 = end1 - start1 + 1;
     int len2 = end2 - start2 + 1;
-
-    /*
-    * swap parameters for nums1 with nums2
-    */
-    if (len1 > len2) {
-        return findKth(nums2, start2, end2, nums1, start1, end1, k);
-    }
 
     if (len1 == 0) {
         return nums2[start2 + k - 1];
     }
 
+    if (len2 == 0) {
+        return nums1[start1 + k - 1];
+    }
+
     if (k == 1) {
-        //return the smaller element of nums1[] and nums2[]
         return Math.min(nums1[start1], nums2[start2]);
     }
 
-    //Calculate number of elements to discard for next recursive
-    int endToDiscard1 = start1 + Math.min(len1, k / 2) - 1;
-    int endToDiscard2 = start2 + Math.min(len2, k / 2) - 1;
+    if (len1 > len2) {
+        return findKth(nums2, start2, end2, nums1, start1, end1, k);
+    }
 
-    if (nums1[endToDiscard1] > nums2[endToDiscard2]) {
-        //if nums2[] are smaller, discard, and start from following position recursively
-        int newK = k - (endToDiscard2 - start2 + 1);
-        return findKth(nums1, start1, end1, nums2, endToDiscard2 + 1, end2, newK);
+    int i = start1 + Math.min(len1, k / 2) - 1;
+    int j = start2 + Math.min(len2, k / 2) - 1;
+
+    if (nums1[i] <= nums2[j]) {
+        return findKth(nums1, i + 1, end1, nums2, start2, end2,
+                       k - (i - start1 + 1));
     } else {
-        //if nums1[] are smaller, discard, and start from following position recursively
-        int newK = k - (endToDiscard1 - start1 + 1);
-        return findKth(nums1, endToDiscard1 + 1, end1, nums2, start2, end2, newK);
+        return findKth(nums1, start1, end1, nums2, j + 1, end2,
+                       k - (j - start2 + 1));
     }
 }
-```
+``
 
 
-## Retrieve List of Elements Appeared at $k^{th}$ Time and in Insertion Order / /}
+## Retrieve Elements Appearing K Times {#kth-occurrence}
+
+### Problem Metadata
+
+- **Platform**: Other
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**: `Array`, `Hash Table`
+- **Techniques**: Hash Table \@ref(hash-table)
 
 ### Description
-Given an unsorted, possibly duplicated elments of array, return the list of element which appeared at kth
-time where k $>=$ 1. The returned elements need to be stable as they were in insertion order.
 
-### Example
-$[1_1, 2_1, 3_1, 4_1, 2_2, 1_2, 1_3, 3_2], k = 1. => [1_1, 2_1, 3_1, 4_1]$
+Given an integer array (possibly with duplicates) and an integer `k >= 1`, return the elements whose k-th occurrence appears, preserving the original order of those k-th occurrences.
 
-$[1_1, 2_1, 3_1, 4_1, 2_2, 1_2, 1_3, 3_2], k = 2. => [2_2, 1_2, 3_2]$
+### Examples
 
-$[1_1, 2_1, 3_1, 4_1, 2_2, 1_2, 1_3, 3_2], k = 3. => [1_3]$
+```
+Input: nums = [1,2,3,4,2,1,1,3], k = 1
+Output: [1,2,3,4]
 
-### Solution
+Input: nums = [1,2,3,4,2,1,1,3], k = 2
+Output: [2,1,3]
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10^5`
+- `k >= 1`
+
+### Solution - Hash Map Counting
+
 #### Walkthrough
-Have a map to record the integer and occurrence. Only save to the list when latest occurrence equals to k, so that
-we could maintain insertion order.
+
+Use a hash map to track how many times each value has appeared. When an element's count becomes exactly `k`, append it to the result list to preserve insertion order.
 
 #### Analysis
-Time complexity is O(n) since every element is visited, and Auxiliary Space is O(n).
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
 
 #### Algorithm
 
+Hash Table \@ref(hash-table)
+
+1. Initialize an empty `HashMap<Integer, Integer>` and an empty result list.
+2. For each element `x` in `nums`:
+   1. Increment `count[x]`.
+   2. If `count[x] == k`, append `x` to `result`.
+3. Return `result`.
+
 #### Java Code
+
 ```java
-List<Integer> insertToKthElement(int[] array, int k) {
+public List<Integer> kthOccurrences(int[] nums, int k) {
     List<Integer> result = new ArrayList<>();
-    if(array == null || array.length == 0) {
-        return result;
-    }
+    Map<Integer, Integer> counts = new HashMap<>();
 
-    Map<Integer, Integer> map = new HashMap<>();
-    for(int num : array) {
-        int count = map.getOrDefault(num, 0);
-        map.put(num, ++count);
+    for (int num : nums) {
+        int newCount = counts.getOrDefault(num, 0) + 1;
+        counts.put(num, newCount);
 
-        //latest occurrences equal to k
-        if( count == k) {
+        if (newCount == k) {
             result.add(num);
         }
     }
@@ -941,796 +1349,689 @@ List<Integer> insertToKthElement(int[] array, int k) {
 ```
 
 
+## Permutations {#permutations}
 
-##  Permutations / LeetCode 46 / Medium
+### Problem Metadata
 
-### Description
-Given a collection of distinct integers, return all possible permutations.
-
-### Example
-Input: [1,2,3]
-```
-Output:
-[
-    [1,2,3],
-    [1,3,2],
-    [2,1,3],
-    [2,3,1],
-    [3,1,2],
-    [3,2,1]
-]
-```
-
-###  Solution - Backtrack with Memoization
-#### Walkthrough
-One way to enumerate all permuations is to recursively add elements into list (avoid adding duplicates) and removing
-the last element form the last. In order to save time to process the same element, we further save flag for each element
-to denote that if the element has been visited or not.
-
-#### Analysis
-Time complexity with memoization to skip some subproblems is
-$(n + n\cdot (n - 1) + n\cdot (n - 1)\cdot (n - 2) + ... + n\cdot (n - 1)\cdot (n - 2)\cdot ...\cdot 1) \cdot n
-\Rightarrow O(n!)$
-
-#### Algorithm
- backtrack \@ref(backtrack), memoization \@ref(memo)
-
-#### Java Code - Backtrack with Memoization
-```java
-List<List<Integer>> result= new ArrayList<>();
-
-public List<List<Integer>> permute(int[] nums) {
-    boolean[] visited = new boolean[nums.length];
-
-    Arrays.sort(nums);
-    backtrack(new ArrayList<>(), nums, visited);
-
-    return result;
-}
-
-private void backtrack(List<Integer> list, int [] nums, boolean[] visited){
-    if(list.size() == nums.length){
-        //copy elements from the current list
-        result.add(new ArrayList<>(list));
-        return;
-    }
-
-    for(int i = 0; i < nums.length; i++){
-        Integer element = nums[i];
-
-        if(visited[i]) {
-            continue;
-        }
-
-        //add a new element
-        list.add(element);
-        visited[i] = true;
-
-        backtrack(list, nums, visited);
-
-        //backtrack the last element
-        list.remove(list.size()-1);
-        visited[i] = false;
-    }
-}
-```
-
-
-##  Permutations II / LeetCode 47 / Medium
+- **Platform**: LeetCode
+- **Problem ID**: 46
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/permutations/
+- **Tags**: `Array`, `Backtracking`
+- **Techniques**: Backtracking \@ref(backtrack)
 
 ### Description
-Given a collection of numbers that might contain duplicates, return all possible unique permutations.
 
-### Example
-Input: [1,1,2]
+Given an array of distinct integers, return all possible permutations.
+
+### Examples
+
 ```
-Output:
-[
-[1,1,2],
-[1,2,1],
-[2,1,1]
-]
+Input: nums = [1,2,3]
+Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
 ```
 
-###  Solution - Backtrack with Memoization
+### Constraints
+
+- `1 <= nums.length <= 8`
+- All values are distinct
+
+### Solution - Backtracking
+
 #### Walkthrough
-While we enumerate all possible enumerate with recursive nature, we need to maintain a visited flag for each element
-to ensure that same element (or same value) would not be processed again. Thus, we could define the following skipping
-conditions:
 
-* The current[i] element has been visited.
-* The current[i] element is the same (value) as the previously[i-1] visited element.
-
+Build permutations by exploring each number once per path. Maintain a `visited` array so each value appears once per permutation. When the path length equals `nums.length`, add a copy to the results and backtrack.
 
 #### Analysis
-Time complexity $O(n!)$ with memoization to skip some subproblems.
+
+- **Time Complexity**: O(n ? n!)
+- **Space Complexity**: O(n) recursion + visited state
 
 #### Algorithm
- backtrack \@ref(backtrack), memoization \@ref(memo)
 
-#### Java Code - Backtrack with Memoization
-```java
-List<List<Integer>> result= new ArrayList<>();
+Backtracking \@ref(backtrack)
 
-public List<List<Integer>> permuteUnique(int[] nums) {
-    boolean visited[] = new boolean[nums.length];
-
-    //Sort the array
-    Arrays.sort(nums);
-    backtrack(new ArrayList<>(), nums, visited);
-    return result;
-}
-
-private void backtrack(List<Integer> list, int [] nums, boolean[] visited){
-    if(list.size() == nums.length){
-        //copy elements from the current list
-        result.add(new ArrayList<>(list));
-        return;
-    }
-
-    for(int i = 0; i < nums.length; i++){
-        if(visited[i] == true || (i > 0 && visited[i-1] == false && nums[i] == nums[i-1])) {
-            /*
-            * Skip the permutation if any of the condition satisifies:
-            * 1) The current[i] element has been visited.
-            * 2) The current[i] element is the same (value) as the previously[i-1] visited element.
-            */
-            continue;
-        }
-
-        Integer element = nums[i];
-
-        //add a new element
-        list.add(element);
-        visited[i] = true;
-
-        backtrack(list, nums, visited);
-
-        //backtrack the last element
-        list.remove(list.size()-1);
-        visited[i] = false;
-    }
-}
-```
-
-
-##  Subsets / LeetCode 78 / Medium
-
-### Description
-Given a set of distinct integers, nums, return all possible subsets (the power set).
-Note: The solution set must not contain duplicate subsets.
-
-### Example
-Input: nums = [1,2,3], Output:
-```java
-[
-    [3],
-    [1],
-    [2],
-    [1,2,3],
-    [1,3],
-    [2,3],
-    [1,2],
-    []
-]
-```
-
-### Solution
-#### Walkthrough
-The enumeration tree is as the following:
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=5em,
-]
-\node {[]}
-child { node {[1]}
-child {  node {[1,2]}
-child {  node {[1,2,3]}}
-}
-child {  node {[1,3]}}
-}
-child { node {[2]}
-child {  node {[2,3]}}
-}
-child {node{[3]}}
-;
-\end{tikzpicture}
-```
-
-Enumerate all possible result by adding a new element that is greater than current element while traversing the array.
-Remember to backtrack.
-
-#### Analysis
-Time complexity between $O(2^{n})$ as there are at most $2^n$ subsets.
-
-#### Algorithm
- backtrack \@ref(backtrack), recursion \@ref(recursion)
+1. Initialize `result` and `visited` array.
+2. Define `backtrack(path)`:
+   1. If `path.size() == nums.length`, append copy to `result`.
+   2. Otherwise iterate indices:
+      - Skip if visited.
+      - Mark visited, append value, recurse, then undo.
+3. Call `backtrack(new ArrayList<>())` and return `result`.
 
 #### Java Code
 ```java
 List<List<Integer>> result = new ArrayList<>();
 
-public List<List<Integer>> subsets(int[] nums) {
-    if (nums.length == 0) {
-        return result;
-    }
-
-    Arrays.sort(nums);
-
-    backtrack(nums, 0, new ArrayList<>());
-
+public List<List<Integer>> permute(int[] nums) {
+    boolean[] visited = new boolean[nums.length];
+    backtrack(new ArrayList<>(), nums, visited);
     return result;
 }
 
-private void backtrack(int[] nums, int index, List<Integer> list) {
-    //copy elements from the current list
-    result.add(new ArrayList<>(list));
+private void backtrack(List<Integer> path, int[] nums, boolean[] visited) {
+    if (path.size() == nums.length) {
+        result.add(new ArrayList<>(path));
+        return;
+    }
 
-    for(int i = index; i < nums.length; i++) {
-        list.add(nums[i]);
-        backtrack(nums, i + 1, list);
-
-        //remove last element to backtrack
-        list.remove(list.size() - 1);
+    for (int i = 0; i < nums.length; i++) {
+        if (visited[i]) {
+            continue;
+        }
+        visited[i] = true;
+        path.add(nums[i]);
+        backtrack(path, nums, visited);
+        path.remove(path.size() - 1);
+        visited[i] = false;
     }
 }
 ```
 
 
-##  Subsets II / LeetCode 90 / Medium
+## Permutations II {#permutations-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 47
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/permutations-ii/
+- **Tags**: `Array`, `Backtracking`
+- **Techniques**: Backtracking \@ref(backtrack)
 
 ### Description
-Given a collection of integers that might contain duplicates, nums, return all possible subsets (the power set).
 
-Note: The solution set must not contain duplicate subsets.
+Given an array of integers that may contain duplicates, return all unique permutations.
 
-### Example
-Input: nums = [1,2,2], Output:
-```java
-[
-    [2],
-    [1],
-    [1,2,2],
-    [2,2],
-    [1,2],
-    []
-]
+### Examples
+
+```
+Input: nums = [1,1,2]
+Output: [[1,1,2],[1,2,1],[2,1,1]]
 ```
 
-### Solution
+### Constraints
+
+- `1 <= nums.length <= 8`
+- `-10 <= nums[i] <= 10`
+
+### Solution - Backtracking with Duplicate Skipping
+
 #### Walkthrough
-The enumeration tree is as the following:
 
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=5em,
-]
-\node {[]}
-child { node {[1]}
-child {  node {[1,$2_1$]}
-child {  node {[1,$2_1$,$2_2$]}}
-}
-child {  node {[1,$2_2$]}}
-}
-child { node {[$2_1$]}
-child {  node {[$2_1$,$2_2$]}}
-}
-;
-\end{tikzpicture}
-```
-
-Enumerate all possible result by adding a new element that is greater than current element while traversing the array.
-Skip if two consecutive elements are the same. Remember to backtrack.
+Sort the input so duplicates are adjacent. During backtracking, skip an index `i` if it equals `nums[i-1]` and the previous instance has not been used in the current path. This ensures each value positions once per depth.
 
 #### Analysis
-Time complexity between $O(2^{n})$ as there are at most $2^n$ subsets.
+
+- **Time Complexity**: O(n ? n!) in worst case
+- **Space Complexity**: O(n)
 
 #### Algorithm
-backtrack \@ref(backtrack), recursion \@ref(recursion)
+
+Backtracking \@ref(backtrack)
+
+1. Sort `nums`, initialize `visited` boolean array and result list.
+2. `backtrack(path)`:
+   1. If `path.size() == nums.length`, append copy.
+   2. For each index `i`:
+      - Skip if `visited[i]`.
+      - Skip if `i > 0 && nums[i] == nums[i-1] && !visited[i-1]` (avoid duplicates).
+      - Mark visited, append, recurse, then undo.
+3. Return result.
+
+#### Java Code
+```java
+List<List<Integer>> result = new ArrayList<>();
+
+public List<List<Integer>> permuteUnique(int[] nums) {
+    Arrays.sort(nums);
+    boolean[] visited = new boolean[nums.length];
+    backtrack(new ArrayList<>(), nums, visited);
+    return result;
+}
+
+private void backtrack(List<Integer> path, int[] nums, boolean[] visited) {
+    if (path.size() == nums.length) {
+        result.add(new ArrayList<>(path));
+        return;
+    }
+
+    for (int i = 0; i < nums.length; i++) {
+        if (visited[i]) {
+            continue;
+        }
+        if (i > 0 && nums[i] == nums[i - 1] && !visited[i - 1]) {
+            continue;
+        }
+        visited[i] = true;
+        path.add(nums[i]);
+        backtrack(path, nums, visited);
+        path.remove(path.size() - 1);
+        visited[i] = false;
+    }
+}
+```
+
+
+## Subsets II {#subsets-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 90
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/subsets-ii/
+- **Tags**: `Array`, `Backtracking`
+- **Techniques**: Backtracking \@ref(backtrack)
+
+### Description
+
+Given an integer array that may contain duplicates, return all possible subsets (the power set) without duplicates.
+
+### Examples
+
+```
+Input: nums = [1,2,2]
+Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10`
+- `-10 <= nums[i] <= 10`
+
+### Solution - Backtracking with Skip Logic
+
+#### Walkthrough
+
+Sort `nums` so duplicates are adjacent. During recursion, start each depth from the current index and skip elements equal to the previous when at the same depth (`i > index && nums[i] == nums[i-1]`). Append the current path to the result at every node.
+
+#### Analysis
+
+- **Time Complexity**: O(2^n)
+- **Space Complexity**: O(n) recursion stack
+
+#### Algorithm
+
+Backtracking \@ref(backtrack)
+
+1. Sort `nums`, initialize result list.
+2. Define `backtrack(start, path)`:
+   1. Append copy of `path`.
+   2. For `i` from `start` to `nums.length - 1`:
+      - Skip if `i > start` and `nums[i] == nums[i - 1]`.
+      - Append `nums[i]`, recurse with `i + 1`, then remove last element.
+3. Return result.
 
 #### Java Code
 ```java
 List<List<Integer>> result = new ArrayList<>();
 
 public List<List<Integer>> subsetsWithDup(int[] nums) {
-    if (nums.length == 0) {
-        return result;
-    }
-
     Arrays.sort(nums);
     backtrack(nums, 0, new ArrayList<>());
-
     return result;
 }
 
-private void backtrack(int[] nums, int index, List<Integer> list) {
-    //copy elements from the current list
-    result.add(new ArrayList<>(list));
+private void backtrack(int[] nums, int start, List<Integer> path) {
+    result.add(new ArrayList<>(path));
 
-    for(int i = index; i < nums.length; i++) {
-        if(i != index && nums[i] == nums[i - 1]) {
+    for (int i = start; i < nums.length; i++) {
+        if (i > start && nums[i] == nums[i - 1]) {
             continue;
         }
-
-        list.add(nums[i]);
-        backtrack(nums, i + 1, list);
-
-        //remove last element to backtrack
-        list.remove(list.size() - 1);
+        path.add(nums[i]);
+        backtrack(nums, i + 1, path);
+        path.remove(path.size() - 1);
     }
 }
 ```
 
 
-##  Sort Array By Parity / LeetCode 906 / Easy
+## Sort Array By Parity {#sort-array-parity}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 905
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/sort-array-by-parity/
+- **Tags**: `Array`, `Two Pointers`
+- **Techniques**: Two Pointers \@ref(two-pointers)
 
 ### Description
-Given an array A of non-negative integers, return an array consisting of all the even elements of A, followed by all
-the odd elements of A.
 
-You may return any answer array that satisfies this condition.
+Given an array `A` of non-negative integers, return any array consisting of all the even elements of `A` followed by all the odd elements.
 
+### Examples
 
-### Example
-Input: [3,1,2,4]. Output: [2,4,3,1]. The outputs [4,2,3,1], [2,4,1,3], and [4,2,1,3] would also be accepted.
+```
+Input: [3,1,2,4]
+Output: [2,4,3,1]
+```
 
-### Solution
+### Constraints
+
+- `1 <= A.length <= 5000`
+- `0 <= A[i] <= 5000`
+
+### Solution - Two Pointers
+
 #### Walkthrough
-Have two indices, left and right. Shrink both indices (left, right) where they satisfy the condition. Swap those
-who do not and shrink both indices again.
+
+Use two pointers. Advance `left` until an odd number is found and decrement `right` until an even number is found; swap them and continue until the pointers cross.
 
 #### Analysis
-Complexity is $O(n)$ since each element is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
+
+Two Pointers \@ref(two-pointers)
+
+1. Set `left = 0`, `right = A.length - 1`.
+2. While `left < right`:
+   1. Increment `left` while `A[left]` is even.
+   2. Decrement `right` while `A[right]` is odd.
+   3. If `left < right`, swap `A[left]` and `A[right]`.
+3. Return `A`.
 
 #### Java Code
 ```java
 public int[] sortArrayByParity(int[] A) {
-    if(A == null || A.length == 0) {
-        return null;
-    }
+    int left = 0;
+    int right = A.length - 1;
 
-    int l = 0, r = A.length - 1;
-    while(l < r) {
-        while (A[l]%2 == 0 && l < r) {
-            //do nothing, incremnt left index
-            l++;
+    while (left < right) {
+        while (left < right && (A[left] & 1) == 0) {
+            left++;
         }
-
-        while (A[r]%2 == 1 && l < r) {
-            //do nothing, decrement right index
-            r--;
+        while (left < right && (A[right] & 1) == 1) {
+            right--;
         }
-
-
-        if( l < r ) {
-            //odd #, swap
-            int temp = A[l];
-            A[l] = A[r];
-            A[r] = temp;
-
-            l++;
-            r--;
+        if (left < right) {
+            int temp = A[left];
+            A[left] = A[right];
+            A[right] = temp;
         }
     }
 
     return A;
 }
-```
+``
 
 
-##  Merge Intervals / LeetCode 56 / Medium
+## Merge Intervals {#merge-intervals}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 56
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/merge-intervals/
+- **Tags**: `Array`, `Sorting`
+- **Techniques**: Sorting \@ref(sorting)
 
 ### Description
-Given a collection of intervals, merge all overlapping intervals.
 
-### Example
-Input: [[1,3],[2,6],[8,10],[15,18]]. Output: [[1,6],[8,10],[15,18]]. Explanation: Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].
+Given an array of intervals where `intervals[i] = [start_i, end_i]`, merge all overlapping intervals and return the result in ascending order of start time.
 
-Input: [[1,4],[4,5]]. Output: [[1,5]]. Explanation: Intervals [1,4] and [4,5] are considered overlapping.
+### Examples
 
+```
+Input: [[1,3],[2,6],[8,10],[15,18]]
+Output: [[1,6],[8,10],[15,18]]
+```
 
-### Solution
+### Constraints
+
+- `1 <= intervals.length <= 10^4`
+- `intervals[i].length == 2`
+- `0 <= start_i <= end_i <= 10^4`
+
+### Solution - Sort then Merge
+
 #### Walkthrough
-Sort the list of intervals first. Use a stack to track the lastly pushed interval. If the current interval does
-not overlap with the top interval, push current interval to stack. If there is an overlap, we merge the
-current and previous interval.
+
+Sort the intervals by starting point. Iterate through them, merging with the last interval in the output when an overlap occurs (`current.start <= last.end`), otherwise append the new interval.
 
 #### Analysis
-Complexity is : $O(n \cdot log n)$ since we sort the array first.
+
+- **Time Complexity**: O(n log n)
+- **Space Complexity**: O(n) for the output list
 
 #### Algorithm
+
+Sorting \@ref(sorting)
+
+1. Sort intervals ascending by start.
+2. Initialize an empty list `merged`.
+3. For each interval:
+   1. If `merged` is empty or `current.start > merged.last.end`, append interval.
+   2. Else set `merged.last.end = max(merged.last.end, current.end)`.
+4. Return `merged` as an array.
 
 #### Java Code
 ```java
-static class Interval {
-    int start;
-    int end;
-
-    public Interval(int l, int r) {
-        start = l;
-        end = r;
-    }
-}
-
 public int[][] merge(int[][] intervals) {
-    List<Interval> input = new ArrayList<>();
-    for(int[] interval : intervals) {
-        input.add(new Interval(interval[0], interval[1]));
-    }
-
-    if(intervals.length == 0) {
+    if (intervals.length == 0) {
         return new int[0][0];
     }
 
-    List<Interval> output = merge(input);
-    int[][] result = new int[output.size()][2];
+    Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+    List<int[]> merged = new ArrayList<>();
+    merged.add(intervals[0].clone());
 
-    for(int i = 0; i < output.size(); i++) {
-        result[i][0] = output.get(i).start;
-        result[i][1] = output.get(i).end;
-    }
+    for (int i = 1; i < intervals.length; i++) {
+        int[] current = intervals[i];
+        int[] last = merged.get(merged.size() - 1);
 
-    return result;
-}
-
-private class IntervalComparator implements Comparator<Interval> {
-    @Override
-    public int compare(Interval a, Interval b) {
-        return a.start - b.start;
-    }
-}
-
-public List<Interval> merge(List<Interval> intervals) {
-    //sort the list
-    Collections.sort(intervals, new IntervalComparator());
-
-    Stack<Interval> merged = new Stack<Interval>();
-    merged.push(intervals.get(0));
-
-    for (int i = 1; i < intervals.size(); i++) {
-        Interval interval = intervals.get(i);
-        Interval top = merged.peek();
-
-        // if interval does not overlap with the previous, simply append it.
-        if (top.end < interval.start) {
-            merged.push(interval);
-        }
-        // if there is an overlap, we merge the current with the last interval
-        // by comparing their end boundaries
-        else {
-            top.end = Math.max(top.end, interval.end);
+        if (current[0] <= last[1]) {
+            last[1] = Math.max(last[1], current[1]);
+        } else {
+            merged.add(current.clone());
         }
     }
 
-    return merged;
+    return merged.toArray(new int[merged.size()][]);
 }
-```
+``
 
 
-##  Non-overlapping Intervals / LeetCode 435 / Medium
+## Non-overlapping Intervals {#non-overlapping-intervals}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 435
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/non-overlapping-intervals/
+- **Tags**: `Array`, `Greedy`, `Sorting`
+- **Techniques**: Sorting \@ref(sorting), Greedy \@ref(greedy)
 
 ### Description
-Given a collection of intervals, find the minimum number of intervals you need to remove to make the rest of the
-intervals non-overlapping.
 
-### Example
-Input: [[1,2],[2,3],[3,4],[1,3]]. Output: 1  Explanation: [1,3] can be removed and the rest of intervals are
-non-overlapping.
+Given a collection of intervals, find the minimum number of intervals to remove so the rest are non-overlapping.
 
-Input: [[1,2],[1,2],[1,2]]. Output: 2 . Explanation: You need to remove two [1,2] to make the rest of intervals
-non-overlapping.
+### Examples
 
-### Solution
+```
+Input: [[1,2],[2,3],[3,4],[1,3]]
+Output: 1
+```
+
+### Constraints
+
+- `1 <= intervals.length <= 10^5`
+- `intervals[i].length == 2`
+
+### Solution - Greedy by End Time
+
 #### Walkthrough
-First, sort the array and count non-overlapping interval - not overlapped with previous end. Finally, number of
-overlapping intervals would be n - count.
+
+Sort intervals by end time; keep a running end boundary for the last accepted interval. When an interval starts after or at the stored end, include it and update the end. Otherwise it overlaps and must be removed. The number removed equals total minus selected count.
 
 #### Analysis
-Complexity is $O(n \cdot log n)$ because of sorting ahead.
+
+- **Time Complexity**: O(n log n)
+- **Space Complexity**: O(1) apart from sorting
 
 #### Algorithm
+
+Greedy \@ref(greedy)
+
+1. Sort intervals ascending by end, breaking ties by start.
+2. Initialize `count = 1`, `end = intervals[0][1]`.
+3. For each remaining interval:
+   - If `interval[0] >= end`, increment `count` and set `end = interval[1]`.
+4. Return `n - count` removals.
 
 #### Java Code
 ```java
 public int eraseOverlapIntervals(int[][] intervals) {
-    if(intervals == null || intervals.length == 0) {
+    if (intervals.length == 0) {
         return 0;
     }
 
-    Arrays.sort(intervals, new Comparator<int[]>() {
-        @Override
-        public int compare(int[] i1, int[] i2) {
-            if (i1[1] != i2[1]){
-                //compare end time
-                return i1[1] - i2[1];
-            }else {
-                //compare start time
-                return i1[0] - i2[0];
-            }
+    Arrays.sort(intervals, (a, b) -> {
+        if (a[1] != b[1]) {
+            return a[1] - b[1];
         }
+        return a[0] - b[0];
     });
 
-    //end for latest non-overlapped interval
-    int end = intervals[0][1];
-    int n = intervals.length;
     int count = 1;
+    int end = intervals[0][1];
 
-    for (int i = 1; i < n; i++) {
+    for (int i = 1; i < intervals.length; i++) {
         if (intervals[i][0] >= end) {
-            //for any non-overlapped interval, update end & count
-            end = intervals[i][1];
             count++;
+            end = intervals[i][1];
         }
     }
 
-    return n - count;
+    return intervals.length - count;
 }
-```
+``
 
 
-##  Interval List Intersections / LeetCode 986 / Medium
+## Interval List Intersections {#interval-list-intersections}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 986
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/interval-list-intersections/
+- **Tags**: `Array`, `Two Pointers`
+- **Techniques**: Two Pointers \@ref(two-pointers)
 
 ### Description
-Given two lists of closed intervals, each list of intervals is pairwise disjoint and in sorted order.
-Return the intersection of these two interval lists.
 
-### Example
+Given two lists of disjoint closed intervals sorted by start time, return their intersections.
+
+### Examples
+
+```
 Input: A = [[0,2],[5,10],[13,23],[24,25]], B = [[1,5],[8,12],[15,24],[25,26]]
 Output: [[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]]
-Reminder: The inputs and the desired output are lists of Interval objects, and not arrays or lists.
+```
 
-### Solution
+### Constraints
+
+- `0 <= len(A), len(B) <= 1000`
+- Intervals are pairwise disjoint within each list and sorted
+
+### Solution - Two Pointers
+
 #### Walkthrough
-Traverse the two lists of intervals. Merge two intervals if there is an intersection. Move the index of A if
-$A[i]$.end $< B[i]$.end since the interval is the smaller out of comparison.
+
+Traverse both lists with indices `i` and `j`. For each pair of intervals, compute the overlap as `start = max(A[i].start, B[j].start)` and `end = min(A[i].end, B[j].end)`. If `start <= end`, append it. Advance the pointer whose interval ends first.
 
 #### Analysis
-The runtime complexity is $O(n * m)$
+
+- **Time Complexity**: O(m + n)
+- **Space Complexity**: O(1) excluding output
 
 #### Algorithm
 
+Two Pointers \@ref(two-pointers)
+
+1. Initialize `i = j = 0`, result list.
+2. While `i < len(A)` and `j < len(B)`:
+   1. `start = max(A[i][0], B[j][0])`, `end = min(A[i][1], B[j][1])`.
+   2. If `start <= end`, append `[start, end]`.
+   3. Increment pointer whose interval ends first.
+3. Return the result list as an array.
+
 #### Java Code
 ```java
-LeetCode 986 / Medium
-private static class Interval {
-    public int start;
-    public int end;
-
-    public Interval(int s, int e) {
-        this.start = s;
-        this.end = e;
-    }
-
-    public static int[][] toArray(List<Interval> list) {
-        int[][] result = new int[list.size()][2];
-
-        for(int i = 0; i < list.size(); i++) {
-            Interval interval = list.get(i);
-
-            result[i] = new int[] {interval.start, interval.end};
-        }
-
-        return result;
-    }
-
-    public static List<Interval> toList(int[][] array) {
-        List<Interval> result = new ArrayList<>();
-
-        for(int i = 0; i < array.length; i++) {
-            Interval interval = new Interval(array[i][0], array[i][1]);
-
-            result.add(interval);
-        }
-
-        return result;
-    }
-
-}
 public int[][] intervalIntersection(int[][] A, int[][] B) {
-    List<Interval> intervalsA = Interval.toList(A);
-    List<Interval> intervalsB = Interval.toList(B);
-    List<Interval> result = new ArrayList<>();
-
+    List<int[]> result = new ArrayList<>();
     int i = 0, j = 0;
-    while( i < intervalsA.size() && j < intervalsB.size()) {
-        int highStart = Math.max(intervalsA.get(i).start, intervalsB.get(j).start);
-        int lowEnd = Math.min(intervalsA.get(i).end, intervalsB.get(j).end);
 
-        //there is an intersection
-        if( highStart <= lowEnd) {
-            result.add( new Interval(highStart, lowEnd));
+    while (i < A.length && j < B.length) {
+        int start = Math.max(A[i][0], B[j][0]);
+        int end = Math.min(A[i][1], B[j][1]);
+
+        if (start <= end) {
+            result.add(new int[]{start, end});
         }
-        if( intervalsA.get(i).end < intervalsB.get(j).end) {
-            //move index of A[]
+
+        if (A[i][1] < B[j][1]) {
             i++;
         } else {
-            //move index of B[]
             j++;
         }
     }
 
-    return Interval.toArray(result);
+    return result.toArray(new int[result.size()][]);
 }
-```
+``
 
 
+## Insert Interval {#insert-interval}
 
-##  Insert Interval / LeetCode 57 / Hard
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 57
+- **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/insert-interval/
+- **Tags**: `Array`
+- **Techniques**: Sorting \@ref(sorting)
 
 ### Description
-Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary).
 
-You may assume that the intervals were initially sorted according to their start times.
+Given a set of non-overlapping intervals sorted by start time, insert a new interval and merge if necessary.
 
-### Example
-Input: intervals = [[1,3],[6,9]], newInterval = [2,5] Output: [[1,5],[6,9]]
+### Examples
 
-Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]. Output: [[1,2],[3,10],[12,16]]
-Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
+```
+Input: intervals = [[1,3],[6,9]], newInterval = [2,5]
+Output: [[1,5],[6,9]]
+```
 
-### Solution
+### Constraints
+
+- `0 <= intervals.length <= 10^4`
+- Intervals are non-overlapping and sorted
+
+### Solution - Linear Merge
+
 #### Walkthrough
-Leverage the merge() method to find out which intervals can be merged with new Inserted interval.
+
+Iterate through intervals, appending those ending before the new interval. Merge overlapping intervals by expanding `newInterval`. Once the new interval ends before the current interval, append it and the rest.
 
 #### Analysis
-Time complexity is $O(n \cdot log(n))$ because of sorting ahead.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) output list
 
 #### Algorithm
+
+1. Initialize result list and index `i = 0`.
+2. Append all intervals whose end < newInterval.start.
+3. While intervals overlap with newInterval, update start = min and end = max.
+4. Append the merged new interval.
+5. Append remaining intervals.
 
 #### Java Code
 ```java
-private static class Interval {
-    public int start;
-    public int end;
+public int[][] insert(int[][] intervals, int[] newInterval) {
+    List<int[]> result = new ArrayList<>();
+    int i = 0;
 
-    public Interval(int s, int e) {
-        this.start = s;
-        this.end = e;
+    while (i < intervals.length && intervals[i][1] < newInterval[0]) {
+        result.add(intervals[i++]);
     }
 
-    public static int[][] toArray(List<Interval> list) {
-        int[][] result = new int[list.size()][2];
+    while (i < intervals.length && intervals[i][0] <= newInterval[1]) {
+        newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+        newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
+        i++;
+    }
+    result.add(newInterval.clone());
 
-        for(int i = 0; i < list.size(); i++) {
-            Interval interval = list.get(i);
-
-            result[i] = new int[] {interval.start, interval.end};
-        }
-
-        return result;
+    while (i < intervals.length) {
+        result.add(intervals[i++]);
     }
 
-    public static List<Interval> toList(int[][] array) {
-        List<Interval> result = new ArrayList<>();
-
-        for(int i = 0; i < array.length; i++) {
-            Interval interval = new Interval(array[i][0], array[i][1]);
-
-            result.add(interval);
-        }
-
-        return result;
-    }
+    return result.toArray(new int[result.size()][]);
 }
-
-public int[][] insert(int[][] existed, int[] target) {
-    List<Interval> intervals = Interval.toList(existed);
-    Interval newInterval = new Interval(target[0], target[1]);
-
-    intervals.add(newInterval);
-
-    List<Interval> merged = merge(intervals);
-
-    return Interval.toArray(merged);
-}
-
-private class IntervalComparator implements Comparator<Interval> {
-    @Override
-    public int compare(Interval a, Interval b) {
-        return a.start < b.start ? -1 : a.start == b.start ? 0 : 1;
-    }
-}
-
-public List<Interval> merge(List<Interval> intervals) {
-    //sort the list
-    Collections.sort(intervals, new IntervalComparator());
-
-    LinkedList<Interval> merged = new LinkedList<Interval>();
-    for (Interval interval : intervals) {
-        if (merged.isEmpty() || merged.getLast().end < interval.start) {
-            // if the list of merged intervals is empty or if the current
-            // interval does not overlap with the previous, simply append it.
-            merged.add(interval);
-        } else {
-            // otherwise, there is overlap, so we merge the current and previous
-            // intervals.
-            merged.getLast().end = Math.max(merged.getLast().end, interval.end);
-        }
-    }
-    return merged;
-}
-```
+``
 
 
-##  Find Common Characters / LeetCode 1002 / Easy
+## Find Common Characters {#find-common-characters}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1002
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/find-common-characters/
+- **Tags**: `Array`, `Hash Table`
+- **Techniques**: Hash Table \@ref(hash-table)
 
 ### Description
-Given an array A of strings made only from lowercase letters, return a list of all characters that show up in all
-strings within the list (including duplicates).  For example, if a character occurs 3 times in all strings but
-not 4 times, you need to include that character three times in the final answer.  You may return the answer in
-any order.
 
-### Example
-Input: ["bella","label","roller"]. Output: ["e","l","l"]
+Given an array of lowercase strings, return a list of all characters that appear in every string (including duplicates). Order does not matter.
 
-Input: ["cool","lock","cook"]. Output: ["c","o"]
+### Examples
 
-### Solution
+```
+Input: ["bella","label","roller"]
+Output: ["e","l","l"]
+```
+
+### Constraints
+
+- `1 <= A.length <= 100`
+- `1 <= A[i].length <= 100`
+
+### Solution - Frequency Intersection
+
 #### Walkthrough
-First retrieve the alphabet distribution for the first word. For each of following word, maintain the min number
-of duplicated alphabets. Lastly, take the alphabet which has more than 1 occurrences.
+
+Track the frequency of each letter in the first string. For every next string, compute its frequency and take the element-wise minimum with the running counts. At the end, output each letter as many times as its remaining count.
 
 #### Analysis
-Time complexity is O(n) where n is the number of words.
+
+- **Time Complexity**: O(n * L) where `L` is average word length
+- **Space Complexity**: O(1) for 26 counts
 
 #### Algorithm
+
+Hash Table \@ref(hash-table)
+
+1. Initialize `minFreq` with counts from the first word.
+2. For each subsequent word:
+   1. Count characters into `temp`.
+   2. Update `minFreq[i] = min(minFreq[i], temp[i])`.
+3. Build the result by outputting each character `minFreq[i]` times.
 
 #### Java Code
 ```java
 public List<String> commonChars(String[] A) {
     int[] minFreq = new int[26];
+    Arrays.fill(minFreq, Integer.MAX_VALUE);
 
-    //init frequency map with the first string
-    for(int i = 0; i < A[0].length(); i++) {
-        char c = A[0].charAt(i);
-
-        int index = c - 'a';
-        int counter = minFreq[index];
-        minFreq[index] = ++counter;
-    }
-
-
-    //Do the actions for the following words
-    for(int i = 1; i < A.length; i++) {
-        String str = A[i];
-        int[] tempFreq = new int[26];
-
-        //1. Store the frequency of alphabets
-        for(int j = 0; j < str.length(); j++) {
-            char c = str.charAt(j);
-
-            int index = c - 'a';
-            int counter = tempFreq[index];
-            tempFreq[index] = ++counter;
+    for (String word : A) {
+        int[] freq = new int[26];
+        for (char c : word.toCharArray()) {
+            freq[c - 'a']++;
         }
-
-        //2. Iterate thru 2 arrays and get the min number of (duplicated) alphabets
-        //   non-duplicated returns 0
-        for(int j = 0; j < 26; j++) {
-            minFreq[j] = Math.min(minFreq[j], tempFreq[j]);
+        for (int i = 0; i < 26; i++) {
+            minFreq[i] = Math.min(minFreq[i], freq[i]);
         }
     }
 
-    int numOfWords = A.length;
     List<String> result = new ArrayList<>();
-
-
-    for(int i = 0; i < 26; i++) {
-        int minCounter = minFreq[i];
-
-        //Take the min number of duplicated alphabets (1 min)
-        for(int j = 0; j < minCounter; j++) {
-            char alphabet = (char) ('a' + i);
-            result.add(String.valueOf(alphabet));
+    for (int i = 0; i < 26; i++) {
+        for (int count = 0; count < minFreq[i]; count++) {
+            result.add(String.valueOf((char) ('a' + i)));
         }
     }
 
@@ -1739,1100 +2040,1560 @@ public List<String> commonChars(String[] A) {
 ```
 
 
-##  Top K Frequently Appeared Elements / Leet Code 347 / Medium
+## Top K Frequent Elements {#top-k-frequent}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 347
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/top-k-frequent-elements/
+- **Tags**: `Array`, `Hash Table`, `Heap`
+- **Techniques**: Hash Table \@ref(hash-table)
 
 ### Description
-Given a non-empty array of integers, return the k most frequent elements. You may assume k is always valid,
-$ 1 <= k <= $ number of unique elements. Your algorithm's time complexity must be better than O($n log n$), where n
-is the array's size.
 
-### Example
-Input: nums = [1,1,1,2,2,3], k = 2  Output: [1,2]
+Given a non-empty integer array, return the `k` most frequent elements. `k` is guaranteed to be valid.
 
-### Solution
+### Examples
+
+```
+Input: nums = [1,1,1,2,2,3], k = 2
+Output: [1,2]
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10^5`
+- `k <= number of unique values`
+
+### Solution - Hash Map + Heap
+
 #### Walkthrough
 
-* We first gather the frequency of integer by count with a HashMap
-* We sort the frequency map by comparing by value() in descending order and sort them in $List<Entry<Number, Frequency>>$.
-* We could traverse the top K entries from the list in a loop.
-
+Count element frequencies with a map. Maintain a min-heap of size `k` keyed by frequency; push each entry and remove the smallest when the heap grows beyond `k`. The heap contents are the answer.
 
 #### Analysis
-Since we sort the frequency map, thus the time complexity is $O(n \cdot log n)$, and Auxiliary Space is $O(n)$ to
-store several maps and list.
+
+- **Time Complexity**: O(n log k)
+- **Space Complexity**: O(n)
 
 #### Algorithm
 
+Hash Table \@ref(hash-table)
+
+1. Build `Map<Integer,Integer>` counts.
+2. Create a min-heap storing `{frequency, value}` pairs.
+3. For each entry in the map:
+   - Push into heap.
+   - If heap size > `k`, pop the smallest frequency.
+4. Pop all heap entries to form the result.
+
 #### Java Code
 ```java
-public List<Integer> topKFrequent(int[] nums, int k) {
-    Map<Integer, Integer> freq = new HashMap<>();
-
+public int[] topKFrequent(int[] nums, int k) {
+    Map<Integer, Integer> counts = new HashMap<>();
     for (int num : nums) {
-        int count = freq.getOrDefault(num, 0);
-        freq.put(num, ++count);
+        counts.put(num, counts.getOrDefault(num, 0) + 1);
     }
 
-    //Sort Map.Entry by comparing by value() in descending order
-    List<Map.Entry<Integer, Integer>> sortedList = new ArrayList<>(freq.entrySet());
-    sortedList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+    PriorityQueue<int[]> heap = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
 
-
-    List<Integer> result = new ArrayList<>();
-    int topN = 0;
-
-    for (Map.Entry<Integer, Integer> entry : sortedList) {
-        //Top K elements retrieved
-        if(topN == k) {
-            break;
+    for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
+        heap.offer(new int[]{entry.getValue(), entry.getKey()});
+        if (heap.size() > k) {
+            heap.poll();
         }
-
-        result.add(entry.getKey());
-        topN++;
     }
 
+    int[] result = new int[k];
+    for (int i = k - 1; i >= 0; i--) {
+        result[i] = heap.poll()[1];
+    }
     return result;
 }
 ```
 
 
-## Count iterations towards filling 1's in an array /  / }
+## Count Iterations to Fill Ones {#fill-ones}
+
+### Problem Metadata
+
+- **Platform**: Other
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Simulation`
+- **Techniques**: Simulation
 
 ### Description
-Given an array of 0s and 1s, in how many iterations the whole array can be filled with 1s if in a single iteration
-immediate neighbors of 1s can be filled. If we cannot fill array with 1s, then print “-1”
 
-### Example
-Input : arr[] = {1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1}
-Output : 1
+Given a binary array, repeatedly convert a zero to one if it has at least one adjacent one. Return the number of iterations needed until all entries equal one, or `-1` if impossible.
 
-Input : arr[] = {0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1}
-Output : 2
+### Examples
 
-### Solution
-#### Walkthrough
-For each sub-block of the array, consider the following 3 scenarios
-
-* Case 1: There are no 1's. In this case, array cannot be filled with 1's. Thus, return -1; Locate the first 1 and evalute the following
-* Case 2: [1, 0, 0, ...., 0, 1] Another 1 follows and makes it a block of 0s with 1s on both ends. Number of iteration needed to flip the 0s become $num_zeo / 2$ if number is even otherwise $(num_zero + 1) / 2$
-* Case 3: [1, 0, 0, ..., 0] Another 1 cannot be found and makes it a single 1 at the end. Number of iteration needed equals to the number of 0s.
-* Case 3: [0, 0, 0, ..., 1] Count the number of 0s until the first 1 is met.
-
-Finally, we need to get the maximum iteration for each subproblems.
-
-#### Analysis
-Time Complexity : O(n) since every element is visited once.
-
-#### Algorithm
-
-#### Java Code
-```java
-int countIterations(int arr[]) {
-    boolean oneFound = false;
-    int maxIteration = 0;
-
-    int n = arr.length;
-    int i = 0;
-
-    // Start traversing the array
-    while ( i < n ) {
-        if (arr[i] == 1) {
-            oneFound = true;
-        }
-
-        // Traverse and skip 1s until a 0 is met
-        while (i < n && arr[i]==1) {
-            i++;
-        }
-
-        // Count initial contiguous 0s until a 1 is met
-        int inialCountZero = 0;
-        while ( i < n && arr[i]==0) {
-            inialCountZero++;
-            i++;
-        }
-
-        // Condition for Case 1
-        if (oneFound == false && i == n) {
-            return -1;
-        }
-
-        // Condition to check if Case 2 satisfies:
-        int countIteration;
-        if (i < n && oneFound == true) {
-
-            // If inialCountZero is even
-            if ((inialCountZero & 1) == 0) {
-                countIteration = inialCountZero / 2;
-            } else {
-                //odd
-                countIteration = (inialCountZero + 1) / 2;
-            }
-
-            inialCountZero = 0;
-        } else {
-            // Case 3
-            countIteration = inialCountZero;
-            inialCountZero = 0;
-        }
-
-        maxIteration = Math.max(maxIteration, countIteration);
-        //totalIteration += countIteration
-    }
-
-    return maxIteration;
-}
+```
+Input: [0,1,0,1]
+Output: 1
 ```
 
+### Constraints
 
+- `1 <= n <= 10^5`
 
-##  Maximum Subarray / Leet Code 53 / Easy
+### Solution - BFS-style Expansion
 
-### Description
-Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
-
-### Example
-For example, given the array [-2,1,-3,4,-1,2,1,-5,4], the contiguous subarray [4,-1,2,1] has the largest sum = 6.
-
-### Solution
 #### Walkthrough
-While traversing the array dp[i], add the current element dp[i] with the previous element dp[i] if and only if
-previous element $dp[i-1] > 0$. In the meantime, compute the max value out of current element dp[i].
+
+Treat positions containing ones as the current frontier. For each iteration, flip neighboring zeros to ones and enqueue them for the next round. Track the number of zeros remaining.
 
 #### Analysis
-Time complexity is O(n) as every element is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
+
+### Algorithm
+
+1. Enqueue indices containing ones and count zeros.
+2. If no zeros, return 0.
+3. While the queue is not empty:
+   - Process one level (current queue size).
+   - For each index, check neighbors; flip zeros to ones, enqueue, and decrement zero count.
+   - Increment iteration counter when any flip occurs.
+4. Return iterations if all zeros flipped, else -1.
+
+### Java Code
+```java
+public int fillOnes(int[] arr) {
+    Queue<Integer> queue = new ArrayDeque<>();
+    int zeros = 0;
+
+    for (int i = 0; i < arr.length; i++) {
+        if (arr[i] == 1) {
+            queue.offer(i);
+        } else {
+            zeros++;
+        }
+    }
+
+    if (zeros == 0) {
+        return 0;
+    }
+
+    int iterations = 0;
+    while (!queue.isEmpty()) {
+        int size = queue.size();
+        boolean flipped = false;
+
+        for (int s = 0; s < size; s++) {
+            int idx = queue.poll();
+            for (int next : new int[]{idx - 1, idx + 1}) {
+                if (next >= 0 && next < arr.length && arr[next] == 0) {
+                    arr[next] = 1;
+                    zeros--;
+                    queue.offer(next);
+                    flipped = true;
+                }
+            }
+        }
+
+        if (flipped) {
+            iterations++;
+        }
+    }
+
+    return zeros == 0 ? iterations : -1;
+}
+``
+
+
+## Maximum Subarray {#maximum-subarray}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 53
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/maximum-subarray/
+- **Tags**: `Array`, `Dynamic Programming`
+- **Techniques**: Dynamic Programming \@ref(dp)
+
+### Description
+
+Given an integer array `nums`, find the contiguous subarray with the largest sum and return that sum.
+
+### Examples
+
+```
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+Output: 6
+Explanation: [4,-1,2,1] has the largest sum = 6.
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10^5`
+- `-10^4 <= nums[i] <= 10^4`
+
+### Solution - Kadane's Algorithm
+
+#### Walkthrough
+
+Maintain `current` sum for the best subarray ending at index `i`. For each number, extend the previous subarray if it improves the sum; otherwise start new from the current number. Track the global maximum.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
- dp \@ref(dp)
+
+Dynamic Programming \@ref(dp)
+
+1. Initialize `current = maxSum = nums[0]`.
+2. For each element from index 1 onward:
+   - `current = max(nums[i], current + nums[i])`.
+   - `maxSum = max(maxSum, current)`.
+3. Return `maxSum`.
 
 #### Java Code
 ```java
 public int maxSubArray(int[] nums) {
-    if(nums.length == 0) {
-        return 0;
-    }
-    int[] dp = new int[nums.length];
-    int max = Integer.MIN_VALUE;
+    int current = nums[0];
+    int maxSum = nums[0];
 
-    //init dp[]
-    for(int i = 0; i < nums.length; i++) {
-        dp[i] = nums[i];
+    for (int i = 1; i < nums.length; i++) {
+        current = Math.max(nums[i], current + nums[i]);
+        maxSum = Math.max(maxSum, current);
     }
 
-    for(int i = 0; i < nums.length; i++) {
-        //keep summing up with positive integer until a max is found
-        if(i > 0 && dp[i-1] > 0) {
-            dp[i] += dp[i - 1];
-        }
-        max = Math.max(dp[i], max);
-    }
-
-    return max;
+    return maxSum;
 }
-```
+``
 
 
+## Maximum Product Subarray {#maximum-product}
 
-##  Maximum Product Subarray / Leet Code 152 / Medium
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 152
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/maximum-product-subarray/
+- **Tags**: `Array`, `Dynamic Programming`
+- **Techniques**: Dynamic Programming \@ref(dp)
 
 ### Description
-Find the contiguous subarray within an array (containing at least one number) which has the largest product.
 
-### Example
-For example, given the array [2,3,-2,4], the contiguous subarray [2,3] has the largest product = 6.
+Find the contiguous subarray within an array that has the largest product.
 
-### Solution
+### Examples
+
+```
+Input: [2,3,-2,4]
+Output: 6 (subarray [2,3])
+```
+
+### Constraints
+
+- `1 <= nums.length <= 2 * 10^4`
+- `-10 <= nums[i] <= 10`
+
+### Solution - Track Max and Min Products
+
 #### Walkthrough
-Need to keep track the not only maximum but also minimum product since there could be negative number in array.
+
+Because negative values can flip the sign, keep both the maximum and minimum products ending at each index. For each number, compute candidates by multiplying with previous max/min and compare with the number itself. Update the global maximum accordingly.
 
 #### Analysis
-Time complexity is O(n) as every element is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
- dp \@ref(dp)
+
+Dynamic Programming \@ref(dp)
+
+1. Initialize `maxSoFar = minSoFar = answer = nums[0]`.
+2. For each `num` from index 1 onward:
+   - If `num < 0`, swap `maxSoFar` and `minSoFar`.
+   - `maxSoFar = max(num, maxSoFar * num)`.
+   - `minSoFar = min(num, minSoFar * num)`.
+   - `answer = max(answer, maxSoFar)`.
+3. Return `answer`.
 
 #### Java Code
 ```java
 public int maxProduct(int[] nums) {
-    if(nums.length == 0) {
-        return 0;
+    int maxSoFar = nums[0];
+    int minSoFar = nums[0];
+    int answer = nums[0];
+
+    for (int i = 1; i < nums.length; i++) {
+        int num = nums[i];
+        if (num < 0) {
+            int temp = maxSoFar;
+            maxSoFar = minSoFar;
+            minSoFar = temp;
+        }
+        maxSoFar = Math.max(num, maxSoFar * num);
+        minSoFar = Math.min(num, minSoFar * num);
+        answer = Math.max(answer, maxSoFar);
     }
 
-    int maxProduct = nums[0];
+    return answer;
+}
+``
 
-    int maxPrev = nums[0], minPrev = nums[0];
 
-    int maxCurrent, minCurrent;
+## Eliminate Maximum Number of Monsters {#eliminate-max-monsters}
 
-    for(int i = 1; i < nums.length; i++) {
-        maxCurrent = Math.max(Math.max(maxPrev * nums[i], minPrev * nums[i]), nums[i]);
-        minCurrent = Math.min(Math.min(maxPrev * nums[i], minPrev * nums[i]), nums[i]);
 
-        //refresh max
-        maxProduct = Math.max(maxProduct, maxCurrent);
+### Problem Metadata
 
-        //refresh values
-        maxPrev = maxCurrent;
-        minPrev = minCurrent;
+- **Platform**: LeetCode
+- **Problem ID**: 1921
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/eliminate-maximum-number-of-monsters/
+- **Tags**: `Array`, `Greedy`, `Sorting`
+- **Techniques**: Sorting, Greedy Algorithm
+
+
+### Description
+
+You are playing a video game where you are defending your city from a group of n monsters. You are given a 0-indexed integer array dist of size n, where dist[i] is the initial distance in kilometers of the ith monster from the city.
+
+The monsters walk toward the city at a constant speed. The speed of each monster is given to you in an integer array speed of size n, where speed[i] is the speed of the ith monster in kilometers per minute.
+
+You have a weapon that, once fully charged, can eliminate a single monster. However, the weapon takes one minute to charge. The weapon is fully charged at the very start.
+
+You lose when any monster reaches your city. If a monster reaches the city at the exact moment the weapon is fully charged, it counts as a loss, and the game ends before you can use your weapon.
+
+Return the maximum number of monsters that you can eliminate before you lose, or n if you can eliminate all the monsters before they reach the city.
+
+
+### Examples
+
+**Example 1:**
+```
+Input: dist = [1,3,4], speed = [1,1,1]
+Output: 3
+Explanation:
+In the beginning, the distances of the monsters are [1,3,4]. You eliminate the first monster.
+After a minute, the distances of the monsters are [X,2,3]. You eliminate the second monster.
+After a minute, the distances of the monsters are [X,X,2]. You eliminate the third monster.
+All 3 monsters can be eliminated.
+```
+
+**Example 2:**
+```
+Input: dist = [1,1,2,3], speed = [1,1,1,1]
+Output: 1
+Explanation:
+In the beginning, the distances of the monsters are [1,1,2,3]. You eliminate the first monster.
+After a minute, the distances of the monsters are [X,0,1,2], so you lose.
+You can only eliminate 1 monster.
+```
+
+**Example 3:**
+```
+Input: dist = [3,2,4], speed = [5,3,2]
+Output: 1
+Explanation:
+In the beginning, the distances of the monsters are [3,2,4]. You eliminate the first monster.
+After a minute, the distances of the monsters are [X,0,2], so you lose.
+You can only eliminate 1 monster
+```
+
+**Example 4:**
+```
+Input: dist = [3,2,4], speed = [5,3,2]
+Output: 1
+Explanation:
+In the beginning, the distances of the monsters are [3,2,4]. You eliminate the first monster.
+After a minute, the distances of the monsters are [X,0,2], so you lose.
+You can only eliminate 1 monster
+```
+
+
+### Constraints
+
+- `n == dist.length == speed.length`
+- `1 <= n <= 10^5`
+- `1 <= dist[i], speed[i] <= 10^5`
+
+
+### Solution 1
+
+
+#### Walkthrough
+
+The key insight is that we should eliminate monsters in order of their **arrival time**, not their current distance. This greedy approach ensures we always eliminate the most urgent threat first.
+
+**Step-by-step approach:**
+
+1. **Calculate arrival time**: For each monster at distance `dist[i]` moving at `speed[i]`, it will reach the city at time `?dist[i] / speed[i]?` minutes. We use ceiling because if a monster arrives at time 1.5, it effectively arrives at minute 2.
+
+2. **Sort by arrival time**: Sort monsters by when they'll arrive. This tells us the optimal elimination order - always eliminate the monster that will arrive soonest.
+
+3. **Simulate elimination**: Starting at time 0 with a charged weapon:
+   - At each minute `t`, check if the monster scheduled to arrive at `arrival[t]` has already reached or will reach the city before we can eliminate it
+   - If `arrival[t] <= t`, the monster has arrived and we lose
+   - Otherwise, eliminate the monster and move to the next minute
+
+4. **Key observation**: Since we eliminate one monster per minute starting at minute 0, **the time elapsed `t` is always equal to the count of monsters eliminated**. This means:
+   - At minute 0: we've eliminated 0 monsters (about to eliminate the 1st)
+   - At minute 1: we've eliminated 1 monster (about to eliminate the 2nd)
+   - At minute `t`: we've eliminated `t` monsters (about to eliminate the `(t+1)`th)
+
+   This allows us to use a single loop variable `t` instead of tracking both `timeElapsed` and `count` separately!
+
+
+#### Analysis
+
+- **Time Complexity**: O(n log n) - Dominated by sorting the arrival times array
+- **Space Complexity**: O(n) - For storing the arrival times array
+
+
+#### Algorithm
+
+\@ref(greedy), \@ref(sorting)
+
+1. Calculate arrival time for each monster: `?dist[i] / speed[i]?`
+2. Sort monsters by arrival time (ascending order)
+3. Iterate through sorted arrival times:
+   - At minute `t`, check if `arrival[t] <= t` (monster has arrived)
+   - If yes, return `t` (number of monsters eliminated)
+   - If no, continue to next minute
+4. If all monsters eliminated, return `n`
+
+
+#### Java Code
+
+```java
+class Solution {
+    public int eliminateMaximum(int[] dist, int[] speed) {
+        int n = dist.length;
+
+        // Calculate arrival time for each monster
+        int[] arrival = new int[n];
+        for (int i = 0; i < n; i++) {
+            arrival[i] = (int) Math.ceil((double) dist[i] / speed[i]);
+        }
+
+        // Sort by arrival time - eliminate monsters in order of urgency
+        Arrays.sort(arrival);
+
+        // Simulate elimination: at minute t, check if monster t has arrived
+        for (int t = 0; t < n; t++) {
+            if (arrival[t] <= t) {
+                // Monster has arrived before we could eliminate it
+                return t;
+            }
+        }
+
+        // All monsters eliminated
+        return n;
     }
-
-    return maxProduct;
 }
 ```
 
 
-##  Longest Valid Parentheses / Leet Code 32 / Hard
+### Notes
+
+- **Pattern**: Greedy + Sorting
+- **Key Insight**: The optimal strategy is to always eliminate the monster with the **earliest arrival time**, regardless of their current distance or speed. Sorting by arrival time naturally gives us this order.
+- **Why Greedy Works**: Since we can only eliminate one monster per minute, we must prioritize by urgency (arrival time). Any other ordering would allow an earlier-arriving monster to reach the city.
+- **Edge Case**: When `arrival[t] == t`, the monster reaches the city at the exact moment the weapon charges, which counts as a loss per the problem statement.
+- **Optimization**: The time elapsed `t` is implicitly equal to the count of monsters eliminated, so we don't need a separate counter variable.
+- **Common Mistakes**:
+  - Sorting by distance instead of arrival time - this fails when a far-away fast monster arrives before a close slow monster
+  - Forgetting to use ceiling division - fractional arrival times must be rounded up
+  - Off-by-one errors with the condition `arrival[t] <= t` vs `arrival[t] < t`
+
+
+
+## Longest Valid Parentheses {#longest-valid-parentheses}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 32
+- **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/longest-valid-parentheses/
+- **Tags**: `Stack`, `Dynamic Programming`
+- **Techniques**: Stack, Dynamic Programming \@ref(dp)
 
 ### Description
-Given a string containing just the characters ’(’ and ’)’, find the length of the longest valid (well-formed)
-parentheses substring.
 
-### Example
-For ”(()”, the longest valid parentheses substring is ”()”, which has length = 2.
-Another example is ”)()())”, where the longest valid parentheses substring is ”()()”, which has length = 4.
+Given a string containing only `'('` and `')'`, return the length of the longest well-formed parentheses substring.
 
-### Solution
+### Examples
+
+```
+Input: s = " )()() "
+Output: 4
+```
+
+### Constraints
+
+- `0 <= s.length <= 3 * 10^4`
+
+### Solution - Stack
+
 #### Walkthrough
-Find the indices of unmatched paranthesis, then locate the adjacent indices with largest difference which would be
-the longest valid paranthesis.
+
+Maintain a stack of indices. Push `-1` as a sentinel. For each character:
+- When `'('`, push its index.
+- When `')'`, pop the stack. If it becomes empty, push the current index (new base). Otherwise update the answer with `i - stack.peek()`.
 
 #### Analysis
-Time complexity is O(n) where n is the number of alphabets.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
 
 #### Algorithm
- dp \@ref(dp)
+
+1. Initialize stack with `-1` and `maxLen = 0`.
+2. For each index `i`:
+   - If `s[i] == '('`, push `i`.
+   - Else pop; if stack empty push `i`, else `maxLen = max(maxLen, i - stack.peek())`.
+3. Return `maxLen`.
 
 #### Java Code
 ```java
 public int longestValidParentheses(String s) {
-    //Stack contains the indices of chars which cannot be matched.
-    Stack<Integer> stack = new Stack<>();
+    Deque<Integer> stack = new ArrayDeque<>();
+    stack.push(-1);
+    int longest = 0;
 
-    for(int i = 0; i < s.length(); i++) {
-        char c = s.charAt(i);
-
-        if(c == '(') {
+    for (int i = 0; i < s.length(); i++) {
+        if (s.charAt(i) == '(') {
             stack.push(i);
-        } else if(c == ')') {
-            if(stack.isEmpty()) {
-            stack.push(i);
+        } else {
+            stack.pop();
+            if (stack.isEmpty()) {
+                stack.push(i);
             } else {
-                int lastIndex = stack.peek();
-
-                if(s.charAt(lastIndex) == '(') {
-                    //pop out the valid pairs
-                    stack.pop();
-                } else {
-                    //XXX: )))))(
-                    stack.push(i);
-                }
+                longest = Math.max(longest, i - stack.peek());
             }
         }
     }
 
-    int longestLength = 0;
-    if(stack.isEmpty()) {
-        //string contains a well-formed paranthesis
-        longestLength = s.length();
-    } else {
-        /*
-        * Any discontinual adjacent indices represents a valid parenthesis.
-        * Therefore, locate the adjacent indices with largest difference ==> the longest valid parenthesis
-        *
-        * Example:
-        * Input: (()()((()((
-        * Indices in stack:
-        * 10<-9<-6<-5<-0
-        *
-        * Longest valid parenthesis: 5 - 0  - 1 = 4
-        */
-        int stopIndex = s.length(), startIndex = 0;
-
-        while(!stack.isEmpty()) {
-            startIndex = stack.pop();
-            longestLength = Math.max(longestLength, stopIndex - startIndex - 1);
-            stopIndex = startIndex;
-        }
-
-        longestLength = Math.max(longestLength, stopIndex);
-    }
-
-    return longestLength;
+    return longest;
 }
-```
 
+## Longest Increasing Subsequence {#lis}
 
-##  Longest Increasing Subsequence / Leet Code 300 / Medium
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 300
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/longest-increasing-subsequence/
+- **Tags**: `Array`, `Binary Search`
+- **Techniques**: Dynamic Programming \@ref(dp), Binary Search \@ref(binary-search)
 
 ### Description
-Given an unsorted array of integers, find the length of longest increasing subsequence.
 
-### Example
-For example, Given [10, 9, 2, 5, 3, 7, 101, 18],
+Given an integer array, find the length of the longest strictly increasing subsequence.
 
-The longest increasing subsequence is [2, 3, 7, 101], therefore the length is 4. Note that there may be more than one
-LIS combination, it is only necessary for you to return the length.
+### Examples
 
-Your algorithm should run in O(n2) complexity.
-
-###  Solution- Brute Force
-#### Walkthrough
-Create an array of length of nums to store length of subsequences. Create a nested loop where two indices, stopIdx
-from 0 to length -1 and from startIdx from 0 to stopIdx - 1. First check if it is a increasing subsequence if
-(nums[stopIdx] < nums[startIdx]). Increment the current length of subsequence for at startIdx - dp[startIdx] + 1.
-However, it is possible that dp[stopIdx] is larger than dp[startIdx] + 1 for previously traversed subsequence. Thus,
-we need to take the maximum out of both cases. Finally, we evaluate the final length out of dp[] array.
-
-#### Analysis
-There are two loops, thus, the time complexity is $O(n^2)$
-
-#### Algorithm
- dp \@ref(dp)
-
-#### Java Code - Brute Force
-```java
-public int lengthOfLIS(int[] nums) {
-    int dp[] = new int[nums.length];
-
-    if(nums.length == 0) {
-        return 0;
-    }
-
-    //init
-    Arrays.fill(dp, 1);
-
-    for(int stopIdx = 0; stopIdx < nums.length; stopIdx++) {
-        for(int startIdx = 0; startIdx < stopIdx; startIdx++) {
-            //Valid Increasing Subsequence
-            if(nums[startIdx] < nums[stopIdx]) {
-                dp[stopIdx] = Math.max(dp[startIdx] + 1, dp[stopIdx]);
-            }
-        }
-    }
-
-    int maxLength = 0;
-    for(int i = 0; i < dp.length; i++) {
-        maxLength = Math.max(maxLength, dp[i]);
-    }
-
-    return maxLength;
-}
+```
+Input: [10,9,2,5,3,7,101,18]
+Output: 4  (the LIS is [2,3,7,101])
 ```
 
-###  Solution - Binary Search
+### Constraints
+
+- `1 <= nums.length <= 2500`
+- `-10^4 <= nums[i] <= 10^4`
+
+### Solution - Patience Sorting
+
 #### Walkthrough
 
+Maintain an array `tails` where `tails[len]` holds the smallest possible tail for an increasing subsequence of length `len+1`. For each number, binary search the first tail greater or equal to it and replace it; if none, append to extend the LIS.
+
 #### Analysis
-For each element, we search for the index using binary search which cost $O(log(n))$. The overall time complexity is
-$O(n \cdot log(n))$
+
+- **Time Complexity**: O(n log n)
+- **Space Complexity**: O(n)
 
 #### Algorithm
 
-#### Java Code - Binary Search
+1. Initialize empty list `tails`.
+2. For each number `x`:
+   - Binary search `tails` to find the leftmost index `i` with `tails[i] >= x`.
+   - If such index exists set `tails[i] = x`, else append `x`.
+3. Return `tails.size()`.
+
+#### Java Code
 ```java
 public int lengthOfLIS(int[] nums) {
-    int len = 1;
-    for (int i = 0; i < nums.length; i++) {
-        int k = Arrays.binarySearch(nums, 0, len, nums[i]);
-        if (k < 0) {
-            k = -(k + 1);
-            if (k == len) {
-                len++;
+    int[] tails = new int[nums.length];
+    int size = 0;
+
+    for (int num : nums) {
+        int left = 0;
+        int right = size;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (tails[mid] < num) {
+                left = mid + 1;
+            } else {
+                right = mid;
             }
-            nums[k] = nums[i];
+        }
+        tails[left] = num;
+        if (left == size) {
+            size++;
         }
     }
-    return len;
+
+    return size;
 }
-```
 
+## Paint House {#paint-house}
 
-##  Paint House / Leet Code 256 / Easy
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 256
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/paint-house/
+- **Tags**: `Array`, `Dynamic Programming`
+- **Techniques**: Dynamic Programming \@ref(dp)
 
 ### Description
-There are a row of n houses, each house can be painted with one of the three colors: red, blue or green. The cost of
-painting each house with a certain color is different. You have to paint all the houses such that no two adjacent
-houses have the same color. The cost of painting each house with a certain color is represented by a n x 3 cost
-matrix. For example, costs[0][0] is the cost of painting house 0 with color red; costs[1][2] is the cost of painting
-house 1 with color green, and so on... Find the minimum cost to paint all houses.
 
-### Example
+You are given an `n x 3` matrix `costs` where `costs[i][j]` denotes the cost of painting house `i` with color `j`. Adjacent houses must not share a color. Return the minimum total cost to paint all houses.
 
+### Examples
 
-### Solution
+```
+Input: costs = [[17,2,17],[16,16,5],[14,3,19]]
+Output: 10
+```
+
+### Constraints
+
+- `1 <= n <= 100`
+- `0 <= costs[i][j] <= 10^4`
+
+### Solution - Rolling DP
+
 #### Walkthrough
-We need to find the cost of one house of having one color with minimum cost with another color. Last but not least,
-these values need to minimized.
+
+Keep three running totals for the cost of painting up to the current house when the current house ends in red, green, or blue. For house `i`, the red cost equals `costs[i][0] + min(previousGreen, previousBlue)`, and similarly for the other colors. Update the running totals and take the minimum at the end.
 
 #### Analysis
-Time complexity is O(n) as every house is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
- dp \@ref(dp)
+
+Dynamic Programming \@ref(dp)
+
+1. Initialize `red = green = blue = 0`.
+2. For each house:
+   1. Compute new totals for each color by adding its cost to the minimum of the other two previous totals.
+   2. Update `red`, `green`, `blue` to these new totals.
+3. Return `min(red, green, blue)`.
 
 #### Java Code
 ```java
 public int minCost(int[][] costs) {
-    int[] house = new int[3];
-    int h0 = 0, h1 = 0, h2 = 0;
+    int red = 0, green = 0, blue = 0;
 
-    for (int i = 0; i < costs.length; i++) {
-        /*
-        * house[0] = cost of current house of of r/g/b plus minimum cost of the other two houses
-        */
-        house[0] = costs[i][0] + Math.min(h1, h2);
-        house[1] = costs[i][1] + Math.min(h0, h2);
-        house[2] = costs[i][2] + Math.min(h0, h1);
-        h0 = house[0];
-        h1 = house[1];
-        h2 = house[2];
+    for (int[] cost : costs) {
+        int newRed = cost[0] + Math.min(green, blue);
+        int newGreen = cost[1] + Math.min(red, blue);
+        int newBlue = cost[2] + Math.min(red, green);
+        red = newRed;
+        green = newGreen;
+        blue = newBlue;
     }
-    return Math.min(Math.min(h0, h1), h2);
+
+    return Math.min(red, Math.min(green, blue));
 }
-```
 
 
-##  Climbing Stairs / Leet Code 70 / Easy
+## Climbing Stairs {#climbing-stairs}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 70
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/climbing-stairs/
+- **Tags**: `Dynamic Programming`
+- **Techniques**: Dynamic Programming \@ref(dp)
 
 ### Description
-You are climbing a stair case. It takes n steps to reach to the top.
 
-Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+You are climbing a staircase with `n` steps. Each time you may climb 1 or 2 steps. Return the number of distinct ways to reach the top.
 
-Note: Given n will be a positive integer.
+### Examples
 
-### Example
-Input: 2 , Output: 2
-Explanation: There are two ways to climb to the top.
+```
+Input: n = 3
+Output: 3
+Explanation: (1+1+1), (1+2), (2+1)
+```
 
-* 1 step + 1 step
-* 2 steps
-\end{itemize}
+### Constraints
 
-Input: 3, Output: 3
-Explanation: There are three ways to climb to the top.
+- `1 <= n <= 45`
 
-* 1 step + 1 step + 1 step
-* 1 step + 2 steps
-* 2 steps + 1 step
-\end{itemize}
+### Solution - Fibonacci DP
 
-### Solution
 #### Walkthrough
 
-* i = 3, total = 1 + 2 = 3
-* i = 4, total = 3 + 2 = 5
-* i = 5, total = 5 + 3 = 8
-* i = 13, total = 8 + 5 = 13
-\end{itemize}
+Let `dp[i]` be the number of ways to reach step `i`. You can arrive at `i` from `i-1` (taking a single step) or from `i-2` (taking two steps). Thus `dp[i] = dp[i-1] + dp[i-2]`. Initialize `dp[0] = 1`, `dp[1] = 1` and iterate upward.
 
 #### Analysis
-Time complexity is O(n) as each step is computed.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1) using rolling variables
 
 #### Algorithm
- dp \@ref(dp)
+
+Dynamic Programming \@ref(dp)
+
+1. Handle base cases `n <= 2`.
+2. Maintain two variables for `dp[i-1]` and `dp[i-2]`.
+3. Iterate from 3 to `n`, computing the sum and shifting the variables.
+4. Return the last computed value.
 
 #### Java Code
 ```java
 public int climbStairs(int n) {
-    if(n == 0) {
-        return 0;
-    }
-    if (n == 1) {
-        return 1;
-    }
-    if (n == 2) {
-        return 2;
+    if (n <= 2) {
+        return n;
     }
 
-    int n_minus_2 = 2;
-    int n_minus_1 = 1;
-    int total = 0;
+    int prev2 = 1; // ways to reach step i-2
+    int prev1 = 2; // ways to reach step i-1
 
-    for(int i = 3; i <= n; i++) {
-        total = n_minus_1 + n_minus_2;
-        n_minus_1 = n_minus_2;
-        n_minus_2 = total;
+    for (int i = 3; i <= n; i++) {
+        int current = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = current;
     }
 
-    return total;
+    return prev1;
 }
-```
 
 
-##  Find the Maximum Number of Repetitions / Firecode / Level 3
+## Maximum Number of Repetitions {#max-repetitions}
+
+### Problem Metadata
+
+- **Platform**: Firecode
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Counting`
+- **Techniques**: Counting
 
 ### Description
-Given an Array of integers, write a method that will return the integer with the maximum number of repetitions. Your
-code is expected to run with O(n) time complexity and O(1) Auxiliary Space. The elements in the array are between 0 to
-size(array) - 1 and the array will not be empty.
 
-### Example
-$f(\{3,1,2,2,3,4,4,4\}) = 4$
+Given an array of integers where each value lies in `[0, n-1]`, return the integer that appears most frequently. The algorithm must run in O(n) time and O(1) extra space.
 
-### Solution
+### Examples
+
+```
+Input: [3,1,2,2,3,4,4,4]
+Output: 4
+```
+
+### Constraints
+
+- `1 <= n <= 10^5`
+- Values are in `[0, n-1]`
+
+### Solution - In-place Counting
+
 #### Walkthrough
-The key is to utilize the characteristic of the elements in the array being between 0 to size(array) - 1. We should
-increment a[a[i]] by k for each element. Retrieve the maximum element and return the index of the element. k is an
-increment factor as long as it is bigger than size of array.
+
+Exploit the bounded value range by using the input array itself as a hash table. For each value `a[i]`, increment `a[a[i] % n]` by `n`. After one pass, the count of value `v` equals `a[v] / n`. Track the index with the maximum total.
 
 #### Analysis
-Time complexity is O(n) as every element is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
- dp \@ref(dp)
+
+1. Let `k = n` (or any value = n).
+2. For each index `i`, add `k` to `arr[arr[i] % n]`.
+3. Scan the array to find the index with the largest value; that index is the answer.
 
 #### Java Code
 ```java
-public static int getMaxRepetition(int[] a) {
-    //k to be the increment factor, larger >= size(a) to be significant
-    int k = 100;
+public int getMaxRepetition(int[] nums) {
+    int n = nums.length;
+    int k = n;
 
-    // Iterate though input array, for every element
-    // arr[i], increment a[a[i]] by k
-    for (int i = 0; i< a.length; i++) {
-        a[(a[i] \% k)] += k;
+    for (int i = 0; i < n; i++) {
+        nums[nums[i] % n] += k;
     }
 
-    // Find index of the maximum repeating element
-    int max = a[0], maxIdx = 0;
-    for (int i = 1; i < a.length; i++) {
-        if (a[i] > max) {
-            max = a[i];
+    int maxIdx = 0;
+    for (int i = 1; i < n; i++) {
+        if (nums[i] > nums[maxIdx]) {
             maxIdx = i;
         }
     }
 
-    // Return index of the maximum element
     return maxIdx;
 }
-```
 
 
-##  House Robber / Leet Code 198 / Easy
+## House Robber {#house-robber}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 198
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/house-robber/
+- **Tags**: `Array`, `Dynamic Programming`
+- **Techniques**: Dynamic Programming \@ref(dp)
 
 ### Description
-You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed,
-the only constraint stopping you from robbing each of them is that adjacent houses have security system connected and
-it will automatically contact the police if two adjacent houses were broken into on the same night.
 
-Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of
-money you can rob tonight without alerting the police.
+Given a list of non-negative integers representing the amount of money in each house along a street, determine the maximum amount you can rob without robbing two adjacent houses.
 
-### Example
-Input: [1,2,3,1], Output: 4
-Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
-Total amount you can rob = 1 + 3 = 4.
+### Examples
 
-Input: [2,7,9,3,1], Output: 12
-Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1).
-Total amount you can rob = 2 + 9 + 1 = 12.
+```
+Input: [1,2,3,1]
+Output: 4
+```
 
-### Solution
+### Constraints
+
+- `1 <= nums.length <= 100`
+- `0 <= nums[i] <= 400`
+
+### Solution - Linear DP
+
 #### Walkthrough
-Create an array of same length of nums. While looping through the array, compute the max profit of:
 
-    * Rob this house plus every two houses before : nums[i] + dp[i-2]
-    * Rob prev house: dp[i-1]
-\end{itemize}
-Finally, return the final outcome, which is the dp[n-1]
+Let `dp[i]` be the best we can do up to house `i`. For each house, we either rob it plus `dp[i-2]` or skip it and take `dp[i-1]`. Initialize the first two values and iterate.
 
 #### Analysis
-Time complexity is O(n) as every element is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1) using rolling variables
 
 #### Algorithm
- dp \@ref(dp)
+
+Dynamic Programming \@ref(dp)
+
+1. Handle `n == 1`.
+2. Maintain `prev2` (dp[i-2]) and `prev1` (dp[i-1]).
+3. For each house value `num`, compute `current = Math.max(prev1, prev2 + num)`.
+4. Shift `prev2 = prev1`, `prev1 = current`.
+5. Return `prev1`.
 
 #### Java Code
 ```java
 public int rob(int[] nums) {
-    int n = nums.length;
-    if(n == 0) {
-        return 0;
+    if (nums.length == 1) {
+        return nums[0];
     }
 
-    int[] dp = new int[n];
-    int max = 0;
+    int prev2 = 0;
+    int prev1 = 0;
 
-    for(int i = 0; i < n; i++) {
-        dp[i] = Math.max(nums[i] + (i >= 2 ? dp[i-2] : 0), (i >= 1 ? dp[i-1]: 0));
+    for (int value : nums) {
+        int current = Math.max(prev1, prev2 + value);
+        prev2 = prev1;
+        prev1 = current;
     }
 
-    return dp[n-1];
+    return prev1;
 }
-```
 
 
-##  Best Time to Buy and Sell Stock / Leet Code 121 / Easy
+## Best Time to Buy and Sell Stock {#stock-121}
 
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 121
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+- **Tags**: `Array`, `Greedy`
+- **Techniques**: Greedy
 
 ### Description
-Say you have an array for which the ith element is the price of a given stock on day i.
 
-If you were only permitted to complete at most one transaction (i.e., buy one and sell one share of the stock),
-design an algorithm to find the maximum profit.
+Given prices where `prices[i]` is the stock price on day `i`, find the maximum profit from a single buy and sell transaction.
 
-Note that you cannot sell a stock before you buy one
+### Examples
 
-### Example
-Input: [7,1,5,3,6,4], Output: 5
+```
+Input: [7,1,5,3,6,4]
+Output: 5
+```
 
-Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.  Not 7-1 = 6, as selling price
-needs to be larger than buying price.
+### Constraints
 
-### Solution
+- `1 <= prices.length <= 10^5`
+- `0 <= prices[i] <= 10^4`
+
+### Solution - Track Min Price
+
 #### Walkthrough
-While computing (sell price - buy price), we need to keep track the maximum profit as well as the minimum minimum
-buying price.
+
+Scan prices once while tracking the minimum price seen so far. For each day, compute the profit if we sold today (`price - minPrice`) and update the answer. Also update `minPrice` whenever we see a smaller value.
 
 #### Analysis
-Time complexity is O(n) as every element is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
- dp \@ref(dp)
+
+1. Initialize `minPrice = Integer.MAX_VALUE`, `maxProfit = 0`.
+2. For each price `p`:
+   - `maxProfit = max(maxProfit, p - minPrice)`.
+   - `minPrice = min(minPrice, p)`.
+3. Return `maxProfit`.
 
 #### Java Code
 ```java
 public int maxProfit(int[] prices) {
-    int maxProfit = 0, minPrice = Integer.MAX_VALUE;
+    int minPrice = Integer.MAX_VALUE;
+    int maxProfit = 0;
 
-    for(int price : prices) {
-        // profit = selling price - buying price
-        int profit = price - minPrice;
-
-        maxProfit = Math.max(profit, maxProfit);
-        minPrice = Math.min(minPrice, price);
+    for (int price : prices) {
+        if (price < minPrice) {
+            minPrice = price;
+        }
+        maxProfit = Math.max(maxProfit, price - minPrice);
     }
 
     return maxProfit;
 }
-```
 
 
-##  Best Time to Buy and Sell Stock II / Leet Code 122 / Easy
+## Best Time to Buy and Sell Stock II {#stock-122}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 122
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+- **Tags**: `Array`, `Greedy`
+- **Techniques**: Greedy
 
 ### Description
-Say you have an array for which the ith element is the price of a given stock on day i.
 
-Design an algorithm to find the maximum profit. You may complete as many transactions as you like (i.e., buy one and
-sell one share of the stock multiple times).
+You may complete as many stock transactions as you like (buy before sell, no overlapping transactions). Return the maximum profit.
 
-Note: You may not engage in multiple transactions at the same time (i.e., you must sell the stock before you buy
-again).
+### Examples
 
-### Example
-Input: [7,1,5,3,6,4], Output: 7
-Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-1 = 4.
-Then buy on day 4 (price = 3) and sell on day 5 (price = 6), profit = 6-3 = 3.
+```
+Input: [7,1,5,3,6,4]
+Output: 7
+Explanation: Buy at 1, sell at 5; buy at 3, sell at 6.
+```
 
-### Solution
+### Constraints
+
+- `1 <= prices.length <= 10^5`
+
+### Solution - Sum Positive Differences
+
 #### Walkthrough
-if current (selling )price greater than previous (buying )price, profit += (selling price - buying price).
+
+Whenever the price increases from day `i-1` to `i`, capture that profit by adding `prices[i] - prices[i-1]`. This mimics buying before each rise and selling at the peak.
 
 #### Analysis
-Time complexity is O(n) as every element is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
- dp \@ref(dp)
+
+1. Initialize `profit = 0`.
+2. For each day `i > 0`, if `prices[i] > prices[i-1]`, add the difference to `profit`.
+3. Return `profit`.
 
 #### Java Code
 ```java
 public int maxProfit(int[] prices) {
     int profit = 0;
-    for(int i = 1; i < prices.length; i++) {
-        if(prices[i] > prices[i - 1]) {
+    for (int i = 1; i < prices.length; i++) {
+        if (prices[i] > prices[i - 1]) {
             profit += prices[i] - prices[i - 1];
         }
     }
     return profit;
 }
-```
 
 
-##  Best Time to Buy and Sell Stock with Cooldown / Leet Code 309 / Medium
+## Best Time to Buy and Sell Stock with Cooldown {#stock-cooldown}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 309
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+- **Tags**: `Array`, `Dynamic Programming`
+- **Techniques**: Dynamic Programming \@ref(dp)
 
 ### Description
-Say you have an array for which the ith element is the price of a given stock on day i.
 
-Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and
-sell one share of the stock multiple times) with the following restrictions:
+You may complete multiple transactions, but after selling a stock you must wait one day (cooldown) before buying again. Return the maximum profit.
 
-You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
-After you sell your stock, you cannot buy stock on next day. (ie, cooldown 1 day)
+### Examples
 
-### Example
-Input: [1,2,3,0,2], Output: 3
-Explanation: transactions = [buy, sell, cooldown, buy, sell]
+```
+Input: [1,2,3,0,2]
+Output: 3
+```
 
-### Solution
+### Constraints
+
+- `1 <= prices.length <= 5000`
+
+### Solution - State Machine DP
+
 #### Walkthrough
 
+Maintain three states per day:
+- `hold`: profit when holding a stock
+- `sold`: profit after selling today
+- `rest`: profit when in cooldown or idle
+
+Transition using previous day values: `hold = max(hold, rest - price)`, `sold = hold + price`, `rest = max(rest, sold_previous)`.
+
 #### Analysis
-Time complexity is O(n) as every element is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
- dp \@ref(dp)
+
+1. Initialize `hold = -prices[0]`, `sold = 0`, `rest = 0`.
+2. For each subsequent price:
+   - `int prevSold = sold;`
+   - `sold = hold + price;`
+   - `hold = Math.max(hold, rest - price);`
+   - `rest = Math.max(rest, prevSold);`
+3. Return `Math.max(sold, rest)`.
 
 #### Java Code
 ```java
 public int maxProfit(int[] prices) {
-    int profit = 0, prevProfit = 0, diff = Integer.MIN_VALUE, prevDiff = 0, maxProfit = 0;
-    for (int price : prices) {
-        prevDiff = diff;
-        //diff = MAX (price[i - 1] - price[i], diff)
-        diff = Math.max(prevProfit - price, prevDiff);
+    int hold = -prices[0];
+    int sold = 0;
+    int rest = 0;
 
-        prevProfit = profit;
-        //profit = MAX(prevDiff + price[i], prevProfit)
-        profit = Math.max(prevDiff + price, prevProfit);
-        maxProfit = Math.max(maxProfit, profit);
+    for (int i = 1; i < prices.length; i++) {
+        int prevSold = sold;
+        sold = hold + prices[i];
+        hold = Math.max(hold, rest - prices[i]);
+        rest = Math.max(rest, prevSold);
     }
 
-    return maxProfit;
+    return Math.max(sold, rest);
 }
-```
 
 
-##  Minimum Swaps To Make Sequences Increasing / LeetCode 801 / Medium
+## Minimum Swaps to Make Sequences Increasing {#min-swaps-increasing}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 801
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/minimum-swaps-to-make-sequences-increasing/
+- **Tags**: `Array`, `Dynamic Programming`
+- **Techniques**: Dynamic Programming \@ref(dp)
 
 ### Description
-We have two integer sequences A and B of the same non-zero length.
 
-We are allowed to swap elements A[i] and B[i].  Note that both elements are in the same index position in their
-respective sequences.
+Given two equal-length arrays `A` and `B` that are strictly increasing individually, you may swap elements at the same index. Return the minimum swaps needed to make both arrays strictly increasing.
 
-At the end of some number of swaps, A and B are both strictly increasing.  (A sequence is strictly increasing
-if and only if A[0] < A[1] < A[2] < ... < A[A.length - 1].)
+### Examples
 
-Given A and B, return the minimum number of swaps to make both sequences strictly increasing.  It is
-**guaranteed** that the given input always makes it possible.
+```
+Input: A = [1,3,5,4], B = [1,2,3,7]
+Output: 1
+```
 
-### Example
-Input: A = [1,3,5,4], B = [1,2,3,7] Output: 1
-Explanation:
-Swap A[3] and B[3].  Then the sequences are:  A = [1, 3, 5, 7] and B = [1, 2, 3, 4] which are both strictly
-increasing.
+### Constraints
 
-### Solution
+- `1 <= n <= 10^5`
+- `0 <= A[i], B[i] <= 2 * 10^5`
+
+### Solution - DP with Keep/Swap States
+
 #### Walkthrough
-Have 2 variables to keep track states as the following:
 
-    * the minimum swaps to maintain sequence increasing if we swap at i
-    * the minimum swaps to maintain sequence increasing if we DO NOT swap at i
-\end{itemize}
-
-Since it is guaranteed that there is valid answer, then we could have the following scenario
-
-    *  Scenaior 1: Need to swap at [i] iff [i-1] swapped
-        ```java
-        //         | i - 1 | i     | Note
-        // A       | 3     | 4     |
-        // B       | 1     | 2     |
-        // noSwap  | x     | x     | [i-1] NOT swapped, [i] NOT swapped
-        // withSwap| y     | y + 1 | [i-1] swapped, [i] swapped.
-        ```
-    * Scenario 2: Need to swap at [i] iff [i-1] NOT swapped
-        ```java
-        //         | i - 1 | i     | Note
-        // A       | 3     | 2     |
-        // B       | 1     | 4     |
-        // noSwap  | x     | y     | [i-1] swapped => [i] NOT swapped
-        // withSwap| y     | x + 1 | [i-1] NOT swapped => [i] swapped
-        ```
-    * Scenario 3 : either swap or no swap
-\end{itemize}
+Let `keep[i]` be the minimum swaps to keep index `i` un-swapped, and `swap[i]` when we swap at `i`. Initialize `keep[0] = 0`, `swap[0] = 1`. For each `i > 0`, consider whether the sequences remain increasing without swap, with swap, or both, and update the states accordingly.
 
 #### Analysis
-Time complexity is O(n) as every element is visited once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
+
+1. Initialize `keep = 0`, `swap = 1`.
+2. For each index `i` from 1 to `n-1`:
+   - Set `nextKeep = nextSwap = Integer.MAX_VALUE`.
+   - If `A[i] > A[i-1] && B[i] > B[i-1]`, update `nextKeep = min(nextKeep, keep)` and `nextSwap = min(nextSwap, swap + 1)`.
+   - If `A[i] > B[i-1] && B[i] > A[i-1]`, update `nextKeep = min(nextKeep, swap)` and `nextSwap = min(nextSwap, keep + 1)`.
+   - Assign `keep = nextKeep`, `swap = nextSwap`.
+3. Return `min(keep, swap)`.
 
 #### Java Code
 ```java
 public int minSwap(int[] A, int[] B) {
-    //For the ith element in A and B
-    //withSwap means the minimum swaps to maintain IS if we swap at [i]
-    //noSwap means the minimum swaps to maintain IS if we DO NOT swap at [i]
+    int keep = 0;
+    int swap = 1;
 
-    //for [0] element, init noSwap = 1 and withSwap = 0
-    int withSwap = 1, noSwap = 0;
+    for (int i = 1; i < A.length; i++) {
+        int nextKeep = Integer.MAX_VALUE;
+        int nextSwap = Integer.MAX_VALUE;
 
-    // System.out.println("i:  " + "Y" + " | " + "N");
-    //assume A.length = B.length
-    int length = A.length;
-    for(int i = 1; i < length; i++) {
-        if(A[i - 1] >= B[i] || B[i - 1] >= A[i]) {
-            //Scenaior 1: Need to swap at [i] iff [i-1] swapped
-            //         | i - 1 | i     | Note
-            // A       | 3     | 4     |
-            // B       | 1     | 2     |
-            // noSwap  | x     | x     | [i-1] NOT swapped, [i] NOT swapped
-            // withSwap| y     | y + 1 | [i-1] swapped, [i] swapped.
-            //no-swap counter should remain
-            withSwap++;
-        } else if(A[i - 1] >= A[i] || B[i - 1] >= B[i]) {
-            //Implicitly A[i - 1] < B[i] && B[i - 1] < A[i]
-            //Scenario 2: Need to swap at [i] iff [i-1] NOT swapped
-            //         | i - 1 | i     | Note
-            // A       | 3     | 2     |
-            // B       | 1     | 4     |
-            // noSwap  | x     | y     | [i-1] swapped => [i] NOT swapped
-            // withSwap| y     | x + 1 | [i-1] NOT swapped => [i] swapped
-            int temp = withSwap;
-            withSwap = noSwap + 1;
-            noSwap = temp;
-        } else {
-            //Scenario 3 : either swap or no swap
-            int min = Math.min(withSwap, noSwap);
-            withSwap = min + 1;
-            noSwap = min;
+        boolean noSwapNeeded = A[i] > A[i - 1] && B[i] > B[i - 1];
+        boolean crossSwap = A[i] > B[i - 1] && B[i] > A[i - 1];
+
+        if (noSwapNeeded) {
+            nextKeep = Math.min(nextKeep, keep);
+            nextSwap = Math.min(nextSwap, swap + 1);
         }
-        // System.out.println(i + ": " + withSwap + " | " + noSwap);
+        if (crossSwap) {
+            nextKeep = Math.min(nextKeep, swap);
+            nextSwap = Math.min(nextSwap, keep + 1);
+        }
+
+        keep = nextKeep;
+        swap = nextSwap;
     }
 
-    return Math.min(noSwap, withSwap);
+    return Math.min(keep, swap);
 }
-```
 
 
+## Retrieve an Optimal Computation from an Array {#optimal-computation}
 
-##  Retrieve an Optimal Computation from an Array / / 
+### Problem Metadata
+
+- **Platform**: Firecode
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Dynamic Programming`
+- **Techniques**: Recursion \@ref(recursion), Memoization \@ref(memo)
 
 ### Description
-Each piece has a positive integer (weight) that indicates how tasty it is. Since taste is subjective, there is also an
-expectancy factor. A piece will taste better if you eat it later: if the taste is m on the first day, it
-will be k * m on day number k. Your task is to design an efficient algorithm that computes an optimal chocolate eating
-strategy and tells you how much pleasure to expect.
 
-### Example
+You are given an array `taste` where each entry represents how tasty a chocolate bar is if eaten on day 1. Eating a bar on day `d` multiplies its taste by `d`. Each day you may eat exactly one bar from either end of the array. Compute the maximum total taste.
 
-```java
-[1, 2, 3], multiplier = 1
+### Examples
+
 ```
-Result = $1 * 1 + 2 * 2 + 3 * 3 + 4 * 4= 30$
+Input: taste = [1,2,3,4]
+Output: 30
+Explanation: Eat 1,2,3,4 from left to right for 1*1 + 2*2 + 3*3 + 4*4.
+```
 
+### Constraints
 
-###  Solution - Recursion
+- `1 <= taste.length <= 200`
+- `1 <= taste[i] <= 10^3`
+
+### Solution - Memoized Recursion
+
 #### Walkthrough
-In the recursive startegy:
 
-* In the base case, where array contains only one element, the function returns the correct value.
-* When array contains more than 1 element, we have to start with either array[0] or array[n-1]. The code computes for each of these cases with recursion, and returns the maximum.
+When only the subarray `taste[i..j]` remains, the current day is `day = n - (j - i)` (since `n - (remaining length - 1)`). We may take either the left or right value. The optimal result is therefore:
 
-
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=20em},
-level 2/.style={sibling distance=15em},
-level 3/.style={sibling distance=10em},
-level 4/.style={sibling distance=3em},
-level distance=3em,
-]
-\node {1,2,3,4}
-child { node {1,2,3}
-child {  node {1,2}
-child {  node {1} }
-child {  node {2} }
-}
-child {  node {2,3}
-child {  node {2} }
-child {  node {3} }
-}
-}
-child { node {2,3,4}
-child {  node {2,3}
-child {  node {2} }
-child {  node {3} }
-}
-child {  node {3,4}
-child {  node {3} }
-child {  node {4} }
-}
-}
-;
-\end{tikzpicture}
+```
+max(day * taste[i] + solve(i+1, j, day+1),
+    day * taste[j] + solve(i, j-1, day+1))
 ```
 
-#### Analysis
-The time complexity is exponential, since there are some overlapping subproblems shown in the recursion tree.
-$O(2^{log(n)})$
-
-#### Algorithm
- recursion \@ref(recursion)
-
-#### Java Code - Recursion
-```java
-int solution(int[] array) {
-    return rec(array, 1);
-}
-
-int rec(int[] array, int multiplier) {
-    int len = array.length;
-
-    if(len == 1) {
-        return array[0] * multiplier;
-    }
-
-    int left = array[0] * multiplier + rec(Arrays.copyOfRange(array, 1, len), multiplier + 1);
-    int right = array[len - 1] * multiplier + rec(Arrays.copyOfRange(array, 0, len - 1), multiplier + 1);
-
-    return Math.max(left, right);
-}
-```
-
-###  Solution - Recursion with Memoization
-#### Walkthrough
-We can derive $multiplier = 1 + n - (j - i), 0 <= i < j <= n,$
-
-The sum of product array[i:j] is either computed directly (the base case), or it can be computed in constant time from
-the already known sum of array[i+1:j] and array[i:j-1].
-
-#### Analysis
-If we use dynamic programming and memorize all of these  subresults, we will get an algorithm with $O(n^2)$ time
-complexity.
-
-#### Algorithm
- recursion \@ref(recursion), memoization \@ref(memo)
-
-#### Java Code - Recursion with Memoization
-```java
-int solution(int[] array) {
-    int len = array.length;
-    int[][] dp = new int[len + 1][len + 1];
-
-    return memoization(array, 0, len, dp);
-}
-
-// 0 <= start < stop <= n
-// start inclusive, stop exclusive
-int memoization(int[] array, int start, int stop, int[][] dp) {
-    int multiplier = 1 + array.length - (stop - start);
-
-    if(dp[start][stop] > 0) {
-        //visited subproblem
-        return dp[start][stop];
-    }
-
-    if(stop - start == 1) {
-        return array[start] * multiplier;
-    }
-
-    int left = multiplier * array[start] + memoization(array, start + 1, stop, dp);
-    int right = multiplier * array[stop - 1] + memoization(array, start, stop - 1, dp);
-
-    int result = Math.max(left, right);
-
-    dp[start][stop] = result;
-
-    return result;
-}
-```
-
-###  Solution - Dynamic Programming with Tabulation
-#### Walkthrough
-We can derive $multiplier = 1 + n - (j - i), 0 <= i < j <= n,$
-
-As an alternative, we can use tabulation and start by filling up the memo table. Note that the order of computation
-matters: to compute the value memo[i][j], the values of memo[i+1][j] and memo[i][j-1] must first be known.
-
-Here is the final view of table from the example:
-```[language=golang]
-0	4	11	20	30
-0	0	8	18	29
-0	0	0	12	25
-0	0	0	0	16
-0	0	0	0	0
-```
+Caching the `(i, j)` results avoids recomputation and yields O(n?) states.
 
 #### Analysis
 
+- **Time Complexity**: O(n?)
+- **Space Complexity**: O(n?) for memoization
+
 #### Algorithm
- dp \@ref(dp), tabulation \@ref(table)
 
-#### Java Code - Dynamic Programming with Tabulation
-```[language=golang]
-int solution(int[] array) {
-    int len = array.length;
-    int[][] dp = new int[len + 1][len + 1];
+1. Define `dfs(i, j)` returning the best score for subarray `[i, j]`.
+2. The current day equals `n - (j - i)`.
+3. Recursively compute both choices (left/right), memoize the maximum, and return it.
+4. Start with `dfs(0, n-1)`.
 
-    return tabulation(array, dp, len);
+#### Java Code
+```java
+public int maxTaste(int[] taste) {
+    int n = taste.length;
+    Integer[][] memo = new Integer[n][n];
+    return dfs(taste, 0, n - 1, memo);
 }
 
-int tabulation(int[] array, int[][] dp, int len) {
-    for(int i = 0; i < len; i++) {
-        dp[i][i + 1] = len * array[i];
+private int dfs(int[] taste, int left, int right, Integer[][] memo) {
+    if (memo[left][right] != null) {
+        return memo[left][right];
     }
 
-    for (int i = len - 1; i >= 0; i--) {
-        for(int j = i + 2; j <= len; j++) {
-            int multiplier = 1 + len - (j - i);
-            int left = multiplier * array[i] + dp[i + 1][j];
-            int right = multiplier * array[j - 1] + dp[i][j - 1];
-            int result = Math.max(left, right);
-            dp[i][j] = result;
-        }
+    int day = taste.length - (right - left);
+    if (left == right) {
+        return day * taste[left];
     }
 
-    return dp[0][len];
+    int pickLeft = day * taste[left] + dfs(taste, left + 1, right, memo);
+    int pickRight = day * taste[right] + dfs(taste, left, right - 1, memo);
+    return memo[left][right] = Math.max(pickLeft, pickRight);
 }
-```
 
 
-##  Shortest Word Distance / / 
+## Shortest Word Distance {#shortest-word-distance}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/shortest-word-distance/
+- **Tags**: `Array`, `Two Pointers`
+- **Techniques**: Two Pointers \@ref(two-pointers)
 
 ### Description
-Given a list of words and two words word1 and word2, return the shortest distance between these two words in the list.
 
-### Example
-words = ["practice", "makes", "perfect", "coding", "makes"]
+Given a list of words and two target words `word1` and `word2`, return the minimum index distance between any occurrence of `word1` and `word2` in the list.
 
-word1 = "coding", word2="practice" result is 3
+### Examples
 
-word1 = "makes", word2="coding" result is 1
+```
+Input: words = ["practice","makes","perfect","coding","makes"], word1 = "coding", word2 = "practice"
+Output: 3
+```
 
-### Solution
+### Constraints
+
+- `2 <= words.length <= 10^5`
+
+### Solution - Single Pass
+
 #### Walkthrough
-Record the indices for each word. Retrieve the minimum distance between two group of indices.
+
+Scan the array while recording the latest indices of `word1` and `word2`. Whenever both have been seen, compute their distance and track the minimum. This avoids storing full index lists.
 
 #### Analysis
-Each word in the list is visited once, and each index in both list is visited once. Thus time complexity is O(n),
-where the Auxiliary Space is O(n) for storing indices.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
 
 #### Algorithm
+
+1. Initialize `idx1 = idx2 = -1`, `answer = n`.
+2. For each index `i`:
+   - If `words[i] == word1`, set `idx1 = i`.
+   - Else if `words[i] == word2`, set `idx2 = i`.
+   - If both indices are valid, update `answer = min(answer, |idx1 - idx2|)`.
+3. Return `answer`.
 
 #### Java Code
 ```java
 public int shortestDistance(String[] words, String word1, String word2) {
-    // list of indices for word1 and word2 in the array respectively.
-    List<Integer> list1 = new ArrayList<>();
-    List<Integer> list2 = new ArrayList<>();
+    int idx1 = -1;
+    int idx2 = -1;
+    int best = words.length;
 
-    for(int i = 0; i < words.length; i++) {
-        if(words[i].equals(word1)) {
-            list1.add(i);
-        } else if(words[i].equals(word2)) {
-            list2.add(i);
+    for (int i = 0; i < words.length; i++) {
+        if (words[i].equals(word1)) {
+            idx1 = i;
+        } else if (words[i].equals(word2)) {
+            idx2 = i;
+        }
+
+        if (idx1 != -1 && idx2 != -1) {
+            best = Math.min(best, Math.abs(idx1 - idx2));
         }
     }
 
-    int min = words.length;
-    for(int i = 0, j = 0; i < list1.size() && j < list2.size();) {
-        int index1 = list1.get(i);
-        int index2 = list2.get(i);
+    return best;
+}
 
-        min = Math.min(min, Math.abs(index1 - index2));
 
-        if(index1 < index2) {
-            i++;
-        } else if(index1 > index2) {
-            j++;
-        } else {
-            // comparing the same indices
-            return 0;
+## Minimum Operations to Make Binary Array Elements Equal to One I {#min-ops-binary-array}
+
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 3191
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-i/
+- **Tags**: `Array`, `Greedy`, `Simulation`
+- **Techniques**: Sequential Traversal, Bit Manipulation
+
+
+### Description
+
+You are given a binary array `nums`. You can do the following operation on the array any number of times (possibly zero):
+
+- Choose any 3 consecutive elements from the array and flip all of them.
+
+Flipping an element means changing its value from 0 to 1, and from 1 to 0.
+
+Return the minimum number of operations required to make all elements in `nums` equal to 1. If it is impossible, return -1.
+
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [0,1,1,1,0,0]
+Output: 3
+Explanation: We can do the following operations:
+- Choose the elements at indices 0, 1 and 2. The resulting array is nums = [1,0,0,1,0,0].
+- Choose the elements at indices 1, 2 and 3. The resulting array is nums = [1,1,1,0,0,0].
+- Choose the elements at indices 3, 4 and 5. The resulting array is nums = [1,1,1,1,1,1].
+```
+
+**Example 2:**
+```
+Input: nums = [0,1,1,1]
+Output: -1
+Explanation: It is impossible to make all elements equal to 1.
+```
+
+
+### Constraints
+
+- `3 <= nums.length <= 10^5`
+- `0 <= nums[i] <= 1`
+
+
+### Solution - Greedy Sequential Traversal
+
+
+#### Walkthrough
+
+The solution uses a **greedy left-to-right approach** based on a key observation: any 0 encountered in the array must be flipped to become 1, and the optimal time to flip it is as soon as we encounter it.
+
+The algorithm works as follows:
+
+1. **Traverse left to right** (indices 0 to `len-3`): For each position `i`, if `nums[i] == 0`, we must flip the window `[i, i+1, i+2]`. We can safely iterate only up to `len-3` because we need at least 3 elements to perform a flip operation.
+
+2. **Use XOR for efficient flipping**: Instead of using `1 - nums[i]` to flip, the solution uses the XOR operator (`^= 1`) which is slightly more efficient and elegant for bit flipping.
+
+3. **Verify the last two elements**: After processing all positions up to `len-3`, we check if the last two elements are both 1. If either is 0, it's impossible to fix them (no 3-element window remaining), so we return -1.
+
+**Why this greedy approach is optimal:**
+- Any 0 must eventually be flipped
+- Flipping a 0 as soon as we encounter it (leftmost first) ensures we process the array in one pass
+- Later flips may change earlier elements, but we've already ensured all earlier positions are 1
+- The last two positions are "locked" after index `len-3`, so they determine if a solution exists
+
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Single pass through the array with constant-time operations per element
+- **Space Complexity**: O(1) - Only using constant extra space (count variable). The input array is modified in-place, which is acceptable for this problem.
+
+**Optimization Notes:**
+- Using XOR (`^= 1`) is more efficient than `1 - nums[i]` for bit flipping
+- The loop stops at `len-2` (excluding last 2 positions) to avoid redundant checks
+- Early continue when `nums[i] == 1` avoids unnecessary operations
+
+
+#### Algorithm
+
+\@ref(greedy)
+
+1. Initialize `count = 0` to track number of flip operations
+2. For each index `i` from 0 to `len-3`:
+   - If `nums[i] == 1`, continue to next iteration
+   - If `nums[i] == 0`:
+     - Set `nums[i] = 1` (no need to XOR since we know it's 0)
+     - Flip `nums[i+1]` using XOR: `nums[i+1] ^= 1`
+     - Flip `nums[i+2]` using XOR: `nums[i+2] ^= 1`
+     - Increment `count`
+3. After loop, check final state:
+   - If `nums[len-1] == 0` OR `nums[len-2] == 0`, return -1
+   - Otherwise, return `count`
+
+
+#### Java Code
+
+```java
+class Solution {
+    public int minOperations(int[] nums) {
+        int count = 0;
+        int len = nums.length;
+
+        for(int i = 0; i < len - 2; i++) {
+            if(nums[i] == 1)
+                continue;
+
+            // Use XOR(^) to flip
+            nums[i] = 1;
+            nums[i+1] ^= 1;
+            nums[i+2] ^= 1;
+
+            count++;
         }
-    }
 
-    return min;
+        // check if the last two bits are 1, nums[len-3] is already 1
+        if(nums[len-1] == 0 || nums[len-2] == 0) {
+            return -1;
+        }
+
+        return count;
+    }
 }
 ```
 
+## Maximize Distance to Closest Person {#maximize-distance-closest}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 849
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/maximize-distance-to-closest-person/
+- **Tags**: `Array`, `Two Pointers`
+- **Techniques**: Two Pointers \@ref(two-pointers), Greedy \@ref(greedy)
+
+### Description
+
+You are given an array representing a row of seats where `seats[i] = 1` represents a person sitting in the i-th seat, and `seats[i] = 0` represents that the i-th seat is empty (0-indexed).
+
+There is at least one empty seat, and at least one person sitting.
+
+Alex wants to sit in the seat such that the distance between him and the closest person to him is maximized.
+
+Return that maximum distance to the closest person.
+
+### Examples
+
+**Example 1:**
+```
+Input: seats = [1,0,0,0,1,0,1]
+Output: 2
+Explanation:
+If Alex sits in the second open seat (i.e. seats[2]), then the closest person has distance 2.
+If Alex sits in any other open seat, the closest person has distance 1.
+Thus, the maximum distance to the closest person is 2.
+```
+
+**Example 2:**
+```
+Input: seats = [1,0,0,0]
+Output: 3
+Explanation:
+If Alex sits in the last seat (i.e. seats[3]), the closest person is 3 seats away.
+This is the maximum distance possible, so the answer is 3.
+```
+
+**Example 3:**
+```
+Input: seats = [0,1]
+Output: 1
+```
+
+### Constraints
+
+- `2 <= seats.length <= 2 * 10^4`
+- `seats[i]` is `0` or `1`
+- At least one seat is empty
+- At least one seat is occupied
+
+### Solution - One-Pass Greedy
+
+#### Walkthrough
+
+The key insight is that Alex can sit in three possible locations to maximize distance:
+
+1. **At the beginning** (before the first person): Distance = index of first person
+2. **In the middle** (between two people): Distance = (gap between them) / 2
+3. **At the end** (after the last person): Distance = (n - 1) - index of last person
+
+We track the maximum distance across all three scenarios by scanning through the array once:
+
+- First, find the first person and record the distance from the start.
+- Then, continue scanning to find subsequent people, calculating the half-distance between consecutive occupied seats.
+- Finally, calculate the distance from the last person to the end of the array.
+
+The maximum of these three distances is the answer.
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Single pass through the array. The first loop finds the first person, then the second loop continues from there to the end. Each element is visited exactly once.
+- **Space Complexity**: O(1) - Only uses a constant amount of extra space for tracking indices and distances.
+
+#### Algorithm
+
+Greedy \@ref(greedy)
+
+1. Initialize `max = 0` to track the maximum distance, and `index` to track the position of the last person seen.
+2. **Find the first person**:
+   - Iterate from the start until finding the first `seats[i] == 1`.
+   - Set `max = i` (distance from start to first person).
+   - Set `index = i` and break.
+3. **Find distances between people**:
+   - Continue iterating from `index` to the end.
+   - When finding another person at position `i`:
+     - Calculate `dist = (i - index) / 2` (Alex sits in the middle of the gap).
+     - Update `max = Math.max(max, dist)`.
+     - Update `index = i` (track the new last person position).
+4. **Calculate distance to the end**:
+   - Compute `dist = (n - 1) - index` (distance from last person to end).
+   - Update `max = Math.max(max, dist)`.
+5. Return `max`.
+
+#### Java Code
+
+```java
+class Solution {
+    public int maxDistToClosest(int[] seats) {
+        int n = seats.length;
+
+        int dist = 0;
+        int max = 0; // max distance
+        int index = 0; // 
+
+        // locate the first person
+        for(int i = 0; i < n; i++) {
+            if(seats[i] == 1) {
+                dist = i;
+                max = dist; //distance = i - 0
+                index = i;                
+                break;
+            }
+        }
+
+        // Locate the next seat sitting in between two people
+        for(int i = index; i < n; i++) {
+            if(seats[i] == 1) {
+                dist = (i - index) / 2;
+                max = Math.max(max, dist);  // distance = (i - begin_index ) / 2
+                index = i;
+            }
+        }
+
+        // locate the distance of last seat vs last person
+        dist = (n - 1) - index;
+        max = Math.max(max, dist);
+
+        return max;
+    }
+}
+```

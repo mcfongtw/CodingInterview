@@ -306,774 +306,235 @@ public List topological_sort_bfs(int[][] graph) {
 
 
 
-## Graph Serialization / /
+## Graph Serialization {#graph-serialization}
 
 ### Description
-Given the a node to a Graph, represent that Graph as a String in such a way that it may be  translated back to a
-Graph using the generated String  A Node contains an integer value and all of the node’s neighbors.
-### Example
-N.A.
 
-### Solution
-#### Walkthrough
-We use BFS to traverse the graph with a visited Set to avoid running into cycle, and add child node only on unvisited
-adjacent nodes. For serialization, we simply place current val as first element and adjacent nodes val at the same
-line for the following elements, i.e. current, adj1, adj2, adj3, ..etc. Therefore, there will be two occurrence
-for each node-pair (edges) in the serialized content. For deserialization, it is easier by first splitting the lines
-and splitting by the dilimter ',' and finally reassemble the graph data structure.
-
-#### Analysis
-The time complexity for both a directed and undirected graph is the sum of the vertices and
-their edges as represented by the graph in its adjacency list representation, or $O(|V| + |E|)$
-
-```java
-Graph:
-1
-Serialized Content:
-1
-```
-
-```java
-Graph:
-1 - 2
-|   |
-3 - 5
-|
-4
-Serialized Content:
-1, 2, 3
-2, 1, 5
-3, 1, 5, 4
-4, 3
-5, 2, 3
-```
-
-#### Algorithm
- bfs \@ref(bfs)
-
-#### Java Code
-```java
-class Graph {
-    private int numOfVertices; // No. of vertices
-    private LinkedList<Integer> adj[]; //Adjacency Lists
-
-    // Constructor
-    Graph(int num) {
-        numOfVertices = num;
-        adj = new LinkedList[numOfVertices];
-        for (int i = 0; i < numOfVertices; ++i) {
-            adj[i] = new LinkedList();
-        }
-    }
-
-    // Function to add an edge into the graph from v1 to v2
-    public void addEdge(int v1, int v2) {
-        adj[v1].add(v2);
-    }
-
-    public String serialize(Integer rootId) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        if(adj.length <= 0) {
-            return "";
-        }
-
-        boolean visited[] = new boolean[numOfVertices];
-        Queue<Integer> queue = new LinkedList<Integer>();
-
-        // Mark the current node as visited and enqueue it
-        queue.offer(rootId);
-
-        while (queue.size() != 0) {
-            Integer nodeId = queue.poll();
-            visited[nodeId]=true;
-
-            stringBuilder.append(serializeNode(nodeId));
-
-            // Get all adjacent vertices of the dequeued vertex s
-            // If a adjacent has not been visited, then mark it
-            // visited and enqueue it
-            for(Integer adjNodeId : adj[nodeId]) {
-                if (!visited[adjNodeId] && !queue.contains(adjNodeId)) {
-                    queue.offer(adjNodeId);
-                }
-            }
-        }
-
-        return stringBuilder.toString();
-    }
-
-    private String serializeNode(int nodeId) {
-        StringBuilder sb = new StringBuilder();
-
-        //serialize node and adjacency nodes
-        sb.append(nodeId);
-        for(Integer adjNodeId: adj[nodeId]) {
-            sb.append(",");
-            sb.append(adjNodeId);
-        }
-        sb.append("\r\n");
-
-        return sb.toString();
-    }
-
-    public Graph deserialize(String input) {
-        String[] lines = input.split("\r\n");
-        Graph graph = new Graph(lines.length);
-
-        for(String line: lines) {
-            String[] nodes = line.split(",");
-
-            if(nodes.length > 1) {
-                int srcNodeId = Integer.parseInt(nodes[0]);
-
-                //there are adjacent nodes
-                for(int j = 1; j < nodes.length; j++) {
-                    Integer dstNodeId = Integer.valueOf(nodes[j]);
-                    graph.addEdge(srcNodeId, dstNodeId);
-                }
-            }
-        }
-
-        return graph;
-    }
-}
-```
-
-
-## Distance of nearest cell having 1 in a binary matrix
-
-### Description
-Given a binary matrix of N x M, containing at least a value 1. The task is to find the distance of nearest 1 in the
-matrix for each cell. The distance is calculated as $|i_1 - i_2| + |j_1 - j_2|$, where $i_1, j_1$ are the row number
-and column number of the current cell and $i_2, j_2$ are the row number and column number of the nearest cell having
-value 1.
-
-### Example
-Input:
-```java
-0, 0, 0, 1
-0, 0, 1, 1
-0, 1, 1, 0
-```
-
-Output:
-```java
-3, 2, 1, 0
-2, 1, 0, 0
-1, 0, 0, 1
-```
-### Solution
-#### Walkthrough
-Consider each cell as a node and each boundary between any two adjacent cells be an edge. Number each cell from 1 to
-N*M. Now, push all the node whose corresponding cell value is 1 in the matrix in the queue. Apply BFS using this queue
-to find the minimum distance of the adjacent node.
-
-#### Analysis
-
-    *  Create a graph with adjacency list for all nodes from 1 to rows * cols. Time complexity is O(rows * cols)
-    *  Create an empty queue and 1 dimensional array of size (rows * cols) for visited[] and distance (init Integer.MAX)
-Time complexity is O(rows * cols)
-    *  For all nodes in the original matrix being 1, insert the associated node id into the queue and set the
-distance to 0.
-    *  Perform a BFS traversal of graph using above created queue. In BFS, we first explore immediate adjacent of all
-1’s, then adjacent of adjacent and determine the minimum distance. Time complexity is O(rows * cols) since all elements
-will be visited once.
-
-Thus, the overall time complexity is O(rows * cols)
-
-#### Algorithm
- bfs \@ref(bfs)
-
-#### Java Code
-```java
-class Graph {
-    private int numOfVertices; // No. of vertices
-    private LinkedList<Integer> adj[]; //Adjacency Lists
-
-    // Constructor
-    Graph(int[][] matrix) {
-        int rows = matrix.length;
-        int cols = matrix[0].length;
-
-        if(matrix.length == 0) {
-            return;
-        }
-        numOfVertices = rows * cols;
-        adj = new LinkedList[numOfVertices];
-
-        for (int i = 0; i < numOfVertices; ++i) {
-            adj[i] = new LinkedList();
-        }
-    }
-
-    // Function to add an edge into the graph from v1 to v2
-    public void addEdge(int src, int dst) {
-        adj[src].add(dst);
-    }
-
-    public void fillAdjacency(int[][] matrix) {
-        int rows = matrix.length;
-        int cols = matrix[0].length;
-
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++) {
-                int srcNodeId = this.computeNodeId(i, j, cols);
-                int dstNodeId = -1;
-
-                //adding left or right neighbor nodes, if there are any (cols > 1)
-                if(cols > 1) {
-                    if (j == 0) {
-                        dstNodeId = this.computeNodeId(i, j + 1, cols);
-                        this.addEdge(srcNodeId, dstNodeId);
-                    } else if (j == cols - 1) {
-                        dstNodeId = this.computeNodeId(i, j - 1, cols);
-                        this.addEdge(srcNodeId, dstNodeId);
-                    } else {
-                        dstNodeId = this.computeNodeId(i, j - 1, cols);
-                        this.addEdge(srcNodeId, dstNodeId);
-                        dstNodeId = this.computeNodeId(i, j + 1, cols);
-                        this.addEdge(srcNodeId, dstNodeId);
-                    }
-                }
-
-                //adding above or below neighbor nodes, if there are any (rows > 1)
-                if(rows > 1) {
-                    if (i == 0) {
-                        dstNodeId = this.computeNodeId(i + 1, j, cols);
-                        this.addEdge(srcNodeId, dstNodeId);
-                    } else if (i == rows - 1) {
-                        dstNodeId = this.computeNodeId(i - 1, j, cols);
-                        this.addEdge(srcNodeId, dstNodeId);
-                    } else {
-                        dstNodeId = this.computeNodeId(i - 1, j, cols);
-                        this.addEdge(srcNodeId, dstNodeId);
-                        dstNodeId = this.computeNodeId(i + 1, j, cols);
-                        this.addEdge(srcNodeId, dstNodeId);
-                    }
-                }
-            }
-        }
-    }
-
-    private int computeNodeId(int i, int j, int cols) {
-        // Example
-        // [0][0] = 0 * 2 + 0 = 0
-        // [0][1] = 0 * 2 + 1 = 1
-        // [1][0] = 1 * 2 + 0 = 2
-        // [1][1] = 1 * 2 + 1 = 3
-        return i * cols + j;
-    }
-
-
-    private void init(Queue<Integer> queue, int[][] matrix, boolean[] visited, int[] dist) {
-        //Traverse all matrix elements. If it is a 1, then insert associated node id into queue
-        if(matrix.length == 0) {
-            return;
-        }
-
-        int rows = matrix.length;
-        int cols = matrix[0].length;
-
-        for(int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                int nodeId = computeNodeId(i, j, cols);
-
-                if(matrix[i][j] == 1) {
-                    queue.offer(nodeId);
-                    visited[nodeId] = true;
-                } else {
-                    dist[nodeId] = Integer.MAX_VALUE;
-                }
-            }
-        }
-    }
-
-    public int[] bfs(int[][] matrix) {
-        int[] dist = new int[numOfVertices];
-        boolean visited[] = new boolean[numOfVertices];
-
-        Queue<Integer> queue = new LinkedList<Integer>();
-
-        // Mark the current node as visited and enqueue it
-        init(queue, matrix, visited, dist);
-
-        while (queue.size() != 0) {
-            Integer nodeId = queue.poll();
-
-            // Get all adjacent vertices of the dequeued vertex s
-            // If a adjacent has not been visited, then mark it
-            // visited and enqueue it
-            for (Integer adjNodeId : adj[nodeId]) {
-                if (!visited[adjNodeId] ) {
-                    //find minimum value among adjaNodeId and its neighbors + 1
-                    dist[adjNodeId] = Math.min(dist[adjNodeId], dist[nodeId] + 1);
-
-                    queue.offer(adjNodeId);
-                    visited[adjNodeId] = true;
-                }
-            }
-        }
-
-        return dist;
-    }
-}
-```
-
-
-## Clone Graph / LeetCode 133 / Medium
-
-### Description
-Given a reference of a node in a connected undirected graph, return a deep copy (clone) of the graph. Each node in the
-graph contains a val (int) and a list (List[Node]) of its neighbors.
-
-### Example
-
-### Solution - DFS
-#### Walkthrough
-Have a map as cache to store the mapping between original and new node. Recursively walk through the each adjacent node
-and assign into the adjacency list if existed in cache; otherwise, recursively clone the node.
-
-#### Analysis
-Since each edge will appear twice. Once in the adjacency list of either end of the edge. So, the overall complexity
-will be $O(|V|) + O(2 \cdot |E|) = O(|V + E|)$
-
-#### Algorithm
-dfs \@ref(dfs)
-
-#### Java Code
-```java
-//use this map to store original and cloned node.
-//also act as visited[]
-Map<Node, Node> map = new HashMap<>();
-
-public Node cloneGraph(Node node) {
-    map.put(node, new Node(node.val, new ArrayList<Node>()));
-
-    for(Node neighbor: node.neighbors){
-        if(map.containsKey(neighbor)) {
-            //if neighbor is cloned
-            Node cloneNode = map.get(node);
-            Node cloneNeighbor = map.get(neighbor);
-            cloneNode.neighbors.add(cloneNeighbor);
-        } else {
-            //recursively clone and add the neighbor
-            Node cloneNode = map.get(node);
-            cloneNode.neighbors.add(cloneGraph(neighbor));
-        }
-    }
-
-    return map.get(node);
-}
-```
+Serialize an undirected graph into a string and reconstruct it back.
 
 ### Solution - BFS
-#### Walkthrough
-We use BFS to traverse the graph with a map cache to store the original and cloned node. This cache can only be used
-as visited[].
 
-#### Analysis
-For every single vertex in the graph, we will end up visiting its neighboring nodes only twice. The time complexity is
-the sum of the vertices and their edges as represented by the graph in its adjacency list representation: $O(|V| + |E|)$
+Traverse the graph with BFS, recording each node and its neighbors. Use a visited set to avoid cycles. For deserialization, parse each line and rebuild adjacency lists.
 
-#### Algorithm
-bfs \@ref(bfs)
-
-#### Java Code
-```java
-public Node cloneGraph(Node root) {
-    //use this map to store original and cloned node
-    //also act as visited[]
-    Map<Node, Node> map = new HashMap<>();
-    Queue<Node> queue = new ArrayDeque<>();
-
-    queue.offer(root);
-    map.put(root, new Node(root.val, new ArrayList<>()));
+```
+public String serialize(Node node) {
+    if (node == null) {
+        return "";
+    }
+    Set<Node> visited = new HashSet<>();
+    Queue<Node> queue = new LinkedList<>();
+    queue.offer(node);
+    visited.add(node);
+    StringBuilder sb = new StringBuilder();
 
     while (!queue.isEmpty()) {
-        Node node = queue.poll();
-
-        for (Node neighbor : node.neighbors) {
-            // neighbor node is not yet cloned
-            if (!map.containsKey(neighbor)) {
-                map.put(neighbor, new Node(neighbor.val, new ArrayList<>()));
+        Node current = queue.poll();
+        sb.append(current.val);
+        for (Node neighbor : current.neighbors) {
+            sb.append(',').append(neighbor.val);
+            if (visited.add(neighbor)) {
                 queue.offer(neighbor);
             }
-
-            //assign the mapping righ tafter
-            Node cloneNode = map.get(node);
-            Node cloneNeighbor = map.get(neighbor);
-            cloneNode.neighbors.add(cloneNeighbor);
         }
+        sb.append('\n');
     }
-
-    return map.get(root);
+    return sb.toString();
 }
-```
+```## Distance of Nearest Cell Having 1 {#nearest-one}
 
+### Problem Metadata
 
-## Course Schedule I / LeetCode 207 / Medium
+- **Difficulty**: Medium
+- **Tags**: `Matrix`, `BFS`
 
 ### Description
-There are a total of n courses you have to take, labeled from 0 to n-1.
 
-Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed
-as a pair: [0,1]
+Given a binary matrix, for every cell compute the distance to the nearest cell containing 1.
 
-Given the total number of courses and a list of prerequisite pairs, is it possible for you to finish all courses?
+### Solution - Multi-source BFS
 
-### Example
-#### Example 1
-Input: 2, [[1,0]]
-Output: true
-Explanation: There are a total of 2 courses to take.
-To take course 1 you should have finished course 0. So it is possible.
+Enqueue all cells containing 1 with distance 0 and run BFS to fill distances for zeros.
 
-#### Example 2
-Input: 2, [[1,0],[0,1]]
-Output: false
-Explanation: There are a total of 2 courses to take.
-To take course 1 you should have finished course 0, and to take course 0 you should
-also have finished course 1. So it is impossible.
+```
+public int[][] nearestOne(int[][] mat) {
+    int m = mat.length, n = mat[0].length;
+    int[][] dist = new int[m][n];
+    for (int[] row : dist) {
+        Arrays.fill(row, -1);
+    }
+    Queue<int[]> queue = new LinkedList<>();
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (mat[i][j] == 1) {
+                dist[i][j] = 0;
+                queue.offer(new int[]{i, j});
+            }
+        }
+    }
+    int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+    while (!queue.isEmpty()) {
+        int[] cell = queue.poll();
+        for (int[] d : dirs) {
+            int nr = cell[0] + d[0];
+            int nc = cell[1] + d[1];
+            if (nr >= 0 && nr < m && nc >= 0 && nc < n && dist[nr][nc] == -1) {
+                dist[nr][nc] = dist[cell[0]][cell[1]] + 1;
+                queue.offer(new int[]{nr, nc});
+            }
+        }
+    }
+    return dist;
+}
+```## Clone Graph {#clone-graph}
 
-### Solution - Topological Sort via BFS
-#### Walkthrough
-This problem can be converted to finding if a graph contains a cycle using topological sort
+### Problem Metadata
 
-#### Analysis
-A BFS would cost $O(|V| + |E|)$
+- **Platform**: LeetCode
+- **Problem ID**: 133
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/clone-graph/
+- **Tags**: `Graph`, `DFS`
 
-#### Algorithm
-topological \@ref(topological), bfs \@ref(bfs)
+### Description
 
-#### Java Code
-```java
+Deep-copy an undirected graph.
+
+### Solution - DFS with Map
+
+```
+public Node cloneGraph(Node node) {
+    if (node == null) {
+        return null;
+    }
+    Map<Node, Node> map = new HashMap<>();
+    return clone(node, map);
+}
+
+private Node clone(Node node, Map<Node, Node> map) {
+    if (map.containsKey(node)) {
+        return map.get(node);
+    }
+    Node copy = new Node(node.val);
+    map.put(node, copy);
+    for (Node neighbor : node.neighbors) {
+        copy.neighbors.add(clone(neighbor, map));
+    }
+    return copy;
+}
+```## Course Schedule {#course-schedule}
+
+### Metadata
+
+- **Problem ID**: LeetCode 207
+- **Tags**: `Graph`, `Topological Sort`
+
+### Description
+
+Determine if all courses can be finished given prerequisites.
+
+### Solution - Kahn's Algorithm
+
+```
 public boolean canFinish(int numCourses, int[][] prerequisites) {
-    if(numCourses == 0 || prerequisites.length == 0){
-        return true;
+    List<List<Integer>> graph = new ArrayList<>();
+    int[] indegree = new int[numCourses];
+    for (int i = 0; i < numCourses; i++) {
+        graph.add(new ArrayList<>());
     }
-
-    // counter for number of prerequisites
-    int[] numPrereq = new int[numCourses];
-    for(int i = 0; i < prerequisites.length; i++){
-        numPrereq[prerequisites[i][0]]++;
+    for (int[] edge : prerequisites) {
+        graph.get(edge[1]).add(edge[0]);
+        indegree[edge[0]]++;
     }
-
-    //store courses that have no prerequisites
-    Queue<Integer> queue = new LinkedList<Integer>();
-        for(int i = 0; i < numCourses; i++){
-        if(numPrereq[i] == 0){
+    Queue<Integer> queue = new LinkedList<>();
+    for (int i = 0; i < numCourses; i++) {
+        if (indegree[i] == 0) {
             queue.offer(i);
         }
     }
-
-    // store the topological sorting order
-    List<Integer> order = new ArrayList<>();
-
-    while(!queue.isEmpty()) {
-        int vertex = queue.poll();
-        order.add(vertex);
-
-        for(int i = 0; i < prerequisites.length; i++){
-            // if a course's prerequisite can be satisfied by a course in queue
-            if(prerequisites[i][1] == vertex) {
-                numPrereq[prerequisites[i][0]]--;
-
-                if(numPrereq[prerequisites[i][0]] == 0) {
-                    queue.offer(prerequisites[i][0]);
-                }
+    int visited = 0;
+    while (!queue.isEmpty()) {
+        int course = queue.poll();
+        visited++;
+        for (int next : graph.get(course)) {
+            if (--indegree[next] == 0) {
+                queue.offer(next);
             }
         }
     }
-
-    return order.size() == numCourses;
+    return visited == numCourses;
 }
-```
-
-### Solution - Topological Sort via DFS
-#### Walkthrough
-
-#### Analysis
-A DFS would cost $O(|V| + |E|)$
-
-#### Algorithm
-topological \@ref(topological), dfs \@ref(dfs)
-
-#### Java Code
-```java
-public boolean canFinish(int numCourses, int[][] prerequisites) {
-    if(numCourses == 0 || prerequisites.length == 0){
-        return true;
-    }
-
-    //track state of visited courses
-    // -1: VISITING
-    //  1: VISITED
-    int[] visited = new int[numCourses];
-
-    // use the map to store what courses depend on a course
-    // can transform into an adjcency list
-    Map<Integer, List<Integer>> adjMap = new HashMap<>();
-    for(int[] edge: prerequisites){
-        if(adjMap.containsKey(edge[1])) {
-            adjMap.get(edge[1]).add(edge[0]);
-        } else {
-            List<Integer> list = new ArrayList<Integer>();
-            list.add(edge[0]);
-            adjMap.put(edge[1], list);
-        }
-    }
-
-    for(int i = 0; i < numCourses; i++) {
-        if(!dfs(adjMap, visited, i)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-private boolean dfs(Map<Integer, List<Integer>> adjMap, int[] visited, Integer vertex){
-    if(visited[vertex] == -1) {
-        return false;
-    }
-    if(visited[vertex] == 1) {
-        return true;
-    }
-
-    visited[vertex] = -1;
-
-    if(adjMap.containsKey(vertex)){
-        for(Integer adjVertex: adjMap.get(vertex)){
-            if(!dfs(adjMap, visited, adjVertex)) {
-                return false;
-            }
-        }
-    }
-
-    visited[vertex] = 1;
-
-    return true;
-}
-```
-
-
-## Course Schedule II / LeetCode 210 / Medium 
+```## Course Schedule II {#course-schedule-ii}
 
 ### Description
-There are a total of n courses you have to take, labeled from 0 to n-1.
 
-Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed
-as a pair: [0,1]. Given the total number of courses and a list of prerequisite pairs, return the ordering of courses
-you should take to finish all courses. There may be multiple correct orders, you just need to return one of them. If
-it is impossible to finish all courses, return an empty array.
+Return a valid order of courses using topological sort, or empty if impossible.
 
-### Example
+### Solution - BFS Order
 
-#### Example 1
-Input: 2, [[1,0]]
-Output: [0,1]
+Use same graph construction as problem 207 but append nodes to order when dequeued.
 
-#### Example 2
-Input: 4, [[1,0],[2,0],[3,1],[3,2]]
-Output: [0,1,2,3] or [0,2,1,3]
-
-### Solution - Topological Sort via BFS
-#### Walkthrough
-This problem can be converted to finding if a graph contains a cycle using topological sort
-
-#### Analysis
-A BFS would cost $O(|V| + |E|)$
-
-#### Algorithm
-topological \@ref(topological), bfs \@ref(bfs)
-
-#### Java Code
-```java
+```
 public int[] findOrder(int numCourses, int[][] prerequisites) {
-    //if there is no prerequisites, return a sequence of courses
-    if(prerequisites.length == 0){
-        int[] res = new int[numCourses];
-
-        for(int i = 0; i < numCourses; i++){
-            res[i] = i;
-        }
-
-        return res;
+    List<List<Integer>> graph = new ArrayList<>();
+    int[] indegree = new int[numCourses];
+    for (int i = 0; i < numCourses; i++) graph.add(new ArrayList<>());
+    for (int[] edge : prerequisites) {
+        graph.get(edge[1]).add(edge[0]);
+        indegree[edge[0]]++;
     }
-
-    // counter for number of prerequisites
-    int[] numPrereq = new int[numCourses];
-    for(int i = 0; i < prerequisites.length; i++){
-        numPrereq[prerequisites[i][0]]++;
-    }
-
-    //store courses that have no prerequisites
-    Queue<Integer> queue = new LinkedList<Integer>();
-    for(int i = 0; i < numCourses; i++){
-        if(numPrereq[i] == 0){
-            queue.offer(i);
+    Queue<Integer> queue = new LinkedList<>();
+    for (int i = 0; i < numCourses; i++) if (indegree[i] == 0) queue.offer(i);
+    int[] order = new int[numCourses];
+    int idx = 0;
+    while (!queue.isEmpty()) {
+        int course = queue.poll();
+        order[idx++] = course;
+        for (int next : graph.get(course)) {
+            if (--indegree[next] == 0) queue.offer(next);
         }
     }
-
-    // store the topological sorting order
-    List<Integer> order = new ArrayList<>();
-
-    while(!queue.isEmpty()) {
-        int vertex = queue.poll();
-        order.add(vertex);
-
-        for(int i = 0; i < prerequisites.length; i++){
-            // if a course's prerequisite can be satisfied by a course in queue
-            if(prerequisites[i][1] == vertex) {
-                numPrereq[prerequisites[i][0]]--;
-
-                if(numPrereq[prerequisites[i][0]] == 0) {
-                    queue.offer(prerequisites[i][0]);
-                }
-            }
-        }
-    }
-
-    int numOfPreReq = order.size();
-    if(numOfPreReq == numCourses) {
-        return toArray(order);
-    } else {
-        return new int[0];
-    }
+    return idx == numCourses ? order : new int[0];
 }
-
-private int[] toArray(List<Integer> list) {
-    int[] result = new int[list.size()];
-
-    for(int i = 0; i < list.size(); i++) {
-        int item = list.get(i);
-        result[i] = item;
-    }
-
-    return result;
-}
-```
-
-
-
-## Graph Validate Tree / LeetCode 261 / Medium
+```## Graph Validate Tree {#graph-valid-tree}
 
 ### Description
-Given n nodes labeled from 0 to n - 1 and a list of undirected edges (each edge is a pair of nodes), check if these
-edges form a valid tree.
 
-### Example
+Determine if edges form a valid tree.
 
-### Solution - Topological Sorting via DFS
-#### Walkthrough
-This problem can be converted to finding the cycle from a graph using Topological Sorting
+### Solution - Union Find
 
-#### Analysis
-A DFS would cost $O(|V| + |E|)$
-
-#### Algorithm
-topological \@ref(topological), dfs \@ref(dfs)
-
-#### Java Code - Topological Sorting via DFS
-```java
+```
 public boolean validTree(int n, int[][] edges) {
-    HashMap<Integer, ArrayList<Integer>> map = new HashMap<Integer, ArrayList<Integer>>();
-    for(int i=0; i<n; i++){
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        map.put(i, list);
-    }
-
-    for(int[] edge: edges){
-        map.get(edge[0]).add(edge[1]);
-        map.get(edge[1]).add(edge[0]);
-    }
-
-    boolean[] visited = new boolean[n];
-
-    if(!helper(0, -1, map, visited))
+    if (edges.length != n - 1) {
         return false;
-
-    for(boolean b: visited){
-        if(!b)
-            return false;
     }
-
-    return true;
-}
-
-private boolean helper(int curr, int parent,
-    HashMap<Integer, ArrayList<Integer>> map, boolean[] visited){
-    if(visited[curr])
-        return false;
-
-    visited[curr] = true;
-
-    for(int i: map.get(curr)){
-        if(i!=parent && !helper(i, curr, map, visited)){
+    UnionFind uf = new UnionFind(n);
+    for (int[] edge : edges) {
+        if (!uf.union(edge[0], edge[1])) {
             return false;
         }
     }
-
     return true;
+}
+
+class UnionFind {
+    int[] parent;
+    int[] rank;
+    UnionFind(int n) {
+        parent = new int[n]; rank = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;
+    }
+    int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]);
+        return parent[x];
+    }
+    boolean union(int a, int b) {
+        int rootA = find(a), rootB = find(b);
+        if (rootA == rootB) return false;
+        if (rank[rootA] < rank[rootB]) parent[rootA] = rootB;
+        else if (rank[rootB] < rank[rootA]) parent[rootB] = rootA;
+        else { parent[rootB] = rootA; rank[rootA]++; }
+        return true;
+    }
 }
 ```
-
-### Solution - Topological Sorting via BFS
-#### Walkthrough
-This problem can be converted to finding the cycle from a graph using Topological Sorting
-
-#### Analysis
-A BFS cost $O(|V| + |E|)$
-
-#### Algorithm
-topological \@ref(topological), bfs \@ref(bfs)
-
-#### Java Code - Topological Sorting via BFS
-```java
-public boolean validTree(int n, int[][] edges) {
-    ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-        for(int i=0; i<n; i++){
-        list.add(new ArrayList<>());
-    }
-
-    //build the graph
-    for(int[] edge: edges){
-        int a = edge[0];
-        int b = edge[1];
-
-        list.get(a).add(b);
-        list.get(b).add(a);
-    }
-
-    //use queue to traverse the graph
-    HashSet<Integer> visited = new HashSet<>();
-    LinkedList<Integer> q = new LinkedList<>();
-    q.offer(0);
-
-    while(!q.isEmpty()){
-        int head = q.poll();
-
-        if(visited.contains(head)){
-            return false;
-        }
-
-        visited.add(head);
-
-        ArrayList<Integer> vList = list.get(head);
-        for(int v: vList){
-            if(!visited.contains(v)){
-                q.offer(v);
-            }
-        }
-    }
-
-    if(visited.size()<n){
-        return false;
-    }
-
-    return true;
-}
-```
-
-

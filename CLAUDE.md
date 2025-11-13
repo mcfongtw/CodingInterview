@@ -62,30 +62,7 @@ The book is organized into topic-based chapters, each as a separate .Rmd file:
 
 ## Problem Template Structure
 
-Each problem follows this format:
-
-```markdown
-## Problem Name / LeetCode # / Difficulty
-
-### Description
-[Problem statement]
-
-### Examples
-[Input/output examples]
-
-### Solution
-#### Walkthrough
-[Explanation of approach]
-
-#### Analysis
-[Time/space complexity]
-
-#### Algorithm
-[Step-by-step algorithm]
-
-#### Java Code
-[Implementation]
-```
+Each problem follows this format in `index.Rmd`
 
 ## Configuration Files
 

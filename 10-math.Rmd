@@ -1,380 +1,504 @@
 # Math
 
+## Power of Two {#power-of-two}
 
+### Problem Metadata
 
-## Power of 2 / Firebase / Level 2
-
-### Description
-Write a method - isPowOfTwo to test whether or not a given positive integer is a power of 2.
-
-### Example
-isPowOfTwo(5) = false
-isPowOfTwo(8) = true
-
-### Solution - Recursive
-#### Walkthrough
-For recursive solution, we invoke recursive calls on even numbrers and return true on $2^0$ = 1. Return false for other
-cases. For bitwise op solution, if we take 3 (011) \& with 4 (100) and result is 0
-
-#### Analysis
-Time Complexity is O(log(n)) since this is the number of  computation performed.
-
-#### Algorithm
-recursion \@ref(recursion)
-
-#### Java Code - Recursive
-```java
-boolean isPowerOfTwo(int n) {
-    if(num == 0) {
-        return false;
-    } else if( num == 1) {
-        return true;
-    } else if( (num & 1) == 1 ) {
-        //odd number
-        return false;
-    } else {
-        return isPowOfTwo(num / 2);
-    }
-}
-```
-
-### Solution - Bitwise Op
-#### Walkthrough
-
-#### Analysis
-Time complexity is constant O(1) and Auxiliary Space is O(1).
-
-#### Java Code - Bitwise Op
-```java
-boolean isPowerOfTwo(int num) {
-    return (num != 0) && ((num & (num - 1)) == 0);
-}
-```
-
-
-
-## Pow(x, n) / Leet Code 50 / Medium
+- **Platform**: Firecode.io
+- **Problem ID**: Power of Two
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/
+- **Tags**: `Math`, `Bit Manipulation`, `Recursion`
+- **Techniques**: \@ref(recursion)
 
 ### Description
-Implement pow(x, n), which calculates x raised to the power n (x^n).
 
-### Example
-2.00000^10  = 1024.00000
+Determine whether a positive integer `n` is a power of two.
 
-2.00000^{-2} = 0.25000
+### Examples
 
-### Solution
+```
+Input: 5
+Output: false
+
+Input: 8
+Output: true
+```
+
+### Constraints
+
+- `0 <= n <= 2^31 - 1`
+
+### Solution 1 - Recursive Halving
+
 #### Walkthrough
-Try to utilize the formula where $x^{n} = x^{\frac{n}{2} + \frac{n}{2} + (n - \frac{n}{2} * 2)}$, regardless n is
-odd or even. The terminal conditions are $x^0 = 1$, $x^1 = x$, $x^{-1} = \frac{1}{x}$
+
+Repeatedly divide `n` by `2` as long as it is even. If we reach `1`, `n` is a power of two; if we encounter an odd number (other than `1`) or zero, it is not.
 
 #### Analysis
-Time Complexity is O(log(n)) since this is the number of  computation performed.
+
+- **Time Complexity**: O(log n)
+- **Space Complexity**: O(log n) recursion depth
 
 #### Algorithm
+
+\@ref(recursion)
+
+1. Handle `n <= 0` as `false`.
+2. Base case `n == 1` is `true`.
+3. If `n` is odd, return `false`.
+4. Recurse on `n / 2`.
 
 #### Java Code
+
+```java
+public boolean isPowerOfTwoRecursive(int n) {
+    if (n <= 0) {
+        return false;
+    }
+    if (n == 1) {
+        return true;
+    }
+    if ((n & 1) == 1) {
+        return false;
+    }
+    return isPowerOfTwoRecursive(n / 2);
+}
+```
+
+### Solution 2 - Bitwise Trick
+
+#### Walkthrough
+
+Power of two numbers have a single bit set. Checking `n & (n - 1)` clears the lowest set bit; for powers of two, the result is zero.
+
+#### Analysis
+
+- **Time Complexity**: O(1)
+- **Space Complexity**: O(1)
+
+#### Java Code
+
+```java
+public boolean isPowerOfTwo(int n) {
+    return n > 0 && (n & (n - 1)) == 0;
+}
+```
+
+## Pow(x, n) {#pow-x-n}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 50
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/powx-n/
+- **Tags**: `Math`, `Divide and Conquer`
+- **Techniques**: \@ref(dnc), \@ref(recursion)
+
+### Description
+
+Implement `pow(x, n)` which computes `x` raised to the power `n` (`x^n`) for integer `n`.
+
+### Examples
+
+```
+Input: x = 2.0, n = 10
+Output: 1024.0
+
+Input: x = 2.0, n = -2
+Output: 0.25
+```
+
+### Constraints
+
+- `-100 <= x <= 100`
+- `-2^31 <= n <= 2^31 - 1`
+
+### Solution - Fast Exponentiation
+
+#### Walkthrough
+
+Use exponentiation by squaring: `x^n = (x^{n/2})^2 * x^{n%2}`. Handle negative exponents by inverting `x` and negating `n`. Base cases are `n == 0 -> 1`, `n == 1 -> x`.
+
+#### Analysis
+
+- **Time Complexity**: O(log |n|)
+- **Space Complexity**: O(log |n|) recursion stack
+
+#### Algorithm
+
+\@ref(dnc), \@ref(recursion)
+
+1. If `n == 0`, return `1`.
+2. If `n < 0`, invert `x` and negate `n`.
+3. Recursively compute `half = pow(x, n / 2)`.
+4. Combine as `half * half * (n % 2 == 0 ? 1 : x)`.
+
+#### Java Code
+
 ```java
 public double myPow(double x, int n) {
-    if(n == 0) {
+    long exp = n;
+    if (exp < 0) {
+        x = 1 / x;
+        exp = -exp;
+    }
+    return fastPow(x, exp);
+}
+
+private double fastPow(double x, long n) {
+    if (n == 0) {
         return 1.0;
     }
-    if(n == 1) {
-        return x;
+    double half = fastPow(x, n / 2);
+    if (n % 2 == 0) {
+        return half * half;
     }
-    if(n == -1) {
-        return 1/x;
-    }
-
-    int remainPower = n - n/2 * 2;
-    double halfPower = myPow(x, n/2);
-    return halfPower * halfPower * myPow(x, remainPower);
+    return half * half * x;
 }
 ```
 
+## Count Primes {#count-primes}
 
-## Count Primes / Leet Code 204 / Easy
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 204
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/count-primes/
+- **Tags**: `Math`, `Sieve`
+- **Techniques**: \@ref(dp)
 
 ### Description
-Count the number of prime numbers less than a non-negative number, n.
 
-### Example
+Return the number of prime numbers strictly less than `n`.
 
-### Solution
+### Examples
+
+```
+Input: n = 10
+Output: 4   // 2,3,5,7
+```
+
+### Constraints
+
+- `0 <= n <= 5 * 10^6`
+
+### Solution - Sieve of Eratosthenes
+
 #### Walkthrough
 
+Maintain a boolean array marking composite numbers. Starting from `2`, whenever a number is unmarked (prime), mark all multiples starting at `i * i` as composite. Count the primes that remain unmarked below `n`.
+
 #### Analysis
-Time Complexity is O() since this is the number of  computation performed.
+
+- **Time Complexity**: O(n log log n)
+- **Space Complexity**: O(n)
 
 #### Algorithm
 
+\@ref(dp)
+
+1. If `n < 2`, return `0`.
+2. Create boolean `isComposite[n]`.
+3. For each `i` up to `sqrt(n)`, if not composite, mark multiples `i * i, i * i + i, ...`.
+4. Count indexes with value `false` (primes).
+
 #### Java Code
+
 ```java
 public int countPrimes(int n) {
-    if (n<=2) {
+    if (n < 2) {
         return 0;
     }
-    if (n==3) {
-        return 1;
-    }
-    int r = n-2;
-
-    for (int i=4; i<n; i++){
-        for (int j=2; j<=i/j; j++){
-            if (i%j==0) {
-                r--;
-                break;
+    boolean[] composite = new boolean[n];
+    for (int i = 2; i * i < n; i++) {
+        if (!composite[i]) {
+            for (int j = i * i; j < n; j += i) {
+                composite[j] = true;
             }
         }
     }
-
-    return r;
+    int count = 0;
+    for (int i = 2; i < n; i++) {
+        if (!composite[i]) {
+            count++;
+        }
+    }
+    return count;
 }
 ```
 
+## Sum of Two Integers {#sum-two-integers}
 
-## Summation using Bitwise operator / LeetCode 371 / Easy
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 371
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/sum-of-two-integers/
+- **Tags**: `Bit Manipulation`
+- **Techniques**: \@ref(bitwise)
 
 ### Description
-Calculate the sum of two integers a and b using bitwise oeprators (operator + and - NOT allowed)
-### Example
 
-### Solution
+Calculate the sum of two integers `a` and `b` without using the `+` or `-` operators.
+
+### Examples
+
+```
+Input: a = 1, b = 2
+Output: 3
+```
+
+### Constraints
+
+- `-1000 <= a, b <= 1000`
+
+### Solution - Bitwise Addition
+
 #### Walkthrough
 
+Sum without carry is `a ^ b`; carry bits are `(a & b) << 1`. Iteratively propagate carry until it is zero.
+
 #### Analysis
-Time Complexity is O() since this is the number of  computation performed.
+
+- **Time Complexity**: O(1) for fixed-width integers
+- **Space Complexity**: O(1)
 
 #### Algorithm
 
+\@ref(bitwise)
+
+1. While `b != 0`, compute `carry = (a & b) << 1` and `a = a ^ b`.
+2. Set `b = carry`.
+3. `a` becomes the final sum.
+
 #### Java Code
+
 ```java
 public int getSum(int a, int b) {
-    int carry = a & b;
-    int result = a ^ b;
-
-    while(carry != 0) {
-        int shiftedcarry = carry << 1;
-        carry = result & shiftedcarry;
-        result ^= shiftedcarry;
+    while (b != 0) {
+        int carry = (a & b) << 1;
+        a = a ^ b;
+        b = carry;
     }
-
-    return result;
+    return a;
 }
 ```
 
+## Fibonacci Sequence {#fibonacci}
 
+### Problem Metadata
 
-## Fibonacci Sequence / Firecode / Level 2
+- **Platform**: Firecode.io / Classic
+- **Problem ID**: Fibonacci
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/
+- **Tags**: `Dynamic Programming`, `Recursion`
+- **Techniques**: \@ref(recursion), \@ref(dp), \@ref(memo)
 
 ### Description
-The Fibonacci Sequence is the series of numbers: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... The next number is found by
-adding up the two numbers before it.
 
-Your goal is to write an optimal method - betterFibonacci that returns the nth Fibonacci number in the sequence. n is
-0 indexed, which means that in the sequence 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ..., n == 0 should return 0 and n == 3
-should return 2. Your method should exhibit a runtime complexity of O(n) and use constant O(1) space.
+Compute the `n`-th Fibonacci number where `F(0) = 0`, `F(1) = 1`, and `F(n) = F(n-1) + F(n-2)`.
 
-### Example
-The $n_{th}$ fibonacci number is
-\begin{equation}
-    f(n) =
-    \begin{cases}
-    1 & \text{if $n = 1$}
-    1 & \text{if $n = 2$}
-    f(n - 1) + f(n - 2)  & \text{if $n \gt 2$}
-    \end{cases}
-\end{equation}
-$
-fib(3) = fib(2) + fib(1) = 2
-fib(4) = fib(3) + fib(2) = 3
-fib(5) = fib(4) + fib(3) = 5
-$
+### Examples
 
-### Solution - Top-down Recursion
-#### Walkthough
-The recursion tree of this strategy is
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=3em,
-]
-\node {fib(5)}
-child { node {fib(4)}
-    child {  node {fib(3)}
-        child {  node {fib(2)}}
-        child {  node {fib(1)}}
-    }
-    child {  node {fib(2)}}
-}
-child { node {fib(3)}
-    child {  node {fib(2)}}
-    child {  node {fib(1)}}
-}
-;
-\end{tikzpicture}
 ```
-There are many duplicated subproblems.
-
-#### Analysis
-Thus, the overall time complexity is expensive, O(2^{h})
-
-#### Algorithm
- recursion \@ref(recursion)
-
-#### Java Code - Top-down Recursion
-```java
-int fib(int x) {
-    return (x == 0 || x == 1) ? x : fib(x - 1) + fib(x - 2);
-}
-```
-### Solution - Tail Recursion
-#### Walkthough 
-
-#### Algorithm
- recursion \@ref(recursion)
-
-#### Java Code - Tail Recursion
-```java
-int fib(int x) {
-    if(x <= 2) {
-        return 2;
-    } else {
-        return fibTailRec(x, 0, 1);
-    }
-}
-
-int fibTailRec(int x, int fMinus1, int fMinus2) {
-    if(x == 0) {
-        return fMinus1;
-    }
-
-    return fibTailRec(x - 1, fMinus2, fMinus1 + fMinus2);
-}
+Input: n = 5
+Output: 5
 ```
 
-### Solution - Dynamic Programming (Bottom-up Iteration)
-#### Walkthrough
-Define n0 and n1 and another variable to add n0 + n1. Have a loop to iterate the compute these three values from
-2 to n. return n1.
+### Constraints
 
-#### Analysis
-Time Complexity is O(n) since this is the number of  computation performed.
+- `0 <= n <= 45`
 
-#### Algorithm
- dp \@ref(dp)
+### Solution 1 - Top-Down Recursion (Naïve)
 
-#### Java Code - Dynamic Programming (Bottom-up Iteration)
-```java
-int fib(int n) {
-    if(n == 0) {
-        return 0;
-    }
-
-    if(n == 1) {
-        return 1;
-    }
-
-    int n0 = 0, n1 = 1, temp = 0;
-
-    for(int i = 2; i <= n; i++) {
-        temp = n0 + n1;
-        n0 = n1;
-        n1 = temp;
-    }
-
-    return n1;
-}
-```
-### Solution - Dynamic Programming with Memoization
-#### Walkthough 
-The strategy is to avoid overlapping subproblems using cache.
-
-#### Analysis
-There will only be n + 1 subproblems computed. The time complexity is $O(n)$
-
-#### Algorithm
- memo \@ref(memo), recursion \@ref(recursion), dp \@ref(dp)
-
-#### Java Code - Dynamic Programming with Memoization
-```java
-int fib(int x) {
-    return fibMemoization(x, new int[x + 1]);
-}
-
-int fibMemoization(int x, int[] mem) {
-    if (mem[x] != 0) {
-        return mem[x];
-    }
-    if (x == 1 || x == 2)  {
-        return 1;
-    }
-    int n = fibMemoization(x - 1, mem) + fibMemoization(x - 2,mem);
-    mem[x] = n;
-    return n;
-}
-```
-
-
-
-## Min operations to reduce number to 1 / / 
-
-### Description
-Given a positive integer n and 3 operations on n:
-
-    *  n - 1
-    *  n / 2 (if n is even)
-    *  n / 3 (if n \% 3 == 0)
-
-Find the minimum number of above operations to reduce n to 1.
-
-### Example
-Input: n = 9
-Output: 2
-Explanation:
-Step 1: 9 / 3 = 3
-Step 2: 3 / 3 = 1
-
-Input: n = 8
-Output: 3
-Explanation:
-Step 1: 8 / 2 = 4
-Step 2: 4 / 2 = 2
-Step 3: 2 - 1 = 1
-
-### Solution - Recursion
 #### Walkthrough
 
-#### Analysis
-O(n^3)
+Directly apply the recurrence `F(n) = F(n-1) + F(n-2)` with base cases `0` and `1`.
 
-#### Algorithm
-recursion \@ref(recursion)
+#### Analysis
+
+- **Time Complexity**: O(2^n)
+- **Space Complexity**: O(n) recursion depth
 
 #### Java Code
+
 ```java
-public int minHops(int num) {
-    return rec(num, 0);
+public int fibRecursive(int n) {
+    if (n <= 1) {
+        return n;
+    }
+    return fibRecursive(n - 1) + fibRecursive(n - 2);
+}
+```
+
+### Solution 2 - Tail Recursion
+
+#### Walkthrough
+
+Carry two consecutive Fibonacci values forward so each call decrements `n` until reaching zero. Although still recursive, it avoids repeated subproblems.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) recursion depth (unless optimized by compiler)
+
+#### Java Code
+
+```java
+public int fibTail(int n) {
+    return fibTailHelper(n, 0, 1);
 }
 
-private int rec(int num, int count) {
-    if(num <= 1) {
-        return count;
+private int fibTailHelper(int n, int a, int b) {
+    if (n == 0) {
+        return a;
     }
-
-    int minCount = Integer.MAX_VALUE;
-
-    if( num % 3 == 0) {
-        minCount = Math.min(minCount, rec(num / 3, count + 1));
+    if (n == 1) {
+        return b;
     }
+    return fibTailHelper(n - 1, b, a + b);
+}
+```
 
-    if( num % 2 == 0) {
-        minCount = Math.min(minCount, rec(num / 2, count + 1));
+### Solution 3 - Bottom-Up DP
+
+#### Walkthrough
+
+Iteratively build Fibonacci numbers from `0` to `n`, maintaining two running values.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Java Code
+
+```java
+public int fibIterative(int n) {
+    if (n <= 1) {
+        return n;
     }
+    int prev = 0;
+    int curr = 1;
+    for (int i = 2; i <= n; i++) {
+        int next = prev + curr;
+        prev = curr;
+        curr = next;
+    }
+    return curr;
+}
+```
 
-    minCount = Math.min(minCount, rec(num - 1, count + 1));
+### Solution 4 - Memoized Recursion
+
+#### Walkthrough
+
+Use a memo array to cache computed Fibonacci numbers, preventing redundant recursion.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
+
+#### Java Code
+
+```java
+public int fibMemo(int n) {
+    int[] memo = new int[n + 1];
+    Arrays.fill(memo, -1);
+    return fibMemoHelper(n, memo);
+}
+
+private int fibMemoHelper(int n, int[] memo) {
+    if (n <= 1) {
+        return n;
+    }
+    if (memo[n] != -1) {
+        return memo[n];
+    }
+    memo[n] = fibMemoHelper(n - 1, memo) + fibMemoHelper(n - 2, memo);
+    return memo[n];
+}
+```
+
+## Minimum Operations to Reduce to One {#min-ops-to-one}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: Reduce to One
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Dynamic Programming`, `Recursion`
+- **Techniques**: \@ref(recursion), \@ref(dp)
+
+### Description
+
+Given an integer `n`, you may perform operations: `n = n - 1`, `n = n / 2` (if even), or `n = n / 3` (if divisible by 3). Return the minimum number of operations needed to reduce `n` to 1.
+
+### Examples
+
+```
+Input: 9
+Output: 2  // 9 -> 3 -> 1
+
+Input: 8
+Output: 3  // 8 -> 4 -> 2 -> 1
+```
+
+### Constraints
+
+- `1 <= n <= 10^6`
+
+### Solution - Memoized Recursion
+
+#### Walkthrough
+
+Define `dp[n]` as the minimal operations to reach `1`. Recursively compute each option and cache results to avoid recomputation.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) for memoization
+
+#### Algorithm
+
+\@ref(recursion), \@ref(dp)
+
+1. Base case: `dp[1] = 0`.
+2. For other `n`, evaluate `1 + dp[n-1]`.
+3. If divisible by `2` or `3`, also consider `1 + dp[n/2]`, `1 + dp[n/3]`.
+4. Store the minimum in memo.
+
+#### Java Code
+
+```java
+public int minStepsToOne(int n) {
+    int[] memo = new int[n + 1];
+    Arrays.fill(memo, -1);
+    return dfs(n, memo);
+}
+
+private int dfs(int n, int[] memo) {
+    if (n == 1) {
+        return 0;
+    }
+    if (memo[n] != -1) {
+        return memo[n];
+    }
+    int best = 1 + dfs(n - 1, memo);
+    if (n % 2 == 0) {
+        best = Math.min(best, 1 + dfs(n / 2, memo));
+    }
+    if (n % 3 == 0) {
+        best = Math.min(best, 1 + dfs(n / 3, memo));
+    }
+    return memo[n] = best;
 }
 ```
 

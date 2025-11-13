@@ -1,746 +1,943 @@
 # String Manipulation
 
+## Binary Representation {#binary-representation}
 
+### Problem Metadata
 
-## Binary Representation / Firecode / Level 2
+- **Platform**: Firecode.io
+- **Problem ID**: Binary Representation
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/
+- **Tags**: `Math`, `String`
+- **Techniques**: \@ref(dnc)
 
 ### Description
-Write a method to compute the binary representation of a positive integer. The method should
-return a string with 1s and 0s.
 
-### Example
-computeBinary(6) = "110"
-computeBinary(5) = "101"
+Given a positive integer `n`, return its binary representation as a string consisting of only `'0'` and `'1'`.
 
-### Solution
+### Examples
+
+```
+Input: n = 6
+Output: "110"
+
+Input: n = 5
+Output: "101"
+```
+
+### Constraints
+
+- `0 <= n <= 2^31 - 1`
+
+### Solution - Iterative Division
+
 #### Walkthrough
-Counting down from val to 0, each time val /= 2. if val is even number, append "0" otherwise append "1".
+
+Repeatedly divide by two and track remainders. Appending each remainder to the front of the result (or using a `StringBuilder` and reversing) yields the binary digits from most significant to least significant.
 
 #### Analysis
-Time complexity is O(log(val)) since this is the number of computation performed.
+
+- **Time Complexity**: O(log n) divisions
+- **Space Complexity**: O(log n) to store the output
 
 #### Algorithm
 
+\@ref(dnc)
+
+1. Handle `n == 0` by returning `"0"`.
+2. While `n > 0`, compute `bit = n % 2` and prepend it to the answer.
+3. Update `n /= 2`.
+
+#### Java Code
+
 ```java
-public static String computeBinary(int val) {
-    if(val == 0) {
+public String computeBinary(int n) {
+    if (n == 0) {
         return "0";
     }
 
-    String result = "";
-
-    while(val > 0) {
-        if(val % 2 == 0) {
-            result = "0" + result;
-        } else {
-            result = "1" + result;
-        }
-
-        val = val / 2;
+    StringBuilder sb = new StringBuilder();
+    while (n > 0) {
+        sb.append(n % 2);
+        n /= 2;
     }
 
-    return result;
+    return sb.reverse().toString();
 }
 ```
 
+## Insert Stars {#insert-stars}
 
-## Insert Stars / Firecode / Level 2
+### Problem Metadata
+
+- **Platform**: Firecode.io
+- **Problem ID**: Insert Stars
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/
+- **Tags**: `Recursion`, `String`
+- **Techniques**: \@ref(recursion)
 
 ### Description
-Given a string, recursively compute a new string where the identical adjacent characters in the original string are
-separated by a "*".
 
-### Example
-insertPairStar("cac") = "cac"
-insertPairStar("cc") = "c*c"
+Given a string `s`, recursively build a new string where any pair of identical adjacent characters is separated by a `'*'`.
 
-### Solution
+### Examples
+
+```
+Input: "cc"
+Output: "c*c"
+
+Input: "cac"
+Output: "cac"
+```
+
+### Constraints
+
+- `1 <= s.length <= 10^4`
+- Characters are ASCII
+
+### Solution - Recursive Pair Expansion
+
 #### Walkthrough
-Use recursive call with substring() method to narrow the original string from outside and find out if there are
-identical adjacent characters existed. Append "*" if there is.
+
+Base case is a single character. For longer strings, compare the first two characters. If equal, return `first + "*" + recurse(s[1:])`; otherwise, return `first + recurse(s[1:])`.
 
 #### Analysis
-Complexity is O(n) as each alphabet is processed once.
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) recursion depth
 
 #### Algorithm
- recursion \@ref(recursion)
+
+\@ref(recursion)
+
+1. If `s.length() <= 1`, return `s`.
+2. Recursively compute the transformed suffix `rest = insertPairStar(s.substring(1))`.
+3. If `s.charAt(0) == s.charAt(1)`, return `s[0] + "*" + rest`; else return `s[0] + rest`.
+
+#### Java Code
 
 ```java
-public static String insertPairStar(String s) {
-    if(s == null) {
-        return null;
-    }
-
-    if(s.length() == 1) {
-        //base case
+public String insertPairStar(String s) {
+    if (s == null || s.length() <= 1) {
         return s;
-    } else if(s.substring(0, 1).equals(s.substring(1, 2))) {
-        //identical adjacent char
-        return s.substring(0,1) + "*" + insertPairStar(s.substring(1,s.length()));
-    } else {
-        //recursive call
-        return s.substring(0,1) + insertPairStar(s.substring(1,s.length()));
     }
+    String rest = insertPairStar(s.substring(1));
+    if (s.charAt(0) == s.charAt(1)) {
+        return s.charAt(0) + "*" + rest;
+    }
+    return s.charAt(0) + rest;
 }
 ```
 
+## Word Ladder {#word-ladder}
 
-## Word Ladder / LeetCode 127 / Medium
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 127
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/word-ladder/
+- **Tags**: `Breadth-First Search`, `Hash Table`
+- **Techniques**: \@ref(bfs)
 
 ### Description
-Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation
-sequence from beginWord to endWord, such that:
 
-Only one letter can be changed at a time.
-Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
-Note:
+Given a begin word, end word, and a dictionary, return the length of the shortest transformation sequence from begin to end such that only one letter changes per step and every intermediate word exists in the dictionary. Return `0` if no sequence exists.
 
-*  Return 0 if there is no such transformation sequence.
-*  All words have the same length.
-*  All words contain only lowercase alphabetic characters.
-*  You may assume no duplicates in the word list.
-*  You may assume beginWord and endWord are non-empty and are not the same.
+### Examples
 
-
-### Example
-Input:
-beginWord = "hit",  endWord = "cog",  wordList = ["hot","dot","dog","lot","log","cog"]
-
+```
+Input: beginWord = "hit", endWord = "cog",
+       wordList = ["hot","dot","dog","lot","log","cog"]
 Output: 5
+Explanation: "hit" -> "hot" -> "dot" -> "dog" -> "cog"
+```
 
-Explanation: As one shortest transformation is "hit" $->$ "hot" $->$ "dot" $->$ "dog" $->$ "cog",  return its length 5.
+### Constraints
 
-### Solution - BFS
+- All words have the same length
+- Words consist of lowercase English letters
+- `wordList` contains no duplicates
+
+### Solution - BFS Over Word Mutations
+
 #### Walkthrough
-Use a queue to grow the tree that beginWord could possibly 'mutate' to, each time with a different character.
-Find the first path that generate endWord; otherwise, continue enumeration until all possibilities exhaust.
+
+Perform BFS from `beginWord`. Each step generates all words formed by replacing one letter with `'a'..'z'`. Newly discovered dictionary entries are enqueued with distance `level + 1`. The first time `endWord` is dequeued we have the shortest length.
 
 #### Analysis
-Time complexity is O(n) as each word is processed once.
+
+- **Time Complexity**: O(26 * L * N) where `L` is word length and `N` is dictionary size
+- **Space Complexity**: O(N)
 
 #### Algorithm
- backtrack \@ref(backtrack), bfs \@ref(bfs)
 
-#### Java Code - BFS
+\@ref(bfs)
+
+1. Insert dictionary into a `Set` for O(1) lookups.
+2. Initialize BFS queue with `beginWord` and level `1`.
+3. For each dequeued word, mutate every position with every letter.
+4. If mutation equals `endWord`, return `level + 1`.
+5. If mutation existed in the dictionary, remove it and enqueue with incremented level.
+6. Return `0` when the queue empties without finding `endWord`.
+
+#### Java Code
+
 ```java
 public int ladderLength(String beginWord, String endWord, List<String> wordList) {
     Set<String> dict = new HashSet<>(wordList);
+    if (!dict.contains(endWord)) {
+        return 0;
+    }
     Queue<String> queue = new LinkedList<>();
     queue.offer(beginWord);
     int level = 1;
 
     while (!queue.isEmpty()) {
-        //Since we are adding element into queue dynamically, it is better to invoke
-        //queue.size() at beginning b/c queue size would change on the fly.
         for (int i = queue.size(); i > 0; i--) {
             String word = queue.poll();
-
             if (word.equals(endWord)) {
-                //find match to endWord
                 return level;
             }
-
-            //Enumerate all OTHER possible chars against word
-            for (int j = 0; j < word.length(); j++) {
-                char[] array = word.toCharArray();
-
+            char[] chars = word.toCharArray();
+            for (int pos = 0; pos < chars.length; pos++) {
+                char original = chars[pos];
                 for (char c = 'a'; c <= 'z'; c++) {
-                    //Skip on the same character
-                    if (c == word.charAt(j)) {
-                        continue;
-                    }
-
-                    array[j] = c;
-                    String guess = String.valueOf(array);
-                    if (dict.remove(guess)) {
-                        //if dict contains element, return true
-                        queue.offer(guess);
+                    if (c == original) continue;
+                    chars[pos] = c;
+                    String next = new String(chars);
+                    if (dict.remove(next)) {
+                        queue.offer(next);
                     }
                 }
+                chars[pos] = original;
             }
         }
-
         level++;
     }
-
     return 0;
 }
 ```
 
+## Longest Common Prefix {#longest-common-prefix}
 
-## Longest Common Prefix / LeetCode 14 / Easy
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 14
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/longest-common-prefix/
+- **Tags**: `String`
+- **Techniques**: \@ref(two-pointers)
 
 ### Description
-Write a function to find the longest common prefix string amongst an array of strings.
 
-If there is no common prefix, return an empty string "".
+Given an array of strings, return the longest common prefix string among them. If none exists, return `""`.
 
-### Example
-Input: ["flower","flow","flight"] Output: "fl"
-Input: ["dog","racecar","car"] Output: ""
+### Examples
 
-### Solution
+```
+Input: ["flower","flow","flight"]
+Output: "fl"
+
+Input: ["dog","racecar","car"]
+Output: ""
+```
+
+### Constraints
+
+- `0 <= strs.length <= 200`
+- `0 <= strs[i].length <= 200`
+
+### Solution - Column Scan
+
 #### Walkthrough
-Take the first string as pivotal string and compare it against all other strings. If there is a common character,
-advance the common index; otherwise, return the substring(0, commonIndex + 1);
+
+Use the first string as a baseline. For each character index, ensure all other strings have the same character. Stop once a mismatch or end of string occurs.
 
 #### Analysis
-Assume there are at most m letter in the longest string and n strings in total. The time complexity is O(m * n).
+
+- **Time Complexity**: O(n * m), `n` strings and `m` average length
+- **Space Complexity**: O(1)
 
 #### Algorithm
 
+\@ref(two-pointers)
+
+1. Handle empty input.
+2. Iterate index `i` across the first string.
+3. For each `i`, compare `strs[j].charAt(i)` with `strs[0].charAt(i)`; return `strs[0].substring(0, i)` on mismatch.
+4. If no mismatch, return the entire first string.
+
+#### Java Code
+
 ```java
-    public String longestCommonPrefix(String[] strs) {
-    if(strs == null || strs.length == 0) {
+public String longestCommonPrefix(String[] strs) {
+    if (strs == null || strs.length == 0) {
         return "";
     }
-
-    int commonIdx = -1;
-    String prefix = strs[0];
-
-    for(int i = 0; i < prefix.length(); i++) {
-        for(String str : strs) {
-            if(str.length() == i) {
-                //if we have reached the end of a string
-                return prefix.substring(0, commonIdx + 1);
-            }
-            if(prefix.charAt(i) != str.charAt(i)) {
-                //if one of the char does not match
-                return commonIdx == -1 ? "" : prefix.substring(0, commonIdx + 1);
+    for (int i = 0; i < strs[0].length(); i++) {
+        char c = strs[0].charAt(i);
+        for (int j = 1; j < strs.length; j++) {
+            if (i == strs[j].length() || strs[j].charAt(i) != c) {
+                return strs[0].substring(0, i);
             }
         }
-
-        commonIdx = i;
     }
-
-    return prefix.substring(0, commonIdx + 1);
+    return strs[0];
 }
 ```
 
+## Longest Common Substring {#longest-common-substring}
 
+### Problem Metadata
 
-## Longest Common Substring
+- **Platform**: Interview Prep
+- **Problem ID**: LCS Substring
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Dynamic Programming`, `String`
+- **Techniques**: \@ref(dp)
 
 ### Description
-Given two strings X and Y, find the length of the longest common substring.
 
-### Example
-X = “abcdxyz”, y = “xyzabcd”. Output : 4  The longest common substring is “abcd” and is of length 4.
+Given two strings `s1` and `s2`, return the length of their longest common substring (contiguous sequence).
 
-Input : X = “zxabcdezy”, y = “yzabcdezx”. Output : 6  The longest common substring is “abcdez” and is of length 6.
+### Examples
 
-### Solution
+```
+Input: s1 = "abcdxyz", s2 = "xyzabcd"
+Output: 4  // "abcd"
+```
+
+### Constraints
+
+- `1 <= len(s1), len(s2) <= 10^3`
+- Strings contain lowercase letters
+
+### Solution - 2D DP Table
+
 #### Walkthrough
-We first declare a 2D array to store the length of each common substring in both strings:
-We first initialize the 1st row and 1st column of the 2D array by checking 1st character of a string against the other
-string  - as specified in red color in the table.
-Next we run two nested loops, iterating with both strings and checking if there is a common character.  If there is a
-common character at {\color{blue}dp[i][j]}, where i is the position from str1 and j is the position from str2. Increment the value
-from {\color{blue}dp[i-1][j-1]} - as specified in blue color in the table.
-During the traversal, we could also retrive the longest length.
 
-\begin{table}[h!]
-\begin{tabular}{|l|l|l|l|l|l|l|l|}
-\hline
-& a                        & b                        & c                        & d                        & x                        & y                        & z                        \\ \hline
-x & 0                        & 0                        & 0                        & 0                        & {\color[HTML]{FE0000} 1} & 0                        & 0                        \\ \hline
-y & 0                        & 0                        & 0                        & 0                        & 0                        & {\color[HTML]{3166FF} 2} & 0                        \\ \hline
-z & 0                        & 0                        & 0                        & 0                        & 0                        & 0                        & {\color[HTML]{3531FF} 3} \\ \hline
-a & {\color[HTML]{FE0000} 1} & 0                        & 0                        & 0                        & 0                        & 0                        & 0                        \\ \hline
-b & 0                        & {\color[HTML]{3531FF} 2} & 0                        & 0                        & 0                        & 0                        & 0                        \\ \hline
-c & 0                        & 0                        & {\color[HTML]{3531FF} 3} & 0                        & 0                        & 0                        & 0                        \\ \hline
-d & 0                        & 0                        & 0                        & {\color[HTML]{3531FF} 4} & 0                        & 0                        & 0                        \\ \hline
-\end{tabular}
-\end{table}
+Let `dp[i][j]` represent the length of the longest common substring ending at `s1[i]` and `s2[j]`. Initialize first row/column by comparing individual characters. For each match extend from `dp[i-1][j-1] + 1`; otherwise reset to zero. Track the maximum length seen.
 
 #### Analysis
-Both space and time complexity are $O(n^2)$, where n is the length of string
+
+- **Time Complexity**: O(n * m)
+- **Space Complexity**: O(n * m)
 
 #### Algorithm
-dp \@ref(dp)
+
+\@ref(dp)
+
+1. Create `dp[len1][len2]`, initialize first row/column.
+2. For each `i > 0` and `j > 0`, if `s1[i] == s2[j]` set `dp[i][j] = dp[i-1][j-1] + 1`, else `0`.
+3. Maintain `maxLen`.
+4. Return `maxLen`.
+
+#### Java Code
 
 ```java
-public static int getLCSLength(String str1, String str2){
-    int[][] dp = new int[str1.length()][str2.length()];	//To store the length of common substring
-    int maxLength = 0;
+public int longestCommonSubstring(String s1, String s2) {
+    int n = s1.length();
+    int m = s2.length();
+    int[][] dp = new int[n][m];
+    int max = 0;
 
-    for(int i = 0; i < str2.length(); i++){	//Init the first row of 2D array
-        dp[0][i] = (str1.charAt(0) == str2.charAt(i)) ? 1 : 0;
+    for (int i = 0; i < n; i++) {
+        dp[i][0] = (s1.charAt(i) == s2.charAt(0)) ? 1 : 0;
+        max = Math.max(max, dp[i][0]);
     }
-
-    for(int j = 0; j < str1.length(); j++){	//Init the first column of 2D array
-        dp[j][0] = (str2.charAt(0) == str1.charAt(j)) ? 1 : 0;
+    for (int j = 0; j < m; j++) {
+        dp[0][j] = (s1.charAt(0) == s2.charAt(j)) ? 1 : 0;
+        max = Math.max(max, dp[0][j]);
     }
-
-    for (int i = 1; i < str1.length(); i++) {
-        for (int j = 1; j < str2.length(); j++) {
-            if(str1.charAt(i) == str2.charAt(j)){
-                // a common character
-                dp[i][j] = dp[i-1][j-1] + 1;
-                maxLength = Math.max(maxLength, dp[i][j]);
-            } else{
+    for (int i = 1; i < n; i++) {
+        for (int j = 1; j < m; j++) {
+            if (s1.charAt(i) == s2.charAt(j)) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+                max = Math.max(max, dp[i][j]);
+            } else {
                 dp[i][j] = 0;
             }
         }
     }
-
-    return maxLength;
+    return max;
 }
 ```
 
+## Longest Palindromic Substring {#longest-palindromic-substring}
 
+### Problem Metadata
 
-## Longest Palindromic Substring / LeetCode 5/ Medium
+- **Platform**: LeetCode
+- **Problem ID**: 5
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/longest-palindromic-substring/
+- **Tags**: `String`, `Dynamic Programming`
+- **Techniques**: \@ref(dp)
 
 ### Description
-Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
 
-### Example
-Input: "babad" Output: "bab"  Note: "aba" is also a valid answer.
+Return the longest palindromic substring contained in `s`.
 
-### Solution - Longest Common Substring
+### Examples
+
+```
+Input: "babad"
+Output: "bab"   // "aba" also valid
+
+Input: "cbbd"
+Output: "bb"
+```
+
+### Constraints
+
+- `1 <= s.length <= 1000`
+- `s` consists of digits and English letters
+
+### Solution - DP via Reversed String
+
 #### Walkthrough
-The idea is to check a \textbf{subset} of Longest Common Substring between the sring s and reverse(s).
-Take S = "abc435cba" and rev(S) = "cba534cba" for example, both "abc" and "cba" are LCS but not Palindromic Substring.
-\begin{table}[h!]
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
-\hline
-& a                        & b                        & {\color[HTML]{FE0000} c} & 4                       & 3                       & 5                       & c                       & b & a \\ \hline
-a                        & 1                        & 0                        & 0                        & 0                       & {\color[HTML]{FE0000} } &                         &                         &   &   \\ \hline
-b                        & 0                        & 2                        & 0                        & 0                       &                         & {\color[HTML]{3166FF} } &                         &   &   \\ \hline
-{\color[HTML]{FE0000} c} & 0                        & 0                        & {\color[HTML]{FE0000}3}                        & 0                       &                         &                         & {\color[HTML]{3531FF} } &   &   \\ \hline
-5                        & 0                        & 0                        & 0                        & 0                       &                         &                         &                         &   &   \\ \hline
-3                        & 0                        & {\color[HTML]{333333} 0} & 0                        & 0                       &                         &                         &                         &   &   \\ \hline
-4                        & 0                        & 0                        & {\color[HTML]{333333} 0} & 0                       &                         &                         &                         &   &   \\ \hline
-{\color[HTML]{3531FF} c} & 0                        & 0                        & 1                        & {\color[HTML]{3531FF} } &                         &                         &                         &   &   \\ \hline
-b                        & 0                        & 1                        & 0                        &                         &                         &                         &                         &   &   \\ \hline
-a                        & 1                        & 0                        & 0                        &                         &                         &                         &                         &   &   \\ \hline
-\end{tabular}
-\end{table}
-When we need to further check if the substring is palindromic, we need to find the index of LCS, call that
-{\color{blue}beforeRev}. {\color{blue}beforeRev} = length - 1 - {\color{red}j} = 9 - 1 - 2 = 6. Next we add the length
-of LCS at {\color{red}(i,j)} : {\color{blue}beforeRev} + {\color{red}dp[i][j]} - 1 = 6 + 3 - 1 = 8, but {\color{red}i} = 2.
-Therefore, it is NOT palindromic.
 
-Take S = "aba435aba" and rev(S) = "aba534aba" for example, "aba" is both LCS and Palindromic Substring.
-\begin{table}[h!]
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
-\hline
-& a                        & b                        & a                        & 4                       & 3                       & 5                       & a                       & b & {\color[HTML]{FE0000} a}\\ \hline
-a                        & 1                        & 0                        & 0                        & 0                       & {\color[HTML]{FE0000} } &                         & 1                       & 0 & 1   \\ \hline
-b                        & 0                        & 2                        & 0                        & 0                       &                         & {\color[HTML]{3166FF} } & 0                       & 2 & 0   \\ \hline
-{\color[HTML]{FE0000} a} & 0                        & 0                        & 3                        & 0                       &                         &                         & 1                       & 0 & {\color[HTML]{FE0000} 3}   \\ \hline
-5                        & {\color[HTML]{333333} 0} & 0                        & 0                        & 0                       &                         &                         &                         &   &   \\ \hline
-3                        & 0                        & {\color[HTML]{333333} 0} & 0                        & 0                       &                         &                         &                         &   &   \\ \hline
-4                        & 0                        & 0                        & {\color[HTML]{333333} 0} & 0                       &                         &                         &                         &   &   \\ \hline
-{\color[HTML]{3531FF} a} & 0                        & 0                        & 1                        & {\color[HTML]{3531FF} } &                         &                         &                         &   &   \\ \hline
-b                        & 0                        & 1                        & 0                        &                         &                         &                         &                         &   &   \\ \hline
-a                        & 1                        & 0                        & 0                        &                         &                         &                         &                         &   &   \\ \hline
-\end{tabular}
-\end{table}
-When we need to further check if the substring is palindromic, we first eval
-{\color{blue}beforeRev} = length - 1 - {\color{red}j} = 9 - 1 - 2 = 6  and add the length of LCS at {\color{red}(i,j)}:
-{\color{blue}beforeRev} + {\color{red}dp[i][j]}- 1 = 6 + 3 - 1 = 8 where {\color{red}i} = 8. Therefore, it is palindromic.
+Compute the longest common substring between `s` and its reverse. Matches correspond to palindromic substrings only when their indices line up (i.e., the substring reads the same forward and backward). Track the candidate with the greatest length that satisfies the index alignment rule.
 
 #### Analysis
-Both time and Auxiliary Space take $O(n^2)$
+
+- **Time Complexity**: O(n^2)
+- **Space Complexity**: O(n^2)
 
 #### Algorithm
- dp \@ref(dp)
 
-#### Java Code - Longest Common Substring
+\@ref(dp)
+
+1. Let `rev = reverse(s)`; create `dp[n][n]`.
+2. For each pair `(i, j)` update `dp[i][j]` similar to LCS-substring.
+3. When `dp[i][j] > currentMax`, ensure the substring indices align (`n - 1 - j + dp[i][j] - 1 == i`).
+4. Update best boundaries accordingly.
+
+#### Java Code
+
 ```java
 public String longestPalindrome(String s) {
-    if (s.equals("")) {
-        return "";
-    }
-
-    String reverse = new StringBuffer(s).reverse().toString();
-    int length = s.length();
+    int n = s.length();
+    String rev = new StringBuilder(s).reverse().toString();
+    int[][] dp = new int[n][n];
     int maxLen = 0;
-    int maxEnd = 0;
-    int[][] dp = new int[length][length];	//To store the length of common substring
+    int end = 0;
 
-    for(int i = 0; i < reverse.length(); i++){	//Init the first row of 2D array
-        dp[0][i] = (s.charAt(0) == reverse.charAt(i)) ? 1 : 0;
-    }
-
-    for(int j = 0; j < s.length(); j++){	//Init the first column of 2D array
-        dp[j][0] = (reverse.charAt(0) == s.charAt(j)) ? 1 : 0;
-    }
-
-    for (int i = 0; i < length; i++) {
-        for (int j = 0; j < length; j++) {
-            if(s.charAt(i) == reverse.charAt(j)){
-                if (i > 0 && j > 0) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (s.charAt(i) == rev.charAt(j)) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1;
+                } else {
                     dp[i][j] = dp[i - 1][j - 1] + 1;
                 }
-            } else{
+                int beforeRev = n - 1 - j;
+                if (dp[i][j] > maxLen && beforeRev + dp[i][j] - 1 == i) {
+                    maxLen = dp[i][j];
+                    end = i;
+                }
+            } else {
                 dp[i][j] = 0;
             }
-
-            if (dp[i][j] > maxLen) {
-                int beforeRev = length - 1 - j;
-
-                //further check if it is a palindromic
-                if (beforeRev + dp[i][j] - 1 == i) {
-                    maxLen = dp[i][j];
-                    maxEnd = i;
-                }
-            }
         }
     }
 
-    String result =  s.substring(maxEnd - maxLen + 1, maxEnd + 1);
-    return result;
+    return s.substring(end - maxLen + 1, end + 1);
 }
 ```
 
+## Word Break {#word-break}
 
-## Word Break / Leet Code 139 / Medium
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 139
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/word-break/
+- **Tags**: `Dynamic Programming`, `Trie`, `Recursion`
+- **Techniques**: \@ref(recursion), \@ref(dp), \@ref(trie)
 
 ### Description
-Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be
-segmented into a space-separated sequence of one or more dictionary words. You may assume the dictionary does not
-contain duplicate words.
 
-### Example
-For example, given s = "leetcode", dict = ["leet", "code"]. Return true because "leetcode" can be segmented as
-"leet code".
+Given a string `s` and a dictionary `wordDict`, determine whether `s` can be segmented into a space-separated sequence of dictionary words.
 
-Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"] Return false.
+### Examples
 
-### Solution - Recursion
+```
+Input: s = "leetcode", wordDict = ["leet","code"]
+Output: true
+
+Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+Output: false
+```
+
+### Constraints
+
+- `1 <= s.length <= 300`
+- `1 <= wordDict.length <= 1000`
+- Words consist of lowercase letters
+
+### Solution 1 - Recursive Prefix Search
+
 #### Walkthrough
-Consider each prefix and search it in dictionary. If the prefix is present in dictionary, we recursively search for
-the rest of the string and AND all sub results.
+
+Try every prefix; if it exists in the dictionary, recursively solve the remaining suffix. Use memoization to prune repeated states.
 
 #### Analysis
-The time complexity is exponential, since there are some overlapping subproblems in the recursion tree.
-$O(2^{log(n)})$, where n is the length of the word.
+
+- **Time Complexity**: Exponential without memoization; with memo, O(n^2) substring checks
+- **Space Complexity**: O(n) recursion depth
 
 #### Algorithm
-recursion \@ref(recursion)
 
-#### Java Code - Recursion
+\@ref(recursion)
+
+1. Define `dfs(start)` returning `true` if substring from `start` can be segmented.
+2. Iterate `end` from `start+1` to `n`, check whether `s[start:end]` is in the dictionary and `dfs(end)` is true.
+3. Memoize failed indices to avoid recomputation.
+
+#### Java Code
+
 ```java
-public boolean wordBreak(String word, List<String> dict) {
-    int length = word.length();
-    // base case
-    if (length == 0) {
+public boolean wordBreakRecursive(String s, List<String> wordDict) {
+    Set<String> dict = new HashSet<>(wordDict);
+    Boolean[] memo = new Boolean[s.length()];
+    return dfs(s, 0, dict, memo);
+}
+
+private boolean dfs(String s, int start, Set<String> dict, Boolean[] memo) {
+    if (start == s.length()) {
         return true;
     }
-
-    //else check for all words
-    for (int i = 1; i <= length; i++) {
-        // Now we will first divide the word into two parts ,
-        // the prefix will have a length of i and check if it is  
-        // present in dictionary ,if yes then we will check for  
-        // suffix of length size-i recursively. if both prefix and  
-        // suffix are present the word is found in dictionary.
- 
-        if (dict.contains(word.substring(0,i)) &&  
-            wordBreak(word.substring(i, length), wordDict)) {
-                return true;
+    if (memo[start] != null) {
+        return memo[start];
+    }
+    for (int end = start + 1; end <= s.length(); end++) {
+        if (dict.contains(s.substring(start, end)) && dfs(s, end, dict, memo)) {
+            return memo[start] = true;
         }
     }
-         
-    // if all cases failed then return false
-    return false;        
+    return memo[start] = false;
 }
 ```
 
-### Solution - Dynamic Programming
+### Solution 2 - Bottom-Up Dynamic Programming
+
 #### Walkthrough
-Create a array of (length of string + 1). In order to ensure the string contains segment of substring in the list, we
-need to ensure:
 
-*  dp[index of segment 1]: true
-*  dp[index of segment 2]: true
-*  dp[other indices] : false
-
-Finally, we only need to check the value of dp[index of last segment].
+Let `dp[i]` denote whether prefix `s[0:i)` can be segmented. For each ending index `i`, check dictionary words that could end at `i` and see if the preceding prefix was valid.
 
 #### Analysis
-Assume there are at most m letter in the given string and n words in dictionary. The time complexity is O(m * n).
+
+- **Time Complexity**: O(n * m), where `m` is dictionary size
+- **Space Complexity**: O(n)
 
 #### Algorithm
- dp \@ref(dp)
 
-#### Java Code - Dynamic Programming
+\@ref(dp)
+
+1. Initialize `dp[0] = true`.
+2. For `end` from `1` to `n`, iterate dictionary words.
+3. If `word` fits at the end and `dp[end - word.length()]` is true, set `dp[end] = true`.
+4. Return `dp[n]`.
+
+#### Java Code
+
 ```java
-public boolean wordBreak(String s, List<String> wordDict) {
-    int n = s.length();
-    boolean[] dp = new boolean[n + 1];
+public boolean wordBreakDP(String s, List<String> wordDict) {
+    boolean[] dp = new boolean[s.length() + 1];
     dp[0] = true;
 
-    for (int endIdx = 1; endIdx <= s.length(); endIdx++) {
-        for (String segment : wordDict) {
-            int prevIdx = endIdx - segment.length();
-            /*
-            * 1. prevIdx >= 0 : to avoid IndexOutOfBoundError
-            * 2. dp[prevIdx]  : to make sure prev word is a match
-            * 3. s.substring(prevIdx, endIdx).equals(segment) : to make sure current word is a match
-            *
-            * If 3 conditions match, move to next round (endIdx)
-            */
-            if (prevIdx >= 0 && dp[prevIdx] && s.substring(prevIdx, endIdx).equals(segment)) {
-                dp[endIdx] = true;
+    for (int end = 1; end <= s.length(); end++) {
+        for (String word : wordDict) {
+            int len = word.length();
+            if (len <= end && dp[end - len] && s.substring(end - len, end).equals(word)) {
+                dp[end] = true;
                 break;
             }
         }
     }
-
-    return dp[n];
+    return dp[s.length()];
 }
 ```
 
-### Solution - Trie with Dynamic Programming
+### Solution 3 - Trie-Assisted DP
+
 #### Walkthrough
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=5em,
-every label/.append style={rectangle, font=\small}
-]
-\node {}
-child { node {t}
-child { node[label={\small true}] {o}
-child { node {f}
-child { node[label={\small true}] {u}}
-}
-child { node {u}
-child { node[label={\small true}] {r}}
-}
-}
-}
-;
-\end{tikzpicture}
-```
-Construct a trie with each word in the dictionary with each node having a property to denote the end of word. Then
-construct a dynamic programming array to record if the word exists by traversing the Trie tree. Lastly, check the
-dp[lastIndex] value, true if the string constsis all valid words; false, otherwise.
+
+Insert dictionary words into a trie. While scanning the string, whenever `dp[i]` is true, walk the trie starting at `i` to mark reachable `dp[j]`. This prunes dictionary iterations when many words share prefixes.
 
 #### Analysis
-Time complexity is O(n * h), where   where n is the length of the string word and h is the average length of words in
-the dictionary (average hight of the tree).
 
+- **Time Complexity**: O(n * L) where `L` is average word length encountered
+- **Space Complexity**: O(total dictionary characters)
 
 #### Algorithm
-dp \@ref(dp)
+
+\@ref(dp), \@ref(trie)
+
+1. Build a trie with `isEnd` flags.
+2. Initialize `dp[0] = true`.
+3. For each index `i`, if `dp[i]` is true, traverse trie edges following `s[i...]`.
+4. Whenever a trie node is terminal at index `j`, set `dp[j] = true`.
+
+#### Java Code
 
 ```java
-
-private static class TrieNode {
+class TrieNode {
     boolean isEnd;
-
-    // next characters
-    TrieNode [] next;
-
-    public TrieNode() {
-        this.isEnd = false;
-        this.next = new TrieNode[26];
-    }
+    TrieNode[] next = new TrieNode[26];
 }
 
-private static class Trie {
-    TrieNode root;
+class Trie {
+    TrieNode root = new TrieNode();
 
-    public Trie() {
-        this.root=new TrieNode();
-    }
-
-    private void insert(TrieNode root, String word, int index) {
-        if (index == word.length()) {
-            root.isEnd = true;
-            return;
+    void insert(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+            if (node.next[idx] == null) {
+                node.next[idx] = new TrieNode();
+            }
+            node = node.next[idx];
         }
-
-        int charIndex = word.charAt(index) - 'a';
-
-        if (root.next[charIndex] == null) {
-            root.next[charIndex] = new TrieNode();
-        }
-
-        insert(root.next[charIndex], word, index + 1);
+        node.isEnd = true;
     }
 
-    public void insert(String word) {
-        insert(root, word, 0);
-    }
-
-    private void lookUp(TrieNode root, String str, int start, int index, boolean [] presence) {
-        int nextCharInStr = start + index;
-
-        if (root.isEnd) {
-            presence[nextCharInStr] = true;
-        }
-
-        if (nextCharIndex == str.length()) {
-            return;
-        }
-
-        int charIndex = str.charAt(nextCharInStr) - 'a';
-
-        // traverse down the trie if TrieNode / char exists
-        if (root.next[charIndex] != null) {
-            lookUp(root.next[charIndex], str, start, index + 1, presence);
-        }
-    }
-
-    public void lookUp(String str, int start, boolean [] presence) {
-        lookUp(root, str, start, 0, presence);
-    }
-}
-
-public boolean wordBreak(String str, List<String> wordDict) {
-    Trie trie = new Trie();
-
-    for (String word : wordDict) {
-        trie.insert(word);
-    }
-
-    boolean [] presence = new boolean [str.length() + 1];
-    presence[0] = true;
-
-    for(int i = 0;i < str.length();i++) {
-        if (presence[i]) {
-            trie.lookUp(str, i, presence);
-        }
-    }
-
-    return presence[str.length()];
-}
-```
-
-
-## Verifying an Alien Dictionary / LeetCode 953 / Easy
-
-### Description
-
-In an alien language, surprisingly they also use english lowercase letters, but possibly in a different order. The
-order of the alphabet is some permutation of lowercase letters.
-
-Given a sequence of words written in the alien language, and the order of the alphabet, return true if and only if the
-given words are sorted lexicographicaly in this alien language.
-
-### Example
-
-Input: words = ["hello","leetcode"], order = "hlabcdefgijkmnopqrstuvwxyz". Output: true
-Explanation: As 'h' comes before 'l' in this language, then the sequence is sorted.
-
-Input: words = ["word","world","row"], order = "worldabcefghijkmnpqstuvxyz". Output: false
-Explanation: As 'd' comes after 'l' in this language, then words[0] $>$ words[1], hence the sequence is unsorted.
-
-Input: words = ["apple","app"], order = "abcdefghijklmnopqrstuvwxyz". Output: false
-Explanation: The first three characters "app" match, and the second string is shorter (in size.) According to
-lexicographical rules "apple" $>$ "app", because 'l' $>$ '$\emptyset$', where '$\emptyset$' is defined as the null
-character which is less than any other character.
-
-### Solution
-#### Walkthrough
-For each pair of words, return false if
-
-*  the lexicographical order of the first different pair of chars
-*  provide the null char if the word is shorter than the other.
-
-Otherwise, compare pair of words until end of list
-
-#### Analysis
-Assume there are n words, and maximum word length is m. Thus the time complexity is O(n * m).
-
-#### Algorithm
-
-```java
-public boolean isAlienSorted(String[] words, String order) {
-    //compare word by word
-    for(int i = 0; i < words.length - 1; i++) {
-        String w1 = words[i];
-        String w2 = words[i + 1];
-
-        int maxLen = Math.max(w1.length(), w2.length());
-
-        for(int j = 0; j < maxLen; j++) {
-            char c1 = j < w1.length() ? w1.charAt(j) : 0;
-            char c2 = j < w2.length() ? w2.charAt(j) : 0;
-
-            //find the first pair of different chars
-            if(c1 != c2) {
-                if(isSorted(c1, c2, order)) {
-                    //sorted on the first pair of different chars
-                    break;
-                } else {
-                    return false;
-                }
+    void advance(String s, int start, boolean[] dp) {
+        TrieNode node = root;
+        for (int i = start; i < s.length(); i++) {
+            int idx = s.charAt(i) - 'a';
+            if (node.next[idx] == null) {
+                return;
+            }
+            node = node.next[idx];
+            if (node.isEnd) {
+                dp[i + 1] = true;
             }
         }
     }
-
-    return true;
 }
 
-private boolean isSorted(char first, char second, String order) {
-    if(first != 0 && second != 0) {
-        return order.indexOf(first) <= order.indexOf(second);
-    } else if(first == 0) {
-        return true;
-    } else {
-        //second == 0
-        return false;
+public boolean wordBreakTrie(String s, List<String> wordDict) {
+    Trie trie = new Trie();
+    for (String word : wordDict) {
+        trie.insert(word);
     }
+    boolean[] dp = new boolean[s.length() + 1];
+    dp[0] = true;
+    for (int i = 0; i < s.length(); i++) {
+        if (dp[i]) {
+            trie.advance(s, i, dp);
+        }
+    }
+    return dp[s.length()];
 }
 ```
 
+## Verifying an Alien Dictionary {#alien-dictionary}
 
-## Find The First Non-Repeated Character in the String / /
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 953
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/verifying-an-alien-dictionary/
+- **Tags**: `Hash Table`, `String`
+- **Techniques**: \@ref(hash-table)
 
 ### Description
-Given a string, find the first non-repeating character in it.
 
-### Example
-For example, if the input string is “GeeksforGeeks”, then output should be ‘f’ and if input string is “GeeksQuiz”,
-then output should be ‘G’.
+Given the order of an alien alphabet and a list of words, determine if the words appear in lexicographically increasing order according to that alien alphabet.
 
-### Solution
+### Examples
+
+```
+Input: words = ["hello","leetcode"], order = "hlabcdefgijkmnopqrstuvwxyz"
+Output: true
+
+Input: words = ["word","world","row"], order = "worldabcefghijkmnpqstuvxyz"
+Output: false
+```
+
+### Constraints
+
+- `1 <= words.length <= 100`
+- `1 <= words[i].length <= 20`
+- `order` is a permutation of lowercase letters
+
+### Solution - Pairwise Comparison with Rank Map
+
 #### Walkthrough
-Have an array to record the count of occurrence for each alphabet int the string regardless of lower or upper case.
-That is, count['G']++, count['e']++, count['e']++ so on and so forth. Therefore, if we traverse the string again,
-with the count we would be able to tell which is the first non repeated character if available.
 
-We should not use boolean array here since there are three outcome for each chracter:
-
-*  appear once
-*  appear multipe times
-*  does not appaer
-
+Precompute the order rank for each letter. Compare consecutive words character by character. The first differing letter determines ordering; if it violates the rank order, return false. Handle prefix cases by ensuring the longer word does not precede its prefix.
 
 #### Analysis
-The runtime complexity is O(n) as each character in string will be visited once.
+
+- **Time Complexity**: O(total letters)
+- **Space Complexity**: O(1)
 
 #### Algorithm
 
+\@ref(hash-table)
+
+1. Build `rank[26]` where `rank[c]` gives order.
+2. For each adjacent pair `(w1, w2)`:
+   1. Scan up to `min(len1, len2)`.
+   2. If chars differ, compare via `rank` and stop.
+   3. If all equal but `len1 > len2`, return false.
+3. Return true if no violations occur.
+
+#### Java Code
+
 ```java
-
-/* The method returns index of first non-repeating
-character in a string. If all characters are repeating
-then returns -1 */
-int firstNonRepeating(String str) {
-    int count[] = new int[1000];
-
-    // calculate count of each characters in the passed string
-    for (int i = 0; i < str.length();  i++) {
-        count[str.charAt(i)]++;
+public boolean isAlienSorted(String[] words, String order) {
+    int[] rank = new int[26];
+    for (int i = 0; i < order.length(); i++) {
+        rank[order.charAt(i) - 'a'] = i;
     }
 
-    for (int i = 0; i < str.length();  i++) {
-        if (count[str.charAt(i)] == 1) {
+    for (int i = 0; i < words.length - 1; i++) {
+        if (!inOrder(words[i], words[i + 1], rank)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+private boolean inOrder(String w1, String w2, int[] rank) {
+    int len = Math.min(w1.length(), w2.length());
+    for (int i = 0; i < len; i++) {
+        char c1 = w1.charAt(i);
+        char c2 = w2.charAt(i);
+        if (c1 != c2) {
+            return rank[c1 - 'a'] < rank[c2 - 'a'];
+        }
+    }
+    return w1.length() <= w2.length();
+}
+```
+
+## First Non-Repeated Character {#first-non-repeated}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: First Unique Character
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**: `Hash Table`, `String`
+- **Techniques**: \@ref(hash-table)
+
+### Description
+
+Given a string `s`, return the index of the first non-repeating character. If every character repeats, return `-1`.
+
+### Examples
+
+```
+Input: "GeeksforGeeks"
+Output: 5   // 'f'
+
+Input: "GeeksQuiz"
+Output: 0   // 'G'
+```
+
+### Constraints
+
+- `1 <= s.length <= 10^5`
+- String may contain uppercase and lowercase letters
+
+### Solution - Frequency Counting
+
+#### Walkthrough
+
+Count occurrences of every character using an array keyed by ASCII value. A second pass over the string returns the first index with frequency `1`.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1) (size of character set)
+
+#### Algorithm
+
+\@ref(hash-table)
+
+1. Initialize `int[] freq = new int[256]`.
+2. For each character, increment its count.
+3. Iterate the string again; return the first index where `freq[c] == 1`.
+4. Return `-1` if none.
+
+#### Java Code
+
+```java
+public int firstUniqChar(String s) {
+    int[] freq = new int[256];
+    for (char c : s.toCharArray()) {
+        freq[c]++;
+    }
+    for (int i = 0; i < s.length(); i++) {
+        if (freq[s.charAt(i)] == 1) {
             return i;
         }
     }
-
     return -1;
 }
 ```
 
+## Number of Substrings Containing All Three Characters {#substrings-all-three}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1358
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
+- **Tags**: `String`, `Sliding Window`
+- **Techniques**: \@ref(two-pointers)
+
+### Description
+
+Given a string `s` consisting only of characters `'a'`, `'b'`, and `'c'`, return the number of substrings containing at least one occurrence of all these three characters.
+
+### Examples
+
+```
+Input: s = "abcabc"
+Output: 10
+Explanation: The substrings containing at least one occurrence of 'a', 'b' and 'c':
+"abc", "abca", "abcab", "abcabc", "bca", "bcab", "bcabc", "cab", "cabc", "abc"
+
+Input: s = "aaacb"
+Output: 3
+Explanation: The substrings containing at least one occurrence of 'a', 'b' and 'c':
+"aaacb", "aacb", "acb"
+
+Input: s = "abc"
+Output: 1
+```
+
+### Constraints
+
+- `3 <= s.length <= 5 * 10^4`
+- `s` consists only of `'a'`, `'b'`, and `'c'` characters
+
+### Solution - Sliding Window
+
+#### Walkthrough
+
+Use a sliding window with two pointers (`l` for left, `r` for right) to track the leftmost valid substring containing all three characters. The key insight is that once a valid window is found at positions `[l, r]`, all substrings extending from this window to the end of the string are also valid. Therefore, we add `n - r` to the result rather than just counting one substring.
+
+Maintain a frequency map to track occurrences of each character. When all three characters are present, shrink the window from the left while the condition holds, adding the count of valid substrings at each step. This ensures we count all possible substrings efficiently without redundant checks.
+
+**Visual Example with `s = "abccabbac"` (n = 9):**
+
+```
+Step 1: r=0, l=0, window="a"
+  count={a:1, b:0, c:0} → uniqueAbc=1, skip
+
+Step 2: r=1, l=0, window="ab"
+  count={a:1, b:1, c:0} → uniqueAbc=2, skip
+
+Step 3: r=2, l=0, window="abc"
+  count={a:1, b:1, c:1} → uniqueAbc=3 ✓
+  Add 9-2=7 substrings starting from l=0: "abc", "abcc", "abcca", "abccab", "abccabb", "abccabba", "abccabbac"
+  Shrink: l=1, window="bc", count={a:0, b:1, c:1} → uniqueAbc=2
+
+Step 4: r=3, l=1, window="bcc"
+  count={a:0, b:1, c:2} → uniqueAbc=2, skip
+
+Step 5: r=4, l=1, window="bcca"
+  count={a:1, b:1, c:2} → uniqueAbc=3 ✓
+  Add 9-4=5 substrings starting from l=1: "bcca", "bccab", "bccabb", "bccabba", "bccabbac"
+  Shrink: l=2, window="cca", count={a:1, b:0, c:2} → uniqueAbc=2
+
+Step 6: r=5, l=2, window="ccab"
+  count={a:1, b:1, c:2} → uniqueAbc=3 ✓
+  Add 9-5=4 substrings starting from l=2: "ccab", "ccabb", "ccabba", "ccabbac"
+  Shrink: l=3, window="cab", count={a:1, b:1, c:1} → uniqueAbc=3 ✓
+  Add 9-5=4 substrings starting from l=3: "cab", "cabb", "cabba", "cabbac"
+  Shrink: l=4, window="ab", count={a:1, b:1, c:0} → uniqueAbc=2
+
+Step 7: r=6, l=4, window="abb"
+  count={a:1, b:2, c:0} → uniqueAbc=2, skip
+
+Step 8: r=7, l=4, window="abba"
+  count={a:2, b:2, c:0} → uniqueAbc=2, skip
+
+Step 9: r=8, l=4, window="abbac"
+  count={a:2, b:2, c:1} → uniqueAbc=3 ✓
+  Add 9-8=1 substring starting from l=4: "abbac"
+  Shrink: l=5, window="bbac", count={a:2, b:1, c:1} → uniqueAbc=3 ✓
+  Add 9-8=1 substring starting from l=5: "bbac"
+  Shrink: l=6, window="bac", count={a:1, b:1, c:1} → uniqueAbc=3 ✓
+  Add 9-8=1 substring starting from l=6: "bac"
+  Shrink: l=7, window="ac", count={a:1, b:0, c:1} → uniqueAbc=2
+
+Total: 7 + 5 + 4 + 4 + 1 + 1 + 1 = 23 ✓
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Each character is visited at most twice, once by the right pointer (`r`) and once by the left pointer (`l`)
+- **Space Complexity**: O(1) - Only three entries in the HashMap (constant space)
+
+#### Algorithm
+
+\@ref(sliding-window), \@ref(two-pointers)
+
+1. Initialize two pointers (`l = 0`, `r` iterates through string) and a frequency map for characters `'a'`, `'b'`, `'c'`.
+2. Expand the window by moving `r` pointer and increment the count for `s.charAt(r)`.
+3. Track the number of distinct characters with at least one occurrence (`uniqueAbc`).
+4. While all three characters are present (`uniqueAbc == 3`):
+   1. Add `n - r` to result (all substrings from current position to end are valid).
+   2. Shrink window from left: decrement count of `s.charAt(l)` and increment `l`.
+   3. If any character count becomes zero, decrement `uniqueAbc`.
+5. Return the total count.
+
+#### Java Code
+
+```java
+class Solution {
+    public int numberOfSubstrings(String s) {
+        int n = s.length();
+        int uniqueAbc = 0;
+        int result = 0;
+        int l = 0;
+
+        Map<Character, Integer> counters = new HashMap<>();
+        counters.put('a', 0);
+        counters.put('b', 0);
+        counters.put('c', 0);
+
+
+        for(int r = 0; r < n; r++) {
+            char c = s.charAt(r);
+            counters.put(c, counters.get(c) + 1);
+
+            if(counters.get(c) == 1)
+                uniqueAbc++;
+            
+            //substring starting at position l and ending at position i contains all three character
+            while(uniqueAbc == 3) {
+                result += n - r; // ALL substrings from l to any position from r to n-1 (rightward till the end) are also valid
+
+                //Shrink window from left by incrementing j until window becomes invalid again
+                c = s.charAt(l);
+                counters.put(c, counters.get(c) - 1);
+
+                if(counters.get(c) == 0)
+                    uniqueAbc--;
+
+                l++;
+            }
+        }
+
+        return result;
+    }
+}
+```
