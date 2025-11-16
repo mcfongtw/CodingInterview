@@ -562,7 +562,7 @@ public List<List<Integer>> twoSumPairs(int[] nums, int target) {
 
 
 
-## 3Sum {#three-sum}
+## Three Sum {#three-sum}
 
 ### Problem Metadata
 
@@ -594,68 +594,123 @@ Explanation: Only these two triplets sum to zero without duplication.
 
 #### Walkthrough
 
-1. Sort the array first so equal values appear together and two-pointer sweeps become possible.
-2. Iterate `i` across the array. For each `nums[i]`, treat it as the first element of a triplet and search for a complementary two-sum (`-nums[i]`) using two pointers `left` and `right`.
-3. Skip duplicate values for both `i` and the pointer adjustments to avoid emitting the same triplet multiple times.
+This solution uses a **Sort + Two Pointers** approach to find all unique triplets that sum to zero.
+
+**Core Strategy:**
+
+1. **Sort the array** to enable the two-pointer technique and group duplicates together
+2. **Fix one element** (`nums[i]`) as the first element of each triplet
+3. **Use two pointers** (`left` and `right`) to find pairs in the remaining sorted array that sum to `-nums[i]`
+4. **Skip duplicates** at all three positions (i, left, right) to ensure unique triplets
+
+**Step-by-step execution:**
+
+1. Sort `nums` in ascending order
+2. Outer loop: iterate `i` from 0 to n-3
+   - Skip `i` if `nums[i] == nums[i-1]` (avoids duplicate triplets with same first element)
+   - Initialize `left = i + 1`, `right = n - 1`
+3. Inner two-pointer loop while `left < right`:
+   - Calculate `sum = nums[i] + nums[left] + nums[right]`
+   - **If sum == 0**: Found valid triplet!
+     - Add `[nums[i], nums[left], nums[right]]` to result
+     - Move both pointers past all duplicate values
+   - **If sum < 0**: Need larger sum → increment `left`
+   - **If sum > 0**: Need smaller sum → decrement `right`
+
+**Why Sorting Enables This Solution:**
+
+- Allows two-pointer technique (move left to increase sum, move right to decrease sum)
+- Groups duplicate values together for efficient skipping
+- Maintains sorted order in output triplets automatically
+
+**Duplicate Handling** (Critical for correctness):
+
+- **First element duplicates**: Skip if `i > 0 && nums[i] == nums[i-1]`
+- **Pointer duplicates**: After finding a match, move both `left` and `right` past all duplicate values to avoid generating the same triplet again
 
 #### Analysis
 
-- **Time Complexity**: O(n�) � sorting is `O(n log n)` and the double-pointer sweep dominates
-- **Space Complexity**: O(1) auxiliary (ignoring the output list)
+- **Time Complexity**: $O(n^2)$
+  - Sorting: $O(n \log n)$
+  - Outer loop: $O(n)$ iterations
+  - Inner two-pointer scan: $O(n)$ per iteration
+  - Overall: $O(n \log n) + O(n^2) = O(n^2)$ (dominated by nested loops)
+- **Space Complexity**: $O(1)$ auxiliary (ignoring the output list)
+  - Only uses a few variables for pointers and temporary storage
+  - This is optimal for the 3Sum problem
 
 #### Algorithm
 
 \@ref(sorting), \@ref(two-pointers)
 
-1. Sort `nums`.
-2. For each index `i` from `0` to `n - 3`:
-   1. If `i > 0` and `nums[i] == nums[i - 1]`, continue (skip duplicates).
-   2. Set `left = i + 1` and `right = n - 1`.
-   3. While `left < right`:
-      - Let `sum = nums[i] + nums[left] + nums[right]`.
-      - If `sum == 0`, record the triplet and move `left`/`right` past duplicates.
-      - If `sum < 0`, increment `left`.
-      - If `sum > 0`, decrement `right`.
-3. Return the collected triplets.
+1. Sort `nums` in ascending order using `Arrays.sort()`
+2. Initialize empty result list
+3. Outer loop: for each index `i` from `0` to `n - 3`:
+   1. **Skip duplicates at position i**: If `i > 0` and `nums[i] == nums[i - 1]`, continue to next iteration
+   2. Initialize two pointers: `left = i + 1`, `right = n - 1`
+   3. Inner loop: while `left < right`:
+      - Calculate `sum = nums[i] + nums[left] + nums[right]`
+      - **Case 1 - Found match** (`sum == 0`):
+        - Add triplet `[nums[i], nums[left], nums[right]]` to result
+        - Store current values: `leftVal = nums[left]`, `rightVal = nums[right]`
+        - Move `left` forward while `nums[left] == leftVal` (skip left duplicates)
+        - Move `right` backward while `nums[right] == rightVal` (skip right duplicates)
+      - **Case 2 - Sum too small** (`sum < 0`):
+        - Increment `left` to increase sum
+      - **Case 3 - Sum too large** (`sum > 0`):
+        - Decrement `right` to decrease sum
+4. Return result list containing all unique triplets
 
 #### Java Code
 
 ```java
-public List<List<Integer>> threeSum(int[] nums) {
-    Arrays.sort(nums);
-    List<List<Integer>> result = new ArrayList<>();
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> result = new ArrayList<>();
+        int len = nums.length;
 
-    for (int i = 0; i < nums.length - 2; i++) {
-        if (i > 0 && nums[i] == nums[i - 1]) {
-            continue;
-        }
-
-        int left = i + 1;
-        int right = nums.length - 1;
-
-        while (left < right) {
-            int sum = nums[i] + nums[left] + nums[right];
-
-            if (sum == 0) {
-                result.add(Arrays.asList(nums[i], nums[left], nums[right]));
-
-                int leftVal = nums[left];
-                int rightVal = nums[right];
-                while (left < right && nums[left] == leftVal) {
-                    left++;
-                }
-                while (left < right && nums[right] == rightVal) {
-                    right--;
-                }
-            } else if (sum < 0) {
-                left++;
-            } else {
-                right--;
+        for(int i = 0; i < (len - 2); i++) {
+            // skip first duplicates
+            if( i> 0 && nums[i] == nums[i-1] ) {
+                continue;
             }
-        }
-    }
 
-    return result;
+            int l = i + 1;
+            int r = len - 1;
+
+            while(l < r) {
+                int sum = nums[i] + nums[l] + nums[r];
+
+                if(sum == 0) {
+                    result.add(Arrays.asList(nums[i], nums[l], nums[r]));
+
+                    int lVal = nums[l];
+                    int rVal = nums[r];
+
+                    // move left pointer past duplicates
+                    while(l < r && nums[l] == lVal) {
+                        l++;
+                    }
+
+                    // move right pointer past duplicates
+                    while(l < r && nums[r] == rVal) {
+                        r--;
+                    }
+
+                } else if(sum < 0) {
+                    // move left pointer forward
+                    l++;
+                } else { //sum > 0
+                    // move right pointer backward
+                    r--;
+                }
+            }
+
+        }
+
+        return result;
+    }
 }
 ```
 
