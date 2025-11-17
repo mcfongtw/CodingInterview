@@ -77,6 +77,8 @@ case "$FORMAT" in
     # For gitbook, move all HTML files to docs/
     rm -rf docs/*
     mv _book/* docs/
+    # Disable Jekyll processing on GitHub Pages
+    touch docs/.nojekyll
     ;;
   pdf)
     # For PDF, copy to docs/ (keep in _book/ too)
@@ -92,6 +94,8 @@ case "$FORMAT" in
     # For all formats, move everything
     rm -rf docs/*
     mv _book/* docs/
+    # Disable Jekyll processing on GitHub Pages
+    touch docs/.nojekyll
     echo "All formats created in docs/"
     ;;
 esac
