@@ -57,7 +57,11 @@ for html_file in glob.glob('docs/*.html'):
     for id_val in ids:
         id_map[id_val].append(html_file)
 
-duplicates = {k: v for k, v in id_map.items() if len(v) > 1}
+# Filter out known false positives
+# - 'section-' is a bookdown artifact present in all files (harmless)
+known_false_positives = {'section-'}
+duplicates = {k: v for k, v in id_map.items() if len(v) > 1 and k not in known_false_positives}
+
 if duplicates:
     print(f"   ❌ Found {len(duplicates)} duplicate IDs:")
     for id_val, files in list(duplicates.items())[:5]:  # Show first 5

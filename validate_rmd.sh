@@ -31,12 +31,12 @@ if [ "$VERBOSE" = "true" ]; then
 fi
 
 # Run Python validation script
-python3 << PYEOF
-verbose = ${VERBOSE}
-
+python3 - "$VERBOSE" << 'PYEOF'
+import sys
 import glob
 import re
-import sys
+
+verbose = sys.argv[1] == 'true'
 
 class RmdValidator:
     def __init__(self):
