@@ -81,6 +81,91 @@ When adding new problems:
 - Follow the established problem template structure
 - Add new chapters to the book by creating numbered .Rmd files (e.g., `13-newchapter.Rmd`)
 
+### Workflow for Adding New Problems
+
+**Two-Phase Approach:**
+
+#### Phase 1: Problem Structure Creation (Claude's Role)
+When the user requests a new problem to be added:
+
+1. **Fetch Problem Details**: Download problem description, examples, constraints, and metadata from the specified platform (LeetCode, HackerRank, etc.)
+
+2. **Create Problem Structure**: Add a new section in the appropriate chapter file with:
+   - Problem metadata (Platform, ID, Difficulty, URL, Tags)
+   - **Techniques**: Use descriptive labels with cross-references (e.g., `[Hash Table](\@ref(hash-table))`, `[Dynamic Programming](\@ref(dp))`)
+   - Complete problem description
+   - Examples with input/output
+   - Constraints
+   - Empty solution structure with placeholders:
+     ```markdown
+     ### Solution
+
+     #### Walkthrough
+
+     [Explain the approach and thought process]
+
+     #### Analysis
+
+     - **Time Complexity**: O(?)
+     - **Space Complexity**: O(?)
+
+     #### Implementation Steps
+
+     1. Step 1
+     2. Step 2
+     3. Step 3
+
+     #### Java Code
+
+     \```java
+     public class Solution {
+         public ReturnType methodName(InputType input) {
+             // Implementation
+         }
+     }
+     \```
+     ```
+
+3. **Assign Unique Anchor ID**: Ensure the problem has a unique anchor (e.g., `{#min-steps-anagram}`)
+
+4. **Update problems_data.csv**: Add a new row to `problems_data.csv` with the problem metadata:
+   ```csv
+   title,platform,problem_id,difficulty,chapter,chapter_num,anchor
+   Minimum Number of Steps to Make Two Strings Anagram,LeetCode,1347,Medium,String Manipulation,09,min-steps-anagram
+   ```
+   - Insert the row in the appropriate chapter section (keep problems grouped by chapter)
+   - Ensure the anchor matches the one used in the .Rmd file
+   - This CSV is used for problem indexing and lookups
+
+5. **Do NOT implement the solution** - Leave the solution section as placeholders for the user to fill in
+
+#### Phase 2: Solution Review & Optimization (User + Claude)
+After the user implements their solution:
+
+1. **User implements** the solution in the placeholders
+2. **User requests review** - Claude can then:
+   - Review the solution for correctness and efficiency
+   - Analyze and verify time/space complexity
+   - Suggest optimizations or alternative approaches
+   - Help document the walkthrough and implementation steps
+   - Ensure code follows best practices
+
+**Example Request:**
+```
+User: "Add LeetCode problem 1347 to string manipulation chapter"
+Claude: [Creates structure with metadata, description, examples, constraints, empty solution]
+
+User: [Implements solution]
+User: "Review my solution for problem 1347"
+Claude: [Reviews, analyzes complexity, suggests improvements]
+```
+
+This two-phase approach ensures:
+- User practices problem-solving independently
+- Solutions are verified by the user on the platform
+- Claude assists with structure, documentation, and optimization
+- All content follows established patterns
+
 ## Deployment
 
 Changes merged to the master branch trigger GitHub Actions to deploy the `docs/` directory to GitHub Pages. Run `build.sh` locally before committing to ensure the static site is up to date.

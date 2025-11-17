@@ -941,3 +941,120 @@ class Solution {
     }
 }
 ```
+
+## Minimum Number of Steps to Make Two Strings Anagram {#min-steps-anagram}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1347
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/minimum-number-of-steps-to-make-two-strings-anagram/
+- **Tags**: `Hash Table`, `String`, `Counting`
+- **Techniques**: [Hash Table](\@ref(hash-table))
+
+### Description
+
+You are given two strings of the same length `s` and `t`. In one step you can choose any character of `t` and replace it with another character.
+
+Return the minimum number of steps to make `t` an anagram of `s`.
+
+An **Anagram** of a string is a string that contains the same characters with a different (or the same) permutation.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "bab", t = "aba"
+Output: 1
+Explanation: Replace the first 'a' in t with 'b', t = "bba" which is anagram of s.
+```
+
+**Example 2:**
+```
+Input: s = "leetcode", t = "practice"
+Output: 5
+Explanation: Replace 'p', 'r', 'a', 'i' and 'c' from t with proper characters to make t anagram of s.
+```
+
+**Example 3:**
+```
+Input: s = "anagram", t = "mangaar"
+Output: 0
+Explanation: "anagram" and "mangaar" are anagrams.
+```
+
+### Constraints
+
+- `1 <= s.length <= 5 * 10^4`
+- `s.length == t.length`
+- `s` and `t` consist of lowercase English letters only
+
+### Solution
+
+#### Walkthrough
+
+To make `t` an anagram of `s`, both strings must have identical character frequencies. The solution uses a **frequency counting** approach:
+
+1. Count the frequency of each character in both strings using arrays of size 26 (for lowercase English letters)
+2. Compare frequencies: for each character, if `s` has more occurrences than `t`, those represent characters that `t` is missing
+3. Sum the differences where `s_freq[i] > t_freq[i]` - this gives the minimum number of replacements needed
+
+**Key Insight**: We only count characters that `s` has but `t` lacks (or has fewer of). Characters that `t` has in excess will automatically be replaced by the missing characters, so we don't need to count them separately.
+
+**Example**: For `s = "bab"` and `t = "aba"`:
+- `s_freq`: a=1, b=2
+- `t_freq`: a=2, b=1
+- Difference: b appears 1 more time in `s` → need 1 replacement
+- Result: 1
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the length of the strings
+  - Two passes to count frequencies: O(n) each
+  - One pass through the 26-element frequency array: O(26) = O(1)
+  - Total: O(2n + 26) = O(n)
+
+- **Space Complexity**: O(1)
+  - Two fixed-size arrays of 26 integers each
+  - Space does not scale with input size
+  - Total: O(52) = O(1)
+
+#### Implementation Steps
+
+1. Create a helper method `countLetterFrequency(String)` that returns a frequency array for a given string
+2. Count character frequencies for both `s` and `t` using the helper method
+3. Initialize a `result` counter to 0
+4. Iterate through the 26 possible characters (a-z)
+5. For each character, if `s_freq[i] > t_freq[i]`, add the difference to `result`
+6. Return `result` as the minimum number of steps
+
+#### Java Code
+
+```java
+class Solution {
+    public int minSteps(String s, String t) {
+        int[] s_freq = countLetterFrequency(s);
+        int[] t_freq = countLetterFrequency(t);
+        int result = 0;
+
+        for(int i = 0; i < 26; i++) {
+            if(s_freq[i] > t_freq[i]) {
+                result += s_freq[i] - t_freq[i];
+            }
+        }
+
+        return result;
+    }
+
+    private int[] countLetterFrequency(String str) {
+        int[] freq = new int[26];
+
+        for(char c : str.toCharArray()) {
+            freq[c - 'a']++;
+        }
+
+        return freq;
+    }
+}
+```
