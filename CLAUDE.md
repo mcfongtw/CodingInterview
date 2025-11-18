@@ -128,11 +128,13 @@ When the user requests a new problem to be added:
 
 3. **Assign Unique Anchor ID**: Ensure the problem has a unique anchor (e.g., `{#min-steps-anagram}`)
 
-4. **Update problems_data.csv**: Add a new row to `problems_data.csv` with the problem metadata:
+4. **Update problems_data.csv** (REQUIRED - do this immediately when creating the problem structure):
+   Add a new row to `problems_data.csv` with the problem metadata:
    ```csv
    title,platform,problem_id,difficulty,chapter,chapter_num,anchor
    Minimum Number of Steps to Make Two Strings Anagram,LeetCode,1347,Medium,String Manipulation,09,min-steps-anagram
    ```
+   - **IMPORTANT**: This must be done at the same time as creating the problem structure in the .Rmd file
    - Insert the row in the appropriate chapter section (keep problems grouped by chapter)
    - Ensure the anchor matches the one used in the .Rmd file
    - This CSV is used for problem indexing and lookups
