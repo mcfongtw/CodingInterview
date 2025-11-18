@@ -9,7 +9,7 @@
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/sort-list/
 - **Tags**: `Linked List`, `Divide and Conquer`
-- **Techniques**: \@ref(dnc), \@ref(ms), \@ref(recursion)
+- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc), [Merge Sort](glossary-of-algorithm.html#ms), [Recursion](glossary-of-algorithm.html#recursion)
 
 ### Description
 
@@ -41,9 +41,7 @@ Merge sort divides the list at its midpoint, recursively sorts each half, and me
 - **Time Complexity**: O(n log n), merge sort across the list
 - **Space Complexity**: O(1) auxiliary (recursion stack ignored per problem statement) plus O(log n) call stack
 
-#### Algorithm
-
-\@ref(dnc), \@ref(ms), \@ref(recursion)
+#### Implementation Steps
 
 1. If the list has zero or one node, return it.
 2. Use slow/fast pointers to find the midpoint; disconnect the first half.
@@ -103,7 +101,7 @@ public class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/insertion-sort-list/
 - **Tags**: `Linked List`, `Sorting`
-- **Techniques**: \@ref(sorting)
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting)
 
 ### Description
 
@@ -135,9 +133,7 @@ Traverse the list and insert each node into the correct position of a growing so
 - **Time Complexity**: O(n^2) due to repeated linear scans for each insertion
 - **Space Complexity**: O(1) extra space
 
-#### Algorithm
-
-\@ref(sorting)
+#### Implementation Steps
 
 1. Create `dummy` pointing to `null`; `curr` traverses the original list.
 2. For each `curr`, remove it from the list and find its insert location starting from `dummy`.
@@ -177,7 +173,7 @@ public class Solution {
 - **Difficulty**: Level 2
 - **URL**: https://www.firecode.io/courses
 - **Tags**: `Array`, `Sorting`
-- **Techniques**: \@ref(sorting)
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting)
 
 ### Description
 
@@ -206,9 +202,7 @@ Selection sort repeatedly selects the smallest remaining element and swaps it in
 - **Time Complexity**: O(n^2) due to nested loops
 - **Space Complexity**: O(1)
 
-#### Algorithm
-
-\@ref(sorting)
+#### Implementation Steps
 
 1. For `i` from `0` to `n - 1`, set `minIndex = i`.
 2. For `j` from `i + 1` to `n - 1`, update `minIndex` when `arr[j] < arr[minIndex]`.
@@ -243,7 +237,7 @@ public int[] selectionSort(int[] arr) {
 - **Difficulty**: Medium
 - **URL**: N/A
 - **Tags**: `Array`, `Divide and Conquer`, `Sorting`
-- **Techniques**: \@ref(dnc), \@ref(qs)
+- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc), [Quick Sort](glossary-of-algorithm.html#qs)
 
 ### Description
 
@@ -272,9 +266,7 @@ Quick sort picks a pivot (last element), partitions the array so values smaller 
 - **Time Complexity**: Average O(n log n); worst-case O(n^2) when pivot choices are poor
 - **Space Complexity**: O(log n) recursion stack
 
-#### Algorithm
-
-\@ref(dnc), \@ref(qs)
+#### Implementation Steps
 
 1. Recursively sort the subarray `[lo, hi]`.
 2. Choose `arr[hi]` as the pivot, partition so `pivotIndex` is the final pivot position.
@@ -326,7 +318,7 @@ private void swap(int[] arr, int i, int j) {
 - **Difficulty**: Medium
 - **URL**: N/A
 - **Tags**: `Array`, `Sorting`, `Heap`
-- **Techniques**: \@ref(sorting), \@ref(heap), \@ref(bs)
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting), [Heap](glossary-of-algorithm.html#heap), [Bubble Sort](glossary-of-algorithm.html#bs)
 
 ### Description
 
@@ -355,9 +347,7 @@ Sort the entire array in ascending order and copy the last `k` values, reversing
 - **Time Complexity**: O(n log n)
 - **Space Complexity**: O(1) auxiliary (in-place sort)
 
-#### Algorithm
-
-\@ref(sorting)
+#### Implementation Steps
 
 1. Sort `nums` ascending.
 2. Copy elements from `n - k` to `n - 1` into the answer array (optionally reverse).
@@ -386,9 +376,7 @@ Bubble sort guarantees that after one full pass the largest element bubbles to t
 - **Time Complexity**: O(n * k)
 - **Space Complexity**: O(1)
 
-#### Algorithm
-
-\@ref(bs)
+#### Implementation Steps
 
 1. Repeat `k` times:
    1. Sweep the array bubbling the largest remaining element to the end.
@@ -426,9 +414,7 @@ Maintain a min heap that stores the current `k` largest numbers. Push each numbe
 - **Time Complexity**: O(n log k)
 - **Space Complexity**: O(k)
 
-#### Algorithm
-
-\@ref(heap)
+#### Implementation Steps
 
 1. Initialize an empty min heap.
 2. For each `num` in `nums`, push it; if heap size exceeds `k`, pop the smallest.

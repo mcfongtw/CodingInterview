@@ -9,7 +9,7 @@
 - **Difficulty**: Level 2
 - **URL**: https://www.firecode.io/
 - **Tags**: `Math`, `Bit Manipulation`, `Recursion`
-- **Techniques**: \@ref(recursion)
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion)
 
 ### Description
 
@@ -40,9 +40,8 @@ Repeatedly divide `n` by `2` as long as it is even. If we reach `1`, `n` is a po
 - **Time Complexity**: O(log n)
 - **Space Complexity**: O(log n) recursion depth
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(recursion)
 
 1. Handle `n <= 0` as `false`.
 2. Base case `n == 1` is `true`.
@@ -94,7 +93,7 @@ public boolean isPowerOfTwo(int n) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/powx-n/
 - **Tags**: `Math`, `Divide and Conquer`
-- **Techniques**: \@ref(dnc), \@ref(recursion)
+- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc), [Recursion](glossary-of-algorithm.html#recursion)
 
 ### Description
 
@@ -126,9 +125,8 @@ Use exponentiation by squaring: `x^n = (x^{n/2})^2 * x^{n%2}`. Handle negative e
 - **Time Complexity**: O(log |n|)
 - **Space Complexity**: O(log |n|) recursion stack
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dnc), \@ref(recursion)
 
 1. If `n == 0`, return `1`.
 2. If `n < 0`, invert `x` and negate `n`.
@@ -168,7 +166,7 @@ private double fastPow(double x, long n) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/count-primes/
 - **Tags**: `Math`, `Sieve`
-- **Techniques**: \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -196,9 +194,8 @@ Maintain a boolean array marking composite numbers. Starting from `2`, whenever 
 - **Time Complexity**: O(n log log n)
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dp)
 
 1. If `n < 2`, return `0`.
 2. Create boolean `isComposite[n]`.
@@ -239,7 +236,7 @@ public int countPrimes(int n) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/sum-of-two-integers/
 - **Tags**: `Bit Manipulation`
-- **Techniques**: \@ref(bitwise)
+- **Techniques**: [Bitwise Operations](glossary-of-algorithm.html#bitwise)
 
 ### Description
 
@@ -267,9 +264,8 @@ Sum without carry is `a ^ b`; carry bits are `(a & b) << 1`. Iteratively propaga
 - **Time Complexity**: O(1) for fixed-width integers
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(bitwise)
 
 1. While `b != 0`, compute `carry = (a & b) << 1` and `a = a ^ b`.
 2. Set `b = carry`.
@@ -297,7 +293,7 @@ public int getSum(int a, int b) {
 - **Difficulty**: Level 2
 - **URL**: https://www.firecode.io/
 - **Tags**: `Dynamic Programming`, `Recursion`
-- **Techniques**: \@ref(recursion), \@ref(dp), \@ref(memo)
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion), [Dynamic Programming](glossary-of-algorithm.html#dp), [Memoization](glossary-of-algorithm.html#memo)
 
 ### Description
 
@@ -435,7 +431,7 @@ private int fibMemoHelper(int n, int[] memo) {
 - **Difficulty**: Medium
 - **URL**: N/A
 - **Tags**: `Dynamic Programming`, `Recursion`
-- **Techniques**: \@ref(recursion), \@ref(dp)
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion), [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -466,9 +462,8 @@ Define `dp[n]` as the minimal operations to reach `1`. Recursively compute each 
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n) for memoization
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(recursion), \@ref(dp)
 
 1. Base case: `dp[1] = 0`.
 2. For other `n`, evaluate `1 + dp[n-1]`.

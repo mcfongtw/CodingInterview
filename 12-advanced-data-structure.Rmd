@@ -9,7 +9,7 @@
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/lru-cache/
 - **Tags**: `Hash Table`, `Linked List`, `Design`
-- **Techniques**: \@ref(hash-table), \@ref(linked-list)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Linked List](glossary-of-algorithm.html#linked-list)
 
 ### Description
 
@@ -47,9 +47,8 @@ Store key-to-node mappings in a hash map, while nodes form a doubly linked list 
 - **Time Complexity**: O(1) per operation
 - **Space Complexity**: O(capacity)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(hash-table), \@ref(linked-list)
 
 1. Maintain `Map<Integer, Node> cache` and sentinel `head`, `tail`.
 2. `get(key)`:
@@ -140,9 +139,8 @@ Java’s `LinkedHashMap` already maintains access order. Extend it and override 
 - **Time Complexity**: O(1) expected per operation
 - **Space Complexity**: O(capacity)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(hash-table)
 
 1. Extend `LinkedHashMap<Integer, Integer>` with accessOrder flag set to true.
 2. Define `removeEldestEntry` to compare size with capacity.
@@ -184,7 +182,7 @@ class LRUCacheLinkedHashMap {
 - **Difficulty**: Easy
 - **URL**: N/A
 - **Tags**: `Queue`, `Stack`, `Design`
-- **Techniques**: \@ref(queue)
+- **Techniques**: [Queue](glossary-of-algorithm.html#queue)
 
 ### Description
 
@@ -216,9 +214,8 @@ Maintain a single queue. For `push(x)` enqueue `x`, then rotate the previous ele
 - **Time Complexity**: `push` O(n), others O(1)
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(queue)
 
 1. `push(x)`: enqueue `x`, then loop `size-1` times moving front to back.
 2. `pop()`: dequeue front.
@@ -261,7 +258,7 @@ class MyStack {
 - **Difficulty**: Easy
 - **URL**: N/A
 - **Tags**: `Array`, `Linked List`, `Stack`
-- **Techniques**: \@ref(array), \@ref(linked-list), \@ref(stack)
+- **Techniques**: [Array](glossary-of-algorithm.html#array), [Linked List](glossary-of-algorithm.html#linked-list), [Stack](glossary-of-algorithm.html#stack)
 
 ### Description
 
@@ -293,9 +290,8 @@ Use a fixed-size array with `head`, `tail`, and `count`. Enqueue writes at `tail
 - **Time Complexity**: O(1)
 - **Space Complexity**: O(capacity)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(array)
 
 1. Initialize `head = 0`, `tail = 0`, `count = 0`.
 2. `enqueue(x)`: if count == capacity throw overflow; assign `data[tail] = x`, `tail = (tail + 1) % capacity`, increment count.
@@ -358,9 +354,8 @@ Maintain `front` and `rear` pointers of a singly linked list. Enqueue appends at
 - **Time Complexity**: O(1)
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(linked-list)
 
 1. Each node holds value plus `next`.
 2. `enqueue(x)`: create node, append at `rear`, update pointers.
@@ -422,9 +417,8 @@ Use two stacks `in` and `out`. Enqueue pushes onto `in`. Dequeue/peek pop from `
 - **Time Complexity**: Amortized O(1)
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(stack)
 
 1. `enqueue(x)`: push onto `in`.
 2. `dequeue()` / `peek()`: if `out` empty, move all elements from `in` to `out`, then pop/peek.
@@ -474,7 +468,7 @@ class QueueWithStacks {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/design-hashset/
 - **Tags**: `Hash Table`, `Design`
-- **Techniques**: \@ref(hash-table)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -510,9 +504,8 @@ Create an array of buckets; each bucket holds a linked list of stored keys. The 
 - **Time Complexity**: Average O(1); worst-case O(n) if all keys collide
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(hash-table)
 
 1. Choose bucket count (e.g., 1000) and allocate arrays of lists.
 2. Map keys to bucket index via modulo.
@@ -590,7 +583,7 @@ class MyHashSet {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/design-hashmap/
 - **Tags**: `Hash Table`, `Design`
-- **Techniques**: \@ref(hash-table)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -626,9 +619,8 @@ Reuse the separate chaining idea but store key/value pairs in nodes. When insert
 - **Time Complexity**: Average O(1), worst-case O(n)
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(hash-table)
 
 1. Buckets array sized at 10,000 to balance collisions.
 2. Hash function `key % size`.

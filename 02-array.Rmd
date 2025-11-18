@@ -53,7 +53,7 @@ for(int i = 0, j = 0; i < A.length; j < B.length;) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/two-sum/
 - **Tags**: `Hash Table`, `Array`
-- **Techniques**: Hash Table, Two Pointers
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
 
 ### Description
@@ -115,9 +115,8 @@ This allows us to find the complement in O(1) time.
 - **Space Complexity**: O(n) - Hash map stores up to n elements
 
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(hash-table)
 
 1. Initialize an empty `HashMap<Integer, Integer>` to store `<value, index>` pairs.
 2. For each index `i` from `0` to `nums.length - 1`:
@@ -186,7 +185,7 @@ public int[] twoSum(int[] nums, int target) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
 - **Tags**: `Array`, `Two Pointers`, `Binary Search`
-- **Techniques**: Two Pointers \@ref(two-pointers), Binary Search \@ref(binary-search)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Binary Search](glossary-of-algorithm.html#binary-search)
 
 ### Description
 
@@ -220,7 +219,7 @@ Use two indices, `left` at the start and `right` at the end of the array. Compar
 - **Time Complexity**: O(n) � each pointer moves at most `numbers.length` steps
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize `left = 0`, `right = numbers.length - 1`.
 2. While `left < right`:
@@ -266,7 +265,7 @@ Iterate through each index `i`, treat `numbers[i]` as the first addend, and bina
 - **Time Complexity**: O(n log n) � one binary search per element
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Loop `i` from `0` to `numbers.length - 2`.
 2. Set `complement = target - numbers[i]`.
@@ -315,7 +314,7 @@ private int binarySearch(int[] numbers, int left, int right, int target) {
 - **Difficulty**: Easy
 - **URL**: N/A
 - **Tags**: `Array`, `Hash Table`
-- **Techniques**: Hash Table \@ref(hash-table)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -352,7 +351,7 @@ Scan the array once while storing previously seen values in a `HashSet`. For eac
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n) � set of seen values
 
-#### Algorithm
+#### Implementation Steps
 
 1. Create an empty `HashSet<Integer>`.
 2. For each `num` in `nums`:
@@ -390,7 +389,7 @@ public boolean sumsToTarget(int[] nums, int k) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/two-sum-iv-input-is-a-bst/
 - **Tags**: `Tree`, `Binary Search Tree`, `Hash Table`
-- **Techniques**: Depth First Search \@ref(dfs), Hash Table \@ref(hash-table)
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -445,7 +444,7 @@ Because every value is checked exactly once, the traversal stays linear.
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n) in the worst case due to the set + recursion stack
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize an empty `HashSet<Integer>`.
 2. Perform DFS:
@@ -486,7 +485,7 @@ private boolean dfs(TreeNode node, int target, Set<Integer> seen) {
 - **Difficulty**: Medium
 - **URL**: N/A
 - **Tags**: `Array`, `Two Pointers`, `Sorting`
-- **Techniques**: Two Pointers \@ref(two-pointers)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
 ### Description
 
@@ -516,7 +515,7 @@ Place `left` at the start and `right` at the end of the array. Compare `nums[lef
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1) auxiliary (result list not counted)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize `left = 0`, `right = nums.length - 1`, and an empty result list.
 2. While `left < right`:
@@ -571,7 +570,7 @@ public List<List<Integer>> twoSumPairs(int[] nums, int target) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/3sum/
 - **Tags**: `Array`, `Sorting`, `Two Pointers`
-- **Techniques**: Sorting, Two Pointers \@ref(two-pointers)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Sorting](glossary-of-algorithm.html#sorting)
 
 ### Description
 
@@ -639,9 +638,8 @@ This solution uses a **Sort + Two Pointers** approach to find all unique triplet
   - Only uses a few variables for pointers and temporary storage
   - This is optimal for the 3Sum problem
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(sorting), \@ref(two-pointers)
 
 1. Sort `nums` in ascending order using `Arrays.sort()`
 2. Initialize empty result list
@@ -726,7 +724,7 @@ class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/3sum-closest/
 - **Tags**: `Array`, `Sorting`, `Two Pointers`
-- **Techniques**: Sorting, Two Pointers \@ref(two-pointers)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Sorting](glossary-of-algorithm.html#sorting)
 
 ### Description
 
@@ -758,9 +756,8 @@ Explanation: The triplet [-1,2,1] sums to 2, which is closest to target.
 - **Time Complexity**: O(n�)
 - **Space Complexity**: O(1) auxiliary
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(sorting), \@ref(two-pointers)
 
 1. Sort `nums`.
 2. Initialize `closest = nums[0] + nums[1] + nums[2]`.
@@ -816,7 +813,7 @@ public int threeSumClosest(int[] nums, int target) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/4sum/
 - **Tags**: `Array`, `Sorting`, `Two Pointers`
-- **Techniques**: Sorting, Two Pointers \@ref(two-pointers)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Sorting](glossary-of-algorithm.html#sorting)
 
 ### Description
 
@@ -845,9 +842,8 @@ Sort the array, then fix two indices `i` and `j`. For each pair, run a two-point
 - **Time Complexity**: O(n^3)
 - **Space Complexity**: O(1) auxiliary (excluding output)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(sorting), \@ref(two-pointers)
 
 1. Sort `nums`.
 2. For each `i` from `0` to `n - 4` (skipping duplicates):
@@ -913,7 +909,7 @@ public List<List<Integer>> fourSum(int[] nums, int target) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/4sum-ii/
 - **Tags**: `Array`, `Hash Table`, `Counting`
-- **Techniques**: Hash Table \@ref(hash-table)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -950,9 +946,8 @@ Rearrange the equation to `(A[i] + B[j]) = -(C[k] + D[l])`. Precompute all pair 
 - **Time Complexity**: O(n�)
 - **Space Complexity**: O(n�) for storing pair sums
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(hash-table)
 
 1. Iterate over all pairs `(i, j)` of `A` and `B`:
    - Compute `sum = A[i] + B[j]`.
@@ -997,7 +992,7 @@ public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
 - **Difficulty**: Easy
 - **URL**: N/A
 - **Tags**: `Array`, `Greedy`
-- **Techniques**: Greedy \@ref(greedy)
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy)
 
 ### Description
 
@@ -1027,9 +1022,8 @@ Track the minimum value seen so far while scanning the array. For each element, 
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(greedy)
 
 1. Initialize `minValue = +8` and `maxGain = 0`.
 2. For each element `x`:
@@ -1064,7 +1058,7 @@ public int maxGain(int[] nums) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/pascals-triangle/
 - **Tags**: `Array`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -1099,9 +1093,8 @@ Start with the first row `[1]`, then iteratively build each subsequent row by in
 - **Time Complexity**: O(n?)
 - **Space Complexity**: O(n?) to store the triangle
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dp)
 
 1. If `numRows == 0`, return an empty list.
 2. Initialize the triangle with `[1]`.
@@ -1150,7 +1143,7 @@ public List<List<Integer>> generate(int numRows) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/search-in-rotated-sorted-array/
 - **Tags**: `Array`, `Binary Search`
-- **Techniques**: Divide and Conquer \@ref(dnc), Binary Search \@ref(binary-search)
+- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc), [Binary Search](glossary-of-algorithm.html#binary-search)
 
 ### Description
 
@@ -1183,9 +1176,8 @@ At each step, a sorted half still exists. Compare `nums[mid]` with `nums[left]` 
 - **Time Complexity**: O(log n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dnc), \@ref(binary-search)
 
 1. Set `left = 0`, `right = n - 1`.
 2. While `left <= right`:
@@ -1240,7 +1232,7 @@ public int search(int[] nums, int target) {
 - **Difficulty**: Hard
 - **URL**: https://leetcode.com/problems/median-of-two-sorted-arrays/
 - **Tags**: `Array`, `Binary Search`, `Divide and Conquer`
-- **Techniques**: Divide and Conquer \@ref(dnc), Recursion \@ref(recursion)
+- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc), [Recursion](glossary-of-algorithm.html#recursion)
 
 ### Description
 
@@ -1273,9 +1265,8 @@ The median can be expressed using the `k`-th smallest element where `k = (m + n 
 - **Time Complexity**: O(log(m + n))
 - **Space Complexity**: O(1) excluding recursion stack
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dnc), \@ref(recursion)
 
 1. Let `total = m + n`.
 2. If `total` is odd, return `findKth(nums1, 0, len1 - 1, nums2, 0, len2 - 1, (total + 1) / 2)`.
@@ -1341,7 +1332,7 @@ private double findKth(int[] nums1, int start1, int end1,
 - **Difficulty**: Easy
 - **URL**: N/A
 - **Tags**: `Array`, `Hash Table`
-- **Techniques**: Hash Table \@ref(hash-table)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -1373,9 +1364,8 @@ Use a hash map to track how many times each value has appeared. When an element'
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(hash-table)
 
 1. Initialize an empty `HashMap<Integer, Integer>` and an empty result list.
 2. For each element `x` in `nums`:
@@ -1413,7 +1403,7 @@ public List<Integer> kthOccurrences(int[] nums, int k) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/permutations/
 - **Tags**: `Array`, `Backtracking`
-- **Techniques**: Backtracking \@ref(backtrack)
+- **Techniques**: [Backtracking](glossary-of-algorithm.html#backtrack)
 
 ### Description
 
@@ -1442,9 +1432,8 @@ Build permutations by exploring each number once per path. Maintain a `visited` 
 - **Time Complexity**: O(n ? n!)
 - **Space Complexity**: O(n) recursion + visited state
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(backtrack)
 
 1. Initialize `result` and `visited` array.
 2. Define `backtrack(path)`:
@@ -1493,7 +1482,7 @@ private void backtrack(List<Integer> path, int[] nums, boolean[] visited) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/permutations-ii/
 - **Tags**: `Array`, `Backtracking`
-- **Techniques**: Backtracking \@ref(backtrack)
+- **Techniques**: [Backtracking](glossary-of-algorithm.html#backtrack)
 
 ### Description
 
@@ -1522,9 +1511,8 @@ Sort the input so duplicates are adjacent. During backtracking, skip an index `i
 - **Time Complexity**: O(n ? n!) in worst case
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(backtrack)
 
 1. Sort `nums`, initialize `visited` boolean array and result list.
 2. `backtrack(path)`:
@@ -1578,7 +1566,7 @@ private void backtrack(List<Integer> path, int[] nums, boolean[] visited) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/subsets-ii/
 - **Tags**: `Array`, `Backtracking`
-- **Techniques**: Backtracking \@ref(backtrack)
+- **Techniques**: [Backtracking](glossary-of-algorithm.html#backtrack)
 
 ### Description
 
@@ -1607,9 +1595,8 @@ Sort `nums` so duplicates are adjacent. During recursion, start each depth from 
 - **Time Complexity**: O(2^n)
 - **Space Complexity**: O(n) recursion stack
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(backtrack)
 
 1. Sort `nums`, initialize result list.
 2. Define `backtrack(start, path)`:
@@ -1653,7 +1640,7 @@ private void backtrack(int[] nums, int start, List<Integer> path) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/sort-array-by-parity/
 - **Tags**: `Array`, `Two Pointers`
-- **Techniques**: Two Pointers \@ref(two-pointers)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
 ### Description
 
@@ -1682,9 +1669,8 @@ Use two pointers. Advance `left` until an odd number is found and decrement `rig
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(two-pointers)
 
 1. Set `left = 0`, `right = A.length - 1`.
 2. While `left < right`:
@@ -1727,7 +1713,7 @@ public int[] sortArrayByParity(int[] A) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/merge-intervals/
 - **Tags**: `Array`, `Sorting`
-- **Techniques**: Sorting \@ref(sorting)
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting)
 
 ### Description
 
@@ -1757,9 +1743,8 @@ Sort the intervals by starting point. Iterate through them, merging with the las
 - **Time Complexity**: O(n log n)
 - **Space Complexity**: O(n) for the output list
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(sorting)
 
 1. Sort intervals ascending by start.
 2. Initialize an empty list `merged`.
@@ -1804,7 +1789,7 @@ public int[][] merge(int[][] intervals) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/non-overlapping-intervals/
 - **Tags**: `Array`, `Greedy`, `Sorting`
-- **Techniques**: Sorting \@ref(sorting), Greedy \@ref(greedy)
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting), [Greedy](glossary-of-algorithm.html#greedy)
 
 ### Description
 
@@ -1833,9 +1818,8 @@ Sort intervals by end time; keep a running end boundary for the last accepted in
 - **Time Complexity**: O(n log n)
 - **Space Complexity**: O(1) apart from sorting
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(greedy)
 
 1. Sort intervals ascending by end, breaking ties by start.
 2. Initialize `count = 1`, `end = intervals[0][1]`.
@@ -1881,7 +1865,7 @@ public int eraseOverlapIntervals(int[][] intervals) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/interval-list-intersections/
 - **Tags**: `Array`, `Two Pointers`
-- **Techniques**: Two Pointers \@ref(two-pointers)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
 ### Description
 
@@ -1910,9 +1894,8 @@ Traverse both lists with indices `i` and `j`. For each pair of intervals, comput
 - **Time Complexity**: O(m + n)
 - **Space Complexity**: O(1) excluding output
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(two-pointers)
 
 1. Initialize `i = j = 0`, result list.
 2. While `i < len(A)` and `j < len(B)`:
@@ -1956,7 +1939,7 @@ public int[][] intervalIntersection(int[][] A, int[][] B) {
 - **Difficulty**: Hard
 - **URL**: https://leetcode.com/problems/insert-interval/
 - **Tags**: `Array`
-- **Techniques**: Sorting \@ref(sorting)
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting)
 
 ### Description
 
@@ -1985,7 +1968,7 @@ Iterate through intervals, appending those ending before the new interval. Merge
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n) output list
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize result list and index `i = 0`.
 2. Append all intervals whose end < newInterval.start.
@@ -2028,7 +2011,7 @@ public int[][] insert(int[][] intervals, int[] newInterval) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/find-common-characters/
 - **Tags**: `Array`, `Hash Table`
-- **Techniques**: Hash Table \@ref(hash-table)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -2057,9 +2040,8 @@ Track the frequency of each letter in the first string. For every next string, c
 - **Time Complexity**: O(n * L) where `L` is average word length
 - **Space Complexity**: O(1) for 26 counts
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(hash-table)
 
 1. Initialize `minFreq` with counts from the first word.
 2. For each subsequent word:
@@ -2104,7 +2086,7 @@ public List<String> commonChars(String[] A) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/top-k-frequent-elements/
 - **Tags**: `Array`, `Hash Table`, `Heap`
-- **Techniques**: Hash Table \@ref(hash-table)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -2133,9 +2115,8 @@ Count element frequencies with a map. Maintain a min-heap of size `k` keyed by f
 - **Time Complexity**: O(n log k)
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(hash-table)
 
 1. Build `Map<Integer,Integer>` counts.
 2. Create a min-heap storing `{frequency, value}` pairs.
@@ -2178,7 +2159,7 @@ public int[] topKFrequent(int[] nums, int k) {
 - **Difficulty**: Medium
 - **URL**: N/A
 - **Tags**: `Array`, `Simulation`
-- **Techniques**: Simulation
+- **Techniques**: [Simulation](glossary-of-algorithm.html#simulation)
 
 ### Description
 
@@ -2270,7 +2251,7 @@ public int fillOnes(int[] arr) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/maximum-subarray/
 - **Tags**: `Array`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -2300,9 +2281,8 @@ Maintain `current` sum for the best subarray ending at index `i`. For each numbe
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dp)
 
 1. Initialize `current = maxSum = nums[0]`.
 2. For each element from index 1 onward:
@@ -2335,7 +2315,7 @@ public int maxSubArray(int[] nums) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/maximum-product-subarray/
 - **Tags**: `Array`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -2364,9 +2344,8 @@ Because negative values can flip the sign, keep both the maximum and minimum pro
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dp)
 
 1. Initialize `maxSoFar = minSoFar = answer = nums[0]`.
 2. For each `num` from index 1 onward:
@@ -2410,7 +2389,7 @@ public int maxProduct(int[] nums) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/eliminate-maximum-number-of-monsters/
 - **Tags**: `Array`, `Greedy`, `Sorting`
-- **Techniques**: Sorting, Greedy Algorithm
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting), [Greedy](glossary-of-algorithm.html#greedy), Greedy Algorithm
 
 
 ### Description
@@ -2509,9 +2488,8 @@ The key insight is that we should eliminate monsters in order of their **arrival
 - **Space Complexity**: O(n) - For storing the arrival times array
 
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(greedy), \@ref(sorting)
 
 1. Calculate arrival time for each monster: `?dist[i] / speed[i]?`
 2. Sort monsters by arrival time (ascending order)
@@ -2576,7 +2554,7 @@ class Solution {
 - **Difficulty**: Hard
 - **URL**: https://leetcode.com/problems/longest-valid-parentheses/
 - **Tags**: `Stack`, `Dynamic Programming`
-- **Techniques**: Stack, Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp), [Stack](glossary-of-algorithm.html#stack)
 
 ### Description
 
@@ -2606,7 +2584,7 @@ Maintain a stack of indices. Push `-1` as a sentinel. For each character:
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize stack with `-1` and `maxLen = 0`.
 2. For each index `i`:
@@ -2647,7 +2625,7 @@ public int longestValidParentheses(String s) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/longest-increasing-subsequence/
 - **Tags**: `Array`, `Binary Search`
-- **Techniques**: Dynamic Programming \@ref(dp), Binary Search \@ref(binary-search)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp), [Binary Search](glossary-of-algorithm.html#binary-search)
 
 ### Description
 
@@ -2676,7 +2654,7 @@ Maintain an array `tails` where `tails[len]` holds the smallest possible tail fo
 - **Time Complexity**: O(n log n)
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize empty list `tails`.
 2. For each number `x`:
@@ -2720,7 +2698,7 @@ public int lengthOfLIS(int[] nums) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/paint-house/
 - **Tags**: `Array`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -2749,9 +2727,8 @@ Keep three running totals for the cost of painting up to the current house when 
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dp)
 
 1. Initialize `red = green = blue = 0`.
 2. For each house:
@@ -2787,7 +2764,7 @@ public int minCost(int[][] costs) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/climbing-stairs/
 - **Tags**: `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -2816,9 +2793,8 @@ Let `dp[i]` be the number of ways to reach step `i`. You can arrive at `i` from 
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1) using rolling variables
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dp)
 
 1. Handle base cases `n <= 2`.
 2. Maintain two variables for `dp[i-1]` and `dp[i-2]`.
@@ -2883,7 +2859,7 @@ Exploit the bounded value range by using the input array itself as a hash table.
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Let `k = n` (or any value = n).
 2. For each index `i`, add `k` to `arr[arr[i] % n]`.
@@ -2920,7 +2896,7 @@ public int getMaxRepetition(int[] nums) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/house-robber/
 - **Tags**: `Array`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -2949,9 +2925,8 @@ Let `dp[i]` be the best we can do up to house `i`. For each house, we either rob
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1) using rolling variables
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dp)
 
 1. Handle `n == 1`.
 2. Maintain `prev2` (dp[i-2]) and `prev1` (dp[i-1]).
@@ -2989,7 +2964,7 @@ public int rob(int[] nums) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 - **Tags**: `Array`, `Greedy`
-- **Techniques**: Greedy
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy)
 
 ### Description
 
@@ -3018,7 +2993,7 @@ Scan prices once while tracking the minimum price seen so far. For each day, com
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize `minPrice = Integer.MAX_VALUE`, `maxProfit = 0`.
 2. For each price `p`:
@@ -3053,7 +3028,7 @@ public int maxProfit(int[] prices) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
 - **Tags**: `Array`, `Greedy`
-- **Techniques**: Greedy
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy)
 
 ### Description
 
@@ -3082,7 +3057,7 @@ Whenever the price increases from day `i-1` to `i`, capture that profit by addin
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize `profit = 0`.
 2. For each day `i > 0`, if `prices[i] > prices[i-1]`, add the difference to `profit`.
@@ -3111,7 +3086,7 @@ public int maxProfit(int[] prices) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
 - **Tags**: `Array`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -3144,7 +3119,7 @@ Transition using previous day values: `hold = max(hold, rest - price)`, `sold = 
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize `hold = -prices[0]`, `sold = 0`, `rest = 0`.
 2. For each subsequent price:
@@ -3182,7 +3157,7 @@ public int maxProfit(int[] prices) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/minimum-swaps-to-make-sequences-increasing/
 - **Tags**: `Array`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -3211,7 +3186,7 @@ Let `keep[i]` be the minimum swaps to keep index `i` un-swapped, and `swap[i]` w
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize `keep = 0`, `swap = 1`.
 2. For each index `i` from 1 to `n-1`:
@@ -3260,7 +3235,7 @@ public int minSwap(int[] A, int[] B) {
 - **Difficulty**: Medium
 - **URL**: N/A
 - **Tags**: `Array`, `Dynamic Programming`
-- **Techniques**: Recursion \@ref(recursion), Memoization \@ref(memo)
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion), [Memoization](glossary-of-algorithm.html#memo)
 
 ### Description
 
@@ -3297,7 +3272,7 @@ Caching the `(i, j)` results avoids recomputation and yields O(n?) states.
 - **Time Complexity**: O(n?)
 - **Space Complexity**: O(n?) for memoization
 
-#### Algorithm
+#### Implementation Steps
 
 1. Define `dfs(i, j)` returning the best score for subarray `[i, j]`.
 2. The current day equals `n - (j - i)`.
@@ -3337,7 +3312,7 @@ private int dfs(int[] taste, int left, int right, Integer[][] memo) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/shortest-word-distance/
 - **Tags**: `Array`, `Two Pointers`
-- **Techniques**: Two Pointers \@ref(two-pointers)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
 ### Description
 
@@ -3365,7 +3340,7 @@ Scan the array while recording the latest indices of `word1` and `word2`. Whenev
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize `idx1 = idx2 = -1`, `answer = n`.
 2. For each index `i`:
@@ -3408,7 +3383,7 @@ public int shortestDistance(String[] words, String word1, String word2) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-i/
 - **Tags**: `Array`, `Greedy`, `Simulation`
-- **Techniques**: Sequential Traversal, Bit Manipulation
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy), [Simulation](glossary-of-algorithm.html#simulation), Bit Manipulation
 
 
 ### Description
@@ -3481,9 +3456,8 @@ The algorithm works as follows:
 - Early continue when `nums[i] == 1` avoids unnecessary operations
 
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(greedy)
 
 1. Initialize `count = 0` to track number of flip operations
 2. For each index `i` from 0 to `len-3`:
@@ -3537,7 +3511,7 @@ class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/maximize-distance-to-closest-person/
 - **Tags**: `Array`, `Two Pointers`
-- **Techniques**: Two Pointers \@ref(two-pointers), Greedy \@ref(greedy)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Greedy](glossary-of-algorithm.html#greedy)
 
 ### Description
 
@@ -3606,9 +3580,8 @@ The maximum of these three distances is the answer.
 - **Time Complexity**: O(n) - Single pass through the array. The first loop finds the first person, then the second loop continues from there to the end. Each element is visited exactly once.
 - **Space Complexity**: O(1) - Only uses a constant amount of extra space for tracking indices and distances.
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(greedy)
 
 1. Initialize `max = 0` to track the maximum distance, and `index` to track the position of the last person seen.
 2. **Find the first person**:
@@ -3675,7 +3648,7 @@ class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/number-of-zero-filled-subarrays/
 - **Tags**: `Array`, `Math`
-- **Techniques**: Array Traversal
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy), Array Traversal
 
 ### Description
 
@@ -3751,9 +3724,8 @@ The sum is: `k + (k-1) + (k-2) + ... + 1 = k * (k + 1) / 2`
 - **Time Complexity**: O(n) - Single pass through the array, visiting each element exactly once
 - **Space Complexity**: O(1) - Only using two variables (`zeroCount` and `result`) regardless of input size
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(greedy)
 
 1. Initialize `zeroCount = 0` to track consecutive zeros in the current sequence.
 2. Initialize `result = 0` to accumulate the total count of zero-filled subarrays.

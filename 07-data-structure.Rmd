@@ -10,7 +10,7 @@ This chapter illustrates problems that rely heavily on common data structures su
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/group-anagrams/
 - **Tags**: `Array`, `Hash Table`, `String`, `Sorting`
-- **Techniques**: \@ref(hash-table), \@ref(sorting)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Sorting](glossary-of-algorithm.html#sorting)
 
 ### Description
 
@@ -40,9 +40,8 @@ Anagrams reduce to the same canonical representation once their letters are sort
 - **Time Complexity**: O(n * m log m) to sort each string of length `m` across `n` strings
 - **Space Complexity**: O(n * m) to store all strings inside the hash map
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(hash-table), \@ref(sorting)
 
 1. Initialize `Map<String, List<String>> groups`.
 2. For every string `s`, sort its characters to form `key`.
@@ -73,7 +72,7 @@ public List<List<String>> groupAnagrams(String[] strs) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 - **Tags**: `String`, `Sliding Window`, `Hash Table`
-- **Techniques**: \@ref(two-pointers), \@ref(hash-table)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -109,9 +108,8 @@ Maintain a sliding window `[left, right)` backed by a hash set of characters cur
 - **Time Complexity**: O(n) because each character is processed at most twice
 - **Space Complexity**: O(min(n, alphabet)) for the sliding-set storage
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(two-pointers), \@ref(hash-table)
 
 1. Initialize `Set<Character> seen`, `left = 0`, `best = 0`.
 2. Iterate `right` over the string.
@@ -150,7 +148,7 @@ public int lengthOfLongestSubstring(String s) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/kth-largest-element-in-an-array/
 - **Tags**: `Array`, `Heap`, `Divide and Conquer`
-- **Techniques**: \@ref(heap)
+- **Techniques**: [Heap](glossary-of-algorithm.html#heap)
 
 ### Description
 
@@ -182,9 +180,8 @@ Maintain a min heap that keeps track of the current `k` largest elements seen so
 - **Time Complexity**: O(n log k) because each insertion and possible removal costs `log k`
 - **Space Complexity**: O(k) for the heap
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(heap)
 
 1. Initialize an empty min heap.
 2. For each `num` in `nums`, push it into the heap.
@@ -215,7 +212,7 @@ public int findKthLargest(int[] nums, int k) {
 - **Difficulty**: Medium
 - **URL**: N/A
 - **Tags**: `Array`, `Heap`, `Divide and Conquer`
-- **Techniques**: \@ref(heap)
+- **Techniques**: [Heap](glossary-of-algorithm.html#heap)
 
 ### Description
 
@@ -245,9 +242,8 @@ Store each array's current front element inside a min heap, keyed by value. Pop 
 - **Time Complexity**: O(n log k), where `n` is the total element count
 - **Space Complexity**: O(k) for the heap plus O(n) for the output
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(heap)
 
 1. Compute the total element count to size the output array.
 2. Push `(arrayIndex, elementIndex)` pairs for the first element of each non-empty array into a min heap ordered by value.
@@ -313,7 +309,7 @@ public int[] mergeKSortedArrays(int[][] arrays) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/maximum-score-from-removing-substrings/
 - **Tags**: `String`, `Stack`, `Greedy`
-- **Techniques**: \@ref(greedy), \@ref(stack)
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy), [Stack](glossary-of-algorithm.html#stack)
 
 ### Description
 
@@ -389,9 +385,8 @@ The difference: when the stack removes the pair at positions 1-2 (`"ba"`), it ex
 - **Time Complexity**: O(n) where n is the length of the input string, as we make two linear passes
 - **Space Complexity**: O(n) for the two stacks in the worst case when no removals occur
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(greedy), \@ref(stack)
 
 1. Determine which substring pair ("ab" or "ba") has the higher score and set it as the priority target
 2. First pass: iterate through the input string with a stack, removing all higher-scoring pairs by popping when the top of stack and current character form a match
@@ -456,7 +451,7 @@ class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/my-calendar-i/
 - **Tags**: `Interval`, `Design`, `TreeMap`
-- **Techniques**: \@ref(greedy), \@ref(bst)
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy), [Binary Search Tree](glossary-of-algorithm.html#bst)
 
 ### Description
 
@@ -489,9 +484,8 @@ Keep a list of existing bookings. To insert a new booking, compare it against ev
 - **Time Complexity**: O(n) per booking for `n` stored intervals
 - **Space Complexity**: O(n) to store the bookings
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(greedy)
 
 1. Represent each booking with a `Booking` object holding `start` and `end`.
 2. For a new interval `[s, e)`, iterate over existing bookings.
@@ -542,9 +536,8 @@ Store bookings inside a `TreeMap` keyed by start time. To book `[start, end)`, f
 - **Time Complexity**: O(log n) per booking for TreeMap lookups and inserts
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(bst)
 
 1. Maintain `TreeMap<Integer, Integer> bookings` storing `start -> end`.
 2. For a request `[s, e)`, find `prevStart = bookings.lowerKey(e)`.

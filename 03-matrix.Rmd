@@ -12,7 +12,7 @@
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/word-search/
 - **Tags**: `Matrix`, `Backtracking`
-- **Techniques**: Backtracking \@ref(backtrack), Depth First Search \@ref(dfs)
+- **Techniques**: [Backtracking](glossary-of-algorithm.html#backtrack), [Depth First Search](glossary-of-algorithm.html#dfs)
 
 ### Description
 
@@ -44,7 +44,7 @@ Try every cell as a starting point. Recursively match characters by exploring fo
 - **Time Complexity**: O(m * n * 4^L) where `L` is the word length
 - **Space Complexity**: O(L) recursion stack
 
-#### Algorithm
+#### Implementation Steps
 
 1. Loop over all cells `(i, j)`.
 2. Call `dfs(i, j, index)` when the character matches `word[index]`.
@@ -98,7 +98,7 @@ private boolean dfs(char[][] board, String word, int row, int col, int index) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/design-tic-tac-toe/
 - **Tags**: `Matrix`, `Prefix Sum`
-- **Techniques**: Matrix Accumulators \@ref(matrix-traversal)
+- **Techniques**: [Matrix Traversal](glossary-of-algorithm.html#matrix-traversal), Matrix Accumulators
 
 ### Description
 
@@ -134,7 +134,7 @@ Instead of scanning entire rows/columns after each move, keep running counts:
 - **Time Complexity**: O(1) per move
 - **Space Complexity**: O(n)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize arrays `rows`, `cols`, and two scalars for diagonals.
 2. For each move, add `score = player == 1 ? 1 : -1` to the row/column.
@@ -189,7 +189,7 @@ class TicTacToe {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/rotate-image/
 - **Tags**: `Matrix`, `In-place`
-- **Techniques**: Matrix Manipulation \@ref(matrix-manipulation)
+- **Techniques**: [Matrix Manipulation](glossary-of-algorithm.html#matrix-manipulation)
 
 ### Description
 
@@ -229,7 +229,7 @@ This achieves the 90-degree rotation in-place.
 - **Time Complexity**: O(n²)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. For each `i`, `j < i`, swap `matrix[i][j]` with `matrix[j][i]`.
 2. For each row, swap `matrix[row][left]` with `matrix[row][right]` while moving inward.
@@ -272,7 +272,7 @@ public void rotate(int[][] matrix) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/spiral-matrix/
 - **Tags**: `Matrix`
-- **Techniques**: Matrix Traversal \@ref(matrix-traversal)
+- **Techniques**: [Matrix Traversal](glossary-of-algorithm.html#matrix-traversal), [Simulation](glossary-of-algorithm.html#simulation)
 
 ### Description
 
@@ -303,7 +303,7 @@ Maintain four boundaries (`top`, `bottom`, `left`, `right`). Traverse in the ord
 - **Time Complexity**: O(m * n)
 - **Space Complexity**: O(1) (excluding output)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize `top = 0`, `bottom = m-1`, `left = 0`, `right = n-1`.
 2. While `top <= bottom` and `left <= right`:
@@ -425,7 +425,7 @@ public List<Integer> spiralOrder(int[][] matrix) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/search-a-2d-matrix/
 - **Tags**: `Matrix`, `Binary Search`
-- **Techniques**: Binary Search \@ref(binary-search), Divide and Conquer \@ref(dnc)
+- **Techniques**: [Binary Search](glossary-of-algorithm.html#binary-search), [Divide and Conquer](glossary-of-algorithm.html#dnc)
 
 ### Description
 
@@ -454,7 +454,7 @@ Because every row starts after the prior row ends, we can treat the matrix as a 
 - **Time Complexity**: O(log(m * n))
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Let `low = 0`, `high = m * n - 1`.
 2. While `low <= high`:
@@ -505,7 +505,7 @@ public boolean searchMatrix(int[][] matrix, int target) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/search-a-2d-matrix-ii/
 - **Tags**: `Matrix`
-- **Techniques**: Matrix Traversal \@ref(matrix-traversal)
+- **Techniques**: [Matrix Traversal](glossary-of-algorithm.html#matrix-traversal)
 
 ### Description
 
@@ -538,7 +538,7 @@ Because of the sorted property, one direction always reduces the search space.
 - **Time Complexity**: O(m + n)
 - **Space Complexity**: O(1)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Set `row = 0`, `col = n - 1`.
 2. While `row < m` and `col >= 0`:
@@ -582,7 +582,7 @@ public boolean searchMatrix(int[][] matrix, int target) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/minimum-path-sum/
 - **Tags**: `Matrix`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -610,7 +610,7 @@ Set `dp[i][j]` to the minimum sum needed to reach `(i, j)`. Initialize the first
 - **Time Complexity**: O(m * n)
 - **Space Complexity**: O(m * n) (can be optimized to O(n))
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize `dp[0][0] = grid[0][0]`.
 2. Fill the first row/column cumulatively.
@@ -653,7 +653,7 @@ public int minPathSum(int[][] grid) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/unique-paths/
 - **Tags**: `Matrix`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -681,7 +681,7 @@ Paths to `(i, j)` equal the sum of paths to `(i-1, j)` and `(i, j-1)` since thos
 - **Time Complexity**: O(m * n)
 - **Space Complexity**: O(m * n) (or O(n) with rolling arrays)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Fill a DP matrix with `dp[0][*] = dp[*][0] = 1`.
 2. For each cell from `(1,1)` to `(m-1,n-1)` compute `dp[i][j] = dp[i-1][j] + dp[i][j-1]`.
@@ -724,7 +724,7 @@ public int uniquePaths(int m, int n) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/number-of-islands/
 - **Tags**: `Matrix`, `DFS`
-- **Techniques**: Depth First Search \@ref(dfs)
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs)
 
 ### Description
 
@@ -756,7 +756,7 @@ Scan every cell. Upon encountering a `'1'`, increment the island count and perfo
 - **Time Complexity**: O(rows * cols)
 - **Space Complexity**: O(rows * cols) recursion in worst case
 
-#### Algorithm
+#### Implementation Steps
 
 1. Initialize `count = 0`.
 2. For each cell:
@@ -804,7 +804,7 @@ private void flood(char[][] grid, int r, int c) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/surrounded-regions/
 - **Tags**: `Matrix`, `DFS`
-- **Techniques**: Depth First Search \@ref(dfs)
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs)
 
 ### Description
 
@@ -840,7 +840,7 @@ All `'O'` connected to the border must remain `'O'`. DFS from every border `'O'`
 - **Time Complexity**: O(rows * cols)
 - **Space Complexity**: O(rows * cols) recursion stack
 
-#### Algorithm
+#### Implementation Steps
 
 1. Run DFS from border cells that are `'O'`, marking them as `'#'`.
 2. Iterate the grid:
@@ -898,7 +898,7 @@ private void dfs(char[][] board, int r, int c) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/maximal-square/
 - **Tags**: `Matrix`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -981,9 +981,8 @@ The maximum side length is 2, so the area is 2 × 2 = 4.
 - **Time Complexity**: O(m × n) - Single pass through the matrix
 - **Space Complexity**: O(m × n) - DP table storage (can be optimized to O(n) using rolling arrays)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dp)
 
 1. Initialize a DP table `dp[rows][cols]` and `max_side = 0`
 2. For each cell `(r, c)`:
@@ -1044,7 +1043,7 @@ class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/count-square-submatrices-with-all-ones/
 - **Tags**: `Matrix`, `Dynamic Programming`
-- **Techniques**: Dynamic Programming \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -1179,9 +1178,8 @@ The elegant part of this solution is that **the DP value at each cell directly t
 - **Time Complexity**: O(m × n) - Single pass through the matrix
 - **Space Complexity**: O(1) - Modifies matrix in-place (or O(m × n) if using separate DP table)
 
-#### Algorithm
+#### Implementation Steps
 
-\@ref(dp)
 
 1. Initialize `result = 0` to track total count
 2. For each cell `(r, c)`:
@@ -1239,7 +1237,7 @@ class Solution {
 - **Difficulty**: Hard
 - **URL**: https://leetcode.com/problems/best-meeting-point/
 - **Tags**: `Matrix`, `Median`, `Sorting`
-- **Techniques**: Sorting \@ref(sorting)
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting)
 
 ### Description
 
@@ -1269,7 +1267,7 @@ The Manhattan distance sum is minimized by the median of row coordinates and col
 - **Time Complexity**: O(m * n)
 - **Space Complexity**: O(m + n)
 
-#### Algorithm
+#### Implementation Steps
 
 1. Traverse the grid, collect row indices (`rows`) and column indices (`cols`) for all homes.
 2. Sort lists (or rows inherently non-decreasing if traversed row-by-row).

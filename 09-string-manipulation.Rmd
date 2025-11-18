@@ -9,7 +9,7 @@
 - **Difficulty**: Level 2
 - **URL**: https://www.firecode.io/
 - **Tags**: `Math`, `String`
-- **Techniques**: \@ref(dnc)
+- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc)
 
 ### Description
 
@@ -40,9 +40,7 @@ Repeatedly divide by two and track remainders. Appending each remainder to the f
 - **Time Complexity**: O(log n) divisions
 - **Space Complexity**: O(log n) to store the output
 
-#### Algorithm
-
-\@ref(dnc)
+#### Implementation Steps
 
 1. Handle `n == 0` by returning `"0"`.
 2. While `n > 0`, compute `bit = n % 2` and prepend it to the answer.
@@ -75,7 +73,7 @@ public String computeBinary(int n) {
 - **Difficulty**: Level 2
 - **URL**: https://www.firecode.io/
 - **Tags**: `Recursion`, `String`
-- **Techniques**: \@ref(recursion)
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion)
 
 ### Description
 
@@ -107,9 +105,7 @@ Base case is a single character. For longer strings, compare the first two chara
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n) recursion depth
 
-#### Algorithm
-
-\@ref(recursion)
+#### Implementation Steps
 
 1. If `s.length() <= 1`, return `s`.
 2. Recursively compute the transformed suffix `rest = insertPairStar(s.substring(1))`.
@@ -139,7 +135,7 @@ public String insertPairStar(String s) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/word-ladder/
 - **Tags**: `Breadth-First Search`, `Hash Table`
-- **Techniques**: \@ref(bfs)
+- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#bfs)
 
 ### Description
 
@@ -171,9 +167,7 @@ Perform BFS from `beginWord`. Each step generates all words formed by replacing 
 - **Time Complexity**: O(26 * L * N) where `L` is word length and `N` is dictionary size
 - **Space Complexity**: O(N)
 
-#### Algorithm
-
-\@ref(bfs)
+#### Implementation Steps
 
 1. Insert dictionary into a `Set` for O(1) lookups.
 2. Initialize BFS queue with `beginWord` and level `1`.
@@ -229,7 +223,7 @@ public int ladderLength(String beginWord, String endWord, List<String> wordList)
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/longest-common-prefix/
 - **Tags**: `String`
-- **Techniques**: \@ref(two-pointers)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
 ### Description
 
@@ -261,9 +255,7 @@ Use the first string as a baseline. For each character index, ensure all other s
 - **Time Complexity**: O(n * m), `n` strings and `m` average length
 - **Space Complexity**: O(1)
 
-#### Algorithm
-
-\@ref(two-pointers)
+#### Implementation Steps
 
 1. Handle empty input.
 2. Iterate index `i` across the first string.
@@ -298,7 +290,7 @@ public String longestCommonPrefix(String[] strs) {
 - **Difficulty**: Medium
 - **URL**: N/A
 - **Tags**: `Dynamic Programming`, `String`
-- **Techniques**: \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -327,9 +319,7 @@ Let `dp[i][j]` represent the length of the longest common substring ending at `s
 - **Time Complexity**: O(n * m)
 - **Space Complexity**: O(n * m)
 
-#### Algorithm
-
-\@ref(dp)
+#### Implementation Steps
 
 1. Create `dp[len1][len2]`, initialize first row/column.
 2. For each `i > 0` and `j > 0`, if `s1[i] == s2[j]` set `dp[i][j] = dp[i-1][j-1] + 1`, else `0`.
@@ -376,7 +366,7 @@ public int longestCommonSubstring(String s1, String s2) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/longest-palindromic-substring/
 - **Tags**: `String`, `Dynamic Programming`
-- **Techniques**: \@ref(dp)
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
@@ -408,9 +398,7 @@ Compute the longest common substring between `s` and its reverse. Matches corres
 - **Time Complexity**: O(n^2)
 - **Space Complexity**: O(n^2)
 
-#### Algorithm
-
-\@ref(dp)
+#### Implementation Steps
 
 1. Let `rev = reverse(s)`; create `dp[n][n]`.
 2. For each pair `(i, j)` update `dp[i][j]` similar to LCS-substring.
@@ -459,7 +447,7 @@ public String longestPalindrome(String s) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/word-break/
 - **Tags**: `Dynamic Programming`, `Trie`, `Recursion`
-- **Techniques**: \@ref(recursion), \@ref(dp), \@ref(trie)
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion), [Dynamic Programming](glossary-of-algorithm.html#dp), [Trie](glossary-of-algorithm.html#trie)
 
 ### Description
 
@@ -492,9 +480,7 @@ Try every prefix; if it exists in the dictionary, recursively solve the remainin
 - **Time Complexity**: Exponential without memoization; with memo, O(n^2) substring checks
 - **Space Complexity**: O(n) recursion depth
 
-#### Algorithm
-
-\@ref(recursion)
+#### Implementation Steps
 
 1. Define `dfs(start)` returning `true` if substring from `start` can be segmented.
 2. Iterate `end` from `start+1` to `n`, check whether `s[start:end]` is in the dictionary and `dfs(end)` is true.
@@ -536,9 +522,7 @@ Let `dp[i]` denote whether prefix `s[0:i)` can be segmented. For each ending ind
 - **Time Complexity**: O(n * m), where `m` is dictionary size
 - **Space Complexity**: O(n)
 
-#### Algorithm
-
-\@ref(dp)
+#### Implementation Steps
 
 1. Initialize `dp[0] = true`.
 2. For `end` from `1` to `n`, iterate dictionary words.
@@ -576,9 +560,7 @@ Insert dictionary words into a trie. While scanning the string, whenever `dp[i]`
 - **Time Complexity**: O(n * L) where `L` is average word length encountered
 - **Space Complexity**: O(total dictionary characters)
 
-#### Algorithm
-
-\@ref(dp), \@ref(trie)
+#### Implementation Steps
 
 1. Build a trie with `isEnd` flags.
 2. Initialize `dp[0] = true`.
@@ -648,7 +630,7 @@ public boolean wordBreakTrie(String s, List<String> wordDict) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/verifying-an-alien-dictionary/
 - **Tags**: `Hash Table`, `String`
-- **Techniques**: \@ref(hash-table)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -681,9 +663,7 @@ Precompute the order rank for each letter. Compare consecutive words character b
 - **Time Complexity**: O(total letters)
 - **Space Complexity**: O(1)
 
-#### Algorithm
-
-\@ref(hash-table)
+#### Implementation Steps
 
 1. Build `rank[26]` where `rank[c]` gives order.
 2. For each adjacent pair `(w1, w2)`:
@@ -731,7 +711,7 @@ private boolean inOrder(String w1, String w2, int[] rank) {
 - **Difficulty**: Easy
 - **URL**: N/A
 - **Tags**: `Hash Table`, `String`
-- **Techniques**: \@ref(hash-table)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -763,9 +743,7 @@ Count occurrences of every character using an array keyed by ASCII value. A seco
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1) (size of character set)
 
-#### Algorithm
-
-\@ref(hash-table)
+#### Implementation Steps
 
 1. Initialize `int[] freq = new int[256]`.
 2. For each character, increment its count.
@@ -798,7 +776,7 @@ public int firstUniqChar(String s) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 - **Tags**: `String`, `Sliding Window`
-- **Techniques**: \@ref(two-pointers)
+- **Techniques**: [Sliding Window](glossary-of-algorithm.html#sliding-window), [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
 ### Description
 
@@ -886,9 +864,7 @@ Total: 7 + 5 + 4 + 4 + 1 + 1 + 1 = 23 ✓
 - **Time Complexity**: O(n) - Each character is visited at most twice, once by the right pointer (`r`) and once by the left pointer (`l`)
 - **Space Complexity**: O(1) - Only three entries in the HashMap (constant space)
 
-#### Algorithm
-
-\@ref(sliding-window), \@ref(two-pointers)
+#### Implementation Steps
 
 1. Initialize two pointers (`l = 0`, `r` iterates through string) and a frequency map for characters `'a'`, `'b'`, `'c'`.
 2. Expand the window by moving `r` pointer and increment the count for `s.charAt(r)`.
@@ -951,7 +927,7 @@ class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/minimum-number-of-steps-to-make-two-strings-anagram/
 - **Tags**: `Hash Table`, `String`, `Counting`
-- **Techniques**: [Hash Table](\@ref(hash-table))
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
