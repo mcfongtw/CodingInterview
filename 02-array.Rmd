@@ -561,6 +561,104 @@ public List<List<Integer>> twoSumPairs(int[] nums, int target) {
 
 
 
+## Remove Duplicates from Sorted Array {#remove-duplicates-sorted}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 26
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+- **Tags**: `Array`, `Two Pointers`
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
+
+### Description
+
+Given an integer array `nums` sorted in **non-decreasing order**, remove the duplicates **in-place** such that each unique element appears only **once**. The **relative order** of the elements should be kept the same. Then return the number of unique elements in `nums`.
+
+Consider the number of unique elements of `nums` to be `k`. To get accepted, you need to do the following things:
+
+- Change the array `nums` such that the first `k` elements of `nums` contain the unique elements in the order they were present in `nums` initially.
+- The remaining elements of `nums` are not important as well as the size of `nums`.
+- Return `k`.
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [1,1,2]
+Output: 2, nums = [1,2,_]
+Explanation: Your function should return k = 2, with the first two elements of nums being 1 and 2 respectively.
+It does not matter what you leave beyond the returned k (hence they are underscores).
+```
+
+**Example 2:**
+```
+Input: nums = [0,0,1,1,1,2,2,3,3,4]
+Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
+Explanation: Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively.
+It does not matter what you leave beyond the returned k (hence they are underscores).
+```
+
+### Constraints
+
+- `1 <= nums.length <= 3 * 10^4`
+- `-100 <= nums[i] <= 100`
+- `nums` is sorted in **non-decreasing** order
+
+### Solution - Two Pointers
+
+#### Walkthrough
+
+Use a **read/write two-pointer approach** to overwrite duplicates in-place.
+
+**Core Idea:**
+- **Write pointer (`w`)**: Tracks where to place the next unique element
+- **Read pointer (`r`)**: Scans through the array looking for new unique values
+
+**Key Insight:** Since the array is sorted, duplicates are always adjacent. Compare each element with the **last written unique element** (`nums[w-1]`). If different, it's a new unique value that should be written at position `w`.
+
+**Why this works:**
+- The first element `nums[0]` is always unique (kept by default)
+- For each subsequent element, we only care if it differs from the last unique element we wrote
+- No swapping needed - just overwrite, since elements after position `w` don't matter
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Single pass through the array, each element visited exactly once
+- **Space Complexity**: O(1) - Only uses two pointer variables regardless of input size
+
+#### Implementation Steps
+
+1. Initialize write pointer `w = 1` (first element is always kept).
+2. Iterate read pointer `r` from `1` to `nums.length - 1`:
+   1. If `nums[r] != nums[w - 1]` (found a new unique element):
+      - Write it: `nums[w] = nums[r]`
+      - Increment write pointer: `w++`
+   2. Otherwise, skip the duplicate (do nothing).
+3. Return `w` as the count of unique elements.
+
+#### Java Code
+
+```java
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int w = 1; // index to write next unique element
+
+        for (int r = 1; r < nums.length; r++) {
+            if (nums[r] != nums[w - 1]) {
+                nums[w] = nums[r];
+                w++;
+            }
+            // else: duplicate, skip it
+        }
+
+        return w;
+    }
+}
+```
+
+
 ## Three Sum {#three-sum}
 
 ### Problem Metadata
