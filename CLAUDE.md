@@ -91,7 +91,12 @@ When the user requests a new problem to be added:
 1. **Fetch Problem Details**: Download problem description, examples, constraints, and metadata from the specified platform (LeetCode, HackerRank, etc.)
 
 2. **Create Problem Structure**: Add a new section in the appropriate chapter file with:
-   - Problem metadata (Platform, ID, Difficulty, URL, Tags)
+   - Problem metadata (Platform, ID, Difficulty, URL, Tags, Techniques)
+   - **Tags**: Track company associations and study plan memberships:
+     - Company names (e.g., `Google`, `Amazon`, `Meta`, `Microsoft`)
+     - Study plans: `Top 100 Liked`, `Blind 75`, `NeetCode 150`
+     - Multiple tags separated by commas
+     - Example: `Tags: Google, Amazon, Top 100 Liked, Blind 75`
    - **Techniques**: Use descriptive labels with cross-references (e.g., `[Hash Table](\@ref(hash-table))`, `[Dynamic Programming](\@ref(dp))`)
    - Complete problem description
    - Examples with input/output
@@ -131,12 +136,13 @@ When the user requests a new problem to be added:
 4. **Update problems_data.csv** (REQUIRED - do this immediately when creating the problem structure):
    Add a new row to `problems_data.csv` with the problem metadata:
    ```csv
-   title,platform,problem_id,difficulty,chapter,chapter_num,anchor
-   Minimum Number of Steps to Make Two Strings Anagram,LeetCode,1347,Medium,String Manipulation,09,min-steps-anagram
+   title,platform,problem_id,difficulty,chapter,chapter_num,anchor,tags
+   Minimum Number of Steps to Make Two Strings Anagram,LeetCode,1347,Medium,String Manipulation,09,min-steps-anagram,"Google, Top 100 Liked"
    ```
    - **IMPORTANT**: This must be done at the same time as creating the problem structure in the .Rmd file
    - Insert the row in the appropriate chapter section (keep problems grouped by chapter)
    - Ensure the anchor matches the one used in the .Rmd file
+   - The `tags` field contains comma-separated values for company names and study plans (e.g., `"Google, Amazon, Top 100 Liked, Blind 75, NeetCode 150"`)
    - This CSV is used for problem indexing and lookups
 
 5. **Do NOT implement the solution** - Leave the solution section as placeholders for the user to fill in

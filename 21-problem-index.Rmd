@@ -106,20 +106,116 @@ kable(by_chapter[, c("chapter", "problem_link", "display_id", "difficulty")],
 
 ---
 
+## Lookup by Study Plan
+
+### Top 100 Liked
+
+```{r top-100-liked, echo=FALSE}
+# Filter problems that contain "Top 100 Liked" in tags
+top100 <- problems[grepl("Top 100 Liked", problems$tags, ignore.case = TRUE), ]
+if(nrow(top100) > 0) {
+  top100 <- top100[order(top100$problem_id, na.last = TRUE), ]
+  top100$display_id <- ifelse(is.na(top100$problem_id), "-", as.character(top100$problem_id))
+  top100$problem_link <- paste0("[", top100$title, "](", top100$anchor, ".html)")
+  kable(top100[, c("display_id", "problem_link", "difficulty", "chapter")],
+        col.names = c("ID", "Problem", "Difficulty", "Chapter"),
+        row.names = FALSE)
+} else {
+  cat("*No problems tagged as Top 100 Liked yet. Tags will be populated by Codex.*\n")
+}
+```
+
+### Blind 75
+
+```{r blind-75, echo=FALSE}
+blind75 <- problems[grepl("Blind 75", problems$tags, ignore.case = TRUE), ]
+if(nrow(blind75) > 0) {
+  blind75 <- blind75[order(blind75$problem_id, na.last = TRUE), ]
+  blind75$display_id <- ifelse(is.na(blind75$problem_id), "-", as.character(blind75$problem_id))
+  blind75$problem_link <- paste0("[", blind75$title, "](", blind75$anchor, ".html)")
+  kable(blind75[, c("display_id", "problem_link", "difficulty", "chapter")],
+        col.names = c("ID", "Problem", "Difficulty", "Chapter"),
+        row.names = FALSE)
+} else {
+  cat("*No problems tagged as Blind 75 yet. Tags will be populated by Codex.*\n")
+}
+```
+
+### NeetCode 150
+
+```{r neetcode-150, echo=FALSE}
+neetcode <- problems[grepl("NeetCode 150", problems$tags, ignore.case = TRUE), ]
+if(nrow(neetcode) > 0) {
+  neetcode <- neetcode[order(neetcode$problem_id, na.last = TRUE), ]
+  neetcode$display_id <- ifelse(is.na(neetcode$problem_id), "-", as.character(neetcode$problem_id))
+  neetcode$problem_link <- paste0("[", neetcode$title, "](", neetcode$anchor, ".html)")
+  kable(neetcode[, c("display_id", "problem_link", "difficulty", "chapter")],
+        col.names = c("ID", "Problem", "Difficulty", "Chapter"),
+        row.names = FALSE)
+} else {
+  cat("*No problems tagged as NeetCode 150 yet. Tags will be populated by Codex.*\n")
+}
+```
+
+---
+
+## Lookup by Company
+
+```{r company-tags, echo=FALSE}
+# Extract all unique company tags from the tags column
+# Common companies to check for
+companies <- c("Google", "Amazon", "Meta", "Microsoft", "Apple", "Bloomberg", "Adobe", "Uber", "Netflix", "Facebook")
+
+# Function to display problems for a company
+show_company_problems <- function(company_name) {
+  company_problems <- problems[grepl(company_name, problems$tags, ignore.case = TRUE), ]
+  if(nrow(company_problems) > 0) {
+    company_problems <- company_problems[order(company_problems$problem_id, na.last = TRUE), ]
+    company_problems$display_id <- ifelse(is.na(company_problems$problem_id), "-", as.character(company_problems$problem_id))
+    company_problems$problem_link <- paste0("[", company_problems$title, "](", company_problems$anchor, ".html)")
+    cat(paste0("\n### ", company_name, " (", nrow(company_problems), " problems)\n\n"))
+    print(kable(company_problems[, c("display_id", "problem_link", "difficulty", "chapter")],
+          col.names = c("ID", "Problem", "Difficulty", "Chapter"),
+          row.names = FALSE))
+  }
+}
+
+# Check if any company tags exist
+has_company_tags <- any(sapply(companies, function(c) any(grepl(c, problems$tags, ignore.case = TRUE))))
+
+if(has_company_tags) {
+  for(company in companies) {
+    show_company_problems(company)
+  }
+} else {
+  cat("*No company tags found yet. Tags will be populated by Codex.*\n\nOnce populated, this section will show problems grouped by company (Google, Amazon, Meta, etc.).\n")
+}
+```
+
+---
+
 ## How to Update This Index
 
 When you add a new problem to the book:
 
 1. Open [problems_data.csv](problems_data.csv) in a spreadsheet or text editor
-2. Add a new row with: `title,platform,problem_id,difficulty,chapter,chapter_num,anchor`
+2. Add a new row with: `title,platform,problem_id,difficulty,chapter,chapter_num,anchor,tags`
 3. Rebuild the book with `sh build.sh`
 4. All lookup tables will automatically update!
 
 ### Example CSV Entry
 
 ```
-Your New Problem,LeetCode,9999,Medium,Array,02,new-problem
+Your New Problem,LeetCode,9999,Medium,Array,02,new-problem,"Google, Amazon, Top 100 Liked, Blind 75"
 ```
+
+### Tags Format
+
+The `tags` field supports comma-separated values for:
+- **Company names**: Google, Amazon, Meta, Microsoft, Apple, Bloomberg, Adobe, Uber, Netflix
+- **Study plans**: Top 100 Liked, Blind 75, NeetCode 150
+
+Use quotes around the tags value if it contains commas.
 
 ---
 
