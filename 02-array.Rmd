@@ -3883,3 +3883,144 @@ class Solution {
     }
 }
 ```
+
+## Capacity To Ship Packages Within D Days {#capacity-to-ship-packages}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1011
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/
+- **Tags**: `Array`, `Binary Search`
+- **Techniques**: [Binary Search](glossary-of-algorithm.html#binary-search), [Greedy](glossary-of-algorithm.html#greedy)
+
+### Description
+
+A conveyor belt has packages that must be shipped from one port to another within `days` days.
+
+The i-th package on the conveyor belt has a weight of `weights[i]`. Each day, we load the ship with packages on the conveyor belt (in the order given by `weights`). We may not load more weight than the maximum weight capacity of the ship.
+
+Return the least weight capacity of the ship that will result in all the packages on the conveyor belt being shipped within `days` days.
+
+### Examples
+
+**Example 1:**
+```
+Input: weights = [1,2,3,4,5,6,7,8,9,10], days = 5
+Output: 15
+Explanation: A ship capacity of 15 is the minimum to ship all the packages in 5 days like this:
+1st day: 1, 2, 3, 4, 5
+2nd day: 6, 7
+3rd day: 8
+4th day: 9
+5th day: 10
+
+Note that the cargo must be shipped in the order given, so using a ship of capacity 14 and splitting the packages into parts like (2, 3, 4, 5), (1, 6, 7), (8), (9), (10) is not allowed.
+```
+
+**Example 2:**
+```
+Input: weights = [3,2,2,4,1,4], days = 3
+Output: 6
+Explanation: A ship capacity of 6 is the minimum to ship all the packages in 3 days like this:
+1st day: 3, 2
+2nd day: 2, 4
+3rd day: 1, 4
+```
+
+**Example 3:**
+```
+Input: weights = [1,2,3,1,1], days = 4
+Output: 3
+```
+
+### Constraints
+
+- `1 <= days <= weights.length <= 5 * 10^4`
+- `1 <= weights[i] <= 500`
+
+### Solution - Binary Search on Answer
+
+#### Walkthrough
+
+This problem uses the **Binary Search on Answer** pattern. Instead of searching for an element in an array, we search for the minimum valid capacity in a range of possible values.
+
+**Key Insight**: If a capacity `C` can ship all packages within `days` days, then any capacity greater than `C` can also do it. This monotonic property makes binary search applicable.
+
+**Search Range**:
+- **Minimum capacity**: `max(weights)` — must be able to carry the heaviest single package
+- **Maximum capacity**: `sum(weights)` — ship everything in one day
+
+**Binary Search Logic**:
+- For each `mid` capacity, use a greedy simulation to check if it works
+- If it works, search for smaller capacity (`max = mid`)
+- If it doesn't work, need larger capacity (`min = mid + 1`)
+- When `min == max`, we've found the minimum valid capacity
+
+**Greedy Check**: Simulate loading packages day by day. Greedily fill each day until adding the next package would exceed capacity, then start a new day.
+
+#### Analysis
+
+- **Time Complexity**: O(n · log(sum - max))
+  - Binary search runs O(log(sum - max)) iterations
+  - Each `isShippable` check scans all n weights in O(n)
+
+- **Space Complexity**: O(1)
+  - Only uses a constant number of variables
+
+#### Implementation Steps
+
+1. Initialize search range: `min = max(weights)`, `max = sum(weights)`
+2. Binary search while `min < max`:
+   - Calculate `mid = (min + max) / 2`
+   - Check if `mid` capacity can ship within `days` using greedy simulation
+   - If yes, narrow to lower half: `max = mid`
+   - If no, narrow to upper half: `min = mid + 1`
+3. Return `min` as the minimum valid capacity
+4. In `isShippable`: iterate through weights, counting days needed by greedily filling each day
+
+#### Java Code
+
+```java
+class Solution {
+    public int shipWithinDays(int[] weights, int days) {
+        // min capacity needs to be at least the heaviest cargo
+        int min = Arrays.stream(weights).max().getAsInt();
+        int max = Arrays.stream(weights).sum();
+
+        while(min < max) {
+            int mid = (min + max) / 2;
+            boolean shippable = isShippable(mid, weights, days);
+
+            if(shippable) {
+                //it works! see if we can use smaller mid (capacity)
+                max = mid;                
+            } else {
+                //it does NOT work! need to use larger mid (capacity)                
+                min = mid + 1;                
+            }
+        }
+
+        //min == max, and the value is guaranteed shippable
+        return min;
+    }
+
+
+    private boolean isShippable(int capacity, int[] weights, int days) {
+        int result = 1;
+        int cap = capacity;
+
+        for(int w : weights) {
+            if(cap >= w) { // more capacity to carry for the day
+                cap -= w;
+            } else { // no more capacity, move it to the next day
+                result++;
+                cap = capacity - w;                
+            }
+        }
+
+        return result <= days;
+    }
+}
+```
