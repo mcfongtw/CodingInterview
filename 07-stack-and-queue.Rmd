@@ -1,0 +1,144 @@
+# Stack and Queue
+This chapter focuses on stack- and queue-driven techniques. Many of these problems can be solved using explicit stacks, monotonic stacks, or queue-based sweeps to efficiently process streaming data.
+
+## Maximum Score From Removing Substrings {#max-score-removing-substrings}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1717
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/maximum-score-from-removing-substrings/
+- **Tags**: `String`, `Stack`, `Greedy`
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy), [Stack](glossary-of-algorithm.html#stack)
+
+### Description
+
+You are given a string `s` and two integers `x` and `y`. You can perform two types of operations any number of times:
+
+- Remove substring `"ab"` and gain `x` points
+- Remove substring `"ba"` and gain `y` points
+
+Return the maximum points you can gain after applying the above operations on `s`.
+
+### Examples
+
+```
+Input: s = "cdbcbbaaabab", x = 4, y = 5
+Output: 19
+Explanation:
+- Remove "ba" underlined in "cdbcbbaaabab". Now s = "cdbcbbaaab" and 5 points are added to the score.
+- Remove "ab" underlined in "cdbcbbaaab". Now s = "cdbcbbaa" and 4 points are added to the score.
+- Remove "ba" underlined in "cdbcbbaa". Now s = "cdbcba" and 5 points are added to the score.
+- Remove "ba" underlined in "cdbcba". Now s = "cdbc" and 5 points are added to the score.
+Total score = 5 + 4 + 5 + 5 = 19.
+
+Input: s = "aabbaaxybbaabb", x = 5, y = 4
+Output: 20
+```
+
+### Constraints
+
+- `1 <= s.length <= 10^5`
+- `1 <= x, y <= 10^4`
+- `s` consists of lowercase English letters
+
+### Solution - Greedy with Stack
+
+#### Walkthrough
+
+The key insight is to use a **greedy strategy**: always remove the higher-scoring substring first, then remove the lower-scoring one from what remains. This maximizes the total points because prioritizing the higher value ensures we never miss opportunities for better scores.
+
+**Why use a stack-based approach?**
+
+A stack is essential because removing substring pairs can create **cascading matches**—new pairs that only appear after previous removals. A simple iterator cannot handle this because it only makes one linear pass without simulating actual removals.
+
+**Visual Example: Why Iterator Would NOT Work**
+
+Consider `stack = ['b', 'b', 'a', 'a']` and we need to find "ba" matches:
+
+```
+Iterator approach (consecutive pair checking):
+Position:  0    1    2    3
+           'b' 'b' 'a' 'a'
+           └─┘ └───┘ └─┘
+           no  MATCH  no
+Result: 1 match found
+
+Stack approach (with actual removal):
+Step 1: push 'b'           → ['b']
+Step 2: push 'b'           → ['b', 'b']
+Step 3: see 'a', peek='b'  → MATCH! pop → ['b']
+Step 4: see 'a', peek='b'  → MATCH! pop → []
+Result: 2 matches found
+```
+
+The difference: when the stack removes the pair at positions 1-2 (`"ba"`), it exposes position 0 (`'b'`) to position 3 (`'a'`), creating a **new match** that the iterator never sees because it only examines the original sequence.
+
+**Two-pass strategy:**
+
+1. **First pass**: Iterate through the original string with a stack, greedily removing all instances of the higher-scoring pair
+2. **Second pass**: Iterate through the resulting stack with a new stack, removing all instances of the lower-scoring pair
+3. Each pass uses the stack's ability to "undo" previous pushes when a match is found, correctly handling cascading removals
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the length of the input string, as we make two linear passes
+- **Space Complexity**: O(n) for the two stacks in the worst case when no removals occur
+
+#### Implementation Steps
+
+
+1. Determine which substring pair ("ab" or "ba") has the higher score and set it as the priority target
+2. First pass: iterate through the input string with a stack, removing all higher-scoring pairs by popping when the top of stack and current character form a match
+3. Second pass: iterate through the first stack with a new stack, removing all lower-scoring pairs using the same matching logic
+4. Return the accumulated score from both passes
+
+#### Java Code
+
+```java
+class Solution {
+    public int maximumGain(String s, int x, int y) {
+        Stack<Character> stack = new Stack<>();
+        int result = 0;
+        char[] highChars, lowChars;
+        int high, low = 0;
+
+        if(x > y) {
+            high = x;
+            low = y;
+            highChars = new char[] {'a', 'b'};
+            lowChars = new char[] {'b', 'a'};
+        } else {
+            high = y;
+            low = x;
+            highChars = new char[] {'b', 'a'};
+            lowChars = new char[] {'a', 'b'};
+        }
+
+        // high score first
+        for(char c : s.toCharArray()) {
+            if(!stack.isEmpty() && stack.peek() == highChars[0] && c == highChars[1]){
+                result += high;
+                stack.pop();
+            } else {
+                stack.push(c);
+            }
+        }
+
+        // then low score        
+        Stack<Character> stack2 = new Stack<>();
+        for(char c : stack) {
+            if(!stack2.isEmpty() && stack2.peek() == lowChars[0] && c == lowChars[1]){
+                result += low;
+                stack2.pop();
+            } else {
+                stack2.push(c);
+            }
+        }
+        
+
+        return result;
+    }
+}
+```

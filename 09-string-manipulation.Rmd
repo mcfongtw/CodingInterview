@@ -1,128 +1,292 @@
 # String Manipulation
+Strings enable hashing, sliding-window, two-pointer, and frequency techniques. Use this chapter as a guide to the most representative LeetCode string/substring problems.
 
-## Binary Representation {#binary-representation}
+## Longest Substring Without Repeating Characters {#longest-substring-unique}
 
 ### Problem Metadata
 
-- **Platform**: Firecode.io
-- **Problem ID**: Binary Representation
-- **Difficulty**: Level 2
-- **URL**: https://www.firecode.io/
-- **Tags**: `Math`, `String`
-- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc)
+- **Platform**: LeetCode
+- **Problem ID**: 3
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/longest-substring-without-repeating-characters/
+- **Tags**: `String`, `Sliding Window`, `Hash Table`
+- **Interview Tags**: Blind 75
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
-Given a positive integer `n`, return its binary representation as a string consisting of only `'0'` and `'1'`.
+Given a string `s`, return the length of the longest substring that contains no repeated characters.
 
 ### Examples
 
 ```
-Input: n = 6
-Output: "110"
+Input: s = "abcabcbb"
+Output: 3
 
-Input: n = 5
-Output: "101"
+Input: s = "bbbbb"
+Output: 1
+
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke"; "pwke" is not valid because it is not a contiguous substring.
 ```
 
 ### Constraints
 
-- `0 <= n <= 2^31 - 1`
+- `0 <= s.length <= 5 * 10^4`
+- `s` consists of English letters, digits, symbols, and spaces
 
-### Solution - Iterative Division
+### Solution - Sliding Window Set
 
 #### Walkthrough
 
-Repeatedly divide by two and track remainders. Appending each remainder to the front of the result (or using a `StringBuilder` and reversing) yields the binary digits from most significant to least significant.
+Maintain a sliding window `[left, right)` backed by a hash set of characters currently in the window. Expand `right` while characters are unique, updating the maximum window length. Whenever a duplicate appears, shrink from the `left` until the duplicate is removed. This ensures each character enters and leaves the window at most once.
 
 #### Analysis
 
-- **Time Complexity**: O(log n) divisions
-- **Space Complexity**: O(log n) to store the output
+- **Time Complexity**: O(n) because each character is processed at most twice
+- **Space Complexity**: O(min(n, alphabet)) for the sliding-set storage
 
 #### Implementation Steps
 
-1. Handle `n == 0` by returning `"0"`.
-2. While `n > 0`, compute `bit = n % 2` and prepend it to the answer.
-3. Update `n /= 2`.
+
+1. Initialize `Set<Character> seen`, `left = 0`, `best = 0`.
+2. Iterate `right` over the string.
+3. While `s[right]` is already in `seen`, remove `s[left]` and increment `left`.
+4. Add `s[right]`, update `best = max(best, right - left + 1)`.
+5. Return `best`.
 
 #### Java Code
 
 ```java
-public String computeBinary(int n) {
-    if (n == 0) {
-        return "0";
+public int lengthOfLongestSubstring(String s) {
+    Set<Character> seen = new HashSet<>();
+    int left = 0;
+    int best = 0;
+
+    for (int right = 0; right < s.length(); right++) {
+        char c = s.charAt(right);
+        while (seen.contains(c)) {
+            seen.remove(s.charAt(left));
+            left++;
+        }
+        seen.add(c);
+        best = Math.max(best, right - left + 1);
     }
 
-    StringBuilder sb = new StringBuilder();
-    while (n > 0) {
-        sb.append(n % 2);
-        n /= 2;
-    }
-
-    return sb.reverse().toString();
+    return best;
 }
 ```
 
-## Insert Stars {#insert-stars}
+## Longest Palindromic Substring {#longest-palindromic-substring}
 
 ### Problem Metadata
 
-- **Platform**: Firecode.io
-- **Problem ID**: Insert Stars
-- **Difficulty**: Level 2
-- **URL**: https://www.firecode.io/
-- **Tags**: `Recursion`, `String`
-- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion)
+- **Platform**: LeetCode
+- **Problem ID**: 5
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/longest-palindromic-substring/
+- **Tags**: `String`, `Dynamic Programming`
+- **Interview Tags**: Blind 75
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
 
 ### Description
 
-Given a string `s`, recursively build a new string where any pair of identical adjacent characters is separated by a `'*'`.
+Return the longest palindromic substring contained in `s`.
 
 ### Examples
 
 ```
-Input: "cc"
-Output: "c*c"
+Input: "babad"
+Output: "bab"   // "aba" also valid
 
-Input: "cac"
-Output: "cac"
+Input: "cbbd"
+Output: "bb"
 ```
 
 ### Constraints
 
-- `1 <= s.length <= 10^4`
-- Characters are ASCII
+- `1 <= s.length <= 1000`
+- `s` consists of digits and English letters
 
-### Solution - Recursive Pair Expansion
+### Solution - DP via Reversed String
 
 #### Walkthrough
 
-Base case is a single character. For longer strings, compare the first two characters. If equal, return `first + "*" + recurse(s[1:])`; otherwise, return `first + recurse(s[1:])`.
+Compute the longest common substring between `s` and its reverse. Matches correspond to palindromic substrings only when their indices line up (i.e., the substring reads the same forward and backward). Track the candidate with the greatest length that satisfies the index alignment rule.
 
 #### Analysis
 
-- **Time Complexity**: O(n)
-- **Space Complexity**: O(n) recursion depth
+- **Time Complexity**: O(n^2)
+- **Space Complexity**: O(n^2)
 
 #### Implementation Steps
 
-1. If `s.length() <= 1`, return `s`.
-2. Recursively compute the transformed suffix `rest = insertPairStar(s.substring(1))`.
-3. If `s.charAt(0) == s.charAt(1)`, return `s[0] + "*" + rest`; else return `s[0] + rest`.
+1. Let `rev = reverse(s)`; create `dp[n][n]`.
+2. For each pair `(i, j)` update `dp[i][j]` similar to LCS-substring.
+3. When `dp[i][j] > currentMax`, ensure the substring indices align (`n - 1 - j + dp[i][j] - 1 == i`).
+4. Update best boundaries accordingly.
 
 #### Java Code
 
 ```java
-public String insertPairStar(String s) {
-    if (s == null || s.length() <= 1) {
-        return s;
+public String longestPalindrome(String s) {
+    int n = s.length();
+    String rev = new StringBuilder(s).reverse().toString();
+    int[][] dp = new int[n][n];
+    int maxLen = 0;
+    int end = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (s.charAt(i) == rev.charAt(j)) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }
+                int beforeRev = n - 1 - j;
+                if (dp[i][j] > maxLen && beforeRev + dp[i][j] - 1 == i) {
+                    maxLen = dp[i][j];
+                    end = i;
+                }
+            } else {
+                dp[i][j] = 0;
+            }
+        }
     }
-    String rest = insertPairStar(s.substring(1));
-    if (s.charAt(0) == s.charAt(1)) {
-        return s.charAt(0) + "*" + rest;
+
+    return s.substring(end - maxLen + 1, end + 1);
+}
+```
+
+## Longest Common Prefix {#longest-common-prefix}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 14
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/longest-common-prefix/
+- **Tags**: `String`
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
+
+### Description
+
+Given an array of strings, return the longest common prefix string among them. If none exists, return `""`.
+
+### Examples
+
+```
+Input: ["flower","flow","flight"]
+Output: "fl"
+
+Input: ["dog","racecar","car"]
+Output: ""
+```
+
+### Constraints
+
+- `0 <= strs.length <= 200`
+- `0 <= strs[i].length <= 200`
+
+### Solution - Column Scan
+
+#### Walkthrough
+
+Use the first string as a baseline. For each character index, ensure all other strings have the same character. Stop once a mismatch or end of string occurs.
+
+#### Analysis
+
+- **Time Complexity**: O(n * m), `n` strings and `m` average length
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+1. Handle empty input.
+2. Iterate index `i` across the first string.
+3. For each `i`, compare `strs[j].charAt(i)` with `strs[0].charAt(i)`; return `strs[0].substring(0, i)` on mismatch.
+4. If no mismatch, return the entire first string.
+
+#### Java Code
+
+```java
+public String longestCommonPrefix(String[] strs) {
+    if (strs == null || strs.length == 0) {
+        return "";
     }
-    return s.charAt(0) + rest;
+    for (int i = 0; i < strs[0].length(); i++) {
+        char c = strs[0].charAt(i);
+        for (int j = 1; j < strs.length; j++) {
+            if (i == strs[j].length() || strs[j].charAt(i) != c) {
+                return strs[0].substring(0, i);
+            }
+        }
+    }
+    return strs[0];
+}
+```
+
+## Group Anagrams {#group-anagrams}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 49
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/group-anagrams/
+- **Tags**: `Array`, `Hash Table`, `String`, `Sorting`
+- **Interview Tags**: Blind 75
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Sorting](glossary-of-algorithm.html#sorting)
+
+### Description
+
+Given an array of strings, group the anagrams together. Two strings are anagrams if they contain the same characters with the same multiplicity, regardless of order.
+
+### Examples
+
+```
+Input: ["eat","tea","tan","ate","nat","bat"]
+Output: [["ate","eat","tea"],["nat","tan"],["bat"]]
+```
+
+### Constraints
+
+- `1 <= strs.length <= 10^4`
+- `0 <= strs[i].length <= 100`
+- `strs[i]` consists of lowercase English letters
+
+### Solution - Hash Signature Map
+
+#### Walkthrough
+
+Anagrams reduce to the same canonical representation once their letters are sorted. Iterate over the strings, sort each one to derive a signature, and use a hash map that stores `signature -> list of anagrams`. Append every string to its signature bucket and finally return the map values as the grouped result.
+
+#### Analysis
+
+- **Time Complexity**: O(n * m log m) to sort each string of length `m` across `n` strings
+- **Space Complexity**: O(n * m) to store all strings inside the hash map
+
+#### Implementation Steps
+
+
+1. Initialize `Map<String, List<String>> groups`.
+2. For every string `s`, sort its characters to form `key`.
+3. Append `s` to `groups.get(key)`, creating the bucket if needed.
+4. Return a list built from the map values.
+
+#### Java Code
+
+```java
+public List<List<String>> groupAnagrams(String[] strs) {
+    Map<String, List<String>> groups = new HashMap<>();
+    for (String word : strs) {
+        char[] chars = word.toCharArray();
+        Arrays.sort(chars);
+        String signature = new String(chars);
+        groups.computeIfAbsent(signature, key -> new ArrayList<>()).add(word);
+    }
+    return new ArrayList<>(groups.values());
 }
 ```
 
@@ -212,231 +376,6 @@ public int ladderLength(String beginWord, String endWord, List<String> wordList)
         level++;
     }
     return 0;
-}
-```
-
-## Longest Common Prefix {#longest-common-prefix}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 14
-- **Difficulty**: Easy
-- **URL**: https://leetcode.com/problems/longest-common-prefix/
-- **Tags**: `String`
-- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
-
-### Description
-
-Given an array of strings, return the longest common prefix string among them. If none exists, return `""`.
-
-### Examples
-
-```
-Input: ["flower","flow","flight"]
-Output: "fl"
-
-Input: ["dog","racecar","car"]
-Output: ""
-```
-
-### Constraints
-
-- `0 <= strs.length <= 200`
-- `0 <= strs[i].length <= 200`
-
-### Solution - Column Scan
-
-#### Walkthrough
-
-Use the first string as a baseline. For each character index, ensure all other strings have the same character. Stop once a mismatch or end of string occurs.
-
-#### Analysis
-
-- **Time Complexity**: O(n * m), `n` strings and `m` average length
-- **Space Complexity**: O(1)
-
-#### Implementation Steps
-
-1. Handle empty input.
-2. Iterate index `i` across the first string.
-3. For each `i`, compare `strs[j].charAt(i)` with `strs[0].charAt(i)`; return `strs[0].substring(0, i)` on mismatch.
-4. If no mismatch, return the entire first string.
-
-#### Java Code
-
-```java
-public String longestCommonPrefix(String[] strs) {
-    if (strs == null || strs.length == 0) {
-        return "";
-    }
-    for (int i = 0; i < strs[0].length(); i++) {
-        char c = strs[0].charAt(i);
-        for (int j = 1; j < strs.length; j++) {
-            if (i == strs[j].length() || strs[j].charAt(i) != c) {
-                return strs[0].substring(0, i);
-            }
-        }
-    }
-    return strs[0];
-}
-```
-
-## Longest Common Substring {#longest-common-substring}
-
-### Problem Metadata
-
-- **Platform**: Interview Prep
-- **Problem ID**: LCS Substring
-- **Difficulty**: Medium
-- **URL**: N/A
-- **Tags**: `Dynamic Programming`, `String`
-- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
-
-### Description
-
-Given two strings `s1` and `s2`, return the length of their longest common substring (contiguous sequence).
-
-### Examples
-
-```
-Input: s1 = "abcdxyz", s2 = "xyzabcd"
-Output: 4  // "abcd"
-```
-
-### Constraints
-
-- `1 <= len(s1), len(s2) <= 10^3`
-- Strings contain lowercase letters
-
-### Solution - 2D DP Table
-
-#### Walkthrough
-
-Let `dp[i][j]` represent the length of the longest common substring ending at `s1[i]` and `s2[j]`. Initialize first row/column by comparing individual characters. For each match extend from `dp[i-1][j-1] + 1`; otherwise reset to zero. Track the maximum length seen.
-
-#### Analysis
-
-- **Time Complexity**: O(n * m)
-- **Space Complexity**: O(n * m)
-
-#### Implementation Steps
-
-1. Create `dp[len1][len2]`, initialize first row/column.
-2. For each `i > 0` and `j > 0`, if `s1[i] == s2[j]` set `dp[i][j] = dp[i-1][j-1] + 1`, else `0`.
-3. Maintain `maxLen`.
-4. Return `maxLen`.
-
-#### Java Code
-
-```java
-public int longestCommonSubstring(String s1, String s2) {
-    int n = s1.length();
-    int m = s2.length();
-    int[][] dp = new int[n][m];
-    int max = 0;
-
-    for (int i = 0; i < n; i++) {
-        dp[i][0] = (s1.charAt(i) == s2.charAt(0)) ? 1 : 0;
-        max = Math.max(max, dp[i][0]);
-    }
-    for (int j = 0; j < m; j++) {
-        dp[0][j] = (s1.charAt(0) == s2.charAt(j)) ? 1 : 0;
-        max = Math.max(max, dp[0][j]);
-    }
-    for (int i = 1; i < n; i++) {
-        for (int j = 1; j < m; j++) {
-            if (s1.charAt(i) == s2.charAt(j)) {
-                dp[i][j] = dp[i - 1][j - 1] + 1;
-                max = Math.max(max, dp[i][j]);
-            } else {
-                dp[i][j] = 0;
-            }
-        }
-    }
-    return max;
-}
-```
-
-## Longest Palindromic Substring {#longest-palindromic-substring}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 5
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/longest-palindromic-substring/
-- **Tags**: `String`, `Dynamic Programming`
-- **Interview Tags**: Blind 75
-- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
-
-### Description
-
-Return the longest palindromic substring contained in `s`.
-
-### Examples
-
-```
-Input: "babad"
-Output: "bab"   // "aba" also valid
-
-Input: "cbbd"
-Output: "bb"
-```
-
-### Constraints
-
-- `1 <= s.length <= 1000`
-- `s` consists of digits and English letters
-
-### Solution - DP via Reversed String
-
-#### Walkthrough
-
-Compute the longest common substring between `s` and its reverse. Matches correspond to palindromic substrings only when their indices line up (i.e., the substring reads the same forward and backward). Track the candidate with the greatest length that satisfies the index alignment rule.
-
-#### Analysis
-
-- **Time Complexity**: O(n^2)
-- **Space Complexity**: O(n^2)
-
-#### Implementation Steps
-
-1. Let `rev = reverse(s)`; create `dp[n][n]`.
-2. For each pair `(i, j)` update `dp[i][j]` similar to LCS-substring.
-3. When `dp[i][j] > currentMax`, ensure the substring indices align (`n - 1 - j + dp[i][j] - 1 == i`).
-4. Update best boundaries accordingly.
-
-#### Java Code
-
-```java
-public String longestPalindrome(String s) {
-    int n = s.length();
-    String rev = new StringBuilder(s).reverse().toString();
-    int[][] dp = new int[n][n];
-    int maxLen = 0;
-    int end = 0;
-
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (s.charAt(i) == rev.charAt(j)) {
-                if (i == 0 || j == 0) {
-                    dp[i][j] = 1;
-                } else {
-                    dp[i][j] = dp[i - 1][j - 1] + 1;
-                }
-                int beforeRev = n - 1 - j;
-                if (dp[i][j] > maxLen && beforeRev + dp[i][j] - 1 == i) {
-                    maxLen = dp[i][j];
-                    end = i;
-                }
-            } else {
-                dp[i][j] = 0;
-            }
-        }
-    }
-
-    return s.substring(end - maxLen + 1, end + 1);
 }
 ```
 
@@ -705,68 +644,120 @@ private boolean inOrder(String w1, String w2, int[] rank) {
 }
 ```
 
-## First Non-Repeated Character {#first-non-repeated}
+## Minimum Number of Steps to Make Two Strings Anagram {#min-steps-anagram}
 
 ### Problem Metadata
 
-- **Platform**: Interview Prep
-- **Problem ID**: First Unique Character
-- **Difficulty**: Easy
-- **URL**: N/A
-- **Tags**: `Hash Table`, `String`
+- **Platform**: LeetCode
+- **Problem ID**: 1347
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/minimum-number-of-steps-to-make-two-strings-anagram/
+- **Tags**: `Hash Table`, `String`, `Counting`
 - **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
-Given a string `s`, return the index of the first non-repeating character. If every character repeats, return `-1`.
+You are given two strings of the same length `s` and `t`. In one step you can choose any character of `t` and replace it with another character.
+
+Return the minimum number of steps to make `t` an anagram of `s`.
+
+An **Anagram** of a string is a string that contains the same characters with a different (or the same) permutation.
 
 ### Examples
 
+**Example 1:**
 ```
-Input: "GeeksforGeeks"
-Output: 5   // 'f'
+Input: s = "bab", t = "aba"
+Output: 1
+Explanation: Replace the first 'a' in t with 'b', t = "bba" which is anagram of s.
+```
 
-Input: "GeeksQuiz"
-Output: 0   // 'G'
+**Example 2:**
+```
+Input: s = "leetcode", t = "practice"
+Output: 5
+Explanation: Replace 'p', 'r', 'a', 'i' and 'c' from t with proper characters to make t anagram of s.
+```
+
+**Example 3:**
+```
+Input: s = "anagram", t = "mangaar"
+Output: 0
+Explanation: "anagram" and "mangaar" are anagrams.
 ```
 
 ### Constraints
 
-- `1 <= s.length <= 10^5`
-- String may contain uppercase and lowercase letters
+- `1 <= s.length <= 5 * 10^4`
+- `s.length == t.length`
+- `s` and `t` consist of lowercase English letters only
 
-### Solution - Frequency Counting
+### Solution
 
 #### Walkthrough
 
-Count occurrences of every character using an array keyed by ASCII value. A second pass over the string returns the first index with frequency `1`.
+To make `t` an anagram of `s`, both strings must have identical character frequencies. The solution uses a **frequency counting** approach:
+
+1. Count the frequency of each character in both strings using arrays of size 26 (for lowercase English letters)
+2. Compare frequencies: for each character, if `s` has more occurrences than `t`, those represent characters that `t` is missing
+3. Sum the differences where `s_freq[i] > t_freq[i]` - this gives the minimum number of replacements needed
+
+**Key Insight**: We only count characters that `s` has but `t` lacks (or has fewer of). Characters that `t` has in excess will automatically be replaced by the missing characters, so we don't need to count them separately.
+
+**Example**: For `s = "bab"` and `t = "aba"`:
+- `s_freq`: a=1, b=2
+- `t_freq`: a=2, b=1
+- Difference: b appears 1 more time in `s` → need 1 replacement
+- Result: 1
 
 #### Analysis
 
-- **Time Complexity**: O(n)
-- **Space Complexity**: O(1) (size of character set)
+- **Time Complexity**: O(n) where n is the length of the strings
+  - Two passes to count frequencies: O(n) each
+  - One pass through the 26-element frequency array: O(26) = O(1)
+  - Total: O(2n + 26) = O(n)
+
+- **Space Complexity**: O(1)
+  - Two fixed-size arrays of 26 integers each
+  - Space does not scale with input size
+  - Total: O(52) = O(1)
 
 #### Implementation Steps
 
-1. Initialize `int[] freq = new int[256]`.
-2. For each character, increment its count.
-3. Iterate the string again; return the first index where `freq[c] == 1`.
-4. Return `-1` if none.
+1. Create a helper method `countLetterFrequency(String)` that returns a frequency array for a given string
+2. Count character frequencies for both `s` and `t` using the helper method
+3. Initialize a `result` counter to 0
+4. Iterate through the 26 possible characters (a-z)
+5. For each character, if `s_freq[i] > t_freq[i]`, add the difference to `result`
+6. Return `result` as the minimum number of steps
 
 #### Java Code
 
 ```java
-public int firstUniqChar(String s) {
-    int[] freq = new int[256];
-    for (char c : s.toCharArray()) {
-        freq[c]++;
-    }
-    for (int i = 0; i < s.length(); i++) {
-        if (freq[s.charAt(i)] == 1) {
-            return i;
+class Solution {
+    public int minSteps(String s, String t) {
+        int[] s_freq = countLetterFrequency(s);
+        int[] t_freq = countLetterFrequency(t);
+        int result = 0;
+
+        for(int i = 0; i < 26; i++) {
+            if(s_freq[i] > t_freq[i]) {
+                result += s_freq[i] - t_freq[i];
+            }
         }
+
+        return result;
     }
-    return -1;
+
+    private int[] countLetterFrequency(String str) {
+        int[] freq = new int[26];
+
+        for(char c : str.toCharArray()) {
+            freq[c - 'a']++;
+        }
+
+        return freq;
+    }
 }
 ```
 
@@ -921,119 +912,269 @@ class Solution {
 }
 ```
 
-## Minimum Number of Steps to Make Two Strings Anagram {#min-steps-anagram}
+## Binary Representation {#binary-representation}
 
 ### Problem Metadata
 
-- **Platform**: LeetCode
-- **Problem ID**: 1347
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/minimum-number-of-steps-to-make-two-strings-anagram/
-- **Tags**: `Hash Table`, `String`, `Counting`
-- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
+- **Platform**: Firecode.io
+- **Problem ID**: Binary Representation
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/
+- **Tags**: `Math`, `String`
+- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc)
 
 ### Description
 
-You are given two strings of the same length `s` and `t`. In one step you can choose any character of `t` and replace it with another character.
-
-Return the minimum number of steps to make `t` an anagram of `s`.
-
-An **Anagram** of a string is a string that contains the same characters with a different (or the same) permutation.
+Given a positive integer `n`, return its binary representation as a string consisting of only `'0'` and `'1'`.
 
 ### Examples
 
-**Example 1:**
 ```
-Input: s = "bab", t = "aba"
-Output: 1
-Explanation: Replace the first 'a' in t with 'b', t = "bba" which is anagram of s.
-```
+Input: n = 6
+Output: "110"
 
-**Example 2:**
-```
-Input: s = "leetcode", t = "practice"
-Output: 5
-Explanation: Replace 'p', 'r', 'a', 'i' and 'c' from t with proper characters to make t anagram of s.
-```
-
-**Example 3:**
-```
-Input: s = "anagram", t = "mangaar"
-Output: 0
-Explanation: "anagram" and "mangaar" are anagrams.
+Input: n = 5
+Output: "101"
 ```
 
 ### Constraints
 
-- `1 <= s.length <= 5 * 10^4`
-- `s.length == t.length`
-- `s` and `t` consist of lowercase English letters only
+- `0 <= n <= 2^31 - 1`
 
-### Solution
+### Solution - Iterative Division
 
 #### Walkthrough
 
-To make `t` an anagram of `s`, both strings must have identical character frequencies. The solution uses a **frequency counting** approach:
-
-1. Count the frequency of each character in both strings using arrays of size 26 (for lowercase English letters)
-2. Compare frequencies: for each character, if `s` has more occurrences than `t`, those represent characters that `t` is missing
-3. Sum the differences where `s_freq[i] > t_freq[i]` - this gives the minimum number of replacements needed
-
-**Key Insight**: We only count characters that `s` has but `t` lacks (or has fewer of). Characters that `t` has in excess will automatically be replaced by the missing characters, so we don't need to count them separately.
-
-**Example**: For `s = "bab"` and `t = "aba"`:
-- `s_freq`: a=1, b=2
-- `t_freq`: a=2, b=1
-- Difference: b appears 1 more time in `s` → need 1 replacement
-- Result: 1
+Repeatedly divide by two and track remainders. Appending each remainder to the front of the result (or using a `StringBuilder` and reversing) yields the binary digits from most significant to least significant.
 
 #### Analysis
 
-- **Time Complexity**: O(n) where n is the length of the strings
-  - Two passes to count frequencies: O(n) each
-  - One pass through the 26-element frequency array: O(26) = O(1)
-  - Total: O(2n + 26) = O(n)
-
-- **Space Complexity**: O(1)
-  - Two fixed-size arrays of 26 integers each
-  - Space does not scale with input size
-  - Total: O(52) = O(1)
+- **Time Complexity**: O(log n) divisions
+- **Space Complexity**: O(log n) to store the output
 
 #### Implementation Steps
 
-1. Create a helper method `countLetterFrequency(String)` that returns a frequency array for a given string
-2. Count character frequencies for both `s` and `t` using the helper method
-3. Initialize a `result` counter to 0
-4. Iterate through the 26 possible characters (a-z)
-5. For each character, if `s_freq[i] > t_freq[i]`, add the difference to `result`
-6. Return `result` as the minimum number of steps
+1. Handle `n == 0` by returning `"0"`.
+2. While `n > 0`, compute `bit = n % 2` and prepend it to the answer.
+3. Update `n /= 2`.
 
 #### Java Code
 
 ```java
-class Solution {
-    public int minSteps(String s, String t) {
-        int[] s_freq = countLetterFrequency(s);
-        int[] t_freq = countLetterFrequency(t);
-        int result = 0;
+public String computeBinary(int n) {
+    if (n == 0) {
+        return "0";
+    }
 
-        for(int i = 0; i < 26; i++) {
-            if(s_freq[i] > t_freq[i]) {
-                result += s_freq[i] - t_freq[i];
+    StringBuilder sb = new StringBuilder();
+    while (n > 0) {
+        sb.append(n % 2);
+        n /= 2;
+    }
+
+    return sb.reverse().toString();
+}
+```
+
+## Insert Stars {#insert-stars}
+
+### Problem Metadata
+
+- **Platform**: Firecode.io
+- **Problem ID**: Insert Stars
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/
+- **Tags**: `Recursion`, `String`
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion)
+
+### Description
+
+Given a string `s`, recursively build a new string where any pair of identical adjacent characters is separated by a `'*'`.
+
+### Examples
+
+```
+Input: "cc"
+Output: "c*c"
+
+Input: "cac"
+Output: "cac"
+```
+
+### Constraints
+
+- `1 <= s.length <= 10^4`
+- Characters are ASCII
+
+### Solution - Recursive Pair Expansion
+
+#### Walkthrough
+
+Base case is a single character. For longer strings, compare the first two characters. If equal, return `first + "*" + recurse(s[1:])`; otherwise, return `first + recurse(s[1:])`.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) recursion depth
+
+#### Implementation Steps
+
+1. If `s.length() <= 1`, return `s`.
+2. Recursively compute the transformed suffix `rest = insertPairStar(s.substring(1))`.
+3. If `s.charAt(0) == s.charAt(1)`, return `s[0] + "*" + rest`; else return `s[0] + rest`.
+
+#### Java Code
+
+```java
+public String insertPairStar(String s) {
+    if (s == null || s.length() <= 1) {
+        return s;
+    }
+    String rest = insertPairStar(s.substring(1));
+    if (s.charAt(0) == s.charAt(1)) {
+        return s.charAt(0) + "*" + rest;
+    }
+    return s.charAt(0) + rest;
+}
+```
+
+## Longest Common Substring {#longest-common-substring}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: LCS Substring
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Dynamic Programming`, `String`
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
+
+### Description
+
+Given two strings `s1` and `s2`, return the length of their longest common substring (contiguous sequence).
+
+### Examples
+
+```
+Input: s1 = "abcdxyz", s2 = "xyzabcd"
+Output: 4  // "abcd"
+```
+
+### Constraints
+
+- `1 <= len(s1), len(s2) <= 10^3`
+- Strings contain lowercase letters
+
+### Solution - 2D DP Table
+
+#### Walkthrough
+
+Let `dp[i][j]` represent the length of the longest common substring ending at `s1[i]` and `s2[j]`. Initialize first row/column by comparing individual characters. For each match extend from `dp[i-1][j-1] + 1`; otherwise reset to zero. Track the maximum length seen.
+
+#### Analysis
+
+- **Time Complexity**: O(n * m)
+- **Space Complexity**: O(n * m)
+
+#### Implementation Steps
+
+1. Create `dp[len1][len2]`, initialize first row/column.
+2. For each `i > 0` and `j > 0`, if `s1[i] == s2[j]` set `dp[i][j] = dp[i-1][j-1] + 1`, else `0`.
+3. Maintain `maxLen`.
+4. Return `maxLen`.
+
+#### Java Code
+
+```java
+public int longestCommonSubstring(String s1, String s2) {
+    int n = s1.length();
+    int m = s2.length();
+    int[][] dp = new int[n][m];
+    int max = 0;
+
+    for (int i = 0; i < n; i++) {
+        dp[i][0] = (s1.charAt(i) == s2.charAt(0)) ? 1 : 0;
+        max = Math.max(max, dp[i][0]);
+    }
+    for (int j = 0; j < m; j++) {
+        dp[0][j] = (s1.charAt(0) == s2.charAt(j)) ? 1 : 0;
+        max = Math.max(max, dp[0][j]);
+    }
+    for (int i = 1; i < n; i++) {
+        for (int j = 1; j < m; j++) {
+            if (s1.charAt(i) == s2.charAt(j)) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+                max = Math.max(max, dp[i][j]);
+            } else {
+                dp[i][j] = 0;
             }
         }
-
-        return result;
     }
+    return max;
+}
+```
 
-    private int[] countLetterFrequency(String str) {
-        int[] freq = new int[26];
+## First Non-Repeated Character {#first-non-repeated}
 
-        for(char c : str.toCharArray()) {
-            freq[c - 'a']++;
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: First Unique Character
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**: `Hash Table`, `String`
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Given a string `s`, return the index of the first non-repeating character. If every character repeats, return `-1`.
+
+### Examples
+
+```
+Input: "GeeksforGeeks"
+Output: 5   // 'f'
+
+Input: "GeeksQuiz"
+Output: 0   // 'G'
+```
+
+### Constraints
+
+- `1 <= s.length <= 10^5`
+- String may contain uppercase and lowercase letters
+
+### Solution - Frequency Counting
+
+#### Walkthrough
+
+Count occurrences of every character using an array keyed by ASCII value. A second pass over the string returns the first index with frequency `1`.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1) (size of character set)
+
+#### Implementation Steps
+
+1. Initialize `int[] freq = new int[256]`.
+2. For each character, increment its count.
+3. Iterate the string again; return the first index where `freq[c] == 1`.
+4. Return `-1` if none.
+
+#### Java Code
+
+```java
+public int firstUniqChar(String s) {
+    int[] freq = new int[256];
+    for (char c : s.toCharArray()) {
+        freq[c]++;
+    }
+    for (int i = 0; i < s.length(); i++) {
+        if (freq[s.charAt(i)] == 1) {
+            return i;
         }
-
-        return freq;
     }
+    return -1;
 }
 ```

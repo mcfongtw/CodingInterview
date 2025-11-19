@@ -102,7 +102,282 @@ search, the general time complexity is reduced to O(h) where h = log(n).
 Since a binary search tree with n nodes has a minimum of O(log(n)) levels, it takes at least O(log(n)) comparisons to
 find a particular node. However, in the edge cases  where tree is in a list form, the worst time complexity is O(n)
 
+## Binary Tree Inorder Traversal {#inorder-traversal}
 
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 94
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-inorder-traversal/
+- **Tags**: `Tree`, `DFS`
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs)
+
+### Description
+
+Return the inorder traversal (left-root-right) of a binary tree.
+
+### Solution - Iterative Stack
+
+```
+public List<Integer> inorderTraversal(TreeNode root) {
+    List<Integer> result = new ArrayList<>();
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    TreeNode current = root;
+
+    while (current != null || !stack.isEmpty()) {
+        while (current != null) {
+            stack.push(current);
+            current = current.left;
+        }
+        current = stack.pop();
+        result.add(current.val);
+        current = current.right;
+    }
+    return result;
+}
+```
+
+### Solution - Recursive
+
+```
+public List<Integer> inorderTraversalRecursive(TreeNode root) {
+    List<Integer> result = new ArrayList<>();
+    dfs(root, result);
+    return result;
+}
+
+private void dfs(TreeNode node, List<Integer> list) {
+    if (node == null) {
+        return;
+    }
+    dfs(node.left, list);
+    list.add(node.val);
+    dfs(node.right, list);
+}
+```
+
+## Validate Binary Search Tree {#validate-bst}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 98
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/validate-binary-search-tree/
+- **Tags**: `Tree`, `DFS`
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), [Recursion](glossary-of-algorithm.html#recursion)
+
+### Description
+
+Check whether a binary tree is a valid BST.
+
+### Solution - Inorder Bounds
+
+Use DFS while carrying min/max bounds.
+
+```
+public boolean isValidBST(TreeNode root) {
+    return validate(root, null, null);
+}
+
+private boolean validate(TreeNode node, Integer low, Integer high) {
+    if (node == null) {
+        return true;
+    }
+    if ((low != null && node.val <= low) || (high != null && node.val >= high)) {
+        return false;
+    }
+    return validate(node.left, low, node.val) && validate(node.right, node.val, high);
+}
+```
+
+## Binary Tree Zigzag Level Order Traversal {#zigzag-level-order}
+
+```
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 103
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+- **Tags**: `Tree`, `BFS`
+- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#bfs)
+
+### Description
+
+Return the zigzag level order traversal of a binary tree (left-to-right, then right-to-left, alternating each level).
+
+### Examples
+
+```
+Input: [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]
+```
+
+### Constraints
+
+- `0 <= nodes <= 2000`
+
+### Solution - BFS with Direction Flag
+
+#### Walkthrough
+
+Perform level-order traversal. Track a boolean indicating whether to append values normally or reversed. For every level, either append values or insert at the front, and flip the flag.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+1. Initialize queue with root and a boolean `leftToRight = true`.
+2. For each level, collect values in a list.
+3. If `leftToRight`, append; otherwise insert at front or use reverse list.
+4. Toggle `leftToRight` each level.
+
+#### Java Code
+```java
+public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+    List<List<Integer>> result = new ArrayList<>();
+    if (root == null) {
+        return result;
+    }
+
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.offer(root);
+    boolean leftToRight = true;
+
+    while (!queue.isEmpty()) {
+        int size = queue.size();
+        LinkedList<Integer> level = new LinkedList<>();
+
+        for (int i = 0; i < size; i++) {
+            TreeNode node = queue.poll();
+            if (leftToRight) {
+                level.addLast(node.val);
+            } else {
+                level.addFirst(node.val);
+            }
+
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+        }
+
+        result.add(level);
+        leftToRight = !leftToRight;
+    }
+
+    return result;
+}
+```
+
+## Maximum Depth of Binary Tree {#max-depth}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 104
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/maximum-depth-of-binary-tree/
+- **Tags**: `Tree`
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), DFS
+
+### Description
+
+Return the maximum depth (number of nodes along the longest path from root down to a leaf).
+
+### Solution - DFS
+
+```
+public int maxDepth(TreeNode root) {
+    if (root == null) {
+        return 0;
+    }
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}
+```
+
+## Binary Tree Level Order Traversal II {#level-order-bottom}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 107
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-level-order-traversal-ii/
+- **Tags**: `Tree`, `BFS`
+- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#bfs)
+
+### Description
+
+Return the level order traversal of a binary tree from the bottom level up to the root.
+
+### Examples
+
+```
+Input: [3,9,20,null,null,15,7]
+Output: [[15,7],[9,20],[3]]
+```
+
+### Constraints
+
+- `0 <= nodes <= 2000`
+
+### Solution - Reverse BFS
+
+#### Walkthrough
+
+Perform BFS collecting nodes level by level. Instead of appending to the end, insert each level at the front of a linked list (or append and reverse at the end).
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+1. Run BFS using a queue.
+2. For each level size, dequeue nodes, record values, enqueue children.
+3. Insert level list at the start of the result.
+
+#### Java Code
+```java
+public List<List<Integer>> levelOrderBottom(TreeNode root) {
+    LinkedList<List<Integer>> result = new LinkedList<>();
+    if (root == null) {
+        return result;
+    }
+
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.offer(root);
+
+    while (!queue.isEmpty()) {
+        int size = queue.size();
+        List<Integer> level = new ArrayList<>(size);
+
+        for (int i = 0; i < size; i++) {
+            TreeNode node = queue.poll();
+            level.add(node.val);
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+        }
+
+        result.addFirst(level);
+    }
+
+    return result;
+}
+```
 
 ## Balanced Binary Tree {#balanced-binary-tree}
 
@@ -350,286 +625,37 @@ private void traverse(TreeNode root, int level, List<List<Integer>> ans) {
 }
 ```
 
-
-
-## Binary Tree Level Order Traversal II {#level-order-bottom}
+## Minimum Depth of Binary Tree {#min-depth}
 
 ### Problem Metadata
 
 - **Platform**: LeetCode
-- **Problem ID**: 107
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/binary-tree-level-order-traversal-ii/
-- **Tags**: `Tree`, `BFS`
-- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#bfs)
+- **Problem ID**: 111
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/minimum-depth-of-binary-tree/
+- **Tags**: `Tree`
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), DFS
 
 ### Description
 
-Return the level order traversal of a binary tree from the bottom level up to the root.
+Return the minimum depth from root to the nearest leaf.
 
-### Examples
+### Solution - DFS
 
 ```
-Input: [3,9,20,null,null,15,7]
-Output: [[15,7],[9,20],[3]]
-```
-
-### Constraints
-
-- `0 <= nodes <= 2000`
-
-### Solution - Reverse BFS
-
-#### Walkthrough
-
-Perform BFS collecting nodes level by level. Instead of appending to the end, insert each level at the front of a linked list (or append and reverse at the end).
-
-#### Analysis
-
-- **Time Complexity**: O(n)
-- **Space Complexity**: O(n)
-
-#### Implementation Steps
-
-1. Run BFS using a queue.
-2. For each level size, dequeue nodes, record values, enqueue children.
-3. Insert level list at the start of the result.
-
-#### Java Code
-```java
-public List<List<Integer>> levelOrderBottom(TreeNode root) {
-    LinkedList<List<Integer>> result = new LinkedList<>();
+public int minDepth(TreeNode root) {
     if (root == null) {
-        return result;
-    }
-
-    Queue<TreeNode> queue = new LinkedList<>();
-    queue.offer(root);
-
-    while (!queue.isEmpty()) {
-        int size = queue.size();
-        List<Integer> level = new ArrayList<>(size);
-
-        for (int i = 0; i < size; i++) {
-            TreeNode node = queue.poll();
-            level.add(node.val);
-            if (node.left != null) {
-                queue.offer(node.left);
-            }
-            if (node.right != null) {
-                queue.offer(node.right);
-            }
-        }
-
-        result.addFirst(level);
-    }
-
-    return result;
-}
-```
-
-## Binary Tree Zigzag Level Order Traversal {#zigzag-level-order}
-
-```
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 103
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
-- **Tags**: `Tree`, `BFS`
-- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#bfs)
-
-### Description
-
-Return the zigzag level order traversal of a binary tree (left-to-right, then right-to-left, alternating each level).
-
-### Examples
-
-```
-Input: [3,9,20,null,null,15,7]
-Output: [[3],[20,9],[15,7]]
-```
-
-### Constraints
-
-- `0 <= nodes <= 2000`
-
-### Solution - BFS with Direction Flag
-
-#### Walkthrough
-
-Perform level-order traversal. Track a boolean indicating whether to append values normally or reversed. For every level, either append values or insert at the front, and flip the flag.
-
-#### Analysis
-
-- **Time Complexity**: O(n)
-- **Space Complexity**: O(n)
-
-#### Implementation Steps
-
-1. Initialize queue with root and a boolean `leftToRight = true`.
-2. For each level, collect values in a list.
-3. If `leftToRight`, append; otherwise insert at front or use reverse list.
-4. Toggle `leftToRight` each level.
-
-#### Java Code
-```java
-public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-    List<List<Integer>> result = new ArrayList<>();
-    if (root == null) {
-        return result;
-    }
-
-    Queue<TreeNode> queue = new LinkedList<>();
-    queue.offer(root);
-    boolean leftToRight = true;
-
-    while (!queue.isEmpty()) {
-        int size = queue.size();
-        LinkedList<Integer> level = new LinkedList<>();
-
-        for (int i = 0; i < size; i++) {
-            TreeNode node = queue.poll();
-            if (leftToRight) {
-                level.addLast(node.val);
-            } else {
-                level.addFirst(node.val);
-            }
-
-            if (node.left != null) {
-                queue.offer(node.left);
-            }
-            if (node.right != null) {
-                queue.offer(node.right);
-            }
-        }
-
-        result.add(level);
-        leftToRight = !leftToRight;
-    }
-
-    return result;
-}
-```
-
-## Count Complete Tree Nodes / Leet Code 222 / Medium
-
-```
-### Description
-Given a complete binary tree, count the number of nodes.  In a complete binary tree every level, except possibly
-the last, is completely filled, and all nodes in the last level are as far left as possible. It can have between
-1 and 2h nodes inclusive at the last level h. In a full binary tree, it is completely filled at the last level,
-leaving the total node number of $2^{height} - 1$
-
-### Example
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {1}
-child { node {2}
-    child { node {4}}
-    child {  node {5}}
-}
-child {  node {3}
-    child {  node {6}}
-}
-;
-\end{tikzpicture}
-```
-output 6
-
-### Solution
-#### Walkthrough
-Recursively call at each node, and determine if it is a full binary tree or complete binary tree. if it is full
-binary tree (left height == right height), return $(2^{h} - 1)$, else return 1 + rec(node.left) + rec(node.right)
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Implementation Steps
-
- dfs \@ref(dfs)
-
-#### Java Code
-```java
-public int countNodes(TreeNode root) {
-    if(root == null) {
         return 0;
     }
-    int lHeight = 0, rHeight = 0;
-
-    for (TreeNode node = root; node != null; node = node.left, lHeight++);
-    for (TreeNode node = root; node != null; node = node.right, rHeight++);
-
-    if (lHeight == rHeight) {
-        /*
-        * full binary tree
-        * 2^leftNum - 1
-        */
-        return (1 << lHeight) - 1;
-    } else {
-        return 1 + countNodes(root.left) + countNodes(root.right);
+    if (root.left == null) {
+        return 1 + minDepth(root.right);
     }
+    if (root.right == null) {
+        return 1 + minDepth(root.left);
+    }
+    return 1 + Math.min(minDepth(root.left), minDepth(root.right));
 }
 ```
-
-
-
-### Solution
-#### Walkthrough
-Have a global variable of ArrayList to remember the path. Create a helper function to recursively traverse the tree.
-If the target does not lie either in the left or right subtree of the current node.Thus, remove current node's value
-from trace list.
-
-#### Analysis
-Time complexity is O(n) as every node is visited once.
-
-#### Implementation Steps
-
- backtrack \@ref(backtrack), dfs \@ref(dfs)
-
-#### Java Code
-```java
-List<TreeNode> trace = new ArrayList<>();
-
-int pathLengthFromRoot(TreeNode root, int target) {
-    path.clear();
-
-    boolean result = backtrack(root, target);
-
-    if(result) {
-        return trace.size();
-    } else {
-        return 0;
-    }
-}
-
-boolean backtrack(TreeNode root, int target) {
-    trace.add(root);
-
-    if(root == null) {
-        return false;
-    }
-    if(root.data == target) {
-        //found the node
-        return true;
-    }
-
-    if(backtrack(root.left, target) || backtrack(root.right, target) ) {
-        return true;
-    }
-
-    //not in current path, backtrack
-    trace.remove(path.size() - 1);
-    return false;
-}
-```
-
 
 ## Path Sum {#path-sum}
 
@@ -735,57 +761,6 @@ private void backtrack(TreeNode node, int remain, List<Integer> path, List<List<
 }
 ```
 
-## Path Sum III {#path-sum-iii}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 437
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/path-sum-iii/
-- **Tags**: `Tree`, `Prefix Sum`
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs)
-
-### Description
-
-Count the number of paths in a binary tree that sum to a target. Paths may start and end anywhere but must go downward.
-
-### Solution - Prefix Sum DFS
-
-#### Walkthrough
-
-Use DFS while tracking a running prefix sum and a hash map of prefix counts. For each node, check how many previous prefix sums equal `currentSum - target`. Update the map while exploring children and backtrack counts afterward.
-
-#### Analysis
-
-- **Time Complexity**: O(n)
-- **Space Complexity**: O(h)
-
-#### Java Code
-```
-public int pathSum(TreeNode root, int targetSum) {
-    Map<Integer, Integer> prefix = new HashMap<>();
-    prefix.put(0, 1);
-    return dfs(root, 0, targetSum, prefix);
-}
-
-private int dfs(TreeNode node, int current, int target, Map<Integer, Integer> prefix) {
-    if (node == null) {
-        return 0;
-    }
-
-    current += node.val;
-    int count = prefix.getOrDefault(current - target, 0);
-    prefix.put(current, prefix.getOrDefault(current, 0) + 1);
-
-    count += dfs(node.left, current, target, prefix);
-    count += dfs(node.right, current, target, prefix);
-
-    prefix.put(current, prefix.get(current) - 1);
-    return count;
-}
-```
-
 ## Binary Tree Preorder Traversal {#preorder-traversal}
 
 ### Problem Metadata
@@ -856,61 +831,6 @@ private void dfs(TreeNode node, List<Integer> list) {
 }
 ```
 
-## Binary Tree Inorder Traversal {#inorder-traversal}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 94
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/binary-tree-inorder-traversal/
-- **Tags**: `Tree`, `DFS`
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs)
-
-### Description
-
-Return the inorder traversal (left-root-right) of a binary tree.
-
-### Solution - Iterative Stack
-
-```
-public List<Integer> inorderTraversal(TreeNode root) {
-    List<Integer> result = new ArrayList<>();
-    Deque<TreeNode> stack = new ArrayDeque<>();
-    TreeNode current = root;
-
-    while (current != null || !stack.isEmpty()) {
-        while (current != null) {
-            stack.push(current);
-            current = current.left;
-        }
-        current = stack.pop();
-        result.add(current.val);
-        current = current.right;
-    }
-    return result;
-}
-```
-
-### Solution - Recursive
-
-```
-public List<Integer> inorderTraversalRecursive(TreeNode root) {
-    List<Integer> result = new ArrayList<>();
-    dfs(root, result);
-    return result;
-}
-
-private void dfs(TreeNode node, List<Integer> list) {
-    if (node == null) {
-        return;
-    }
-    dfs(node.left, list);
-    list.add(node.val);
-    dfs(node.right, list);
-}
-```
-
 ## Binary Tree Postorder Traversal {#postorder-traversal}
 
 ### Problem Metadata
@@ -964,61 +884,34 @@ private void dfs(TreeNode node, List<Integer> list) {
 }
 ```
 
-## Maximum Depth of Binary Tree {#max-depth}
+## Binary Tree Upside Down {#upside-down}
 
 ### Problem Metadata
 
 - **Platform**: LeetCode
-- **Problem ID**: 104
-- **Difficulty**: Easy
-- **URL**: https://leetcode.com/problems/maximum-depth-of-binary-tree/
+- **Problem ID**: 156
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-upside-down/
 - **Tags**: `Tree`
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), DFS
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion)
 
 ### Description
 
-Return the maximum depth (number of nodes along the longest path from root down to a leaf).
+Flip the tree so that every right child becomes a left sibling.
 
-### Solution - DFS
-
-```
-public int maxDepth(TreeNode root) {
-    if (root == null) {
-        return 0;
-    }
-    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
-}
-```
-
-## Minimum Depth of Binary Tree {#min-depth}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 111
-- **Difficulty**: Easy
-- **URL**: https://leetcode.com/problems/minimum-depth-of-binary-tree/
-- **Tags**: `Tree`
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), DFS
-
-### Description
-
-Return the minimum depth from root to the nearest leaf.
-
-### Solution - DFS
+### Solution - Recursive Rotation
 
 ```
-public int minDepth(TreeNode root) {
-    if (root == null) {
-        return 0;
+public TreeNode upsideDownBinaryTree(TreeNode root) {
+    if (root == null || root.left == null) {
+        return root;
     }
-    if (root.left == null) {
-        return 1 + minDepth(root.right);
-    }
-    if (root.right == null) {
-        return 1 + minDepth(root.left);
-    }
-    return 1 + Math.min(minDepth(root.left), minDepth(root.right));
+    TreeNode newRoot = upsideDownBinaryTree(root.left);
+    root.left.left = root.right;
+    root.left.right = root;
+    root.left = null;
+    root.right = null;
+    return newRoot;
 }
 ```
 
@@ -1065,72 +958,6 @@ private boolean dfs(TreeNode node, int[] count) {
     }
     count[0]++;
     return true;
-}
-```
-
-## Validate Binary Search Tree {#validate-bst}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 98
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/validate-binary-search-tree/
-- **Tags**: `Tree`, `DFS`
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), [Recursion](glossary-of-algorithm.html#recursion)
-
-### Description
-
-Check whether a binary tree is a valid BST.
-
-### Solution - Inorder Bounds
-
-Use DFS while carrying min/max bounds.
-
-```
-public boolean isValidBST(TreeNode root) {
-    return validate(root, null, null);
-}
-
-private boolean validate(TreeNode node, Integer low, Integer high) {
-    if (node == null) {
-        return true;
-    }
-    if ((low != null && node.val <= low) || (high != null && node.val >= high)) {
-        return false;
-    }
-    return validate(node.left, low, node.val) && validate(node.right, node.val, high);
-}
-```
-
-## Binary Tree Upside Down {#upside-down}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 156
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/binary-tree-upside-down/
-- **Tags**: `Tree`
-- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion)
-
-### Description
-
-Flip the tree so that every right child becomes a left sibling.
-
-### Solution - Recursive Rotation
-
-```
-public TreeNode upsideDownBinaryTree(TreeNode root) {
-    if (root == null || root.left == null) {
-        return root;
-    }
-    TreeNode newRoot = upsideDownBinaryTree(root.left);
-    root.left.left = root.right;
-    root.left.right = root;
-    root.left = null;
-    root.right = null;
-    return newRoot;
 }
 ```
 
@@ -1239,6 +1066,57 @@ private int height(TreeNode node, List<List<Integer>> result) {
     }
     result.get(h).add(node.val);
     return h;
+}
+```
+
+## Path Sum III {#path-sum-iii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 437
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/path-sum-iii/
+- **Tags**: `Tree`, `Prefix Sum`
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs)
+
+### Description
+
+Count the number of paths in a binary tree that sum to a target. Paths may start and end anywhere but must go downward.
+
+### Solution - Prefix Sum DFS
+
+#### Walkthrough
+
+Use DFS while tracking a running prefix sum and a hash map of prefix counts. For each node, check how many previous prefix sums equal `currentSum - target`. Update the map while exploring children and backtrack counts afterward.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(h)
+
+#### Java Code
+```
+public int pathSum(TreeNode root, int targetSum) {
+    Map<Integer, Integer> prefix = new HashMap<>();
+    prefix.put(0, 1);
+    return dfs(root, 0, targetSum, prefix);
+}
+
+private int dfs(TreeNode node, int current, int target, Map<Integer, Integer> prefix) {
+    if (node == null) {
+        return 0;
+    }
+
+    current += node.val;
+    int count = prefix.getOrDefault(current - target, 0);
+    prefix.put(current, prefix.getOrDefault(current, 0) + 1);
+
+    count += dfs(node.left, current, target, prefix);
+    count += dfs(node.right, current, target, prefix);
+
+    prefix.put(current, prefix.get(current) - 1);
+    return count;
 }
 ```
 

@@ -1,88 +1,5 @@
 # Math
-
-## Power of Two {#power-of-two}
-
-### Problem Metadata
-
-- **Platform**: Firecode.io
-- **Problem ID**: Power of Two
-- **Difficulty**: Level 2
-- **URL**: https://www.firecode.io/
-- **Tags**: `Math`, `Bit Manipulation`, `Recursion`
-- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion)
-
-### Description
-
-Determine whether a positive integer `n` is a power of two.
-
-### Examples
-
-```
-Input: 5
-Output: false
-
-Input: 8
-Output: true
-```
-
-### Constraints
-
-- `0 <= n <= 2^31 - 1`
-
-### Solution 1 - Recursive Halving
-
-#### Walkthrough
-
-Repeatedly divide `n` by `2` as long as it is even. If we reach `1`, `n` is a power of two; if we encounter an odd number (other than `1`) or zero, it is not.
-
-#### Analysis
-
-- **Time Complexity**: O(log n)
-- **Space Complexity**: O(log n) recursion depth
-
-#### Implementation Steps
-
-
-1. Handle `n <= 0` as `false`.
-2. Base case `n == 1` is `true`.
-3. If `n` is odd, return `false`.
-4. Recurse on `n / 2`.
-
-#### Java Code
-
-```java
-public boolean isPowerOfTwoRecursive(int n) {
-    if (n <= 0) {
-        return false;
-    }
-    if (n == 1) {
-        return true;
-    }
-    if ((n & 1) == 1) {
-        return false;
-    }
-    return isPowerOfTwoRecursive(n / 2);
-}
-```
-
-### Solution 2 - Bitwise Trick
-
-#### Walkthrough
-
-Power of two numbers have a single bit set. Checking `n & (n - 1)` clears the lowest set bit; for powers of two, the result is zero.
-
-#### Analysis
-
-- **Time Complexity**: O(1)
-- **Space Complexity**: O(1)
-
-#### Java Code
-
-```java
-public boolean isPowerOfTwo(int n) {
-    return n > 0 && (n & (n - 1)) == 0;
-}
-```
+These math problems emphasize bit hacks, exponentiation, DP-on-numbers, and number theory tricks that show up in interviews.
 
 ## Pow(x, n) {#pow-x-n}
 
@@ -283,6 +200,90 @@ public int getSum(int a, int b) {
         b = carry;
     }
     return a;
+}
+```
+
+## Power of Two {#power-of-two}
+
+### Problem Metadata
+
+- **Platform**: Firecode.io
+- **Problem ID**: Power of Two
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/
+- **Tags**: `Math`, `Bit Manipulation`, `Recursion`
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion)
+
+### Description
+
+Determine whether a positive integer `n` is a power of two.
+
+### Examples
+
+```
+Input: 5
+Output: false
+
+Input: 8
+Output: true
+```
+
+### Constraints
+
+- `0 <= n <= 2^31 - 1`
+
+### Solution 1 - Recursive Halving
+
+#### Walkthrough
+
+Repeatedly divide `n` by `2` as long as it is even. If we reach `1`, `n` is a power of two; if we encounter an odd number (other than `1`) or zero, it is not.
+
+#### Analysis
+
+- **Time Complexity**: O(log n)
+- **Space Complexity**: O(log n) recursion depth
+
+#### Implementation Steps
+
+
+1. Handle `n <= 0` as `false`.
+2. Base case `n == 1` is `true`.
+3. If `n` is odd, return `false`.
+4. Recurse on `n / 2`.
+
+#### Java Code
+
+```java
+public boolean isPowerOfTwoRecursive(int n) {
+    if (n <= 0) {
+        return false;
+    }
+    if (n == 1) {
+        return true;
+    }
+    if ((n & 1) == 1) {
+        return false;
+    }
+    return isPowerOfTwoRecursive(n / 2);
+}
+```
+
+### Solution 2 - Bitwise Trick
+
+#### Walkthrough
+
+Power of two numbers have a single bit set. Checking `n & (n - 1)` clears the lowest set bit; for powers of two, the result is zero.
+
+#### Analysis
+
+- **Time Complexity**: O(1)
+- **Space Complexity**: O(1)
+
+#### Java Code
+
+```java
+public boolean isPowerOfTwo(int n) {
+    return n > 0 && (n & (n - 1)) == 0;
 }
 ```
 
@@ -498,4 +499,3 @@ private int dfs(int n, int[] memo) {
     return memo[n] = best;
 }
 ```
-

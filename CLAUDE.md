@@ -52,8 +52,8 @@ The book is organized into topic-based chapters, each as a separate .Rmd file:
 - `04-tree.Rmd` - Tree problems and traversal algorithms
 - `05-graph.Rmd` - Graph problems
 - `06-linked-list.Rmd` - Linked list problems
-- `07-data-structure.Rmd` - Data structure problems (stacks, queues, heaps)
-- `08-search-and-sort.Rmd` - Searching and sorting algorithms
+- `07-stack-and-queue.Rmd` - Stack and queue problems
+- `08-heap.Rmd` - Heap and priority queue problems
 - `09-string-manipulation.Rmd` - String problems
 - `10-math.Rmd` - Math problems
 - `11-interactive.Rmd` - Interactive problems
@@ -80,6 +80,14 @@ When adding new problems:
 - Reference algorithm definitions from glossary using `\@ref(id)` (e.g., `\@ref(dfs)`)
 - Follow the established problem template structure
 - Add new chapters to the book by creating numbered .Rmd files (e.g., `13-newchapter.Rmd`)
+
+### Chapter Organization Rules
+
+- **Sort by Problem ID**: All problems within a chapter must be sorted by their Problem ID field in ascending order. Problems without a numeric ID (e.g., from Firecode or Interview Prep) should be placed at the end of the chapter.
+- **Categorize by Data Structure**: Problems should be placed in chapters based on their primary data structure type, not by algorithm type. For example:
+  - Linked list sorting problems → `06-linked-list.Rmd` (not search-and-sort)
+  - Heap-based problems → `08-heap.Rmd`
+  - Stack/Queue problems → `07-stack-and-queue.Rmd`
 
 ### Workflow for Adding New Problems
 

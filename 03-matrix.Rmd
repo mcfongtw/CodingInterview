@@ -1,186 +1,4 @@
-
 # Matrix
-
-## Design Tic-Tac-Toe {#tic-tac-toe}
-
-## Word Search {#word-search}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 79
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/word-search/
-- **Tags**: `Matrix`, `Backtracking`
-- **Interview Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Backtracking](glossary-of-algorithm.html#backtrack), [Depth First Search](glossary-of-algorithm.html#dfs)
-
-### Description
-
-Given a board of characters and a target word, check if the word can be constructed from sequentially adjacent cells (horizontal or vertical). Each cell can be used at most once.
-
-### Examples
-
-```
-Input:
-[["A","B","C","E"],
- ["S","F","C","S"],
- ["A","D","E","E"]], word = "ABCCED"
-Output: true
-```
-
-### Constraints
-
-- `1 <= board.length, board[0].length <= 6`
-- `1 <= word.length <= 15`
-
-### Solution - DFS Backtracking
-
-#### Walkthrough
-
-Try every cell as a starting point. Recursively match characters by exploring four directions, marking the current cell as visited to avoid reuse. If we reach the end of the word, return true; otherwise backtrack by restoring the cell.
-
-#### Analysis
-
-- **Time Complexity**: O(m * n * 4^L) where `L` is the word length
-- **Space Complexity**: O(L) recursion stack
-
-#### Implementation Steps
-
-1. Loop over all cells `(i, j)`.
-2. Call `dfs(i, j, index)` when the character matches `word[index]`.
-3. Base case: `index == word.length()` → success.
-4. On mismatch or out of bounds, return false.
-5. Temporarily mark cell as visited, recurse to neighbors, then restore.
-
-#### Java Code
-
-```java
-private static final char VISITED = '#';
-
-public boolean exist(char[][] board, String word) {
-    for (int i = 0; i < board.length; i++) {
-        for (int j = 0; j < board[0].length; j++) {
-            if (dfs(board, word, i, j, 0)) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-private boolean dfs(char[][] board, String word, int row, int col, int index) {
-    if (index == word.length()) {
-        return true;
-    }
-    if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) {
-        return false;
-    }
-    if (board[row][col] != word.charAt(index)) {
-        return false;
-    }
-
-    char saved = board[row][col];
-    board[row][col] = VISITED;
-
-    boolean found = dfs(board, word, row + 1, col, index + 1)
-            || dfs(board, word, row - 1, col, index + 1)
-            || dfs(board, word, row, col + 1, index + 1)
-            || dfs(board, word, row, col - 1, index + 1);
-
-    board[row][col] = saved;
-    return found;
-}
-```
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 348
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/design-tic-tac-toe/
-- **Tags**: `Matrix`, `Prefix Sum`
-- **Interview Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Matrix Traversal](glossary-of-algorithm.html#matrix-traversal), Matrix Accumulators
-
-### Description
-
-Design a Tic-Tac-Toe game on an `n x n` board. Implement `move(row, col, player)` that places the player's mark and returns `0` if no one wins, or the player's number if they win.
-
-### Examples
-
-```
-Input:
-["TicTacToe","move","move","move","move","move","move","move"]
-[[3],[0,0,1],[0,2,2],[2,2,1],[1,1,2],[2,0,1],[1,0,2],[2,1,1]]
-Output: [null,0,0,0,0,0,0,1]
-```
-
-### Constraints
-
-- `n` between 1 and 100
-- Calls to `move` do not place on occupied cells
-
-### Solution - Running Counts
-
-#### Walkthrough
-
-Instead of scanning entire rows/columns after each move, keep running counts:
-
-1. `rows[i]` stores the net score for row `i`, `cols[j]` for column `j`.
-2. Add `+1` for player 1 or `-1` for player 2.
-3. Maintain two diagonals.
-4. If any absolute value reaches `n`, that player wins.
-
-#### Analysis
-
-- **Time Complexity**: O(1) per move
-- **Space Complexity**: O(n)
-
-#### Implementation Steps
-
-1. Initialize arrays `rows`, `cols`, and two scalars for diagonals.
-2. For each move, add `score = player == 1 ? 1 : -1` to the row/column.
-3. Update diagonals when applicable.
-4. Check if any absolute value equals `n`; return winner or `0`.
-
-#### Java Code
-
-```java
-class TicTacToe {
-    private final int[] rows;
-    private final int[] cols;
-    private int diag;
-    private int antiDiag;
-
-    public TicTacToe(int n) {
-        rows = new int[n];
-        cols = new int[n];
-    }
-
-    public int move(int row, int col, int player) {
-        int score = player == 1 ? 1 : -1;
-        rows[row] += score;
-        cols[col] += score;
-
-        if (row == col) {
-            diag += score;
-        }
-        if (row + col == rows.length - 1) {
-            antiDiag += score;
-        }
-
-        if (Math.abs(rows[row]) == rows.length
-            || Math.abs(cols[col]) == rows.length
-            || Math.abs(diag) == rows.length
-            || Math.abs(antiDiag) == rows.length) {
-            return player;
-        }
-
-        return 0;
-    }
-}
-```
-
 
 ## Rotate Image {#rotate-image}
 
@@ -263,8 +81,6 @@ public void rotate(int[][] matrix) {
     }
 }
 ```
-
-
 
 ## Spiral Matrix {#spiral-matrix}
 
@@ -419,6 +235,139 @@ public List<Integer> spiralOrder(int[][] matrix) {
 }
 ```
 
+## Unique Paths {#unique-paths}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 62
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/unique-paths/
+- **Tags**: `Matrix`, `Dynamic Programming`
+- **Interview Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
+
+### Description
+
+A robot can move only right or down on an `m x n` grid from the top-left to the bottom-right. Count the number of unique paths.
+
+### Examples
+
+```
+Input: m = 3, n = 7
+Output: 28
+```
+
+### Constraints
+
+- `1 <= m, n <= 100`
+
+### Solution - DP Grid
+
+#### Walkthrough
+
+Paths to `(i, j)` equal the sum of paths to `(i-1, j)` and `(i, j-1)` since those are the only ways to enter. Initialize the first row and column to 1 because there is only one way to reach those cells.
+
+#### Analysis
+
+- **Time Complexity**: O(m * n)
+- **Space Complexity**: O(m * n) (or O(n) with rolling arrays)
+
+#### Implementation Steps
+
+1. Fill a DP matrix with `dp[0][*] = dp[*][0] = 1`.
+2. For each cell from `(1,1)` to `(m-1,n-1)` compute `dp[i][j] = dp[i-1][j] + dp[i][j-1]`.
+3. Return `dp[m-1][n-1]`.
+
+#### Java Code
+
+```java
+public int uniquePaths(int m, int n) {
+    int[][] dp = new int[m][n];
+    for (int i = 0; i < m; i++) {
+        dp[i][0] = 1;
+    }
+    for (int j = 0; j < n; j++) {
+        dp[0][j] = 1;
+    }
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+```
+
+## Minimum Path Sum {#min-path-sum}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 64
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/minimum-path-sum/
+- **Tags**: `Matrix`, `Dynamic Programming`
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
+
+### Description
+
+Given a grid of non-negative numbers, move only right or down from the top-left cell to the bottom-right, minimizing the sum of values along the path.
+
+### Examples
+
+```
+Input: [[1,3,1],[1,5,1],[4,2,1]]
+Output: 7
+```
+
+### Constraints
+
+- `1 <= m, n <= 200`
+
+### Solution - DP Table
+
+#### Walkthrough
+
+Set `dp[i][j]` to the minimum sum needed to reach `(i, j)`. Initialize the first row and column with cumulative sums. For each other cell, add the current value to the minimum of the top or left neighbor.
+
+#### Analysis
+
+- **Time Complexity**: O(m * n)
+- **Space Complexity**: O(m * n) (can be optimized to O(n))
+
+#### Implementation Steps
+
+1. Initialize `dp[0][0] = grid[0][0]`.
+2. Fill the first row/column cumulatively.
+3. For `i > 0`, `j > 0`, set `dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])`.
+4. Return `dp[m-1][n-1]`.
+
+#### Java Code
+
+```java
+public int minPathSum(int[][] grid) {
+    int rows = grid.length;
+    int cols = grid[0].length;
+    int[][] dp = new int[rows][cols];
+
+    dp[0][0] = grid[0][0];
+    for (int c = 1; c < cols; c++) {
+        dp[0][c] = dp[0][c - 1] + grid[0][c];
+    }
+    for (int r = 1; r < rows; r++) {
+        dp[r][0] = dp[r - 1][0] + grid[r][0];
+    }
+
+    for (int r = 1; r < rows; r++) {
+        for (int c = 1; c < cols; c++) {
+            dp[r][c] = grid[r][c] + Math.min(dp[r - 1][c], dp[r][c - 1]);
+        }
+    }
+
+    return dp[rows - 1][cols - 1];
+}
+```
 
 ## Search a 2D Matrix {#search-matrix}
 
@@ -499,308 +448,96 @@ public boolean searchMatrix(int[][] matrix, int target) {
 }
 ```
 
-
-## Search a 2D Matrix II {#search-matrix-ii}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 240
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/search-a-2d-matrix-ii/
-- **Tags**: `Matrix`
-- **Techniques**: [Matrix Traversal](glossary-of-algorithm.html#matrix-traversal)
-
-### Description
-
-The matrix is sorted in ascending order both across rows and down columns. Determine whether a target value exists.
-
-### Examples
-
-```
-Input: matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5
-Output: true
-```
-
-### Constraints
-
-- `1 <= m, n <= 300`
-
-### Solution - Staircase Search
-
-#### Walkthrough
-
-Start in the top-right corner (or bottom-left). At each step:
-
-- If the value is greater than target, move left (eliminate a column).
-- If smaller, move down (eliminate a row).
-
-Because of the sorted property, one direction always reduces the search space.
-
-#### Analysis
-
-- **Time Complexity**: O(m + n)
-- **Space Complexity**: O(1)
-
-#### Implementation Steps
-
-1. Set `row = 0`, `col = n - 1`.
-2. While `row < m` and `col >= 0`:
-   - If `matrix[row][col] == target`, return true.
-   - If greater, `col--`; otherwise `row++`.
-3. Return false if not found.
-
-#### Java Code
-
-```java
-public boolean searchMatrix(int[][] matrix, int target) {
-    if (matrix.length == 0 || matrix[0].length == 0) {
-        return false;
-    }
-
-    int row = 0;
-    int col = matrix[0].length - 1;
-
-    while (row < matrix.length && col >= 0) {
-        int value = matrix[row][col];
-        if (value == target) {
-            return true;
-        } else if (value > target) {
-            col--;
-        } else {
-            row++;
-        }
-    }
-
-    return false;
-}
-```
-
-
-## Minimum Path Sum {#min-path-sum}
+## Word Search {#word-search}
 
 ### Problem Metadata
 
 - **Platform**: LeetCode
-- **Problem ID**: 64
+- **Problem ID**: 79
 - **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/minimum-path-sum/
-- **Tags**: `Matrix`, `Dynamic Programming`
-- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
-
-### Description
-
-Given a grid of non-negative numbers, move only right or down from the top-left cell to the bottom-right, minimizing the sum of values along the path.
-
-### Examples
-
-```
-Input: [[1,3,1],[1,5,1],[4,2,1]]
-Output: 7
-```
-
-### Constraints
-
-- `1 <= m, n <= 200`
-
-### Solution - DP Table
-
-#### Walkthrough
-
-Set `dp[i][j]` to the minimum sum needed to reach `(i, j)`. Initialize the first row and column with cumulative sums. For each other cell, add the current value to the minimum of the top or left neighbor.
-
-#### Analysis
-
-- **Time Complexity**: O(m * n)
-- **Space Complexity**: O(m * n) (can be optimized to O(n))
-
-#### Implementation Steps
-
-1. Initialize `dp[0][0] = grid[0][0]`.
-2. Fill the first row/column cumulatively.
-3. For `i > 0`, `j > 0`, set `dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])`.
-4. Return `dp[m-1][n-1]`.
-
-#### Java Code
-
-```java
-public int minPathSum(int[][] grid) {
-    int rows = grid.length;
-    int cols = grid[0].length;
-    int[][] dp = new int[rows][cols];
-
-    dp[0][0] = grid[0][0];
-    for (int c = 1; c < cols; c++) {
-        dp[0][c] = dp[0][c - 1] + grid[0][c];
-    }
-    for (int r = 1; r < rows; r++) {
-        dp[r][0] = dp[r - 1][0] + grid[r][0];
-    }
-
-    for (int r = 1; r < rows; r++) {
-        for (int c = 1; c < cols; c++) {
-            dp[r][c] = grid[r][c] + Math.min(dp[r - 1][c], dp[r][c - 1]);
-        }
-    }
-
-    return dp[rows - 1][cols - 1];
-}
-```
-
-
-## Unique Paths {#unique-paths}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 62
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/unique-paths/
-- **Tags**: `Matrix`, `Dynamic Programming`
+- **URL**: https://leetcode.com/problems/word-search/
+- **Tags**: `Matrix`, `Backtracking`
 - **Interview Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
+- **Techniques**: [Backtracking](glossary-of-algorithm.html#backtrack), [Depth First Search](glossary-of-algorithm.html#dfs)
 
 ### Description
 
-A robot can move only right or down on an `m x n` grid from the top-left to the bottom-right. Count the number of unique paths.
-
-### Examples
-
-```
-Input: m = 3, n = 7
-Output: 28
-```
-
-### Constraints
-
-- `1 <= m, n <= 100`
-
-### Solution - DP Grid
-
-#### Walkthrough
-
-Paths to `(i, j)` equal the sum of paths to `(i-1, j)` and `(i, j-1)` since those are the only ways to enter. Initialize the first row and column to 1 because there is only one way to reach those cells.
-
-#### Analysis
-
-- **Time Complexity**: O(m * n)
-- **Space Complexity**: O(m * n) (or O(n) with rolling arrays)
-
-#### Implementation Steps
-
-1. Fill a DP matrix with `dp[0][*] = dp[*][0] = 1`.
-2. For each cell from `(1,1)` to `(m-1,n-1)` compute `dp[i][j] = dp[i-1][j] + dp[i][j-1]`.
-3. Return `dp[m-1][n-1]`.
-
-#### Java Code
-
-```java
-public int uniquePaths(int m, int n) {
-    int[][] dp = new int[m][n];
-    for (int i = 0; i < m; i++) {
-        dp[i][0] = 1;
-    }
-    for (int j = 0; j < n; j++) {
-        dp[0][j] = 1;
-    }
-    for (int i = 1; i < m; i++) {
-        for (int j = 1; j < n; j++) {
-            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
-        }
-    }
-    return dp[m - 1][n - 1];
-}
-```
-
-
-
-
-
-
-
-
-
-## Number of Islands {#number-of-islands}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 200
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/number-of-islands/
-- **Tags**: `Matrix`, `DFS`
-- **Interview Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs)
-
-### Description
-
-Given a grid of `'1'` (land) and `'0'` (water), count the number of islands where islands are connected horizontally or vertically.
+Given a board of characters and a target word, check if the word can be constructed from sequentially adjacent cells (horizontal or vertical). Each cell can be used at most once.
 
 ### Examples
 
 ```
 Input:
-11110
-11010
-11000
-00000
-Output: 1
+[["A","B","C","E"],
+ ["S","F","C","S"],
+ ["A","D","E","E"]], word = "ABCCED"
+Output: true
 ```
 
 ### Constraints
 
-- `1 <= rows, cols <= 300`
+- `1 <= board.length, board[0].length <= 6`
+- `1 <= word.length <= 15`
 
-### Solution - Flood Fill
+### Solution - DFS Backtracking
 
 #### Walkthrough
 
-Scan every cell. Upon encountering a `'1'`, increment the island count and perform DFS/BFS to mark the entire island as visited (turn to `'0'` or another marker). Continue scanning until all land is processed.
+Try every cell as a starting point. Recursively match characters by exploring four directions, marking the current cell as visited to avoid reuse. If we reach the end of the word, return true; otherwise backtrack by restoring the cell.
 
 #### Analysis
 
-- **Time Complexity**: O(rows * cols)
-- **Space Complexity**: O(rows * cols) recursion in worst case
+- **Time Complexity**: O(m * n * 4^L) where `L` is the word length
+- **Space Complexity**: O(L) recursion stack
 
 #### Implementation Steps
 
-1. Initialize `count = 0`.
-2. For each cell:
-   - If it is `'1'`, run DFS that changes it and its connected neighbors to `'0'`, and increment `count`.
-3. Return `count`.
+1. Loop over all cells `(i, j)`.
+2. Call `dfs(i, j, index)` when the character matches `word[index]`.
+3. Base case: `index == word.length()` → success.
+4. On mismatch or out of bounds, return false.
+5. Temporarily mark cell as visited, recurse to neighbors, then restore.
 
 #### Java Code
 
 ```java
-public int numIslands(char[][] grid) {
-    int rows = grid.length;
-    int cols = grid[0].length;
-    int islands = 0;
+private static final char VISITED = '#';
 
-    for (int r = 0; r < rows; r++) {
-        for (int c = 0; c < cols; c++) {
-            if (grid[r][c] == '1') {
-                islands++;
-                flood(grid, r, c);
+public boolean exist(char[][] board, String word) {
+    for (int i = 0; i < board.length; i++) {
+        for (int j = 0; j < board[0].length; j++) {
+            if (dfs(board, word, i, j, 0)) {
+                return true;
             }
         }
     }
-
-    return islands;
+    return false;
 }
 
-private void flood(char[][] grid, int r, int c) {
-    if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] != '1') {
-        return;
+private boolean dfs(char[][] board, String word, int row, int col, int index) {
+    if (index == word.length()) {
+        return true;
+    }
+    if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) {
+        return false;
+    }
+    if (board[row][col] != word.charAt(index)) {
+        return false;
     }
 
-    grid[r][c] = '0';
-    flood(grid, r - 1, c);
-    flood(grid, r + 1, c);
-    flood(grid, r, c - 1);
-    flood(grid, r, c + 1);
+    char saved = board[row][col];
+    board[row][col] = VISITED;
+
+    boolean found = dfs(board, word, row + 1, col, index + 1)
+            || dfs(board, word, row - 1, col, index + 1)
+            || dfs(board, word, row, col + 1, index + 1)
+            || dfs(board, word, row, col - 1, index + 1);
+
+    board[row][col] = saved;
+    return found;
 }
 ```
+
 ## Surrounded Regions {#surrounded-regions}
 
 ### Problem Metadata
@@ -896,6 +633,89 @@ private void dfs(char[][] board, int r, int c) {
     dfs(board, r, c + 1);
 }
 ```
+
+## Number of Islands {#number-of-islands}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 200
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/number-of-islands/
+- **Tags**: `Matrix`, `DFS`
+- **Interview Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs)
+
+### Description
+
+Given a grid of `'1'` (land) and `'0'` (water), count the number of islands where islands are connected horizontally or vertically.
+
+### Examples
+
+```
+Input:
+11110
+11010
+11000
+00000
+Output: 1
+```
+
+### Constraints
+
+- `1 <= rows, cols <= 300`
+
+### Solution - Flood Fill
+
+#### Walkthrough
+
+Scan every cell. Upon encountering a `'1'`, increment the island count and perform DFS/BFS to mark the entire island as visited (turn to `'0'` or another marker). Continue scanning until all land is processed.
+
+#### Analysis
+
+- **Time Complexity**: O(rows * cols)
+- **Space Complexity**: O(rows * cols) recursion in worst case
+
+#### Implementation Steps
+
+1. Initialize `count = 0`.
+2. For each cell:
+   - If it is `'1'`, run DFS that changes it and its connected neighbors to `'0'`, and increment `count`.
+3. Return `count`.
+
+#### Java Code
+
+```java
+public int numIslands(char[][] grid) {
+    int rows = grid.length;
+    int cols = grid[0].length;
+    int islands = 0;
+
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            if (grid[r][c] == '1') {
+                islands++;
+                flood(grid, r, c);
+            }
+        }
+    }
+
+    return islands;
+}
+
+private void flood(char[][] grid, int r, int c) {
+    if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length || grid[r][c] != '1') {
+        return;
+    }
+
+    grid[r][c] = '0';
+    flood(grid, r - 1, c);
+    flood(grid, r + 1, c);
+    flood(grid, r, c - 1);
+    flood(grid, r, c + 1);
+}
+```
+
 ## Maximal Square {#maximal-square}
 
 ### Problem Metadata
@@ -1037,6 +857,257 @@ class Solution {
 
         // Return area (side length squared)
         return max_side * max_side;
+    }
+}
+```
+
+## Search a 2D Matrix II {#search-matrix-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 240
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/search-a-2d-matrix-ii/
+- **Tags**: `Matrix`
+- **Techniques**: [Matrix Traversal](glossary-of-algorithm.html#matrix-traversal)
+
+### Description
+
+The matrix is sorted in ascending order both across rows and down columns. Determine whether a target value exists.
+
+### Examples
+
+```
+Input: matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5
+Output: true
+```
+
+### Constraints
+
+- `1 <= m, n <= 300`
+
+### Solution - Staircase Search
+
+#### Walkthrough
+
+Start in the top-right corner (or bottom-left). At each step:
+
+- If the value is greater than target, move left (eliminate a column).
+- If smaller, move down (eliminate a row).
+
+Because of the sorted property, one direction always reduces the search space.
+
+#### Analysis
+
+- **Time Complexity**: O(m + n)
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+1. Set `row = 0`, `col = n - 1`.
+2. While `row < m` and `col >= 0`:
+   - If `matrix[row][col] == target`, return true.
+   - If greater, `col--`; otherwise `row++`.
+3. Return false if not found.
+
+#### Java Code
+
+```java
+public boolean searchMatrix(int[][] matrix, int target) {
+    if (matrix.length == 0 || matrix[0].length == 0) {
+        return false;
+    }
+
+    int row = 0;
+    int col = matrix[0].length - 1;
+
+    while (row < matrix.length && col >= 0) {
+        int value = matrix[row][col];
+        if (value == target) {
+            return true;
+        } else if (value > target) {
+            col--;
+        } else {
+            row++;
+        }
+    }
+
+    return false;
+}
+```
+
+## Best Meeting Point {#best-meeting-point}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 296
+- **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/best-meeting-point/
+- **Tags**: `Matrix`, `Median`, `Sorting`
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting)
+
+### Description
+
+Given a 2D grid of 0s and 1s where each 1 represents a friend’s home, find the meeting point that minimizes the total Manhattan distance from all homes.
+
+### Examples
+
+```
+Input: [[1,0,0,0,1],
+        [0,0,0,0,0],
+        [0,0,1,0,0]]
+Output: 6
+```
+
+### Constraints
+
+- `1 <= rows, cols <= 200`
+
+### Solution - Median Trick
+
+#### Walkthrough
+
+The Manhattan distance sum is minimized by the median of row coordinates and column coordinates separately. Collect all row indices, all column indices, take medians, then sum absolute differences to these medians.
+
+#### Analysis
+
+- **Time Complexity**: O(m * n)
+- **Space Complexity**: O(m + n)
+
+#### Implementation Steps
+
+1. Traverse the grid, collect row indices (`rows`) and column indices (`cols`) for all homes.
+2. Sort lists (or rows inherently non-decreasing if traversed row-by-row).
+3. Median row = `rows[rows.size/2]`, same for columns.
+4. Sum absolute differences from medians.
+
+#### Java Code
+
+```java
+public int minTotalDistance(int[][] grid) {
+    List<Integer> rows = new ArrayList<>();
+    List<Integer> cols = new ArrayList<>();
+
+    for (int r = 0; r < grid.length; r++) {
+        for (int c = 0; c < grid[0].length; c++) {
+            if (grid[r][c] == 1) {
+                rows.add(r);
+            }
+        }
+    }
+
+    for (int c = 0; c < grid[0].length; c++) {
+        for (int r = 0; r < grid.length; r++) {
+            if (grid[r][c] == 1) {
+                cols.add(c);
+            }
+        }
+    }
+
+    int rowMedian = rows.get(rows.size() / 2);
+    int colMedian = cols.get(cols.size() / 2);
+
+    int distance = 0;
+    for (int r : rows) {
+        distance += Math.abs(r - rowMedian);
+    }
+    for (int c : cols) {
+        distance += Math.abs(c - colMedian);
+    }
+
+    return distance;
+}
+```
+
+## Design Tic Tac Toe {#design-tic-tac-toe}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 348
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/design-tic-tac-toe/
+- **Tags**: `Matrix`, `Prefix Sum`
+- **Interview Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Matrix Traversal](glossary-of-algorithm.html#matrix-traversal), Matrix Accumulators
+
+### Description
+
+Design a Tic-Tac-Toe game on an `n x n` board. Implement `move(row, col, player)` that places the player's mark and returns `0` if no one wins, or the player's number if they win.
+
+### Examples
+
+```
+Input:
+["TicTacToe","move","move","move","move","move","move","move"]
+[[3],[0,0,1],[0,2,2],[2,2,1],[1,1,2],[2,0,1],[1,0,2],[2,1,1]]
+Output: [null,0,0,0,0,0,0,1]
+```
+
+### Constraints
+
+- `n` between 1 and 100
+- Calls to `move` do not place on occupied cells
+
+### Solution - Running Counts
+
+#### Walkthrough
+
+Instead of scanning entire rows/columns after each move, keep running counts:
+
+1. `rows[i]` stores the net score for row `i`, `cols[j]` for column `j`.
+2. Add `+1` for player 1 or `-1` for player 2.
+3. Maintain two diagonals.
+4. If any absolute value reaches `n`, that player wins.
+
+#### Analysis
+
+- **Time Complexity**: O(1) per move
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+1. Initialize arrays `rows`, `cols`, and two scalars for diagonals.
+2. For each move, add `score = player == 1 ? 1 : -1` to the row/column.
+3. Update diagonals when applicable.
+4. Check if any absolute value equals `n`; return winner or `0`.
+
+#### Java Code
+
+```java
+class TicTacToe {
+    private final int[] rows;
+    private final int[] cols;
+    private int diag;
+    private int antiDiag;
+
+    public TicTacToe(int n) {
+        rows = new int[n];
+        cols = new int[n];
+    }
+
+    public int move(int row, int col, int player) {
+        int score = player == 1 ? 1 : -1;
+        rows[row] += score;
+        cols[col] += score;
+
+        if (row == col) {
+            diag += score;
+        }
+        if (row + col == rows.length - 1) {
+            antiDiag += score;
+        }
+
+        if (Math.abs(rows[row]) == rows.length
+            || Math.abs(cols[col]) == rows.length
+            || Math.abs(diag) == rows.length
+            || Math.abs(antiDiag) == rows.length) {
+            return player;
+        }
+
+        return 0;
     }
 }
 ```
@@ -1235,86 +1306,4 @@ class Solution {
 }
 ```
 
-## Best Meeting Point {#best-meeting-point}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 296
-- **Difficulty**: Hard
-- **URL**: https://leetcode.com/problems/best-meeting-point/
-- **Tags**: `Matrix`, `Median`, `Sorting`
-- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting)
-
-### Description
-
-Given a 2D grid of 0s and 1s where each 1 represents a friend’s home, find the meeting point that minimizes the total Manhattan distance from all homes.
-
-### Examples
-
-```
-Input: [[1,0,0,0,1],
-        [0,0,0,0,0],
-        [0,0,1,0,0]]
-Output: 6
-```
-
-### Constraints
-
-- `1 <= rows, cols <= 200`
-
-### Solution - Median Trick
-
-#### Walkthrough
-
-The Manhattan distance sum is minimized by the median of row coordinates and column coordinates separately. Collect all row indices, all column indices, take medians, then sum absolute differences to these medians.
-
-#### Analysis
-
-- **Time Complexity**: O(m * n)
-- **Space Complexity**: O(m + n)
-
-#### Implementation Steps
-
-1. Traverse the grid, collect row indices (`rows`) and column indices (`cols`) for all homes.
-2. Sort lists (or rows inherently non-decreasing if traversed row-by-row).
-3. Median row = `rows[rows.size/2]`, same for columns.
-4. Sum absolute differences from medians.
-
-#### Java Code
-
-```java
-public int minTotalDistance(int[][] grid) {
-    List<Integer> rows = new ArrayList<>();
-    List<Integer> cols = new ArrayList<>();
-
-    for (int r = 0; r < grid.length; r++) {
-        for (int c = 0; c < grid[0].length; c++) {
-            if (grid[r][c] == 1) {
-                rows.add(r);
-            }
-        }
-    }
-
-    for (int c = 0; c < grid[0].length; c++) {
-        for (int r = 0; r < grid.length; r++) {
-            if (grid[r][c] == 1) {
-                cols.add(c);
-            }
-        }
-    }
-
-    int rowMedian = rows.get(rows.size() / 2);
-    int colMedian = cols.get(cols.size() / 2);
-
-    int distance = 0;
-    for (int r : rows) {
-        distance += Math.abs(r - rowMedian);
-    }
-    for (int c : cols) {
-        distance += Math.abs(c - colMedian);
-    }
-
-    return distance;
-}
-```
+## Design Tic-Tac-Toe {#tic-tac-toe}

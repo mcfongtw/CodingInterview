@@ -1,0 +1,294 @@
+# Heap
+
+This chapter collects heap-centric interview problems, including priority-queue manipulations, top-k extractions, and heap-based merges.
+
+## Find k-th Largest Element in an Array {#kth-largest}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 215
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/kth-largest-element-in-an-array/
+- **Tags**: `Array`, `Heap`, `Divide and Conquer`
+- **Techniques**: [Heap](glossary-of-algorithm.html#heap)
+
+### Description
+
+Given an unsorted array `nums` and an integer `k`, return the `k`-th largest element in the array. The `k`-th largest element is the element that would appear at index `n - k` after sorting the array in ascending order.
+
+### Examples
+
+```
+Input: nums = [3,2,1,5,6,4], k = 2
+Output: 5
+
+Input: nums = [3,2,3,1,2,4,5,5,6], k = 4
+Output: 4
+```
+
+### Constraints
+
+- `1 <= k <= nums.length <= 10^5`
+- `-10^4 <= nums[i] <= 10^4`
+
+### Solution - Size-k Min Heap
+
+#### Walkthrough
+
+Maintain a min heap that keeps track of the current `k` largest elements seen so far. Iterate over `nums`, pushing each number into the heap and immediately popping whenever the heap size exceeds `k`. After processing all numbers, the heap root is the `k`-th largest element because every larger value is still inside the heap.
+
+#### Analysis
+
+- **Time Complexity**: O(n log k) because each insertion and possible removal costs `log k`
+- **Space Complexity**: O(k) for the heap
+
+#### Implementation Steps
+
+
+1. Initialize an empty min heap.
+2. For each `num` in `nums`, push it into the heap.
+3. If the heap size exceeds `k`, pop the smallest element.
+4. After processing, return the heap root.
+
+#### Java Code
+
+```java
+public int findKthLargest(int[] nums, int k) {
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+    for (int num : nums) {
+        minHeap.offer(num);
+        if (minHeap.size() > k) {
+            minHeap.poll();
+        }
+    }
+    return minHeap.peek();
+}
+```
+
+## Top K Elements {#top-k-elements}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: Top K Elements
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Sorting`, `Heap`
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting), [Heap](glossary-of-algorithm.html#heap), [Bubble Sort](glossary-of-algorithm.html#bs)
+
+### Description
+
+Given an unsorted array `nums` and an integer `k`, return the `k` largest elements. The order of the result can be either sorted descending or unspecified depending on the approach.
+
+### Examples
+
+```
+Input: nums = [3,2,1,5,6,4], k = 2
+Output: [6,5]
+```
+
+### Constraints
+
+- `1 <= k <= n <= 10^5`
+- `-10^4 <= nums[i] <= 10^4`
+
+### Solution 1 - Sort Then Slice
+
+#### Walkthrough
+
+Sort the entire array in ascending order and copy the last `k` values, reversing if descending order is required. This is simple but costs O(n log n).
+
+#### Analysis
+
+- **Time Complexity**: O(n log n)
+- **Space Complexity**: O(1) auxiliary (in-place sort)
+
+#### Implementation Steps
+
+1. Sort `nums` ascending.
+2. Copy elements from `n - k` to `n - 1` into the answer array (optionally reverse).
+
+#### Java Code
+
+```java
+public int[] topKBySorting(int[] nums, int k) {
+    Arrays.sort(nums);
+    int[] result = new int[k];
+    for (int i = 0; i < k; i++) {
+        result[i] = nums[nums.length - 1 - i];
+    }
+    return result;
+}
+```
+
+### Solution 2 - Partial Bubble (k Passes)
+
+#### Walkthrough
+
+Bubble sort guarantees that after one full pass the largest element bubbles to the end. Running only `k` passes yields the `k` largest elements at the array tail without fully sorting the remainder.
+
+#### Analysis
+
+- **Time Complexity**: O(n * k)
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+1. Repeat `k` times:
+   1. Sweep the array bubbling the largest remaining element to the end.
+2. Read off the last `k` positions as the answer.
+
+#### Java Code
+
+```java
+public int[] topKByPartialBubble(int[] nums, int k) {
+    for (int pass = 0; pass < k; pass++) {
+        for (int j = 0; j < nums.length - pass - 1; j++) {
+            if (nums[j] > nums[j + 1]) {
+                int tmp = nums[j];
+                nums[j] = nums[j + 1];
+                nums[j + 1] = tmp;
+            }
+        }
+    }
+    int[] result = new int[k];
+    for (int i = 0; i < k; i++) {
+        result[i] = nums[nums.length - 1 - i];
+    }
+    return result;
+}
+```
+
+### Solution 3 - Min Heap of Size k
+
+#### Walkthrough
+
+Maintain a min heap that stores the current `k` largest numbers. Push each number and pop whenever the heap size exceeds `k`. After processing all numbers the heap contains exactly the answer set, and polling yields increasing order.
+
+#### Analysis
+
+- **Time Complexity**: O(n log k)
+- **Space Complexity**: O(k)
+
+#### Implementation Steps
+
+1. Initialize an empty min heap.
+2. For each `num` in `nums`, push it; if heap size exceeds `k`, pop the smallest.
+3. Extract remaining heap elements into the answer array (reverse if descending needed).
+
+#### Java Code
+
+```java
+public int[] topKByMinHeap(int[] nums, int k) {
+    PriorityQueue<Integer> heap = new PriorityQueue<>();
+    for (int num : nums) {
+        heap.offer(num);
+        if (heap.size() > k) {
+            heap.poll();
+        }
+    }
+    int[] result = new int[k];
+    for (int i = k - 1; i >= 0; i--) {
+        result[i] = heap.poll();
+    }
+    return result;
+}
+```
+
+## Merge K Sorted Arrays {#merge-k-arrays}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: N/A
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Heap`, `Divide and Conquer`
+- **Techniques**: [Heap](glossary-of-algorithm.html#heap)
+
+### Description
+
+Given `k` sorted integer arrays, merge them into a single sorted array that contains all elements from the inputs.
+
+### Examples
+
+```
+Input: [[1,4,7],[2,5],[3,6,9]]
+Output: [1,2,3,4,5,6,7,9]
+```
+
+### Constraints
+
+- `1 <= k <= 10^3`
+- Total number of elements across all arrays `n <= 10^5`
+- Each array is sorted in non-decreasing order
+
+### Solution - Min Heap of Array Entries
+
+#### Walkthrough
+
+Store each array's current front element inside a min heap, keyed by value. Pop the smallest element, append it to the answer, then advance the pointer for the array it came from and push the next value (if any). Because each push/pop costs `log k` and every element is processed once, the merge preserves overall sorted order efficiently.
+
+#### Analysis
+
+- **Time Complexity**: O(n log k), where `n` is the total element count
+- **Space Complexity**: O(k) for the heap plus O(n) for the output
+
+#### Implementation Steps
+
+
+1. Compute the total element count to size the output array.
+2. Push `(arrayIndex, elementIndex)` pairs for the first element of each non-empty array into a min heap ordered by value.
+3. Repeatedly pop the smallest entry, append the value to the output, and advance that array's index.
+4. If the array still has elements, push the updated entry back into the heap.
+5. Return the filled output array.
+
+#### Java Code
+
+```java
+class ArrayEntry implements Comparable<ArrayEntry> {
+    int[] array;
+    int index;
+
+    ArrayEntry(int[] array, int index) {
+        this.array = array;
+        this.index = index;
+    }
+
+    int value() {
+        return array[index];
+    }
+
+    @Override
+    public int compareTo(ArrayEntry other) {
+        return Integer.compare(this.value(), other.value());
+    }
+}
+
+public int[] mergeKSortedArrays(int[][] arrays) {
+    PriorityQueue<ArrayEntry> minHeap = new PriorityQueue<>();
+    int total = 0;
+
+    for (int[] array : arrays) {
+        total += array.length;
+        if (array.length > 0) {
+            minHeap.offer(new ArrayEntry(array, 0));
+        }
+    }
+
+    int[] merged = new int[total];
+    int write = 0;
+
+    while (!minHeap.isEmpty()) {
+        ArrayEntry current = minHeap.poll();
+        merged[write++] = current.value();
+        current.index++;
+        if (current.index < current.array.length) {
+            minHeap.offer(current);
+        }
+    }
+
+    return merged;
+}
+```

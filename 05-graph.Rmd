@@ -308,7 +308,88 @@ public List topological_sort_bfs(int[][] graph) {
 }
 ```
 
+## Clone Graph {#clone-graph}
 
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 133
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/clone-graph/
+- **Tags**: `Graph`, `DFS`
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Deep-copy an undirected graph.
+
+### Solution - DFS with Map
+
+```
+public Node cloneGraph(Node node) {
+    if (node == null) {
+        return null;
+    }
+    Map<Node, Node> map = new HashMap<>();
+    return clone(node, map);
+}
+
+private Node clone(Node node, Map<Node, Node> map) {
+    if (map.containsKey(node)) {
+        return map.get(node);
+    }
+    Node copy = new Node(node.val);
+    map.put(node, copy);
+    for (Node neighbor : node.neighbors) {
+        copy.neighbors.add(clone(neighbor, map));
+    }
+    return copy;
+}
+```
+
+## Course Schedule {#course-schedule}
+
+### Metadata
+
+- **Problem ID**: LeetCode 207
+- **Tags**: `Graph`, `Topological Sort`
+
+### Description
+
+Determine if all courses can be finished given prerequisites.
+
+### Solution - Kahn's Algorithm
+
+```
+public boolean canFinish(int numCourses, int[][] prerequisites) {
+    List<List<Integer>> graph = new ArrayList<>();
+    int[] indegree = new int[numCourses];
+    for (int i = 0; i < numCourses; i++) {
+        graph.add(new ArrayList<>());
+    }
+    for (int[] edge : prerequisites) {
+        graph.get(edge[1]).add(edge[0]);
+        indegree[edge[0]]++;
+    }
+    Queue<Integer> queue = new LinkedList<>();
+    for (int i = 0; i < numCourses; i++) {
+        if (indegree[i] == 0) {
+            queue.offer(i);
+        }
+    }
+    int visited = 0;
+    while (!queue.isEmpty()) {
+        int course = queue.poll();
+        visited++;
+        for (int next : graph.get(course)) {
+            if (--indegree[next] == 0) {
+                queue.offer(next);
+            }
+        }
+    }
+    return visited == numCourses;
+}
+```
 
 ## Graph Serialization {#graph-serialization}
 
@@ -391,89 +472,6 @@ public int[][] nearestOne(int[][] mat) {
         }
     }
     return dist;
-}
-```
-
-## Clone Graph {#clone-graph}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 133
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/clone-graph/
-- **Tags**: `Graph`, `DFS`
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), [Hash Table](glossary-of-algorithm.html#hash-table)
-
-### Description
-
-Deep-copy an undirected graph.
-
-### Solution - DFS with Map
-
-```
-public Node cloneGraph(Node node) {
-    if (node == null) {
-        return null;
-    }
-    Map<Node, Node> map = new HashMap<>();
-    return clone(node, map);
-}
-
-private Node clone(Node node, Map<Node, Node> map) {
-    if (map.containsKey(node)) {
-        return map.get(node);
-    }
-    Node copy = new Node(node.val);
-    map.put(node, copy);
-    for (Node neighbor : node.neighbors) {
-        copy.neighbors.add(clone(neighbor, map));
-    }
-    return copy;
-}
-```
-
-## Course Schedule {#course-schedule}
-
-### Metadata
-
-- **Problem ID**: LeetCode 207
-- **Tags**: `Graph`, `Topological Sort`
-
-### Description
-
-Determine if all courses can be finished given prerequisites.
-
-### Solution - Kahn's Algorithm
-
-```
-public boolean canFinish(int numCourses, int[][] prerequisites) {
-    List<List<Integer>> graph = new ArrayList<>();
-    int[] indegree = new int[numCourses];
-    for (int i = 0; i < numCourses; i++) {
-        graph.add(new ArrayList<>());
-    }
-    for (int[] edge : prerequisites) {
-        graph.get(edge[1]).add(edge[0]);
-        indegree[edge[0]]++;
-    }
-    Queue<Integer> queue = new LinkedList<>();
-    for (int i = 0; i < numCourses; i++) {
-        if (indegree[i] == 0) {
-            queue.offer(i);
-        }
-    }
-    int visited = 0;
-    while (!queue.isEmpty()) {
-        int course = queue.poll();
-        visited++;
-        for (int next : graph.get(course)) {
-            if (--indegree[next] == 0) {
-                queue.offer(next);
-            }
-        }
-    }
-    return visited == numCourses;
 }
 ```
 
