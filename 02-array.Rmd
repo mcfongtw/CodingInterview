@@ -1864,6 +1864,150 @@ public int rob(int[] nums) {
 
 ```
 
+## Minimum Size Subarray Sum {#min-size-subarray-sum}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 209
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/minimum-size-subarray-sum/
+- **Tags**: `Array`, `Sliding Window`, `Binary Search`, `Prefix Sum`
+- **Techniques**: [Sliding Window](glossary-of-algorithm.html#sliding-window), [Two Pointers](glossary-of-algorithm.html#two-pointers)
+
+### Description
+
+Given an array of positive integers `nums` and a positive integer `target`, return the minimal length of a contiguous subarray whose sum is greater than or equal to `target`. If no such subarray exists, return `0`.
+
+### Examples
+
+**Example 1:**
+```
+Input: target = 7, nums = [2,3,1,2,4,3]
+Output: 2
+Explanation: The subarray [4,3] has the minimal length under the problem constraint.
+```
+
+**Example 2:**
+```
+Input: target = 4, nums = [1,4,4]
+Output: 1
+```
+
+**Example 3:**
+```
+Input: target = 11, nums = [1,1,1,1,1,1,1,1]
+Output: 0
+```
+
+### Constraints
+
+- `1 <= target <= 10^9`
+- `1 <= nums.length <= 10^5`
+- `1 <= nums[i] <= 10^5`
+
+### Solution - Sliding Window
+
+#### Walkthrough
+
+This solution uses a **dynamic sliding window** approach with two pointers (`l` and `r`) that expand and contract to find the minimum subarray length.
+
+**Core Strategy:**
+
+1. **Expand the window**: Move the right pointer `r` forward and add elements to the running sum
+2. **Contract when valid**: Once `sum >= target`, try to shrink the window from the left while maintaining the validity
+3. **Track minimum**: Record the smallest window size that satisfies the condition
+
+**Key Insight**: Since all elements are positive, adding elements always increases the sum, and removing elements always decreases it. This monotonic property guarantees the sliding window technique works optimally.
+
+**Why `r >= l` is Always Guaranteed:**
+
+The inner `while` loop condition `sum >= target` provides an **implicit guarantee** that `r >= l`:
+
+1. **Initialization**: Both pointers start at 0, so initially `r == l`
+2. **Outer loop invariant**: The right pointer `r` moves forward first (in the outer `for` loop), so `r` is always ≥ the initial `l`
+3. **Inner loop protection**:
+   - The `while` loop only executes when `sum >= target`
+   - We subtract `nums[l]` **before** incrementing `l`
+   - If `sum >= target`, it means the current window `[l, r]` contains at least one element (otherwise sum would be 0)
+   - The loop **stops** when `sum < target`, which happens when we've removed too many elements
+   - At this point, the window still contains `[l, r]` where `l <= r`
+4. **Cannot overtake**: If `l` were to catch up to `r` (i.e., `l == r`), we have a single-element window. After removing it, `sum` would become less than `target` (since all elements are positive and at least 1), causing the `while` loop to exit before `l` increments past `r`
+
+**Mathematical Proof:**
+- For `l` to exceed `r`, we'd need `l = r + 1`
+- This would mean the window is empty: `[r+1, r]`
+- An empty window has `sum = 0`, which is `< target` (target ≥ 1)
+- Therefore, the `while` condition `sum >= target` would be **false**
+- The inner loop exits before `l` can overtake `r`
+
+This invariant ensures `r - l + 1` is always a valid positive length.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - The outer loop iterates `n` times (right pointer moves from 0 to n-1)
+  - The inner loop also processes each element at most once (left pointer moves from 0 to n-1)
+  - **Key observation**: Each element is added to `sum` exactly once (by `r`) and removed at most once (by `l`)
+  - Total operations: O(n + n) = O(n)
+  - This is **not** O(n²) because the inner loop doesn't reset; both pointers only move forward
+
+- **Space Complexity**: O(1)
+  - Only uses a constant number of variables (`result`, `sum`, `l`)
+  - No additional data structures that grow with input size
+
+#### Implementation Steps
+
+1. Initialize variables:
+   - `result = Integer.MAX_VALUE` to track the minimum window length
+   - `sum = 0` to maintain the current window sum
+   - `l = 0` as the left pointer
+2. Outer loop: Iterate `r` from 0 to `n-1` (right pointer):
+   1. Add `nums[r]` to the running sum
+   2. Inner loop: While `sum >= target` (window is valid):
+      - Subtract `nums[l]` from sum (prepare to shrink)
+      - Update `result = min(result, r - l + 1)` (record current window size)
+      - Increment `l` to shrink the window from the left
+3. After the loop:
+   - If `result` is still `Integer.MAX_VALUE`, no valid subarray exists → return 0
+   - Otherwise, return `result`
+
+#### Java Code
+
+```java
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        int result = Integer.MAX_VALUE;
+        int sum = 0;
+
+        //left pointer
+        int l = 0;
+
+        //traverse array with a right pointer
+        for(int r = 0; r < nums.length; r++) {
+            sum += nums[r];
+
+            //sum is greater than or equal to target
+            while(sum >= target) {                
+                sum -= nums[l];
+
+                //the inner loop condition makes sure r >= l
+                result = Math.min(result, r - l + 1);            
+                l++;
+            }
+
+        }
+
+
+        if(result == Integer.MAX_VALUE) {
+            return 0;
+        } else {
+            return result;
+        }
+    }
+}
+```
+
 ## Paint House {#paint-house}
 
 ### Problem Metadata
