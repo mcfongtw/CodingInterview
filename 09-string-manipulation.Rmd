@@ -563,6 +563,145 @@ public boolean wordBreakTrie(String s, List<String> wordDict) {
 }
 ```
 
+## Sort Characters By Frequency {#sort-characters-by-frequency}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 451
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/sort-characters-by-frequency/
+- **Tags**: `String`, `Hash Table`, `Sorting`, `Heap`, `Bucket Sort`, `Counting`
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Sorting](glossary-of-algorithm.html#sorting), [Heap](glossary-of-algorithm.html#heap)
+
+### Description
+
+Given a string `s`, sort it in **decreasing order** based on the **frequency** of the characters. The frequency of a character is the number of times it appears in the string.
+
+Return the sorted string. If there are multiple answers, return any of them.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "tree"
+Output: "eert"
+Explanation: 'e' appears twice while 'r' and 't' both appear once.
+So 'e' must appear before both 'r' and 't'. Therefore "eetr" is also a valid answer.
+```
+
+**Example 2:**
+```
+Input: s = "cccaaa"
+Output: "cccaaa"
+Explanation: Both 'c' and 'a' appear three times, so both "cccaaa" and "aaaccc" are valid answers.
+Note that "cacaca" is incorrect, as the same characters must be together.
+```
+
+**Example 3:**
+```
+Input: s = "Aabb"
+Output: "bbAa"
+Explanation: "bbaA" is also a valid answer, but "Aabb" is incorrect.
+Note that 'A' and 'a' are treated as two different characters.
+```
+
+### Constraints
+
+- `1 <= s.length <= 5 * 10^5`
+- `s` consists of uppercase and lowercase English letters and digits
+
+### Solution - Frequency Map with Stream Sorting
+
+#### Walkthrough
+
+The solution uses a **frequency counting** approach combined with **stream-based sorting** to build the result string in decreasing order of character frequency.
+
+**Step-by-step approach:**
+
+1. **Count frequencies**: Build a `HashMap<Character, Integer>` to count how many times each character appears in the input string
+2. **Sort by frequency**: Convert the map entries to a list and sort them in reverse order by frequency value using Java Streams
+3. **Build result**: Iterate through the sorted list and append each character to the result string based on its frequency count
+
+**Key insight**: By sorting the frequency map entries in descending order, we ensure that characters with higher frequencies appear first in the output. Characters with equal frequencies can appear in any order (as per problem requirements), so the natural map ordering is acceptable.
+
+**Example walkthrough with `s = "tree"`:**
+```
+Step 1: Count frequencies
+  freqMap = {t:1, r:1, e:2}
+
+Step 2: Sort by frequency (descending)
+  sortedFreqList = [(e,2), (t,1), (r,1)]
+  Note: (t,1) and (r,1) can be in any order
+
+Step 3: Build result string
+  - Process (e,2): append 'e' twice → result = "ee"
+  - Process (t,1): append 't' once → result = "eet"
+  - Process (r,1): append 'r' once → result = "eetr"
+
+Output: "eetr" (also valid: "eert")
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n + k log k)
+  - Building frequency map: O(n) where n is the length of the string
+  - Sorting k unique characters: O(k log k) where k ≤ n (at most n unique characters)
+  - Building result string: O(n) to append all characters
+  - Total: O(n + k log k), which simplifies to O(n log n) in worst case when all characters are unique
+
+- **Space Complexity**: O(n)
+  - HashMap storage: O(k) where k ≤ n unique characters
+  - Sorted list: O(k) entries
+  - StringBuilder: O(n) to build the result string
+  - Total: O(n)
+
+#### Implementation Steps
+
+1. Initialize a `HashMap<Character, Integer>` called `freqMap` to store character frequencies
+2. Iterate through the input string and populate `freqMap` using `getOrDefault(c, 0) + 1`
+3. Convert the map's entry set to a stream and sort in reverse order by value using `Collections.reverseOrder(Map.Entry.comparingByValue())`
+4. Collect the sorted entries into a list `sortedFreqList`
+5. Iterate through `sortedFreqList`:
+   - Extract character `c` and its frequency `f`
+   - Append character `c` exactly `f` times to the result string
+6. Return the final result string
+
+#### Java Code
+
+```java
+class Solution {
+    public String frequencySort(String s) {
+        Map<Character, Integer> freqMap = new HashMap<>();
+
+        for(char c : s.toCharArray()) {
+            int freq = freqMap.getOrDefault(c, 0);
+            freqMap.put(c, freq + 1);
+        }
+
+        // guarantee the list of entry is sorted by value and in order
+        List<Map.Entry<Character, Integer>> sortedFreqList =
+            freqMap.entrySet()
+            .stream()
+            .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+            .toList();
+
+        // iterate through the list in order and build result using StringBuilder
+        StringBuilder result = new StringBuilder();
+        for(Map.Entry<Character, Integer> entry : sortedFreqList) {
+            char c = entry.getKey();
+            int f = entry.getValue();
+
+            for(int i = 0; i < f; i++) {
+                result.append(c);
+            }
+        }
+
+        return result.toString();
+    }
+}
+```
+
 ## Verifying an Alien Dictionary {#alien-dictionary}
 
 ### Problem Metadata
