@@ -1920,11 +1920,11 @@ This solution uses a **dynamic sliding window** approach with two pointers (`l` 
 
 **Key Insight**: Since all elements are positive, adding elements always increases the sum, and removing elements always decreases it. This monotonic property guarantees the sliding window technique works optimally.
 
-**Why `r >= l` is Always Guaranteed:**
+**Why $r \geq l$ is Always Guaranteed:**
 
-The inner `while` loop condition `sum >= target` provides an **implicit guarantee** that `r >= l`:
+The inner `while` loop condition `sum >= target` provides an **implicit guarantee** that $r \geq l$:
 
-1. **Initialization**: Both pointers start at 0, so initially `r == l`
+1. **Initialization**: Both pointers start at 0, so initially $r == l$
 2. **Outer loop invariant**: The right pointer `r` moves forward first (in the outer `for` loop), so `r` is always ≥ the initial `l`
 3. **Inner loop protection**:
    - The `while` loop only executes when `sum >= target`
@@ -1941,7 +1941,7 @@ The inner `while` loop condition `sum >= target` provides an **implicit guarante
 - Therefore, the `while` condition `sum >= target` would be **false**
 - The inner loop exits before `l` can overtake `r`
 
-This invariant ensures `r - l + 1` is always a valid positive length.
+This invariant ensures $r - l + 1$ is always a valid positive length.
 
 #### Analysis
 
