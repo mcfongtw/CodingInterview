@@ -8,29 +8,12 @@ This is a technical interview preparation resource built with R Bookdown. It con
 
 ## Roles and Responsibilities
 
-When working with this repository, Claude Code should act as an expert in the following areas:
+Claude Code should act as an expert in:
 
-### Technical Expertise
-- **R Programming**: Proficient in R syntax, R Markdown, and the R ecosystem
-- **Bookdown Framework**: Expert knowledge of bookdown configuration, cross-referencing, and book generation
-- **LaTeX**: Skilled in LaTeX for mathematical notation, typesetting, and bibliography management
-- **Pandoc**: Understanding of document conversion and markdown processing
-- **Git/GitHub**: Familiar with version control and GitHub Pages deployment
-
-### Content Development Support
-- **Coding Interview Problems**: Help users prepare, write, and structure coding interview problems
-- **Algorithm Solutions**: Assist in developing Java solutions with proper complexity analysis
-- **Problem Documentation**: Guide users in following the established problem template structure
-- **Code Review**: Review Java solutions for correctness, efficiency, and best practices
-- **Complexity Analysis**: Help analyze and document time/space complexity
-
-### Workflow Assistance
-- **Build Process**: Guide users through building the site locally using build.sh or R commands
-- **Debugging**: Troubleshoot build errors, rendering issues, and deployment problems
-- **Content Organization**: Suggest appropriate chapter placement and cross-references
-- **Documentation**: Maintain and update project documentation (README, GETTING_STARTED, etc.)
-
-Claude should proactively offer help with problem formulation, solution development, and ensure all content follows the project's established patterns and quality standards.
+- **R/Bookdown/LaTeX**: R Markdown, bookdown configuration, cross-referencing, mathematical notation
+- **Content Development**: Help structure coding interview problems, review Java solutions, analyze complexity
+- **Build & Deployment**: Guide through build.sh, troubleshoot errors, GitHub Pages deployment
+- **Organization**: Suggest chapter placement, maintain documentation, ensure content follows established patterns
 
 ## Build Commands
 
@@ -40,16 +23,16 @@ sh build.sh
 ```
 This runs `bookdown::render_book()` to generate HTML output in `_book/`, then moves it to `docs/` for GitHub Pages deployment.
 
-**Note:** The build process requires R and the bookdown package to be installed. Use RStudio for the best development experience.
+**Note:** Requires R and bookdown package. Use RStudio for best development experience.
 
 ## Content Structure
 
-The book is organized into topic-based chapters, each as a separate .Rmd file:
+The book is organized into topic-based chapters as separate .Rmd files:
 
-- `index.Rmd` - Introduction and glossary of algorithms (DFS, BFS, DP, etc.)
-- `02-array.Rmd` - Array problems (e.g., Two Sum, Three Sum)
+- `index.Rmd` - Introduction and algorithm glossary (DFS, BFS, DP, etc.)
+- `02-array.Rmd` - Array problems
 - `03-matrix.Rmd` - Matrix problems
-- `04-tree.Rmd` - Tree problems and traversal algorithms
+- `04-tree.Rmd` - Tree problems and traversals
 - `05-graph.Rmd` - Graph problems
 - `06-linked-list.Rmd` - Linked list problems
 - `07-stack-and-queue.Rmd` - Stack and queue problems
@@ -60,128 +43,58 @@ The book is organized into topic-based chapters, each as a separate .Rmd file:
 - `12-advanced-data-structure.Rmd` - Advanced data structures
 - `20-references.Rmd` - Bibliography
 
-## Problem Template Structure
-
-Each problem follows this format in `index.Rmd`
-
 ## Configuration Files
 
-- `_bookdown.yml` - Bookdown configuration (output filename, language settings)
-- `_output.yml` - Output format configuration (gitbook settings, CSS, TOC)
+- `_bookdown.yml` - Bookdown configuration (output filename, language)
+- `_output.yml` - Output format (gitbook settings, CSS, TOC)
 - `style.css` / `toc.css` - Custom styling
 - `bookdown-demo.Rproj` - RStudio project file
 
-## Content Guidelines
+## Adding New Problems
 
-When adding new problems:
-- Solutions are primarily in Java
-- **Verify solutions on online platforms**: All code should be tested and verified on platforms like LeetCode, HackerRank, or similar coding challenge sites before adding to the book
-- Include complexity analysis (time and space)
-- Reference algorithm definitions from glossary using `\@ref(id)` (e.g., `\@ref(dfs)`)
-- Follow the established problem template structure
-- Add new chapters to the book by creating numbered .Rmd files (e.g., `13-newchapter.Rmd`)
+### Chapter Organization
 
-### Chapter Organization Rules
+- **Sort by Problem ID**: Problems within chapters must be sorted by ID (ascending). Non-numeric IDs go at the end.
+- **Categorize by Data Structure**: Place problems by primary data structure, not algorithm type:
+  - Linked list sorting → `06-linked-list.Rmd` (not search-and-sort)
+  - Heap-based → `08-heap.Rmd`
+  - Stack/Queue → `07-stack-and-queue.Rmd`
 
-- **Sort by Problem ID**: All problems within a chapter must be sorted by their Problem ID field in ascending order. Problems without a numeric ID (e.g., from Firecode or Interview Prep) should be placed at the end of the chapter.
-- **Categorize by Data Structure**: Problems should be placed in chapters based on their primary data structure type, not by algorithm type. For example:
-  - Linked list sorting problems → `06-linked-list.Rmd` (not search-and-sort)
-  - Heap-based problems → `08-heap.Rmd`
-  - Stack/Queue problems → `07-stack-and-queue.Rmd`
+### Two-Phase Workflow
 
-### Workflow for Adding New Problems
+**Phase 1: Structure Creation (Claude)**
 
-**Two-Phase Approach:**
+When adding a new problem, Claude will:
 
-#### Phase 1: Problem Structure Creation (Claude's Role)
-When the user requests a new problem to be added:
-
-1. **Fetch Problem Details**: Download problem description, examples, constraints, and metadata from the specified platform (LeetCode, HackerRank, etc.)
-
-2. **Create Problem Structure**: Add a new section in the appropriate chapter file with:
-   - Problem metadata (Platform, ID, Difficulty, URL, Tags, Techniques)
-   - **Tags**: Track company associations and study plan memberships:
-     - Company names (e.g., `Google`, `Amazon`, `Meta`, `Microsoft`)
-     - Study plans: `Top 100 Liked`, `Blind 75`, `NeetCode 150`
-     - Multiple tags separated by commas
-     - Example: `Tags: Google, Amazon, Top 100 Liked, Blind 75`
-   - **Techniques**: Use descriptive labels with cross-references (e.g., `[Hash Table](\@ref(hash-table))`, `[Dynamic Programming](\@ref(dp))`)
-   - Complete problem description
-   - Examples with input/output
-   - Constraints
-   - Empty solution structure with placeholders:
-     ```markdown
-     ### Solution
-
-     #### Walkthrough
-
-     [Explain the approach and thought process]
-
-     #### Analysis
-
-     - **Time Complexity**: O(?)
-     - **Space Complexity**: O(?)
-
-     #### Implementation Steps
-
-     1. Step 1
-     2. Step 2
-     3. Step 3
-
-     #### Java Code
-
-     \```java
-     public class Solution {
-         public ReturnType methodName(InputType input) {
-             // Implementation
-         }
-     }
-     \```
-     ```
-
-3. **Assign Unique Anchor ID**: Ensure the problem has a unique anchor (e.g., `{#min-steps-anagram}`)
-
-4. **Update problems_data.csv** (REQUIRED - do this immediately when creating the problem structure):
-   Add a new row to `problems_data.csv` with the problem metadata:
+1. **Fetch problem details** from the platform (LeetCode, HackerRank, etc.)
+2. **Create problem section** in appropriate chapter with:
+   - Metadata: Platform, ID, Difficulty, URL, Tags, Techniques
+   - **Tags**: Company names (`Google`, `Amazon`, `Meta`) and study plans (`Top 100 Liked`, `Blind 75`, `NeetCode 150`)
+   - **Techniques**: Use cross-references (e.g., `[Hash Table](\@ref(hash-table))`)
+   - Complete description, examples, and constraints
+   - Empty solution structure (Walkthrough, Analysis, Implementation Steps, Java Code placeholders)
+3. **Assign unique anchor ID** (e.g., `{#min-steps-anagram}`)
+4. **Update problems_data.csv** simultaneously with matching anchor and metadata:
    ```csv
    title,platform,problem_id,difficulty,chapter,chapter_num,anchor,tags
-   Minimum Number of Steps to Make Two Strings Anagram,LeetCode,1347,Medium,String Manipulation,09,min-steps-anagram,"Google, Top 100 Liked"
+   Problem Name,LeetCode,1347,Medium,String Manipulation,09,anchor-id,"Google, Top 100 Liked"
    ```
-   - **IMPORTANT**: This must be done at the same time as creating the problem structure in the .Rmd file
-   - Insert the row in the appropriate chapter section (keep problems grouped by chapter)
-   - Ensure the anchor matches the one used in the .Rmd file
-   - The `tags` field contains comma-separated values for company names and study plans (e.g., `"Google, Amazon, Top 100 Liked, Blind 75, NeetCode 150"`)
-   - This CSV is used for problem indexing and lookups
+5. **Do NOT implement the solution** - User will fill in placeholders
 
-5. **Do NOT implement the solution** - Leave the solution section as placeholders for the user to fill in
+**Phase 2: Review & Optimization (User + Claude)**
 
-#### Phase 2: Solution Review & Optimization (User + Claude)
-After the user implements their solution:
+After user implements the solution:
+- User verifies solution on the platform
+- User requests review
+- Claude reviews correctness, efficiency, complexity analysis, and suggests optimizations
 
-1. **User implements** the solution in the placeholders
-2. **User requests review** - Claude can then:
-   - Review the solution for correctness and efficiency
-   - Analyze and verify time/space complexity
-   - Suggest optimizations or alternative approaches
-   - Help document the walkthrough and implementation steps
-   - Ensure code follows best practices
+### Content Requirements
 
-**Example Request:**
-```
-User: "Add LeetCode problem 1347 to string manipulation chapter"
-Claude: [Creates structure with metadata, description, examples, constraints, empty solution]
-
-User: [Implements solution]
-User: "Review my solution for problem 1347"
-Claude: [Reviews, analyzes complexity, suggests improvements]
-```
-
-This two-phase approach ensures:
-- User practices problem-solving independently
-- Solutions are verified by the user on the platform
-- Claude assists with structure, documentation, and optimization
-- All content follows established patterns
+- Solutions in Java, verified on online platforms (LeetCode, HackerRank, etc.)
+- Include time/space complexity analysis
+- Use `\@ref(id)` for glossary references (e.g., `\@ref(dfs)`)
+- Follow established problem template structure
 
 ## Deployment
 
-Changes merged to the master branch trigger GitHub Actions to deploy the `docs/` directory to GitHub Pages. Run `build.sh` locally before committing to ensure the static site is up to date.
+Changes merged to master trigger GitHub Actions to deploy `docs/` to GitHub Pages. Run `build.sh` locally before committing to ensure the static site is up to date.

@@ -41,6 +41,67 @@ for(int i = 0, j = 0; i < A.length; j < B.length;) {
 }
 ```
 
+## Kadane's Algorithm
+
+Kadane's algorithm is a fundamental dynamic programming technique for finding the maximum sum (or product) of a contiguous subarray. It's widely used in array problems and appears in several LeetCode questions.
+
+### Core Concept
+
+The key insight is to maintain a running state representing the **best subarray ending at the current position**. At each element, we decide:
+
+1. **Start fresh** from the current element
+2. **Extend** the previous subarray by including the current element
+
+This decision is captured by the recurrence:
+
+```
+dp[i] = max(nums[i], dp[i-1] + nums[i])
+```
+
+where `dp[i]` represents the maximum sum of a subarray **ending at index i**.
+
+### Key Insight
+
+**Why does `max(nums[i], current + nums[i])` work?**
+
+- `nums[i]`: Start a new subarray from this element
+- `current + nums[i]`: Extend the previous best subarray
+
+If the previous sum is negative, starting fresh gives a better result.
+
+### Standard Implementation
+
+For the complete implementation and detailed walkthrough, see [Maximum Subarray](#maximum-subarray) (LeetCode 53).
+
+### Kadane's Algorithm Variants
+
+**1. Maximum Product Subarray**
+
+For products instead of sums, we need to track **both max and min** because negative numbers flip signs. A large negative product can become a large positive when multiplied by another negative.
+
+See [Maximum Product Subarray](#maximum-product) (LeetCode 152) for the complete implementation and detailed explanation.
+
+**2. Other Variants**
+
+Kadane's algorithm can be extended to:
+- Maximum Sum Circular Subarray (LeetCode 918)
+- Constraint-based problems with additional state tracking
+- Stock price problems with transaction limits
+
+### Time Complexity
+
+- **Time**: O(n) - Single pass through the array
+- **Space**: O(1) - Only uses a constant number of variables
+
+This makes Kadane's algorithm highly efficient for linear array optimization problems.
+
+### Related Problems
+
+- [Maximum Subarray](#maximum-subarray) (LeetCode 53)
+- [Maximum Product Subarray](#maximum-product) (LeetCode 152)
+- Maximum Sum Circular Subarray (LeetCode 918)
+- Best Time to Buy and Sell Stock (variants)
+
 ## Two Sums I {#two-sum-1}
 
 
@@ -1061,21 +1122,121 @@ Explanation: [4,-1,2,1] has the largest sum = 6.
 
 #### Walkthrough
 
-Maintain `current` sum for the best subarray ending at index `i`. For each number, extend the previous subarray if it improves the sum; otherwise start new from the current number. Track the global maximum.
+This solution uses **Kadane's Algorithm** (see [Kadane's Algorithm](#kadanes-algorithm)), a classic dynamic programming technique for finding the maximum sum of a contiguous subarray.
+
+**Core Strategy:**
+
+The key insight is to maintain a running state representing the **best subarray ending at the current position**. At each element, we make a critical decision:
+
+1. **Start fresh** from the current element (begin a new subarray)
+2. **Extend** the previous subarray by including the current element
+
+This decision is captured by the recurrence relation:
+```
+current = max(nums[i], current + nums[i])
+```
+
+where `current` represents the maximum sum of a subarray **ending at index i**.
+
+**Why `max(nums[i], current + nums[i])`?**
+
+- `nums[i]`: Start a new subarray from this element
+- `current + nums[i]`: Extend the previous best subarray
+
+If the previous sum (`current`) is negative, adding it to `nums[i]` would only decrease the value. Starting fresh from `nums[i]` gives a better result.
+
+**Step-by-step execution:**
+
+For the array `[-2, 1, -3, 4, -1, 2, 1, -5, 4]`:
+
+```
+i=0: nums[0]=-2
+  current = -2 (first element)
+  maxSum = -2
+
+i=1: nums[1]=1
+  current = max(1, -2+1) = max(1, -1) = 1 (start fresh!)
+  maxSum = max(-2, 1) = 1
+
+i=2: nums[2]=-3
+  current = max(-3, 1+(-3)) = max(-3, -2) = -2 (extend)
+  maxSum = max(1, -2) = 1
+
+i=3: nums[3]=4
+  current = max(4, -2+4) = max(4, 2) = 4 (start fresh!)
+  maxSum = max(1, 4) = 4
+
+i=4: nums[4]=-1
+  current = max(-1, 4+(-1)) = max(-1, 3) = 3 (extend)
+  maxSum = max(4, 3) = 4
+
+i=5: nums[5]=2
+  current = max(2, 3+2) = max(2, 5) = 5 (extend)
+  maxSum = max(4, 5) = 5
+
+i=6: nums[6]=1
+  current = max(1, 5+1) = max(1, 6) = 6 (extend)
+  maxSum = max(5, 6) = 6
+
+i=7: nums[7]=-5
+  current = max(-5, 6+(-5)) = max(-5, 1) = 1 (extend)
+  maxSum = max(6, 1) = 6
+
+i=8: nums[8]=4
+  current = max(4, 1+4) = max(4, 5) = 5 (extend)
+  maxSum = max(6, 5) = 6
+
+Result: 6 (from subarray [4,-1,2,1])
+```
+
+**Key Insight:** At each position, we only need to know the best subarray ending at the previous position. We don't need to track all possible subarrays, making this approach highly efficient.
 
 #### Analysis
 
 - **Time Complexity**: O(n)
+  - Single pass through the array
+  - Each element is visited exactly once
+  - Each iteration performs constant-time operations (two comparisons and assignments)
+  - No nested loops or recursion
+  - This is optimal since we must examine every element at least once
+
 - **Space Complexity**: O(1)
+  - Only uses two variables (`current` and `maxSum`) regardless of input size
+  - No additional data structures needed
+  - No recursion stack space
+  - This is optimal for the iterative approach
+
+**Why This Approach is Optimal:**
+
+- We cannot do better than O(n) time since we must examine every element
+- We cannot use less than O(1) space while maintaining necessary state
+- Kadane's algorithm achieves both optimal time and space complexity
 
 #### Implementation Steps
 
+**Initialization:**
 
-1. Initialize `current = maxSum = nums[0]`.
-2. For each element from index 1 onward:
-   - `current = max(nums[i], current + nums[i])`.
-   - `maxSum = max(maxSum, current)`.
-3. Return `maxSum`.
+1. Initialize `current = nums[0]` (maximum sum of subarray ending at position 0)
+2. Initialize `maxSum = nums[0]` (global maximum sum found so far)
+
+**Main Loop** (iterate from index 1 to n-1):
+
+For each element `nums[i]`:
+
+3. **Update current** (best subarray ending at position i):
+   - Compare two choices:
+     - **Start fresh**: `nums[i]` (begin new subarray from current element)
+     - **Extend**: `current + nums[i]` (add current element to previous subarray)
+   - Set `current = Math.max(nums[i], current + nums[i])`
+   - **Critical insight**: If `current` was negative, starting fresh is always better
+
+4. **Update global maximum**:
+   - Set `maxSum = Math.max(maxSum, current)`
+   - Track the best result seen across all positions
+
+**Return:**
+
+5. Return `maxSum` (the maximum subarray sum)
 
 #### Java Code
 ```java
@@ -1624,23 +1785,125 @@ Output: 6 (subarray [2,3])
 
 #### Walkthrough
 
-Because negative values can flip the sign, keep both the maximum and minimum products ending at each index. For each number, compute candidates by multiplying with previous max/min and compare with the number itself. Update the global maximum accordingly.
+This solution is a **variant of Kadane's algorithm** (see [Kadane's Algorithm](#kadanes-algorithm)) adapted for products instead of sums. The key challenge is that negative numbers flip signs, making a large negative product potentially valuable if we later multiply by another negative.
+
+**Core Strategy:**
+
+Track **two values** at each position:
+- `maxSoFar`: Maximum product of subarray **ending at current index**
+- `minSoFar`: Minimum product of subarray **ending at current index**
+
+**Why track both max AND min?**
+
+Because negative numbers flip signs:
+- A **large negative** × **negative** = **large positive**
+- Today's minimum could become tomorrow's maximum
+
+**The Decision at Each Position** (Kadane's principle):
+
+For each element `num`, we must decide:
+1. **Start fresh**: Begin a new subarray from `num`
+2. **Extend**: Multiply `num` with the previous max/min products
+
+This gives us:
+```
+maxSoFar = max(num, num × previous_max, num × previous_min)
+minSoFar = min(num, num × previous_max, num × previous_min)
+```
+
+**The Swap Optimization:**
+
+When `num < 0`, multiplying by it flips signs:
+- `previous_max × num` becomes negative (likely the new minimum)
+- `previous_min × num` becomes positive (likely the new maximum)
+
+By **swapping max and min before multiplying**, we simplify the logic:
+```
+if (num < 0) swap(maxSoFar, minSoFar)
+maxSoFar = max(num, maxSoFar × num)
+minSoFar = min(num, minSoFar × num)
+```
+
+**Example Walkthrough:**
+```
+nums = [2, 3, -2, 4]
+
+i=0: num=2
+  maxSoFar = 2, minSoFar = 2, answer = 2
+
+i=1: num=3
+  maxSoFar = max(3, 2×3) = 6
+  minSoFar = min(3, 2×3) = 3
+  answer = 6
+
+i=2: num=-2 (negative → swap first!)
+  After swap: maxSoFar=3, minSoFar=6
+  maxSoFar = max(-2, 3×(-2)) = -2
+  minSoFar = min(-2, 6×(-2)) = -12
+  answer = 6
+
+i=3: num=4
+  maxSoFar = max(4, -2×4) = 4  ← Start fresh!
+  minSoFar = min(4, -12×4) = -48
+  answer = 6
+
+Result: 6 (from subarray [2,3])
+```
+
+**Key Insight:** Just like Kadane's algorithm for sums, we compare `num` (start fresh) vs extending the previous subarray. The difference is we track both extremes (max and min) because products can flip signs.
 
 #### Analysis
 
 - **Time Complexity**: O(n)
+  - Single pass through the array
+  - Each iteration performs constant-time operations (comparisons, multiplications, swap)
+  - No nested loops or recursion
+
 - **Space Complexity**: O(1)
+  - Only uses three variables (`maxSoFar`, `minSoFar`, `answer`) regardless of input size
+  - No additional data structures
+  - This is optimal for the problem
+
+**Why This Approach is Optimal:**
+- We must examine every element at least once → O(n) is the lower bound
+- We cannot do better than O(1) space while still tracking necessary state
+- The swap optimization elegantly handles negative numbers without complex branching
 
 #### Implementation Steps
 
+**Initialization:**
+1. Set `maxSoFar = nums[0]` (maximum product ending at position 0)
+2. Set `minSoFar = nums[0]` (minimum product ending at position 0)
+3. Set `answer = nums[0]` (global maximum so far)
 
-1. Initialize `maxSoFar = minSoFar = answer = nums[0]`.
-2. For each `num` from index 1 onward:
-   - If `num < 0`, swap `maxSoFar` and `minSoFar`.
-   - `maxSoFar = max(num, maxSoFar * num)`.
-   - `minSoFar = min(num, minSoFar * num)`.
-   - `answer = max(answer, maxSoFar)`.
-3. Return `answer`.
+**Main Loop** (iterate from index 1 to n-1):
+
+For each element `num = nums[i]`:
+
+4. **Handle negative numbers** (swap optimization):
+   - If `num < 0`:
+     - Save `temp = maxSoFar`
+     - Set `maxSoFar = minSoFar` (min becomes max after multiplying by negative)
+     - Set `minSoFar = temp` (max becomes min after multiplying by negative)
+
+5. **Update maxSoFar** (best product ending here):
+   - Compare two choices:
+     - **Start fresh**: `num` (begin new subarray from current element)
+     - **Extend**: `maxSoFar × num` (multiply with previous best)
+   - Set `maxSoFar = Math.max(num, maxSoFar × num)`
+   - **Why compare with `num` not `maxSoFar`?** We need the option to restart the subarray, just like in Kadane's algorithm!
+
+6. **Update minSoFar** (worst product ending here):
+   - Set `minSoFar = Math.min(num, minSoFar × num)`
+   - Track minimum for when we encounter another negative number
+
+7. **Update global maximum**:
+   - Set `answer = Math.max(answer, maxSoFar)`
+   - Only `maxSoFar` can contribute to the answer (we want maximum product)
+
+**Return:**
+
+8. Return `answer` (the maximum product found across all subarrays)
 
 #### Java Code
 ```java
