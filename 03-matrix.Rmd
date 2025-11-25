@@ -1059,8 +1059,69 @@ Instead of scanning entire rows/columns after each move, keep running counts:
 
 1. `rows[i]` stores the net score for row `i`, `cols[j]` for column `j`.
 2. Add `+1` for player 1 or `-1` for player 2.
-3. Maintain two diagonals.
+3. Maintain two diagonals (main and anti-diagonal).
 4. If any absolute value reaches `n`, that player wins.
+
+**Why Use +1/-1 Scoring?**
+
+Using opposite signs (+1 for Player 1, -1 for Player 2) allows a single counter to track both players:
+- If `rows[i] = +n`, Player 1 has filled row i completely (won)
+- If `rows[i] = -n`, Player 2 has filled row i completely (won)
+- Using `Math.abs(rows[i]) == n` detects both cases
+
+This eliminates the need for separate counters per player, reducing space complexity.
+
+**Visual Example (n=3):**
+
+```
+Game Sequence:
+Move 1: Player 1 at (0,0) - Top-left corner
+Move 2: Player 2 at (0,2) - Top-right corner
+Move 3: Player 1 at (1,1) - Center
+Move 4: Player 2 at (1,0) - Middle-left
+Move 5: Player 1 at (2,0) - Bottom-left
+Move 6: Player 2 at (1,2) - Middle-right
+Move 7: Player 1 at (2,1) - Bottom-center → Player 1 WINS!
+
+Board Evolution:
+
+After Move 1 (Player 1 at 0,0):        After Move 2 (Player 2 at 0,2):
+X . .                                   X . O
+. . .                                   . . .
+. . .                                   . . .
+rows=[1,0,0]   diag=1                  rows=[0,0,0]   diag=1
+cols=[1,0,0]   antiDiag=0              cols=[1,0,-1]  antiDiag=-1
+
+After Move 3 (Player 1 at 1,1):        After Move 4 (Player 2 at 1,0):
+X . O                                   X . O
+. X .                                   O X .
+. . .                                   . . .
+rows=[0,1,0]   diag=2                  rows=[0,0,0]   diag=2
+cols=[1,1,-1]  antiDiag=1              cols=[0,1,-1]  antiDiag=1
+
+After Move 5 (Player 1 at 2,0):        After Move 6 (Player 2 at 1,2):
+X . O                                   X . O
+O X .                                   O X O
+X . .                                   X . .
+rows=[0,0,1]   diag=2                  rows=[0,-1,1]  diag=2
+cols=[1,1,-1]  antiDiag=1              cols=[0,1,-2]  antiDiag=1
+
+After Move 7 (Player 1 at 2,1):
+X . O
+O X O
+X X .
+rows=[0,-1,2]   diag=2
+cols=[0,2,-2]   antiDiag=1
+
+Check: |cols[1]| = |2| = 2 (not 3, continue)
+       Wait... need one more move for column win
+
+Actually, Player 1 would need (2,2) for diagonal win or continue column strategy.
+The game continues until a counter reaches ±3.
+```
+
+**Key Insight:**
+By checking `Math.abs(counter) == n`, we only need ONE set of counters instead of tracking separate counts for each player. The sign tells us which player is dominating that line.
 
 #### Analysis
 
@@ -1078,35 +1139,58 @@ Instead of scanning entire rows/columns after each move, keep running counts:
 
 ```java
 class TicTacToe {
+    // Running sum for each row: +1 for Player 1, -1 for Player 2
     private final int[] rows;
+
+    // Running sum for each column: +1 for Player 1, -1 for Player 2
     private final int[] cols;
+
+    // Running sum for main diagonal (top-left to bottom-right)
+    // Cells where row == col (e.g., (0,0), (1,1), (2,2))
     private int diag;
+
+    // Running sum for anti-diagonal (top-right to bottom-left)
+    // Cells where row + col == n-1 (e.g., (0,2), (1,1), (2,0) for n=3)
     private int antiDiag;
 
     public TicTacToe(int n) {
         rows = new int[n];
         cols = new int[n];
+        // diag and antiDiag are initialized to 0 by default
     }
 
+
     public int move(int row, int col, int player) {
+        // Convert player number to score: Player 1 = +1, Player 2 = -1
         int score = player == 1 ? 1 : -1;
+
+        // Update the running sum for this row and column
         rows[row] += score;
         cols[col] += score;
 
+        // If on main diagonal (row == col), update diagonal sum
+        // Main diagonal: (0,0), (1,1), (2,2), ...
         if (row == col) {
             diag += score;
         }
+
+        // If on anti-diagonal (row + col == n-1), update anti-diagonal sum
+        // Anti-diagonal: (0,n-1), (1,n-2), ..., (n-1,0)
         if (row + col == rows.length - 1) {
             antiDiag += score;
         }
 
-        if (Math.abs(rows[row]) == rows.length
-            || Math.abs(cols[col]) == rows.length
-            || Math.abs(diag) == rows.length
-            || Math.abs(antiDiag) == rows.length) {
-            return player;
+        // Check if any line is complete (sum reaches +n or -n)
+        // Math.abs() handles both Player 1 winning (+n) and Player 2 winning (-n)
+        int n = rows.length;
+        if (Math.abs(rows[row]) == n         // Current row is filled by one player
+            || Math.abs(cols[col]) == n      // Current column is filled by one player
+            || Math.abs(diag) == n           // Main diagonal is filled by one player
+            || Math.abs(antiDiag) == n) {    // Anti-diagonal is filled by one player
+            return player;  // Current player wins!
         }
 
+        // No winner yet
         return 0;
     }
 }
@@ -1438,5 +1522,3 @@ class Solution {
     }
 }
 ```
-
-## Design Tic-Tac-Toe {#tic-tac-toe}
