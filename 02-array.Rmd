@@ -2559,6 +2559,299 @@ public int[] topKFrequent(int[] nums, int k) {
 }
 ```
 
+## Random Pick Index {#random-pick-index}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 398
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/random-pick-index/
+- **Tags**: `Array`, `Hash Table`, `Reservoir Sampling`, `Randomized`
+- **Interview Tags**: Google
+- **Techniques**: [Reservoir Sampling](glossary-of-algorithm.html#reservoir-sampling), [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Given an integer array `nums` with possible duplicates, randomly output the index of a given target number. You can assume that the given target number must exist in the array.
+
+Implement the `Solution` class:
+
+- `Solution(int[] nums)` Initializes the object with the array `nums`.
+- `int pick(int target)` Picks a random index `i` from `nums` where `nums[i] == target`. If there are multiple valid indices, then each index should have an equal probability of returning.
+
+### Examples
+
+**Example 1:**
+```
+Input:
+["Solution", "pick", "pick", "pick"]
+[[[1, 2, 3, 3, 3]], [3], [1], [3]]
+
+Output:
+[null, 4, 0, 2]
+
+Explanation:
+Solution solution = new Solution([1, 2, 3, 3, 3]);
+solution.pick(3); // returns 4 (index of one of the 3's, each with 1/3 probability)
+solution.pick(1); // returns 0 (only one 1 in the array)
+solution.pick(3); // returns 2 (index of one of the 3's, each with 1/3 probability)
+```
+
+### Constraints
+
+- `1 <= nums.length <= 2 * 10^4`
+- `-2^31 <= nums[i] <= 2^31 - 1`
+- `target` is an integer from `nums`
+- At most `10^4` calls will be made to `pick`
+- **Important**: Solutions that use too much extra space will not pass the judge
+
+### Solution - Reservoir Sampling
+
+#### Walkthrough
+
+This solution uses **Reservoir Sampling**, a randomized algorithm that allows us to randomly select items from a stream with equal probability while using minimal space.
+
+**Core Strategy:**
+
+The problem requires each valid index to have equal probability of being selected. Reservoir Sampling achieves this by:
+1. Scanning through the array to find all occurrences of the target
+2. For each occurrence, probabilistically deciding whether to select it
+3. Guaranteeing that by the end, each occurrence had exactly `1/k` probability of being selected (where `k` = total count of target)
+
+**The Algorithm:**
+
+For each matching element at index `i`:
+- This is the `count`-th occurrence we've seen
+- Replace our current result with index `i` with probability `1/count`
+- This is done by: `if (rand.nextInt(count) == 0)` which has exactly `1/count` probability
+
+**Mathematical Proof of Equal Probability:**
+
+Why does each index have equal probability `1/k`?
+
+For the $i$-th occurrence (where $1 \leq i \leq k$):
+
+1. **Probability of being selected** when encountered: $\frac{1}{i}$
+
+2. **Probability of NOT being replaced** by subsequent occurrences:
+   - Not replaced by $(i+1)$-th: $\frac{i}{i+1}$
+   - Not replaced by $(i+2)$-th: $\frac{i+1}{i+2}$
+   - ...
+   - Not replaced by $k$-th: $\frac{k-1}{k}$
+   - Product: $\frac{i}{i+1} \times \frac{i+1}{i+2} \times \ldots \times \frac{k-1}{k} = \frac{i}{k}$
+
+3. **Final probability**: $\frac{1}{i} \times \frac{i}{k} = \frac{1}{k}$ ✓
+
+**Example Walkthrough:**
+
+For `nums = [1, 2, 3, 3, 3]`, picking `target = 3`:
+
+```
+Scan array:
+- i=0: nums[0]=1 (skip)
+- i=1: nums[1]=2 (skip)
+- i=2: nums[2]=3 (1st occurrence, count=1)
+  → rand.nextInt(1) always returns 0
+  → result = 2 (selected with probability 1/1)
+
+- i=3: nums[3]=3 (2nd occurrence, count=2)
+  → rand.nextInt(2) returns 0 with probability 1/2
+  → If 0: result = 3 (replace)
+  → If 1: result = 2 (keep previous)
+
+- i=4: nums[4]=3 (3rd occurrence, count=3)
+  → rand.nextInt(3) returns 0 with probability 1/3
+  → If 0: result = 4 (replace)
+  → Otherwise: keep previous
+
+Final: Each index (2, 3, 4) has exactly 1/3 probability
+```
+
+**Key Insight:** We don't need to store all indices - we just need to track the current "winner" and update it probabilistically as we scan.
+
+#### Analysis
+
+- **Time Complexity**:
+  - Constructor: `O(1)` - Just stores reference to array
+  - pick(): `O(n)` - Must scan entire array to find all occurrences
+  - This is acceptable when memory is constrained or `pick()` is called infrequently
+
+- **Space Complexity**: `O(1)`
+  - Only stores reference to input array and a Random object
+  - No preprocessing or additional data structures
+  - **This satisfies the constraint**: "Solutions that use too much extra space will not pass the judge"
+
+**Trade-off:** Trades time for space compared to the Hash Map approach. Best when:
+- Array is very large (space-constrained environment)
+- `pick()` is called infrequently
+- Cannot afford O(n) preprocessing space
+
+#### Implementation Steps
+
+1. **Constructor**:
+   - Store reference to the input array `nums`
+   - Initialize a `Random` object for generating random numbers
+
+2. **pick() method**:
+   - Initialize `count = 0` to track how many occurrences we've found
+   - Initialize `result = -1` to store the selected index
+
+3. **Scan the array** (loop through all indices):
+   - If `nums[i] == target`:
+     - Increment `count` (this is the count-th occurrence)
+     - Generate random number in range `[0, count)`
+     - If random number is `0` (probability = `1/count`):
+       - Update `result = i` (select this index)
+     - Otherwise keep previous `result`
+
+4. **Return** the final `result` index
+
+**Why `rand.nextInt(count) == 0` works:**
+- `rand.nextInt(count)` returns values `0, 1, 2, ..., count-1` with equal probability
+- Each value has probability `1/count`
+- Checking for `== 0` gives us exactly `1/count` probability
+
+#### Java Code
+
+```java
+class Solution {
+    private int[] nums;
+    private Random rand;
+
+    public Solution(int[] nums) {
+        this.nums = nums;
+        this.rand = new Random();
+    }
+
+    public int pick(int target) {
+        int count = 0;
+        int result = -1;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == target) {
+                count++;
+                // With probability 1/count, replace result with current index
+                if (rand.nextInt(count) == 0) {
+                    result = i;
+                }
+            }
+        }
+
+        return result;
+    }
+}
+```
+
+### Alternative Solution - Hash Map (Preprocessing)
+
+#### Walkthrough
+
+This approach uses **preprocessing with a Hash Map** to trade space for query speed.
+
+**Core Strategy:**
+
+1. **Constructor (Preprocessing)**: Build a HashMap where:
+   - Key = number value
+   - Value = List of all indices where that number appears in the array
+
+2. **pick() method**:
+   - Look up the target in the HashMap to get all valid indices
+   - Generate a random index to select from the list
+   - Return the selected index
+
+**Example:**
+
+For `nums = [1, 2, 3, 3, 3]`:
+
+HashMap after preprocessing:
+```
+{
+  1 → [0],
+  2 → [1],
+  3 → [2, 3, 4]
+}
+```
+
+When `pick(3)` is called:
+- Retrieve list `[2, 3, 4]` (size = 3)
+- Generate random index in `[0, 3)`: could be 0, 1, or 2
+- Return `indexList.get(randomIndex)`: could be 2, 3, or 4 with equal probability
+
+**Why This Works:**
+
+Java's `Random.nextInt(n)` generates integers in `[0, n)` with uniform distribution, so each index in the list has exactly `1/n` probability of being selected.
+
+#### Analysis
+
+- **Time Complexity**:
+  - Constructor: `O(n)` - Single pass through array to build HashMap
+  - pick(): `O(1)` - HashMap lookup + random selection
+  - This is optimal for query speed
+
+- **Space Complexity**: `O(n)`
+  - HashMap stores all n elements as keys
+  - Lists store all n indices total across all values
+  - **Warning**: This violates the space constraint for large arrays
+  - However, it's the fastest solution for frequent `pick()` calls
+
+**Trade-off:** Trades space for time. Best when:
+- Memory is abundant
+- `pick()` is called very frequently (amortizes the preprocessing cost)
+- Query speed is critical
+
+#### Implementation Steps
+
+1. **Constructor**:
+   - Initialize empty `HashMap<Integer, List<Integer>>` called `indexMap`
+   - Initialize a `Random` object
+   - Loop through array with index `i`:
+     - Get or create the list for `nums[i]`
+     - Add index `i` to the list
+     - Store the list back in the HashMap
+
+2. **pick() method**:
+   - Look up `target` in `indexMap` to get the list of indices
+   - Generate random index: `rand.nextInt(indexList.size())`
+   - Return `indexList.get(randomIndex)`
+
+#### Java Code
+
+```java
+class Solution {
+    private Map<Integer, List<Integer>> indexMap;
+    private Random rand;
+
+    public Solution(int[] nums) {
+        this.indexMap = new HashMap<>();
+        this.rand = new Random();
+
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            List<Integer> indexList = indexMap.getOrDefault(num, new ArrayList<>());
+            indexList.add(i);
+            indexMap.put(num, indexList);
+        }
+    }
+
+    public int pick(int target) {
+        List<Integer> indexList = indexMap.get(target);
+        int randomIdx = rand.nextInt(indexList.size());
+        return indexList.get(randomIdx);
+    }
+}
+```
+
+### Comparison of Solutions
+
+| Aspect | Reservoir Sampling | Hash Map Preprocessing |
+|--------|-------------------|------------------------|
+| **Constructor Time** | O(1) | O(n) |
+| **pick() Time** | O(n) | O(1) |
+| **Space** | O(1) | O(n) |
+| **Best For** | Space-constrained, infrequent queries | Frequent queries, ample memory |
+| **LeetCode Constraint** | ✅ Satisfies space requirement | ❌ May fail for large inputs |
+
 ## Non-overlapping Intervals {#non-overlapping-intervals}
 
 ### Problem Metadata
