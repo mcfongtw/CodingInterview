@@ -1443,8 +1443,8 @@ The key insight is that we only need to count the **top-left corner** (or starti
 **Why this works:**
 
 For any battleship (horizontal or vertical), only its top-left cell will have:
-- No `'X'` in the cell directly above it (if `r > 0`)
-- No `'X'` in the cell directly to its left (if `c > 0`)
+- No `'X'` in the cell directly above it (if r > 0)
+- No `'X'` in the cell directly to its left (if c > 0)
 
 All other cells of the same battleship will have at least one `'X'` neighbor in these directions and will be skipped using guard clauses.
 
@@ -1485,8 +1485,8 @@ Only cells that pass both guard checks are battleship starting points.
 2. Iterate through each cell `(r, c)` in the board using nested loops
 3. For each cell containing `'X'`:
    - **Skip if not top-left corner**: Use guard clauses with `continue` to skip cells that are:
-     - Part of a vertical ship: If `r > 0` (row exists above) AND `board[r-1][c] == 'X'` (cell above is occupied)
-     - Part of a horizontal ship: If `c > 0` (column exists to left) AND `board[r][c-1] == 'X'` (cell to left is occupied)
+     - Part of a vertical ship: If r > 0 (row exists above) AND `board[r-1][c] == 'X'` (cell above is occupied)
+     - Part of a horizontal ship: If c > 0 (column exists to left) AND `board[r][c-1] == 'X'` (cell to left is occupied)
    - **Count if top-left corner**: If both guard clauses pass, this is a ship's starting point, so increment `result`
 4. Return `result`
 
