@@ -1,5 +1,9 @@
 # Arrays
-Arrays show up in almost every interview. This chapter opens with a refresher on iterating combinations before diving into the most popular LeetCode array problems.
+
+Arrays show up in almost every interview. This chapter opens with a refresher on iterating combinations and fundamental array algorithms before diving into the most popular LeetCode array problems.
+
+## Iterating Combinations
+
 If we are enumerating the cartesian products over two arrays of n elements.
 
 ```
@@ -174,6 +178,11 @@ This allows us to find the complement in O(1) time.
 - **Time Complexity**: O(n) - Single pass through array, each lookup/insert is O(1)
 - **Space Complexity**: O(n) - Hash map stores up to n elements
 
+**Why Hash Table?** The unsorted array prevents using [Two Pointers](\@ref(two-pointers)) because sorting would destroy the original indices we need to return. Hash table provides O(1) complement lookup while preserving index information.
+
+**Why Not Two Pointers?** Consider `nums = [3,2,4], target = 6`. The correct answer is `[1,2]` (indices of 2 and 4). If we sorted to `[2,3,4]`, the indices would become `[0,1]`, losing the original positions.
+
+**Trade-off**: We sacrifice O(n) space to maintain O(n) time and preserve indices.
 
 #### Implementation Steps
 
@@ -212,6 +221,13 @@ public int[] twoSum(int[] nums, int target) {
 #### Walkthrough
 
 Similar to the previous approach, but instead of storing the current number, store the **difference** (target - nums[i]) in the hash map.
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Single pass, O(1) operations per element
+- **Space Complexity**: O(n) - Hash map stores differences
+
+**Comparison with Previous Approach**: Both solutions have identical complexity. The first approach stores `<value, index>` and checks for complements; this approach stores `<complement, index>` and checks for values. Choose based on readability preference—most implementations favor the first approach as it's more intuitive.
 
 
 #### Java Code
@@ -1968,8 +1984,10 @@ Use two indices, `left` at the start and `right` at the end of the array. Compar
 
 #### Analysis
 
-- **Time Complexity**: O(n) � each pointer moves at most `numbers.length` steps
-- **Space Complexity**: O(1)
+- **Time Complexity**: O(n) - Each pointer moves at most `numbers.length` steps
+- **Space Complexity**: O(1) - Only uses two pointer variables
+
+**Key Insight:** Sorted order enables a monotonic sweep—moving `left` only increases the sum, moving `right` only decreases it—so every pair is considered once with constant extra space.
 
 #### Implementation Steps
 
@@ -2010,12 +2028,14 @@ public int[] twoSum(int[] numbers, int target) {
 
 #### Walkthrough
 
-Iterate through each index `i`, treat `numbers[i]` as the first addend, and binary-search for `target - numbers[i]` in the suffix `[i + 1, n)`. Sorting guarantees binary search is valid, and we avoid reusing the same element by only searching to the right.
+Treat each `numbers[i]` as the first addend and binary-search for `target - numbers[i]` in the **suffix** `[i + 1, n)`. The array is sorted, so binary search can find complements in logarithmic time, and searching only in the suffix ensures we never reuse the same element or produce reversed indices.
 
 #### Analysis
 
-- **Time Complexity**: O(n log n) � one binary search per element
-- **Space Complexity**: O(1)
+- **Time Complexity**: O(n log n) - one binary search per element, shrinking search range as `i` grows
+- **Space Complexity**: O(1) - constant extra pointers
+
+**When to use**: This is a clear, deterministic alternative to two pointers when you want per-element searches or need a pattern that generalizes to other lookup-style problems. It trades a small slowdown (log factor) for a simple inner loop.
 
 #### Implementation Steps
 
@@ -2027,7 +2047,7 @@ Iterate through each index `i`, treat `numbers[i]` as the first addend, and bina
 #### Java Code
 
 ```java
-public int[] twoSumBinarySearch(int[] numbers, int target) {
+public int[] twoSum(int[] numbers, int target) {
     for (int i = 0; i < numbers.length - 1; i++) {
         int complement = target - numbers[i];
         int j = binarySearch(numbers, i + 1, numbers.length - 1, complement);
@@ -2056,6 +2076,7 @@ private int binarySearch(int[] numbers, int left, int right, int target) {
     return -1;
 }
 ```
+
 
 ## House Robber {#house-robber}
 
@@ -3071,8 +3092,14 @@ Because every value is checked exactly once, the traversal stays linear.
 
 #### Analysis
 
-- **Time Complexity**: O(n)
-- **Space Complexity**: O(n) in the worst case due to the set + recursion stack
+- **Time Complexity**: O(n) - Visit each node exactly once
+- **Space Complexity**: O(n) - HashSet stores up to n values + O(h) recursion stack where h is tree height
+
+**Why Not Use BST Property?** While we could use in-order traversal to get sorted values and then apply two pointers, the DFS + HashSet approach is simpler and has the same O(n) time complexity.
+
+**BST-Specific Optimization**: Could implement bidirectional BST iterator (one forward, one backward) for O(h) space instead of O(n), but added complexity rarely justifies the space savings.
+
+**Trade-off**: We sacrifice O(n) space for code simplicity. The BST property doesn't provide significant advantage over treating it as a general binary tree for this problem.
 
 #### Implementation Steps
 
@@ -4218,7 +4245,7 @@ class Solution {
 }
 ```
 
-## Two Sum II - Return True or False {#two-sum-ii-boolean}
+## Two Sum III - Return True or False {#two-sum-ii-boolean}
 
 ### Problem Metadata
 
@@ -4329,8 +4356,20 @@ Place `left` at the start and `right` at the end of the array. Compare `nums[lef
 
 #### Analysis
 
-- **Time Complexity**: O(n)
-- **Space Complexity**: O(1) auxiliary (result list not counted)
+- **Time Complexity**: O(n) - Each element visited at most once by each pointer
+- **Space Complexity**: O(1) auxiliary space (output list not counted)
+
+**Why Two Pointers Works**: The sorted array guarantees that skipping duplicates correctly finds all unique pairs. After finding a match at `[left, right]`, we advance both pointers past all duplicate values to avoid counting the same pair multiple times.
+
+**Uniqueness Detail**: Because the array may contain repeats, the duplicate-skipping logic is essential:
+```java
+while (left < right && nums[left] == currentLeft) left++;
+while (left < right && nums[right] == currentRight) right--;
+```
+
+**Why Not Hash Table?** For finding all unique pairs in sorted arrays, two pointers is more efficient. Hash table would require additional logic to deduplicate pairs and wouldn't leverage the sorted property.
+
+**When to Use**: Standard approach for "find all pairs" problems with sorted input.
 
 #### Implementation Steps
 
@@ -4955,3 +4994,40 @@ private void swap(int[] arr, int i, int j) {
     arr[j] = tmp;
 }
 ```
+
+## N Sum Family Comparison {#n-sum-family}
+
+### Two Sum Family (LeetCode 1, 167, 653)
+
+| Problem | Input/Constraints | Return | Preferred Approach | Time | Space | Notes |
+|---------|-------------------|--------|--------------------|------|-------|-------|
+| [Two Sum I](#two-sum-1) | Unsorted array; preserve original indices | Pair of indices | Hash table | O(n) | O(n) | Sorting breaks indices; hash lookup keeps order info |
+| [Two Sum II](#two-sum-ii-sorted) | Sorted array; 1-indexed output | Pair of indices | Two pointers | O(n) | O(1) | Sorted order unlocks monotonic sweep; TreeMap fallback is O(n log n) |
+| [Two Sum III](#two-sum-ii-boolean) | Unsorted array; existence only | Boolean | Hash set | O(n) | O(n) | Same complement idea, short-circuits on first match |
+| [Two Sum IV](#two-sum-iv-bst) | BST input | Boolean | DFS + HashSet (or dual iterators) | O(n) | O(n) or O(h) | Iterator variant trades simplicity for O(h) space |
+
+**Key differences and picks:** Sorting status drives the strategy (hash table for unsorted, two pointers for sorted). When output is just existence, hash set with early exit wins. BST input can use dual iterators for O(h) space, but DFS + HashSet stays simplest.
+
+### Three Sum Family (LeetCode 15, 16)
+
+| Problem | Input/Constraints | Return | Preferred Approach | Time | Space | Notes |
+|---------|-------------------|--------|--------------------|------|-------|-------|
+| [3Sum](#three-sum) | Unsorted array | All unique triplets summing to 0 | Sort + two pointers | O(n^2) | O(1) | Duplicate skipping on outer and inner pointers is key |
+| [3Sum Closest](#three-sum) | Unsorted array | Closest sum to target (value only) | Sort + two pointers | O(n^2) | O(1) | Same loop as 3Sum but tracks best distance instead of unique sets |
+
+**Key differences and picks:** Both require sorting to enable the inner two-pointer sweep. 3Sum needs dedup to emit unique triplets; 3Sum Closest reuses the same sweep but optimizes for distance rather than uniqueness.
+
+### Four Sum Family (LeetCode 18, 454)
+
+| Problem | Input/Constraints | Return | Preferred Approach | Time | Space | Notes |
+|---------|-------------------|--------|--------------------|------|-------|-------|
+| [4Sum](#four-sum) | Unsorted array | All unique quadruplets = target | Sort + nested two pointers | O(n^3) | O(1) | Fix two indices, two-pointer the rest, skip duplicates at every level |
+| [4Sum II](#four-sum-ii) | Four arrays A,B,C,D | Count of quadruples = 0 | Hash map of pair sums | O(n^2) | O(n^2) | Precompute A+B counts, probe with -(C+D) |
+
+**Key differences and picks:** Single-array 4Sum extends the 3Sum pattern (extra fixed index) with heavy dedup. Multi-array 4Sum II swaps to pair-sum hashing because sorting across four lists is unnecessary—hashing collapses the problem to two combined arrays for O(n^2).
+
+### Scaling Patterns
+
+- Increasing N generally adds one outer loop and preserves two-pointer or hashing on the innermost search.
+- Sorting + pointer sweeping dominates when the input is a single array; hash-based pair-sum caching dominates multi-array counts (e.g., 4Sum II).
+- Deduping steps grow in importance as N grows to avoid exponential blow-up in output size.
