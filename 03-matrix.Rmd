@@ -1196,6 +1196,151 @@ class TicTacToe {
 }
 ```
 
+## Brick Wall {#brick-wall}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 554
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/brick-wall/
+- **Tags**: `Matrix`, `Hash Table`, `Prefix Sum`
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Prefix Sum](glossary-of-algorithm.html#prefix-sum)
+
+### Description
+
+There is a rectangular brick wall in front of you with several rows of bricks. The bricks have the same height but different widths. You want to draw a vertical line from the top to the bottom and cross the **least** bricks. The brick wall is represented by a list of rows, where each row is a list of integers representing the width of each brick in that row from left to right.
+
+If your line goes through the edge between two bricks (not in the middle of a brick), then the brick is not considered as crossed. You **cannot** draw a line along either of the wall's two vertical edges.
+
+Return the minimum number of crossed bricks after drawing such a vertical line.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: wall = [[1,2,2,1],
+               [3,1,2],
+               [1,3,2],
+               [2,4],
+               [3,1,2],
+               [1,3,1,1]]
+Output: 2
+```
+
+**Example 2:**
+
+```
+Input: wall = [[1],[1],[1]]
+Output: 3
+```
+
+### Constraints
+
+- `n == wall.length`
+- `1 <= n <= 10^4`
+- `1 <= wall[i].length <= 10^4`
+- `1 <= sum(wall[i].length) <= 2 * 10^4`
+- `sum(wall[i])` is the same for each row `i`
+- `1 <= wall[i][j] <= 2^31 - 1`
+
+### Solution - Hash Map with Prefix Sum
+
+#### Walkthrough
+
+The key insight is that to minimize bricks crossed, we want to draw the vertical line where the **most brick edges align** across all rows. If we can find a position where many rows have a brick edge (gap between bricks), we can pass through those gaps without crossing those bricks.
+
+**Strategy:**
+1. For each row, track all edge positions using prefix sums (cumulative widths)
+2. Use a HashMap to count how many rows have an edge at each position
+3. The answer is: `total rows - maximum edge count`
+
+**Why subtract from total rows?** If `k` rows have an edge at position `x`, then drawing a line at `x` crosses only `n - k` bricks (where `n` is the total number of rows).
+
+**Visual Example:**
+
+For the wall:
+```
+Row 0: [1, 2, 2, 1]  → Edges at positions: 1, 3, 5
+Row 1: [3, 1, 2]     → Edges at positions: 3, 4
+Row 2: [1, 3, 2]     → Edges at positions: 1, 4
+Row 3: [2, 4]        → Edges at position: 2
+Row 4: [3, 1, 2]     → Edges at positions: 3, 4
+Row 5: [1, 3, 1, 1]  → Edges at positions: 1, 4, 5
+```
+
+Edge frequency map:
+```
+Position 1: 3 rows (rows 0, 2, 5)
+Position 2: 1 row  (row 3)
+Position 3: 3 rows (rows 0, 1, 4)
+Position 4: 4 rows (rows 1, 2, 4, 5) ← Maximum!
+Position 5: 2 rows (rows 0, 5)
+```
+
+Drawing the line at position 4 crosses only `6 - 4 = 2` bricks.
+
+**Important:** We skip the last brick in each row because we cannot draw a line on the wall's outer edges per the problem constraints.
+
+#### Analysis
+
+- **Time Complexity**: O(n × m) where `n` is the number of rows and `m` is the average number of bricks per row. We iterate through every brick in the wall once.
+- **Space Complexity**: O(w) where `w` is the total width of the wall. In the worst case, the HashMap stores one entry per unit of width. However, in practice, it's much smaller—only O(unique edge positions), which is typically much less than the wall width.
+
+#### Implementation Steps
+
+1. Create a HashMap `edgeCount` to track edge positions and their frequencies
+2. For each row in the wall:
+   - Initialize `edgePos = 0` to track cumulative position
+   - Loop through each brick except the last (to skip the wall border)
+   - Add the current brick's width to `edgePos` (prefix sum)
+   - Increment the count for this edge position in the HashMap
+3. Find the maximum edge count across all positions in the HashMap
+4. Return `total rows - maximum edge count` (minimum bricks crossed)
+
+#### Java Code
+
+```java
+class Solution {
+    public int leastBricks(List<List<Integer>> wall) {
+        // length of the wall
+        int lenOfOneRow = 0;
+
+        for(int brickWidth: wall.get(0)) {
+            // count sum of all brick width combined in the first row. 
+            lenOfOneRow += brickWidth;
+        }
+
+        //Create a counter to record 0-index:number of existing edge
+        Map<Integer, Integer> edgeCount = new HashMap<>();
+
+        for(List<Integer> rowOfBricks : wall) {
+            int edgePos = 0;
+            // loop through each brick of row except the last brick (skip the border brick)
+            for(int j = 0; j < rowOfBricks.size() - 1; j++) {
+                int width = rowOfBricks.get(j);
+                edgePos += width;
+                // Only store positions where edges exist
+                edgeCount.put(edgePos, edgeCount.getOrDefault(edgePos, 0) + 1);          
+            }
+        }
+
+        // take the max number of edge existing on the wall        
+        int maxEdgeCount = 0;
+        for(int count : edgeCount.values()) {
+            maxEdgeCount = Math.max(maxEdgeCount, count);
+        }
+
+        // Draw a vertical line to result in least number of crossed bricks
+        int numOfRows = wall.size();
+        int result =  numOfRows - maxEdgeCount;
+
+        return result;
+    }
+}
+```
+
 ## Count Square Submatrices with All Ones {#count-square-submatrices}
 
 ### Problem Metadata
