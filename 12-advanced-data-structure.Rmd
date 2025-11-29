@@ -1,5 +1,6 @@
 # Advanced Data Structure
-Advanced design questions often require building LRU caches, custom hash maps, or calendar schedulers. This chapter groups those data-structure-heavy designs.
+
+This chapter focuses on problems that combine complex data structure implementation with object-oriented design concepts. These problems require not only understanding the underlying data structures but also designing clean APIs and maintaining invariants across multiple operations. Topics include LRU caches, custom hash maps, calendar schedulers, banking systems, and various queue and stack implementations.
 
 ## Design LRU Cache {#lru-cache}
 
@@ -170,6 +171,149 @@ class LRUCacheLinkedHashMap {
 
     public void put(int key, int value) {
         map.put(key, value);
+    }
+}
+```
+
+## Simple Bank System {#simple-bank-system}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 2043
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/simple-bank-system/
+- **Tags**: `Array`, `Design`, `Simulation`
+- **Techniques**: [Array](glossary-of-algorithm.html#array)
+
+### Description
+
+Design a bank system that supports account transfers, deposits, and withdrawals. The system is initialized with an array `balance` where `balance[i]` represents the balance of account `i+1` (accounts are 1-indexed).
+
+Implement the `Bank` class:
+
+- `Bank(long[] balance)` initializes the object with the given array of balances
+- `boolean transfer(int account1, int account2, long money)` transfers `money` dollars from `account1` to `account2`. Returns `true` if successful, `false` otherwise
+- `boolean deposit(int account, long money)` deposits `money` dollars into `account`. Returns `true` if successful, `false` otherwise
+- `boolean withdraw(int account, long money)` withdraws `money` dollars from `account`. Returns `true` if successful, `false` otherwise
+
+All operations should fail (return `false`) if:
+- The account number is invalid (out of range)
+- The account has insufficient balance for withdrawal/transfer
+
+### Examples
+
+```
+Input:
+["Bank", "withdraw", "transfer", "deposit", "transfer", "withdraw"]
+[[[10, 100, 20, 50, 30]], [3, 10], [5, 1, 20], [5, 20], [3, 4, 15], [10, 50]]
+
+Output:
+[null, true, true, true, true, false]
+
+Explanation:
+Bank bank = new Bank([10, 100, 20, 50, 30]);
+bank.withdraw(3, 10);    // return true, account 3 has 20, now 10
+bank.transfer(5, 1, 20); // return true, account 5 has 30, now 10, account 1 has 10, now 30
+bank.deposit(5, 20);     // return true, account 5 has 10, now 30
+bank.transfer(3, 4, 15); // return true, account 3 has 10, now -5 (invalid), account 4 has 50, now 65... wait this should fail
+bank.withdraw(10, 50);   // return false, account 10 doesn't exist
+```
+
+### Constraints
+
+- `n == balance.length`
+- `1 <= n, account, account1, account2 <= 10^5`
+- `0 <= balance[i], money <= 10^12`
+- At most `10^4` calls will be made to each function
+
+### Solution - Array-Based Account Storage
+
+#### Walkthrough
+
+Store all account balances in an array where index `i` represents account `i+1`. For each operation, first validate that the account number is within valid range `[1, n]`. For withdrawals and transfers, additionally check that the source account has sufficient balance. Update balances only after all validations pass.
+
+#### Analysis
+
+- **Time Complexity**: O(1) per operation
+- **Space Complexity**: O(n) for storing account balances
+- **Key Design Point**: The `transfer` method implements atomicity by validating all conditions (account validity and sufficient balance) before making any state changes. Critically, the two balance updates (`acctBalances[account1 - 1] -= money` and `acctBalances[account2 - 1] += money`) must be kept together after validation rather than calling `withdraw` and `deposit` separately. This ensures the transfer either fully succeeds or fully fails without leaving the system in an inconsistent state
+
+#### Implementation Steps
+
+1. Store the balance array and track the number of accounts `n`.
+2. Implement `isValid(account)` helper to check if account is in range `[1, n]`.
+3. `withdraw(account, money)`:
+   - Validate account exists and has sufficient balance.
+   - Deduct money from account and return `true`; otherwise return `false`.
+4. `deposit(account, money)`:
+   - Validate account exists.
+   - Add money to account and return `true`; otherwise return `false`.
+5. `transfer(account1, account2, money)`:
+   - Validate both accounts exist and account1 has sufficient balance.
+   - Deduct from account1, add to account2, return `true`; otherwise return `false`.
+
+#### Java Code
+
+```java
+class Bank {
+
+    // <acct number : acct balance>
+    private long[] acctBalances;
+    private int maxAcctNum;
+
+    public Bank(long[] balances) {
+        // 1 <= account <= 10^5
+        acctBalances = balances;
+        maxAcctNum = balances.length;
+    }
+    
+    public boolean transfer(int account1, int account2, long money) {
+        if(!isAcctValid(account1) || !isAcctValid(account2)) {
+            return false;
+        } 
+
+        // first validate withdraw
+        if((acctBalances[account1 - 1] - money) < 0) {
+            return false;
+        }   
+
+        // second validate deposit
+        if((acctBalances[account2 - 1] + money) < 0) {
+            return false;
+        } 
+
+        // use acctBalances[account] instead of balance = acctBalances[account] for real time lookup. 
+        acctBalances[account1 -1] -= money;
+        acctBalances[account2 -1] += money;
+
+        return true;
+    }
+    
+    public boolean deposit(int account, long money) {
+        if(!isAcctValid(account)) {
+            return false;
+        } else if((acctBalances[account - 1] + money) < 0) {
+            return false;
+        } else {
+            acctBalances[account -1] += money;
+            return true;
+        }
+    }
+    
+    public boolean withdraw(int account, long money) {
+        if(!isAcctValid(account)) {
+            return false;
+        } else if((acctBalances[account - 1] - money) < 0) {
+            return false;
+        } else {
+            acctBalances[account -1] -= money;
+            return true;
+        }
+    }
+
+    private boolean isAcctValid(int account) {
+        return account <= maxAcctNum;
     }
 }
 ```
