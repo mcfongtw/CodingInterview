@@ -106,6 +106,114 @@ This makes Kadane's algorithm highly efficient for linear array optimization pro
 - Maximum Sum Circular Subarray (LeetCode 918)
 - Best Time to Buy and Sell Stock (variants)
 
+## Unbounded Knapsack
+
+The **Unbounded Knapsack** pattern is a fundamental dynamic programming technique for problems where you can use items (coins, elements, etc.) an unlimited number of times to achieve a target. Unlike the 0/1 Knapsack where each item is used at most once, unbounded knapsack allows infinite repetitions.
+
+### Core Concept
+
+Given a set of items with certain properties (value, weight, denomination) and a target, determine:
+- The number of ways to reach the target
+- The minimum/maximum value achievable
+- Whether the target is reachable
+
+**Key characteristic**: Items can be reused multiple times.
+
+### Combinations vs Permutations
+
+A critical distinction in unbounded knapsack problems is whether order matters:
+
+- **Combinations**: `{1, 2}` is the same as `{2, 1}` → Use coins in outer loop
+- **Permutations**: `{1, 2}` differs from `{2, 1}` → Use amount in outer loop
+
+**For Combinations** (most common):
+```java
+for (int coin : coins) {           // Outer: iterate items
+    for (int i = coin; i <= amount; i++) {  // Inner: iterate target
+        dp[i] += dp[i - coin];
+    }
+}
+```
+
+**For Permutations**:
+```java
+for (int i = 1; i <= amount; i++) {        // Outer: iterate target
+    for (int coin : coins) {                // Inner: iterate items
+        if (i >= coin) {
+            dp[i] += dp[i - coin];
+        }
+    }
+}
+```
+
+### Standard Recurrence Relation
+
+For counting combinations to make amount `i`:
+
+$$
+\text{dp}[i] = \sum_{\text{coin} \in \text{coins}} \text{dp}[i - \text{coin}]
+$$
+
+Where `dp[i]` represents the number of ways to make amount `i`.
+
+**Base case**: `dp[0] = 1` (one way to make 0: use no items)
+
+### Why Loop Order Matters
+
+**Visual Example**: `coins = [1, 2]`, `amount = 3`
+
+**Combinations approach** (coins outer):
+- Process coin 1: builds `{1}`, `{1,1}`, `{1,1,1}`
+- Process coin 2: builds `{2}`, `{1,2}`, `{2,1}` → but `{1,2}` already counted as `{1,1,1}`
+- Result: Correctly counts `{1,1,1}`, `{1,2}` (4 combinations)
+
+**Permutations approach** (amount outer):
+- Process amount 1: `{1}`
+- Process amount 2: `{1,1}`, `{2}`
+- Process amount 3: `{1,1,1}`, `{1,2}`, `{2,1}` (6 permutations)
+
+### Time and Space Complexity
+
+- **Time**: $O(n \times m)$ where $n$ is the target amount and $m$ is the number of items
+- **Space**: $O(n)$ using 1D DP array (can be optimized from 2D)
+
+### Standard Implementation Pattern
+
+```java
+public int unboundedKnapsack(int target, int[] items) {
+    int[] dp = new int[target + 1];
+    dp[0] = 1;  // Base case
+
+    // Outer loop: items (for combinations)
+    for (int item : items) {
+        // Inner loop: all reachable targets
+        for (int i = item; i <= target; i++) {
+            dp[i] += dp[i - item];
+        }
+    }
+
+    return dp[target];
+}
+```
+
+### Variants
+
+1. **Count combinations**: How many ways to make the target?
+   - [Coin Change II](#coin-change-ii)
+
+2. **Minimum items needed**: What's the fewest items to reach target?
+   - Recurrence: `dp[i] = min(dp[i], dp[i - item] + 1)`
+
+3. **Maximum value**: What's the maximum value achievable?
+   - Recurrence: `dp[i] = max(dp[i], dp[i - weight] + value)`
+
+4. **Reachability**: Can the target be reached?
+   - Use boolean DP: `dp[i] = dp[i] || dp[i - item]`
+
+### Related Problems
+
+- [Coin Change II](#coin-change-ii) - Classic unbounded knapsack for counting combinations
+
 ## Two Sums I {#two-sum-1}
 
 
@@ -3028,6 +3136,540 @@ public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
     }
 
     return result;
+}
+```
+
+## Coin Change {#coin-change}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 322
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/coin-change/
+- **Tags**: `Array`, `Dynamic Programming`, `Breadth-First Search`
+- **Interview Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](#dp), [Unbounded Knapsack](#unbounded-knapsack)
+
+### Description
+
+You are given an integer array `coins` representing coins of different denominations and an integer `amount` representing a total amount of money.
+
+Return the **fewest number of coins** that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return `-1`.
+
+You may assume that you have an **infinite number of each kind of coin**.
+
+### Examples
+
+**Example 1:**
+```
+Input: coins = [1,2,5], amount = 11
+Output: 3
+Explanation: 11 = 5 + 5 + 1
+```
+
+**Example 2:**
+```
+Input: coins = [2], amount = 3
+Output: -1
+Explanation: The amount of 3 cannot be made up with coins of 2.
+```
+
+**Example 3:**
+```
+Input: coins = [1], amount = 0
+Output: 0
+Explanation: No coins are needed to make amount 0.
+```
+
+### Constraints
+
+- `1 <= coins.length <= 12`
+- `1 <= coins[i] <= 2^31 - 1`
+- `0 <= amount <= 10^4`
+
+### Solution - Dynamic Programming (Unbounded Knapsack)
+
+#### Walkthrough
+
+This problem is a classic **Unbounded Knapsack** variant where instead of **counting combinations** (like [Coin Change II](#coin-change-ii)), we need to find the **minimum number of items** needed to reach the target amount.
+
+**Key Difference from Coin Change II:**
+
+| Aspect | Coin Change (322) | Coin Change II (518) |
+|--------|-------------------|----------------------|
+| **Goal** | Minimize coin count | Count combinations |
+| **DP meaning** | `dp[i]` = min coins to make amount `i` | `dp[i]` = number of ways to make amount `i` |
+| **Recurrence** | `dp[i] = min(dp[i], dp[i-coin] + 1)` | `dp[i] += dp[i-coin]` |
+| **Base case** | `dp[0] = 0` (0 coins for amount 0) | `dp[0] = 1` (1 way for amount 0) |
+| **Initialization** | `dp[i] = ∞` (impossible initially) | `dp[i] = 0` (no ways initially) |
+| **Impossible case** | Return `-1` if `dp[amount] == ∞` | Return `0` (no ways) |
+
+**Core DP Strategy:**
+
+We use a 1D DP array where `dp[i]` represents the **minimum number of coins** needed to make amount `i`.
+
+**Recurrence Relation:**
+
+For each coin and each amount `i >= coin`:
+```
+dp[i] = min(dp[i], dp[i - coin] + 1)
+```
+
+This means:
+- `dp[i]`: Current minimum coins needed for amount `i`
+- `dp[i - coin]`: Minimum coins for the remaining amount after using one `coin`
+- `+ 1`: We're using one additional coin
+- `min()`: Keep the better option (use or don't use this coin)
+
+**Base Case:**
+```
+dp[0] = 0
+```
+We need **zero coins** to make amount 0.
+
+**Initialization:**
+```
+dp[i] = amount + 1  (or Integer.MAX_VALUE)
+```
+Initialize all amounts as "impossible" (requires more coins than could ever be needed). We use `amount + 1` because the maximum possible coins needed is `amount` (using all 1-denomination coins).
+
+**Visual Example: `coins = [1, 2, 5], amount = 11`**
+
+**Initial State:**
+```
+dp = [0, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞]
+      ↑
+   amount 0 = 0 coins
+```
+
+**Iteration 1: Process coin = 1**
+
+For each amount `i` from 1 to 11, update `dp[i] = min(dp[i], dp[i-1] + 1)`:
+
+```
+i=1:  dp[1] = min(∞, dp[0]+1) = min(∞, 1) = 1
+i=2:  dp[2] = min(∞, dp[1]+1) = min(∞, 2) = 2
+i=3:  dp[3] = min(∞, dp[2]+1) = min(∞, 3) = 3
+...
+i=11: dp[11] = min(∞, dp[10]+1) = min(∞, 11) = 11
+
+dp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+```
+
+After processing coin=1:
+- All amounts 1-11 can be made with 1-coins only
+- E.g., amount 11 = eleven 1-coins
+
+**Iteration 2: Process coin = 2**
+
+For each amount `i` from 2 to 11, update `dp[i] = min(dp[i], dp[i-2] + 1)`:
+
+```
+i=2:  dp[2] = min(2, dp[0]+1) = min(2, 1) = 1  → {2}
+i=3:  dp[3] = min(3, dp[1]+1) = min(3, 2) = 2  → {2,1}
+i=4:  dp[4] = min(4, dp[2]+1) = min(4, 2) = 2  → {2,2}
+i=5:  dp[5] = min(5, dp[3]+1) = min(5, 3) = 3  → {2,2,1}
+i=6:  dp[6] = min(6, dp[4]+1) = min(6, 3) = 3  → {2,2,2}
+i=7:  dp[7] = min(7, dp[5]+1) = min(7, 4) = 4  → {2,2,2,1}
+i=8:  dp[8] = min(8, dp[6]+1) = min(8, 4) = 4  → {2,2,2,2}
+i=9:  dp[9] = min(9, dp[7]+1) = min(9, 5) = 5  → {2,2,2,2,1}
+i=10: dp[10] = min(10, dp[8]+1) = min(10, 5) = 5  → {2,2,2,2,2}
+i=11: dp[11] = min(11, dp[9]+1) = min(11, 6) = 6  → {2,2,2,2,2,1}
+
+dp = [0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6]
+```
+
+**Iteration 3: Process coin = 5**
+
+For each amount `i` from 5 to 11, update `dp[i] = min(dp[i], dp[i-5] + 1)`:
+
+```
+i=5:  dp[5] = min(3, dp[0]+1) = min(3, 1) = 1   → {5}
+i=6:  dp[6] = min(3, dp[1]+1) = min(3, 2) = 2   → {5,1}
+i=7:  dp[7] = min(4, dp[2]+1) = min(4, 2) = 2   → {5,2}
+i=8:  dp[8] = min(4, dp[3]+1) = min(4, 3) = 3   → {5,2,1}
+i=9:  dp[9] = min(5, dp[4]+1) = min(5, 3) = 3   → {5,2,2}
+i=10: dp[10] = min(5, dp[5]+1) = min(5, 2) = 2  → {5,5}
+i=11: dp[11] = min(6, dp[6]+1) = min(6, 3) = 3  → {5,5,1}
+
+dp = [0, 1, 1, 2, 2, 1, 2, 2, 3, 3, 2, 3]
+      ↑                             ↑
+   base                          answer
+```
+
+**Final Result: `dp[11] = 3`**
+
+The minimum is 3 coins: `{5, 5, 1}`
+
+**Why Loop Order Doesn't Matter for Minimization:**
+
+Unlike Coin Change II (where coins-outer prevents permutation counting), **for minimization problems the loop order doesn't affect correctness**:
+
+- **Coins outer** (used in solution): Process all amounts for each coin
+- **Amounts outer**: Process all coins for each amount
+
+Both give the same answer because we're taking the `min()` of all possibilities. Order doesn't matter when optimizing—we consider all combinations anyway.
+
+**Counter-example (Why ∞ Initialization is Critical):**
+
+If we initialize with 0 instead of ∞:
+```java
+// WRONG
+int[] dp = new int[amount + 1]; // All zeros
+```
+
+Then `dp[i] = min(dp[i], dp[i-coin] + 1)` would always pick 0, giving incorrect results.
+
+**Key Insights:**
+
+1. **Minimization vs Counting**: Use `min()` instead of `+=`
+2. **∞ Initialization**: Represents "impossible" state initially
+3. **+1 in recurrence**: Each coin usage adds 1 to the count
+4. **Loop order flexible**: Unlike combination counting, order doesn't matter for optimization
+5. **Check final value**: If `dp[amount]` still equals ∞, return -1 (impossible)
+
+#### Analysis
+
+- **Time Complexity**: O(n × m)
+  - `n = amount` (inner loop runs from `coin` to `amount`)
+  - `m = coins.length` (outer loop processes each coin)
+  - For each of the `m` coins, we update up to `n` DP states
+  - Total operations: O(n × m)
+
+- **Space Complexity**: O(n)
+  - DP array of size `amount + 1`
+  - No additional data structures needed
+  - **Space-optimized**: Uses 1D array (cannot be further optimized since we need all previous states)
+
+**Why 1D Array Works:**
+
+Unlike some DP problems that need 2D arrays to avoid overwriting, Coin Change works with 1D because:
+- We only need values `dp[0]` through `dp[i-1]` to compute `dp[i]`
+- Processing left-to-right naturally preserves this dependency
+- The `min()` operation safely handles updates from the current iteration
+
+#### Implementation Steps
+
+1. **Handle base case**:
+   - If `amount == 0`, return `0` immediately (no coins needed)
+
+2. **Initialize DP array**:
+   - Create `dp[amount + 1]`
+   - Set `dp[0] = 0` (base case: zero coins for amount 0)
+   - Set all other `dp[i] = amount + 1` (represents "impossible" / infinity)
+   - **Why `amount + 1`?** It's larger than any valid answer (max coins = `amount` using all 1-denominations)
+
+3. **Outer loop - Iterate through coins**:
+   - For each `coin` in `coins[]`
+   - Order doesn't matter for minimization (unlike combination counting)
+
+4. **Inner loop - Iterate through amounts**:
+   - For each amount `i` from `coin` to `amount` (inclusive)
+   - Start from `coin` because we can't use this coin for amounts smaller than it
+   - **Update rule**: `dp[i] = min(dp[i], dp[i - coin] + 1)`
+     - `dp[i]`: Current minimum (using previously processed coins)
+     - `dp[i - coin] + 1`: Use one `coin` + minimum for remaining amount
+     - **Take minimum** because we want the fewest coins
+
+5. **Return result**:
+   - If `dp[amount] > amount`, no solution exists → return `-1`
+   - Otherwise, return `dp[amount]`
+   - **Why check `> amount`?** If still equals our "impossible" sentinel value
+
+**Alternative: Check with exact sentinel**
+```java
+if (dp[amount] == amount + 1) return -1;  // Still impossible
+```
+
+#### Java Code
+
+```java
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        // dp[i] = minimum number of coins to make amount i
+        int[] dp = new int[amount + 1];
+
+        // Initialize: 0 for base case, impossible (amount+1) for rest
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            dp[i] = amount + 1;  // Represents infinity (impossible)
+        }
+
+        // Outer loop: iterate through coins
+        for (int coin : coins) {
+            // Inner loop: update all amounts that can use this coin
+            for (int i = coin; i <= amount; i++) {
+                // Take minimum: don't use coin vs use coin
+                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+            }
+        }
+
+        // If still impossible, return -1; otherwise return minimum coins
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+}
+```
+
+## Coin Change II {#coin-change-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 518
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/coin-change-ii/
+- **Tags**: `Array`, `Dynamic Programming`
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dp)
+
+### Description
+
+You are given an integer array `coins` representing coins of different denominations and an integer `amount` representing a total amount of money.
+
+Return the **number of combinations** that make up that amount. If that amount of money cannot be made up by any combination of the coins, return `0`.
+
+You may assume that you have an **infinite number** of each kind of coin.
+
+The answer is **guaranteed** to fit into a signed 32-bit integer.
+
+### Examples
+
+**Example 1:**
+```
+Input: amount = 5, coins = [1,2,5]
+Output: 4
+Explanation: There are four ways to make up the amount:
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+```
+
+**Example 2:**
+```
+Input: amount = 3, coins = [2]
+Output: 0
+Explanation: The amount of 3 cannot be made up just with coins of 2.
+```
+
+**Example 3:**
+```
+Input: amount = 10, coins = [10]
+Output: 1
+```
+
+### Constraints
+
+- `1 <= coins.length <= 300`
+- `1 <= coins[i] <= 5000`
+- All the values of `coins` are **unique**
+- `0 <= amount <= 5000`
+
+### Solution - Dynamic Programming (Unbounded Knapsack)
+
+#### Walkthrough
+
+This problem is a classic **Unbounded Knapsack** variant where we need to count the number of **combinations** (not permutations) to make up a target amount using an unlimited supply of coins.
+
+**Key Distinction - Combinations vs Permutations:**
+
+The problem asks for **combinations**, meaning `[1,2]` and `[2,1]` are considered the **same** way to make amount 3. This is crucial because:
+- **Combinations**: Order doesn't matter → `{1,2}` is same as `{2,1}`
+- **Permutations**: Order matters → `[1,2]` is different from `[2,1]`
+
+To ensure we count combinations (not permutations), we **iterate coins in the outer loop** and amounts in the inner loop. This prevents counting the same combination multiple times with different orderings.
+
+**Core DP Strategy:**
+
+We use a 1D DP array where `dp[i]` represents the **number of combinations** to make amount `i`.
+
+**Recurrence Relation:**
+
+For each coin and each amount `i >= coin`:
+```
+dp[i] = dp[i] + dp[i - coin]
+```
+
+This means:
+- `dp[i]`: Current count of combinations for amount `i` (using previously processed coins)
+- `dp[i - coin]`: Count of combinations for the remaining amount after using one `coin`
+- We **add** these together because using the current coin gives us additional combinations
+
+**Base Case:**
+```
+dp[0] = 1
+```
+There's exactly **one way** to make amount 0: use no coins at all.
+
+**Visual Example: `amount = 5, coins = [1, 2, 5]`**
+
+Let's trace through the algorithm step by step:
+
+**Initial State:**
+```
+dp = [1, 0, 0, 0, 0, 0]
+      ↑
+   amount 0 = 1 way (use no coins)
+```
+
+**Iteration 1: Process coin = 1**
+
+For each amount `i` from 1 to 5, update `dp[i] += dp[i - 1]`:
+
+```
+i=1: dp[1] += dp[0] → dp[1] = 0 + 1 = 1  (one 1)
+i=2: dp[2] += dp[1] → dp[2] = 0 + 1 = 1  (two 1s)
+i=3: dp[3] += dp[2] → dp[3] = 0 + 1 = 1  (three 1s)
+i=4: dp[4] += dp[3] → dp[4] = 0 + 1 = 1  (four 1s)
+i=5: dp[5] += dp[4] → dp[5] = 0 + 1 = 1  (five 1s)
+
+dp = [1, 1, 1, 1, 1, 1]
+```
+
+After processing coin=1, we can make:
+- Amount 1: `{1}` → 1 way
+- Amount 2: `{1,1}` → 1 way
+- Amount 3: `{1,1,1}` → 1 way
+- Amount 4: `{1,1,1,1}` → 1 way
+- Amount 5: `{1,1,1,1,1}` → 1 way
+
+**Iteration 2: Process coin = 2**
+
+For each amount `i` from 2 to 5, update `dp[i] += dp[i - 2]`:
+
+```
+i=2: dp[2] += dp[0] → dp[2] = 1 + 1 = 2  (added {2})
+i=3: dp[3] += dp[1] → dp[3] = 1 + 1 = 2  (added {2,1})
+i=4: dp[4] += dp[2] → dp[4] = 1 + 2 = 3  (added {2,2} and {2,1,1})
+i=5: dp[5] += dp[3] → dp[5] = 1 + 2 = 3  (added {2,2,1} and {2,1,1,1})
+
+dp = [1, 1, 2, 2, 3, 3]
+```
+
+After processing coin=2, we can make:
+- Amount 2: `{1,1}`, `{2}` → 2 ways
+- Amount 3: `{1,1,1}`, `{2,1}` → 2 ways
+- Amount 4: `{1,1,1,1}`, `{2,1,1}`, `{2,2}` → 3 ways
+- Amount 5: `{1,1,1,1,1}`, `{2,1,1,1}`, `{2,2,1}` → 3 ways
+
+**Iteration 3: Process coin = 5**
+
+For each amount `i` from 5 to 5, update `dp[i] += dp[i - 5]`:
+
+```
+i=5: dp[5] += dp[0] → dp[5] = 3 + 1 = 4  (added {5})
+
+dp = [1, 1, 2, 2, 3, 4]
+      ↑              ↑
+   base case    answer
+```
+
+**Final Result: `dp[5] = 4`**
+
+The 4 combinations are:
+1. `{5}` (one 5-coin)
+2. `{2, 2, 1}` (two 2-coins, one 1-coin)
+3. `{2, 1, 1, 1}` (one 2-coin, three 1-coins)
+4. `{1, 1, 1, 1, 1}` (five 1-coins)
+
+**Why This Avoids Permutations:**
+
+By iterating **coins in outer loop**, we ensure each coin is considered in a fixed order. For example:
+- When processing coin=2, we only add combinations where 2 comes **after** all previously processed coins (coin=1)
+- This prevents counting `{1,2}` and `{2,1}` as different combinations
+
+**Counter-example (Wrong Approach):**
+
+If we swap loops (amounts outer, coins inner), we'd count **permutations** instead:
+```java
+// WRONG - counts permutations
+for (int i = 1; i <= amount; i++) {
+    for (int coin : coins) {
+        if (i >= coin) {
+            dp[i] += dp[i - coin];
+        }
+    }
+}
+```
+This would count `[1,2]` and `[2,1]` as different ways, giving incorrect results.
+
+**Key Insights:**
+
+1. **Outer loop = coins** ensures combinations (not permutations)
+2. **Inner loop = amounts** builds up solutions incrementally
+3. **dp[i - coin]** represents "what we can build if we use one more `coin`"
+4. **Addition** accumulates all ways to reach each amount
+5. **Base case dp[0] = 1** enables the recurrence to work (identity element)
+
+#### Analysis
+
+- **Time Complexity**: O(n × m)
+  - `n = amount` (inner loop runs from `coin` to `amount`)
+  - `m = coins.length` (outer loop processes each coin)
+  - For each of the `m` coins, we update up to `n` DP states
+  - Total operations: O(n × m)
+
+- **Space Complexity**: O(n)
+  - DP array of size `amount + 1`
+  - No additional data structures needed
+  - **Space-optimized**: Uses 1D array instead of 2D (saves O(m × n) → O(n))
+
+**Why 1D Array Works:**
+
+The classic 2D formulation would be:
+```
+dp[coin_index][amount] = dp[coin_index-1][amount] + dp[coin_index][amount-coin]
+```
+
+But notice we only need the **previous coin row** and **current coin row**. By iterating coins in outer loop and processing amounts left-to-right, the 1D array automatically reuses previous results correctly.
+
+#### Implementation Steps
+
+1. **Initialize DP array**:
+   - Create `dp[amount + 1]` initialized to 0
+   - Set `dp[0] = 1` (base case: one way to make amount 0)
+
+2. **Outer loop - Iterate through coins**:
+   - For each `coin` in `coins[]`
+   - This ensures we count **combinations** (not permutations)
+
+3. **Inner loop - Iterate through amounts**:
+   - For each amount `i` from `coin` to `amount` (inclusive)
+   - Start from `coin` because we can't use this coin for amounts smaller than it
+   - **Update rule**: `dp[i] += dp[i - coin]`
+     - `dp[i]`: Current count (using previously processed coins)
+     - `dp[i - coin]`: Ways to make the remaining amount after using one `coin`
+     - **Add** because using current coin gives additional combinations
+
+4. **Return**: `dp[amount]` contains the total number of combinations
+
+**Why the loops are ordered this way:**
+- **Outer loop (coins)**: Ensures we consider coins in a fixed order
+- **Inner loop (amounts)**: Builds up solutions for increasing amounts
+- **Left-to-right inner loop**: Allows reusing the same coin multiple times (unbounded)
+
+#### Java Code
+
+```java
+class Solution {
+    public int change(int amount, int[] coins) {
+        // dp[i] = number of combinations to make amount i
+        int[] dp = new int[amount + 1];
+
+        // Base case: one way to make amount 0 (use no coins)
+        dp[0] = 1;
+
+        // Outer loop: iterate through coins (ensures combinations, not permutations)
+        for (int coin : coins) {
+            // Inner loop: update all amounts that can use this coin
+            for (int i = coin; i <= amount; i++) {
+                // Add combinations from using this coin
+                dp[i] += dp[i - coin];
+            }
+        }
+
+        return dp[amount];
+    }
 }
 ```
 
