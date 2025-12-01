@@ -746,3 +746,145 @@ public DLLNode insertAt(DLLNode head, int pos, int val) {
     return head;
 }
 ```
+
+## Merge In Between Linked Lists {#merge-in-between}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1669
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/merge-in-between-linked-lists/
+- **Tags**: `Linked List`
+- **Techniques**: [Linked List](glossary-of-algorithm.html#linked-list)
+
+### Description
+
+You are given two linked lists: `list1` and `list2` of sizes `n` and `m` respectively.
+
+Remove `list1`'s nodes from the `a`-th node to the `b`-th node (0-indexed), and put `list2` in their place.
+
+Build the result list and return its head.
+
+### Examples
+
+```
+Input: list1 = [10,1,13,6,9,5], a = 3, b = 4, list2 = [1000000,1000001,1000002]
+Output: [10,1,13,1000000,1000001,1000002,5]
+Explanation: We remove the nodes at positions 3 and 4 and put the entire list2 in their place.
+
+Input: list1 = [0,1,2,3,4,5,6], a = 2, b = 5, list2 = [1000000,1000001,1000002,1000003,1000004]
+Output: [0,1,1000000,1000001,1000002,1000003,1000004,6]
+```
+
+### Constraints
+
+- `3 <= list1.length <= 10^4`
+- `1 <= a <= b < list1.length - 1`
+- `1 <= list2.length <= 10^4`
+
+### Solution - Pointer Manipulation
+
+#### Walkthrough
+
+The solution uses a three-phase pointer manipulation strategy: (1) locate the node before the removal range, (2) find the node after the removal range, and (3) reconnect pointers to splice in `list2`.
+
+**Visual Example**: `list1 = [10,1,13,6,9,5]`, `a = 3`, `b = 4`, `list2 = [1000000,1000001,1000002]`
+
+**Phase 1: Find node before position `a`**
+
+```
+Initial state (with dummy):
+dummy → 10 → 1 → 13 → 6 → 9 → 5 → null
+^l      (index 0 after dummy)
+
+After traversing a=3 times:
+dummy → 10 → 1 → 13 → 6 → 9 → 5 → null
+                  ^l
+                  (l is at index 2, l.next is at index 3)
+```
+
+**Phase 2: Find node after position `b`**
+
+```
+Starting from l, traverse (b-a+1) = (4-3+1) = 2 times:
+dummy → 10 → 1 → 13 → 6 → 9 → 5 → null
+                  ^l        ^r
+                            (r is at index 4, r.next is at index 5)
+```
+
+**Phase 3: Find tail of list2**
+
+```
+list2: 1000000 → 1000001 → 1000002 → null
+                            ^list2LastNode
+```
+
+**Phase 4: Reconnect pointers**
+
+```
+Step 1: l.next = list2
+dummy → 10 → 1 → 13 ┐     6 → 9 → 5 → null
+                  ^l │          ^r.next
+                     └→ 1000000 → 1000001 → 1000002 → null
+                                              ^list2LastNode
+
+Step 2: list2LastNode.next = r.next
+dummy → 10 → 1 → 13 → 1000000 → 1000001 → 1000002 → 5 → null
+                  ^l                       ^list2LastNode  ^r.next
+
+Final result: [10,1,13,1000000,1000001,1000002,5] ✓
+```
+
+This approach correctly removes nodes at indices 3-4 (values 6,9) and inserts `list2` in their place.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+1. **Create dummy node**: Initialize a dummy node pointing to `list1` to handle edge cases where removal starts at index 0.
+2. **Locate node before removal range**: Traverse `a` steps from dummy to find node `l` where `l.next` points to the first node to be removed.
+3. **Locate node at end of removal range**: Starting from `l`, traverse `(b - a + 1)` steps to find node `r` at position `b`.
+4. **Find tail of list2**: Traverse `list2` to its last node.
+5. **Reconnect pointers**:
+   - Set `l.next = list2` (connect left portion to `list2`)
+   - Set `list2LastNode.next = r.next` (connect `list2` tail to right portion)
+6. **Return result**: Return `dummyHead.next`
+
+#### Java Code
+
+```java
+class Solution {
+    public ListNode mergeInBetween(ListNode list1, int a, int b, ListNode list2) {
+        // create a dummy node -- 
+        //   If we are removing sublist from index 0 in list1, dummyHead.next = list2
+        ListNode dummyHead = new ListNode(-1, list1);        
+
+        //traverse to left sublist of list1, which left.next is ListNode to be removed at index a.
+        ListNode l = dummyHead;
+        for(int i = 0; i < a; i++) {
+            l = l.next;
+        }
+
+        //traverse to right sublist of list1, which right is ListNode to be removed at index b.
+        ListNode r = l;
+        for(int i = 0; i < (b - a + 1); i++) {
+            r = r.next;
+        }
+
+        //The last (not null) node in list2
+        ListNode list2LastNode = list2;
+        while(list2LastNode.next != null) {
+            list2LastNode = list2LastNode.next;
+        }
+
+        l.next = list2;
+        list2LastNode.next = r.next;
+
+        return dummyHead.next;
+    }
+}
+```
