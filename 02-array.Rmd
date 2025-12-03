@@ -4351,6 +4351,217 @@ class Solution {
 }
 ```
 
+## Cutting Ribbons {#cutting-ribbons}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1891
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/cutting-ribbons/
+- **Tags**: `Array`, `Binary Search`
+- **Techniques**: [Binary Search](glossary-of-algorithm.html#binary-search), [Greedy](glossary-of-algorithm.html#greedy)
+
+### Description
+
+You are given an integer array `ribbons`, where `ribbons[i]` represents the length of the `i-th` ribbon, and an integer `k`. You may cut any of the ribbons into any number of segments of **positive integer** lengths, or perform no cuts at all.
+
+For example, if you have a ribbon of length `4`, you can:
+- Keep the ribbon of length `4`
+- Cut it into one ribbon of length `3` and one ribbon of length `1`
+- Cut it into two ribbons of length `2`
+- Cut it into one ribbon of length `2` and two ribbons of length `1`
+- Cut it into four ribbons of length `1`
+
+Your goal is to obtain `k` ribbons of all the **same positive integer length**. You are allowed to throw away any excess ribbon as a result of cutting.
+
+Return the **maximum** possible positive integer length that you could obtain `k` ribbons of, or `0` if you cannot obtain `k` ribbons of the same length.
+
+### Examples
+
+**Example 1:**
+```
+Input: ribbons = [9,7,5], k = 3
+Output: 5
+Explanation:
+- Cut the first ribbon to two ribbons, one of length 5 and one of length 4.
+- Cut the second ribbon to two ribbons, one of length 5 and one of length 2.
+- Keep the third ribbon as it is.
+Now you have 3 ribbons of length 5.
+```
+
+**Example 2:**
+```
+Input: ribbons = [7,5,9], k = 4
+Output: 4
+Explanation:
+- Cut the first ribbon to two ribbons, one of length 4 and one of length 3.
+- Cut the second ribbon to two ribbons, one of length 4 and one of length 1.
+- Cut the third ribbon to three ribbons, two of length 4 and one of length 1.
+Now you have 4 ribbons of length 4.
+```
+
+**Example 3:**
+```
+Input: ribbons = [5,7,9], k = 22
+Output: 0
+Explanation: You cannot obtain k ribbons of the same positive integer length.
+```
+
+### Constraints
+
+- `1 <= ribbons.length <= 10^5`
+- `1 <= ribbons[i] <= 10^5`
+- `1 <= k <= 10^9`
+
+### Solution - Binary Search on Answer
+
+#### Walkthrough
+
+This problem uses the **Binary Search on Answer** pattern. Instead of searching for a value in the array, we search for the maximum valid ribbon length.
+
+**Key Insight**: If we can obtain `k` ribbons of length `L`, we can also obtain `k` ribbons of any length smaller than `L`. This monotonic property makes binary search applicable, but we want the **maximum** valid length.
+
+**Search Range**:
+- **Minimum length**: `1` — ribbons must have positive integer length
+- **Maximum length**: `sum(ribbons) / k` — theoretical upper bound if all ribbon material is used
+
+**Binary Search Logic**:
+- For each `mid` length, check if we can get at least `k` ribbons of that length
+- If yes, this length works! Save it and search for **larger** length (`l = mid + 1`)
+- If no, need **smaller** length (`r = mid - 1`)
+- Return the last valid length found
+
+**Greedy Check**: For a given length `len`, count how many ribbons we can get by dividing each ribbon: `ribbon / len`. If total count ≥ `k`, the length is valid.
+
+**Why `l = len + 1` instead of `l++`?**
+
+Binary search moves in **logarithmic jumps**, not linear increments:
+- `l++` moves by 1 (linear search)
+- `l = len + 1` moves by half the search space (binary search)
+- `len` is the midpoint: `len = (l + r) / 2`
+- Setting `l = len + 1` eliminates the lower half of the search space instantly
+- This maintains O(log n) time instead of degrading to O(n)
+
+**Example**: If `l = 1, r = 100`, then `len = 50`
+- With `l++`: would take 50 iterations to reach 50
+- With `l = len + 1`: jumps directly to 51 in one iteration
+
+The same logic applies to `r = len - 1` — it's a jump, not a step.
+
+**Why Use Upper Mid Formula `mid = (l + r + 1) / 2`?**
+
+For binary search that finds the **maximum** value, using upper mid prevents infinite loops and improves efficiency when the search space narrows to two adjacent values.
+
+**Example with `l = 5, r = 6`** (both are potential answers):
+
+*Regular mid* `mid = (l + r) / 2`:
+```
+Iteration 1:
+  mid = (5 + 6) / 2 = 5  (tests lower bound)
+  isCutPossible(5) → true
+  result = 5, l = 6
+
+Iteration 2:
+  mid = (6 + 6) / 2 = 6  (tests upper bound)
+  isCutPossible(6) → true
+  result = 6, l = 7
+
+Exit (2 iterations needed)
+```
+
+*Upper mid* `mid = (l + r + 1) / 2`:
+```
+Iteration 1:
+  mid = (5 + 6 + 1) / 2 = 6  (tests upper bound directly)
+  isCutPossible(6) → true
+  result = 6, l = 7
+
+Exit (only 1 iteration needed!)
+```
+
+**Key Benefits**:
+- When narrowed to two adjacent candidates, upper mid tests the **larger** value first
+- For "maximize" problems, this directly finds the answer without extra iteration
+- Prevents getting stuck testing the same lower value repeatedly
+- More efficient convergence to the maximum valid answer
+
+**When to Use Upper Mid vs Regular Mid:**
+
+| Search Goal | Mid Formula | Use When | Example Update |
+|-------------|-------------|----------|----------------|
+| Find **maximum** | `(l + r + 1) / 2` | `if (valid) { result = mid; l = mid + 1; }` | Cutting Ribbons, Capacity to Ship |
+| Find **minimum** | `(l + r) / 2` | `if (valid) { result = mid; r = mid - 1; }` | Find minimum in rotated array |
+| Exact match | `(l + r) / 2` | `if (nums[mid] == target) return mid;` | Standard binary search |
+
+**Why the difference?**
+- **Maximize**: We want `l` to move up when valid → upper mid tests the larger candidate first
+- **Minimize**: We want `r` to move down when valid → regular mid tests the smaller candidate first
+- **Exact match**: Direction doesn't matter, regular mid is standard
+
+#### Analysis
+
+- **Time Complexity**: O(n · log(sum/k))
+  - Binary search runs O(log(sum/k)) iterations (searching from 1 to sum/k)
+  - Each `isEnoughRibbons` check iterates through n ribbons in O(n)
+  - Total: O(n · log(sum/k))
+
+- **Space Complexity**: O(1)
+  - Only uses constant variables (l, r, result, len, numOfRibbons)
+  - No additional data structures
+
+#### Implementation Steps
+
+1. Calculate `sum` of all ribbons and initialize search range: `l = 1`, `r = sum / k`
+2. Initialize `result = 0` to track the maximum valid length found
+3. Binary search while `l <= r`:
+   - Calculate `len = (l + r) / 2` (candidate ribbon length)
+   - Check if we can get `k` ribbons of length `len` using greedy counting
+   - If yes: save `result = len` and search for larger: `l = len + 1`
+   - If no: search for smaller: `r = len - 1`
+4. Return `result` (maximum valid length, or 0 if impossible)
+5. In `isEnoughRibbons`: count total ribbons by summing `ribbon / len` for each ribbon, return true if count ≥ `k`
+
+#### Java Code
+
+```java
+class Solution {
+    public int maxLength(int[] ribbons, int k) {
+        int max = Arrays.stream(ribbons).max().getAsInt();
+
+        //l = 1, r = max possible length for a ribbon
+        int l = 1;
+        int r = max;
+        int result = 0;
+
+        while(l <= r) {
+            // Use upper mid to prevent infinite loops
+            int mid = (l + r + 1) / 2; 
+            if(isCutPossible(ribbons, k, mid)) {
+                result = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+
+        return result;
+    }
+
+    private boolean isCutPossible(int[] ribbons, int k, long len) {
+        int numOfRibbons = 0;
+        for(int ribbon: ribbons) {
+            numOfRibbons += (ribbon / len);
+            if(numOfRibbons >= k) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+```
+
 ## Eliminate Maximum Number of Monsters {#eliminate-max-monsters}
 
 
