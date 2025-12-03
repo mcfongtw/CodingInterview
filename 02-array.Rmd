@@ -4428,8 +4428,8 @@ This problem uses the **Binary Search on Answer** pattern. Instead of searching 
 
 **Binary Search Logic**:
 - For each `mid` length, check if we can get at least `k` ribbons of that length
-- If yes, this length works! Save it and search for **larger** length (`l = mid + 1`)
-- If no, need **smaller** length (`r = mid - 1`)
+- If yes, this length works! Save it and search for **larger** length (l = mid + 1)
+- If no, need **smaller** length (r = mid - 1)
 - Return the last valid length found
 
 **Greedy Check**: For a given length `len`, count how many ribbons we can get by dividing each ribbon: `ribbon / len`. If total count ≥ `k`, the length is valid.
@@ -4447,7 +4447,7 @@ Binary search moves in **logarithmic jumps**, not linear increments:
 - With `l++`: would take 50 iterations to reach 50
 - With `l = len + 1`: jumps directly to 51 in one iteration
 
-The same logic applies to `r = len - 1` — it's a jump, not a step.
+The same logic applies to r = len - 1 — it's a jump, not a step.
 
 **Why Use Upper Mid Formula `mid = (l + r + 1) / 2`?**
 
@@ -4490,9 +4490,9 @@ Exit (only 1 iteration needed!)
 
 | Search Goal | Mid Formula | Use When | Example Update |
 |-------------|-------------|----------|----------------|
-| Find **maximum** | `(l + r + 1) / 2` | `if (valid) { result = mid; l = mid + 1; }` | Cutting Ribbons, Capacity to Ship |
-| Find **minimum** | `(l + r) / 2` | `if (valid) { result = mid; r = mid - 1; }` | Find minimum in rotated array |
-| Exact match | `(l + r) / 2` | `if (nums[mid] == target) return mid;` | Standard binary search |
+| Find **maximum** | (l + r + 1) / 2 | if (valid) { result = mid; l = mid + 1; } | Cutting Ribbons, Capacity to Ship |
+| Find **minimum** | (l + r) / 2 | if (valid) { result = mid; r = mid - 1; } | Find minimum in rotated array |
+| Exact match | (l + r) / 2 | if (nums[mid] == target) return mid; | Standard binary search |
 
 **Why the difference?**
 - **Maximize**: We want `l` to move up when valid → upper mid tests the larger candidate first
@@ -4512,15 +4512,15 @@ Exit (only 1 iteration needed!)
 
 #### Implementation Steps
 
-1. Calculate `sum` of all ribbons and initialize search range: `l = 1`, `r = sum / k`
+1. Calculate `sum` of all ribbons and initialize search range: `l = 1`, r = sum / k
 2. Initialize `result = 0` to track the maximum valid length found
 3. Binary search while `l <= r`:
-   - Calculate `len = (l + r) / 2` (candidate ribbon length)
+   - Calculate len = (l + r) / 2 (candidate ribbon length)
    - Check if we can get `k` ribbons of length `len` using greedy counting
-   - If yes: save `result = len` and search for larger: `l = len + 1`
-   - If no: search for smaller: `r = len - 1`
+   - If yes: save `result = len` and search for larger: l = len + 1
+   - If no: search for smaller: r = len - 1
 4. Return `result` (maximum valid length, or 0 if impossible)
-5. In `isEnoughRibbons`: count total ribbons by summing `ribbon / len` for each ribbon, return true if count ≥ `k`
+5. In `isEnoughRibbons`: count total ribbons by summing ribbon / len for each ribbon, return true if count ≥ `k`
 
 #### Java Code
 
