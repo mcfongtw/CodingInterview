@@ -1283,13 +1283,13 @@ Step 2: Two-pointer palindrome check
    - Append valid letters to `StringBuilder`
 3. Convert the filtered string to lowercase using `toString().toLowerCase()`
 4. Handle edge case: if filtered string is empty, return `true`
-5. Call helper method `isPalindrome()` with the filtered string:
+5. Call helper method isPalindrome with the filtered string:
    - Convert string to character array for O(1) access
    - Initialize two pointers: left pointer at 0, right pointer at chars.length - 1
-   - While left pointer $\le$ right pointer, compare characters at both positions:
-     - If mismatch, return `false`
+   - While left pointer does not exceed right pointer, compare characters at both positions:
+     - If mismatch, return false
      - Otherwise, increment left pointer and decrement right pointer
-   - If loop completes, return `true`
+   - If loop completes, return true
 
 #### Java Code
 
@@ -1469,12 +1469,12 @@ Step 3: Return global maximum
    - Call helper function `lengthOfLongestSubstring(str)` to find max unique substring length
    - Update `result` with the maximum of current result and session result
 4. **Return result**: The maximum length found across all sessions
-5. **Helper function `lengthOfLongestSubstring`**: Implements the standard sliding window algorithm:
-   - Initialize `HashSet<Character> seen` to track characters in current window
-   - Use two pointers: `l` (left) and `r` (right) to define the window
-   - Expand window by moving `r`: Add each character to the set
-   - When duplicate found: Shrink window from `l` until duplicate is removed
-   - Track maximum window size using `r - l + 1`
+5. **Helper function lengthOfLongestSubstring**: Implements the standard sliding window algorithm:
+   - Initialize HashSet to track characters in current window
+   - Use two pointers: left pointer at index 0, right pointer expanding through the string
+   - Expand window by moving right pointer: Add each character to the set
+   - When duplicate found: Shrink window from left pointer until duplicate is removed
+   - Track maximum window size using right - left + 1
 
 #### Java Code
 
