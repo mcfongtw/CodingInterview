@@ -13,26 +13,43 @@ problems <- read.csv("problems_data.csv", stringsAsFactors = FALSE)
 problems$problem_id[problems$problem_id == "NA"] <- NA
 problems$problem_id <- as.numeric(problems$problem_id)
 
+# Add platform priority for sorting (LeetCode=1, HackerRank=2, Others=3)
+problems$platform_priority <- ifelse(problems$platform == "LeetCode", 1,
+                                      ifelse(problems$platform == "HackerRank", 2, 3))
+
 # Add HTML links for clickable problem titles
 problems$html_link <- paste0("[", problems$title, "](", problems$anchor, ".html)")
 ```
 
 ---
 
-## Quick Lookup by LeetCode ID
+## Quick Lookup by Problem ID
 
-Find any LeetCode problem by its problem number:
+Find any LeetCode or HackerRank problem by its ID:
 
 ```{r lookup-by-id, echo=FALSE}
+# Separate LeetCode and HackerRank problems with valid IDs
 leetcode_only <- problems[problems$platform == "LeetCode" & !is.na(problems$problem_id), ]
+hackerrank_only <- problems[problems$platform == "HackerRank" & !is.na(problems$problem_id), ]
+
+# Sort each platform by problem_id
 leetcode_sorted <- leetcode_only[order(leetcode_only$problem_id), ]
+hackerrank_sorted <- hackerrank_only[order(hackerrank_only$problem_id), ]
+
+# Combine: LeetCode first, then HackerRank
+combined_sorted <- rbind(leetcode_sorted, hackerrank_sorted)
 
 # Add clickable links
-leetcode_sorted$problem_link <- paste0("[", leetcode_sorted$title, "](", leetcode_sorted$anchor, ".html)")
+combined_sorted$problem_link <- paste0("[", combined_sorted$title, "](", combined_sorted$anchor, ".html)")
 
-kable(leetcode_sorted[, c("problem_id", "problem_link", "difficulty", "chapter")],
-      col.names = c("ID", "Problem", "Difficulty", "Chapter"),
-      row.names = FALSE)
+# Display combined table
+if(nrow(combined_sorted) > 0) {
+  kable(combined_sorted[, c("platform", "problem_id", "problem_link", "difficulty", "chapter")],
+        col.names = c("Platform", "ID", "Problem", "Difficulty", "Chapter"),
+        row.names = FALSE)
+} else {
+  cat("*No LeetCode or HackerRank problems with IDs found.*\n")
+}
 ```
 
 ---
@@ -43,10 +60,12 @@ kable(leetcode_sorted[, c("problem_id", "problem_link", "difficulty", "chapter")
 
 ```{r easy-problems, echo=FALSE}
 easy <- problems[problems$difficulty == "Easy", ]
+# Sort by platform priority, then problem_id
+easy <- easy[order(easy$platform_priority, easy$problem_id, na.last = TRUE), ]
 easy$display_id <- ifelse(is.na(easy$problem_id), "-", as.character(easy$problem_id))
 easy$problem_link <- paste0("[", easy$title, "](", easy$anchor, ".html)")
-kable(easy[, c("display_id", "problem_link", "chapter", "platform")],
-      col.names = c("ID", "Problem", "Chapter", "Platform"),
+kable(easy[, c("platform", "display_id", "problem_link", "chapter")],
+      col.names = c("Platform", "ID", "Problem", "Chapter"),
       row.names = FALSE)
 ```
 
@@ -54,10 +73,12 @@ kable(easy[, c("display_id", "problem_link", "chapter", "platform")],
 
 ```{r medium-problems, echo=FALSE}
 medium <- problems[problems$difficulty == "Medium", ]
+# Sort by platform priority, then problem_id
+medium <- medium[order(medium$platform_priority, medium$problem_id, na.last = TRUE), ]
 medium$display_id <- ifelse(is.na(medium$problem_id), "-", as.character(medium$problem_id))
 medium$problem_link <- paste0("[", medium$title, "](", medium$anchor, ".html)")
-kable(medium[, c("display_id", "problem_link", "chapter", "platform")],
-      col.names = c("ID", "Problem", "Chapter", "Platform"),
+kable(medium[, c("platform", "display_id", "problem_link", "chapter")],
+      col.names = c("Platform", "ID", "Problem", "Chapter"),
       row.names = FALSE)
 ```
 
@@ -66,10 +87,12 @@ kable(medium[, c("display_id", "problem_link", "chapter", "platform")],
 ```{r hard-problems, echo=FALSE}
 hard <- problems[problems$difficulty == "Hard", ]
 if(nrow(hard) > 0) {
+  # Sort by platform priority, then problem_id
+  hard <- hard[order(hard$platform_priority, hard$problem_id, na.last = TRUE), ]
   hard$display_id <- ifelse(is.na(hard$problem_id), "-", as.character(hard$problem_id))
   hard$problem_link <- paste0("[", hard$title, "](", hard$anchor, ".html)")
-  kable(hard[, c("display_id", "problem_link", "chapter", "platform")],
-        col.names = c("ID", "Problem", "Chapter", "Platform"),
+  kable(hard[, c("platform", "display_id", "problem_link", "chapter")],
+        col.names = c("Platform", "ID", "Problem", "Chapter"),
         row.names = FALSE)
 } else {
   cat("*No hard problems currently in the database.*\n")
@@ -81,10 +104,12 @@ if(nrow(hard) > 0) {
 ```{r unclassified-problems, echo=FALSE}
 unclassified <- problems[problems$difficulty == "Unclassified", ]
 if(nrow(unclassified) > 0) {
+  # Sort by platform priority, then problem_id
+  unclassified <- unclassified[order(unclassified$platform_priority, unclassified$problem_id, na.last = TRUE), ]
   unclassified$display_id <- ifelse(is.na(unclassified$problem_id), "-", as.character(unclassified$problem_id))
   unclassified$problem_link <- paste0("[", unclassified$title, "](", unclassified$anchor, ".html)")
-  kable(unclassified[, c("display_id", "problem_link", "chapter", "platform")],
-        col.names = c("ID", "Problem", "Chapter", "Platform"),
+  kable(unclassified[, c("platform", "display_id", "problem_link", "chapter")],
+        col.names = c("Platform", "ID", "Problem", "Chapter"),
         row.names = FALSE)
 } else {
   cat("*No unclassified problems currently in the database.*\n")
@@ -96,11 +121,16 @@ if(nrow(unclassified) > 0) {
 ## Lookup by Chapter
 
 ```{r by-chapter, echo=FALSE}
-by_chapter <- problems[order(problems$chapter_num, problems$problem_id, na.last = TRUE), ]
+# Create platform priority for sorting (LeetCode=1, HackerRank=2, Others=3)
+problems$platform_priority <- ifelse(problems$platform == "LeetCode", 1,
+                                      ifelse(problems$platform == "HackerRank", 2, 3))
+
+# Sort by chapter, then platform priority, then problem_id (NA last)
+by_chapter <- problems[order(problems$chapter_num, problems$platform_priority, problems$problem_id, na.last = TRUE), ]
 by_chapter$display_id <- ifelse(is.na(by_chapter$problem_id), "-", as.character(by_chapter$problem_id))
 by_chapter$problem_link <- paste0("[", by_chapter$title, "](", by_chapter$anchor, ".html)")
-kable(by_chapter[, c("chapter", "problem_link", "display_id", "difficulty")],
-      col.names = c("Chapter", "Problem", "LeetCode ID", "Difficulty"),
+kable(by_chapter[, c("chapter", "problem_link", "platform", "display_id", "difficulty")],
+      col.names = c("Chapter", "Problem", "Platform", "Problem ID", "Difficulty"),
       row.names = FALSE)
 ```
 
@@ -114,11 +144,12 @@ kable(by_chapter[, c("chapter", "problem_link", "display_id", "difficulty")],
 # Filter problems that contain "Top 100 Liked" in tags
 top100 <- problems[grepl("Top 100 Liked", problems$tags, ignore.case = TRUE), ]
 if(nrow(top100) > 0) {
-  top100 <- top100[order(top100$problem_id, na.last = TRUE), ]
+  # Sort by platform priority, then problem_id
+  top100 <- top100[order(top100$platform_priority, top100$problem_id, na.last = TRUE), ]
   top100$display_id <- ifelse(is.na(top100$problem_id), "-", as.character(top100$problem_id))
   top100$problem_link <- paste0("[", top100$title, "](", top100$anchor, ".html)")
-  kable(top100[, c("display_id", "problem_link", "difficulty", "chapter")],
-        col.names = c("ID", "Problem", "Difficulty", "Chapter"),
+  kable(top100[, c("platform", "display_id", "problem_link", "difficulty", "chapter")],
+        col.names = c("Platform", "ID", "Problem", "Difficulty", "Chapter"),
         row.names = FALSE)
 } else {
   cat("*No problems tagged as Top 100 Liked yet. Tags will be populated by Codex.*\n")
@@ -130,11 +161,12 @@ if(nrow(top100) > 0) {
 ```{r blind-75, echo=FALSE}
 blind75 <- problems[grepl("Blind 75", problems$tags, ignore.case = TRUE), ]
 if(nrow(blind75) > 0) {
-  blind75 <- blind75[order(blind75$problem_id, na.last = TRUE), ]
+  # Sort by platform priority, then problem_id
+  blind75 <- blind75[order(blind75$platform_priority, blind75$problem_id, na.last = TRUE), ]
   blind75$display_id <- ifelse(is.na(blind75$problem_id), "-", as.character(blind75$problem_id))
   blind75$problem_link <- paste0("[", blind75$title, "](", blind75$anchor, ".html)")
-  kable(blind75[, c("display_id", "problem_link", "difficulty", "chapter")],
-        col.names = c("ID", "Problem", "Difficulty", "Chapter"),
+  kable(blind75[, c("platform", "display_id", "problem_link", "difficulty", "chapter")],
+        col.names = c("Platform", "ID", "Problem", "Difficulty", "Chapter"),
         row.names = FALSE)
 } else {
   cat("*No problems tagged as Blind 75 yet. Tags will be populated by Codex.*\n")
@@ -146,11 +178,12 @@ if(nrow(blind75) > 0) {
 ```{r neetcode-150, echo=FALSE}
 neetcode <- problems[grepl("NeetCode 150", problems$tags, ignore.case = TRUE), ]
 if(nrow(neetcode) > 0) {
-  neetcode <- neetcode[order(neetcode$problem_id, na.last = TRUE), ]
+  # Sort by platform priority, then problem_id
+  neetcode <- neetcode[order(neetcode$platform_priority, neetcode$problem_id, na.last = TRUE), ]
   neetcode$display_id <- ifelse(is.na(neetcode$problem_id), "-", as.character(neetcode$problem_id))
   neetcode$problem_link <- paste0("[", neetcode$title, "](", neetcode$anchor, ".html)")
-  kable(neetcode[, c("display_id", "problem_link", "difficulty", "chapter")],
-        col.names = c("ID", "Problem", "Difficulty", "Chapter"),
+  kable(neetcode[, c("platform", "display_id", "problem_link", "difficulty", "chapter")],
+        col.names = c("Platform", "ID", "Problem", "Difficulty", "Chapter"),
         row.names = FALSE)
 } else {
   cat("*No problems tagged as NeetCode 150 yet. Tags will be populated by Codex.*\n")
@@ -170,12 +203,13 @@ companies <- c("Google", "Amazon", "Meta", "Microsoft", "Apple", "Bloomberg", "A
 show_company_problems <- function(company_name) {
   company_problems <- problems[grepl(company_name, problems$tags, ignore.case = TRUE), ]
   if(nrow(company_problems) > 0) {
-    company_problems <- company_problems[order(company_problems$problem_id, na.last = TRUE), ]
+    # Sort by platform priority, then problem_id
+    company_problems <- company_problems[order(company_problems$platform_priority, company_problems$problem_id, na.last = TRUE), ]
     company_problems$display_id <- ifelse(is.na(company_problems$problem_id), "-", as.character(company_problems$problem_id))
     company_problems$problem_link <- paste0("[", company_problems$title, "](", company_problems$anchor, ".html)")
     cat(paste0("\n### ", company_name, " (", nrow(company_problems), " problems)\n\n"))
-    print(kable(company_problems[, c("display_id", "problem_link", "difficulty", "chapter")],
-          col.names = c("ID", "Problem", "Difficulty", "Chapter"),
+    print(kable(company_problems[, c("platform", "display_id", "problem_link", "difficulty", "chapter")],
+          col.names = c("Platform", "ID", "Problem", "Difficulty", "Chapter"),
           row.names = FALSE))
   }
 }

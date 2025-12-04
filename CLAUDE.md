@@ -54,7 +54,11 @@ The book is organized into topic-based chapters as separate .Rmd files:
 
 ### Chapter Organization
 
-- **Sort by Problem ID**: Problems within chapters must be sorted by ID (ascending). Non-numeric IDs go at the end.
+- **Sort by Platform Priority, Then Problem ID**: Problems must be sorted with the following priority:
+  1. LeetCode problems (sorted by problem ID, ascending)
+  2. HackerRank problems (sorted by problem ID, ascending)
+  3. Other platform problems (sorted by problem ID if available, otherwise by title)
+  4. Problems without IDs appear at the end
 - **Categorize by Data Structure**: Place problems by primary data structure, not algorithm type:
   - Linked list sorting → `06-linked-list.Rmd` (not search-and-sort)
   - Heap-based → `08-heap.Rmd`
@@ -67,19 +71,22 @@ The book is organized into topic-based chapters as separate .Rmd files:
 When adding a new problem, Claude will:
 
 1. **Fetch problem details** from the platform (LeetCode, HackerRank, etc.)
-2. **Create problem section** in appropriate chapter with:
+2. **Insert problem in correct position** following platform priority (LeetCode → HackerRank → Others) and ID order
+3. **Create problem section** in appropriate chapter with:
    - Metadata: Platform, ID, Difficulty, URL, Tags, Techniques
    - **Tags**: Company names (`Google`, `Amazon`, `Meta`) and study plans (`Top 100 Liked`, `Blind 75`, `NeetCode 150`)
    - **Techniques**: Use cross-references (e.g., `[Hash Table](\@ref(hash-table))`)
    - Complete description, examples, and constraints
    - Empty solution structure (Walkthrough, Analysis, Implementation Steps, Java Code placeholders)
-3. **Assign unique anchor ID** (e.g., `{#min-steps-anagram}`)
-4. **Update problems_data.csv** simultaneously with matching anchor and metadata:
+4. **Assign unique anchor ID** (e.g., `{#min-steps-anagram}`)
+5. **Update problems_data.csv** simultaneously with matching anchor and metadata:
    ```csv
    title,platform,problem_id,difficulty,chapter,chapter_num,anchor,tags
    Problem Name,LeetCode,1347,Medium,String Manipulation,09,anchor-id,"Google, Top 100 Liked"
+   Problem Name,HackerRank,unique-paths,Easy,Array,02,hr-unique-paths,""
    ```
-5. **Do NOT implement the solution** - User will fill in placeholders
+   **Supported platforms**: `LeetCode`, `HackerRank`, `Other`, `Firecode`, `Interview`
+6. **Do NOT implement the solution** - User will fill in placeholders
 
 **Phase 2: Review & Optimization (User + Claude)**
 
@@ -94,6 +101,29 @@ After user implements the solution:
 - Include time/space complexity analysis
 - Use `\@ref(id)` for glossary references (e.g., `\@ref(dfs)`)
 - Follow established problem template structure
+
+### R Markdown Gotchas
+
+**CRITICAL: Escape Comparison Operators**
+
+R Markdown has issues with comparison operators (`=`, `<=`, `>=`, `==`) in regular text. Use LaTeX math mode or avoid backticks around these operators.
+
+❌ **WRONG** - Will fail with parsing errors:
+```markdown
+- While left pointer <= right pointer, compare...
+- Initialize two pointers: `l = 0`, `r = chars.length - 1`
+```
+
+✅ **CORRECT** - Use LaTeX math notation or descriptive text:
+```markdown
+- While left pointer $\le$ right pointer, compare...
+- Initialize two pointers: left pointer at 0, right pointer at chars.length - 1
+```
+
+**Rules**:
+1. Use LaTeX math mode for comparison operators: `$\le$`, `$\ge$`, `$\eq$`
+2. When documenting variable initialization, avoid backticks around assignments
+3. Remove backticks from expressions containing comparison operators
 
 ## Deployment
 
