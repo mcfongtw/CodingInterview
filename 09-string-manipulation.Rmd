@@ -40,7 +40,129 @@ Explanation: The answer is "wke"; "pwke" is not valid because it is not a contig
 
 #### Walkthrough
 
-Maintain a sliding window `[left, right)` backed by a hash set of characters currently in the window. Expand `right` while characters are unique, updating the maximum window length. Whenever a duplicate appears, shrink from the `left` until the duplicate is removed. This ensures each character enters and leaves the window at most once.
+Maintain a sliding window `[left, right]` backed by a hash set of characters currently in the window. Expand `right` while characters are unique, updating the maximum window length. Whenever a duplicate appears, shrink from the `left` until the duplicate is removed. This ensures each character enters and leaves the window at most once.
+
+**Key Concept - Window Length Calculation:**
+- The window spans from index `left` to index `right` (inclusive)
+- Window length formula: `right - left + 1`
+- Example: For window from index 2 to index 5, length = 5 - 2 + 1 = 4 characters
+
+**Visual Example with `s = "abcabcbb"`:**
+
+```
+Initial state: left = 0, right starts at 0, best = 0, seen = {}
+
+Step 1: right = 0, char = 'a'
+  String: [a] b c a b c b b
+          ↑
+       left,right
+  seen = {a}
+  Window length = 0 - 0 + 1 = 1
+  best = 1
+
+Step 2: right = 1, char = 'b'
+  String: [a b] c a b c b b
+          ↑   ↑
+        left right
+  seen = {a, b}
+  Window length = 1 - 0 + 1 = 2
+  best = 2
+
+Step 3: right = 2, char = 'c'
+  String: [a b c] a b c b b
+          ↑     ↑
+        left  right
+  seen = {a, b, c}
+  Window length = 2 - 0 + 1 = 3
+  best = 3
+
+Step 4: right = 3, char = 'a' (DUPLICATE!)
+  String: a b c [a] b c b b
+                 ↑
+               right
+  'a' is in seen, shrink from left:
+    - Remove 'a' at left=0, left becomes 1
+    - seen = {b, c}
+  Now add 'a' back:
+  String: a [b c a] b c b b
+            ↑     ↑
+          left  right
+  seen = {b, c, a}
+  Window length = 3 - 1 + 1 = 3
+  best = 3
+
+Step 5: right = 4, char = 'b' (DUPLICATE!)
+  String: a b c [a b] c b b
+                     ↑
+                   right
+  'b' is in seen, shrink from left:
+    - Remove 'b' at left=1, left becomes 2
+    - seen = {c, a}
+  Now add 'b' back:
+  String: a b [c a b] c b b
+              ↑     ↑
+            left  right
+  seen = {c, a, b}
+  Window length = 4 - 2 + 1 = 3
+  best = 3
+
+Step 6: right = 5, char = 'c' (DUPLICATE!)
+  String: a b c [a b c] b b
+                       ↑
+                     right
+  'c' is in seen, shrink from left:
+    - Remove 'c' at left=2, left becomes 3
+    - seen = {a, b}
+  Now add 'c' back:
+  String: a b c [a b c] b b
+                ↑     ↑
+              left  right
+  seen = {a, b, c}
+  Window length = 5 - 3 + 1 = 3
+  best = 3
+
+Step 7: right = 6, char = 'b' (DUPLICATE!)
+  String: a b c a [b c b] b
+                         ↑
+                       right
+  'b' is in seen, shrink from left:
+    - Remove 'a' at left=3, left becomes 4
+    - 'b' still in seen
+    - Remove 'b' at left=4, left becomes 5
+    - seen = {c}
+  Now add 'b' back:
+  String: a b c a b [c b] b
+                    ↑   ↑
+                  left right
+  seen = {c, b}
+  Window length = 6 - 5 + 1 = 2
+  best = 3
+
+Step 8: right = 7, char = 'b' (DUPLICATE!)
+  String: a b c a b c [b b]
+                         ↑
+                       right
+  'b' is in seen, shrink from left:
+    - Remove 'c' at left=5, left becomes 6
+    - 'b' still in seen
+    - Remove 'b' at left=6, left becomes 7
+    - seen = {}
+  Now add 'b' back:
+  String: a b c a b c b [b]
+                        ↑ ↑
+                    left,right
+  seen = {b}
+  Window length = 7 - 7 + 1 = 1
+  best = 3
+
+Final result: 3
+```
+
+**Key Takeaways:**
+1. The window `[left, right]` always contains unique characters
+2. When a duplicate is found, we shrink from the left until the duplicate is removed
+3. `right - left + 1` gives the current window size because both indices are inclusive
+4. We track the maximum window size seen throughout the process
 
 #### Analysis
 
@@ -1214,6 +1336,188 @@ class Result {
         return true;
     }
     
+
+}
+```
+
+## Max Unique Substring Length in a Session {#max-unique-substring-session}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: max-unique-substring-length-in-session
+- **Difficulty**: Medium
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/max-unique-substring-length-in-session
+- **Tags**: `String`, `Sliding Window`, `Hash Table`
+- **Techniques**: [Sliding Window](glossary-of-algorithm.html#sliding-window), [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Given a string of lowercase letters with sessions separated by `'*'` characters, find the maximum length of a substring with all distinct letters within any single session.
+
+### Examples
+
+**Example 1:**
+```
+Input: sessionString = "abcabcbb"
+Output: 3
+Explanation: There is only one session: "abcabcbb". Scanning with a sliding window for distinct letters, the longest substrings without repeats are "abc", "bca" and so on, each of length 3. Therefore, the result is 3.
+```
+
+**Example 2:**
+```
+Input: sessionString = "*"
+Output: 0
+Explanation: The string contains only '*', so there are no valid sessions.
+```
+
+**Example 3:**
+```
+Input: sessionString = "aa"
+Output: 1
+Explanation: There is only one session: "aa". The longest substring with distinct letters is "a" with length 1.
+```
+
+### Constraints
+
+- `0 <= sessionString.length <= 100000`
+- For all characters in sessionString: each character is either `'*'` or a lowercase letter `'a'` to `'z'`
+- Each session is defined as a maximal contiguous substring without `'*'` characters
+- Number of sessions (segments between `'*'`) is at most sessionString.length + 1
+- If sessionString is empty or contains only `'*'`, output 0
+
+### Solution - Split Sessions and Sliding Window
+
+#### Walkthrough
+
+This solution uses a **two-level approach** that combines string splitting with the sliding window technique from [Longest Substring Without Repeating Characters](#longest-substring-unique):
+
+1. **Split by sessions**: Use `split("\\*")` to separate the input into individual sessions
+2. **Apply sliding window per session**: For each non-empty session, apply the standard sliding window algorithm to find the longest substring with unique characters
+3. **Track global maximum**: Maintain the maximum length across all sessions
+
+**Key insight**: This problem is essentially applying LeetCode #3 (Longest Substring Without Repeating Characters) to multiple independent substrings created by splitting on `'*'`.
+
+**Example walkthrough with `s = "abc*de*fgh"`:**
+```
+Step 1: Split by '*'
+  Input: "abc*de*fgh"
+  Sessions: ["abc", "de", "fgh"]
+
+Step 2: Process each session with sliding window
+  Session "abc":
+    - All characters unique
+    - Max length: 3
+
+  Session "de":
+    - All characters unique
+    - Max length: 2
+
+  Session "fgh":
+    - All characters unique
+    - Max length: 3
+
+Step 3: Return global maximum
+  result = max(3, 2, 3) = 3
+```
+
+**Example walkthrough with `s = "a*bc*aabbc"`:**
+```
+Step 1: Split by '*'
+  Input: "a*bc*aabbc"
+  Sessions: ["a", "bc", "aabbc"]
+
+Step 2: Process each session
+  Session "a":
+    - Max length: 1
+
+  Session "bc":
+    - Max length: 2
+
+  Session "aabbc":
+    - Sliding window finds "ab", "abc", "bc" as unique substrings
+    - Max length: 3 (from "abc")
+
+Step 3: Return global maximum
+  result = max(1, 2, 3) = 3
+```
+
+**Edge cases handled:**
+- Empty string: `split()` returns empty array, result remains 0
+- Only asterisks `"***"`: All sessions are empty strings, skipped by `!str.isEmpty()`
+- No asterisks `"abcabc"`: Single session processed normally
+- Leading/trailing asterisks `"*abc*"`: Creates empty sessions that are filtered out
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the total length of the input string
+  - Splitting by `'*'`: O(n) to scan the entire string
+  - Processing all sessions: Each character is visited at most twice (once by right pointer, once by left pointer in sliding window)
+  - Total: O(n) + O(n) = O(n)
+
+- **Space Complexity**: O(n)
+  - `split()` creates an array of session strings: O(n) in worst case when there are no `'*'` characters
+  - `HashSet<Character> seen`: O(min(m, 26)) where m is the length of the longest session (at most 26 lowercase letters)
+  - Dominant factor: O(n) for the split result array
+
+#### Implementation Steps
+
+1. **Split input string**: Use `split("\\*")` to separate sessions (note the escaped asterisk for regex)
+2. **Initialize result tracker**: Set `result = 0` to track the maximum length across all sessions
+3. **Process each session**:
+   - Check if session is non-empty using `!str.isEmpty()`
+   - Call helper function `lengthOfLongestSubstring(str)` to find max unique substring length
+   - Update `result` with the maximum of current result and session result
+4. **Return result**: The maximum length found across all sessions
+5. **Helper function `lengthOfLongestSubstring`**: Implements the standard sliding window algorithm:
+   - Initialize `HashSet<Character> seen` to track characters in current window
+   - Use two pointers: `l` (left) and `r` (right) to define the window
+   - Expand window by moving `r`: Add each character to the set
+   - When duplicate found: Shrink window from `l` until duplicate is removed
+   - Track maximum window size using `r - l + 1`
+
+#### Java Code
+
+```java
+class Result {
+
+    /*
+     * Complete the 'maxDistinctSubstringLengthInSessions' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts STRING sessionString as parameter.
+     */
+
+    public static int maxDistinctSubstringLengthInSessions(String sessionString) {
+        String[] splitStrings  = sessionString.split("\\*");
+        int result = 0;
+        
+        for(String str: splitStrings) {
+            if(!str.isEmpty()) {
+                result = Math.max(result, lengthOfLongestSubstring(str));
+            }
+        }
+
+        return result;
+    }
+    
+    private static int lengthOfLongestSubstring(String s) {
+        Set<Character> seen = new HashSet<>();
+        int l = 0;
+        int longest = 0;
+
+        for (int r = 0; r < s.length(); r++) {
+            char c = s.charAt(r);
+            while (seen.contains(c)) {
+                seen.remove(s.charAt(l));
+                l++;
+            }
+            seen.add(c);
+            longest = Math.max(longest, r - l + 1);
+        }
+
+        return longest;
+    }
 
 }
 ```
