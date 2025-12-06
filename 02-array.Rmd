@@ -1525,6 +1525,221 @@ public int[][] insert(int[][] intervals, int[] newInterval) {
 }
 ```
 
+## Merge and Sort Intervals (HackerRank) {#hr-merge-sort-intervals}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: merge-and-sort-intervals
+- **Difficulty**: Medium
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/merge-and-sort-intervals/
+- **Tags**: `Array`, `Sorting`, `Intervals`
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting)
+
+### Description
+
+**Note**: This problem is nearly identical to [Merge Intervals](#merge-intervals) (LeetCode #56). The core algorithm and approach are the same.
+
+Given an array of intervals `[startTime, endTime]`, merge all overlapping intervals and return a sorted array of non-overlapping intervals.
+
+**Key Details**:
+- Intervals may be provided in any order
+- Duplicates and fully contained intervals are allowed
+- Return intervals sorted by increasing start time
+
+### Examples
+
+**Example 1:**
+```
+Input: intervals = [[1, 3], [2, 6], [8, 10], [15, 18]]
+Output: [[1, 6], [8, 10], [15, 18]]
+Explanation:
+- Step 1: Sort intervals by start time (already sorted)
+- Step 2: Initialize merged list with first interval [1,3]
+- Step 3: Compare [2,6] with last merged [1,3]. They overlap (2 ≤ 3), so merge into [1,6]
+- Step 4: Compare [8,10] with last merged [1,6]. No overlap (8 > 6), append [8,10]
+- Step 5: Compare [15,18] with last merged [8,10]. No overlap (15 > 10), append [15,18]
+Result: [[1,6],[8,10],[15,18]]
+```
+
+**Example 2:**
+```
+Input: intervals = [[5, 10]]
+Output: [[5, 10]]
+Explanation: Only one interval, return as-is
+```
+
+**Example 3:**
+```
+Input: intervals = []
+Output: []
+Explanation: Empty input returns empty output
+```
+
+### Input Format
+
+- First line: integer `n` denoting the number of intervals
+- Second line: integer `2` denoting the length of individual interval array
+- Next `n` lines: two space-separated integers `startTime` and `endTime`
+
+**Example:**
+```
+4
+2
+1 3
+2 6
+8 10
+15 18
+```
+
+### Constraints
+
+- $0 \le$ intervals.length $\le 100000$
+- intervals[i].length == 2 for all $0 \le i <$ intervals.length
+- $0 \le$ intervals[i][0] $<$ intervals[i][1] $\le 10^9$ for all $0 \le i <$ intervals.length
+
+### Solution
+
+**Cross-Reference**: See [Merge Intervals](#merge-intervals) for the complete solution walkthrough, analysis, and implementation.
+
+This problem uses the **identical algorithm** as LeetCode #56:
+
+1. **Sort** intervals by start time
+2. **Merge** overlapping intervals by comparing `current.start` with `last.end`
+3. **Return** the merged result sorted by start time
+
+#### Key Differences from LeetCode #56
+
+- **Input Format**: HackerRank uses custom stdin format with separate lines for count and interval pairs
+- **Output Format**: Print each interval on a separate line as two space-separated integers
+- **Edge Case Handling**: Must handle empty input (n=0) explicitly
+
+#### Analysis
+
+- **Time Complexity**: $O(n \log n)$ - Dominated by sorting
+- **Space Complexity**: $O(n)$ - For the output list
+
+#### Implementation Steps
+
+Refer to [Merge Intervals](#merge-intervals) for detailed implementation steps.
+
+#### Java Code
+
+**Note**: The actual HackerRank function signature uses `List<List<Integer>>` instead of `int[][]`. Both approaches use the same merge algorithm.
+
+```java
+class Result {
+    /*
+     * Complete the 'mergeHighDefinitionIntervals' function below.
+     *
+     * The function is expected to return a 2D_INTEGER_ARRAY.
+     * The function accepts 2D_INTEGER_ARRAY intervals as parameter.
+     */
+
+    public static List<List<Integer>> mergeHighDefinitionIntervals(
+        List<List<Integer>> intervals) {
+
+        if (intervals == null || intervals.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // Sort by start time: intervals[i].get(0)
+        intervals.sort(Comparator.comparingInt(a -> a.get(0)));
+
+        List<List<Integer>> merged = new ArrayList<>();
+
+        // Add a copy of the first interval
+        merged.add(new ArrayList<>(intervals.get(0)));
+
+        for (int i = 1; i < intervals.size(); i++) {
+            List<Integer> current = intervals.get(i);
+            List<Integer> last = merged.get(merged.size() - 1);
+
+            // If current.start <= last.end -> merge
+            if (current.get(0) <= last.get(1)) {
+                last.set(1, Math.max(last.get(1), current.get(1)));
+            } else {
+                // No overlap, add a new interval (copy to avoid aliasing)
+                merged.add(new ArrayList<>(current));
+            }
+        }
+
+        return merged;
+    }
+}
+```
+
+**Alternative: Array-Based Approach**
+
+If you prefer working with arrays or the problem accepts `int[][]` input:
+
+```java
+import java.util.*;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Read number of intervals
+        int n = sc.nextInt();
+
+        // Handle empty input
+        if (n == 0) {
+            sc.nextInt(); // consume the "0" on second line
+            return;
+        }
+
+        // Read array length (always 2 for intervals)
+        int arrayLength = sc.nextInt();
+
+        // Read intervals
+        int[][] intervals = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            intervals[i][0] = sc.nextInt();
+            intervals[i][1] = sc.nextInt();
+        }
+
+        // Merge intervals
+        int[][] result = mergeIntervals(intervals);
+
+        // Print result
+        for (int[] interval : result) {
+            System.out.println(interval[0] + " " + interval[1]);
+        }
+
+        sc.close();
+    }
+
+    public static int[][] mergeIntervals(int[][] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return new int[0][0];
+        }
+
+        // Sort by start time
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+
+        List<int[]> merged = new ArrayList<>();
+        merged.add(intervals[0].clone());
+
+        for (int i = 1; i < intervals.length; i++) {
+            int[] current = intervals[i];
+            int[] last = merged.get(merged.size() - 1);
+
+            // Check for overlap (current.start <= last.end)
+            if (current[0] <= last[1]) {
+                // Merge by extending the end time
+                last[1] = Math.max(last[1], current[1]);
+            } else {
+                // No overlap, add new interval
+                merged.add(current.clone());
+            }
+        }
+
+        return merged.toArray(new int[merged.size()][]);
+    }
+}
+```
+
 ## Climbing Stairs {#climbing-stairs}
 
 ### Problem Metadata
