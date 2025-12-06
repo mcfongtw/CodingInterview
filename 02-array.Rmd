@@ -6027,6 +6027,112 @@ private void swap(int[] arr, int i, int j) {
 }
 ```
 
+## Count Elements Greater Than Previous Average {#count-elements-greater-avg}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: count-elements-greater-than-previous-average
+- **Difficulty**: Easy
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/count-elements-greater-than-previous-average/problem
+- **Tags**: `Array`, `Math`
+- **Techniques**: [Running Average](glossary-of-algorithm.html#running-average)
+
+### Description
+
+Given an array of positive integers, return the number of elements that are strictly greater than the average of all previous elements in the array.
+
+**Important**: Skip the first element since there are no previous elements to calculate an average from.
+
+### Examples
+
+**Example 1:**
+```
+Input: arr = [1, 2, 3, 4]
+Output: 3
+Explanation:
+- Skip arr[0] = 1 (first element)
+- arr[1] = 2, avg([1]) = 1.0, 2 > 1.0 → count
+- arr[2] = 3, avg([1,2]) = 1.5, 3 > 1.5 → count
+- arr[3] = 4, avg([1,2,3]) = 2.0, 4 > 2.0 → count
+Total: 3
+```
+
+**Example 2:**
+```
+Input: arr = [5, 1, 2, 1]
+Output: 0
+Explanation:
+- Skip arr[0] = 5
+- arr[1] = 1, avg([5]) = 5.0, 1 is not > 5.0
+- arr[2] = 2, avg([5,1]) = 3.0, 2 is not > 3.0
+- arr[3] = 1, avg([5,1,2]) = 2.67, 1 is not > 2.67
+Total: 0
+```
+
+### Constraints
+
+- $1 \le$ arr.length $\le 10^5$
+- $1 \le$ arr[i] $\le 10^9$
+
+### Solution - Running Sum with Floating Point Average
+
+#### Walkthrough
+
+TODO: Add walkthrough explanation
+
+#### Analysis
+
+- **Time Complexity**: TODO
+- **Space Complexity**: TODO
+
+#### Implementation Steps
+
+TODO: Add implementation steps
+
+#### Java Code
+
+```java
+class Result {
+    /*
+     * Complete the 'countResponseTimeRegressions' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts INTEGER_ARRAY responseTimes as parameter.
+     */
+    public static int countResponseTimeRegressions(List<Integer> responseTimes) {
+        double[] prefixAvg = new double[responseTimes.size()];
+        
+        int result = 0;
+        
+        for(int i = 0; i < responseTimes.size(); i++) {
+            int respTime = responseTimes.get(i);
+            double newAvg = calPrefixAverage(prefixAvg, i, respTime);
+            
+            if(i > 0 && respTime > newAvg) {
+                result++;
+            }
+        }
+        
+        return result;
+    }
+    
+    private static double calPrefixAverage(double[] prefixAvgRespTimes, int index, int resp) {
+        double avg = 0;
+        
+        if(index == 0) {
+            avg = resp;
+        } else {
+            avg = ((prefixAvgRespTimes[index - 1] * index + resp)) / (index + 1);
+        }
+        prefixAvgRespTimes[index] = avg;
+        
+        
+        return avg;
+    }
+}
+```
+
 ## N Sum Family Comparison {#n-sum-family}
 
 ### Two Sum Family (LeetCode 1, 167, 653)
