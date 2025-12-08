@@ -309,3 +309,383 @@ public static SinglyLinkedListNode removeKthNodeFromEnd(SinglyLinkedListNode hea
     return head;
 }
 ```
+
+
+## Reverse Even-Indexed Nodes and Append {#hr-reverse-even-append}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: reverse-even-indexed-nodes-append
+- **Difficulty**: Medium
+- **URL**: https://www.hackerrank.com/challenges/reverse-even-indexed-nodes-append
+- **Tags**: `Linked List`, `Two Pointers`
+- **Techniques**: [Linked List](glossary-of-algorithm.html#linked-list), [Two Pointers](glossary-of-algorithm.html#two-pointers)
+
+### Description
+
+Given a singly linked list, extract all even-indexed nodes (0-indexed), reverse their order, and append them to the end of the list in one traversal. Return the head of the modified list.
+
+**Note:** Even indices refer to positions 0, 2, 4, ... (not even values). The problem statement refers to these as "sponsored nodes."
+
+### Examples
+
+**Example 1:**
+```
+Input:
+  head = [10, 20, 30, 40, 50, 60]
+Output:
+  [20, 40, 60, 50, 30, 10]
+Explanation:
+  - Step 1: Extract nodes at even positions 0, 2, 4 → [10, 30, 50]
+  - Step 2: Remaining nodes at odd positions 1, 3, 5 → [20, 40, 60]
+  - Step 3: Reverse the extracted list → [50, 30, 10]
+  - Step 4: Append reversed list to remaining → [20, 40, 60, 50, 30, 10]
+```
+
+**Example 2:**
+```
+Input:
+  head = [42]
+Output:
+  [42]
+Explanation:
+  Single node list. Even-indexed node [42] reversed is still [42].
+  No odd-indexed nodes to prepend, so result is [42].
+```
+
+**Example 3:**
+```
+Input:
+  head = [1, 2]
+Output:
+  [2, 1]
+Explanation:
+  - Even-indexed nodes: [1]
+  - Odd-indexed nodes: [2]
+  - Reverse [1] → [1]
+  - Append → [2, 1]
+```
+
+### Input Format
+
+- First line: integer n denoting the length of linked list
+- Next n lines: elements of the linked list
+
+Example:
+```
+6
+10
+20
+30
+40
+50
+60
+```
+
+### Constraints
+
+- $0 \le n \le 100000$
+- $-10^9 \le$ value of each node $\le 10^9$
+- Even indices are 0, 2, 4, ... (0-indexed)
+- The list may be empty (n = 0)
+
+### Output Format
+
+An array representing the values of the modified linked list.
+
+### Sample Input 0
+
+```
+1
+42
+```
+
+### Sample Output 0
+
+```
+42
+```
+
+**Explanation:** Single node at index 0 (even). After reversal and appending, result is [42].
+
+### Sample Input 1
+
+```
+2
+1
+2
+```
+
+### Sample Output 1
+
+```
+2
+1
+```
+
+**Explanation:** Node 1 at index 0 (even), node 2 at index 1 (odd). After extraction and reversal: [2, 1].
+
+### Solution - Extract, Reverse, and Append
+
+#### Walkthrough
+
+This solution uses a **three-phase approach** to efficiently solve the problem in O(n) time:
+
+1. **Phase 1: Separate even and odd indexed nodes** - Use two pointers to extract nodes at even positions (0, 2, 4, ...) into one list and nodes at odd positions (1, 3, 5, ...) into another list
+2. **Phase 2: Reverse the even-indexed list** - Apply iterative reversal to the extracted even-indexed nodes
+3. **Phase 3: Append reversed list** - Connect the tail of the odd-indexed list to the head of the reversed even-indexed list
+
+**Key Insight:** The odd-indexed list becomes the new head of the result, with the reversed even-indexed list appended to its tail.
+
+**Visual Example 1:** `head = [10, 20, 30, 40, 50, 60]`
+
+**Phase 1: Separation**
+
+```
+Initial state:
+[10] → [20] → [30] → [40] → [50] → [60] → null
+ ^even  ^odd
+ ^evenHead  ^oddHead
+
+Iteration 1:
+  oddTail = odd (20)
+  even.next = odd.next (30)
+  even moves to 30
+  odd.next = even.next (40)
+  odd moves to 40
+
+State after iteration 1:
+Even list: [10] → [30] ...
+Odd list:  [20] → [40] ...
+           ^oddTail
+
+Iteration 2:
+  oddTail = odd (40)
+  even.next = odd.next (50)
+  even moves to 50
+  odd.next = even.next (60)
+  odd moves to 60
+
+State after iteration 2:
+Even list: [10] → [30] → [50] ...
+Odd list:  [20] → [40] → [60] ...
+                  ^oddTail
+
+Iteration 3:
+  oddTail = odd (60)
+  even.next = odd.next (null)
+  even moves to null
+  Loop exits (even is null)
+
+Final separated state:
+Even list: [10] → [30] → [50] → null
+Odd list:  [20] → [40] → [60] → null
+                         ^oddTail
+```
+
+**Phase 2: Reverse even list**
+
+```
+Reverse [10] → [30] → [50] → null
+
+Step 1: prev=null, curr=10
+  next = 30
+  10.next = null
+  prev = 10, curr = 30
+
+Step 2: prev=10, curr=30
+  next = 50
+  30.next = 10
+  prev = 30, curr = 50
+
+Step 3: prev=30, curr=50
+  next = null
+  50.next = 30
+  prev = 50, curr = null
+
+Result: [50] → [30] → [10] → null
+        ^evenHead (updated)
+```
+
+**Phase 3: Connect odd tail to reversed even head**
+
+```
+Odd list:     [20] → [40] → [60] → null
+                            ^oddTail
+
+Reversed even: [50] → [30] → [10] → null
+               ^evenHead
+
+After oddTail.next = evenHead:
+[20] → [40] → [60] → [50] → [30] → [10] → null
+^oddHead
+
+Return oddHead → [20, 40, 60, 50, 30, 10] ✓
+```
+
+**Visual Example 2:** `head = [1, 2]`
+
+```
+Phase 1: Separation
+Initial: [1] → [2] → null
+         ^even  ^odd
+         ^evenHead  ^oddHead
+
+Iteration 1:
+  oddTail = odd (2)
+  even.next = odd.next (null)
+  even moves to null
+  Loop exits
+
+Separated:
+Even: [1] → null
+Odd:  [2] → null
+      ^oddTail
+
+Phase 2: Reverse even list
+[1] → null (already reversed, single node)
+^evenHead
+
+Phase 3: Connect
+oddTail.next = evenHead
+[2] → [1] → null
+^oddHead
+
+Return [2, 1] ✓
+```
+
+**Visual Example 3:** `head = [42]`
+
+```
+Edge case: Single node
+even = 42, evenHead = 42
+odd = null, oddHead = null
+
+Early return: head.next == null, return head
+Result: [42] ✓
+```
+
+**Edge Case: Empty list**
+
+```
+head = null
+Return null immediately ✓
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Phase 1 (Separation): O(n) - visits each node once to separate into two lists
+  - Phase 2 (Reversal): O(n/2) - reverses approximately half the nodes (even-indexed)
+  - Phase 3 (Connection): O(1) - single pointer assignment
+  - **Overall: O(n)**
+
+- **Space Complexity**: O(1)
+  - Uses only a constant number of pointers (`even`, `evenHead`, `odd`, `oddHead`, `oddTail`, `prev`, `curr`, `next`)
+  - No additional data structures or recursion
+  - All operations modify pointers in-place
+
+#### Implementation Steps
+
+1. **Handle edge cases:**
+   - Return `null` if head is `null`
+   - Return `head` if only single node exists
+
+2. **Initialize pointers for separation:**
+   - `even` starts at index 0 (head)
+   - `evenHead` saves the head of even list
+   - `odd` starts at index 1 (head.next)
+   - `oddHead` saves the head of odd list (this becomes the final result head)
+   - `oddTail` tracks the last node of odd list for appending
+
+3. **Separate even and odd nodes:**
+   - While both `even` and `odd` are non-null:
+     - Track `oddTail` before advancing
+     - Link `even.next` to skip the odd node
+     - Move `even` to next even-indexed node
+     - If `even` is not null, link `odd.next` to skip the even node and advance `odd`
+
+4. **Reverse the even-indexed list:**
+   - Use iterative three-pointer reversal (`prev`, `curr`, `next`)
+   - Update `evenHead` to the new head after reversal
+
+5. **Connect odd tail to reversed even head:**
+   - Set `oddTail.next = evenHead`
+
+6. **Return the new head:**
+   - Return `oddHead` (the head of the odd-indexed list)
+
+#### Java Code
+
+```java
+class Result {
+
+    /*
+     * Complete the 'extractAndAppendSponsoredNodes' function below.
+     *
+     * The function is expected to return an INTEGER_SINGLY_LINKED_LIST.
+     * The function accepts INTEGER_SINGLY_LINKED_LIST head as parameter.
+     */
+
+    /*
+     * For your reference:
+     *
+     * SinglyLinkedListNode {
+     *     int data;
+     *     SinglyLinkedListNode next;
+     * }
+     *
+     */
+
+    public static SinglyLinkedListNode extractAndAppendSponsoredNodes(SinglyLinkedListNode head) {
+        if (head == null) {
+            return null;
+        }
+        
+        if(head.next == null) {
+            return head;
+        }
+
+        // starts at index 0
+        SinglyLinkedListNode even = head;        
+        SinglyLinkedListNode evenHead = even;
+        // starts at index 1 (or null)
+        SinglyLinkedListNode odd = head.next;    
+        SinglyLinkedListNode oddHead = odd;      
+        SinglyLinkedListNode oddTail = null;
+
+        while (even != null && odd != null) {
+            oddTail = odd;
+            even.next = odd.next;         // skip odd node
+            even = even.next;             // move to next even node (or null)
+            
+            //make sure even is not null
+            if (even != null) {                          
+                odd.next = even.next;     // skip even node                
+                odd = odd.next;           // move to next odd node (or null)
+            }
+        }
+        
+        evenHead = reverseList(evenHead);
+        oddTail.next = evenHead;
+        
+        return oddHead;
+    }
+    
+    private static SinglyLinkedListNode reverseList(SinglyLinkedListNode head) {
+        SinglyLinkedListNode prev = null;
+        SinglyLinkedListNode curr = head;
+        
+        while (curr != null) {
+            SinglyLinkedListNode next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+        return prev;
+    }
+
+}
+```
