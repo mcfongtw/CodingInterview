@@ -1,0 +1,253 @@
+# Arrays
+
+Arrays show up in almost every interview. This chapter opens with a refresher on iterating combinations and fundamental array algorithms before diving into the most popular LeetCode array problems.
+
+### Iterating Combinations
+
+If we are enumerating the cartesian products over two arrays of n elements.
+
+```
+A = [A_1, A_2, ..., A_n]
+B = [B_1, B_2, ..., B_n]
+A1 X A2 = [(A_1, B_1), (A_1, B_2), ..., (A_n, B_n)]
+```
+
+The time complexity is O(n^2).
+
+```java
+for(int i = 0; i < A.length; i++) {
+    for(int j = 0; j < B.length; j++) {
+        // process each (A_i, B_j)
+    }
+}
+```
+
+If we only need to enumerate part of the combination over two arrays while traversing both arrays simultaneously.
+
+```
+A = [A_1, A_2, ..., A_n]
+B = [B_1, B_2, ..., B_n]
+A1 X A2 = [(A_1, B_1), (A_2, B_1), (A_2, B_2), ..., (A_n, B_n)]
+```
+
+we could possibly reduce the complexity to O(n)
+
+```java
+for(int i = 0, j = 0; i < A.length; j < B.length;) {
+    int a = A[i];
+    int b = B[j];
+
+    if(a < b) {
+        i++;
+    } else if(a > b) {
+        j++;
+    }
+}
+```
+
+### Kadane's Algorithm
+
+Kadane's algorithm is a fundamental dynamic programming technique for finding the maximum sum (or product) of a contiguous subarray. It's widely used in array problems and appears in several LeetCode questions.
+
+#### Core Concept
+
+The key insight is to maintain a running state representing the **best subarray ending at the current position**. At each element, we decide:
+
+1. **Start fresh** from the current element
+2. **Extend** the previous subarray by including the current element
+
+This decision is captured by the recurrence:
+
+```
+dp[i] = max(nums[i], dp[i-1] + nums[i])
+```
+
+where `dp[i]` represents the maximum sum of a subarray **ending at index i**.
+
+#### Key Insight
+
+**Why does `max(nums[i], current + nums[i])` work?**
+
+- `nums[i]`: Start a new subarray from this element
+- `current + nums[i]`: Extend the previous best subarray
+
+If the previous sum is negative, starting fresh gives a better result.
+
+#### Standard Implementation
+
+For the complete implementation and detailed walkthrough, see [Maximum Subarray](#maximum-subarray) (LeetCode 53).
+
+#### Kadane's Algorithm Variants
+
+**1. Maximum Product Subarray**
+
+For products instead of sums, we need to track **both max and min** because negative numbers flip signs. A large negative product can become a large positive when multiplied by another negative.
+
+See [Maximum Product Subarray](#maximum-product) (LeetCode 152) for the complete implementation and detailed explanation.
+
+**2. Other Variants**
+
+Kadane's algorithm can be extended to:
+- Maximum Sum Circular Subarray (LeetCode 918)
+- Constraint-based problems with additional state tracking
+- Stock price problems with transaction limits
+
+#### Time Complexity
+
+- **Time**: O(n) - Single pass through the array
+- **Space**: O(1) - Only uses a constant number of variables
+
+This makes Kadane's algorithm highly efficient for linear array optimization problems.
+
+#### Related Problems
+
+- [Maximum Subarray](#maximum-subarray) (LeetCode 53)
+- [Maximum Product Subarray](#maximum-product) (LeetCode 152)
+- Maximum Sum Circular Subarray (LeetCode 918)
+- Best Time to Buy and Sell Stock (variants)
+
+### Unbounded Knapsack
+
+The **Unbounded Knapsack** pattern is a fundamental dynamic programming technique for problems where you can use items (coins, elements, etc.) an unlimited number of times to achieve a target. Unlike the 0/1 Knapsack where each item is used at most once, unbounded knapsack allows infinite repetitions.
+
+#### Core Concept
+
+Given a set of items with certain properties (value, weight, denomination) and a target, determine:
+- The number of ways to reach the target
+- The minimum/maximum value achievable
+- Whether the target is reachable
+
+**Key characteristic**: Items can be reused multiple times.
+
+#### Combinations vs Permutations
+
+A critical distinction in unbounded knapsack problems is whether order matters:
+
+- **Combinations**: `{1, 2}` is the same as `{2, 1}` → Use coins in outer loop
+- **Permutations**: `{1, 2}` differs from `{2, 1}` → Use amount in outer loop
+
+**For Combinations** (most common):
+```java
+for (int coin : coins) {           // Outer: iterate items
+    for (int i = coin; i <= amount; i++) {  // Inner: iterate target
+        dp[i] += dp[i - coin];
+    }
+}
+```
+
+**For Permutations**:
+```java
+for (int i = 1; i <= amount; i++) {        // Outer: iterate target
+    for (int coin : coins) {                // Inner: iterate items
+        if (i >= coin) {
+            dp[i] += dp[i - coin];
+        }
+    }
+}
+```
+
+#### Standard Recurrence Relation
+
+For counting combinations to make amount `i`:
+
+$$
+\text{dp}[i] = \sum_{\text{coin} \in \text{coins}} \text{dp}[i - \text{coin}]
+$$
+
+Where `dp[i]` represents the number of ways to make amount `i`.
+
+**Base case**: `dp[0] = 1` (one way to make 0: use no items)
+
+#### Why Loop Order Matters
+
+**Visual Example**: `coins = [1, 2]`, `amount = 3`
+
+**Combinations approach** (coins outer):
+- Process coin 1: builds `{1}`, `{1,1}`, `{1,1,1}`
+- Process coin 2: builds `{2}`, `{1,2}`, `{2,1}` → but `{1,2}` already counted as `{1,1,1}`
+- Result: Correctly counts `{1,1,1}`, `{1,2}` (4 combinations)
+
+**Permutations approach** (amount outer):
+- Process amount 1: `{1}`
+- Process amount 2: `{1,1}`, `{2}`
+- Process amount 3: `{1,1,1}`, `{1,2}`, `{2,1}` (6 permutations)
+
+#### Time and Space Complexity
+
+- **Time**: $O(n \times m)$ where $n$ is the target amount and $m$ is the number of items
+- **Space**: $O(n)$ using 1D DP array (can be optimized from 2D)
+
+#### Standard Implementation Pattern
+
+```java
+public int unboundedKnapsack(int target, int[] items) {
+    int[] dp = new int[target + 1];
+    dp[0] = 1;  // Base case
+
+    // Outer loop: items (for combinations)
+    for (int item : items) {
+        // Inner loop: all reachable targets
+        for (int i = item; i <= target; i++) {
+            dp[i] += dp[i - item];
+        }
+    }
+
+    return dp[target];
+}
+```
+
+#### Variants
+
+1. **Count combinations**: How many ways to make the target?
+   - [Coin Change II](#coin-change-ii)
+
+2. **Minimum items needed**: What's the fewest items to reach target?
+   - Recurrence: `dp[i] = min(dp[i], dp[i - item] + 1)`
+
+3. **Maximum value**: What's the maximum value achievable?
+   - Recurrence: `dp[i] = max(dp[i], dp[i - weight] + value)`
+
+4. **Reachability**: Can the target be reached?
+   - Use boolean DP: `dp[i] = dp[i] || dp[i - item]`
+
+#### Related Problems
+
+- [Coin Change II](#coin-change-ii) - Classic unbounded knapsack for counting combinations
+
+
+### N Sum Family Comparison {#n-sum-family}
+
+#### Two Sum Family (LeetCode 1, 167, 653)
+
+| Problem | Input/Constraints | Return | Preferred Approach | Time | Space | Notes |
+|---------|-------------------|--------|--------------------|------|-------|-------|
+| [Two Sum I](#two-sum-1) | Unsorted array; preserve original indices | Pair of indices | Hash table | O(n) | O(n) | Sorting breaks indices; hash lookup keeps order info |
+| [Two Sum II](#two-sum-ii-sorted) | Sorted array; 1-indexed output | Pair of indices | Two pointers | O(n) | O(1) | Sorted order unlocks monotonic sweep; TreeMap fallback is O(n log n) |
+| [Two Sum III](#two-sum-ii-boolean) | Unsorted array; existence only | Boolean | Hash set | O(n) | O(n) | Same complement idea, short-circuits on first match |
+| [Two Sum IV](#two-sum-iv-bst) | BST input | Boolean | DFS + HashSet (or dual iterators) | O(n) | O(n) or O(h) | Iterator variant trades simplicity for O(h) space |
+
+**Key differences and picks:** Sorting status drives the strategy (hash table for unsorted, two pointers for sorted). When output is just existence, hash set with early exit wins. BST input can use dual iterators for O(h) space, but DFS + HashSet stays simplest.
+
+#### Three Sum Family (LeetCode 15, 16)
+
+| Problem | Input/Constraints | Return | Preferred Approach | Time | Space | Notes |
+|---------|-------------------|--------|--------------------|------|-------|-------|
+| [3Sum](#three-sum) | Unsorted array | All unique triplets summing to 0 | Sort + two pointers | O(n^2) | O(1) | Duplicate skipping on outer and inner pointers is key |
+| [3Sum Closest](#three-sum) | Unsorted array | Closest sum to target (value only) | Sort + two pointers | O(n^2) | O(1) | Same loop as 3Sum but tracks best distance instead of unique sets |
+
+**Key differences and picks:** Both require sorting to enable the inner two-pointer sweep. 3Sum needs dedup to emit unique triplets; 3Sum Closest reuses the same sweep but optimizes for distance rather than uniqueness.
+
+#### Four Sum Family (LeetCode 18, 454)
+
+| Problem | Input/Constraints | Return | Preferred Approach | Time | Space | Notes |
+|---------|-------------------|--------|--------------------|------|-------|-------|
+| [4Sum](#four-sum) | Unsorted array | All unique quadruplets = target | Sort + nested two pointers | O(n^3) | O(1) | Fix two indices, two-pointer the rest, skip duplicates at every level |
+| [4Sum II](#four-sum-ii) | Four arrays A,B,C,D | Count of quadruples = 0 | Hash map of pair sums | O(n^2) | O(n^2) | Precompute A+B counts, probe with -(C+D) |
+
+**Key differences and picks:** Single-array 4Sum extends the 3Sum pattern (extra fixed index) with heavy dedup. Multi-array 4Sum II swaps to pair-sum hashing because sorting across four lists is unnecessary—hashing collapses the problem to two combined arrays for O(n^2).
+
+#### Scaling Patterns
+
+- Increasing N generally adds one outer loop and preserves two-pointer or hashing on the innermost search.
+- Sorting + pointer sweeping dominates when the input is a single array; hash-based pair-sum caching dominates multi-array counts (e.g., 4Sum II).
+- Deduping steps grow in importance as N grows to avoid exponential blow-up in output size.

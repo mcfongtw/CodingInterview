@@ -1,107 +1,3 @@
-# Tree
-
-### Breadth First Traversal
-The algorithm starts at the tree root, and explores all of the neighbor nodes at the present depth prior to moving
-on to the nodes at the next depth level.
-
-#### Implementation Steps
-
-bfs \@ref(bfs)
-
-#### Typical Implementation - Java
-```java
-public boolean breadthFirstTraversal(TreeNode root) {
-    Queue<TreeNode> queue = new LinkedList();
-
-    while (!queue.isEmpty()) {
-        TreeNode node = queue.poll();
-
-        if (node.left != null) {
-            queue.offer(node.left);
-        }
-
-        if (node.right != null) {
-            queue.offer(node.right);
-        }
-    }
-
-    return false;
-}
-```
-
-#### Complexity Analysis
-
-* Time Complexity: Breadth-first search visits every vertex once and checks every edge in the graph once.
-Therefore, the runtime complexity is $O(|V| + |E|)$. In simplicity, O(n) since $|V| = n$
-* Auxiliary Space: In Breadth First traversal, visited node in different level is stored in a queue one by one.
-Extra Space required is O(w) where w is maximum width of a level in binary tree.
-
-### Depth First Traversal
-The algorithm starts at the root node and explores as far as possible along each branch.
-
-#### Implementation Steps
-
-dfs \@ref(dfs)
-
-#### Type of Depth First Traversal
-
-* Depth First InOrder Traversal
-* Depth First PreOrder Traversal
-* Depth First PostOrder Traversal
-
-#### Complexity Analysis
-
-* Time Complexity: Depth-first search visits every vertex once and checks every edge in the graph once.
-Therefore, the runtime complexity is $O(|V| + |E|)$. In simplicity, O(n) since $|V| = n$
-* Auxiliary Space: In Depth First Traversals, stack (or function call stack) stores all ancestors of a node. Extra Space required is O(h) where h is maximum height of binary tree.
-
-### Selection Strategy
-
-- Extra Space can be one factor
-- Depth First Traversals are typically recursive and recursive code requires function call overheads.
-- The most important points is, BFS starts visiting nodes from root while DFS starts visiting nodes from leaves. So if our problem is to search something that is more likely to closer to root, we would prefer BFS. And if the target node is close to a leaf, we would prefer DFS
-- Maximum Width of a Binary Tree at depth (or height) h can be 2h where h starts from 0. So the maximum number of nodes can be at the last level. And worst case occurs when Binary Tree is a perfect Binary Tree with numbers of node
-- It is evident from above points that extra space required for Level order traversal is likely to be more when tree is more balanced and extra space for Depth First Traversal is likely to be more when tree is less balanced.
-
-### Binary Search Tree
-```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='Some caption.', engine.opts = list(template = "latex/tikz2pdf.tex")}
-\begin{tikzpicture}[
-level 1/.style={sibling distance=10em},
-level 2/.style={sibling distance=5em},
-level 3/.style={sibling distance=5em},
-level distance=2.5em,
-]
-\node {4}
-child { node {2}
-child {  node {1}}
-child {  node {3}}
-}
-child { node {7}
-child {  node {6}}
-child {  node {9}}
-}
-;
-\end{tikzpicture}
-```
-
-A BST is a binary tree where nodes are ordered in the following way:
-
-- each node contains one key (also known as data)
-- the keys in the left subtree are less then the key in its parent node
-- the keys in the right subtree are greater the key in its parent node
-- duplicate keys are not allowed.
-
-#### Implementation Steps
-
-bst \@ref(bst)
-
-#### Complexity Analysis
-The particular kind of binary tree is optimized in a way that only a PARTIAL nodes along a path will be visited during
-search, the general time complexity is reduced to O(h) where h = log(n).
-
-Since a binary search tree with n nodes has a minimum of O(log(n)) levels, it takes at least O(log(n)) comparisons to
-find a particular node. However, in the edge cases  where tree is in a list form, the worst time complexity is O(n)
-
 ## Binary Tree Inorder Traversal {#inorder-traversal}
 
 ### Problem Metadata
@@ -157,6 +53,7 @@ private void dfs(TreeNode node, List<Integer> list) {
 }
 ```
 
+
 ## Validate Binary Search Tree {#validate-bst}
 
 ### Problem Metadata
@@ -191,6 +88,7 @@ private boolean validate(TreeNode node, Integer low, Integer high) {
     return validate(node.left, low, node.val) && validate(node.right, node.val, high);
 }
 ```
+
 
 ## Binary Tree Zigzag Level Order Traversal {#zigzag-level-order}
 
@@ -277,6 +175,7 @@ public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
 }
 ```
 
+
 ## Maximum Depth of Binary Tree {#max-depth}
 
 ### Problem Metadata
@@ -300,6 +199,47 @@ public int maxDepth(TreeNode root) {
         return 0;
     }
     return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}
+```
+
+
+## Construct Binary Tree from Preorder and Inorder Traversal {#build-tree}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 105
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+- **Tags**: `Tree`
+- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc), [Recursion](glossary-of-algorithm.html#recursion), [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Build a binary tree from preorder and inorder traversals.
+
+### Solution - Hash Map Recursion
+
+```
+public TreeNode buildTree(int[] preorder, int[] inorder) {
+    Map<Integer, Integer> indexMap = new HashMap<>();
+    for (int i = 0; i < inorder.length; i++) {
+        indexMap.put(inorder[i], i);
+    }
+    return build(preorder, 0, preorder.length - 1, 0, inorder.length - 1, indexMap);
+}
+
+private TreeNode build(int[] preorder, int preL, int preR, int inL, int inR, Map<Integer, Integer> indexMap) {
+    if (preL > preR) {
+        return null;
+    }
+    int rootVal = preorder[preL];
+    TreeNode root = new TreeNode(rootVal);
+    int inorderRootIndex = indexMap.get(rootVal);
+    int leftSize = inorderRootIndex - inL;
+    root.left = build(preorder, preL + 1, preL + leftSize, inL, inorderRootIndex - 1, indexMap);
+    root.right = build(preorder, preL + leftSize + 1, preR, inorderRootIndex + 1, inR, indexMap);
+    return root;
 }
 ```
 
@@ -378,6 +318,42 @@ public List<List<Integer>> levelOrderBottom(TreeNode root) {
     return result;
 }
 ```
+
+
+## Convert Sorted Array to BST {#sorted-array-bst}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 108
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+- **Tags**: `Tree`, `Divide and Conquer`
+- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc), [Recursion](glossary-of-algorithm.html#recursion)
+
+### Description
+
+Convert a sorted array to a height-balanced BST.
+
+### Solution - Divide and Conquer
+
+```
+public TreeNode sortedArrayToBST(int[] nums) {
+    return build(nums, 0, nums.length - 1);
+}
+
+private TreeNode build(int[] nums, int left, int right) {
+    if (left > right) {
+        return null;
+    }
+    int mid = left + (right - left) / 2;
+    TreeNode node = new TreeNode(nums[mid]);
+    node.left = build(nums, left, mid - 1);
+    node.right = build(nums, mid + 1, right);
+    return node;
+}
+```
+
 
 ## Balanced Binary Tree {#balanced-binary-tree}
 
@@ -625,6 +601,7 @@ private void traverse(TreeNode root, int level, List<List<Integer>> ans) {
 }
 ```
 
+
 ## Minimum Depth of Binary Tree {#min-depth}
 
 ### Problem Metadata
@@ -656,6 +633,7 @@ public int minDepth(TreeNode root) {
     return 1 + Math.min(minDepth(root.left), minDepth(root.right));
 }
 ```
+
 
 ## Path Sum {#path-sum}
 
@@ -707,6 +685,7 @@ public boolean hasPathSum(TreeNode root, int targetSum) {
     return hasPathSum(root.left, remaining) || hasPathSum(root.right, remaining);
 }
 ```
+
 
 ## Path Sum II {#path-sum-ii}
 
@@ -760,6 +739,46 @@ private void backtrack(TreeNode node, int remain, List<Integer> path, List<List<
     path.remove(path.size() - 1);
 }
 ```
+
+
+## Populating Next Right Pointers in Each Node {#connect-next}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 116
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/populating-next-right-pointers-in-each-node/
+- **Tags**: `Tree`, `Breadth First Search`
+- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#bfs)
+
+### Description
+
+Connect each node's `next` pointer to its right neighbor on the same level in a perfect binary tree.
+
+### Solution - O(1) Level Traversal
+
+```
+public Node connect(Node root) {
+    if (root == null) {
+        return null;
+    }
+    Node leftmost = root;
+    while (leftmost.left != null) {
+        Node head = leftmost;
+        while (head != null) {
+            head.left.next = head.right;
+            if (head.next != null) {
+                head.right.next = head.next.left;
+            }
+            head = head.next;
+        }
+        leftmost = leftmost.left;
+    }
+    return root;
+}
+```
+
 
 ## Binary Tree Preorder Traversal {#preorder-traversal}
 
@@ -831,6 +850,7 @@ private void dfs(TreeNode node, List<Integer> list) {
 }
 ```
 
+
 ## Binary Tree Postorder Traversal {#postorder-traversal}
 
 ### Problem Metadata
@@ -884,6 +904,7 @@ private void dfs(TreeNode node, List<Integer> list) {
 }
 ```
 
+
 ## Binary Tree Upside Down {#upside-down}
 
 ### Problem Metadata
@@ -914,6 +935,7 @@ public TreeNode upsideDownBinaryTree(TreeNode root) {
     return newRoot;
 }
 ```
+
 
 ## Count Univalue Subtrees {#count-univalue}
 
@@ -961,6 +983,7 @@ private boolean dfs(TreeNode node, int[] count) {
 }
 ```
 
+
 ## Inorder Successor in BST {#inorder-successor}
 
 ### Problem Metadata
@@ -992,6 +1015,7 @@ public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
     return succ;
 }
 ```
+
 
 ## Binary Tree Longest Consecutive Sequence {#longest-consecutive}
 
@@ -1029,6 +1053,7 @@ private int dfs(TreeNode node, TreeNode parent, int length) {
     return Math.max(length, Math.max(left, right));
 }
 ```
+
 
 ## Find Leaves of Binary Tree {#find-leaves}
 
@@ -1068,6 +1093,7 @@ private int height(TreeNode node, List<List<Integer>> result) {
     return h;
 }
 ```
+
 
 ## Path Sum III {#path-sum-iii}
 
@@ -1120,6 +1146,7 @@ private int dfs(TreeNode node, int current, int target, Map<Integer, Integer> pr
 }
 ```
 
+
 ## Diameter of Binary Tree {#diameter}
 
 ### Problem Metadata
@@ -1157,192 +1184,3 @@ private int depth(TreeNode node, int[] diameter) {
 }
 ```
 
-## Binary Tree Serialization {#tree-serialization}
-
-### Problem Metadata
-
-- **Platform**: Firecode/LeetCode 297
-- **Difficulty**: Medium
-- **Tags**: `Tree`
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), [Recursion](glossary-of-algorithm.html#recursion)
-
-### Description
-
-Serialize a binary tree to string and deserialize back.
-
-### Solution - Preorder with Null Markers
-
-```
-private static final String SEP = ",";
-private static final String NULL = "#";
-
-public String serialize(TreeNode root) {
-    StringBuilder sb = new StringBuilder();
-    serialize(root, sb);
-    return sb.toString();
-}
-
-private void serialize(TreeNode node, StringBuilder sb) {
-    if (node == null) {
-        sb.append(NULL).append(SEP);
-        return;
-    }
-    sb.append(node.val).append(SEP);
-    serialize(node.left, sb);
-    serialize(node.right, sb);
-}
-
-public TreeNode deserialize(String data) {
-    Queue<String> queue = new LinkedList<>(Arrays.asList(data.split(SEP)));
-    return deserialize(queue);
-}
-
-private TreeNode deserialize(Queue<String> queue) {
-    String val = queue.poll();
-    if (val.equals(NULL)) {
-        return null;
-    }
-    TreeNode node = new TreeNode(Integer.parseInt(val));
-    node.left = deserialize(queue);
-    node.right = deserialize(queue);
-    return node;
-}
-```
-
-## Fill in the Ancestors of the Node {#fill-ancestors}
-
-### Description
-
-Given a node, print ancestors from root to parent.
-
-### Solution
-
-Do DFS and build path; when target found, print path.
-
-```
-public boolean printAncestors(TreeNode root, int key, List<Integer> ancestors) {
-    if (root == null) {
-        return false;
-    }
-    if (root.val == key) {
-        return true;
-    }
-    if (printAncestors(root.left, key, ancestors) || printAncestors(root.right, key, ancestors)) {
-        ancestors.add(root.val);
-        return true;
-    }
-    return false;
-}
-```
-
-## Find the k-th Largest Node in a BST {#kth-largest-bst}
-
-### Description
-
-Return the k-th largest node value in a BST.
-
-### Solution - Reverse Inorder
-
-```
-public int kthLargest(TreeNode root, int k) {
-    Stack<TreeNode> stack = new Stack<>();
-    TreeNode current = root;
-    while (current != null || !stack.isEmpty()) {
-        while (current != null) {
-            stack.push(current);
-            current = current.right;
-        }
-        current = stack.pop();
-        if (--k == 0) {
-            return current.val;
-        }
-        current = current.left;
-    }
-    return -1;
-}
-```
-
-## Convert Sorted Array to BST {#sorted-array-bst}
-
-### Description
-
-Convert a sorted array to a height-balanced BST.
-
-### Solution - Divide and Conquer
-
-```
-public TreeNode sortedArrayToBST(int[] nums) {
-    return build(nums, 0, nums.length - 1);
-}
-
-private TreeNode build(int[] nums, int left, int right) {
-    if (left > right) {
-        return null;
-    }
-    int mid = left + (right - left) / 2;
-    TreeNode node = new TreeNode(nums[mid]);
-    node.left = build(nums, left, mid - 1);
-    node.right = build(nums, mid + 1, right);
-    return node;
-}
-```
-
-## Populating Next Right Pointers in Each Node {#connect-next}
-
-### Description
-
-Connect each node's `next` pointer to its right neighbor on the same level in a perfect binary tree.
-
-### Solution - O(1) Level Traversal
-
-```
-public Node connect(Node root) {
-    if (root == null) {
-        return null;
-    }
-    Node leftmost = root;
-    while (leftmost.left != null) {
-        Node head = leftmost;
-        while (head != null) {
-            head.left.next = head.right;
-            if (head.next != null) {
-                head.right.next = head.next.left;
-            }
-            head = head.next;
-        }
-        leftmost = leftmost.left;
-    }
-    return root;
-}
-```
-
-## Construct Binary Tree from Preorder and Inorder Traversal {#build-tree}
-
-### Description
-
-Build a binary tree from preorder and inorder traversals.
-
-### Solution - Hash Map Recursion
-
-```
-public TreeNode buildTree(int[] preorder, int[] inorder) {
-    Map<Integer, Integer> indexMap = new HashMap<>();
-    for (int i = 0; i < inorder.length; i++) {
-        indexMap.put(inorder[i], i);
-    }
-    return build(preorder, 0, preorder.length - 1, 0, inorder.length - 1, indexMap);
-}
-
-private TreeNode build(int[] preorder, int preL, int preR, int inL, int inR, Map<Integer, Integer> indexMap) {
-    if (preL > preR) {
-        return null;
-    }
-    int rootVal = preorder[preL];
-    TreeNode root = new TreeNode(rootVal);
-    int inorderRootIndex = indexMap.get(rootVal);
-    int leftSize = inorderRootIndex - inL;
-    root.left = build(preorder, preL + 1, preL + leftSize, inL, inorderRootIndex - 1, indexMap);
-    root.right = build(preorder, preL + leftSize + 1, preR, inorderRootIndex + 1, inR, indexMap);
-    return root;
-}
-```

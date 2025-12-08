@@ -1,0 +1,728 @@
+## Minimum Operations to Make Binary Array Elements Equal to One I {#min-ops-binary-array}
+
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 3191
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-i/
+- **Tags**: `Array`, `Greedy`, `Simulation`
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy), [Simulation](glossary-of-algorithm.html#simulation), Bit Manipulation
+
+
+### Description
+
+You are given a binary array `nums`. You can do the following operation on the array any number of times (possibly zero):
+
+- Choose any 3 consecutive elements from the array and flip all of them.
+
+Flipping an element means changing its value from 0 to 1, and from 1 to 0.
+
+Return the minimum number of operations required to make all elements in `nums` equal to 1. If it is impossible, return -1.
+
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [0,1,1,1,0,0]
+Output: 3
+Explanation: We can do the following operations:
+- Choose the elements at indices 0, 1 and 2. The resulting array is nums = [1,0,0,1,0,0].
+- Choose the elements at indices 1, 2 and 3. The resulting array is nums = [1,1,1,0,0,0].
+- Choose the elements at indices 3, 4 and 5. The resulting array is nums = [1,1,1,1,1,1].
+```
+
+**Example 2:**
+```
+Input: nums = [0,1,1,1]
+Output: -1
+Explanation: It is impossible to make all elements equal to 1.
+```
+
+
+### Constraints
+
+- `3 <= nums.length <= 10^5`
+- `0 <= nums[i] <= 1`
+
+
+### Solution - Greedy Sequential Traversal
+
+
+#### Walkthrough
+
+The solution uses a **greedy left-to-right approach** based on a key observation: any 0 encountered in the array must be flipped to become 1, and the optimal time to flip it is as soon as we encounter it.
+
+The algorithm works as follows:
+
+1. **Traverse left to right** (indices 0 to `len-3`): For each position `i`, if `nums[i] == 0`, we must flip the window `[i, i+1, i+2]`. We can safely iterate only up to `len-3` because we need at least 3 elements to perform a flip operation.
+
+2. **Use XOR for efficient flipping**: Instead of using `1 - nums[i]` to flip, the solution uses the XOR operator (`^= 1`) which is slightly more efficient and elegant for bit flipping.
+
+3. **Verify the last two elements**: After processing all positions up to `len-3`, we check if the last two elements are both 1. If either is 0, it's impossible to fix them (no 3-element window remaining), so we return -1.
+
+**Why this greedy approach is optimal:**
+- Any 0 must eventually be flipped
+- Flipping a 0 as soon as we encounter it (leftmost first) ensures we process the array in one pass
+- Later flips may change earlier elements, but we've already ensured all earlier positions are 1
+- The last two positions are "locked" after index `len-3`, so they determine if a solution exists
+
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Single pass through the array with constant-time operations per element
+- **Space Complexity**: O(1) - Only using constant extra space (count variable). The input array is modified in-place, which is acceptable for this problem.
+
+**Optimization Notes:**
+- Using XOR (`^= 1`) is more efficient than `1 - nums[i]` for bit flipping
+- The loop stops at `len-2` (excluding last 2 positions) to avoid redundant checks
+- Early continue when `nums[i] == 1` avoids unnecessary operations
+
+
+#### Implementation Steps
+
+
+1. Initialize `count = 0` to track number of flip operations
+2. For each index `i` from 0 to `len-3`:
+   - If `nums[i] == 1`, continue to next iteration
+   - If `nums[i] == 0`:
+     - Set `nums[i] = 1` (no need to XOR since we know it's 0)
+     - Flip `nums[i+1]` using XOR: `nums[i+1] ^= 1`
+     - Flip `nums[i+2]` using XOR: `nums[i+2] ^= 1`
+     - Increment `count`
+3. After loop, check final state:
+   - If `nums[len-1] == 0` OR `nums[len-2] == 0`, return -1
+   - Otherwise, return `count`
+
+
+#### Java Code
+
+```java
+class Solution {
+    public int minOperations(int[] nums) {
+        int count = 0;
+        int len = nums.length;
+
+        for(int i = 0; i < len - 2; i++) {
+            if(nums[i] == 1)
+                continue;
+
+            // Use XOR(^) to flip
+            nums[i] = 1;
+            nums[i+1] ^= 1;
+            nums[i+2] ^= 1;
+
+            count++;
+        }
+
+        // check if the last two bits are 1, nums[len-3] is already 1
+        if(nums[len-1] == 0 || nums[len-2] == 0) {
+            return -1;
+        }
+
+        return count;
+    }
+}
+```
+
+
+## Two Sum III - Return True or False {#two-sum-ii-boolean}
+
+### Problem Metadata
+
+- **Platform**: Other
+- **Problem ID**: N/A
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**: `Array`, `Hash Table`
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Given an integer array `nums` and an integer `k`, determine whether there exists a pair of distinct elements whose sum equals `k`. Return `true` if such a pair exists; otherwise, return `false`.
+
+### Examples
+
+**Example 1**
+```
+Input: nums = [1,3,7], k = 8
+Output: true
+Explanation: 1 + 7 = 8.
+```
+
+**Example 2**
+```
+Input: nums = [1,3,7], k = 6
+Output: false
+```
+
+### Constraints
+
+- `2 <= nums.length <= 10^5`
+- `-10^9 <= nums[i], k <= 10^9`
+
+### Solution - Hash Set
+
+#### Walkthrough
+
+Scan the array once while storing previously seen values in a `HashSet`. For each `num`, compute `diff = k - num`. If `diff` already exists in the set, we have found a valid pair; otherwise, add `num` to the set and keep scanning.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) � set of seen values
+
+#### Implementation Steps
+
+1. Create an empty `HashSet<Integer>`.
+2. For each `num` in `nums`:
+   1. Let `diff = k - num`.
+   2. If `diff` exists in the set, return `true`.
+   3. Otherwise, insert `num` into the set.
+3. Return `false`.
+
+#### Java Code
+
+```java
+public boolean sumsToTarget(int[] nums, int k) {
+    Set<Integer> seen = new HashSet<>();
+
+    for (int num : nums) {
+        int diff = k - num;
+
+        if (seen.contains(diff)) {
+            return true;
+        }
+
+        seen.add(num);
+    }
+
+    return false;
+}
+```
+
+
+## Two Sum V - All Unique Pairs {#two-sum-v}
+
+### Problem Metadata
+
+- **Platform**: Other
+- **Problem ID**: N/A
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Two Pointers`, `Sorting`
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
+
+### Description
+
+Given a **sorted** integer array `nums` and an integer `target`, find **all unique pairs** `[a, b]` such that `a + b = target`. Each pair should list the smaller element first, and duplicate pairs must be removed.
+
+### Examples
+
+```
+Input: nums = [-2,-1,-1,0,1,2], target = 0
+Output: [[-2,2],[-1,1]]
+```
+
+### Constraints
+
+- `2 <= nums.length <= 10^5`
+- `-10^9 <= nums[i], target <= 10^9`
+- `nums` is sorted in non-decreasing order
+
+### Solution - Two Pointers
+
+#### Walkthrough
+
+Place `left` at the start and `right` at the end of the array. Compare `nums[left] + nums[right]` with `target` and move pointers inward. Whenever a valid pair is found, add it to the result and skip over duplicates on both sides to avoid repeated pairs.
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Each element visited at most once by each pointer
+- **Space Complexity**: O(1) auxiliary space (output list not counted)
+
+**Why Two Pointers Works**: The sorted array guarantees that skipping duplicates correctly finds all unique pairs. After finding a match at `[left, right]`, we advance both pointers past all duplicate values to avoid counting the same pair multiple times.
+
+**Uniqueness Detail**: Because the array may contain repeats, the duplicate-skipping logic is essential:
+```java
+while (left < right && nums[left] == currentLeft) left++;
+while (left < right && nums[right] == currentRight) right--;
+```
+
+**Why Not Hash Table?** For finding all unique pairs in sorted arrays, two pointers is more efficient. Hash table would require additional logic to deduplicate pairs and wouldn't leverage the sorted property.
+
+**When to Use**: Standard approach for "find all pairs" problems with sorted input.
+
+#### Implementation Steps
+
+1. Initialize `left = 0`, `right = nums.length - 1`, and an empty result list.
+2. While `left < right`:
+   1. Compute `sum = nums[left] + nums[right]`.
+   2. If `sum == target`, record the pair and move both pointers past duplicate values.
+   3. If `sum < target`, increment `left`.
+   4. Otherwise, decrement `right`.
+3. Return the collected list of pairs.
+
+#### Java Code
+
+```java
+public List<List<Integer>> twoSumPairs(int[] nums, int target) {
+    List<List<Integer>> result = new ArrayList<>();
+    int left = 0;
+    int right = nums.length - 1;
+
+    while (left < right) {
+        int sum = nums[left] + nums[right];
+
+        if (sum == target) {
+            result.add(Arrays.asList(nums[left], nums[right]));
+
+            int currentLeft = nums[left];
+            int currentRight = nums[right];
+            while (left < right && nums[left] == currentLeft) {
+                left++;
+            }
+            while (left < right && nums[right] == currentRight) {
+                right--;
+            }
+        } else if (sum < target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+
+    return result;
+}
+```
+
+
+## Max Gain {#max-gain}
+
+### Problem Metadata
+
+- **Platform**: Firecode
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**: `Array`, `Greedy`
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy)
+
+### Description
+
+Given an integer array, return the maximum gain, defined as the largest difference `a[j] - a[i]` such that `j > i`. If the array never increases, return 0.
+
+### Examples
+
+```
+Input: [0,50,10,100,30]   Output: 100
+Input: [100,40,20,10]     Output: 0
+Input: [0,100,0,100,0,100] Output: 100
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10^5`
+- `-10^9 <= nums[i] <= 10^9`
+
+### Solution - One-Pass Greedy
+
+#### Walkthrough
+
+Track the minimum value seen so far while scanning the array. For each element, compute the gain relative to this minimum and update the answer. Update the running minimum whenever a smaller value is encountered.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+
+1. Initialize `minValue = +8` and `maxGain = 0`.
+2. For each element `x`:
+   1. Update `minValue = min(minValue, x)`.
+   2. Update `maxGain = max(maxGain, x - minValue)`.
+3. Return `maxGain`.
+
+#### Java Code
+
+```java
+public int maxGain(int[] nums) {
+    int minValue = Integer.MAX_VALUE;
+    int maxGain = 0;
+
+    for (int num : nums) {
+        minValue = Math.min(minValue, num);
+        maxGain = Math.max(maxGain, num - minValue);
+    }
+
+    return maxGain;
+}
+```
+
+
+## Retrieve Elements Appearing K Times {#kth-occurrence}
+
+### Problem Metadata
+
+- **Platform**: Other
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**: `Array`, `Hash Table`
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Given an integer array (possibly with duplicates) and an integer `k >= 1`, return the elements whose k-th occurrence appears, preserving the original order of those k-th occurrences.
+
+### Examples
+
+```
+Input: nums = [1,2,3,4,2,1,1,3], k = 1
+Output: [1,2,3,4]
+
+Input: nums = [1,2,3,4,2,1,1,3], k = 2
+Output: [2,1,3]
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10^5`
+- `k >= 1`
+
+### Solution - Hash Map Counting
+
+#### Walkthrough
+
+Use a hash map to track how many times each value has appeared. When an element's count becomes exactly `k`, append it to the result list to preserve insertion order.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+
+1. Initialize an empty `HashMap<Integer, Integer>` and an empty result list.
+2. For each element `x` in `nums`:
+   1. Increment `count[x]`.
+   2. If `count[x] == k`, append `x` to `result`.
+3. Return `result`.
+
+#### Java Code
+
+```java
+public List<Integer> kthOccurrences(int[] nums, int k) {
+    List<Integer> result = new ArrayList<>();
+    Map<Integer, Integer> counts = new HashMap<>();
+
+    for (int num : nums) {
+        int newCount = counts.getOrDefault(num, 0) + 1;
+        counts.put(num, newCount);
+
+        if (newCount == k) {
+            result.add(num);
+        }
+    }
+
+    return result;
+}
+```
+
+
+## Maximum Number of Repetitions {#max-repetitions}
+
+### Problem Metadata
+
+- **Platform**: Firecode
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Counting`
+- **Techniques**: Counting
+
+### Description
+
+Given an array of integers where each value lies in `[0, n-1]`, return the integer that appears most frequently. The algorithm must run in O(n) time and O(1) extra space.
+
+### Examples
+
+```
+Input: [3,1,2,2,3,4,4,4]
+Output: 4
+```
+
+### Constraints
+
+- `1 <= n <= 10^5`
+- Values are in `[0, n-1]`
+
+### Solution - In-place Counting
+
+#### Walkthrough
+
+Exploit the bounded value range by using the input array itself as a hash table. For each value `a[i]`, increment `a[a[i] % n]` by `n`. After one pass, the count of value `v` equals `a[v] / n`. Track the index with the maximum total.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+1. Let `k = n` (or any value = n).
+2. For each index `i`, add `k` to `arr[arr[i] % n]`.
+3. Scan the array to find the index with the largest value; that index is the answer.
+
+#### Java Code
+```java
+public int getMaxRepetition(int[] nums) {
+    int n = nums.length;
+    int k = n;
+
+    for (int i = 0; i < n; i++) {
+        nums[nums[i] % n] += k;
+    }
+
+    int maxIdx = 0;
+    for (int i = 1; i < n; i++) {
+        if (nums[i] > nums[maxIdx]) {
+            maxIdx = i;
+        }
+    }
+
+    return maxIdx;
+}
+
+
+```
+
+
+## Retrieve an Optimal Computation from an Array {#optimal-computation}
+
+### Problem Metadata
+
+- **Platform**: Firecode
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Dynamic Programming`
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion), [Memoization](glossary-of-algorithm.html#memo)
+
+### Description
+
+You are given an array `taste` where each entry represents how tasty a chocolate bar is if eaten on day 1. Eating a bar on day `d` multiplies its taste by `d`. Each day you may eat exactly one bar from either end of the array. Compute the maximum total taste.
+
+### Examples
+
+```
+Input: taste = [1,2,3,4]
+Output: 30
+Explanation: Eat 1,2,3,4 from left to right for 1*1 + 2*2 + 3*3 + 4*4.
+```
+
+### Constraints
+
+- `1 <= taste.length <= 200`
+- `1 <= taste[i] <= 10^3`
+
+### Solution - Memoized Recursion
+
+#### Walkthrough
+
+When only the subarray `taste[i..j]` remains, the current day is `day = n - (j - i)` (since `n - (remaining length - 1)`). We may take either the left or right value. The optimal result is therefore:
+
+```
+max(day * taste[i] + solve(i+1, j, day+1),
+    day * taste[j] + solve(i, j-1, day+1))
+```
+
+Caching the `(i, j)` results avoids recomputation and yields O(n?) states.
+
+#### Analysis
+
+- **Time Complexity**: O(n?)
+- **Space Complexity**: O(n?) for memoization
+
+#### Implementation Steps
+
+1. Define `dfs(i, j)` returning the best score for subarray `[i, j]`.
+2. The current day equals `n - (j - i)`.
+3. Recursively compute both choices (left/right), memoize the maximum, and return it.
+4. Start with `dfs(0, n-1)`.
+
+#### Java Code
+```java
+public int maxTaste(int[] taste) {
+    int n = taste.length;
+    Integer[][] memo = new Integer[n][n];
+    return dfs(taste, 0, n - 1, memo);
+}
+
+private int dfs(int[] taste, int left, int right, Integer[][] memo) {
+    if (memo[left][right] != null) {
+        return memo[left][right];
+    }
+
+    int day = taste.length - (right - left);
+    if (left == right) {
+        return day * taste[left];
+    }
+
+    int pickLeft = day * taste[left] + dfs(taste, left + 1, right, memo);
+    int pickRight = day * taste[right] + dfs(taste, left, right - 1, memo);
+    return memo[left][right] = Math.max(pickLeft, pickRight);
+}
+
+
+```
+
+
+## Selection Sort Array {#selection-sort-array}
+
+### Problem Metadata
+
+- **Platform**: Firecode.io
+- **Problem ID**: Selection Sort Array
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/courses
+- **Tags**: `Array`, `Sorting`
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting)
+
+### Description
+
+Given an integer array, sort it in ascending order using the selection sort algorithm.
+
+### Examples
+
+```
+Input: [3,5,1,4,2]
+Output: [1,2,3,4,5]
+```
+
+### Constraints
+
+- `1 <= n <= 10^4`
+- Elements fit in 32-bit signed integers
+
+### Solution - Iterative Selection
+
+#### Walkthrough
+
+Selection sort repeatedly selects the smallest remaining element and swaps it into the next output position. For each index `i`, scan the suffix `[i, n)` to find the minimum value and swap it with `arr[i]`.
+
+#### Analysis
+
+- **Time Complexity**: O(n^2) due to nested loops
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+1. For `i` from `0` to `n - 1`, set `minIndex = i`.
+2. For `j` from `i + 1` to `n - 1`, update `minIndex` when `arr[j] < arr[minIndex]`.
+3. Swap `arr[i]` with `arr[minIndex]`.
+4. Return the sorted array.
+
+#### Java Code
+
+```java
+public int[] selectionSort(int[] arr) {
+    for (int i = 0; i < arr.length; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < arr.length; j++) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+        int temp = arr[i];
+        arr[i] = arr[minIndex];
+        arr[minIndex] = temp;
+    }
+    return arr;
+}
+```
+
+
+## Quick Sort Array {#quick-sort-array}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: Quick Sort
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Array`, `Divide and Conquer`, `Sorting`
+- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc), [Quick Sort](glossary-of-algorithm.html#qs)
+
+### Description
+
+Sort an integer array in ascending order using the quick sort algorithm.
+
+### Examples
+
+```
+Input: [10,7,8,9,1,5]
+Output: [1,5,7,8,9,10]
+```
+
+### Constraints
+
+- `1 <= n <= 10^5`
+- Elements fit in 32-bit signed integers
+
+### Solution - Lomuto Partitioning
+
+#### Walkthrough
+
+Quick sort picks a pivot (last element), partitions the array so values smaller than the pivot appear to its left, and recurses on both subarrays. The Lomuto partition scheme swaps each value less than the pivot into the correct region and finally places the pivot at its final index.
+
+#### Analysis
+
+- **Time Complexity**: Average O(n log n); worst-case O(n^2) when pivot choices are poor
+- **Space Complexity**: O(log n) recursion stack
+
+#### Implementation Steps
+
+1. Recursively sort the subarray `[lo, hi]`.
+2. Choose `arr[hi]` as the pivot, partition so `pivotIndex` is the final pivot position.
+3. Recursively quick sort `[lo, pivotIndex - 1]` and `[pivotIndex + 1, hi]`.
+4. Base case when `lo >= hi`.
+
+#### Java Code
+
+```java
+public void quickSort(int[] arr) {
+    quickSort(arr, 0, arr.length - 1);
+}
+
+private void quickSort(int[] arr, int lo, int hi) {
+    if (lo >= hi) {
+        return;
+    }
+    int pivotIndex = partition(arr, lo, hi);
+    quickSort(arr, lo, pivotIndex - 1);
+    quickSort(arr, pivotIndex + 1, hi);
+}
+
+private int partition(int[] arr, int lo, int hi) {
+    int pivot = arr[hi];
+    int i = lo;
+    for (int j = lo; j < hi; j++) {
+        if (arr[j] <= pivot) {
+            swap(arr, i, j);
+            i++;
+        }
+    }
+    swap(arr, i, hi);
+    return i;
+}
+
+private void swap(int[] arr, int i, int j) {
+    int tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+}
+```
+
+

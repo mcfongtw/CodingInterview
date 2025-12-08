@@ -1,0 +1,350 @@
+## Check Palindrome by Filtering Non-Letters {#check-palindrome-filter}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: check-palindrome-filter-non-letters
+- **Difficulty**: Easy
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/check-palindrome-filter-non-letters/problem
+- **Tags**: `String`, `Two Pointers`
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
+
+### Description
+
+Given a string `s`, determine whether it is a palindrome after filtering out all non-letter characters and ignoring case. A palindrome reads the same backward as forward.
+
+An empty string is considered a palindrome.
+
+### Examples
+
+```
+Input: s = "A man, a plan, a canal: Panama"
+Output: true
+Explanation: After filtering and lowercasing: "amanaplanacanalpanama" is a palindrome
+
+Input: s = "race a car"
+Output: false
+Explanation: After filtering and lowercasing: "raceacar" is not a palindrome
+
+Input: s = ""
+Output: true
+Explanation: Empty string is considered a palindrome
+```
+
+### Constraints
+
+- `0 <= s.length <= 10^5`
+- `s` consists of printable ASCII characters
+
+### Solution - Two Pointers with Filtering
+
+#### Walkthrough
+
+Your solution uses a **two-phase approach**: first filter and normalize the string, then check if it's a palindrome using the two-pointer technique.
+
+**Phase 1: Filtering and Normalization**
+1. Create a `StringBuilder` to collect only letter characters
+2. Iterate through the input string, checking each character with `Character.isLowerCase()` or `Character.isUpperCase()`
+3. If the character is a letter, append it to the `StringBuilder`
+4. Convert the filtered string to lowercase for case-insensitive comparison
+5. Handle the edge case: empty filtered string returns `true` (empty string is a palindrome)
+
+**Phase 2: Palindrome Check**
+1. Use two pointers starting at both ends of the filtered string
+2. Compare characters at left pointer `l` and right pointer `r`
+3. If characters don't match, immediately return `false`
+4. Move pointers toward the center (`l++`, `r--`)
+5. If all comparisons succeed, return `true`
+
+**Example walkthrough with `s = "A man, a plan, a canal: Panama"`:**
+```
+Step 1: Filter non-letters
+  Original: "A man, a plan, a canal: Panama"
+  After filtering: "AmanaplanacanalPanama"
+  After lowercasing: "amanaplanacanalpanama"
+
+Step 2: Two-pointer palindrome check
+  l=0, r=20: 'a' == 'a' ✓
+  l=1, r=19: 'm' == 'm' ✓
+  l=2, r=18: 'a' == 'a' ✓
+  ...continues until l > r
+  Result: true
+```
+
+**Example walkthrough with `s = "race a car"`:**
+```
+Step 1: Filter non-letters
+  Original: "race a car"
+  After filtering: "raceacar"
+  After lowercasing: "raceacar"
+
+Step 2: Two-pointer palindrome check
+  l=0, r=7: 'r' != 'r' ✓
+  l=1, r=6: 'a' != 'a' ✓
+  l=2, r=5: 'c' != 'c' ✓
+  l=3, r=4: 'e' != 'a' ✗
+  Result: false
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - First pass to filter characters: O(n) where n is the length of the input string
+  - Converting to lowercase: O(m) where m is the length of the filtered string (m ≤ n)
+  - Two-pointer palindrome check: O(m/2) = O(m)
+  - Total: O(n + m + m) = O(n) since m ≤ n
+
+- **Space Complexity**: O(n)
+  - `StringBuilder` to store filtered characters: O(m) where m ≤ n
+  - `testStr` stores the lowercase version: O(m)
+  - `chars` array in palindrome check: O(m)
+  - Total: O(n) in the worst case where all characters are letters
+
+#### Implementation Steps
+
+1. Initialize a `StringBuilder` to collect valid letter characters
+2. Iterate through input string with `toCharArray()`:
+   - Use `Character.isLowerCase(c) || Character.isUpperCase(c)` to identify letters
+   - Append valid letters to `StringBuilder`
+3. Convert the filtered string to lowercase using `toString().toLowerCase()`
+4. Handle edge case: if filtered string is empty, return `true`
+5. Call helper method isPalindrome with the filtered string:
+   - Convert string to character array for O(1) access
+   - Initialize two pointers: left pointer at 0, right pointer at chars.length - 1
+   - While left pointer does not exceed right pointer, compare characters at both positions:
+     - If mismatch, return false
+     - Otherwise, increment left pointer and decrement right pointer
+   - If loop completes, return true
+
+#### Java Code
+
+```java
+class Result {
+
+    /*
+     * Complete the 'isAlphabeticPalindrome' function below.
+     *
+     * The function is expected to return a BOOLEAN.
+     * The function accepts STRING code as parameter.
+     */
+
+    public static boolean isAlphabeticPalindrome(String code) {
+        StringBuilder sb = new StringBuilder();
+        
+        for(char c : code.toCharArray()) {
+            if(Character.isLowerCase(c) || Character.isUpperCase(c)) {
+                sb.append(c);
+            }
+        }
+        
+        String testStr = sb.toString().toLowerCase();    
+        
+        if(testStr.isEmpty()) {
+            return true;
+        }           
+        
+        return isPailndrome(testStr);
+    }
+    
+    private static boolean isPailndrome(String str) {        
+        char[] chars = str.toCharArray();
+        int l = 0, r = chars.length - 1;
+        
+        while(l <= r) {
+            if(chars[l] != chars[r]) {
+                return false;
+            }
+            l++;
+            r--;
+        }
+        
+        return true;
+    }
+    
+
+}
+```
+
+
+## Max Unique Substring Length in a Session {#max-unique-substring-session}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: max-unique-substring-length-in-session
+- **Difficulty**: Medium
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/max-unique-substring-length-in-session
+- **Tags**: `String`, `Sliding Window`, `Hash Table`
+- **Techniques**: [Sliding Window](glossary-of-algorithm.html#sliding-window), [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Given a string of lowercase letters with sessions separated by `'*'` characters, find the maximum length of a substring with all distinct letters within any single session.
+
+### Examples
+
+**Example 1:**
+```
+Input: sessionString = "abcabcbb"
+Output: 3
+Explanation: There is only one session: "abcabcbb". Scanning with a sliding window for distinct letters, the longest substrings without repeats are "abc", "bca" and so on, each of length 3. Therefore, the result is 3.
+```
+
+**Example 2:**
+```
+Input: sessionString = "*"
+Output: 0
+Explanation: The string contains only '*', so there are no valid sessions.
+```
+
+**Example 3:**
+```
+Input: sessionString = "aa"
+Output: 1
+Explanation: There is only one session: "aa". The longest substring with distinct letters is "a" with length 1.
+```
+
+### Constraints
+
+- `0 <= sessionString.length <= 100000`
+- For all characters in sessionString: each character is either `'*'` or a lowercase letter `'a'` to `'z'`
+- Each session is defined as a maximal contiguous substring without `'*'` characters
+- Number of sessions (segments between `'*'`) is at most sessionString.length + 1
+- If sessionString is empty or contains only `'*'`, output 0
+
+### Solution - Split Sessions and Sliding Window
+
+#### Walkthrough
+
+This solution uses a **two-level approach** that combines string splitting with the sliding window technique from [Longest Substring Without Repeating Characters](#longest-substring-unique):
+
+1. **Split by sessions**: Use `split("\\*")` to separate the input into individual sessions
+2. **Apply sliding window per session**: For each non-empty session, apply the standard sliding window algorithm to find the longest substring with unique characters
+3. **Track global maximum**: Maintain the maximum length across all sessions
+
+**Key insight**: This problem is essentially applying LeetCode #3 (Longest Substring Without Repeating Characters) to multiple independent substrings created by splitting on `'*'`.
+
+**Example walkthrough with `s = "abc*de*fgh"`:**
+```
+Step 1: Split by '*'
+  Input: "abc*de*fgh"
+  Sessions: ["abc", "de", "fgh"]
+
+Step 2: Process each session with sliding window
+  Session "abc":
+    - All characters unique
+    - Max length: 3
+
+  Session "de":
+    - All characters unique
+    - Max length: 2
+
+  Session "fgh":
+    - All characters unique
+    - Max length: 3
+
+Step 3: Return global maximum
+  result = max(3, 2, 3) = 3
+```
+
+**Example walkthrough with `s = "a*bc*aabbc"`:**
+```
+Step 1: Split by '*'
+  Input: "a*bc*aabbc"
+  Sessions: ["a", "bc", "aabbc"]
+
+Step 2: Process each session
+  Session "a":
+    - Max length: 1
+
+  Session "bc":
+    - Max length: 2
+
+  Session "aabbc":
+    - Sliding window finds "ab", "abc", "bc" as unique substrings
+    - Max length: 3 (from "abc")
+
+Step 3: Return global maximum
+  result = max(1, 2, 3) = 3
+```
+
+**Edge cases handled:**
+- Empty string: `split()` returns empty array, result remains 0
+- Only asterisks `"***"`: All sessions are empty strings, skipped by `!str.isEmpty()`
+- No asterisks `"abcabc"`: Single session processed normally
+- Leading/trailing asterisks `"*abc*"`: Creates empty sessions that are filtered out
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the total length of the input string
+  - Splitting by `'*'`: O(n) to scan the entire string
+  - Processing all sessions: Each character is visited at most twice (once by right pointer, once by left pointer in sliding window)
+  - Total: O(n) + O(n) = O(n)
+
+- **Space Complexity**: O(n)
+  - `split()` creates an array of session strings: O(n) in worst case when there are no `'*'` characters
+  - `HashSet<Character> seen`: O(min(m, 26)) where m is the length of the longest session (at most 26 lowercase letters)
+  - Dominant factor: O(n) for the split result array
+
+#### Implementation Steps
+
+1. **Split input string**: Use `split("\\*")` to separate sessions (note the escaped asterisk for regex)
+2. **Initialize result tracker**: Set `result = 0` to track the maximum length across all sessions
+3. **Process each session**:
+   - Check if session is non-empty using `!str.isEmpty()`
+   - Call helper function `lengthOfLongestSubstring(str)` to find max unique substring length
+   - Update `result` with the maximum of current result and session result
+4. **Return result**: The maximum length found across all sessions
+5. **Helper function lengthOfLongestSubstring**: Implements the standard sliding window algorithm:
+   - Initialize HashSet to track characters in current window
+   - Use two pointers: left pointer at index 0, right pointer expanding through the string
+   - Expand window by moving right pointer: Add each character to the set
+   - When duplicate found: Shrink window from left pointer until duplicate is removed
+   - Track maximum window size using right - left + 1
+
+#### Java Code
+
+```java
+class Result {
+
+    /*
+     * Complete the 'maxDistinctSubstringLengthInSessions' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts STRING sessionString as parameter.
+     */
+
+    public static int maxDistinctSubstringLengthInSessions(String sessionString) {
+        String[] splitStrings  = sessionString.split("\\*");
+        int result = 0;
+        
+        for(String str: splitStrings) {
+            if(!str.isEmpty()) {
+                result = Math.max(result, lengthOfLongestSubstring(str));
+            }
+        }
+
+        return result;
+    }
+    
+    private static int lengthOfLongestSubstring(String s) {
+        Set<Character> seen = new HashSet<>();
+        int l = 0;
+        int longest = 0;
+
+        for (int r = 0; r < s.length(); r++) {
+            char c = s.charAt(r);
+            while (seen.contains(c)) {
+                seen.remove(s.charAt(l));
+                l++;
+            }
+            seen.add(c);
+            longest = Math.max(longest, r - l + 1);
+        }
+
+        return longest;
+    }
+
+}
+```
+

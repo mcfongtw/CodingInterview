@@ -1,0 +1,299 @@
+## Fibonacci Sequence {#fibonacci}
+
+### Problem Metadata
+
+- **Platform**: Firecode.io / Classic
+- **Problem ID**: Fibonacci
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/
+- **Tags**: `Dynamic Programming`, `Recursion`
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion), [Dynamic Programming](glossary-of-algorithm.html#dp), [Memoization](glossary-of-algorithm.html#memo)
+
+### Description
+
+Compute the `n`-th Fibonacci number where `F(0) = 0`, `F(1) = 1`, and `F(n) = F(n-1) + F(n-2)`.
+
+### Examples
+
+```
+Input: n = 5
+Output: 5
+```
+
+### Constraints
+
+- `0 <= n <= 45`
+
+### Solution 1 - Top-Down Recursion (Naïve)
+
+#### Walkthrough
+
+Directly apply the recurrence `F(n) = F(n-1) + F(n-2)` with base cases `0` and `1`.
+
+#### Analysis
+
+- **Time Complexity**: O(2^n)
+- **Space Complexity**: O(n) recursion depth
+
+#### Java Code
+
+```java
+public int fibRecursive(int n) {
+    if (n <= 1) {
+        return n;
+    }
+    return fibRecursive(n - 1) + fibRecursive(n - 2);
+}
+```
+
+### Solution 2 - Tail Recursion
+
+#### Walkthrough
+
+Carry two consecutive Fibonacci values forward so each call decrements `n` until reaching zero. Although still recursive, it avoids repeated subproblems.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) recursion depth (unless optimized by compiler)
+
+#### Java Code
+
+```java
+public int fibTail(int n) {
+    return fibTailHelper(n, 0, 1);
+}
+
+private int fibTailHelper(int n, int a, int b) {
+    if (n == 0) {
+        return a;
+    }
+    if (n == 1) {
+        return b;
+    }
+    return fibTailHelper(n - 1, b, a + b);
+}
+```
+
+### Solution 3 - Bottom-Up DP
+
+#### Walkthrough
+
+Iteratively build Fibonacci numbers from `0` to `n`, maintaining two running values.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Java Code
+
+```java
+public int fibIterative(int n) {
+    if (n <= 1) {
+        return n;
+    }
+    int prev = 0;
+    int curr = 1;
+    for (int i = 2; i <= n; i++) {
+        int next = prev + curr;
+        prev = curr;
+        curr = next;
+    }
+    return curr;
+}
+```
+
+### Solution 4 - Memoized Recursion
+
+#### Walkthrough
+
+Use a memo array to cache computed Fibonacci numbers, preventing redundant recursion.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
+
+#### Java Code
+
+```java
+public int fibMemo(int n) {
+    int[] memo = new int[n + 1];
+    Arrays.fill(memo, -1);
+    return fibMemoHelper(n, memo);
+}
+
+private int fibMemoHelper(int n, int[] memo) {
+    if (n <= 1) {
+        return n;
+    }
+    if (memo[n] != -1) {
+        return memo[n];
+    }
+    memo[n] = fibMemoHelper(n - 1, memo) + fibMemoHelper(n - 2, memo);
+    return memo[n];
+}
+```
+
+
+## Minimum Operations to Reduce to One {#min-ops-to-one}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: Reduce to One
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**: `Dynamic Programming`, `Recursion`
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion), [Dynamic Programming](glossary-of-algorithm.html#dp)
+
+### Description
+
+Given an integer `n`, you may perform operations: `n = n - 1`, `n = n / 2` (if even), or `n = n / 3` (if divisible by 3). Return the minimum number of operations needed to reduce `n` to 1.
+
+### Examples
+
+```
+Input: 9
+Output: 2  // 9 -> 3 -> 1
+
+Input: 8
+Output: 3  // 8 -> 4 -> 2 -> 1
+```
+
+### Constraints
+
+- `1 <= n <= 10^6`
+
+### Solution - Memoized Recursion
+
+#### Walkthrough
+
+Define `dp[n]` as the minimal operations to reach `1`. Recursively compute each option and cache results to avoid recomputation.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) for memoization
+
+#### Implementation Steps
+
+
+1. Base case: `dp[1] = 0`.
+2. For other `n`, evaluate `1 + dp[n-1]`.
+3. If divisible by `2` or `3`, also consider `1 + dp[n/2]`, `1 + dp[n/3]`.
+4. Store the minimum in memo.
+
+#### Java Code
+
+```java
+public int minStepsToOne(int n) {
+    int[] memo = new int[n + 1];
+    Arrays.fill(memo, -1);
+    return dfs(n, memo);
+}
+
+private int dfs(int n, int[] memo) {
+    if (n == 1) {
+        return 0;
+    }
+    if (memo[n] != -1) {
+        return memo[n];
+    }
+    int best = 1 + dfs(n - 1, memo);
+    if (n % 2 == 0) {
+        best = Math.min(best, 1 + dfs(n / 2, memo));
+    }
+    if (n % 3 == 0) {
+        best = Math.min(best, 1 + dfs(n / 3, memo));
+    }
+    return memo[n] = best;
+}
+```
+
+
+## Power of Two {#power-of-two}
+
+### Problem Metadata
+
+- **Platform**: Firecode.io
+- **Problem ID**: Power of Two
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/
+- **Tags**: `Math`, `Bit Manipulation`, `Recursion`
+- **Techniques**: [Recursion](glossary-of-algorithm.html#recursion)
+
+### Description
+
+Determine whether a positive integer `n` is a power of two.
+
+### Examples
+
+```
+Input: 5
+Output: false
+
+Input: 8
+Output: true
+```
+
+### Constraints
+
+- `0 <= n <= 2^31 - 1`
+
+### Solution 1 - Recursive Halving
+
+#### Walkthrough
+
+Repeatedly divide `n` by `2` as long as it is even. If we reach `1`, `n` is a power of two; if we encounter an odd number (other than `1`) or zero, it is not.
+
+#### Analysis
+
+- **Time Complexity**: O(log n)
+- **Space Complexity**: O(log n) recursion depth
+
+#### Implementation Steps
+
+
+1. Handle `n <= 0` as `false`.
+2. Base case `n == 1` is `true`.
+3. If `n` is odd, return `false`.
+4. Recurse on `n / 2`.
+
+#### Java Code
+
+```java
+public boolean isPowerOfTwoRecursive(int n) {
+    if (n <= 0) {
+        return false;
+    }
+    if (n == 1) {
+        return true;
+    }
+    if ((n & 1) == 1) {
+        return false;
+    }
+    return isPowerOfTwoRecursive(n / 2);
+}
+```
+
+### Solution 2 - Bitwise Trick
+
+#### Walkthrough
+
+Power of two numbers have a single bit set. Checking `n & (n - 1)` clears the lowest set bit; for powers of two, the result is zero.
+
+#### Analysis
+
+- **Time Complexity**: O(1)
+- **Space Complexity**: O(1)
+
+#### Java Code
+
+```java
+public boolean isPowerOfTwo(int n) {
+    return n > 0 && (n & (n - 1)) == 0;
+}
+```
+

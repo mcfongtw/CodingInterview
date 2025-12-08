@@ -1,0 +1,286 @@
+## Implement Queue {#design-queue}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: Queue Design
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**: `Array`, `Linked List`, `Stack`
+- **Techniques**: [Array](glossary-of-algorithm.html#array), [Linked List](glossary-of-algorithm.html#linked-list), [Stack](glossary-of-algorithm.html#stack)
+
+### Description
+
+Implement a queue with operations `enqueue`, `dequeue`, `peek`, and `isEmpty`. Explore multiple representations.
+
+### Examples
+
+```
+MyQueue queue = new MyQueue(3);
+queue.enqueue(1);
+queue.enqueue(2);
+queue.dequeue(); // 1
+queue.enqueue(3);
+queue.peek(); // 2
+```
+
+### Constraints
+
+- Assume integers, bounded or unbounded based on implementation
+
+### Solution 1 - Circular Array
+
+#### Walkthrough
+
+Use a fixed-size array with `head`, `tail`, and `count`. Enqueue writes at `tail` then wraps around; dequeue reads from `head`. This avoids shifting elements.
+
+#### Analysis
+
+- **Time Complexity**: O(1)
+- **Space Complexity**: O(capacity)
+
+#### Implementation Steps
+
+
+1. Initialize `head = 0`, `tail = 0`, `count = 0`.
+2. `enqueue(x)`: if count == capacity throw overflow; assign `data[tail] = x`, `tail = (tail + 1) % capacity`, increment count.
+3. `dequeue()`: if empty throw, read `data[head]`, advance head, decrement count.
+4. `peek()` returns `data[head]`.
+
+#### Java Code
+
+```java
+class ArrayQueue {
+    private final int[] data;
+    private int head = 0;
+    private int tail = 0;
+    private int count = 0;
+
+    public ArrayQueue(int capacity) {
+        this.data = new int[capacity];
+    }
+
+    public void enqueue(int x) {
+        if (count == data.length) {
+            throw new IllegalStateException("Queue full");
+        }
+        data[tail] = x;
+        tail = (tail + 1) % data.length;
+        count++;
+    }
+
+    public int dequeue() {
+        if (count == 0) {
+            throw new NoSuchElementException();
+        }
+        int value = data[head];
+        head = (head + 1) % data.length;
+        count--;
+        return value;
+    }
+
+    public int peek() {
+        if (count == 0) {
+            throw new NoSuchElementException();
+        }
+        return data[head];
+    }
+
+    public boolean isEmpty() {
+        return count == 0;
+    }
+}
+```
+
+### Solution 2 - Linked List
+
+#### Walkthrough
+
+Maintain `front` and `rear` pointers of a singly linked list. Enqueue appends at the tail; dequeue removes from the head.
+
+#### Analysis
+
+- **Time Complexity**: O(1)
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+
+1. Each node holds value plus `next`.
+2. `enqueue(x)`: create node, append at `rear`, update pointers.
+3. `dequeue()`: remove `front`, adjusting `rear` when queue becomes empty.
+
+#### Java Code
+
+```java
+class LinkedQueue {
+    private static class Node {
+        int val;
+        Node next;
+        Node(int val) { this.val = val; }
+    }
+    private Node front;
+    private Node rear;
+
+    public void enqueue(int x) {
+        Node node = new Node(x);
+        if (rear == null) {
+            front = rear = node;
+        } else {
+            rear.next = node;
+            rear = node;
+        }
+    }
+
+    public int dequeue() {
+        if (front == null) {
+            throw new NoSuchElementException();
+        }
+        int value = front.val;
+        front = front.next;
+        if (front == null) {
+            rear = null;
+        }
+        return value;
+    }
+
+    public int peek() {
+        if (front == null) throw new NoSuchElementException();
+        return front.val;
+    }
+
+    public boolean isEmpty() {
+        return front == null;
+    }
+}
+```
+
+### Solution 3 - Two Stacks
+
+#### Walkthrough
+
+Use two stacks `in` and `out`. Enqueue pushes onto `in`. Dequeue/peek pop from `out`, reloading it from `in` when empty by moving all elements to reverse order.
+
+#### Analysis
+
+- **Time Complexity**: Amortized O(1)
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+
+1. `enqueue(x)`: push onto `in`.
+2. `dequeue()` / `peek()`: if `out` empty, move all elements from `in` to `out`, then pop/peek.
+3. `isEmpty()`: true when `in` and `out` are empty.
+
+#### Java Code
+
+```java
+class QueueWithStacks {
+    private final Deque<Integer> in = new ArrayDeque<>();
+    private final Deque<Integer> out = new ArrayDeque<>();
+
+    public void enqueue(int x) {
+        in.push(x);
+    }
+
+    public int dequeue() {
+        shift();
+        return out.pop();
+    }
+
+    public int peek() {
+        shift();
+        return out.peek();
+    }
+
+    public boolean isEmpty() {
+        return in.isEmpty() && out.isEmpty();
+    }
+
+    private void shift() {
+        if (out.isEmpty()) {
+            while (!in.isEmpty()) {
+                out.push(in.pop());
+            }
+        }
+    }
+}
+```
+
+## Implement Stack Using Queues {#design-stack}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: Stack via Queue
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**: `Queue`, `Stack`, `Design`
+- **Techniques**: [Queue](glossary-of-algorithm.html#queue)
+
+### Description
+
+Design a stack that supports `push`, `pop`, `top`, and `empty` using only standard queue operations.
+
+### Examples
+
+```
+MyStack stack = new MyStack();
+stack.push(1);
+stack.push(2);
+stack.top(); // 2
+stack.pop(); // 2
+stack.empty(); // false
+```
+
+### Constraints
+
+- Use only queue operations: enqueue, dequeue, size, isEmpty
+
+### Solution - Single Queue Rotation
+
+#### Walkthrough
+
+Maintain a single queue. For `push(x)` enqueue `x`, then rotate the previous elements to the back by dequeuing and enqueuing `size - 1` times, so that `x` becomes the front. `pop` and `top` are queue front operations.
+
+#### Analysis
+
+- **Time Complexity**: `push` O(n), others O(1)
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+
+1. `push(x)`: enqueue `x`, then loop `size-1` times moving front to back.
+2. `pop()`: dequeue front.
+3. `top()`: peek front.
+4. `empty()`: check queue emptiness.
+
+#### Java Code
+
+```java
+class MyStack {
+    private final Queue<Integer> queue = new LinkedList<>();
+
+    public void push(int x) {
+        queue.offer(x);
+        for (int i = 0; i < queue.size() - 1; i++) {
+            queue.offer(queue.poll());
+        }
+    }
+
+    public int pop() {
+        return queue.poll();
+    }
+
+    public int top() {
+        return queue.peek();
+    }
+
+    public boolean empty() {
+        return queue.isEmpty();
+    }
+}
+```
+

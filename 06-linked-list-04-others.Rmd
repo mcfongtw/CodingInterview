@@ -1,0 +1,34 @@
+## Insert Node at Position in Doubly Linked List {#insert-dll}
+
+### Problem Metadata
+
+- **Platform**: Other
+- **Difficulty**: Easy
+- **Tags**: `Linked List`
+- **Techniques**: [Linked List](glossary-of-algorithm.html#linked-list)
+
+### Description
+
+Insert a value at position `pos` (1-indexed) in a doubly linked list.
+
+```java
+public DLLNode insertAt(DLLNode head, int pos, int val) {
+    DLLNode node = new DLLNode(val);
+    if (pos == 1) {
+        node.next = head;
+        if (head != null) head.prev = node;
+        return node;
+    }
+    DLLNode curr = head;
+    for (int i = 1; curr != null && i < pos - 1; i++) {
+        curr = curr.next;
+    }
+    if (curr == null) return head;
+    node.next = curr.next;
+    if (curr.next != null) curr.next.prev = node;
+    curr.next = node;
+    node.prev = curr;
+    return head;
+}
+```
+

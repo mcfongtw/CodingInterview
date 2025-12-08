@@ -1,0 +1,92 @@
+## Distance of Nearest Cell Having 1 {#nearest-one}
+
+### Problem Metadata
+
+- **Platform**: Other
+- **Difficulty**: Medium
+- **Tags**: `Matrix`, `BFS`
+- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#bfs)
+
+### Description
+
+Given a binary matrix, for every cell compute the distance to the nearest cell containing 1.
+
+### Solution - Multi-source BFS
+
+Enqueue all cells containing 1 with distance 0 and run BFS to fill distances for zeros.
+
+```
+public int[][] nearestOne(int[][] mat) {
+    int m = mat.length, n = mat[0].length;
+    int[][] dist = new int[m][n];
+    for (int[] row : dist) {
+        Arrays.fill(row, -1);
+    }
+    Queue<int[]> queue = new LinkedList<>();
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (mat[i][j] == 1) {
+                dist[i][j] = 0;
+                queue.offer(new int[]{i, j});
+            }
+        }
+    }
+    int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+    while (!queue.isEmpty()) {
+        int[] cell = queue.poll();
+        for (int[] d : dirs) {
+            int nr = cell[0] + d[0];
+            int nc = cell[1] + d[1];
+            if (nr >= 0 && nr < m && nc >= 0 && nc < n && dist[nr][nc] == -1) {
+                dist[nr][nc] = dist[cell[0]][cell[1]] + 1;
+                queue.offer(new int[]{nr, nc});
+            }
+        }
+    }
+    return dist;
+}
+```
+
+
+## Graph Serialization {#graph-serialization}
+
+### Problem Metadata
+
+- **Platform**: Other
+- **Tags**: `Graph`
+- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#bfs)
+
+### Description
+
+Serialize an undirected graph into a string and reconstruct it back.
+
+### Solution - BFS
+
+Traverse the graph with BFS, recording each node and its neighbors. Use a visited set to avoid cycles. For deserialization, parse each line and rebuild adjacency lists.
+
+```
+public String serialize(Node node) {
+    if (node == null) {
+        return "";
+    }
+    Set<Node> visited = new HashSet<>();
+    Queue<Node> queue = new LinkedList<>();
+    queue.offer(node);
+    visited.add(node);
+    StringBuilder sb = new StringBuilder();
+
+    while (!queue.isEmpty()) {
+        Node current = queue.poll();
+        sb.append(current.val);
+        for (Node neighbor : current.neighbors) {
+            sb.append(',').append(neighbor.val);
+            if (visited.add(neighbor)) {
+                queue.offer(neighbor);
+            }
+        }
+        sb.append('\n');
+    }
+    return sb.toString();
+}
+```
+

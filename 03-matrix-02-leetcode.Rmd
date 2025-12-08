@@ -1,5 +1,3 @@
-# Matrix
-
 ## Rotate Image {#rotate-image}
 
 ### Problem Metadata
@@ -81,6 +79,7 @@ public void rotate(int[][] matrix) {
     }
 }
 ```
+
 
 ## Spiral Matrix {#spiral-matrix}
 
@@ -235,6 +234,7 @@ public List<Integer> spiralOrder(int[][] matrix) {
 }
 ```
 
+
 ## Unique Paths {#unique-paths}
 
 ### Problem Metadata
@@ -298,6 +298,7 @@ public int uniquePaths(int m, int n) {
     return dp[m - 1][n - 1];
 }
 ```
+
 
 ## Minimum Path Sum {#min-path-sum}
 
@@ -368,6 +369,7 @@ public int minPathSum(int[][] grid) {
     return dp[rows - 1][cols - 1];
 }
 ```
+
 
 ## Search a 2D Matrix {#search-matrix}
 
@@ -447,6 +449,7 @@ public boolean searchMatrix(int[][] matrix, int target) {
     return false;
 }
 ```
+
 
 ## Word Search {#word-search}
 
@@ -537,6 +540,7 @@ private boolean dfs(char[][] board, String word, int row, int col, int index) {
     return found;
 }
 ```
+
 
 ## Surrounded Regions {#surrounded-regions}
 
@@ -634,6 +638,7 @@ private void dfs(char[][] board, int r, int c) {
 }
 ```
 
+
 ## Number of Islands {#number-of-islands}
 
 ### Problem Metadata
@@ -715,6 +720,7 @@ private void flood(char[][] grid, int r, int c) {
     flood(grid, r, c + 1);
 }
 ```
+
 
 ## Maximal Square {#maximal-square}
 
@@ -861,6 +867,7 @@ class Solution {
 }
 ```
 
+
 ## Search a 2D Matrix II {#search-matrix-ii}
 
 ### Problem Metadata
@@ -936,6 +943,7 @@ public boolean searchMatrix(int[][] matrix, int target) {
     return false;
 }
 ```
+
 
 ## Best Meeting Point {#best-meeting-point}
 
@@ -1020,6 +1028,7 @@ public int minTotalDistance(int[][] grid) {
     return distance;
 }
 ```
+
 
 ## Design Tic Tac Toe {#design-tic-tac-toe}
 
@@ -1196,6 +1205,140 @@ class TicTacToe {
 }
 ```
 
+
+## Battleships in a Board {#battleships-in-board}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 419
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/battleships-in-a-board/
+- **Tags**: `Matrix`, `DFS`
+- **Techniques**: [Matrix Traversal](glossary-of-algorithm.html#matrix-traversal), [Depth First Search](glossary-of-algorithm.html#dfs)
+
+### Description
+
+Given an `m x n` matrix `board` where each cell is a battleship `'X'` or empty `'.'`, return the number of battleships on the board.
+
+Battleships can only be placed horizontally or vertically on the board. In other words, they can only be made of the shape `1 x k` (1 row, k columns) or `k x 1` (k rows, 1 column), where `k` can be of any size. At least one horizontal or vertical cell separates between two battleships (i.e., there are no adjacent battleships).
+
+### Examples
+
+**Example 1:**
+
+```
+Input: board = [["X",".",".","X"],[".",".",".","X"],[".",".",".","X"]]
+Output: 2
+```
+
+**Example 2:**
+
+```
+Input: board = [["."]]
+Output: 0
+```
+
+### Constraints
+
+- `m == board.length`
+- `n == board[i].length`
+- `1 <= m, n <= 200`
+- `board[i][j]` is either `'.'` or `'X'`
+
+### Follow-up
+
+Could you do it in one pass, using only O(1) extra memory and without modifying the board values?
+
+### Solution - Top-Left Corner Counting
+
+#### Walkthrough
+
+The key insight is that we only need to count the **top-left corner** (or starting point) of each battleship. Since battleships are either horizontal or vertical and never adjacent, we can identify a battleship's start by **skipping cells that have a battleship piece above them or to their left**.
+
+**Why this works:**
+
+For any battleship (horizontal or vertical), only its top-left cell will have:
+- No `'X'` in the cell directly above it (if r > 0)
+- No `'X'` in the cell directly to its left (if c > 0)
+
+All other cells of the same battleship will have at least one `'X'` neighbor in these directions and will be skipped using guard clauses.
+
+**Example Walkthrough:**
+
+```
+Board:
+X . . X
+. . . X
+. . . X
+
+Cell (0,0): X, no row above, no col left → COUNT ✓ (single-cell or horizontal ship start)
+Cell (0,3): X, no row above, board[0][2]='.' → COUNT ✓ (vertical ship start)
+Cell (1,3): X, board[0][3]='X' above → SKIP (part of vertical ship)
+Cell (2,3): X, board[1][3]='X' above → SKIP (part of vertical ship)
+
+Result: 2 battleships
+```
+
+This approach satisfies the follow-up requirement: **one pass, O(1) space, no board modification**.
+
+**Algorithm Strategy:**
+
+Using early-exit guard clauses with `continue`, we skip any `'X'` cell that:
+1. Has an `'X'` directly above it (not a ship start, part of a vertical ship), OR
+2. Has an `'X'` directly to its left (not a ship start, part of a horizontal ship)
+
+Only cells that pass both guard checks are battleship starting points.
+
+#### Analysis
+
+- **Time Complexity**: O(m × n) - Single pass through all cells in the board
+- **Space Complexity**: O(1) - Only using a counter variable, no auxiliary data structures or board modification
+
+#### Implementation Steps
+
+1. Initialize `result = 0` to count battleships
+2. Iterate through each cell `(r, c)` in the board using nested loops
+3. For each cell containing `'X'`:
+   - **Skip if not top-left corner**: Use guard clauses with `continue` to skip cells that are:
+     - Part of a vertical ship: If r > 0 (row exists above) AND `board[r-1][c] == 'X'` (cell above is occupied)
+     - Part of a horizontal ship: If c > 0 (column exists to left) AND `board[r][c-1] == 'X'` (cell to left is occupied)
+   - **Count if top-left corner**: If both guard clauses pass, this is a ship's starting point, so increment `result`
+4. Return `result`
+
+#### Java Code
+
+```java
+class Solution {
+    public int countBattleships(char[][] board) {
+        int rows = board.length;
+        int cols = board[0].length;
+        int result = 0;
+
+        for(int r = 0; r < rows; r++) {
+            for(int c = 0; c < cols; c++) {
+                //count the **top-left corner** of each UNIQUE battleship
+                if (board[r][c] == 'X') {                
+                    // NO battleship is placed above it
+                    if (r > 0 && board[r-1][c] == 'X') {
+                        continue;
+                    }
+
+                    // NO battleship is placed to its left
+                    if (c > 0 && board[r][c-1] == 'X') {
+                        continue;
+                    }
+                    
+                    result++;
+                }
+            }        
+        }
+
+        return result;
+    }
+}
+```
+
 ## Brick Wall {#brick-wall}
 
 ### Problem Metadata
@@ -1340,6 +1483,7 @@ class Solution {
     }
 }
 ```
+
 
 ## Count Square Submatrices with All Ones {#count-square-submatrices}
 
@@ -1535,135 +1679,3 @@ class Solution {
 }
 ```
 
-## Battleships in a Board {#battleships-in-board}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 419
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/battleships-in-a-board/
-- **Tags**: `Matrix`, `DFS`
-- **Techniques**: [Matrix Traversal](glossary-of-algorithm.html#matrix-traversal), [Depth First Search](glossary-of-algorithm.html#dfs)
-
-### Description
-
-Given an `m x n` matrix `board` where each cell is a battleship `'X'` or empty `'.'`, return the number of battleships on the board.
-
-Battleships can only be placed horizontally or vertically on the board. In other words, they can only be made of the shape `1 x k` (1 row, k columns) or `k x 1` (k rows, 1 column), where `k` can be of any size. At least one horizontal or vertical cell separates between two battleships (i.e., there are no adjacent battleships).
-
-### Examples
-
-**Example 1:**
-
-```
-Input: board = [["X",".",".","X"],[".",".",".","X"],[".",".",".","X"]]
-Output: 2
-```
-
-**Example 2:**
-
-```
-Input: board = [["."]]
-Output: 0
-```
-
-### Constraints
-
-- `m == board.length`
-- `n == board[i].length`
-- `1 <= m, n <= 200`
-- `board[i][j]` is either `'.'` or `'X'`
-
-### Follow-up
-
-Could you do it in one pass, using only O(1) extra memory and without modifying the board values?
-
-### Solution - Top-Left Corner Counting
-
-#### Walkthrough
-
-The key insight is that we only need to count the **top-left corner** (or starting point) of each battleship. Since battleships are either horizontal or vertical and never adjacent, we can identify a battleship's start by **skipping cells that have a battleship piece above them or to their left**.
-
-**Why this works:**
-
-For any battleship (horizontal or vertical), only its top-left cell will have:
-- No `'X'` in the cell directly above it (if r > 0)
-- No `'X'` in the cell directly to its left (if c > 0)
-
-All other cells of the same battleship will have at least one `'X'` neighbor in these directions and will be skipped using guard clauses.
-
-**Example Walkthrough:**
-
-```
-Board:
-X . . X
-. . . X
-. . . X
-
-Cell (0,0): X, no row above, no col left → COUNT ✓ (single-cell or horizontal ship start)
-Cell (0,3): X, no row above, board[0][2]='.' → COUNT ✓ (vertical ship start)
-Cell (1,3): X, board[0][3]='X' above → SKIP (part of vertical ship)
-Cell (2,3): X, board[1][3]='X' above → SKIP (part of vertical ship)
-
-Result: 2 battleships
-```
-
-This approach satisfies the follow-up requirement: **one pass, O(1) space, no board modification**.
-
-**Algorithm Strategy:**
-
-Using early-exit guard clauses with `continue`, we skip any `'X'` cell that:
-1. Has an `'X'` directly above it (not a ship start, part of a vertical ship), OR
-2. Has an `'X'` directly to its left (not a ship start, part of a horizontal ship)
-
-Only cells that pass both guard checks are battleship starting points.
-
-#### Analysis
-
-- **Time Complexity**: O(m × n) - Single pass through all cells in the board
-- **Space Complexity**: O(1) - Only using a counter variable, no auxiliary data structures or board modification
-
-#### Implementation Steps
-
-1. Initialize `result = 0` to count battleships
-2. Iterate through each cell `(r, c)` in the board using nested loops
-3. For each cell containing `'X'`:
-   - **Skip if not top-left corner**: Use guard clauses with `continue` to skip cells that are:
-     - Part of a vertical ship: If r > 0 (row exists above) AND `board[r-1][c] == 'X'` (cell above is occupied)
-     - Part of a horizontal ship: If c > 0 (column exists to left) AND `board[r][c-1] == 'X'` (cell to left is occupied)
-   - **Count if top-left corner**: If both guard clauses pass, this is a ship's starting point, so increment `result`
-4. Return `result`
-
-#### Java Code
-
-```java
-class Solution {
-    public int countBattleships(char[][] board) {
-        int rows = board.length;
-        int cols = board[0].length;
-        int result = 0;
-
-        for(int r = 0; r < rows; r++) {
-            for(int c = 0; c < cols; c++) {
-                //count the **top-left corner** of each UNIQUE battleship
-                if (board[r][c] == 'X') {                
-                    // NO battleship is placed above it
-                    if (r > 0 && board[r-1][c] == 'X') {
-                        continue;
-                    }
-
-                    // NO battleship is placed to its left
-                    if (c > 0 && board[r][c-1] == 'X') {
-                        continue;
-                    }
-                    
-                    result++;
-                }
-            }        
-        }
-
-        return result;
-    }
-}
-```

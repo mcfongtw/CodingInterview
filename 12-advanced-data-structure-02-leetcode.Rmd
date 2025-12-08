@@ -1,7 +1,3 @@
-# Advanced Data Structure
-
-This chapter focuses on problems that combine complex data structure implementation with object-oriented design concepts. These problems require not only understanding the underlying data structures but also designing clean APIs and maintaining invariants across multiple operations. Topics include LRU caches, custom hash maps, calendar schedulers, banking systems, and various queue and stack implementations.
-
 ## Design LRU Cache {#lru-cache}
 
 ### Problem Metadata
@@ -175,6 +171,370 @@ class LRUCacheLinkedHashMap {
 }
 ```
 
+
+## Design HashSet {#design-hashset}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 705
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/design-hashset/
+- **Tags**: `Hash Table`, `Design`
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Create a HashSet supporting `add(key)`, `contains(key)`, and `remove(key)` without using built-in hash table libraries.
+
+### Examples
+
+```
+MyHashSet set = new MyHashSet();
+set.add(1);
+set.add(2);
+set.contains(1); // true
+set.contains(3); // false
+set.add(2);
+set.contains(2); // true
+set.remove(2);
+set.contains(2); // false
+```
+
+### Constraints
+
+- `0 <= key <= 10^6`
+- At most `10^4` operations
+
+### Solution - Separate Chaining Buckets
+
+#### Walkthrough
+
+Create an array of buckets; each bucket holds a linked list of stored keys. The hash function is `key % capacity`. `add` inserts if absent, `remove` deletes from the chain, `contains` scans the list.
+
+#### Analysis
+
+- **Time Complexity**: Average O(1); worst-case O(n) if all keys collide
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+
+1. Choose bucket count (e.g., 1000) and allocate arrays of lists.
+2. Map keys to bucket index via modulo.
+3. Implement linked-list helpers to search, insert, remove within each bucket.
+
+#### Java Code
+
+```java
+class MyHashSet {
+    private static class Node {
+        int key;
+        Node next;
+        Node(int key) { this.key = key; }
+    }
+
+    private final Node[] buckets;
+    private final int size = 1000;
+
+    public MyHashSet() {
+        buckets = new Node[size];
+    }
+
+    public void add(int key) {
+        int idx = key % size;
+        Node head = buckets[idx];
+        Node curr = head;
+        while (curr != null) {
+            if (curr.key == key) {
+                return;
+            }
+            curr = curr.next;
+        }
+        Node node = new Node(key);
+        node.next = head;
+        buckets[idx] = node;
+    }
+
+    public void remove(int key) {
+        int idx = key % size;
+        Node dummy = new Node(-1);
+        dummy.next = buckets[idx];
+        Node prev = dummy;
+        Node curr = dummy.next;
+        while (curr != null) {
+            if (curr.key == key) {
+                prev.next = curr.next;
+                break;
+            }
+            prev = curr;
+            curr = curr.next;
+        }
+        buckets[idx] = dummy.next;
+    }
+
+    public boolean contains(int key) {
+        int idx = key % size;
+        Node curr = buckets[idx];
+        while (curr != null) {
+            if (curr.key == key) {
+                return true;
+            }
+            curr = curr.next;
+        }
+        return false;
+    }
+}
+```
+
+
+## Design HashMap {#design-hashmap}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 706
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/design-hashmap/
+- **Tags**: `Hash Table`, `Design`
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Implement a hash map supporting `put(key, value)`, `get(key)`, and `remove(key)` using separate chaining.
+
+### Examples
+
+```
+MyHashMap map = new MyHashMap();
+map.put(1, 1);
+map.put(2, 2);
+map.get(1); // 1
+map.get(3); // -1
+map.put(2, 1); // update
+map.get(2); // 1
+map.remove(2);
+map.get(2); // -1
+```
+
+### Constraints
+
+- `0 <= key, value <= 10^6`
+- At most `10^4` operations
+
+### Solution - Linked List Buckets
+
+#### Walkthrough
+
+Reuse the separate chaining idea but store key/value pairs in nodes. When inserting, update if the key already exists; otherwise add a new node at the bucket head. `remove` rewires the linked list as needed.
+
+#### Analysis
+
+- **Time Complexity**: Average O(1), worst-case O(n)
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+
+1. Buckets array sized at 10,000 to balance collisions.
+2. Hash function `key % size`.
+3. `put`: search for key; if found update value; else add new node.
+4. `get`: search bucket; return value or `-1`.
+5. `remove`: delete node from bucket list.
+
+#### Java Code
+
+```java
+class MyHashMap {
+    private static class Node {
+        int key, value;
+        Node next;
+        Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    private final Node[] buckets;
+    private final int size = 10000;
+
+    public MyHashMap() {
+        buckets = new Node[size];
+    }
+
+    public void put(int key, int value) {
+        int idx = key % size;
+        Node head = buckets[idx];
+        Node curr = head;
+        while (curr != null) {
+            if (curr.key == key) {
+                curr.value = value;
+                return;
+            }
+            curr = curr.next;
+        }
+        Node node = new Node(key, value);
+        node.next = head;
+        buckets[idx] = node;
+    }
+
+    public int get(int key) {
+        Node node = findNode(key);
+        return node == null ? -1 : node.value;
+    }
+
+    public void remove(int key) {
+        int idx = key % size;
+        Node dummy = new Node(-1, -1);
+        dummy.next = buckets[idx];
+        Node prev = dummy;
+        Node curr = dummy.next;
+        while (curr != null) {
+            if (curr.key == key) {
+                prev.next = curr.next;
+                break;
+            }
+            prev = curr;
+            curr = curr.next;
+        }
+        buckets[idx] = dummy.next;
+    }
+
+    private Node findNode(int key) {
+        int idx = key % size;
+        Node curr = buckets[idx];
+        while (curr != null) {
+            if (curr.key == key) {
+                return curr;
+            }
+            curr = curr.next;
+        }
+        return null;
+    }
+}
+```
+
+
+## My Calendar I {#my-calendar-i}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 729
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/my-calendar-i/
+- **Tags**: `Interval`, `Design`, `TreeMap`
+- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy), [Binary Search Tree](glossary-of-algorithm.html#bst)
+
+### Description
+
+Design a calendar that can add non-overlapping half-open intervals `[start, end)`. The method `book(start, end)` should return `true` when the booking does not intersect any existing booking and `false` otherwise.
+
+### Examples
+
+```
+Input:
+["MyCalendar","book","book","book"]
+[[],[10,20],[15,25],[20,30]]
+
+Output:
+[null,true,false,true]
+```
+
+### Constraints
+
+- `0 <= start < end <= 10^9`
+- At most `1000` calls to `book`
+
+### Solution - Brute Force Interval Scan
+
+#### Walkthrough
+
+Keep a list of existing bookings. To insert a new booking, compare it against every stored interval and reject it if any overlap occurs. Because the number of operations is bounded by 1000, a linear scan per request is acceptable.
+
+#### Analysis
+
+- **Time Complexity**: O(n) per booking for `n` stored intervals
+- **Space Complexity**: O(n) to store the bookings
+
+#### Implementation Steps
+
+
+1. Represent each booking with a `Booking` object holding `start` and `end`.
+2. For a new interval `[s, e)`, iterate over existing bookings.
+3. If `s < existing.end` and `e > existing.start`, intervals overlap; reject.
+4. Otherwise append the interval and return `true`.
+
+#### Java Code
+
+```java
+class Booking {
+    int start;
+    int end;
+
+    Booking(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    boolean overlaps(Booking that) {
+        return this.start < that.end && that.start < this.end;
+    }
+}
+
+class MyCalendar {
+    private final List<Booking> bookings = new ArrayList<>();
+
+    public boolean book(int start, int end) {
+        Booking request = new Booking(start, end);
+        for (Booking existing : bookings) {
+            if (existing.overlaps(request)) {
+                return false;
+            }
+        }
+        bookings.add(request);
+        return true;
+    }
+}
+```
+
+### Solution - TreeMap Boundary Search
+
+#### Walkthrough
+
+Store bookings inside a `TreeMap` keyed by start time. To book `[start, end)`, find the neighbor with the greatest start less than `end` (using `lowerKey`) and ensure its end time is not greater than `start`. This works because overlapping intervals must have an earlier start that ends after the new start.
+
+#### Analysis
+
+- **Time Complexity**: O(log n) per booking for TreeMap lookups and inserts
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+
+1. Maintain `TreeMap<Integer, Integer> bookings` storing `start -> end`.
+2. For a request `[s, e)`, find `prevStart = bookings.lowerKey(e)`.
+3. If `prevStart` is null or `bookings.get(prevStart) <= s`, the booking fits.
+4. Insert `[s, e)` and return `true`; otherwise return `false`.
+
+#### Java Code
+
+```java
+class MyCalendarTreeMap {
+    private final TreeMap<Integer, Integer> bookings = new TreeMap<>();
+
+    public boolean book(int start, int end) {
+        Integer prevStart = bookings.lowerKey(end);
+        if (prevStart == null || bookings.get(prevStart) <= start) {
+            bookings.put(start, end);
+            return true;
+        }
+        return false;
+    }
+}
+```
+
+
 ## Simple Bank System {#simple-bank-system}
 
 ### Problem Metadata
@@ -318,648 +678,3 @@ class Bank {
 }
 ```
 
-## Design HashSet {#design-hashset}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 705
-- **Difficulty**: Easy
-- **URL**: https://leetcode.com/problems/design-hashset/
-- **Tags**: `Hash Table`, `Design`
-- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
-
-### Description
-
-Create a HashSet supporting `add(key)`, `contains(key)`, and `remove(key)` without using built-in hash table libraries.
-
-### Examples
-
-```
-MyHashSet set = new MyHashSet();
-set.add(1);
-set.add(2);
-set.contains(1); // true
-set.contains(3); // false
-set.add(2);
-set.contains(2); // true
-set.remove(2);
-set.contains(2); // false
-```
-
-### Constraints
-
-- `0 <= key <= 10^6`
-- At most `10^4` operations
-
-### Solution - Separate Chaining Buckets
-
-#### Walkthrough
-
-Create an array of buckets; each bucket holds a linked list of stored keys. The hash function is `key % capacity`. `add` inserts if absent, `remove` deletes from the chain, `contains` scans the list.
-
-#### Analysis
-
-- **Time Complexity**: Average O(1); worst-case O(n) if all keys collide
-- **Space Complexity**: O(n)
-
-#### Implementation Steps
-
-
-1. Choose bucket count (e.g., 1000) and allocate arrays of lists.
-2. Map keys to bucket index via modulo.
-3. Implement linked-list helpers to search, insert, remove within each bucket.
-
-#### Java Code
-
-```java
-class MyHashSet {
-    private static class Node {
-        int key;
-        Node next;
-        Node(int key) { this.key = key; }
-    }
-
-    private final Node[] buckets;
-    private final int size = 1000;
-
-    public MyHashSet() {
-        buckets = new Node[size];
-    }
-
-    public void add(int key) {
-        int idx = key % size;
-        Node head = buckets[idx];
-        Node curr = head;
-        while (curr != null) {
-            if (curr.key == key) {
-                return;
-            }
-            curr = curr.next;
-        }
-        Node node = new Node(key);
-        node.next = head;
-        buckets[idx] = node;
-    }
-
-    public void remove(int key) {
-        int idx = key % size;
-        Node dummy = new Node(-1);
-        dummy.next = buckets[idx];
-        Node prev = dummy;
-        Node curr = dummy.next;
-        while (curr != null) {
-            if (curr.key == key) {
-                prev.next = curr.next;
-                break;
-            }
-            prev = curr;
-            curr = curr.next;
-        }
-        buckets[idx] = dummy.next;
-    }
-
-    public boolean contains(int key) {
-        int idx = key % size;
-        Node curr = buckets[idx];
-        while (curr != null) {
-            if (curr.key == key) {
-                return true;
-            }
-            curr = curr.next;
-        }
-        return false;
-    }
-}
-```
-
-## Design HashMap {#design-hashmap}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 706
-- **Difficulty**: Easy
-- **URL**: https://leetcode.com/problems/design-hashmap/
-- **Tags**: `Hash Table`, `Design`
-- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
-
-### Description
-
-Implement a hash map supporting `put(key, value)`, `get(key)`, and `remove(key)` using separate chaining.
-
-### Examples
-
-```
-MyHashMap map = new MyHashMap();
-map.put(1, 1);
-map.put(2, 2);
-map.get(1); // 1
-map.get(3); // -1
-map.put(2, 1); // update
-map.get(2); // 1
-map.remove(2);
-map.get(2); // -1
-```
-
-### Constraints
-
-- `0 <= key, value <= 10^6`
-- At most `10^4` operations
-
-### Solution - Linked List Buckets
-
-#### Walkthrough
-
-Reuse the separate chaining idea but store key/value pairs in nodes. When inserting, update if the key already exists; otherwise add a new node at the bucket head. `remove` rewires the linked list as needed.
-
-#### Analysis
-
-- **Time Complexity**: Average O(1), worst-case O(n)
-- **Space Complexity**: O(n)
-
-#### Implementation Steps
-
-
-1. Buckets array sized at 10,000 to balance collisions.
-2. Hash function `key % size`.
-3. `put`: search for key; if found update value; else add new node.
-4. `get`: search bucket; return value or `-1`.
-5. `remove`: delete node from bucket list.
-
-#### Java Code
-
-```java
-class MyHashMap {
-    private static class Node {
-        int key, value;
-        Node next;
-        Node(int key, int value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
-    private final Node[] buckets;
-    private final int size = 10000;
-
-    public MyHashMap() {
-        buckets = new Node[size];
-    }
-
-    public void put(int key, int value) {
-        int idx = key % size;
-        Node head = buckets[idx];
-        Node curr = head;
-        while (curr != null) {
-            if (curr.key == key) {
-                curr.value = value;
-                return;
-            }
-            curr = curr.next;
-        }
-        Node node = new Node(key, value);
-        node.next = head;
-        buckets[idx] = node;
-    }
-
-    public int get(int key) {
-        Node node = findNode(key);
-        return node == null ? -1 : node.value;
-    }
-
-    public void remove(int key) {
-        int idx = key % size;
-        Node dummy = new Node(-1, -1);
-        dummy.next = buckets[idx];
-        Node prev = dummy;
-        Node curr = dummy.next;
-        while (curr != null) {
-            if (curr.key == key) {
-                prev.next = curr.next;
-                break;
-            }
-            prev = curr;
-            curr = curr.next;
-        }
-        buckets[idx] = dummy.next;
-    }
-
-    private Node findNode(int key) {
-        int idx = key % size;
-        Node curr = buckets[idx];
-        while (curr != null) {
-            if (curr.key == key) {
-                return curr;
-            }
-            curr = curr.next;
-        }
-        return null;
-    }
-}
-```
-
-## My Calendar I {#my-calendar-i}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 729
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/my-calendar-i/
-- **Tags**: `Interval`, `Design`, `TreeMap`
-- **Techniques**: [Greedy](glossary-of-algorithm.html#greedy), [Binary Search Tree](glossary-of-algorithm.html#bst)
-
-### Description
-
-Design a calendar that can add non-overlapping half-open intervals `[start, end)`. The method `book(start, end)` should return `true` when the booking does not intersect any existing booking and `false` otherwise.
-
-### Examples
-
-```
-Input:
-["MyCalendar","book","book","book"]
-[[],[10,20],[15,25],[20,30]]
-
-Output:
-[null,true,false,true]
-```
-
-### Constraints
-
-- `0 <= start < end <= 10^9`
-- At most `1000` calls to `book`
-
-### Solution - Brute Force Interval Scan
-
-#### Walkthrough
-
-Keep a list of existing bookings. To insert a new booking, compare it against every stored interval and reject it if any overlap occurs. Because the number of operations is bounded by 1000, a linear scan per request is acceptable.
-
-#### Analysis
-
-- **Time Complexity**: O(n) per booking for `n` stored intervals
-- **Space Complexity**: O(n) to store the bookings
-
-#### Implementation Steps
-
-
-1. Represent each booking with a `Booking` object holding `start` and `end`.
-2. For a new interval `[s, e)`, iterate over existing bookings.
-3. If `s < existing.end` and `e > existing.start`, intervals overlap; reject.
-4. Otherwise append the interval and return `true`.
-
-#### Java Code
-
-```java
-class Booking {
-    int start;
-    int end;
-
-    Booking(int start, int end) {
-        this.start = start;
-        this.end = end;
-    }
-
-    boolean overlaps(Booking that) {
-        return this.start < that.end && that.start < this.end;
-    }
-}
-
-class MyCalendar {
-    private final List<Booking> bookings = new ArrayList<>();
-
-    public boolean book(int start, int end) {
-        Booking request = new Booking(start, end);
-        for (Booking existing : bookings) {
-            if (existing.overlaps(request)) {
-                return false;
-            }
-        }
-        bookings.add(request);
-        return true;
-    }
-}
-```
-
-### Solution - TreeMap Boundary Search
-
-#### Walkthrough
-
-Store bookings inside a `TreeMap` keyed by start time. To book `[start, end)`, find the neighbor with the greatest start less than `end` (using `lowerKey`) and ensure its end time is not greater than `start`. This works because overlapping intervals must have an earlier start that ends after the new start.
-
-#### Analysis
-
-- **Time Complexity**: O(log n) per booking for TreeMap lookups and inserts
-- **Space Complexity**: O(n)
-
-#### Implementation Steps
-
-
-1. Maintain `TreeMap<Integer, Integer> bookings` storing `start -> end`.
-2. For a request `[s, e)`, find `prevStart = bookings.lowerKey(e)`.
-3. If `prevStart` is null or `bookings.get(prevStart) <= s`, the booking fits.
-4. Insert `[s, e)` and return `true`; otherwise return `false`.
-
-#### Java Code
-
-```java
-class MyCalendarTreeMap {
-    private final TreeMap<Integer, Integer> bookings = new TreeMap<>();
-
-    public boolean book(int start, int end) {
-        Integer prevStart = bookings.lowerKey(end);
-        if (prevStart == null || bookings.get(prevStart) <= start) {
-            bookings.put(start, end);
-            return true;
-        }
-        return false;
-    }
-}
-```
-
-## Implement Stack Using Queues {#design-stack}
-
-### Problem Metadata
-
-- **Platform**: Interview Prep
-- **Problem ID**: Stack via Queue
-- **Difficulty**: Easy
-- **URL**: N/A
-- **Tags**: `Queue`, `Stack`, `Design`
-- **Techniques**: [Queue](glossary-of-algorithm.html#queue)
-
-### Description
-
-Design a stack that supports `push`, `pop`, `top`, and `empty` using only standard queue operations.
-
-### Examples
-
-```
-MyStack stack = new MyStack();
-stack.push(1);
-stack.push(2);
-stack.top(); // 2
-stack.pop(); // 2
-stack.empty(); // false
-```
-
-### Constraints
-
-- Use only queue operations: enqueue, dequeue, size, isEmpty
-
-### Solution - Single Queue Rotation
-
-#### Walkthrough
-
-Maintain a single queue. For `push(x)` enqueue `x`, then rotate the previous elements to the back by dequeuing and enqueuing `size - 1` times, so that `x` becomes the front. `pop` and `top` are queue front operations.
-
-#### Analysis
-
-- **Time Complexity**: `push` O(n), others O(1)
-- **Space Complexity**: O(n)
-
-#### Implementation Steps
-
-
-1. `push(x)`: enqueue `x`, then loop `size-1` times moving front to back.
-2. `pop()`: dequeue front.
-3. `top()`: peek front.
-4. `empty()`: check queue emptiness.
-
-#### Java Code
-
-```java
-class MyStack {
-    private final Queue<Integer> queue = new LinkedList<>();
-
-    public void push(int x) {
-        queue.offer(x);
-        for (int i = 0; i < queue.size() - 1; i++) {
-            queue.offer(queue.poll());
-        }
-    }
-
-    public int pop() {
-        return queue.poll();
-    }
-
-    public int top() {
-        return queue.peek();
-    }
-
-    public boolean empty() {
-        return queue.isEmpty();
-    }
-}
-```
-
-## Implement Queue {#design-queue}
-
-### Problem Metadata
-
-- **Platform**: Interview Prep
-- **Problem ID**: Queue Design
-- **Difficulty**: Easy
-- **URL**: N/A
-- **Tags**: `Array`, `Linked List`, `Stack`
-- **Techniques**: [Array](glossary-of-algorithm.html#array), [Linked List](glossary-of-algorithm.html#linked-list), [Stack](glossary-of-algorithm.html#stack)
-
-### Description
-
-Implement a queue with operations `enqueue`, `dequeue`, `peek`, and `isEmpty`. Explore multiple representations.
-
-### Examples
-
-```
-MyQueue queue = new MyQueue(3);
-queue.enqueue(1);
-queue.enqueue(2);
-queue.dequeue(); // 1
-queue.enqueue(3);
-queue.peek(); // 2
-```
-
-### Constraints
-
-- Assume integers, bounded or unbounded based on implementation
-
-### Solution 1 - Circular Array
-
-#### Walkthrough
-
-Use a fixed-size array with `head`, `tail`, and `count`. Enqueue writes at `tail` then wraps around; dequeue reads from `head`. This avoids shifting elements.
-
-#### Analysis
-
-- **Time Complexity**: O(1)
-- **Space Complexity**: O(capacity)
-
-#### Implementation Steps
-
-
-1. Initialize `head = 0`, `tail = 0`, `count = 0`.
-2. `enqueue(x)`: if count == capacity throw overflow; assign `data[tail] = x`, `tail = (tail + 1) % capacity`, increment count.
-3. `dequeue()`: if empty throw, read `data[head]`, advance head, decrement count.
-4. `peek()` returns `data[head]`.
-
-#### Java Code
-
-```java
-class ArrayQueue {
-    private final int[] data;
-    private int head = 0;
-    private int tail = 0;
-    private int count = 0;
-
-    public ArrayQueue(int capacity) {
-        this.data = new int[capacity];
-    }
-
-    public void enqueue(int x) {
-        if (count == data.length) {
-            throw new IllegalStateException("Queue full");
-        }
-        data[tail] = x;
-        tail = (tail + 1) % data.length;
-        count++;
-    }
-
-    public int dequeue() {
-        if (count == 0) {
-            throw new NoSuchElementException();
-        }
-        int value = data[head];
-        head = (head + 1) % data.length;
-        count--;
-        return value;
-    }
-
-    public int peek() {
-        if (count == 0) {
-            throw new NoSuchElementException();
-        }
-        return data[head];
-    }
-
-    public boolean isEmpty() {
-        return count == 0;
-    }
-}
-```
-
-### Solution 2 - Linked List
-
-#### Walkthrough
-
-Maintain `front` and `rear` pointers of a singly linked list. Enqueue appends at the tail; dequeue removes from the head.
-
-#### Analysis
-
-- **Time Complexity**: O(1)
-- **Space Complexity**: O(n)
-
-#### Implementation Steps
-
-
-1. Each node holds value plus `next`.
-2. `enqueue(x)`: create node, append at `rear`, update pointers.
-3. `dequeue()`: remove `front`, adjusting `rear` when queue becomes empty.
-
-#### Java Code
-
-```java
-class LinkedQueue {
-    private static class Node {
-        int val;
-        Node next;
-        Node(int val) { this.val = val; }
-    }
-    private Node front;
-    private Node rear;
-
-    public void enqueue(int x) {
-        Node node = new Node(x);
-        if (rear == null) {
-            front = rear = node;
-        } else {
-            rear.next = node;
-            rear = node;
-        }
-    }
-
-    public int dequeue() {
-        if (front == null) {
-            throw new NoSuchElementException();
-        }
-        int value = front.val;
-        front = front.next;
-        if (front == null) {
-            rear = null;
-        }
-        return value;
-    }
-
-    public int peek() {
-        if (front == null) throw new NoSuchElementException();
-        return front.val;
-    }
-
-    public boolean isEmpty() {
-        return front == null;
-    }
-}
-```
-
-### Solution 3 - Two Stacks
-
-#### Walkthrough
-
-Use two stacks `in` and `out`. Enqueue pushes onto `in`. Dequeue/peek pop from `out`, reloading it from `in` when empty by moving all elements to reverse order.
-
-#### Analysis
-
-- **Time Complexity**: Amortized O(1)
-- **Space Complexity**: O(n)
-
-#### Implementation Steps
-
-
-1. `enqueue(x)`: push onto `in`.
-2. `dequeue()` / `peek()`: if `out` empty, move all elements from `in` to `out`, then pop/peek.
-3. `isEmpty()`: true when `in` and `out` are empty.
-
-#### Java Code
-
-```java
-class QueueWithStacks {
-    private final Deque<Integer> in = new ArrayDeque<>();
-    private final Deque<Integer> out = new ArrayDeque<>();
-
-    public void enqueue(int x) {
-        in.push(x);
-    }
-
-    public int dequeue() {
-        shift();
-        return out.pop();
-    }
-
-    public int peek() {
-        shift();
-        return out.peek();
-    }
-
-    public boolean isEmpty() {
-        return in.isEmpty() && out.isEmpty();
-    }
-
-    private void shift() {
-        if (out.isEmpty()) {
-            while (!in.isEmpty()) {
-                out.push(in.pop());
-            }
-        }
-    }
-}
-```

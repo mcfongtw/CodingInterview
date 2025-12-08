@@ -46,21 +46,21 @@ echo ""
 
 case "$FORMAT" in
   gitbook)
-    Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
+    Rscript -e "suppressWarnings(bookdown::render_book('index.Rmd', 'bookdown::gitbook'))"
     ;;
   pdf)
-    Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book')"
+    Rscript -e "suppressWarnings(bookdown::render_book('index.Rmd', 'bookdown::pdf_book'))"
     ;;
   epub)
-    Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::epub_book')"
+    Rscript -e "suppressWarnings(bookdown::render_book('index.Rmd', 'bookdown::epub_book'))"
     ;;
   all)
     echo "Building gitbook..."
-    Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
+    Rscript -e "suppressWarnings(bookdown::render_book('index.Rmd', 'bookdown::gitbook'))"
     echo "Building PDF..."
-    Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book')"
+    Rscript -e "suppressWarnings(bookdown::render_book('index.Rmd', 'bookdown::pdf_book'))"
     echo "Building EPUB..."
-    Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::epub_book')"
+    Rscript -e "suppressWarnings(bookdown::render_book('index.Rmd', 'bookdown::epub_book'))"
     ;;
   *)
     echo "Unknown format: $FORMAT"

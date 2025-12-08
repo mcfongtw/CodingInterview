@@ -30,7 +30,7 @@ This runs `bookdown::render_book()` to generate HTML output in `_book/`, then mo
 The book is organized into topic-based chapters as separate .Rmd files:
 
 - `index.Rmd` - Introduction and algorithm glossary (DFS, BFS, DP, etc.)
-- `02-array.Rmd` - Array problems
+- `02-array-*.Rmd` - Array problems (split by platform, see Multi-File Chapters below)
 - `03-matrix.Rmd` - Matrix problems
 - `04-tree.Rmd` - Tree problems and traversals
 - `05-graph.Rmd` - Graph problems
@@ -42,6 +42,55 @@ The book is organized into topic-based chapters as separate .Rmd files:
 - `11-interactive.Rmd` - Interactive problems
 - `12-advanced-data-structure.Rmd` - Advanced data structures
 - `20-references.Rmd` - Bibliography
+
+### Multi-File Chapters
+
+For large chapters with 50+ problems, split by platform to improve maintainability:
+
+**File naming pattern:**
+```
+{chapter-num}-{topic}-01-intro.Rmd       # Chapter header + algorithm summaries
+{chapter-num}-{topic}-02-leetcode.Rmd    # LeetCode problems
+{chapter-num}-{topic}-03-hackerrank.Rmd  # HackerRank problems
+{chapter-num}-{topic}-04-others.Rmd      # Firecode, Interview, Other platforms
+```
+
+**Header level rules:**
+
+- **Intro file (`-01-intro.Rmd`):**
+  - Contains `# Chapter Name` (level 1 header, **only once per chapter**)
+  - Uses `###` (level 3) for algorithm summaries and conceptual sections
+  - Results in numbering: X.0.1, X.0.2, X.0.3... (e.g., 2.0.1 Kadane's Algorithm, 2.0.2 Unbounded Knapsack)
+  - Example content: Iterating Combinations, Kadane's Algorithm, Unbounded Knapsack, N Sum Family Comparison
+
+- **Problem files (`-02-leetcode`, `-03-hackerrank`, `-04-others`):**
+  - **NO level 1 headers** (`#`) - these would create new chapters
+  - Use `##` (level 2) for problem titles
+  - Use `###` (level 3) for problem subsections (Metadata, Walkthrough, Analysis, etc.)
+  - Results in numbering: X.1, X.2, X.3... (e.g., 2.1 Two Sum, 2.2 Median of Two Sorted Arrays)
+
+**How Bookdown merges files:**
+- Files are merged in **lexicographic order** by filename
+- The `-01-`, `-02-`, `-03-` prefixes ensure correct merge order
+- All `02-array-*.Rmd` files become a single "Chapter 2: Arrays"
+- Section numbers increment continuously across merged files
+
+**Result:** Clear visual hierarchy where X.0.* sections are foundational concepts, and X.1+ sections are actual problems.
+
+**Example structure (Array chapter):**
+```
+Chapter 2: Arrays
+  2.0.1 Iterating Combinations       (### in 02-array-01-intro.Rmd)
+  2.0.2 Kadane's Algorithm           (### in 02-array-01-intro.Rmd)
+  2.0.3 Unbounded Knapsack           (### in 02-array-01-intro.Rmd)
+  2.0.4 N Sum Family Comparison      (### in 02-array-01-intro.Rmd)
+  2.1 Two Sums I                      (## in 02-array-02-leetcode.Rmd)
+  2.2 Median of Two Sorted Arrays     (## in 02-array-02-leetcode.Rmd)
+  ...
+  2.45 Count Elements Greater Avg     (## in 02-array-03-hackerrank.Rmd)
+  ...
+  2.54 Max Gain                       (## in 02-array-04-others.Rmd)
+```
 
 ## Configuration Files
 

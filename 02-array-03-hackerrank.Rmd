@@ -1,0 +1,588 @@
+## Count Elements Greater Than Previous Average {#count-elements-greater-avg}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: count-elements-greater-than-previous-average
+- **Difficulty**: Easy
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/count-elements-greater-than-previous-average/problem
+- **Tags**: `Array`, `Math`
+- **Techniques**: [Running Average](glossary-of-algorithm.html#running-average)
+
+### Description
+
+Given an array of positive integers, return the number of elements that are strictly greater than the average of all previous elements in the array.
+
+**Important**: Skip the first element since there are no previous elements to calculate an average from.
+
+### Examples
+
+**Example 1:**
+```
+Input: arr = [1, 2, 3, 4]
+Output: 3
+Explanation:
+- Skip arr[0] = 1 (first element)
+- arr[1] = 2, avg([1]) = 1.0, 2 > 1.0 → count
+- arr[2] = 3, avg([1,2]) = 1.5, 3 > 1.5 → count
+- arr[3] = 4, avg([1,2,3]) = 2.0, 4 > 2.0 → count
+Total: 3
+```
+
+**Example 2:**
+```
+Input: arr = [5, 1, 2, 1]
+Output: 0
+Explanation:
+- Skip arr[0] = 5
+- arr[1] = 1, avg([5]) = 5.0, 1 is not > 5.0
+- arr[2] = 2, avg([5,1]) = 3.0, 2 is not > 3.0
+- arr[3] = 1, avg([5,1,2]) = 2.67, 1 is not > 2.67
+Total: 0
+```
+
+### Constraints
+
+- $1 \le$ arr.length $\le 10^5$
+- $1 \le$ arr[i] $\le 10^9$
+
+### Solution - Running Sum with Floating Point Average
+
+#### Walkthrough
+
+TODO: Add walkthrough explanation
+
+#### Analysis
+
+- **Time Complexity**: TODO
+- **Space Complexity**: TODO
+
+#### Implementation Steps
+
+TODO: Add implementation steps
+
+#### Java Code
+
+```java
+class Result {
+    /*
+     * Complete the 'countResponseTimeRegressions' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts INTEGER_ARRAY responseTimes as parameter.
+     */
+    public static int countResponseTimeRegressions(List<Integer> responseTimes) {
+        double[] prefixAvg = new double[responseTimes.size()];
+        
+        int result = 0;
+        
+        for(int i = 0; i < responseTimes.size(); i++) {
+            int respTime = responseTimes.get(i);
+            double newAvg = calPrefixAverage(prefixAvg, i, respTime);
+            
+            if(i > 0 && respTime > newAvg) {
+                result++;
+            }
+        }
+        
+        return result;
+    }
+    
+    private static double calPrefixAverage(double[] prefixAvgRespTimes, int index, int resp) {
+        double avg = 0;
+        
+        if(index == 0) {
+            avg = resp;
+        } else {
+            avg = ((prefixAvgRespTimes[index - 1] * index + resp)) / (index + 1);
+        }
+        prefixAvgRespTimes[index] = avg;
+        
+        
+        return avg;
+    }
+}
+```
+
+
+## Merge and Sort Intervals (HackerRank) {#hr-merge-sort-intervals}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: merge-and-sort-intervals
+- **Difficulty**: Medium
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/merge-and-sort-intervals/
+- **Tags**: `Array`, `Sorting`, `Intervals`
+- **Techniques**: [Sorting](glossary-of-algorithm.html#sorting)
+
+### Description
+
+**Note**: This problem is nearly identical to [Merge Intervals](#merge-intervals) (LeetCode #56). The core algorithm and approach are the same.
+
+Given an array of intervals `[startTime, endTime]`, merge all overlapping intervals and return a sorted array of non-overlapping intervals.
+
+**Key Details**:
+- Intervals may be provided in any order
+- Duplicates and fully contained intervals are allowed
+- Return intervals sorted by increasing start time
+
+### Examples
+
+**Example 1:**
+```
+Input: intervals = [[1, 3], [2, 6], [8, 10], [15, 18]]
+Output: [[1, 6], [8, 10], [15, 18]]
+Explanation:
+- Step 1: Sort intervals by start time (already sorted)
+- Step 2: Initialize merged list with first interval [1,3]
+- Step 3: Compare [2,6] with last merged [1,3]. They overlap (2 ≤ 3), so merge into [1,6]
+- Step 4: Compare [8,10] with last merged [1,6]. No overlap (8 > 6), append [8,10]
+- Step 5: Compare [15,18] with last merged [8,10]. No overlap (15 > 10), append [15,18]
+Result: [[1,6],[8,10],[15,18]]
+```
+
+**Example 2:**
+```
+Input: intervals = [[5, 10]]
+Output: [[5, 10]]
+Explanation: Only one interval, return as-is
+```
+
+**Example 3:**
+```
+Input: intervals = []
+Output: []
+Explanation: Empty input returns empty output
+```
+
+### Input Format
+
+- First line: integer `n` denoting the number of intervals
+- Second line: integer `2` denoting the length of individual interval array
+- Next `n` lines: two space-separated integers `startTime` and `endTime`
+
+**Example:**
+```
+4
+2
+1 3
+2 6
+8 10
+15 18
+```
+
+### Constraints
+
+- $0 \le$ intervals.length $\le 100000$
+- intervals[i].length == 2 for all $0 \le i <$ intervals.length
+- $0 \le$ intervals[i][0] $<$ intervals[i][1] $\le 10^9$ for all $0 \le i <$ intervals.length
+
+### Solution
+
+**Cross-Reference**: See [Merge Intervals](#merge-intervals) for the complete solution walkthrough, analysis, and implementation.
+
+This problem uses the **identical algorithm** as LeetCode #56:
+
+1. **Sort** intervals by start time
+2. **Merge** overlapping intervals by comparing `current.start` with `last.end`
+3. **Return** the merged result sorted by start time
+
+#### Key Differences from LeetCode #56
+
+- **Input Format**: HackerRank uses custom stdin format with separate lines for count and interval pairs
+- **Output Format**: Print each interval on a separate line as two space-separated integers
+- **Edge Case Handling**: Must handle empty input (n=0) explicitly
+
+#### Analysis
+
+- **Time Complexity**: $O(n \log n)$ - Dominated by sorting
+- **Space Complexity**: $O(n)$ - For the output list
+
+#### Implementation Steps
+
+Refer to [Merge Intervals](#merge-intervals) for detailed implementation steps.
+
+#### Java Code
+
+**Note**: The actual HackerRank function signature uses `List<List<Integer>>` instead of `int[][]`. Both approaches use the same merge algorithm.
+
+```java
+class Result {
+    /*
+     * Complete the 'mergeHighDefinitionIntervals' function below.
+     *
+     * The function is expected to return a 2D_INTEGER_ARRAY.
+     * The function accepts 2D_INTEGER_ARRAY intervals as parameter.
+     */
+
+    public static List<List<Integer>> mergeHighDefinitionIntervals(
+        List<List<Integer>> intervals) {
+
+        if (intervals == null || intervals.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // Sort by start time: intervals[i].get(0)
+        intervals.sort(Comparator.comparingInt(a -> a.get(0)));
+
+        List<List<Integer>> merged = new ArrayList<>();
+
+        // Add a copy of the first interval
+        merged.add(new ArrayList<>(intervals.get(0)));
+
+        for (int i = 1; i < intervals.size(); i++) {
+            List<Integer> current = intervals.get(i);
+            List<Integer> last = merged.get(merged.size() - 1);
+
+            // If current.start <= last.end -> merge
+            if (current.get(0) <= last.get(1)) {
+                last.set(1, Math.max(last.get(1), current.get(1)));
+            } else {
+                // No overlap, add a new interval (copy to avoid aliasing)
+                merged.add(new ArrayList<>(current));
+            }
+        }
+
+        return merged;
+    }
+}
+```
+
+**Alternative: Array-Based Approach**
+
+If you prefer working with arrays or the problem accepts `int[][]` input:
+
+```java
+import java.util.*;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Read number of intervals
+        int n = sc.nextInt();
+
+        // Handle empty input
+        if (n == 0) {
+            sc.nextInt(); // consume the "0" on second line
+            return;
+        }
+
+        // Read array length (always 2 for intervals)
+        int arrayLength = sc.nextInt();
+
+        // Read intervals
+        int[][] intervals = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            intervals[i][0] = sc.nextInt();
+            intervals[i][1] = sc.nextInt();
+        }
+
+        // Merge intervals
+        int[][] result = mergeIntervals(intervals);
+
+        // Print result
+        for (int[] interval : result) {
+            System.out.println(interval[0] + " " + interval[1]);
+        }
+
+        sc.close();
+    }
+
+    public static int[][] mergeIntervals(int[][] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return new int[0][0];
+        }
+
+        // Sort by start time
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+
+        List<int[]> merged = new ArrayList<>();
+        merged.add(intervals[0].clone());
+
+        for (int i = 1; i < intervals.length; i++) {
+            int[] current = intervals[i];
+            int[] last = merged.get(merged.size() - 1);
+
+            // Check for overlap (current.start <= last.end)
+            if (current[0] <= last[1]) {
+                // Merge by extending the end time
+                last[1] = Math.max(last[1], current[1]);
+            } else {
+                // No overlap, add new interval
+                merged.add(current.clone());
+            }
+        }
+
+        return merged.toArray(new int[merged.size()][]);
+    }
+}
+```
+
+
+## Top K Frequent Events with Order Preservation (HackerRank) {#hr-top-k-frequent-events}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: top-k-frequent-events-with-order-preservation
+- **Difficulty**: Medium
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/top-k-frequent-events-with-order-preservation
+- **Tags**: `Array`, `Hash Table`, `Sorting`, `Heap`
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Heap](glossary-of-algorithm.html#heap), [Sorting](glossary-of-algorithm.html#sorting)
+
+### Description
+
+Given an array of integers and an integer `k`, return an array of the `k` most frequent elements. If two elements have the same frequency, prioritize the one that appears first in the original array.
+
+**Relationship to [Top K Frequent Elements](#top-k-frequent) (LeetCode 347)**:
+This problem is similar to LeetCode 347 but adds an **order preservation constraint**. When elements have the same frequency, LeetCode 347 allows returning them in any order, while this problem requires breaking ties by **first occurrence index** in the original array.
+
+**Key Requirements**:
+- Find the k most frequent elements
+- When frequencies tie, use the element's **first occurrence index** as the tiebreaker
+- Preserve order based on frequency (descending) and first occurrence (ascending for ties)
+
+### Examples
+
+**Example 1:**
+```
+Input: events = [1, 2, 1, 3, 2, 1], k = 2
+Output: [1, 2]
+Explanation:
+- Frequency count: 1→3, 2→2, 3→1
+- Top two frequencies are for IDs 1 and 2
+- Result: [1, 2]
+```
+
+**Example 2:**
+```
+Input: events = [4, 4, 1, 2, 2, 3, 1, 3, 2], k = 3
+Output: [2, 4, 1]
+Explanation:
+- Frequencies: 2→3, 4→2, 1→2, 3→2
+- Highest frequency is 2 (count=3)
+- For the next two slots, 4, 1, and 3 all tie with count=2
+- First occurrences: 4 at index 0, 1 at index 2, 3 at index 5
+- Pick 4 then 1 (smaller indices)
+- Final order: [2, 4, 1]
+```
+
+**Example 3:**
+```
+Input: events = [], k = 0
+Output: []
+Explanation: Empty array returns empty result
+```
+
+**Example 4:**
+```
+Input: events = [1], k = 1
+Output: [1]
+Explanation: Single element with k=1 returns that element
+```
+
+### Input Format
+
+A list of input cases. Each case is a pair `(events, k)` where:
+- `events` is an array of integers
+- `k` is the number of top frequent elements to return
+
+### Output Format
+
+For each input case, return an array of length `k` containing the IDs of the `k` most frequent events. Ties in frequency are broken by the smaller first occurrence index in the original events array.
+
+### Constraints
+
+- $0 \le$ events.length $\le 100000$
+- $0 \le$ events[i] $\le 10^9$ for all $0 \le i <$ events.length
+- $0 \le k \le$ events.length
+- If events.length $> 0$ then $1 \le k \le D$, where $D$ is the number of distinct values in events
+- If events.length $= 0$ then $k = 0$
+
+### Solution
+
+#### Walkthrough
+
+This problem extends [Top K Frequent Elements](#top-k-frequent) (LeetCode 347) by adding an **order preservation constraint** when frequencies tie. The solution uses a **full sort with custom comparator** approach.
+
+**Key Insight**: We need to track **three pieces of information** for each unique event:
+1. The event value itself
+2. Its frequency (how many times it appears)
+3. Its **first occurrence index** in the original array (for tiebreaking)
+
+**Algorithm Strategy**:
+
+1. **Build Frequency Map with First Occurrence Tracking**:
+   - Use `HashMap<Integer, EventInfo>` where `EventInfo` stores `(value, frequency, firstIndex)`
+   - When encountering a new event at index `i`, initialize `EventInfo(event, 0, i)`
+   - For subsequent occurrences, increment frequency but **preserve the original first index**
+
+2. **Two-Level Sorting with Custom Comparator**:
+   ```java
+   Comparator<EventInfo> comparator = (a, b) -> {
+       if (a.frequency != b.frequency) {
+           return b.frequency - a.frequency;  // Primary: Higher frequency first
+       }
+       return a.index - b.index;              // Tiebreaker: Earlier index first
+   };
+   ```
+   - **Primary criterion**: Frequency (descending) - more frequent events come first
+   - **Secondary criterion**: First occurrence index (ascending) - events appearing earlier win ties
+
+3. **Sort All Candidates**:
+   - Extract all `EventInfo` objects from the map into a list
+   - Sort using the custom comparator
+   - This gives us the complete ranking: highest frequency first, ties broken by appearance order
+
+4. **Extract Top K**:
+   - Take the first `min(k, candidates.size())` elements from the sorted list
+   - Return only the event values (not the entire `EventInfo` objects)
+
+**Why Full Sort Over Min-Heap?**
+
+For this problem, a full sort $O(m \log m)$ is preferred over min-heap $O(n \log k)$ because:
+- The number of distinct events `m` is typically much smaller than total events `n`
+- Custom comparator with two-level sorting is simpler to implement with `Collections.sort()`
+- Min-heap would require complex tie-breaking logic in the heap's comparator
+- Performance difference is negligible when $m \ll n$ (e.g., $m = 100$ distinct events in $n = 100000$ total events)
+
+#### Analysis
+
+**Time Complexity**: $O(n + m \log m)$ where $n$ is the length of the events array and $m$ is the number of distinct events.
+
+Breaking down the operations:
+1. **Building frequency map**: $O(n)$ - single pass through all events
+   - Each `getOrDefault()` and `put()` operation is $O(1)$ on average
+   - Total: $n$ iterations $\times O(1) = O(n)$
+
+2. **Sorting candidates**: $O(m \log m)$ - sorting the list of distinct events
+   - We have at most $m$ distinct events (where $m \le n$)
+   - Java's `Collections.sort()` uses TimSort with $O(m \log m)$ complexity
+
+3. **Extracting top k**: $O(k)$ - copying k values to the result list
+   - Since $k \le m \le n$, this is dominated by the previous steps
+
+**Total**: $O(n) + O(m \log m) + O(k) = O(n + m \log m)$
+
+**Important Note**: In practice, $m \ll n$ (distinct events are much fewer than total events), so the sorting step $O(m \log m)$ is often faster than the initial scan $O(n)$.
+
+**Space Complexity**: $O(m)$ for auxiliary storage.
+
+1. **Frequency map**: $O(m)$ - stores one `EventInfo` object per distinct event
+2. **Candidates list**: $O(m)$ - temporary list for sorting
+3. **Result list**: $O(k)$ - output array
+
+**Total**: $O(m) + O(m) + O(k) = O(m)$ since $k \le m$
+
+#### Implementation Steps
+
+**Step 1: Define EventInfo Class**
+```java
+static class EventInfo {
+    int value;        // The event ID/value
+    int frequency;    // How many times it appears
+    int index;        // First occurrence index in original array
+
+    public EventInfo(int v, int f, int i) {
+        value = v;
+        frequency = f;
+        index = i;
+    }
+}
+```
+
+**Step 2: Handle Edge Cases**
+- Return empty list if `events` is null, empty, or `k == 0`
+- This prevents unnecessary computation for invalid inputs
+
+**Step 3: Build Frequency Map with First Occurrence Tracking**
+- Initialize `HashMap<Integer, EventInfo>` to store event metadata
+- Iterate through the events array with index `i`:
+  - Use `getOrDefault(event, new EventInfo(event, 0, i))` to get or create entry
+  - **Critical**: Initialize new entries with frequency 0 (not 1) to avoid double-counting
+  - Increment `frequency++` for both new and existing entries
+  - The first occurrence index `i` is automatically preserved from the initial creation
+
+**Step 4: Create Two-Level Custom Comparator**
+```java
+Comparator<EventInfo> comparator = (a, b) -> {
+    if (a.frequency != b.frequency) {
+        return b.frequency - a.frequency;  // Primary: descending frequency
+    }
+    return a.index - b.index;              // Tiebreaker: ascending first index
+};
+```
+
+**Step 5: Sort All Candidates**
+- Extract all `EventInfo` values from the map into a list
+- Sort using the custom comparator
+- This produces the final ranking with frequency-first, index-second ordering
+
+**Step 6: Extract Top K Values**
+- Iterate through the first `min(k, candidates.size())` elements
+- Add only the `value` field (not the entire `EventInfo` object) to the result list
+- Return the result
+
+#### Java Code
+
+```java
+    /*
+     * Complete the 'getTopKFrequentEvents' function below.
+     *
+     * The function is expected to return an INTEGER_ARRAY.
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY events
+     *  2. INTEGER k
+     */
+     
+    static class EventInfo {
+        int value;
+        int frequency;
+        int index;  
+        
+        public EventInfo(int v, int f , int i) {
+            value = v;
+            frequency = f;
+            index = i;
+        }
+    }   
+
+    public static List<Integer> getTopKFrequentEvents(List<Integer> events, int k) {
+        if (events == null || events.isEmpty() || k == 0) {
+            return new ArrayList<>();
+        }
+        
+        // Step 1: Build frequency map while tracking first occurrence
+        Map<Integer, EventInfo> freqMap = new HashMap<>();
+        for (int i = 0; i < events.size(); i++) {
+            int event = events.get(i);
+            EventInfo eventInfo = freqMap.getOrDefault(event, new EventInfo(event, 0, i));
+            eventInfo.frequency++;
+            freqMap.put(event, eventInfo);
+        }
+        
+        // Step 2: Create comparator with two-level sorting
+        Comparator<EventInfo> comparator = (a, b) -> {
+            if (a.frequency != b.frequency) {
+                return b.frequency - a.frequency;  // Higher frequency first
+            }
+            return a.index - b.index;    // Earlier index first
+        };
+        
+        // Step 3: Collect all EventInfo objects and sort
+        List<EventInfo> candidates = new ArrayList<>(freqMap.values());
+        candidates.sort(comparator);
+
+        // Step 4: Extract top k values
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < Math.min(k, candidates.size()); i++) {
+            result.add(candidates.get(i).value);
+        }
+        
+        return result;
+    }
+```
+
+

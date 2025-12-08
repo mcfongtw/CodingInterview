@@ -1,0 +1,185 @@
+## Clone Graph {#clone-graph}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 133
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/clone-graph/
+- **Tags**: `Graph`, `DFS`
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), [Hash Table](glossary-of-algorithm.html#hash-table)
+
+### Description
+
+Deep-copy an undirected graph.
+
+### Solution - DFS with Map
+
+```
+public Node cloneGraph(Node node) {
+    if (node == null) {
+        return null;
+    }
+    Map<Node, Node> map = new HashMap<>();
+    return clone(node, map);
+}
+
+private Node clone(Node node, Map<Node, Node> map) {
+    if (map.containsKey(node)) {
+        return map.get(node);
+    }
+    Node copy = new Node(node.val);
+    map.put(node, copy);
+    for (Node neighbor : node.neighbors) {
+        copy.neighbors.add(clone(neighbor, map));
+    }
+    return copy;
+}
+```
+
+
+## Course Schedule {#course-schedule}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 207
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/course-schedule/
+- **Tags**: `Graph`, `Topological Sort`
+- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#topological), [Breadth First Search](glossary-of-algorithm.html#bfs)
+
+### Description
+
+Determine if all courses can be finished given prerequisites.
+
+### Solution - Kahn's Algorithm
+
+```
+public boolean canFinish(int numCourses, int[][] prerequisites) {
+    List<List<Integer>> graph = new ArrayList<>();
+    int[] indegree = new int[numCourses];
+    for (int i = 0; i < numCourses; i++) {
+        graph.add(new ArrayList<>());
+    }
+    for (int[] edge : prerequisites) {
+        graph.get(edge[1]).add(edge[0]);
+        indegree[edge[0]]++;
+    }
+    Queue<Integer> queue = new LinkedList<>();
+    for (int i = 0; i < numCourses; i++) {
+        if (indegree[i] == 0) {
+            queue.offer(i);
+        }
+    }
+    int visited = 0;
+    while (!queue.isEmpty()) {
+        int course = queue.poll();
+        visited++;
+        for (int next : graph.get(course)) {
+            if (--indegree[next] == 0) {
+                queue.offer(next);
+            }
+        }
+    }
+    return visited == numCourses;
+}
+```
+
+
+## Course Schedule II {#course-schedule-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 210
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/course-schedule-ii/
+- **Tags**: `Graph`, `Topological Sort`
+- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#topological), [Breadth First Search](glossary-of-algorithm.html#bfs)
+
+### Description
+
+Return a valid order of courses using topological sort, or empty if impossible.
+
+### Solution - BFS Order
+
+Use same graph construction as problem 207 but append nodes to order when dequeued.
+
+```
+public int[] findOrder(int numCourses, int[][] prerequisites) {
+    List<List<Integer>> graph = new ArrayList<>();
+    int[] indegree = new int[numCourses];
+    for (int i = 0; i < numCourses; i++) graph.add(new ArrayList<>());
+    for (int[] edge : prerequisites) {
+        graph.get(edge[1]).add(edge[0]);
+        indegree[edge[0]]++;
+    }
+    Queue<Integer> queue = new LinkedList<>();
+    for (int i = 0; i < numCourses; i++) if (indegree[i] == 0) queue.offer(i);
+    int[] order = new int[numCourses];
+    int idx = 0;
+    while (!queue.isEmpty()) {
+        int course = queue.poll();
+        order[idx++] = course;
+        for (int next : graph.get(course)) {
+            if (--indegree[next] == 0) queue.offer(next);
+        }
+    }
+    return idx == numCourses ? order : new int[0];
+}
+```
+
+
+## Graph Validate Tree {#graph-valid-tree}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 261
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/graph-valid-tree/
+- **Tags**: `Graph`, `Union Find`
+- **Techniques**: Union Find
+
+### Description
+
+Determine if edges form a valid tree.
+
+### Solution - Union Find
+
+```
+public boolean validTree(int n, int[][] edges) {
+    if (edges.length != n - 1) {
+        return false;
+    }
+    UnionFind uf = new UnionFind(n);
+    for (int[] edge : edges) {
+        if (!uf.union(edge[0], edge[1])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+class UnionFind {
+    int[] parent;
+    int[] rank;
+    UnionFind(int n) {
+        parent = new int[n]; rank = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;
+    }
+    int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]);
+        return parent[x];
+    }
+    boolean union(int a, int b) {
+        int rootA = find(a), rootB = find(b);
+        if (rootA == rootB) return false;
+        if (rank[rootA] < rank[rootB]) parent[rootA] = rootB;
+        else if (rank[rootB] < rank[rootA]) parent[rootB] = rootA;
+        else { parent[rootB] = rootA; rank[rootA]++; }
+        return true;
+    }
+}
+```

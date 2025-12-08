@@ -1,0 +1,107 @@
+## Binary Tree Serialization {#tree-serialization}
+
+### Problem Metadata
+
+- **Platform**: Firecode/LeetCode 297
+- **Difficulty**: Medium
+- **Tags**: `Tree`
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), [Recursion](glossary-of-algorithm.html#recursion)
+
+### Description
+
+Serialize a binary tree to string and deserialize back.
+
+### Solution - Preorder with Null Markers
+
+```
+private static final String SEP = ",";
+private static final String NULL = "#";
+
+public String serialize(TreeNode root) {
+    StringBuilder sb = new StringBuilder();
+    serialize(root, sb);
+    return sb.toString();
+}
+
+private void serialize(TreeNode node, StringBuilder sb) {
+    if (node == null) {
+        sb.append(NULL).append(SEP);
+        return;
+    }
+    sb.append(node.val).append(SEP);
+    serialize(node.left, sb);
+    serialize(node.right, sb);
+}
+
+public TreeNode deserialize(String data) {
+    Queue<String> queue = new LinkedList<>(Arrays.asList(data.split(SEP)));
+    return deserialize(queue);
+}
+
+private TreeNode deserialize(Queue<String> queue) {
+    String val = queue.poll();
+    if (val.equals(NULL)) {
+        return null;
+    }
+    TreeNode node = new TreeNode(Integer.parseInt(val));
+    node.left = deserialize(queue);
+    node.right = deserialize(queue);
+    return node;
+}
+```
+
+
+## Fill in the Ancestors of the Node {#fill-ancestors}
+
+### Description
+
+Given a node, print ancestors from root to parent.
+
+### Solution
+
+Do DFS and build path; when target found, print path.
+
+```
+public boolean printAncestors(TreeNode root, int key, List<Integer> ancestors) {
+    if (root == null) {
+        return false;
+    }
+    if (root.val == key) {
+        return true;
+    }
+    if (printAncestors(root.left, key, ancestors) || printAncestors(root.right, key, ancestors)) {
+        ancestors.add(root.val);
+        return true;
+    }
+    return false;
+}
+```
+
+
+## Find the k-th Largest Node in a BST {#kth-largest-bst}
+
+### Description
+
+Return the k-th largest node value in a BST.
+
+### Solution - Reverse Inorder
+
+```
+public int kthLargest(TreeNode root, int k) {
+    Stack<TreeNode> stack = new Stack<>();
+    TreeNode current = root;
+    while (current != null || !stack.isEmpty()) {
+        while (current != null) {
+            stack.push(current);
+            current = current.right;
+        }
+        current = stack.pop();
+        if (--k == 0) {
+            return current.val;
+        }
+        current = current.left;
+    }
+    return -1;
+}
+```
+
