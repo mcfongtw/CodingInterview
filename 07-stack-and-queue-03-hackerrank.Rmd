@@ -1,1 +1,354 @@
-<!-- No HackerRank problems for this chapter. -->
+## Validate Properly Nested Brackets {#validate-nested-brackets}
+
+### Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: validate-properly-nested-brackets
+- **Difficulty**: Easy
+- **URL**: [HackerRank - Validate Properly Nested Brackets](https://www.hackerrank.com/challenges/validate-properly-nested-brackets)
+- **Tags**: Stack
+- **Techniques**: [Stack](\@ref(stack))
+
+### Description
+
+Given a string, check if all brackets ('()', '{}', '[]') are properly matched and nested. Return 1 if valid, otherwise return 0.
+
+**Example 1:**
+
+**Input:**
+```
+code_snippet = "if (a[0] > b[1]) { doSomething(); }"
+```
+
+**Output:**
+```
+1
+```
+
+**Explanation:** All brackets are properly matched: '(' with ')', '[' with ']', and '{' with '}'. No mismatches or improper nesting.
+
+**Example 2:**
+
+**Input:**
+```
+code_snippet = "int x = 42; // no brackets here"
+```
+
+**Output:**
+```
+1
+```
+
+**Example 3:**
+
+**Input:**
+```
+code_snippet = "() {} []"
+```
+
+**Output:**
+```
+1
+```
+
+**Constraints:**
+
+- $0 \le$ code_snippet.length $\le 1000$
+- code_snippet consists of printable ASCII characters (character codes 32 to 126 inclusive)
+- code_snippet may contain any combination of '(', ')', '{', '}', '[', ']', letters, digits, symbols, and whitespace
+- code_snippet may be empty
+
+### Walkthrough
+
+This is a classic bracket matching problem that uses a stack to track opening brackets and validate proper nesting.
+
+**Key Insight:** For valid bracket sequences:
+1. Every closing bracket must have a corresponding opening bracket before it
+2. The most recent unmatched opening bracket must match the current closing bracket
+3. All opening brackets must eventually be closed
+
+**Strategy:**
+- Use a stack to store opening brackets as we encounter them
+- When we see a closing bracket, check if it matches the top of the stack
+- If the stack is empty when we see a closing bracket, or if brackets don't match, return false
+- After processing all characters, the stack should be empty (all brackets matched)
+
+**Example trace for `"if (a[0] > b[1]) { doSomething(); }"`:**
+
+1. Skip characters until `(` → Push `(` onto stack: `['(']`
+2. Skip until `[` → Push `[` onto stack: `['(', '[']`
+3. Hit `]` → Check top `[` matches → Pop → Stack: `['(']`
+4. Hit `)` → Check top `(` matches → Pop → Stack: `[]`
+5. Skip until `{` → Push `{` onto stack: `['{']`
+6. Skip until `}` → Check top `{` matches → Pop → Stack: `[]`
+7. End of string, stack is empty → Valid!
+
+### Analysis
+
+**Time Complexity:** $O(n)$ where n is the length of the code snippet. We iterate through each character exactly once.
+
+**Space Complexity:** $O(n)$ in the worst case when all characters are opening brackets (e.g., `"(((((("`). The stack can grow up to the size of the input string.
+
+### Implementation Steps
+
+1. **Handle edge case**: Return true for empty strings (no brackets to validate)
+
+2. **Initialize data structures**:
+   - Create a stack to store opening brackets
+   - Create a map to pair opening brackets with their corresponding closing brackets
+
+3. **Iterate through each character**:
+   - If it's an opening bracket (`(`, `{`, `[`), push it onto the stack
+   - If it's a closing bracket:
+     - Check if stack is empty → return false (no matching opening bracket)
+     - Check if top of stack matches this closing bracket → if not, return false
+     - Pop the matching opening bracket from the stack
+   - Otherwise, skip non-bracket characters
+
+4. **Final validation**: After processing all characters, check if stack is empty
+   - Empty stack → all brackets matched → return true
+   - Non-empty stack → unmatched opening brackets remain → return false
+
+### Java Code
+
+```java
+class Result {
+
+    /*
+     * Complete the 'areBracketsProperlyMatched' function below.
+     *
+     * The function is expected to return a BOOLEAN.
+     * The function accepts STRING code_snippet as parameter.
+     */
+     
+     private static Map<Character, Character> bracketMap = new HashMap<>(); 
+
+    public static boolean areBracketsProperlyMatched(String code_snippet) {
+        if(code_snippet.isEmpty()) {
+            return true;
+        }
+        
+        // Write your code here
+        Stack<Character> openParenStack = new Stack<>();
+        bracketMap.put('{', '}');
+        bracketMap.put('(', ')');
+        bracketMap.put('[', ']');
+        
+        for(char c : code_snippet.toCharArray()) {
+            //System.out.println(c);
+            if(isOpenParenthesis(c)) {
+                openParenStack.add(c);
+            } else if(isCloseParenthesis(c)) {
+                if(openParenStack.isEmpty()) {
+                    return false;
+                }
+                char expected = bracketMap.get(openParenStack.peek());
+                //System.out.println("expected " + expected + " vs actual " + c );
+                if(expected != c) {
+                    return false;
+                }
+                //pop the top open parentheiss
+                openParenStack.pop();
+            } else {
+                //skip
+            }
+        }
+        
+        // if there are still open parenthesis left in the stack
+        if(!openParenStack.isEmpty()) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private static boolean isOpenParenthesis(char c) {
+        return bracketMap.keySet().contains(c);
+    }
+    
+    private static boolean isCloseParenthesis(char c) {
+        return bracketMap.values().contains(c);
+    }
+
+}
+```
+
+## Next Greater Element with Position Offset {#next-greater-offset}
+
+### Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: next-greater-element-position-offset
+- **Difficulty**: Medium
+- **URL**: [HackerRank - Next Greater Element with Position Offset](https://www.hackerrank.com/challenges/next-greater-element-position-offset)
+- **Tags**: Stack, Monotonic Stack
+- **Techniques**: [Stack](\@ref(stack)), [Monotonic Stack](\@ref(monotonic-stack))
+
+### Description
+
+Given an integer array `readings`, return an array `result` where `result[i] = [value, distance]`, with `value` being the next greater element to the right of `readings[i]` and `distance` being the index difference. If no greater element exists, return `[-1, -1]`.
+
+**Example:**
+
+**Input:**
+```
+readings = [2, 1, 2, 4, 3]
+```
+
+**Output:**
+```
+[[4, 3], [2, 1], [4, 1], [-1, -1], [-1, -1]]
+```
+
+**Explanation:**
+
+For each index i in readings:
+
+- i=0, value=2. The next greater element to its right is 4 at index 3, so distance = 3 - 0 = 3, result is [4, 3].
+- i=1, value=1. The next greater element is 2 at index 2, distance = 2 - 1 = 1, result is [2, 1].
+- i=2, value=2. The next greater element is 4 at index 3, distance = 3 - 2 = 1, result is [4, 1].
+- i=3, value=4. There is no greater element to the right, result is [-1, -1].
+- i=4, value=3. There is no greater element to the right, result is [-1, -1].
+
+**Input Format:**
+
+The first line contains an integer n denoting length of array.
+The next n lines denote the elements in array.
+
+**Constraints:**
+
+- $0 \le$ readings.length $\le 100000$
+- $-1000000000 \le$ readings[i] $\le 1000000000$
+
+### Walkthrough
+
+This is a classic "next greater element" problem that uses a monotonic stack pattern to efficiently find the next greater element for each position along with the distance.
+
+**Key Insight:**
+
+A monotonic stack (decreasing in this case) allows us to process elements in a single pass. When we encounter a larger element, we know it's the "next greater element" for all smaller elements still waiting in the stack. By storing indices instead of values, we can:
+1. Look up the original value in the readings array
+2. Calculate the distance between indices
+3. Update the correct position in the result array
+
+**Strategy:**
+
+- Use a stack to store **indices** (not values) of elements waiting to find their next greater element
+- Maintain the stack in decreasing order by the values at those indices
+- When we encounter a larger element at index `i`, it becomes the "next greater element" for all indices in the stack with smaller values
+- Pop those indices and update their results with `[readings[i], i - stackIndex]`
+- Push current index onto stack
+- Elements remaining in stack have no next greater element (already initialized to [-1, -1])
+
+**Example trace for `readings = [2, 1, 2, 4, 3]`:**
+
+```
+Initial: result = [[-1,-1], [-1,-1], [-1,-1], [-1,-1], [-1,-1]]
+         stack = []
+
+i=0, readings[0]=2:
+  - Stack empty, push index 0
+  - stack = [0]
+
+i=1, readings[1]=1:
+  - 1 is not greater than readings[0]=2, push index 1
+  - stack = [0, 1]
+
+i=2, readings[2]=2:
+  - 2 > readings[1]=1, pop index 1
+    → result[1] = [2, 2-1] = [2, 1]
+  - 2 is not greater than readings[0]=2, push index 2
+  - stack = [0, 2]
+  - result = [[-1,-1], [2,1], [-1,-1], [-1,-1], [-1,-1]]
+
+i=3, readings[3]=4:
+  - 4 > readings[2]=2, pop index 2
+    → result[2] = [4, 3-2] = [4, 1]
+  - 4 > readings[0]=2, pop index 0
+    → result[0] = [4, 3-0] = [4, 3]
+  - Stack empty, push index 3
+  - stack = [3]
+  - result = [[4,3], [2,1], [4,1], [-1,-1], [-1,-1]]
+
+i=4, readings[4]=3:
+  - 3 is not greater than readings[3]=4, push index 4
+  - stack = [3, 4]
+
+Final: Indices 3 and 4 remain in stack (no next greater element)
+       result = [[4,3], [2,1], [4,1], [-1,-1], [-1,-1]]
+```
+
+### Analysis
+
+**Time Complexity:** $O(n)$ where n is the length of the readings array. Although we have a nested while loop inside the for loop, each element is pushed onto the stack exactly once and popped at most once. The total number of push and pop operations across all iterations is $O(n)$.
+
+**Space Complexity:** $O(n)$ for the stack in the worst case. If the array is in strictly decreasing order (e.g., `[5, 4, 3, 2, 1]`), all indices will be pushed onto the stack and remain there until the end. We also use $O(n)$ space for the result array.
+
+### Implementation Steps
+
+1. **Handle edge case**: If readings is empty or null, return result with single `[-1, -1]` entry
+
+2. **Initialize data structures**:
+   - Create result list, initializing each entry with immutable `[-1, -1]` (note: will use `set()` to update)
+   - Create a stack to store indices of elements waiting to find their next greater element
+
+3. **Process array from left to right** (index i from 0 to n-1):
+   - Get current value at index i
+   - While stack is not empty AND current value is greater than value at stack top index:
+     - Pop the index (prevIdx) from stack
+     - Update result at prevIdx: set index 0 to current value, set index 1 to distance (i - prevIdx)
+   - Push current index i onto stack
+
+4. **No post-processing needed**: Elements still in stack already have `[-1, -1]` from initialization
+
+5. **Return result array**
+
+### Java Code
+
+```java
+class Result {
+
+    /*
+     * Complete the 'findNextGreaterElementsWithDistance' function below.
+     *
+     * The function is expected to return a 2D_INTEGER_ARRAY.
+     * The function accepts INTEGER_ARRAY readings as parameter.
+     */
+
+    public static List<List<Integer>> findNextGreaterElementsWithDistance(List<Integer> readings) {
+        List<List<Integer>> result = new ArrayList<>();
+        if(readings == null || readings.size() == 0) {
+            result.add(Arrays.asList(new Integer[]{-1, -1}));
+            return result;
+        }
+        
+        // Write your code here
+        Stack<Integer> stack = new Stack<>();
+        
+        
+        //initialize the 2d array
+        for(int reading : readings) {
+            result.add(Arrays.asList(new Integer[]{-1, -1}));
+        }
+        
+        // Process each element
+        for (int i = 0; i < readings.size(); i++) {
+            int val = readings.get(i);
+            
+            // While current element is greater than element at stack top index
+            while (!stack.isEmpty() && val > readings.get(stack.peek())) {
+                int prevIdx = stack.pop();
+                // Update result for prevIndex with [value, distance]
+                result.get(prevIdx).set(0, val);
+                result.get(prevIdx).set(1, i - prevIdx);
+            }
+
+            // Push current index onto stack
+            stack.push(i);
+        }
+        
+        return result;
+    }
+
+}
+```
