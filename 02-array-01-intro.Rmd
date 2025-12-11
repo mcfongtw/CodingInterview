@@ -45,67 +45,6 @@ for(int i = 0, j = 0; i < A.length; j < B.length;) {
 }
 ```
 
-### Kadane's Algorithm
-
-Kadane's algorithm is a fundamental dynamic programming technique for finding the maximum sum (or product) of a contiguous subarray. It's widely used in array problems and appears in several LeetCode questions.
-
-#### Core Concept
-
-The key insight is to maintain a running state representing the **best subarray ending at the current position**. At each element, we decide:
-
-1. **Start fresh** from the current element
-2. **Extend** the previous subarray by including the current element
-
-This decision is captured by the recurrence:
-
-```
-dp[i] = max(nums[i], dp[i-1] + nums[i])
-```
-
-where `dp[i]` represents the maximum sum of a subarray **ending at index i**.
-
-#### Key Insight
-
-**Why does `max(nums[i], current + nums[i])` work?**
-
-- `nums[i]`: Start a new subarray from this element
-- `current + nums[i]`: Extend the previous best subarray
-
-If the previous sum is negative, starting fresh gives a better result.
-
-#### Standard Implementation
-
-For the complete implementation and detailed walkthrough, see [Maximum Subarray](#maximum-subarray) (LeetCode 53).
-
-#### Kadane's Algorithm Variants
-
-**1. Maximum Product Subarray**
-
-For products instead of sums, we need to track **both max and min** because negative numbers flip signs. A large negative product can become a large positive when multiplied by another negative.
-
-See [Maximum Product Subarray](#maximum-product) (LeetCode 152) for the complete implementation and detailed explanation.
-
-**2. Other Variants**
-
-Kadane's algorithm can be extended to:
-- Maximum Sum Circular Subarray (LeetCode 918)
-- Constraint-based problems with additional state tracking
-- Stock price problems with transaction limits
-
-#### Time Complexity
-
-- **Time**: O(n) - Single pass through the array
-- **Space**: O(1) - Only uses a constant number of variables
-
-This makes Kadane's algorithm highly efficient for linear array optimization problems.
-
-#### Related Problems
-
-- [Maximum Subarray](#maximum-subarray) (LeetCode 53)
-- [Maximum Product Subarray](#maximum-product) (LeetCode 152)
-- Maximum Sum Circular Subarray (LeetCode 918)
-- Best Time to Buy and Sell Stock (variants)
-
 ### N Sum Family Comparison {#n-sum-family}
 
 #### Two Sum Family (LeetCode 1, 167, 653)
