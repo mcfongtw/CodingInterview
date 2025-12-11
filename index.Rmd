@@ -27,16 +27,139 @@ This book is a comprehensive collection of coding interview problems and solutio
 
 Dynamic Programming (DP) is a method to simplify complicated problems by breaking them down into simpler sub-problems in a recursive manner. The key insight is that sub-problems typically repeat and overlap, allowing us to store and reuse solutions to avoid redundant computation.
 
-Common DP approaches include:
-- **Memoization**: Top-down recursive approach with caching
-- **Tabulation**: Bottom-up iterative table-filling approach
-- **State Optimization**: Reducing space complexity by tracking only necessary states
+There are two main approaches to implementing DP solutions:
 
-### Unbounded Knapsack {#unbounded-knapsack}
+### Memoization (Top-Down) {#dp-memoization}
 
-The **Unbounded Knapsack** pattern is a fundamental dynamic programming technique for problems where you can use items (coins, elements, etc.) an unlimited number of times to achieve a target. Unlike the 0/1 Knapsack where each item is used at most once, unbounded knapsack allows infinite repetitions.
+**Memoization** is a top-down recursive approach with caching. It solves the problem by recursively breaking it down into smaller subproblems and storing (caching) the results to avoid redundant calculations.
 
-#### Core Concept
+**Key Characteristics:**
+- Starts from the original problem and recursively breaks it down
+- Uses a cache (typically a HashMap or array) to store computed results
+- Only computes subproblems that are actually needed
+- Natural recursive structure that mirrors the problem definition
+
+**Template:**
+```java
+Map<Key, Result> memo = new HashMap<>();
+
+public Result solve(Problem problem) {
+    // Base case
+    if (isBaseCase(problem)) {
+        return baseResult;
+    }
+
+    // Check cache
+    if (memo.containsKey(problem)) {
+        return memo.get(problem);
+    }
+
+    // Compute result recursively
+    Result result = combineSubproblems(
+        solve(subproblem1),
+        solve(subproblem2)
+    );
+
+    // Store in cache
+    memo.put(problem, result);
+    return result;
+}
+```
+
+**Example: Fibonacci with Memoization**
+```java
+Map<Integer, Long> memo = new HashMap<>();
+
+public long fibonacci(int n) {
+    if (n <= 1) return n;
+
+    if (memo.containsKey(n)) {
+        return memo.get(n);
+    }
+
+    long result = fibonacci(n - 1) + fibonacci(n - 2);
+    memo.put(n, result);
+    return result;
+}
+```
+
+**Pros:**
+- Intuitive - mirrors the recursive problem definition
+- Only computes necessary subproblems (lazy evaluation)
+- Easy to convert from naive recursion (just add caching)
+
+**Cons:**
+- Recursion overhead (stack space and function calls)
+- Risk of stack overflow for deep recursion
+- Slightly slower due to cache lookups and recursion
+
+**Time Complexity:** Same as tabulation (typically $O(n \times m)$ for 2D DP)
+**Space Complexity:** $O(n)$ for cache + $O(n)$ for recursion stack = $O(n)$ total
+
+### Tabulation (Bottom-Up) {#dp-tabulation}
+
+**Tabulation** is a bottom-up iterative approach that builds a table (array) by solving smaller subproblems first and using their results to solve larger ones.
+
+**Key Characteristics:**
+- Starts from base cases and builds up to the final solution
+- Uses an array/table to store results iteratively
+- Computes all subproblems (even if not needed for final answer)
+- No recursion - purely iterative
+
+**Template:**
+```java
+public Result solve(Problem problem) {
+    // Initialize DP table
+    Result[] dp = new Result[size];
+
+    // Base case(s)
+    dp[0] = baseResult;
+
+    // Fill table iteratively
+    for (int i = 1; i < size; i++) {
+        dp[i] = combineSubproblems(dp[i-1], dp[i-2], ...);
+    }
+
+    return dp[size - 1];
+}
+```
+
+**Example: Fibonacci with Tabulation**
+```java
+public long fibonacci(int n) {
+    if (n <= 1) return n;
+
+    long[] dp = new long[n + 1];
+    dp[0] = 0;
+    dp[1] = 1;
+
+    for (int i = 2; i <= n; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+
+    return dp[n];
+}
+```
+
+**Pros:**
+- No recursion overhead (no stack space, faster)
+- Easier to optimize space (often can reduce from O(n) to O(1))
+- More efficient for problems where most subproblems are needed
+- No risk of stack overflow
+
+**Cons:**
+- Less intuitive than memoization for some problems
+- Computes all subproblems (even unnecessary ones)
+- Requires determining the correct iteration order
+
+**Time Complexity:** Same as memoization (typically $O(n \times m)$ for 2D DP)
+**Space Complexity:** $O(n)$ for table (often optimizable to $O(1)$)
+
+#### Unbounded Knapsack Pattern {#dp-unbounded-knapsack}
+
+The **Unbounded Knapsack** pattern is a tabulation-based dynamic programming technique for problems where you can use items (coins, elements, etc.) an unlimited number of times to achieve a target. Unlike the 0/1 Knapsack where each item is used at most once, unbounded knapsack allows infinite repetitions.
+
+**Core Concept:**
 
 Given a set of items with certain properties (value, weight, denomination) and a target, determine:
 - The number of ways to reach the target
@@ -45,7 +168,7 @@ Given a set of items with certain properties (value, weight, denomination) and a
 
 **Key characteristic**: Items can be reused multiple times.
 
-#### Combinations vs Permutations
+**Combinations vs Permutations:**
 
 A critical distinction in unbounded knapsack problems is whether order matters:
 
@@ -72,7 +195,7 @@ for (int i = 1; i <= amount; i++) {        // Outer: iterate target
 }
 ```
 
-#### Standard Recurrence Relation
+**Standard Recurrence Relation:**
 
 For counting combinations to make amount `i`:
 
@@ -84,9 +207,9 @@ Where `dp[i]` represents the number of ways to make amount `i`.
 
 **Base case**: `dp[0] = 1` (one way to make 0: use no items)
 
-#### Why Loop Order Matters
+**Why Loop Order Matters:**
 
-**Visual Example**: `coins = [1, 2]`, `amount = 3`
+Visual Example: `coins = [1, 2]`, `amount = 3`
 
 **Combinations approach** (coins outer):
 - Process coin 1: builds `{1}`, `{1,1}`, `{1,1,1}`
@@ -98,12 +221,12 @@ Where `dp[i]` represents the number of ways to make amount `i`.
 - Process amount 2: `{1,1}`, `{2}`
 - Process amount 3: `{1,1,1}`, `{1,2}`, `{2,1}` (6 permutations)
 
-#### Time and Space Complexity
+**Time and Space Complexity:**
 
 - **Time**: $O(n \times m)$ where $n$ is the target amount and $m$ is the number of items
 - **Space**: $O(n)$ using 1D DP array (can be optimized from 2D)
 
-#### Standard Implementation Pattern
+**Standard Implementation Pattern:**
 
 ```java
 public int unboundedKnapsack(int target, int[] items) {
@@ -122,7 +245,7 @@ public int unboundedKnapsack(int target, int[] items) {
 }
 ```
 
-#### Variants
+**Variants:**
 
 1. **Count combinations**: How many ways to make the target?
    - [Coin Change II](glossary-of-algorithm.html#coin-change-ii)
@@ -136,6 +259,50 @@ public int unboundedKnapsack(int target, int[] items) {
 4. **Reachability**: Can the target be reached?
    - Use boolean DP: `dp[i] = dp[i] || dp[i - item]`
 
+### Memoization vs Tabulation Comparison
+
+| Aspect | Memoization | Tabulation |
+|--------|-------------|------------|
+| **Direction** | Top-down (recursive) | Bottom-up (iterative) |
+| **Implementation** | Recursion + cache | Iteration + table |
+| **Subproblems** | Only needed ones | All subproblems |
+| **Intuition** | Natural recursive structure | Build from base cases |
+| **Stack Space** | $O(n)$ recursion stack | $O(1)$ no recursion |
+| **Speed** | Slightly slower | Slightly faster |
+| **Space Optimization** | Harder | Easier (often → $O(1)$) |
+| **Risk** | Stack overflow | None |
+
+**When to use Memoization:**
+- Problem naturally expressed recursively
+- Only a subset of subproblems needed
+- Quick conversion from naive recursion
+- Tree-based or non-sequential dependencies
+
+**When to use Tabulation:**
+- Most/all subproblems needed for solution
+- Want to avoid recursion overhead
+- Need space optimization ($O(1)$ possible)
+- Sequential dependencies (Fibonacci, climbing stairs)
+
+### State Optimization
+
+Beyond choosing memoization or tabulation, you can often reduce space complexity by observing that you only need recent states:
+
+**Example: Fibonacci Space Optimization**
+```java
+// From O(n) space
+long[] dp = new long[n + 1];
+
+// To O(1) space
+long prev2 = 0, prev1 = 1;
+for (int i = 2; i <= n; i++) {
+    long current = prev1 + prev2;
+    prev2 = prev1;
+    prev1 = current;
+}
+```
+
+This optimization is more commonly applied to tabulation than memoization.
 
 ## Backtracking Algorithms {#backtracking}
 
