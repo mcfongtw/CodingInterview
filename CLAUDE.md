@@ -75,6 +75,16 @@ For large chapters with 50+ problems, split by platform to improve maintainabili
 - All `02-array-*.Rmd` files become a single "Chapter 2: Arrays"
 - Section numbers increment continuously across merged files
 
+### Anchor naming conventions
+
+- `*-01-intro.Rmd`: anchors start with `intro-` (e.g., `{#intro-n-sum-family}`)
+- LeetCode problems: anchors start with `lc-`
+- HackerRank problems: anchors start with `hr-`
+- Firecode problems: anchors start with `fc-`
+- Other/uncategorized problems: anchors start with `other-`
+- Actual interview problems: anchors start with `interview-`
+- Keep anchor slugs lowercase with hyphens and ensure they match `problems_data.csv`
+
 **Result:** Clear visual hierarchy where X.0.* sections are foundational concepts, and X.1+ sections are actual problems.
 
 **Example structure (Array chapter):**

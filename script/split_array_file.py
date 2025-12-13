@@ -88,8 +88,8 @@ def split_file():
     for section in sections:
         anchor = section['anchor']
 
-        # Special handling for n-sum-family
-        if anchor == 'n-sum-family':
+        # Special handling for n-sum-family intro anchor
+        if anchor in {'n-sum-family', 'intro-n-sum-family'}:
             nsum_section = section
             continue
 

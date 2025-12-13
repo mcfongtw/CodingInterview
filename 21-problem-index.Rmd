@@ -13,9 +13,10 @@ problems <- read.csv("problems_data.csv", stringsAsFactors = FALSE)
 problems$problem_id[problems$problem_id == "NA"] <- NA
 problems$problem_id <- as.numeric(problems$problem_id)
 
-# Add platform priority for sorting (LeetCode=1, HackerRank=2, Others=3)
-problems$platform_priority <- ifelse(problems$platform == "LeetCode", 1,
-                                      ifelse(problems$platform == "HackerRank", 2, 3))
+# Add platform priority for sorting (LeetCode=1, HackerRank=2, Firecode=3, Others=4)
+platform_order <- c(LeetCode = 1, HackerRank = 2, Firecode = 3, Other = 4, Interview = 4)
+problems$platform_priority <- platform_order[problems$platform]
+problems$platform_priority[is.na(problems$platform_priority)] <- max(platform_order) + 1
 
 # Add HTML links for clickable problem titles
 problems$html_link <- paste0("[", problems$title, "](", problems$anchor, ".html)")
@@ -25,30 +26,26 @@ problems$html_link <- paste0("[", problems$title, "](", problems$anchor, ".html)
 
 ## Quick Lookup by Problem ID
 
-Find any LeetCode or HackerRank problem by its ID:
+Browse problems by platform, sorted by problem ID (numeric when present, otherwise by title):
 
-```{r lookup-by-id, echo=FALSE}
-# Separate LeetCode and HackerRank problems with valid IDs
-leetcode_only <- problems[problems$platform == "LeetCode" & !is.na(problems$problem_id), ]
-hackerrank_only <- problems[problems$platform == "HackerRank" & !is.na(problems$problem_id), ]
+```{r lookup-by-id, echo=FALSE, results='asis'}
+platforms <- c("LeetCode", "HackerRank", "Firecode", "Other", "Interview")
 
-# Sort each platform by problem_id
-leetcode_sorted <- leetcode_only[order(leetcode_only$problem_id), ]
-hackerrank_sorted <- hackerrank_only[order(hackerrank_only$problem_id), ]
-
-# Combine: LeetCode first, then HackerRank
-combined_sorted <- rbind(leetcode_sorted, hackerrank_sorted)
-
-# Add clickable links
-combined_sorted$problem_link <- paste0("[", combined_sorted$title, "](", combined_sorted$anchor, ".html)")
-
-# Display combined table
-if(nrow(combined_sorted) > 0) {
-  kable(combined_sorted[, c("platform", "problem_id", "problem_link", "difficulty", "chapter")],
-        col.names = c("Platform", "ID", "Problem", "Difficulty", "Chapter"),
-        row.names = FALSE)
-} else {
-  cat("*No LeetCode or HackerRank problems with IDs found.*\n")
+for (p in platforms) {
+  cat(paste0("### ", p, "\n\n"))
+  df <- problems[problems$platform == p, ]
+  if (nrow(df) == 0) {
+    cat(paste0("*No problems for ", p, " yet.*\n\n"))
+    next
+  }
+  df$problem_id_num <- suppressWarnings(as.numeric(df$problem_id))
+  df <- df[order(is.na(df$problem_id_num), df$problem_id_num, df$title, na.last = TRUE), ]
+  df$display_id <- ifelse(is.na(df$problem_id_num), "-", as.character(df$problem_id))
+  df$problem_link <- paste0("[", df$title, "](", df$anchor, ".html)")
+  print(kable(df[, c("display_id", "problem_link", "difficulty", "chapter")],
+              col.names = c("ID", "Problem", "Difficulty", "Chapter"),
+              row.names = FALSE))
+  cat("\n\n")
 }
 ```
 
@@ -121,9 +118,10 @@ if(nrow(unclassified) > 0) {
 ## Lookup by Chapter
 
 ```{r by-chapter, echo=FALSE}
-# Create platform priority for sorting (LeetCode=1, HackerRank=2, Others=3)
-problems$platform_priority <- ifelse(problems$platform == "LeetCode", 1,
-                                      ifelse(problems$platform == "HackerRank", 2, 3))
+# Create platform priority for sorting (LeetCode=1, HackerRank=2, Firecode=3, Others=4)
+platform_order <- c(LeetCode = 1, HackerRank = 2, Firecode = 3, Other = 4, Interview = 4)
+problems$platform_priority <- platform_order[problems$platform]
+problems$platform_priority[is.na(problems$platform_priority)] <- max(platform_order) + 1
 
 # Sort by chapter, then platform priority, then problem_id (NA last)
 by_chapter <- problems[order(problems$chapter_num, problems$platform_priority, problems$problem_id, na.last = TRUE), ]

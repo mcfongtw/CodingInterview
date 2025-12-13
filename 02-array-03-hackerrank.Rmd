@@ -1,4 +1,4 @@
-## Count Elements Greater Than Previous Average {#count-elements-greater-avg}
+## Count Elements Greater Than Previous Average {#hr-count-elements-greater-avg}
 
 ### Problem Metadata
 
@@ -118,7 +118,7 @@ class Result {
 
 ### Description
 
-**Note**: This problem is nearly identical to [Merge Intervals](#merge-intervals) (LeetCode #56). The core algorithm and approach are the same.
+**Note**: This problem is nearly identical to [Merge Intervals](#lc-merge-intervals) (LeetCode #56). The core algorithm and approach are the same.
 
 Given an array of intervals `[startTime, endTime]`, merge all overlapping intervals and return a sorted array of non-overlapping intervals.
 
@@ -135,7 +135,7 @@ Input: intervals = [[1, 3], [2, 6], [8, 10], [15, 18]]
 Output: [[1, 6], [8, 10], [15, 18]]
 Explanation:
 - Step 1: Sort intervals by start time (already sorted)
-- Step 2: Initialize merged list with first interval [1,3]
+- Step 2: Initialize merged lc-list with first interval [1,3]
 - Step 3: Compare [2,6] with last merged [1,3]. They overlap (2 ≤ 3), so merge into [1,6]
 - Step 4: Compare [8,10] with last merged [1,6]. No overlap (8 > 6), append [8,10]
 - Step 5: Compare [15,18] with last merged [8,10]. No overlap (15 > 10), append [15,18]
@@ -180,7 +180,7 @@ Explanation: Empty input returns empty output
 
 ### Solution
 
-**Cross-Reference**: See [Merge Intervals](#merge-intervals) for the complete solution walkthrough, analysis, and implementation.
+**Cross-Reference**: See [Merge Intervals](#lc-merge-intervals) for the complete solution walkthrough, analysis, and implementation.
 
 This problem uses the **identical algorithm** as LeetCode #56:
 
@@ -197,11 +197,11 @@ This problem uses the **identical algorithm** as LeetCode #56:
 #### Analysis
 
 - **Time Complexity**: $O(n \log n)$ - Dominated by sorting
-- **Space Complexity**: $O(n)$ - For the output list
+- **Space Complexity**: $O(n)$ - For the output lc-list
 
 #### Implementation Steps
 
-Refer to [Merge Intervals](#merge-intervals) for detailed implementation steps.
+Refer to [Merge Intervals](#lc-merge-intervals) for detailed implementation steps.
 
 #### Java Code
 
@@ -321,14 +321,14 @@ public class Solution {
 ```
 
 
-## Top K Frequent Events with Order Preservation (HackerRank) {#hr-top-k-frequent-events}
+## Top K Frequent Events with Order Preservation (HackerRank) {#hr-lc-top-k-frequent-events}
 
 ### Problem Metadata
 
 - **Platform**: HackerRank
-- **Problem ID**: top-k-frequent-events-with-order-preservation
+- **Problem ID**: lc-top-k-frequent-events-with-order-preservation
 - **Difficulty**: Medium
-- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/top-k-frequent-events-with-order-preservation
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/lc-top-k-frequent-events-with-order-preservation
 - **Tags**: `Array`, `Hash Table`, `Sorting`, `Heap`
 - **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Heap](glossary-of-algorithm.html#heap), [Sorting](glossary-of-algorithm.html#sorting)
 
@@ -336,7 +336,7 @@ public class Solution {
 
 Given an array of integers and an integer `k`, return an array of the `k` most frequent elements. If two elements have the same frequency, prioritize the one that appears first in the original array.
 
-**Relationship to [Top K Frequent Elements](#top-k-frequent) (LeetCode 347)**:
+**Relationship to [Top K Frequent Elements](#lc-top-k-frequent) (LeetCode 347)**:
 This problem is similar to LeetCode 347 but adds an **order preservation constraint**. When elements have the same frequency, LeetCode 347 allows returning them in any order, while this problem requires breaking ties by **first occurrence index** in the original array.
 
 **Key Requirements**:
@@ -385,7 +385,7 @@ Explanation: Single element with k=1 returns that element
 
 ### Input Format
 
-A list of input cases. Each case is a pair `(events, k)` where:
+A lc-list of input cases. Each case is a pair `(events, k)` where:
 - `events` is an array of integers
 - `k` is the number of top frequent elements to return
 
@@ -405,7 +405,7 @@ For each input case, return an array of length `k` containing the IDs of the `k`
 
 #### Walkthrough
 
-This problem extends [Top K Frequent Elements](#top-k-frequent) (LeetCode 347) by adding an **order preservation constraint** when frequencies tie. The solution uses a **full sort with custom comparator** approach.
+This problem extends [Top K Frequent Elements](#lc-top-k-frequent) (LeetCode 347) by adding an **order preservation constraint** when frequencies tie. The solution uses a **full sort with custom comparator** approach.
 
 **Key Insight**: We need to track **three pieces of information** for each unique event:
 1. The event value itself
@@ -432,12 +432,12 @@ This problem extends [Top K Frequent Elements](#top-k-frequent) (LeetCode 347) b
    - **Secondary criterion**: First occurrence index (ascending) - events appearing earlier win ties
 
 3. **Sort All Candidates**:
-   - Extract all `EventInfo` objects from the map into a list
+   - Extract all `EventInfo` objects from the map into a lc-list
    - Sort using the custom comparator
    - This gives us the complete ranking: highest frequency first, ties broken by appearance order
 
 4. **Extract Top K**:
-   - Take the first `min(k, candidates.size())` elements from the sorted list
+   - Take the first `min(k, candidates.size())` elements from the sorted lc-list
    - Return only the event values (not the entire `EventInfo` objects)
 
 **Why Full Sort Over Min-Heap?**
@@ -457,11 +457,11 @@ Breaking down the operations:
    - Each `getOrDefault()` and `put()` operation is $O(1)$ on average
    - Total: $n$ iterations $\times O(1) = O(n)$
 
-2. **Sorting candidates**: $O(m \log m)$ - sorting the list of distinct events
+2. **Sorting candidates**: $O(m \log m)$ - sorting the lc-list of distinct events
    - We have at most $m$ distinct events (where $m \le n$)
    - Java's `Collections.sort()` uses TimSort with $O(m \log m)$ complexity
 
-3. **Extracting top k**: $O(k)$ - copying k values to the result list
+3. **Extracting top k**: $O(k)$ - copying k values to the result lc-list
    - Since $k \le m \le n$, this is dominated by the previous steps
 
 **Total**: $O(n) + O(m \log m) + O(k) = O(n + m \log m)$
@@ -471,8 +471,8 @@ Breaking down the operations:
 **Space Complexity**: $O(m)$ for auxiliary storage.
 
 1. **Frequency map**: $O(m)$ - stores one `EventInfo` object per distinct event
-2. **Candidates list**: $O(m)$ - temporary list for sorting
-3. **Result list**: $O(k)$ - output array
+2. **Candidates lc-list**: $O(m)$ - temporary lc-list for sorting
+3. **Result lc-list**: $O(k)$ - output array
 
 **Total**: $O(m) + O(m) + O(k) = O(m)$ since $k \le m$
 
@@ -494,7 +494,7 @@ static class EventInfo {
 ```
 
 **Step 2: Handle Edge Cases**
-- Return empty list if `events` is null, empty, or `k == 0`
+- Return empty lc-list if `events` is null, empty, or `k == 0`
 - This prevents unnecessary computation for invalid inputs
 
 **Step 3: Build Frequency Map with First Occurrence Tracking**
@@ -516,13 +516,13 @@ Comparator<EventInfo> comparator = (a, b) -> {
 ```
 
 **Step 5: Sort All Candidates**
-- Extract all `EventInfo` values from the map into a list
+- Extract all `EventInfo` values from the map into a lc-list
 - Sort using the custom comparator
 - This produces the final ranking with frequency-first, index-second ordering
 
 **Step 6: Extract Top K Values**
 - Iterate through the first `min(k, candidates.size())` elements
-- Add only the `value` field (not the entire `EventInfo` object) to the result list
+- Add only the `value` field (not the entire `EventInfo` object) to the result lc-list
 - Return the result
 
 #### Java Code
@@ -603,7 +603,7 @@ Given an array of positive integers `weights` and a target `capacity`, return al
 
 **Key Requirements**:
 - Each weight can be **reused multiple times** (unbounded)
-- Return combinations as lists of **indices** (not weight values)
+- Return combinations as lc-lists of **indices** (not weight values)
 - All combinations must be in **non-decreasing index order**
 - No duplicate combinations
 
@@ -661,7 +661,7 @@ This represents `weights = [8, 4, 5, 3, 9, 6]` and `capacity = 15`.
 
 ### Output Format
 
-Return a list of lists of integers, where each inner list is a combination of indices in non-decreasing order whose corresponding weights sum exactly to `capacity`.
+Return a lc-list of lc-lists of integers, where each inner lc-list is a combination of indices in non-decreasing order whose corresponding weights sum exactly to `capacity`.
 
 Print each combination on a separate line with space-separated indices.
 
@@ -707,7 +707,7 @@ The solution uses the classic **Choose-Explore-Unchoose** backtracking pattern:
 
 3. **Why must we copy `current` when adding to `result`?**
    - `current` is mutated during backtracking
-   - Without copying, all entries in `result` would reference the same (eventually empty) list
+   - Without copying, all entries in `result` would reference the same (eventually empty) lc-list
    - `new ArrayList<>(current)` creates a snapshot of the current state
 
 **Visual Trace for `weights = [2, 3, 5], capacity = 8`**:
@@ -775,7 +775,7 @@ Breaking down the complexity:
    - Branching factor at each level: up to $C$ choices (each weight index)
    - Total nodes in decision tree: $O(C^{T/W_{min}})$
 
-2. **Work per recursive call**: $O(k)$ for copying `current` list when adding to result
+2. **Work per recursive call**: $O(k)$ for copying `current` lc-list when adding to result
    - Only valid combinations trigger the copy operation
    - Most branches terminate early (capacity exceeded or no valid choices)
 
@@ -785,8 +785,8 @@ Breaking down the complexity:
 **Space Complexity**: $O(T/W_{min})$ for auxiliary storage (excluding output).
 
 1. **Recursion stack depth**: $O(T/W_{min})$ - maximum depth occurs when using the smallest weight repeatedly
-2. **Current combination list**: $O(T/W_{min})$ - maximum length of a single combination
-3. **Output list**: Not counted as auxiliary space (required by problem)
+2. **Current combination lc-list**: $O(T/W_{min})$ - maximum length of a single combination
+3. **Output lc-list**: Not counted as auxiliary space (required by problem)
 
 **Total auxiliary space**: $O(T/W_{min})$ - dominated by recursion depth
 
@@ -800,8 +800,8 @@ Breaking down the complexity:
 #### Implementation Steps
 
 **Step 1: Initialize Result Collection**
-- Create `result` list to store all valid combinations
-- Initialize backtracking with empty `current` list, starting index 0, and full capacity
+- Create `result` lc-list to store all valid combinations
+- Initialize backtracking with empty `current` lc-list, starting index 0, and full capacity
 
 **Step 2: Define Backtracking Base Cases**
 - **Success case**: When `capacity == 0`, we've found a valid combination
@@ -924,7 +924,7 @@ Given an array of positive integers `planSizes` representing available data plan
 - Return `-1` if no valid combination exists
 
 **Relationship to Similar Problems**:
-This is a variant of [Coin Change](#coin-change) (LeetCode 322). Both problems use unbounded knapsack DP to find the minimum number of items (coins/plans) needed to reach a target sum. The core algorithm is identical, with different variable names (planSizes vs coins, targetBandwidth vs amount).
+This is a variant of [Coin Change](#lc-coin-change) (LeetCode 322). Both problems use unbounded knapsack DP to find the minimum number of items (coins/plans) needed to reach a target sum. The core algorithm is identical, with different variable names (planSizes vs coins, targetBandwidth vs amount).
 
 ### Examples
 
@@ -1005,7 +1005,7 @@ Return a single integer: the minimum number of plans needed to reach exactly `ta
 
 #### Walkthrough
 
-This problem is a **classic unbounded knapsack optimization** problem, identical in structure to [Coin Change](#coin-change) (LeetCode 322). The key insight is that we're not finding all combinations (which would require backtracking), but rather finding the **minimum count** of plans needed, which is perfect for dynamic programming.
+This problem is a **classic unbounded knapsack optimization** problem, identical in structure to [Coin Change](#lc-coin-change) (LeetCode 322). The key insight is that we're not finding all combinations (which would require backtracking), but rather finding the **minimum count** of plans needed, which is perfect for dynamic programming.
 
 **Why Dynamic Programming?**
 

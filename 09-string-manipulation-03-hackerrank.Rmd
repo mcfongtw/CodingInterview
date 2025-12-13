@@ -1,11 +1,11 @@
-## Check Palindrome by Filtering Non-Letters {#check-palindrome-filter}
+## Check Palindrome by Filtering Non-Letters {#hr-check-palindrome-filter}
 
 ### Problem Metadata
 
 - **Platform**: HackerRank
-- **Problem ID**: check-palindrome-filter-non-letters
+- **Problem ID**: hr-check-palindrome-filter-non-letters
 - **Difficulty**: Easy
-- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/check-palindrome-filter-non-letters/problem
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/hr-check-palindrome-filter-non-letters/problem
 - **Tags**: `String`, `Two Pointers`
 - **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
@@ -166,7 +166,7 @@ class Result {
 ```
 
 
-## Generate Valid Angle Bracket Sequences {#generate-valid-brackets}
+## Generate Valid Angle Bracket Sequences {#hr-generate-valid-brackets}
 
 ### Problem Metadata
 
@@ -281,11 +281,11 @@ Your original solution generated candidates and validated them afterward with `i
 
 #### Implementation Steps
 
-1. **Initialize result list**: Create an empty `ArrayList` to store all valid sequences
+1. **Initialize result lc-list**: Create an empty `ArrayList` to store all valid sequences
 2. **Call backtracking helper**: Start with empty string, `open = 0`, `close = 0`, and target `n`
 3. **Base case in backtrack**:
    - When `open == n` AND `close == n`, we've used all brackets
-   - Add the completed sequence to result list
+   - Add the completed sequence to result lc-list
    - Return to explore other branches
 4. **Recursive case 1 - Try adding `<`**:
    - Check if `open < n` (haven't used all opening brackets)
@@ -293,7 +293,7 @@ Your original solution generated candidates and validated them afterward with `i
 5. **Recursive case 2 - Try adding `>`**:
    - Check if `close < open` (there are unmatched opening brackets)
    - If true, recurse with `current + ">"`, increment `close` count
-6. **Return result**: After backtracking completes, return the list of all valid sequences
+6. **Return result**: After backtracking completes, return the lc-list of all valid sequences
 
 #### Java Code
 
@@ -335,7 +335,7 @@ class Result {
 ```
 
 
-## Max Unique Substring Length in a Session {#max-unique-substring-session}
+## Max Unique Substring Length in a Session {#hr-max-unique-substring-session}
 
 ### Problem Metadata
 
@@ -385,7 +385,7 @@ Explanation: There is only one session: "aa". The longest substring with distinc
 
 #### Walkthrough
 
-This solution uses a **two-level approach** that combines string splitting with the sliding window technique from [Longest Substring Without Repeating Characters](#longest-substring-unique):
+This solution uses a **two-level approach** that combines string splitting with the sliding window technique from [Longest Substring Without Repeating Characters](#lc-longest-substring-unique):
 
 1. **Split by sessions**: Use `split("\\*")` to separate the input into individual sessions
 2. **Apply sliding window per session**: For each non-empty session, apply the standard sliding window algorithm to find the longest substring with unique characters

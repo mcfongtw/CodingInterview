@@ -1,13 +1,13 @@
-## Design LRU Cache {#lru-cache}
+## Design LRU Cache {#lc-lru-cache}
 
 ### Problem Metadata
 
 - **Platform**: LeetCode
 - **Problem ID**: 146
 - **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/lru-cache/
+- **URL**: https://leetcode.com/problems/lc-lru-cache/
 - **Tags**: `Hash Table`, `Linked List`, `Design`
-- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Linked List](glossary-of-algorithm.html#linked-list)
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Linked List](glossary-of-algorithm.html#linked-lc-list)
 
 ### Description
 
@@ -38,7 +38,7 @@ cache.get(4); // 4
 
 #### Walkthrough
 
-Store key-to-node mappings in a hash map, while nodes form a doubly linked list ordered by recency. The head is most recent, tail is least recent. `get` moves the node to the head. `put` updates existing keys similarly or inserts a new node at the head and, if over capacity, removes the tail node and deletes it from the map. Sentinel head/tail nodes simplify pointer updates.
+Store key-to-node mappings in a hash map, while nodes form a doubly linked lc-list ordered by recency. The head is most recent, tail is least recent. `get` moves the node to the head. `put` updates existing keys similarly or inserts a new node at the head and, if over capacity, removes the tail node and deletes it from the map. Sentinel head/tail nodes simplify pointer updates.
 
 #### Analysis
 
@@ -172,14 +172,14 @@ class LRUCacheLinkedHashMap {
 ```
 
 
-## Design HashSet {#design-hashset}
+## Design HashSet {#lc-design-hashset}
 
 ### Problem Metadata
 
 - **Platform**: LeetCode
 - **Problem ID**: 705
 - **Difficulty**: Easy
-- **URL**: https://leetcode.com/problems/design-hashset/
+- **URL**: https://leetcode.com/problems/lc-design-hashset/
 - **Tags**: `Hash Table`, `Design`
 - **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
@@ -210,7 +210,7 @@ set.contains(2); // false
 
 #### Walkthrough
 
-Create an array of buckets; each bucket holds a linked list of stored keys. The hash function is `key % capacity`. `add` inserts if absent, `remove` deletes from the chain, `contains` scans the list.
+Create an array of buckets; each bucket holds a linked lc-list of stored keys. The hash function is `key % capacity`. `add` inserts if absent, `remove` deletes from the chain, `contains` scans the lc-list.
 
 #### Analysis
 
@@ -220,9 +220,9 @@ Create an array of buckets; each bucket holds a linked list of stored keys. The 
 #### Implementation Steps
 
 
-1. Choose bucket count (e.g., 1000) and allocate arrays of lists.
+1. Choose bucket count (e.g., 1000) and allocate arrays of lc-lists.
 2. Map keys to bucket index via modulo.
-3. Implement linked-list helpers to search, insert, remove within each bucket.
+3. Implement linked-lc-list helpers to search, insert, remove within each bucket.
 
 #### Java Code
 
@@ -288,14 +288,14 @@ class MyHashSet {
 ```
 
 
-## Design HashMap {#design-hashmap}
+## Design HashMap {#lc-design-hashmap}
 
 ### Problem Metadata
 
 - **Platform**: LeetCode
 - **Problem ID**: 706
 - **Difficulty**: Easy
-- **URL**: https://leetcode.com/problems/design-hashmap/
+- **URL**: https://leetcode.com/problems/lc-design-hashmap/
 - **Tags**: `Hash Table`, `Design`
 - **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table)
 
@@ -326,7 +326,7 @@ map.get(2); // -1
 
 #### Walkthrough
 
-Reuse the separate chaining idea but store key/value pairs in nodes. When inserting, update if the key already exists; otherwise add a new node at the bucket head. `remove` rewires the linked list as needed.
+Reuse the separate chaining idea but store key/value pairs in nodes. When inserting, update if the key already exists; otherwise add a new node at the bucket head. `remove` rewires the linked lc-list as needed.
 
 #### Analysis
 
@@ -336,11 +336,11 @@ Reuse the separate chaining idea but store key/value pairs in nodes. When insert
 #### Implementation Steps
 
 
-1. Buckets array sized at 10,000 to balance collisions.
+1. Buckets array sized at 10,000 to balance collc-lisions.
 2. Hash function `key % size`.
 3. `put`: search for key; if found update value; else add new node.
 4. `get`: search bucket; return value or `-1`.
-5. `remove`: delete node from bucket list.
+5. `remove`: delete node from bucket lc-list.
 
 #### Java Code
 
@@ -415,14 +415,14 @@ class MyHashMap {
 ```
 
 
-## My Calendar I {#my-calendar-i}
+## My Calendar I {#lc-my-calendar-i}
 
 ### Problem Metadata
 
 - **Platform**: LeetCode
 - **Problem ID**: 729
 - **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/my-calendar-i/
+- **URL**: https://leetcode.com/problems/lc-my-calendar-i/
 - **Tags**: `Interval`, `Design`, `TreeMap`
 - **Techniques**: [Greedy](glossary-of-algorithm.html#greedy), [Binary Search Tree](glossary-of-algorithm.html#bst)
 
@@ -450,7 +450,7 @@ Output:
 
 #### Walkthrough
 
-Keep a list of existing bookings. To insert a new booking, compare it against every stored interval and reject it if any overlap occurs. Because the number of operations is bounded by 1000, a linear scan per request is acceptable.
+Keep a lc-list of existing bookings. To insert a new booking, compare it against every stored interval and reject it if any overlap occurs. Because the number of operations is bounded by 1000, a linear scan per request is acceptable.
 
 #### Analysis
 
@@ -535,14 +535,14 @@ class MyCalendarTreeMap {
 ```
 
 
-## Simple Bank System {#simple-bank-system}
+## Simple Bank System {#lc-simple-bank-system}
 
 ### Problem Metadata
 
 - **Platform**: LeetCode
 - **Problem ID**: 2043
 - **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/simple-bank-system/
+- **URL**: https://leetcode.com/problems/lc-simple-bank-system/
 - **Tags**: `Array`, `Design`, `Simulation`
 - **Techniques**: [Array](glossary-of-algorithm.html#array)
 

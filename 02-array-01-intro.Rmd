@@ -45,16 +45,16 @@ for(int i = 0, j = 0; i < A.length; j < B.length;) {
 }
 ```
 
-### N Sum Family Comparison {#n-sum-family}
+### N Sum Family Comparison {#intro-n-sum-family}
 
 #### Two Sum Family (LeetCode 1, 167, 653)
 
 | Problem | Input/Constraints | Return | Preferred Approach | Time | Space | Notes |
 |---------|-------------------|--------|--------------------|------|-------|-------|
-| [Two Sum I](#two-sum-1) | Unsorted array; preserve original indices | Pair of indices | Hash table | O(n) | O(n) | Sorting breaks indices; hash lookup keeps order info |
-| [Two Sum II](#two-sum-ii-sorted) | Sorted array; 1-indexed output | Pair of indices | Two pointers | O(n) | O(1) | Sorted order unlocks monotonic sweep; TreeMap fallback is O(n log n) |
-| [Two Sum III](#two-sum-ii-boolean) | Unsorted array; existence only | Boolean | Hash set | O(n) | O(n) | Same complement idea, short-circuits on first match |
-| [Two Sum IV](#two-sum-iv-bst) | BST input | Boolean | DFS + HashSet (or dual iterators) | O(n) | O(n) or O(h) | Iterator variant trades simplicity for O(h) space |
+| [Two Sum I](#lc-two-sum-1) | Unsorted array; preserve original indices | Pair of indices | Hash table | O(n) | O(n) | Sorting breaks indices; hash lookup keeps order info |
+| [Two Sum II](#lc-two-sum-ii-sorted) | Sorted array; 1-indexed output | Pair of indices | Two pointers | O(n) | O(1) | Sorted order unlocks monotonic sweep; TreeMap fallback is O(n log n) |
+| [Two Sum III](#other-two-sum-ii-boolean) | Unsorted array; existence only | Boolean | Hash set | O(n) | O(n) | Same complement idea, short-circuits on first match |
+| [Two Sum IV](#lc-two-sum-iv-bst) | BST input | Boolean | DFS + HashSet (or dual iterators) | O(n) | O(n) or O(h) | Iterator variant trades simplicity for O(h) space |
 
 **Key differences and picks:** Sorting status drives the strategy (hash table for unsorted, two pointers for sorted). When output is just existence, hash set with early exit wins. BST input can use dual iterators for O(h) space, but DFS + HashSet stays simplest.
 
@@ -62,8 +62,8 @@ for(int i = 0, j = 0; i < A.length; j < B.length;) {
 
 | Problem | Input/Constraints | Return | Preferred Approach | Time | Space | Notes |
 |---------|-------------------|--------|--------------------|------|-------|-------|
-| [3Sum](#three-sum) | Unsorted array | All unique triplets summing to 0 | Sort + two pointers | O(n^2) | O(1) | Duplicate skipping on outer and inner pointers is key |
-| [3Sum Closest](#three-sum) | Unsorted array | Closest sum to target (value only) | Sort + two pointers | O(n^2) | O(1) | Same loop as 3Sum but tracks best distance instead of unique sets |
+| [3Sum](#lc-three-sum) | Unsorted array | All unique triplets summing to 0 | Sort + two pointers | O(n^2) | O(1) | Duplicate skipping on outer and inner pointers is key |
+| [3Sum Closest](#lc-three-sum) | Unsorted array | Closest sum to target (value only) | Sort + two pointers | O(n^2) | O(1) | Same loop as 3Sum but tracks best distance instead of unique sets |
 
 **Key differences and picks:** Both require sorting to enable the inner two-pointer sweep. 3Sum needs dedup to emit unique triplets; 3Sum Closest reuses the same sweep but optimizes for distance rather than uniqueness.
 
@@ -71,10 +71,10 @@ for(int i = 0, j = 0; i < A.length; j < B.length;) {
 
 | Problem | Input/Constraints | Return | Preferred Approach | Time | Space | Notes |
 |---------|-------------------|--------|--------------------|------|-------|-------|
-| [4Sum](#four-sum) | Unsorted array | All unique quadruplets = target | Sort + nested two pointers | O(n^3) | O(1) | Fix two indices, two-pointer the rest, skip duplicates at every level |
-| [4Sum II](#four-sum-ii) | Four arrays A,B,C,D | Count of quadruples = 0 | Hash map of pair sums | O(n^2) | O(n^2) | Precompute A+B counts, probe with -(C+D) |
+| [4Sum](#lc-four-sum) | Unsorted array | All unique quadruplets = target | Sort + nested two pointers | O(n^3) | O(1) | Fix two indices, two-pointer the rest, skip duplicates at every level |
+| [4Sum II](#lc-four-sum-ii) | Four arrays A,B,C,D | Count of quadruples = 0 | Hash map of pair sums | O(n^2) | O(n^2) | Precompute A+B counts, probe with -(C+D) |
 
-**Key differences and picks:** Single-array 4Sum extends the 3Sum pattern (extra fixed index) with heavy dedup. Multi-array 4Sum II swaps to pair-sum hashing because sorting across four lists is unnecessary—hashing collapses the problem to two combined arrays for O(n^2).
+**Key differences and picks:** Single-array 4Sum extends the 3Sum pattern (extra fixed index) with heavy dedup. Multi-array 4Sum II swaps to pair-sum hashing because sorting across four lc-lists is unnecessary—hashing collapses the problem to two combined arrays for O(n^2).
 
 #### Scaling Patterns
 

@@ -12,9 +12,9 @@ Imagine a graph with as the following:
 
 \subsubsection{Typical Implementation - Adjacency List}
 
-An adjacency list is created with an array of lists. Size of the array is equal to the number of vertices. Each entry
-represents the list of vertices adjacent to the $i^{th}$ vertex. Each node maintains a list of all its adjacent edges,
-then, for each node, you could discover all its neighbors by traversing its adjacency list just once in linear time.
+An adjacency lc-list is created with an array of lc-lists. Size of the array is equal to the number of vertices. Each entry
+represents the lc-list of vertices adjacent to the $i^{th}$ vertex. Each node maintains a lc-list of all its adjacent edges,
+then, for each node, you could discover all its neighbors by traversing its adjacency lc-list just once in linear time.
 
 ```
 | 0 | -- 1 -- 4
@@ -65,7 +65,7 @@ class Graph  {
 }
 ```
 
-There is an alternative implementation to represent per node with a list of adjacent nodes.
+There is an alternative implementation to represent per node with a lc-list of adjacent nodes.
 \subsubsection{Typical Implementation - per Node based}
 ```java
 class Node {
@@ -89,11 +89,11 @@ full binary tree)
 If your graph is implemented as an adjacency matrix, then, for each node, you have to traverse an entire row of length
 V in the matrix to discover all its outgoing edges. So, the complexity of DFS is $O(|V| * |V|) = O(|V|^2)$.
 
-If your graph is implemented using adjacency lists, wherein each node maintains a list of all its adjacent edges,
-then, for each node, you could discover all its neighbors by traversing its adjacency list just once in linear time.
-For a directed graph, the sum of the sizes of the adjacency lists of all the nodes is E (total number of edges). So, the
+If your graph is implemented using adjacency lc-lists, wherein each node maintains a lc-list of all its adjacent edges,
+then, for each node, you could discover all its neighbors by traversing its adjacency lc-list just once in linear time.
+For a directed graph, the sum of the sizes of the adjacency lc-lists of all the nodes is E (total number of edges). So, the
 complexity of DFS is O(V) + O(E) = O(V + E). For an undirected graph, each edge will appear twice. Once in the adjacency
-list of either end of the edge. So, the overall complexity will be $O(|V|) + O (2\cdot |E|) = O(|V + E|)$.
+lc-list of either end of the edge. So, the overall complexity will be $O(|V|) + O (2\cdot |E|) = O(|V + E|)$.
 
 #### Implementation Steps
 
@@ -126,7 +126,7 @@ void dfs(int root) {
 ### Bread First Traversal
 For every single vertex in the graph, we will end up looking at its neighboring nodes only once (directed graph) or
 twice (undirected graph). The time complexity for both a directed and undirected graph is the sum of the vertices and
-their edges as represented by the graph in its adjacency list representation, or $O(|V| + |E|)$
+their edges as represented by the graph in its adjacency lc-list representation, or $O(|V| + |E|)$
 
 The power of using breadth-first search to traverse through a graph is that it can easily tell us the shortest way to
 get from one node to another.
