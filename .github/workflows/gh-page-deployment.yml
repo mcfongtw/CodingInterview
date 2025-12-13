@@ -73,9 +73,9 @@ jobs:
           Rscript -e "tinytex::install_tinytex()"
           echo "$HOME/bin" >> $GITHUB_PATH
 
-      - name: Install LaTeX packages
+      - name: Install LaTeX packages (set mirror & update)
         run: |
-          Rscript -e "tinytex::tlmgr_install(c('preview', 'pgf', 'tikz-cd', 'standalone', 'xcolor', 'amsmath', 'amsfonts'))"
+          Rscript -e "tinytex::tlmgr_repo('http://mirror.ctan.org/systems/texlive/tlnet'); tinytex::tlmgr_update(); tinytex::tlmgr_install(c('preview', 'pgf', 'tikz-cd', 'standalone', 'xcolor', 'amsmath', 'amsfonts'))"
 
       - name: Validate R Markdown sources
         run: sh validate_rmd.sh --verbose
