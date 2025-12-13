@@ -1,1 +1,142 @@
-<!-- No HackerRank problems for this chapter. -->
+## Height of Binary Search Tree {#height-bst}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: height-of-binary-search-tree
+- **Difficulty**: Easy
+- **URL**: https://www.hackerrank.com/challenges/height-of-binary-search-tree/
+- **Tags**: `Tree`, `BST`, `DFS`
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), [Binary Search Tree](glossary-of-algorithm.html#bst)
+
+### Description
+
+Given the root of a binary search tree, return the height of the tree. Height is the number of nodes along the longest path from root to leaf.
+
+### Examples
+
+**Example 1:**
+```
+Input:
+n = 7
+values = [4, 2, 6, 1, 3, 5, 7]
+leftChild = [1, 3, 5, -1, -1, -1, -1]
+rightChild = [2, 4, 6, -1, -1, -1, -1]
+
+Output: 3
+
+Explanation:
+The tree is perfectly balanced with three levels:
+- Level 1: Node 4 (root)
+- Level 2: Nodes 2 and 6
+- Level 3: Leaves 1, 3, 5, 7
+The longest path from root to any leaf has 3 nodes, so the height is 3.
+```
+
+**Example 2:**
+```
+Input:
+n = 1
+values = [10]
+leftChild = [-1]
+rightChild = [-1]
+
+Output: 1
+```
+
+**Example 3:**
+```
+Input:
+n = 2
+values = [5, 3]
+leftChild = [1, -1]
+rightChild = [-1]
+
+Output: 2
+```
+
+### Input Format
+
+- The first line contains n: integer denoting number of nodes in the binary search tree.
+- The next n lines contain individual elements of the array. values[i] is the integer value stored in the $i^{th}$ node.
+- The next line contains an integer m denoting length of leftChild.
+- The next m lines contain the elements of leftChild. leftChild[i] is the index of the left child of node i, or -1 if none.
+- The next line contains an integer p denoting length of rightChild.
+- The next p lines contain the elements of rightChild. rightChild[i] is the index of the right child of node i, or -1 if none.
+
+### Constraints
+
+- $0 \le n \le 1000$
+- values.length $\eq$ n
+- leftChild.length $\eq$ n
+- rightChild.length $\eq$ n
+- For all $0 \le i < n$: $-10^9 \le$ values[i] $\le 10^9$
+- All values[i] are unique
+- For all $0 \le i < n$: leftChild[i] $\eq$ -1 or ($0 \le$ leftChild[i] $< n$)
+- For all $0 \le i < n$: rightChild[i] $\eq$ -1 or ($0 \le$ rightChild[i] $< n$)
+- For all $0 \le i < n$: if leftChild[i] $\ne$ -1 then values[leftChild[i]] $<$ values[i]
+- For all $0 \le i < n$: if rightChild[i] $\ne$ -1 then values[rightChild[i]] $>$ values[i]
+- The set of edges defined by (i, leftChild[i]) and (i, rightChild[i]) forms a single connected acyclic graph (a tree)
+
+### Output Format
+
+Return a single integer representing the height of the tree: the number of nodes along the longest path from the root to any leaf. If n $\eq$ 0, return 0.
+
+### Solution - Recursive DFS
+
+#### Walkthrough
+
+The problem uses an index-based tree representation where each node is identified by its position in the arrays. The `leftChild[i]` and `rightChild[i]` arrays store the indices of the left and right children of node `i`, or -1 if no child exists.
+
+The solution uses recursive depth-first search starting from the root (index 0). For each node:
+1. If the index is -1 (no node), return height 0 (base case)
+2. Otherwise, recursively calculate the height of the left subtree using `leftChild[idx]`
+3. Recursively calculate the height of the right subtree using `rightChild[idx]`
+4. Return 1 (current node) plus the maximum height of the two subtrees
+
+This is the classic recursive height calculation adapted to work with index-based tree representation instead of traditional TreeNode pointers.
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Each node is visited exactly once during the recursive traversal
+- **Space Complexity**: O(h) - The recursion call stack depth equals the tree height h, where h can range from log(n) for balanced trees to n for skewed trees
+
+#### Implementation Steps
+
+1. Start with the root node at index 0
+2. Base case: if current index is -1, return 0 (no node exists)
+3. Recursively compute height of left subtree by passing `leftChild[idx]`
+4. Recursively compute height of right subtree by passing `rightChild[idx]`
+5. Return 1 plus the maximum of the two subtree heights
+6. The recursion naturally handles all nodes through the index-based traversal
+
+#### Java Code
+
+```java
+class Result {
+
+    /*
+     * Complete the 'getBinarySearchTreeHeight' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY values
+     *  2. INTEGER_ARRAY leftChild
+     *  3. INTEGER_ARRAY rightChild
+     */
+
+    public static int getBinarySearchTreeHeight(List<Integer> values, List<Integer> leftChild, List<Integer> rightChild) {
+        return calHeight(0, leftChild, rightChild);
+    }
+
+    private static int calHeight(int idx, List<Integer> leftChild, List<Integer> rightChild) {
+        if(idx == -1) {
+            return 0;
+        } else {
+            //recursively traversing leftChild and rightChild by index
+            return 1 + Math.max(calHeight(leftChild.get(idx), leftChild, rightChild), calHeight(rightChild.get(idx), leftChild, rightChild));
+        }
+    }
+
+}
+```
