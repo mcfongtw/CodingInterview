@@ -105,6 +105,500 @@ class Result {
 ```
 
 
+## Count Number Pairs {#hr-count-number-pairs}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: count-number-pairs
+- **Difficulty**: Easy
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/count-number-pairs/problem
+- **Tags**: `Array`, `Two Pointers`
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
+
+### Description
+
+Given a sorted array of positive integers `prices` and a target value `budget`, count the number of pairs $(i, j)$ where $i < j$ and $\text{prices}[i] + \text{prices}[j] \le \text{budget}$.
+
+**Key Requirements**:
+- Array is sorted in non-decreasing order
+- Count pairs where sum does not exceed budget
+- Return 0 if fewer than 2 elements
+
+### Examples
+
+**Example 1:**
+```
+Input: prices = [1, 2, 3, 4, 5], budget = 7
+Output: 8
+Explanation:
+Valid pairs (prices[i] + prices[j] ≤ 7):
+- (1, 2) = 3 ≤ 7
+- (1, 3) = 4 ≤ 7
+- (1, 4) = 5 ≤ 7
+- (1, 5) = 6 ≤ 7
+- (2, 3) = 5 ≤ 7
+- (2, 4) = 6 ≤ 7
+- (2, 5) = 7 ≤ 7
+- (3, 4) = 7 ≤ 7
+Pairs like (3,5)=8, (4,5)=9 exceed budget.
+Total valid pairs: 8
+```
+
+**Example 2:**
+```
+Input: prices = [], budget = 100
+Output: 0
+Explanation: Empty array has no pairs
+```
+
+**Example 3:**
+```
+Input: prices = [5], budget = 5
+Output: 0
+Explanation: Single element cannot form a pair
+```
+
+### Input Format
+
+- First line: Two space-separated integers `n` and `budget`
+  - `n` is the number of prices
+  - `budget` is the maximum sum allowed
+- Second line (if n > 0): `n` space-separated integers representing prices in non-decreasing order
+
+**Example:**
+```
+5 7
+1 2 3 4 5
+```
+
+### Output Format
+
+Return a single integer representing the total count of unique index pairs $(i, j)$ with $0 \le i < j < n$ such that $\text{prices}[i] + \text{prices}[j] \le \text{budget}$. If $n < 2$, output 0.
+
+### Constraints
+
+- $0 \le$ prices.length $\le 1000$
+- $1 \le$ prices[i] $\le 10^9$ for all $0 \le i <$ prices.length
+- prices is sorted in non-decreasing order
+- $1 \le$ budget $\le 10^9$
+- All inputs are integers
+
+### Solution - Two Pointers with Sorted Array Optimization
+
+#### Walkthrough
+
+This problem uses a **two-pointer technique** optimized for sorted arrays. The key insight is that when the array is sorted in non-decreasing order, we can leverage this property to count valid pairs efficiently.
+
+**Algorithm Strategy**:
+
+The solution processes each element from right to left (largest to smallest) and uses a **critical observation**: if `prices[i] + prices[j] <= budget` for some index `j`, then **all pairs** with indices from `0` to `j` paired with index `i` are also valid because the array is sorted.
+
+**Why this works:**
+- Array is sorted: `prices[0] <= prices[1] <= ... <= prices[j] <= ... <= prices[i]`
+- If `prices[i] + prices[j] <= budget`, then:
+  - `prices[i] + prices[j-1] <= budget` (since `prices[j-1] <= prices[j]`)
+  - `prices[i] + prices[j-2] <= budget` (since `prices[j-2] <= prices[j-1]`)
+  - ... and so on for all indices from `0` to `j`
+- Therefore, we can count `j + 1` valid pairs all at once (indices 0 through j paired with i)
+
+**Visual Example: `prices = [1, 2, 3, 4, 5], budget = 7`**
+
+```
+Step-by-step execution:
+
+i=4 (prices[4]=5):
+  j=3: 5+4=9 > 7, continue
+  j=2: 5+3=8 > 7, continue
+  j=1: 5+2=7 ≤ 7 ✓
+       All pairs (0,4), (1,4) are valid
+       Add j+1 = 2 pairs
+       result = 2
+
+i=3 (prices[3]=4):
+  j=2: 4+3=7 ≤ 7 ✓
+       All pairs (0,3), (1,3), (2,3) are valid
+       Add j+1 = 3 pairs
+       result = 2 + 3 = 5
+
+i=2 (prices[2]=3):
+  j=1: 3+2=5 ≤ 7 ✓
+       All pairs (0,2), (1,2) are valid
+       Add j+1 = 2 pairs
+       result = 5 + 2 = 7
+
+i=1 (prices[1]=2):
+  j=0: 2+1=3 ≤ 7 ✓
+       Pair (0,1) is valid
+       Add j+1 = 1 pair
+       result = 7 + 1 = 8
+
+Final result: 8 pairs
+```
+
+**Why iterate from right to left (i from n-1 to 1)?**
+- We want to count each unique pair $(i, j)$ exactly once where $i < j$
+- By fixing the larger index `i` and searching leftward for valid smaller indices `j`, we ensure $j < i$ always holds
+- This prevents counting the same pair twice (e.g., both $(1, 3)$ and $(3, 1)$)
+
+**Key Optimization**:
+- Instead of checking each pair individually $O(n^2)$, we find the **rightmost valid j** for each `i`
+- Once found, we know **all indices from 0 to j** form valid pairs with `i`
+- This batch counting reduces redundant work
+
+#### Analysis
+
+**Time Complexity**: $O(n^2)$ in the worst case, but with **early termination optimization** that often performs much better in practice.
+
+Breaking down the operations:
+1. **Outer loop**: Iterates from `i = n-1` down to `i = 1`, running $O(n)$ times
+2. **Inner while loop**: For each `i`, searches from `j = i-1` down to `j = 0`
+   - **Worst case**: All pairs exceed budget, inner loop checks all $j$ indices → $O(n)$ per iteration
+   - **Best case**: First `j` satisfies the condition → $O(1)$ per iteration
+   - **Total worst case**: $O(n) \times O(n) = O(n^2)$
+
+**Why is this better than naive $O(n^2)$?**
+- **Early break**: Once we find a valid `j`, we immediately break and add `j+1` pairs in $O(1)$ time
+- **Practical performance**: When many pairs are valid (budget is generous), we find valid `j` quickly
+- **Contrast with naive approach**: Without optimization, we'd check each pair individually, always doing $\frac{n(n-1)}{2}$ comparisons
+
+**Space Complexity**: $O(1)$ for auxiliary storage.
+
+- Only uses constant extra variables (`result`, `i`, `j`)
+- No additional data structures needed
+- Input array is not modified
+
+#### Implementation Steps
+
+**Step 1: Initialize Result Counter**
+- Create `result = 0` to accumulate the count of valid pairs
+
+**Step 2: Outer Loop - Fix Larger Index**
+- Iterate from `i = prices.size() - 1` down to `i = 1`
+- Why start at `n-1`? We're fixing the larger index of each pair
+- Why stop at `1`? When `i = 0`, there are no smaller indices to pair with
+
+**Step 3: Inner Loop - Find Rightmost Valid Smaller Index**
+- Initialize `j = i - 1` (start searching from the element immediately before `i`)
+- While `j >= 0`:
+  - Check if `prices[i] + prices[j] <= budget`
+  - **If valid**:
+    - Add `j + 1` to result (counts all pairs from indices 0 to j with index i)
+    - Break immediately (optimization: no need to check further)
+  - **If invalid**: Decrement `j` to check the next smaller element
+
+**Step 4: Return Total Count**
+- After processing all indices, `result` contains the total number of valid pairs
+
+**Key Implementation Details**:
+
+1. **Why `result += (j + 1)` instead of `result++`?**
+   - `j + 1` counts all indices from `0` to `j` inclusive
+   - Example: If `j = 3`, we count pairs at indices `[0, 1, 2, 3]` = 4 pairs
+
+2. **Why break after finding valid `j`?**
+   - Once we find the rightmost valid `j`, we know all smaller indices are also valid
+   - Breaking avoids redundant checks and improves practical performance
+
+3. **Edge case handling**:
+   - If `prices.size() < 2`, outer loop never executes → returns `0` (correct)
+   - If no pairs satisfy the budget, inner loop exhausts without breaking → adds `0` (correct)
+
+#### Java Code
+
+```java
+class Result {
+
+    /*
+     * Complete the 'countAffordablePairs' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY prices
+     *  2. INTEGER budget
+     */
+
+    public static int countAffordablePairs(List<Integer> prices, int budget) {
+        int result = 0;
+
+        // Fix the larger index i (from right to left)
+        for (int i = prices.size() - 1; i >= 1; i--) {
+            int j = i - 1;
+
+            // Search for the rightmost valid smaller index j
+            while (j >= 0) {
+                if (prices.get(i) + prices.get(j) <= budget) {
+                    // All pairs from indices 0 to j with index i are valid
+                    result += (j + 1);
+                    break;
+                }
+
+                j--;
+            }
+        }
+
+        return result;
+    }
+
+}
+```
+
+### Solution - Optimal Two Pointers (Linear Time)
+
+#### Walkthrough
+
+This solution uses the **classic two-pointer technique** optimized for sorted arrays, achieving guaranteed linear time complexity. This approach is more efficient than the previous solution because it leverages the sorted property to avoid redundant checks.
+
+**Algorithm Strategy**:
+
+The key insight is to use **two pointers moving inward** from both ends of the array:
+
+1. **Initialize Pointers**:
+   - `left = 0` (smallest element)
+   - `right = n-1` (largest element)
+   - `count = 0` (accumulated pair count)
+
+2. **Core Logic**:
+   - While `left < right`:
+     - Compute `sum = prices[left] + prices[right]`
+     - **If sum $\le$ budget**:
+       - All pairs `(left, left+1)`, `(left, left+2)`, ..., `(left, right)` are valid
+       - Why? Because array is sorted: if `prices[left] + prices[right] <= budget`, then `prices[left] + prices[j]` is also valid for all `j` in range `[left+1, right-1]`
+       - Add `(right - left)` pairs to count
+       - Move `left++` to explore pairs with the next smallest element
+     - **If sum $>$ budget**:
+       - Current right element is too large when paired with left
+       - Move `right--` to try a smaller right element
+       - Don't increment left yet, as smaller right values might work with current left
+
+**Visual Example: `prices = [1, 2, 3, 4, 5], budget = 7`**
+
+```
+Step-by-step execution:
+
+Initial: left=0, right=4, count=0
+  prices[0]=1, prices[4]=5
+  sum = 1+5 = 6 <= 7 ✓
+  Valid pairs: (0,1), (0,2), (0,3), (0,4) = 4 pairs
+  count += (4-0) = 4
+  left++ → left=1
+
+Step 2: left=1, right=4, count=4
+  prices[1]=2, prices[4]=5
+  sum = 2+5 = 7 <= 7 ✓
+  Valid pairs: (1,2), (1,3), (1,4) = 3 pairs
+  count += (4-1) = 7
+  left++ → left=2
+
+Step 3: left=2, right=4, count=7
+  prices[2]=3, prices[4]=5
+  sum = 3+5 = 8 > 7 ✗
+  Sum too large, try smaller right
+  right-- → right=3
+
+Step 4: left=2, right=3, count=7
+  prices[2]=3, prices[3]=4
+  sum = 3+4 = 7 <= 7 ✓
+  Valid pairs: (2,3) = 1 pair
+  count += (3-2) = 8
+  left++ → left=3
+
+Step 5: left=3, right=3, count=8
+  left == right → stop (can't form pair with itself)
+
+Final result: 8 pairs
+```
+
+**Why This Works**:
+
+The algorithm exploits the sorted property in a powerful way:
+
+1. **When `sum <= budget` (move left pointer right)**:
+   - If `prices[left] + prices[right] <= budget`, then `prices[left]` can pair with ANY element from `left+1` to `right`
+   - Because the array is sorted: `prices[left+1] <= prices[left+2] <= ... <= prices[right]`
+   - So all intermediate elements will also satisfy the budget constraint
+   - Count all `(right - left)` pairs at once
+
+2. **When `sum > budget` (move right pointer left)**:
+   - Current `right` element is too large to pair with `left`
+   - Since array is sorted and we've exceeded budget, `right` won't work with any element $\ge$ `left`
+   - Try a smaller `right` value instead
+
+**Comparison with Previous Solution**:
+
+| Aspect | Previous Solution | Optimal Two Pointers |
+|--------|------------------|---------------------|
+| Time Complexity | $O(n^2)$ worst case | $O(n)$ guaranteed |
+| Approach | Iterate right-to-left, search leftward | Two pointers converging inward |
+| Early Break | Yes (practical optimization) | Not needed (already optimal) |
+| Sorted Property | Used for batch counting | Used for directional pointer movement |
+| Best For | Educational, easier to understand | Production code, maximum efficiency |
+
+#### Analysis
+
+**Time Complexity**: $O(n)$ - Linear time guaranteed.
+
+Breaking down the operations:
+
+1. **Pointer Movement**: Each pointer moves at most $n$ times
+   - `left` moves from index 0 to at most index $n-1$: maximum $n$ increments
+   - `right` moves from index $n-1$ to at most index 0: maximum $n$ decrements
+   - **Total pointer movements**: $\le 2n$
+
+2. **Work Per Iteration**: $O(1)$
+   - Compute sum: $O(1)$
+   - Compare with budget: $O(1)$
+   - Update count: $O(1)$
+   - Move pointer: $O(1)$
+
+3. **Loop Termination**: Guaranteed to terminate when `left >= right`
+   - Each iteration moves at least one pointer
+   - Pointers converge monotonically
+
+**Total**: $O(n)$ - exact bound is $\le 2n$ iterations with $O(1)$ work each
+
+**Why is this better than the previous $O(n^2)$ solution?**
+
+- **No nested loops**: Single while loop with two moving pointers
+- **No redundant checks**: Each pair is implicitly counted through batch addition
+- **Predictable performance**: Always $O(n)$, regardless of input distribution
+- **Example**: For `n = 1000` elements:
+  - Previous solution: Up to $1,000,000$ comparisons in worst case
+  - Optimal solution: At most $2,000$ pointer movements
+
+**Space Complexity**: $O(1)$ for auxiliary storage.
+
+1. **Variables used**: `left`, `right`, `count`, `sum` - all constant space
+2. **No additional data structures**: No arrays, maps, or lists allocated
+3. **Input array**: Not modified, not counted as auxiliary space
+
+**Total auxiliary space**: $O(1)$ - constant space regardless of input size
+
+#### Implementation Steps
+
+**Step 1: Initialize Two Pointers and Counter**
+```java
+int left = 0;                    // Start at smallest element
+int right = prices.size() - 1;   // Start at largest element
+int count = 0;                   // Accumulated pair count
+```
+- `left` begins at the leftmost index (smallest price due to sorting)
+- `right` begins at the rightmost index (largest price due to sorting)
+- `count` will accumulate the total number of valid pairs
+
+**Step 2: Two-Pointer Loop with Budget Check**
+```java
+while (left < right) {
+    int sum = prices.get(left) + prices.get(right);
+
+    // ... conditional logic ...
+}
+```
+- Continue while pointers haven't crossed or met
+- When `left == right`, we can't form a pair (need two distinct indices)
+- Compute sum of elements at both pointer positions
+
+**Step 3: Handle Valid Pair Case (sum $\le$ budget)**
+```java
+if (sum <= budget) {
+    count += (right - left);
+    left++;
+}
+```
+- **Why `right - left` pairs?**
+  - If `prices[left] + prices[right] <= budget`, then by sorted property:
+    - `prices[left] + prices[left+1] <= budget` (since `prices[left+1] <= prices[right]`)
+    - `prices[left] + prices[left+2] <= budget`
+    - ... and so on for all indices between `left+1` and `right`
+  - Total valid pairs: indices from `left+1` to `right` inclusive
+  - Count: `(right - left)` pairs
+- **Why move `left++`?**
+  - We've counted all pairs involving `prices[left]` with indices $\ge$ `left+1`
+  - Move to the next smallest element to find more pairs
+
+**Step 4: Handle Invalid Pair Case (sum $>$ budget)**
+```java
+else {
+    right--;
+}
+```
+- Current `right` element makes the sum too large
+- Since array is sorted, `prices[right]` is the largest element in remaining range
+- **Why move `right--`?**
+  - Decreasing `right` gives us a smaller value to try with current `left`
+  - We haven't exhausted all possibilities for current `left` yet
+  - Don't move `left` because a smaller `right` might work with current `left`
+
+**Step 5: Return Total Count**
+```java
+return count;
+```
+- After pointers converge, `count` contains the total number of valid pairs
+- All pairs are counted exactly once due to strict ordering constraint `left < right`
+
+**Key Implementation Details**:
+
+1. **Why `count += (right - left)` instead of `count++`?**
+   - Batch counting optimization enabled by sorted property
+   - Example: If `left=2, right=7`, we count 5 pairs: `(2,3), (2,4), (2,5), (2,6), (2,7)`
+
+2. **Why only move one pointer per iteration?**
+   - Moving `left++` when valid ensures we explore all pairs with current left
+   - Moving `right--` when invalid tries a smaller right value
+   - Moving both would skip potential valid pairs
+
+3. **Edge case handling**:
+   - If `prices.size() < 2`, loop never executes → returns `0` (correct)
+   - If no pairs satisfy budget, count stays `0` → returns `0` (correct)
+   - Pointers guaranteed to converge in at most $n$ iterations
+
+#### Java Code
+
+```java
+class Result {
+
+    /*
+     * Complete the 'countAffordablePairs' function below.
+     *
+     * OPTIMAL SOLUTION: O(n) time, O(1) space using two pointers
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY prices
+     *  2. INTEGER budget
+     */
+
+    public static int countAffordablePairs(List<Integer> prices, int budget) {
+        int left = 0;
+        int right = prices.size() - 1;
+        int count = 0;
+
+        while (left < right) {
+            int sum = prices.get(left) + prices.get(right);
+
+            if (sum <= budget) {
+                // All pairs (left, left+1), ..., (left, right) are valid
+                // Sorted property ensures all intermediate sums are also valid
+                count += (right - left);
+                left++;
+            } else {
+                // Sum too large, try smaller right element
+                right--;
+            }
+        }
+
+        return count;
+    }
+}
+```
+
+**Algorithm Summary**:
+- **Time**: $O(n)$ - single pass with two converging pointers
+- **Space**: $O(1)$ - only constant variables used
+- **Correctness**: Leverages sorted property for batch counting
+- **Use Case**: Preferred for production code when performance matters
+
+
 ## Merge and Sort Intervals (HackerRank) {#hr-merge-sort-intervals}
 
 ### Problem Metadata
