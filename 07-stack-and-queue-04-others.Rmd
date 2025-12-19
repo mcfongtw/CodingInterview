@@ -1,1 +1,400 @@
-<!-- No Other-platform problems for this chapter. -->
+## VIP Customer Scheduler {#interview-vip-scheduler}
+
+### Metadata
+
+- **Platform**: Interview (Intuit)
+- **Difficulty**: Medium
+- **Tags**: `Intuit`
+- **Techniques**: [Queue](\@ref(queue)), [Priority Queue](\@ref(priority-queue))
+
+### Description
+
+Design a scheduler service that manages customer processing with VIP priority.
+
+**Requirements:**
+
+You need to implement two classes:
+
+1. **Customer class** with:
+   - Customer type (VIP or Regular)
+   - Customer ID or name
+
+2. **SchedulerService class** with:
+   - `void checkIn(Customer c)`: Add a customer to the queue
+   - `Customer getNextCustomer()`: Retrieve the next customer to process
+
+**Processing Rules:**
+
+1. All VIP customers must be processed before regular customers
+2. Maintain a 2:1 processing ratio between VIP and regular customers (2 VIPs, then 1 regular)
+3. Preserve in-place ordering: customers cannot be reordered once checked in
+4. Cannot put a customer back into the queue in a different position
+
+**Example:**
+
+```
+Input sequence: VIP1, VIP2, Regular1, VIP3, Regular2, Regular3, VIP4
+
+Output sequence:
+- VIP1 (1st VIP)
+- VIP2 (2nd VIP)
+- Regular1 (1 regular after 2 VIPs)
+- VIP3 (1st VIP)
+- VIP4 (2nd VIP)
+- Regular2 (1 regular after 2 VIPs)
+- Regular3 (remaining)
+```
+
+### Walkthrough
+
+**Approach 1: Two Simple Queues**
+
+The key insight is to maintain two separate FIFO queues:
+- One queue for VIP customers
+- One queue for regular customers
+
+To maintain the 2:1 ratio, we track how many VIPs we've served since the last regular customer. When `getNextCustomer()` is called:
+1. If VIP queue is not empty and we haven't served 2 VIPs yet, serve from VIP queue
+2. If we've served 2 VIPs and regular queue is not empty, serve from regular queue and reset counter
+3. If regular queue is empty, continue serving VIPs regardless of ratio
+4. If VIP queue is empty, serve from regular queue
+
+**Detailed Execution Scenarios:**
+
+**Scenario 1: Normal 2:1 ratio with both types present**
+
+Input: `VIP1, VIP2, Regular1, VIP3, VIP4, Regular2`
+
+```
+Call 1: vipCount=0, vipQueue not empty → Serve VIP1 (1st poll), count=1
+Call 2: vipCount=1, vipQueue not empty → Serve VIP2 (1st poll), count=2
+Call 3: vipCount=2, regularQueue not empty → Serve Regular1 (2nd poll), count=0
+Call 4: vipCount=0, vipQueue not empty → Serve VIP3 (1st poll), count=1
+Call 5: vipCount=1, vipQueue not empty → Serve VIP4 (1st poll), count=2
+Call 6: vipCount=2, regularQueue not empty → Serve Regular2 (2nd poll), count=0
+```
+
+Output: `VIP1, VIP2, Regular1, VIP3, VIP4, Regular2`
+
+**Scenario 2: Regulars exhausted, continue with VIPs**
+
+Input: `VIP1, VIP2, Regular1, VIP3, VIP4, VIP5`
+
+```
+Call 1: vipCount=0 → Serve VIP1 (1st poll), count=1
+Call 2: vipCount=1 → Serve VIP2 (1st poll), count=2
+Call 3: vipCount=2, regularQueue not empty → Serve Regular1 (2nd poll), count=0
+Call 4: vipCount=0 → Serve VIP3 (1st poll), count=1
+Call 5: vipCount=1 → Serve VIP4 (1st poll), count=2
+Call 6: vipCount=2, regularQueue EMPTY → Serve VIP5 (3rd poll), count=3
+```
+
+Output: `VIP1, VIP2, Regular1, VIP3, VIP4, VIP5`
+
+**Scenario 3: VIPs exhausted, only regulars remain**
+
+Input: `VIP1, Regular1, Regular2, Regular3`
+
+```
+Call 1: vipCount=0 → Serve VIP1 (1st poll), count=1
+Call 2: vipCount=1, vipQueue EMPTY, regularQueue not empty
+        → First check fails (vipQueue empty)
+        → Second check fails (count ≠ 2)
+        → Third check fails (vipQueue empty)
+        → Serve Regular1 (4th poll)
+Call 3: vipQueue EMPTY → Serve Regular2 (4th poll)
+Call 4: vipQueue EMPTY → Serve Regular3 (4th poll)
+```
+
+Output: `VIP1, Regular1, Regular2, Regular3`
+
+**Scenario 4: Only VIPs, no regulars**
+
+Input: `VIP1, VIP2, VIP3`
+
+```
+Call 1: vipCount=0 → Serve VIP1 (1st poll), count=1
+Call 2: vipCount=1 → Serve VIP2 (1st poll), count=2
+Call 3: vipCount=2, regularQueue EMPTY → Serve VIP3 (3rd poll), count=3
+```
+
+Output: `VIP1, VIP2, VIP3`
+
+**Scenario 5: Only regulars, no VIPs**
+
+Input: `Regular1, Regular2`
+
+```
+Call 1: vipQueue empty from start → Serve Regular1 (4th poll)
+Call 2: vipQueue empty → Serve Regular2 (4th poll)
+```
+
+Output: `Regular1, Regular2`
+
+**Key Observations:**
+- The **1st poll** handles normal VIP serving (most common)
+- The **2nd poll** enforces the 2:1 ratio when both types exist
+- The **3rd poll** handles the edge case when regulars run out mid-stream
+- The **4th poll** handles when only regulars remain
+- Polls 3 and 4 are mutually exclusive (only one executes per call)
+
+**Approach 2: Priority Queue**
+
+Use a single priority queue with a custom comparator that considers:
+1. Customer type (VIP vs Regular)
+2. Check-in order (to maintain FIFO within each type)
+3. Current processing ratio state
+
+Each customer needs to track their arrival order. The comparator ensures VIPs always have higher priority, but we need external state to manage the 2:1 ratio.
+
+**Challenge with Priority Queue approach**: Priority queues don't naturally support the "2:1 ratio with state" requirement because the comparator is stateless. We need to combine it with external tracking.
+
+### Analysis
+
+**Approach 1: Two Simple Queues**
+
+**Time Complexity:**
+- `checkIn()`: $O(1)$ - simple enqueue operation
+- `getNextCustomer()`: $O(1)$ - simple dequeue with counter check
+
+**Space Complexity:** $O(n)$ where n is total number of customers in both queues
+
+**Approach 2: Priority Queue**
+
+**Time Complexity:**
+- `checkIn()`: $O(\log n)$ - heap insertion
+- `getNextCustomer()`: $O(\log n)$ - heap removal with ratio tracking
+
+**Space Complexity:** $O(n)$ where n is total number of customers
+
+**Two queues approach is more efficient** for this specific problem due to $O(1)$ operations.
+
+### Implementation Steps
+
+**Approach 1: Two Simple Queues**
+
+1. Create two separate `Queue<Customer>`: `vipQueue` and `regularQueue`
+2. Maintain a counter `vipServedCount` to track VIPs served since last regular
+3. In `checkIn()`: route customer to appropriate queue based on type
+4. In `getNextCustomer()`:
+   - Check if VIP queue has customers and counter $\lt$ 2, serve VIP
+   - Else if regular queue has customers and counter $\eq$ 2, serve regular and reset counter
+   - Else serve from whichever queue is non-empty
+
+**Approach 2: Priority Queue**
+
+1. Create `Customer` class with `type`, `id`, and `checkInOrder` fields
+2. Use `PriorityQueue` with comparator: VIP type first, then by check-in order
+3. Maintain external counter `vipServedCount`
+4. In `getNextCustomer()`: peek at top, check ratio constraint, adjust serving logic
+5. **Note**: This approach requires peeking and conditional polling, making it less clean than two queues
+
+### Java Code
+
+#### Approach 1: Two Simple Queues
+
+```java
+class Customer {
+    enum Type {
+        VIP, REGULAR
+    }
+
+    private Type type;
+    private String id;
+
+    public Customer(Type type, String id) {
+        this.type = type;
+        this.id = id;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return type + "-" + id;
+    }
+}
+
+class SchedulerService {
+    private Queue<Customer> vipQueue;
+    private Queue<Customer> regularQueue;
+    private int vipServedCount;
+
+    public SchedulerService() {
+        this.vipQueue = new LinkedList<>();
+        this.regularQueue = new LinkedList<>();
+        this.vipServedCount = 0;
+    }
+
+    public void checkIn(Customer customer) {
+        if (customer.getType() == Customer.Type.VIP) {
+            vipQueue.offer(customer);
+        } else {
+            regularQueue.offer(customer);
+        }
+    }
+
+    public Customer getNextCustomer() {
+        // If both queues are empty, return null
+        if (vipQueue.isEmpty() && regularQueue.isEmpty()) {
+            return null;
+        }
+
+        // If VIP queue is not empty and we haven't served 2 VIPs yet
+        if (!vipQueue.isEmpty() && vipServedCount < 2) {
+            vipServedCount++;
+            return vipQueue.poll();
+        }
+
+        // If we've served 2 VIPs and regular queue has customers
+        if (vipServedCount == 2 && !regularQueue.isEmpty()) {
+            vipServedCount = 0;  // Reset counter
+            return regularQueue.poll();
+        }
+
+        // If regular queue is empty but VIP queue has customers
+        if (!vipQueue.isEmpty()) {
+            vipServedCount++;
+            return vipQueue.poll();
+        }
+
+        // Only regular customers left
+        return regularQueue.poll();
+    }
+}
+```
+
+#### Approach 2: Priority Queue
+
+```java
+class Customer {
+    enum Type {
+        VIP, REGULAR
+    }
+
+    private Type type;
+    private String id;
+    private int checkInOrder;
+
+    public Customer(Type type, String id, int checkInOrder) {
+        this.type = type;
+        this.id = id;
+        this.checkInOrder = checkInOrder;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getCheckInOrder() {
+        return checkInOrder;
+    }
+
+    @Override
+    public String toString() {
+        return type + "-" + id;
+    }
+}
+
+class SchedulerService {
+    private PriorityQueue<Customer> queue;
+    private int checkInCounter;
+    private int vipServedCount;
+
+    public SchedulerService() {
+        // Comparator: VIP first, then by check-in order (FIFO within same type)
+        this.queue = new PriorityQueue<>((c1, c2) -> {
+            if (c1.getType() != c2.getType()) {
+                // VIP (0) comes before REGULAR (1)
+                return c1.getType().ordinal() - c2.getType().ordinal();
+            }
+            // Same type: maintain FIFO order
+            return c1.getCheckInOrder() - c2.getCheckInOrder();
+        });
+        this.checkInCounter = 0;
+        this.vipServedCount = 0;
+    }
+
+    public void checkIn(Customer customer) {
+        queue.offer(new Customer(customer.getType(), customer.getId(), checkInCounter++));
+    }
+
+    public Customer getNextCustomer() {
+        if (queue.isEmpty()) {
+            return null;
+        }
+
+        // Check if we need to enforce 2:1 ratio
+        Customer next = queue.peek();
+
+        // If next is VIP and we haven't served 2 VIPs yet, serve it
+        if (next.getType() == Customer.Type.VIP && vipServedCount < 2) {
+            vipServedCount++;
+            return queue.poll();
+        }
+
+        // If we've served 2 VIPs, we need to serve a regular
+        if (vipServedCount == 2) {
+            // Look for a regular customer
+            Customer regular = findAndRemoveRegular();
+            if (regular != null) {
+                vipServedCount = 0;  // Reset counter
+                return regular;
+            }
+            // No regular customers, continue with VIPs
+            vipServedCount++;
+            return queue.poll();
+        }
+
+        // Default: serve from priority queue
+        if (next.getType() == Customer.Type.VIP) {
+            vipServedCount++;
+        } else {
+            vipServedCount = 0;
+        }
+        return queue.poll();
+    }
+
+    // Helper method to find and remove first regular customer
+    // This breaks the O(log n) guarantee - requires O(n) scan
+    private Customer findAndRemoveRegular() {
+        List<Customer> tempList = new ArrayList<>();
+        Customer regular = null;
+
+        while (!queue.isEmpty()) {
+            Customer c = queue.poll();
+            if (c.getType() == Customer.Type.REGULAR && regular == null) {
+                regular = c;
+                break;
+            } else {
+                tempList.add(c);
+            }
+        }
+
+        // Put back non-regular customers
+        for (Customer c : tempList) {
+            queue.offer(c);
+        }
+
+        return regular;
+    }
+}
+```
+
+### Key Insights
+
+- **Two queues approach is superior** for this problem: simpler logic, $O(1)$ operations, and cleaner code
+- **Priority queue approach has a fatal flaw**: Finding a regular customer when VIP queue is non-empty requires $O(n)$ scan, negating the benefit of using a heap
+- **State management is critical**: The 2:1 ratio requires tracking how many VIPs have been served since the last regular customer
+- **Edge cases matter**: Handle scenarios where one queue is empty while maintaining the ratio constraint
+- **Interview lesson**: Sometimes simpler data structures (two queues) are better than sophisticated ones (priority queue) when the problem has clear categorical separation
