@@ -1,3 +1,121 @@
+## Reverse Integer {#lc-reverse-integer}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 7
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/reverse-integer/
+- **Tags**: `Math`
+- **Interview Tags**: NeetCode 150
+- **Techniques**: [Math](glossary-of-algorithm.html#math)
+
+### Description
+
+Given a signed 32-bit integer `x`, return `x` with its digits reversed. If reversing `x` causes the value to go outside the signed 32-bit integer range $[-2^{31}, 2^{31} - 1]$, then return `0`.
+
+**Assume the environment does not allow you to store 64-bit integers (signed or unsigned).**
+
+### Examples
+
+```
+Input: x = 123
+Output: 321
+
+Input: x = -123
+Output: -321
+
+Input: x = 120
+Output: 21
+
+Input: x = 1534236469
+Output: 0
+Explanation: The reversed number 9646324351 exceeds the 32-bit signed integer range.
+```
+
+### Constraints
+
+- $-2^{31} \le x \le 2^{31} - 1$
+
+### Solution - Digit Extraction with Overflow Detection
+
+#### Walkthrough
+
+Extract digits from right to left using modulo and division operations. Build the reversed number by multiplying the current result by 10 and adding each extracted digit. The key challenge is detecting overflow **before** it happens, without using 64-bit integers.
+
+For overflow detection, check if the result exceeds the boundary value before multiplication. The boundary is `Integer.MAX_VALUE / 10` (214748364) for positive numbers and `Integer.MIN_VALUE / 10` (-214748364) for negative numbers. When the result equals the boundary, also check if the next digit would cause overflow by comparing against the last digit of the respective limit (7 for positive, -8 for negative).
+
+Java's modulo operator naturally preserves the sign of negative numbers, so no special handling is needed for negative inputs.
+
+**Example 1: Normal case (x = 123)**
+```
+x = 123, result = 0
+Iteration 1: residue = 3, x = 12, result = 3
+Iteration 2: residue = 2, x = 1, result = 32
+Iteration 3: residue = 1, x = 0, result = 321
+Output: 321
+```
+
+**Example 2: Negative case (x = -123)**
+```
+x = -123, result = 0
+Iteration 1: residue = -3, x = -12, result = -3
+Iteration 2: residue = -2, x = -1, result = -32
+Iteration 3: residue = -1, x = 0, result = -321
+Output: -321
+```
+
+**Example 3: Overflow case (x = 1534236469)**
+```
+x = 1534236469, result = 0
+After 9 iterations: result = 964632435
+Iteration 10: residue = 1
+  Check: 964632435 > 214748364? YES! Return 0
+  (Would overflow to 9646324351 > 2147483647)
+Output: 0
+```
+
+#### Analysis
+
+- **Time Complexity**: O(log n) where n is the absolute value of x (number of digits)
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+
+1. Initialize `result = 0`.
+2. While `x` is not zero, extract the last digit using `x % 10`.
+3. Before multiplying `result` by 10, check for overflow:
+   - If `result > Integer.MAX_VALUE / 10`, return 0 (positive overflow).
+   - If `result < Integer.MIN_VALUE / 10`, return 0 (negative overflow).
+4. Update `result = result * 10 + digit`.
+5. Remove the last digit from `x` using `x / 10`.
+6. Return the final `result`.
+
+#### Java Code
+
+```java
+public int reverse(int x) {
+    int result = 0;
+
+    while(x != 0) {
+        int residue = x % 10;
+        x = x / 10;
+
+        // Check overflow before multiplication
+        // For valid 32-bit inputs, these checks are sufficient
+        if (result > Integer.MAX_VALUE / 10 || result < Integer.MIN_VALUE / 10) {
+            return 0;
+        }
+
+        result = result * 10 + residue;
+    }
+
+    return result;
+}
+```
+
+
 ## Pow(x, n) {#lc-pow-x-n}
 
 ### Problem Metadata
