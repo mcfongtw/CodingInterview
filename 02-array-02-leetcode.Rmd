@@ -246,6 +246,222 @@ private double findKth(int[] nums1, int start1, int end1,
 ```
 
 
+## Container With Most Water {#lc-container-most-water}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 11
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/container-with-most-water/
+- **Tags**: `Array`, `Two Pointers`, `Greedy`
+- **Interview Tags**: NeetCode 150
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Greedy](glossary-of-algorithm.html#greedy)
+
+### Description
+
+You are given an integer array `height` of length `n`. There are `n` vertical lines drawn such that the two endpoints of the `i-th` line are `(i, 0)` and `(i, height[i])`.
+
+Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+Return the **maximum amount of water** a container can store.
+
+**Note:** You may not slant the container.
+
+### Examples
+
+**Example 1:**
+```
+Input: height = [1,8,6,2,5,4,8,3,7]
+Output: 49
+Explanation: The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7].
+In this case, the max area of water (blue section) the container can contain is 49.
+The vertical lines are at positions 1 and 8, with heights 8 and 7 respectively.
+Area = min(8, 7) * (8 - 1) = 7 * 7 = 49.
+```
+
+**Example 2:**
+```
+Input: height = [1,1]
+Output: 1
+```
+
+### Constraints
+
+- `n == height.length`
+- $2 \le n \le 10^5$
+- $0 \le \text{height}[i] \le 10^4$
+
+### Solution - Two Pointers
+
+#### Walkthrough
+
+This solution uses a **greedy two-pointer approach** to find the maximum water container area.
+
+**Core Strategy:**
+
+The area of water between two lines is determined by:
+```
+area = width × height
+     = (right - left) × min(height[left], height[right])
+```
+
+The height is always limited by the **shorter of the two lines** (water would overflow from the shorter side).
+
+**Key Insight: Why Move the Shorter Pointer?**
+
+At each step, we have two choices:
+1. Move the left pointer right (decrease width)
+2. Move the right pointer left (decrease width)
+
+Since **width always decreases** when we move inward, the only way to potentially increase area is to find a **taller line** that compensates for the lost width.
+
+- **Moving the taller pointer**: The height remains capped by the shorter line → area **can only decrease**
+- **Moving the shorter pointer**: We might find a taller line → area **might increase**
+
+Therefore, we **always move the pointer pointing to the shorter line**.
+
+**Visual Example Walkthrough:**
+
+Using `height = [1, 8, 6, 2, 5, 4, 8, 3, 7]`:
+
+```
+Step 1: l=0, r=8
+height:  [1, 8, 6, 2, 5, 4, 8, 3, 7]
+          ^                       ^
+area = (8 - 0) × min(1, 7) = 8 × 1 = 8
+height[l]=1 < height[r]=7 → Move l++ (left is shorter)
+
+Step 2: l=1, r=8
+height:  [1, 8, 6, 2, 5, 4, 8, 3, 7]
+             ^                    ^
+area = (8 - 1) × min(8, 7) = 7 × 7 = 49 ✓ NEW MAX
+height[l]=8 > height[r]=7 → Move r-- (right is shorter)
+
+Step 3: l=1, r=7
+height:  [1, 8, 6, 2, 5, 4, 8, 3, 7]
+             ^                 ^
+area = (7 - 1) × min(8, 3) = 6 × 3 = 18
+height[l]=8 > height[r]=3 → Move r--
+
+Step 4: l=1, r=6
+height:  [1, 8, 6, 2, 5, 4, 8, 3, 7]
+             ^              ^
+area = (6 - 1) × min(8, 8) = 5 × 8 = 40
+height[l]=8 = height[r]=8 → Move r-- (equal, move either)
+
+Step 5: l=1, r=5
+height:  [1, 8, 6, 2, 5, 4, 8, 3, 7]
+             ^           ^
+area = (5 - 1) × min(8, 4) = 4 × 4 = 16
+height[l]=8 > height[r]=4 → Move r--
+
+Step 6: l=1, r=4
+height:  [1, 8, 6, 2, 5, 4, 8, 3, 7]
+             ^        ^
+area = (4 - 1) × min(8, 5) = 3 × 5 = 15
+height[l]=8 > height[r]=5 → Move r--
+
+Step 7: l=1, r=3
+height:  [1, 8, 6, 2, 5, 4, 8, 3, 7]
+             ^     ^
+area = (3 - 1) × min(8, 2) = 2 × 2 = 4
+height[l]=8 > height[r]=2 → Move r--
+
+Step 8: l=1, r=2
+height:  [1, 8, 6, 2, 5, 4, 8, 3, 7]
+             ^  ^
+area = (2 - 1) × min(8, 6) = 1 × 6 = 6
+height[l]=8 > height[r]=6 → Move r--
+
+Step 9: l >= r → Stop
+Result: 49 (from Step 2: indices 1 and 8)
+```
+
+**Why This Greedy Strategy Works:**
+
+- We start with the **maximum width** (entire array)
+- At each step, we **eliminate the side that cannot improve the result**
+- If `height[l] < height[r]`:
+  - Moving `r` would keep `min(height[l], height[r-1]) $\le$ height[l]` with smaller width → worse
+  - Moving `l` might find `height[l+1] > height[l]` → potential improvement
+- This guarantees we explore all potentially optimal containers in **O(n)** time
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Single pass with two pointers moving inward
+  - Each pointer moves at most n steps total
+  - Each iteration performs constant-time operations (comparison, multiplication)
+  - This is optimal since we must examine both endpoints of any potential container
+
+- **Space Complexity**: O(1)
+  - Only uses three variables (`l`, `r`, `result`) regardless of input size
+  - No additional data structures needed
+  - This is optimal for the problem
+
+**Why This Approach is Optimal:**
+- We cannot do better than O(n) time since examining fewer than n positions could miss the optimal container
+- The greedy strategy ensures we never miss the maximum by eliminating only provably suboptimal choices
+
+#### Implementation Steps
+
+**Initialization:**
+1. Set left pointer l at index 0
+2. Set right pointer r at index height.length - 1
+3. Set result to 0 (maximum area found so far)
+
+**Main Loop** (while left pointer $<$ right pointer):
+
+For each iteration:
+
+4. **Calculate current area**:
+   - Compute `area = (r - l) × Math.min(height[l], height[r])`
+   - Width: distance between pointers
+   - Height: limited by shorter line
+
+5. **Update maximum**:
+   - If `area > result`, update `result = area`
+
+6. **Move pointer strategically** (greedy choice):
+   - If `height[l] < height[r]`:
+     - Increment `l++` (move away from shorter left line)
+   - Else:
+     - Decrement `r--` (move away from shorter/equal right line)
+   - **Critical insight**: Moving the shorter pointer is the only move that could potentially improve the area
+
+**Return:**
+
+7. Return `result` (maximum area found)
+
+#### Java Code
+
+```java
+class Solution {
+    public int maxArea(int[] height) {
+        int l = 0, r = height.length - 1;
+        int result = 0;
+
+        while (l < r) {
+            int area = (r - l) * Math.min(height[l], height[r]);
+
+            if (area > result) {
+                result = area;
+            }
+
+            if (height[l] < height[r]) {
+                l++;
+            } else {
+                r--;
+            }
+        }
+
+        return result;
+    }
+}
+```
+
+
 ## Three Sum {#lc-three-sum}
 
 ### Problem Metadata

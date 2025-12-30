@@ -848,6 +848,265 @@ visited[row][col] = false;
    ```
 
 
+## Two Pointer {#two-pointer-intro}
+
+The **Two Pointer** technique uses two indices (pointers) to traverse a data structure, often in a single pass, to solve problems efficiently. This technique is particularly powerful for array and linked list problems, reducing time complexity from O(n^2) to O(n) by avoiding nested loops.
+
+### Core Concept
+
+Instead of using nested loops to compare elements, two pointers work together to:
+
+- **Converge from opposite ends** (opposite direction)
+- **Move at different speeds** (fast-slow)
+- **Define a window** (sliding window)
+- **Track positions in different structures** (parallel traversal)
+
+### Common Patterns
+
+#### Pattern 1: Opposite Direction (Converging Pointers)
+
+**When to use**: Sorted arrays, finding pairs/triplets, container problems
+
+**How it works**: Start pointers at opposite ends and move them toward each other based on a condition.
+
+**Template**:
+```java
+int left = 0, right = array.length - 1;
+while (left < right) {
+    // Evaluate current state
+    int result = computeResult(array[left], array[right]);
+
+    // Move pointers based on condition
+    if (condition) {
+        left++;      // Move left pointer right
+    } else {
+        right--;     // Move right pointer left
+    }
+}
+```
+
+**Key insight**: In sorted arrays, pointer movement is monotonic - moving the left pointer increases values, moving the right pointer decreases values.
+
+**Examples**:
+
+- **[Two Sum II - Sorted Array](#lc-two-sum-ii-sorted)**: Find pair summing to target
+  - If `array[left] + array[right] < target`: need larger sum, move `left++`
+  - If `array[left] + array[right] > target`: need smaller sum, move `right--`
+  - Time: O(n), Space: O(1)
+
+- **[Container With Most Water](#lc-container-most-water)**: Maximize area between two lines
+  - Area = `(right - left) × min(height[left], height[right])`
+  - Always move the pointer with smaller height (greedy optimization)
+  - Time: O(n), Space: O(1)
+
+- **[3Sum](#lc-three-sum)**: Find all unique triplets summing to zero
+  - Fix one element, use two pointers on remaining sorted subarray
+  - Skip duplicates to ensure unique triplets
+  - Time: O(n^2), Space: O(1)
+
+- **[Sort Array by Parity](#lc-sort-array-parity)**: Move even numbers to front
+  - Left pointer finds odd numbers, right pointer finds even numbers
+  - Swap when both found, continue until pointers cross
+  - Time: O(n), Space: O(1)
+
+**Complexity Analysis**:
+
+- **Time**: O(n) for single pass, O(n^2) when combined with outer loop (3Sum, 4Sum)
+- **Space**: O(1) - only pointer variables
+
+#### Pattern 2: Same Direction (Fast-Slow Pointers)
+
+**When to use**: In-place array modification, linked list cycle detection, finding middle element
+
+**How it works**: Both pointers start at the same position but move at different speeds or under different conditions.
+
+**Template**:
+```java
+int slow = 0, fast = 0;
+while (fast < array.length) {
+    // Process element at fast pointer
+    if (shouldKeep(array[fast])) {
+        array[slow] = array[fast];
+        slow++;
+    }
+    fast++;
+}
+// Result is in array[0...slow-1]
+```
+
+**Key insight**: The slow pointer tracks the "write position" for valid elements, while the fast pointer scans ahead.
+
+**Examples**:
+
+- **[Remove Duplicates from Sorted Array](#lc-remove-duplicates-sorted)**: Remove duplicates in-place
+  - Slow pointer tracks position for next unique element
+  - Fast pointer scans for new unique values
+  - Time: O(n), Space: O(1)
+
+- **[Linked List Cycle](#lc-linked-list-cycle)** (Floyd's Cycle Detection): Detect cycle in linked list
+  - Fast pointer moves 2 steps, slow pointer moves 1 step
+  - If cycle exists, pointers will meet
+  - Time: O(n), Space: O(1)
+
+- **[Palindrome Linked List](#lc-palindrome-list)**: Check if linked list is palindrome
+  - Use fast-slow to find middle
+  - Reverse second half, compare with first half
+  - Time: O(n), Space: O(1)
+
+**Complexity Analysis**:
+
+- **Time**: O(n) - single pass with both pointers
+- **Space**: O(1) - only pointer variables
+
+#### Pattern 3: Sliding Window (Dynamic Two Pointers)
+
+**When to use**: Subarray/substring problems with contiguous elements, optimization problems
+
+**How it works**: Two pointers define a window that expands (move right) or contracts (move left) based on conditions.
+
+**Template**:
+```java
+int left = 0, result = 0;
+for (int right = 0; right < array.length; right++) {
+    // Expand window by including array[right]
+    addToWindow(array[right]);
+
+    // Contract window while invalid
+    while (windowInvalid()) {
+        removeFromWindow(array[left]);
+        left++;
+    }
+
+    // Update result with current valid window
+    result = updateResult(result, right - left + 1);
+}
+```
+
+**Key insight**: The window expands to explore possibilities and contracts to maintain validity, ensuring each element is visited at most twice (once by right, once by left).
+
+**Examples**:
+
+- **[Minimum Size Subarray Sum](#lc-min-size-subarray-sum)**: Find minimum subarray length with sum $\ge$ target
+  - Expand: add elements until sum $\ge$ target
+  - Contract: remove from left while maintaining sum $\ge$ target
+  - Time: O(n), Space: O(1)
+
+- **[Longest Substring Without Repeating](#lc-longest-substring-unique)**: Find longest substring with unique characters
+  - Expand: add characters to window
+  - Contract: shrink from left when duplicate found
+  - Use hash set to track characters in current window
+  - Time: O(n), Space: O(min(n, charset size))
+
+- **[Number of Substrings All Three Chars](#lc-substrings-all-three)**: Count substrings containing 'a', 'b', 'c'
+  - When window `[left, right]` is valid (contains all three), all substrings extending to end are valid
+  - Add `n - right` to result (not just 1)
+  - Time: O(n), Space: O(1)
+
+**Complexity Analysis**:
+
+- **Time**: O(n) - each element added once (right) and removed once (left), total 2n operations
+- **Space**: O(k) where k is auxiliary data structure size (hash map, frequency array)
+
+#### Pattern 4: Parallel Traversal (Two Lists)
+
+**When to use**: Merging sorted lists, comparing sequences, simultaneous traversal
+
+**How it works**: Each pointer tracks position in a different data structure, advancing independently.
+
+**Template**:
+```java
+int i = 0, j = 0;
+while (i < list1.length && j < list2.length) {
+    if (compareCondition(list1[i], list2[j])) {
+        processAndAdvance(list1[i]);
+        i++;
+    } else {
+        processAndAdvance(list2[j]);
+        j++;
+    }
+}
+// Handle remaining elements in either list
+```
+
+**Examples**:
+
+- **[Merge Two Sorted Lists](#lc-merge-two-sorted)**: Merge two sorted linked lists
+  - Compare current nodes from both lists
+  - Append smaller node to result, advance that pointer
+  - Time: O(m + n), Space: O(1)
+
+- **[Interval List Intersections](#lc-interval-list-intersections)**: Find interval intersections
+  - Compare intervals from both lists
+  - Advance pointer of interval that ends first
+  - Time: O(m + n), Space: O(1)
+
+**Complexity Analysis**:
+
+- **Time**: O(m + n) where m, n are sizes of the two structures
+- **Space**: O(1) - only pointer variables (excluding output)
+
+### Two Pointer vs Other Techniques
+
+| Aspect | Two Pointer | Hash Table | Sorting |
+|--------|-------------|------------|---------|
+| **Time Complexity** | O(n) or O(n^2) with outer loop | O(n) average | O(n log n) |
+| **Space Complexity** | O(1) | O(n) | O(1) or O(n) |
+| **When to Use** | Sorted data, in-place modification, pairs/triplets | Fast lookups, unsorted data | Need ordering, multiple searches |
+| **Limitation** | Requires sorted data or special structure | Extra space, no ordering | Destroys original order |
+
+**Decision tree**:
+
+1. **Need to preserve original indices?** → Use Hash Table (e.g., [Two Sum I](#lc-two-sum-1))
+2. **Array already sorted or can be sorted?** → Use Two Pointer (e.g., [Two Sum II](#lc-two-sum-ii-sorted), [3Sum](#lc-three-sum))
+3. **Need all pairs/triplets from sorted data?** → Use Two Pointer with duplicate skipping (e.g., [3Sum](#lc-three-sum))
+4. **Subarray/substring problem with contiguous elements?** → Use Sliding Window (e.g., [Minimum Size Subarray Sum](#lc-min-size-subarray-sum))
+5. **In-place modification required?** → Use Same-Direction Two Pointer (e.g., [Remove Duplicates](#lc-remove-duplicates-sorted))
+
+### Common Pitfalls
+
+1. **Forgetting to skip duplicates**: In problems like [3Sum](#lc-three-sum), must skip duplicates at all pointer levels
+   ```java
+   // Skip duplicates for first element
+   if (i > 0 && nums[i] == nums[i-1]) continue;
+   // Skip duplicates for second element
+   while (left < right && nums[left] == nums[left+1]) left++;
+   // Skip duplicates for third element
+   while (left < right && nums[right] == nums[right-1]) right--;
+   ```
+
+2. **Incorrect window validity**: In sliding window, ensure condition is checked before and after window modification
+   ```java
+   // Contract window WHILE invalid (not just IF)
+   while (windowInvalid()) {
+       removeFromWindow(array[left]);
+       left++;
+   }
+   ```
+
+3. **Off-by-one errors**: Carefully handle boundary conditions
+   ```java
+   while (left < right)  // Not <=, pointers shouldn't cross
+   while (left <= right) // Use <= when pointers can meet (binary search)
+   ```
+
+4. **Not considering all valid substrings**: In problems like [Number of Substrings All Three Chars](#lc-substrings-all-three), when window becomes valid, all extensions are also valid
+   ```java
+   // When [left, right] is valid, add (n - right) substrings
+   result += n - right;  // Not just +1
+   ```
+
+### Summary
+
+The Two Pointer technique is a fundamental optimization that:
+
+- **Reduces time complexity** from O(n^2) to O(n) by eliminating nested loops
+- **Minimizes space usage** to O(1) by avoiding auxiliary data structures
+- **Works best with sorted data** or problems allowing in-place modification
+- **Has four main patterns**: opposite direction, same direction, sliding window, parallel traversal
+
+Master these patterns and you'll recognize two-pointer opportunities in most array, string, and linked list problems.
+
+
 ## Dynamic Programming vs Backtracking {#dp-vs-backtracking}
 
 Both **Dynamic Programming (DP)** and **Backtracking** solve problems by exploring subproblems, but they differ fundamentally in **what they optimize for** and **when to use each**. Understanding this distinction is critical for choosing the right approach.
