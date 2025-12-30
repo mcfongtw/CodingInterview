@@ -1,0 +1,1379 @@
+# Common Strategies {#common-strategies}
+
+This chapter covers fundamental algorithmic strategies that appear repeatedly across coding interview problems. Understanding these patterns—Dynamic Programming, Backtracking, and Two Pointers—will help you recognize problem types quickly and apply the right technique efficiently. Each section provides detailed explanations, implementation templates, and guidance on when to use each approach.
+
+## Dynamic Programming {#dynamic-programming}
+
+Dynamic Programming (DP) is a method to simplify complicated problems by breaking them down into simpler sub-problems in a recursive manner. The key insight is that sub-problems typically repeat and overlap, allowing us to store and reuse solutions to avoid redundant computation.
+
+There are two main approaches to implementing DP solutions:
+
+### Memoization (Top-Down) {#dp-memoization}
+
+**Memoization** is a top-down recursive approach with caching. It solves the problem by recursively breaking it down into smaller subproblems and storing (caching) the results to avoid redundant calculations.
+
+**Key Characteristics:**
+- Starts from the original problem and recursively breaks it down
+- Uses a cache (typically a HashMap or array) to store computed results
+- Only computes subproblems that are actually needed
+- Natural recursive structure that mirrors the problem definition
+
+**Template:**
+```java
+Map<Key, Result> memo = new HashMap<>();
+
+public Result solve(Problem problem) {
+    // Base case
+    if (isBaseCase(problem)) {
+        return baseResult;
+    }
+
+    // Check cache
+    if (memo.containsKey(problem)) {
+        return memo.get(problem);
+    }
+
+    // Compute result recursively
+    Result result = combineSubproblems(
+        solve(subproblem1),
+        solve(subproblem2)
+    );
+
+    // Store in cache
+    memo.put(problem, result);
+    return result;
+}
+```
+
+**Example: Fibonacci with Memoization**
+```java
+Map<Integer, Long> memo = new HashMap<>();
+
+public long fibonacci(int n) {
+    if (n <= 1) return n;
+
+    if (memo.containsKey(n)) {
+        return memo.get(n);
+    }
+
+    long result = fibonacci(n - 1) + fibonacci(n - 2);
+    memo.put(n, result);
+    return result;
+}
+```
+
+**Pros:**
+- Intuitive - mirrors the recursive problem definition
+- Only computes necessary subproblems (lazy evaluation)
+- Easy to convert from naive recursion (just add caching)
+
+**Cons:**
+- Recursion overhead (stack space and function calls)
+- Risk of stack overflow for deep recursion
+- Slightly slower due to cache lookups and recursion
+
+**Time Complexity:** Same as tabulation (typically $O(n \times m)$ for 2D DP)
+**Space Complexity:** $O(n)$ for cache + $O(n)$ for recursion stack = $O(n)$ total
+
+### Tabulation (Bottom-Up) {#dp-tabulation}
+
+**Tabulation** is a bottom-up iterative approach that builds a table (array) by solving smaller subproblems first and using their results to solve larger ones.
+
+**Key Characteristics:**
+- Starts from base cases and builds up to the final solution
+- Uses an array/table to store results iteratively
+- Computes all subproblems (even if not needed for final answer)
+- No recursion - purely iterative
+
+**Template:**
+```java
+public Result solve(Problem problem) {
+    // Initialize DP table
+    Result[] dp = new Result[size];
+
+    // Base case(s)
+    dp[0] = baseResult;
+
+    // Fill table iteratively
+    for (int i = 1; i < size; i++) {
+        dp[i] = combineSubproblems(dp[i-1], dp[i-2], ...);
+    }
+
+    return dp[size - 1];
+}
+```
+
+**Example: Fibonacci with Tabulation**
+```java
+public long fibonacci(int n) {
+    if (n <= 1) return n;
+
+    long[] dp = new long[n + 1];
+    dp[0] = 0;
+    dp[1] = 1;
+
+    for (int i = 2; i <= n; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+
+    return dp[n];
+}
+```
+
+**Pros:**
+- No recursion overhead (no stack space, faster)
+- Easier to optimize space (often can reduce from O(n) to O(1))
+- More efficient for problems where most subproblems are needed
+- No risk of stack overflow
+
+**Cons:**
+- Less intuitive than memoization for some problems
+- Computes all subproblems (even unnecessary ones)
+- Requires determining the correct iteration order
+
+**Time Complexity:** Same as memoization (typically $O(n \times m)$ for 2D DP)
+**Space Complexity:** $O(n)$ for table (often optimizable to $O(1)$)
+
+#### Unbounded Knapsack Pattern {#dp-unbounded-knapsack}
+
+The **Unbounded Knapsack** pattern is a tabulation-based dynamic programming technique for problems where you can use items (coins, elements, etc.) an unlimited number of times to achieve a target. Unlike the 0/1 Knapsack where each item is used at most once, unbounded knapsack allows infinite repetitions.
+
+**Core Concept:**
+
+Given a set of items with certain properties (value, weight, denomination) and a target, determine:
+- The number of ways to reach the target
+- The minimum/maximum value achievable
+- Whether the target is reachable
+
+**Key characteristic**: Items can be reused multiple times.
+
+**Combinations vs Permutations:**
+
+A critical distinction in unbounded knapsack problems is whether order matters:
+
+- **Combinations**: `{1, 2}` is the same as `{2, 1}` → Use coins in outer loop
+- **Permutations**: `{1, 2}` differs from `{2, 1}` → Use amount in outer loop
+
+**For Combinations** (most common):
+```java
+for (int coin : coins) {           // Outer: iterate items
+    for (int i = coin; i <= amount; i++) {  // Inner: iterate target
+        dp[i] += dp[i - coin];
+    }
+}
+```
+
+**For Permutations**:
+```java
+for (int i = 1; i <= amount; i++) {        // Outer: iterate target
+    for (int coin : coins) {                // Inner: iterate items
+        if (i >= coin) {
+            dp[i] += dp[i - coin];
+        }
+    }
+}
+```
+
+**Standard Recurrence Relation:**
+
+For counting combinations to make amount `i`:
+
+$$
+\text{dp}[i] = \sum_{\text{coin} \in \text{coins}} \text{dp}[i - \text{coin}]
+$$
+
+Where `dp[i]` represents the number of ways to make amount `i`.
+
+**Base case**: `dp[0] = 1` (one way to make 0: use no items)
+
+**Why Loop Order Matters:**
+
+Visual Example: `coins = [1, 2]`, `amount = 3`
+
+**Combinations approach** (coins outer):
+- Process coin 1: builds `{1}`, `{1,1}`, `{1,1,1}`
+- Process coin 2: builds `{2}`, `{1,2}`, `{2,1}` → but `{1,2}` already counted as `{1,1,1}`
+- Result: Correctly counts `{1,1,1}`, `{1,2}` (4 combinations)
+
+**Permutations approach** (amount outer):
+- Process amount 1: `{1}`
+- Process amount 2: `{1,1}`, `{2}`
+- Process amount 3: `{1,1,1}`, `{1,2}`, `{2,1}` (6 permutations)
+
+**Time and Space Complexity:**
+
+- **Time**: $O(n \times m)$ where $n$ is the target amount and $m$ is the number of items
+- **Space**: $O(n)$ using 1D DP array (can be optimized from 2D)
+
+**Standard Implementation Pattern:**
+
+```java
+public int unboundedKnapsack(int target, int[] items) {
+    int[] dp = new int[target + 1];
+    dp[0] = 1;  // Base case
+
+    // Outer loop: items (for combinations)
+    for (int item : items) {
+        // Inner loop: all reachable targets
+        for (int i = item; i <= target; i++) {
+            dp[i] += dp[i - item];
+        }
+    }
+
+    return dp[target];
+}
+```
+
+**Variants:**
+
+1. **Count combinations**: How many ways to make the target?
+   - [Coin Change II](glossary-of-algorithm.html#lc-coin-change-ii)
+
+2. **Minimum items needed**: What's the fewest items to reach target?
+   - Recurrence: `dp[i] = min(dp[i], dp[i - item] + 1)`
+
+3. **Maximum value**: What's the maximum value achievable?
+   - Recurrence: `dp[i] = max(dp[i], dp[i - weight] + value)`
+
+4. **Reachability**: Can the target be reached?
+   - Use boolean DP: `dp[i] = dp[i] || dp[i - item]`
+
+### Memoization vs Tabulation Comparison
+
+| Aspect | Memoization | Tabulation |
+|--------|-------------|------------|
+| **Direction** | Top-down (recursive) | Bottom-up (iterative) |
+| **Implementation** | Recursion + cache | Iteration + table |
+| **Subproblems** | Only needed ones | All subproblems |
+| **Intuition** | Natural recursive structure | Build from base cases |
+| **Stack Space** | $O(n)$ recursion stack | $O(1)$ no recursion |
+| **Speed** | Slightly slower | Slightly faster |
+| **Space Optimization** | Harder | Easier (often → $O(1)$) |
+| **Risk** | Stack overflow | None |
+
+**When to use Memoization:**
+- Problem naturally expressed recursively
+- Only a subset of subproblems needed
+- Quick conversion from naive recursion
+- Tree-based or non-sequential dependencies
+
+**When to use Tabulation:**
+- Most/all subproblems needed for solution
+- Want to avoid recursion overhead
+- Need space optimization ($O(1)$ possible)
+- Sequential dependencies (Fibonacci, climbing stairs)
+
+### State Optimization
+
+Beyond choosing memoization or tabulation, you can often reduce space complexity by observing that you only need recent states:
+
+**Example: Fibonacci Space Optimization**
+```java
+// From O(n) space
+long[] dp = new long[n + 1];
+
+// To O(1) space
+long prev2 = 0, prev1 = 1;
+for (int i = 2; i <= n; i++) {
+    long current = prev1 + prev2;
+    prev2 = prev1;
+    prev1 = current;
+}
+```
+
+This optimization is more commonly applied to tabulation than memoization.
+
+### Kadane's Algorithm {#kadanes-algorithm}
+
+Kadane's algorithm is a **space-optimized tabulation DP technique** for finding the maximum sum (or product) of a contiguous subarray. It demonstrates how tabulation DP can be reduced from $O(n)$ space to $O(1)$ space, making it one of the most elegant examples of DP optimization.
+
+#### Core Concept
+
+The key insight is to maintain a running state representing the **best subarray ending at the current position**. At each element, we make an optimal decision:
+
+1. **Start fresh** from the current element
+2. **Extend** the previous subarray by including the current element
+
+This decision is captured by the recurrence relation:
+
+$$
+\text{dp}[i] = \max(\text{nums}[i], \text{dp}[i-1] + \text{nums}[i])
+$$
+
+where $\text{dp}[i]$ represents the maximum sum of a subarray **ending at index i**.
+
+**State Definition**:
+- `current`: Maximum sum ending at the current position
+- `maxSoFar`: Global maximum across all positions
+
+**Why It's Dynamic Programming**:
+- **Optimal Substructure**: The best subarray ending at position $i$ depends on the best subarray ending at position $i-1$
+- **Overlapping Subproblems**: We reuse the previous state (`current`) to compute the next state
+- **Memoization**: We only need to track one previous state (space-optimized DP)
+
+#### Key Insight
+
+**Why does `max(nums[i], current + nums[i])` work?**
+
+- `nums[i]`: Start a new subarray from this element (abandon previous state)
+- `current + nums[i]`: Extend the previous best subarray (build on previous state)
+
+**Decision Logic**:
+- If the previous sum `current` is **negative**, starting fresh from `nums[i]` gives a better result
+- If the previous sum is **positive**, extending it by adding `nums[i]` is better
+
+This is the essence of **optimal substructure** in DP.
+
+#### Standard Implementation (Space-Optimized Tabulation)
+
+```java
+public int maxSubArray(int[] nums) {
+    int current = nums[0];    // Best subarray ending here
+    int maxSoFar = nums[0];   // Global maximum
+
+    for (int i = 1; i < nums.length; i++) {
+        // DP recurrence: max(start fresh, extend previous)
+        current = Math.max(nums[i], current + nums[i]);
+
+        // Track global maximum
+        maxSoFar = Math.max(maxSoFar, current);
+    }
+
+    return maxSoFar;
+}
+```
+
+**This is $O(1)$ space-optimized tabulation DP**:
+- Instead of storing `dp[i]` for all $i$, we only track `current` (latest state)
+- Original 1D DP table: `int[] dp = new int[n]`
+- Optimized: Two variables `current` and `maxSoFar`
+
+#### Kadane's Algorithm Variants
+
+**1. Maximum Product Subarray**
+
+For products instead of sums, we need to track **both max and min** because negative numbers flip signs. A large negative product can become a large positive when multiplied by another negative.
+
+**Modified Recurrence**:
+$$
+\begin{align}
+\text{maxProduct}[i] &= \max(\text{nums}[i], \text{maxProduct}[i-1] \times \text{nums}[i], \text{minProduct}[i-1] \times \text{nums}[i]) \\
+\text{minProduct}[i] &= \min(\text{nums}[i], \text{maxProduct}[i-1] \times \text{nums}[i], \text{minProduct}[i-1] \times \text{nums}[i])
+\end{align}
+$$
+
+See [Maximum Product Subarray](#lc-maximum-product) (LeetCode 152) for the complete implementation.
+
+**2. Circular Maximum Subarray**
+
+For circular arrays, the maximum can wrap around the boundary. Use Kadane's algorithm twice:
+- **Case 1**: Standard Kadane (no wrap)
+- **Case 2**: Total sum - minimum subarray (wrap around)
+
+See Maximum Sum Circular Subarray (LeetCode 918).
+
+**3. Stock Price Problems**
+
+Many stock problems are variants of Kadane's algorithm with state tracking:
+- [Best Time to Buy and Sell Stock](#lc-stock-121): Find maximum `prices[j] - prices[i]` where $j > i$
+  - Transform to maximum subarray of price differences
+- Stock with multiple transactions: Add transaction limit state to DP
+
+#### Complexity Analysis
+
+- **Time**: $O(n)$ - Single pass through the array
+- **Space**: $O(1)$ - Only uses constant variables (space-optimized DP)
+
+**Comparison to Naive Approach**:
+- Naive: Try all $O(n^2)$ subarrays → $O(n^2)$ time
+- Kadane's DP: Reuse previous state → $O(n)$ time
+
+This demonstrates DP's power: reducing exponential/polynomial time to linear time by exploiting optimal substructure.
+
+#### When to Recognize Kadane's Algorithm
+
+Use Kadane's algorithm when the problem asks:
+- **"Find the maximum/minimum sum/product of a contiguous subarray"**
+- **"Best profit from a sequence of transactions"** (with state tracking)
+- **Linear optimization** over a contiguous subsequence
+
+**Red flags that it's NOT Kadane's**:
+- Need to find **all** subarrays (enumeration) → Backtracking or brute force
+- Non-contiguous elements allowed → Different DP pattern (e.g., Longest Increasing Subsequence)
+
+#### Related Problems
+
+- [Maximum Subarray](#lc-maximum-subarray) (LeetCode 53) - Classic Kadane's
+- [Maximum Product Subarray](#lc-maximum-product) (LeetCode 152) - Two-state variant
+- Maximum Sum Circular Subarray (LeetCode 918) - Circular variant
+- [Best Time to Buy and Sell Stock](#lc-stock-121) (LeetCode 121) - Transformed Kadane's
+- Best Time to Buy and Sell Stock with Cooldown (LeetCode 309) - State machine DP
+
+## Backtracking Algorithms {#backtracking}
+
+**Backtracking** is a fundamental algorithmic technique for exploring all possible solutions to a problem by incrementally building candidates and abandoning ("backtracking") from candidates that cannot lead to a valid solution.
+
+There are **three main backtracking patterns**, each suited to different problem types:
+
+1. **Choose-Explore-Unchoose** (Mutable State) - Most common for combinations/subsets
+2. **Pass-by-Value** (Immutable State) - Cleaner but uses more memory
+3. **Mark-Unmark** (Grid/Graph Traversal) - For 2D grid or graph problems
+
+### Pattern 1: Choose-Explore-Unchoose (Mutable State) {#backtracking-choose-explore-unchoose-pattern}
+
+**Best for**: Combination/subset problems where you build solutions incrementally using shared mutable state.
+
+**Core Concept**: The pattern follows three essential steps:
+
+1. **Choose**: Make a decision and add it to the current state
+2. **Explore**: Recursively explore the consequences of that decision
+3. **Unchoose**: Undo the decision to restore the original state and try alternatives
+
+This pattern enables exhaustive search while maintaining a single shared state object, making it memory-efficient compared to creating new states for each recursive call.
+
+### Why Unchoose Matters
+
+The unchoose step is **critical** for correctness. Without it:
+- The state accumulates all choices from all branches
+- Alternative branches start with polluted state
+- You cannot explore independent paths from the same starting point
+
+**Example**: Finding combinations that sum to a target:
+```
+Without unchoose:
+Choose 1 → state=[1]
+  Choose 2 → state=[1,2]  ✓ Found!
+  Choose 3 → state=[1,2,3]  ← Wrong! Should be [1,3]
+
+With unchoose:
+Choose 1 → state=[1]
+  Choose 2 → state=[1,2]  ✓ Found!
+  Unchoose → state=[1]
+  Choose 3 → state=[1,3]  ✓ Correct!
+  Unchoose → state=[1]
+Unchoose → state=[]
+```
+
+### Standard Template
+
+```java
+public void backtrack(State current, Parameters params, Result result) {
+    // Base case: found a valid solution
+    if (isValidSolution(current)) {
+        result.add(new State(current));  // Must copy!
+        return;
+    }
+
+    // Base case: pruning - abandon invalid paths
+    if (shouldPrune(current, params)) {
+        return;
+    }
+
+    // Iterate through all possible choices
+    for (Choice choice : getAvailableChoices(params)) {
+        // 1. CHOOSE: Make the decision
+        current.add(choice);
+
+        // 2. EXPLORE: Recurse with updated state
+        backtrack(current, updateParams(choice), result);
+
+        // 3. UNCHOOSE: Undo the decision
+        current.remove(choice);
+    }
+}
+```
+
+### Key Implementation Details
+
+**1. Copying State When Storing Results**
+
+Always copy the state when adding to results:
+```java
+// ❌ WRONG: Stores reference to mutable state
+result.add(current);
+
+// ✅ CORRECT: Stores snapshot of current state
+result.add(new ArrayList<>(current));
+```
+
+Without copying, all result entries reference the same object, which gets modified and eventually cleared.
+
+**2. Controlling Iteration to Avoid Duplicates**
+
+Use a starting index to maintain order and prevent duplicates:
+```java
+// Prevents [1,2] and [2,1] from both appearing
+for (int i = startIndex; i < choices.length; i++) {
+    current.add(choices[i]);
+    backtrack(current, i, result);  // Pass 'i' or 'i+1'
+    current.remove(current.size() - 1);
+}
+```
+
+**When to pass `i` vs `i+1`**:
+- Pass `i`: Allow reusing the same choice (unbounded problems)
+- Pass `i+1`: Each choice can only be used once (0/1 problems)
+
+**3. Pruning for Performance**
+
+Add early termination checks to avoid exploring doomed paths:
+```java
+if (currentSum > target) return;  // Exceeds target
+if (remaining.isEmpty()) return;  // No more choices
+```
+
+### Common Backtracking Problems
+
+| Problem Type | Key Variation | Example |
+|-------------|---------------|---------|
+| **Combination Sum** | Unbounded reuse, pass `i` | Find Index Combinations (HackerRank) |
+| **Subsets** | Each element used once, pass `i+1` | Subsets (LeetCode 78) |
+| **Permutations** | Each element used once, track used | Permutations (LeetCode 46) |
+| **N-Queens** | Constraint checking, board state | N-Queens (LeetCode 51) |
+| **Word Search** | 2D grid, mark visited | Word Search (LeetCode 79) |
+
+### Time and Space Complexity
+
+**Time Complexity**: Typically $O(b^d)$ where:
+- $b$ is the branching factor (number of choices per level)
+- $d$ is the maximum depth of recursion tree
+
+This can be exponential, but pruning often reduces actual runtime significantly.
+
+**Space Complexity**: $O(d)$ for:
+- Recursion stack depth: $O(d)$
+- Current state storage: $O(d)$
+- Output storage: Not counted as auxiliary space
+
+### Example: Combination Sum with Unbounded Reuse
+
+**Problem**: Find all combinations of indices whose weights sum to target (weights can be reused).
+
+```java
+public List<List<Integer>> findCombinations(int[] weights, int target) {
+    List<List<Integer>> result = new ArrayList<>();
+    backtrack(weights, new ArrayList<>(), 0, target, result);
+    return result;
+}
+
+private void backtrack(int[] weights, List<Integer> current,
+                       int index, int remaining, List<List<Integer>> result) {
+    // Base case: found valid combination
+    if (remaining == 0) {
+        result.add(new ArrayList<>(current));  // Copy!
+        return;
+    }
+
+    // Base case: pruning
+    if (index >= weights.length || remaining < 0) {
+        return;
+    }
+
+    // Try all choices starting from 'index'
+    for (int i = index; i < weights.length; i++) {
+        // 1. CHOOSE
+        current.add(i);
+
+        // 2. EXPLORE (pass 'i' for unbounded reuse)
+        backtrack(weights, current, i, remaining - weights[i], result);
+
+        // 3. UNCHOOSE
+        current.remove(current.size() - 1);
+    }
+}
+```
+
+**Key observations**:
+- Passing `i` (not `i+1`) allows reusing the same index
+- Loop starts from `index` to maintain non-decreasing order
+- Copying `current` is essential when storing in `result`
+- Early return when `remaining == 0` finds a valid solution
+- Early return when `remaining < 0` prunes invalid paths
+
+
+### Pattern 2: Pass-by-Value (Immutable State) {#backtracking-pass-by-value-pattern}
+
+**Best for**: Problems where creating new state objects is cleaner than manual undo operations, or when the state is small (e.g., integers, strings).
+
+**Core Concept**: Instead of modifying and reverting state, create a **new copy** of the state for each recursive call. No unchoose step needed because each branch gets its own independent state.
+
+**Template**:
+```java
+public void backtrack(int[] choices, List<Integer> current, int index, Result result) {
+    // Base case: found valid solution
+    if (isValidSolution(current)) {
+        result.add(current);  // Can add directly (already a copy)
+        return;
+    }
+
+    // Base case: pruning
+    if (shouldPrune(current, index)) {
+        return;
+    }
+
+    // Try all choices
+    for (int i = index; i < choices.length; i++) {
+        // Create NEW state by copying and adding choice
+        List<Integer> newState = new ArrayList<>(current);
+        newState.add(choices[i]);
+
+        // Explore with new state (no unchoose needed)
+        backtrack(choices, newState, i, result);
+    }
+}
+```
+
+**Example: Permutations**
+
+```java
+public List<List<Integer>> permute(int[] nums) {
+    List<List<Integer>> result = new ArrayList<>();
+    backtrack(nums, new ArrayList<>(), result);
+    return result;
+}
+
+private void backtrack(int[] nums, List<Integer> current, List<List<Integer>> result) {
+    // Found a complete permutation
+    if (current.size() == nums.length) {
+        result.add(current);  // No copy needed!
+        return;
+    }
+
+    for (int num : nums) {
+        // Skip if already used
+        if (current.contains(num)) continue;
+
+        // Create new state with this choice
+        List<Integer> newCurrent = new ArrayList<>(current);
+        newCurrent.add(num);
+
+        // Explore (no unchoose step)
+        backtrack(nums, newCurrent, result);
+    }
+}
+```
+
+**Pros**:
+- Simpler logic - no manual undo step
+- No risk of forgetting to unchoose
+- Easier to reason about (functional style)
+
+**Cons**:
+- Higher memory usage - creates new objects for each recursive call
+- Slower for large state objects due to copying overhead
+- Time: $O(n)$ per call for copying state of size $n$
+
+**When to use**:
+- State is small (primitives, small strings, shallow copies)
+- Code clarity is more important than memory efficiency
+- Debugging backtracking issues (easier to trace)
+
+
+### Pattern 3: Mark-Unmark (Grid/Graph Traversal) {#backtracking-mark-unmark-pattern}
+
+**Best for**: 2D grid or graph problems where you need to track visited cells/nodes to avoid cycles.
+
+**Core Concept**: Mark cells/nodes as visited before exploring, then unmark them after to allow reuse in other paths. Similar to choose-explore-unchoose but uses in-place marking.
+
+**Template**:
+```java
+public void backtrack(char[][] grid, int row, int col, String current, Result result) {
+    // Base case: found valid solution
+    if (isValidSolution(current)) {
+        result.add(current);
+        return;
+    }
+
+    // Base case: out of bounds or already visited
+    if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length
+        || grid[row][col] == '#') {
+        return;
+    }
+
+    // 1. MARK: Mark current cell as visited
+    char original = grid[row][col];
+    grid[row][col] = '#';  // Mark visited
+
+    // 2. EXPLORE: Try all 4 directions
+    backtrack(grid, row + 1, col, current + original, result);  // Down
+    backtrack(grid, row - 1, col, current + original, result);  // Up
+    backtrack(grid, row, col + 1, current + original, result);  // Right
+    backtrack(grid, row, col - 1, current + original, result);  // Left
+
+    // 3. UNMARK: Restore original value
+    grid[row][col] = original;
+}
+```
+
+**Example: Word Search (LeetCode 79)**
+
+```java
+public boolean exist(char[][] board, String word) {
+    for (int i = 0; i < board.length; i++) {
+        for (int j = 0; j < board[0].length; j++) {
+            if (backtrack(board, word, 0, i, j)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+private boolean backtrack(char[][] board, String word, int index, int row, int col) {
+    // Found complete word
+    if (index == word.length()) {
+        return true;
+    }
+
+    // Out of bounds or wrong character or already visited
+    if (row < 0 || row >= board.length || col < 0 || col >= board[0].length
+        || board[row][col] != word.charAt(index)) {
+        return false;
+    }
+
+    // 1. MARK: Save and mark as visited
+    char temp = board[row][col];
+    board[row][col] = '#';
+
+    // 2. EXPLORE: Try all 4 directions
+    boolean found = backtrack(board, word, index + 1, row + 1, col) ||
+                    backtrack(board, word, index + 1, row - 1, col) ||
+                    backtrack(board, word, index + 1, row, col + 1) ||
+                    backtrack(board, word, index + 1, row, col - 1);
+
+    // 3. UNMARK: Restore original character
+    board[row][col] = temp;
+
+    return found;
+}
+```
+
+**Key Points**:
+- Use a **sentinel value** (like `#` or `*`) to mark visited cells
+- Must **restore original value** to allow reuse in other paths
+- Often combined with directional arrays: `int[][] dirs = {{0,1}, {1,0}, {0,-1}, {-1,0}}`
+
+**Alternative: Separate Visited Array**
+
+Instead of modifying the grid, use a separate boolean array:
+```java
+boolean[][] visited = new boolean[rows][cols];
+
+// Mark
+visited[row][col] = true;
+
+// Explore...
+
+// Unmark
+visited[row][col] = false;
+```
+
+**When to use**:
+- 2D grid traversal (Word Search, Number of Islands with paths)
+- Graph cycle detection in DFS
+- Problems requiring path tracking (not just reachability)
+
+
+### Comparison of Backtracking Patterns
+
+| Pattern | State Management | Memory | Code Complexity | Best Use Case |
+|---------|-----------------|--------|-----------------|---------------|
+| **Choose-Explore-Unchoose** | Mutable, shared | Low $O(d)$ | Medium (must remember unchoose) | Combinations, subsets, partition problems |
+| **Pass-by-Value** | Immutable, copied | High $O(d \times n)$ | Low (no unchoose) | Small state, permutations, string building |
+| **Mark-Unmark** | In-place marking | Low $O(1)$ | Medium (grid manipulation) | 2D grid traversal, graph paths |
+
+**Key Takeaway**: Choose the pattern based on:
+1. **State size**: Small → Pass-by-Value, Large → Choose-Explore-Unchoose
+2. **Problem type**: Grid/Graph → Mark-Unmark, Combinations → Choose-Explore-Unchoose
+3. **Code clarity vs. performance**: Debugging → Pass-by-Value, Production → Choose-Explore-Unchoose
+
+### Common Mistakes Across All Patterns
+
+1. **Forgetting to copy when storing results** (Pattern 1)
+   ```java
+   // ❌ WRONG
+   result.add(current);  // Stores reference
+
+   // ✅ CORRECT
+   result.add(new ArrayList<>(current));  // Stores snapshot
+   ```
+
+2. **Not restoring state** (Patterns 1 & 3)
+   ```java
+   // ❌ WRONG: Missing unchoose/unmark
+   current.add(choice);
+   backtrack(...);
+   // Forgot: current.remove(current.size() - 1);
+   ```
+
+3. **Wrong loop bounds for duplicates**
+   ```java
+   // ❌ WRONG: Allows duplicates like [1,2] and [2,1]
+   for (int i = 0; i < choices.length; i++)
+
+   // ✅ CORRECT: Maintains order
+   for (int i = startIndex; i < choices.length; i++)
+   ```
+
+4. **Infinite recursion in grid problems** (Pattern 3)
+   ```java
+   // ❌ WRONG: No visited check
+   backtrack(grid, row + 1, col);
+
+   // ✅ CORRECT: Mark before recursing
+   grid[row][col] = '#';
+   backtrack(grid, row + 1, col);
+   grid[row][col] = original;
+   ```
+
+
+## Two Pointer {#two-pointer-intro}
+
+The **Two Pointer** technique uses two indices (pointers) to traverse a data structure, often in a single pass, to solve problems efficiently. This technique is particularly powerful for array and linked list problems, reducing time complexity from O(n^2) to O(n) by avoiding nested loops.
+
+### Core Concept
+
+Instead of using nested loops to compare elements, two pointers work together to:
+
+- **Converge from opposite ends** (opposite direction)
+- **Move at different speeds** (fast-slow)
+- **Define a window** (sliding window)
+- **Track positions in different structures** (parallel traversal)
+
+### Common Patterns
+
+#### Pattern 1: Opposite Direction (Converging Pointers)
+
+**When to use**: Sorted arrays, finding pairs/triplets, container problems
+
+**How it works**: Start pointers at opposite ends and move them toward each other based on a condition.
+
+**Template**:
+```java
+int left = 0, right = array.length - 1;
+while (left < right) {
+    // Evaluate current state
+    int result = computeResult(array[left], array[right]);
+
+    // Move pointers based on condition
+    if (condition) {
+        left++;      // Move left pointer right
+    } else {
+        right--;     // Move right pointer left
+    }
+}
+```
+
+**Key insight**: In sorted arrays, pointer movement is monotonic - moving the left pointer increases values, moving the right pointer decreases values.
+
+**Examples**:
+
+- **[Two Sum II - Sorted Array](#lc-two-sum-ii-sorted)**: Find pair summing to target
+  - If `array[left] + array[right] < target`: need larger sum, move `left++`
+  - If `array[left] + array[right] > target`: need smaller sum, move `right--`
+  - Time: O(n), Space: O(1)
+
+- **[Container With Most Water](#lc-container-most-water)**: Maximize area between two lines
+  - Area = `(right - left) × min(height[left], height[right])`
+  - Always move the pointer with smaller height (greedy optimization)
+  - Time: O(n), Space: O(1)
+
+- **[3Sum](#lc-three-sum)**: Find all unique triplets summing to zero
+  - Fix one element, use two pointers on remaining sorted subarray
+  - Skip duplicates to ensure unique triplets
+  - Time: O(n^2), Space: O(1)
+
+- **[Sort Array by Parity](#lc-sort-array-parity)**: Move even numbers to front
+  - Left pointer finds odd numbers, right pointer finds even numbers
+  - Swap when both found, continue until pointers cross
+  - Time: O(n), Space: O(1)
+
+**Complexity Analysis**:
+
+- **Time**: O(n) for single pass, O(n^2) when combined with outer loop (3Sum, 4Sum)
+- **Space**: O(1) - only pointer variables
+
+#### Pattern 2: Same Direction (Fast-Slow Pointers)
+
+**When to use**: In-place array modification, linked list cycle detection, finding middle element
+
+**How it works**: Both pointers start at the same position but move at different speeds or under different conditions.
+
+**Template**:
+```java
+int slow = 0, fast = 0;
+while (fast < array.length) {
+    // Process element at fast pointer
+    if (shouldKeep(array[fast])) {
+        array[slow] = array[fast];
+        slow++;
+    }
+    fast++;
+}
+// Result is in array[0...slow-1]
+```
+
+**Key insight**: The slow pointer tracks the "write position" for valid elements, while the fast pointer scans ahead.
+
+**Examples**:
+
+- **[Remove Duplicates from Sorted Array](#lc-remove-duplicates-sorted)**: Remove duplicates in-place
+  - Slow pointer tracks position for next unique element
+  - Fast pointer scans for new unique values
+  - Time: O(n), Space: O(1)
+
+- **[Linked List Cycle](#lc-linked-list-cycle)** (Floyd's Cycle Detection): Detect cycle in linked list
+  - Fast pointer moves 2 steps, slow pointer moves 1 step
+  - If cycle exists, pointers will meet
+  - Time: O(n), Space: O(1)
+
+- **[Palindrome Linked List](#lc-palindrome-list)**: Check if linked list is palindrome
+  - Use fast-slow to find middle
+  - Reverse second half, compare with first half
+  - Time: O(n), Space: O(1)
+
+**Complexity Analysis**:
+
+- **Time**: O(n) - single pass with both pointers
+- **Space**: O(1) - only pointer variables
+
+#### Pattern 3: Sliding Window (Dynamic Two Pointers)
+
+**When to use**: Subarray/substring problems with contiguous elements, optimization problems
+
+**How it works**: Two pointers define a window that expands (move right) or contracts (move left) based on conditions.
+
+**Template**:
+```java
+int left = 0, result = 0;
+for (int right = 0; right < array.length; right++) {
+    // Expand window by including array[right]
+    addToWindow(array[right]);
+
+    // Contract window while invalid
+    while (windowInvalid()) {
+        removeFromWindow(array[left]);
+        left++;
+    }
+
+    // Update result with current valid window
+    result = updateResult(result, right - left + 1);
+}
+```
+
+**Key insight**: The window expands to explore possibilities and contracts to maintain validity, ensuring each element is visited at most twice (once by right, once by left).
+
+**Examples**:
+
+- **[Minimum Size Subarray Sum](#lc-min-size-subarray-sum)**: Find minimum subarray length with sum $\ge$ target
+  - Expand: add elements until sum $\ge$ target
+  - Contract: remove from left while maintaining sum $\ge$ target
+  - Time: O(n), Space: O(1)
+
+- **[Longest Substring Without Repeating](#lc-longest-substring-unique)**: Find longest substring with unique characters
+  - Expand: add characters to window
+  - Contract: shrink from left when duplicate found
+  - Use hash set to track characters in current window
+  - Time: O(n), Space: O(min(n, charset size))
+
+- **[Number of Substrings All Three Chars](#lc-substrings-all-three)**: Count substrings containing 'a', 'b', 'c'
+  - When window `[left, right]` is valid (contains all three), all substrings extending to end are valid
+  - Add `n - right` to result (not just 1)
+  - Time: O(n), Space: O(1)
+
+**Complexity Analysis**:
+
+- **Time**: O(n) - each element added once (right) and removed once (left), total 2n operations
+- **Space**: O(k) where k is auxiliary data structure size (hash map, frequency array)
+
+#### Pattern 4: Parallel Traversal (Two Lists)
+
+**When to use**: Merging sorted lists, comparing sequences, simultaneous traversal
+
+**How it works**: Each pointer tracks position in a different data structure, advancing independently.
+
+**Template**:
+```java
+int i = 0, j = 0;
+while (i < list1.length && j < list2.length) {
+    if (compareCondition(list1[i], list2[j])) {
+        processAndAdvance(list1[i]);
+        i++;
+    } else {
+        processAndAdvance(list2[j]);
+        j++;
+    }
+}
+// Handle remaining elements in either list
+```
+
+**Examples**:
+
+- **[Merge Two Sorted Lists](#lc-merge-two-sorted)**: Merge two sorted linked lists
+  - Compare current nodes from both lists
+  - Append smaller node to result, advance that pointer
+  - Time: O(m + n), Space: O(1)
+
+- **[Interval List Intersections](#lc-interval-list-intersections)**: Find interval intersections
+  - Compare intervals from both lists
+  - Advance pointer of interval that ends first
+  - Time: O(m + n), Space: O(1)
+
+**Complexity Analysis**:
+
+- **Time**: O(m + n) where m, n are sizes of the two structures
+- **Space**: O(1) - only pointer variables (excluding output)
+
+### Two Pointer vs Other Techniques
+
+| Aspect | Two Pointer | Hash Table | Sorting |
+|--------|-------------|------------|---------|
+| **Time Complexity** | O(n) or O(n^2) with outer loop | O(n) average | O(n log n) |
+| **Space Complexity** | O(1) | O(n) | O(1) or O(n) |
+| **When to Use** | Sorted data, in-place modification, pairs/triplets | Fast lookups, unsorted data | Need ordering, multiple searches |
+| **Limitation** | Requires sorted data or special structure | Extra space, no ordering | Destroys original order |
+
+**Decision tree**:
+
+1. **Need to preserve original indices?** → Use Hash Table (e.g., [Two Sum I](#lc-two-sum-1))
+2. **Array already sorted or can be sorted?** → Use Two Pointer (e.g., [Two Sum II](#lc-two-sum-ii-sorted), [3Sum](#lc-three-sum))
+3. **Need all pairs/triplets from sorted data?** → Use Two Pointer with duplicate skipping (e.g., [3Sum](#lc-three-sum))
+4. **Subarray/substring problem with contiguous elements?** → Use Sliding Window (e.g., [Minimum Size Subarray Sum](#lc-min-size-subarray-sum))
+5. **In-place modification required?** → Use Same-Direction Two Pointer (e.g., [Remove Duplicates](#lc-remove-duplicates-sorted))
+
+### Common Pitfalls
+
+1. **Forgetting to skip duplicates**: In problems like [3Sum](#lc-three-sum), must skip duplicates at all pointer levels
+   ```java
+   // Skip duplicates for first element
+   if (i > 0 && nums[i] == nums[i-1]) continue;
+   // Skip duplicates for second element
+   while (left < right && nums[left] == nums[left+1]) left++;
+   // Skip duplicates for third element
+   while (left < right && nums[right] == nums[right-1]) right--;
+   ```
+
+2. **Incorrect window validity**: In sliding window, ensure condition is checked before and after window modification
+   ```java
+   // Contract window WHILE invalid (not just IF)
+   while (windowInvalid()) {
+       removeFromWindow(array[left]);
+       left++;
+   }
+   ```
+
+3. **Off-by-one errors**: Carefully handle boundary conditions
+   ```java
+   while (left < right)  // Not <=, pointers shouldn't cross
+   while (left <= right) // Use <= when pointers can meet (binary search)
+   ```
+
+4. **Not considering all valid substrings**: In problems like [Number of Substrings All Three Chars](#lc-substrings-all-three), when window becomes valid, all extensions are also valid
+   ```java
+   // When [left, right] is valid, add (n - right) substrings
+   result += n - right;  // Not just +1
+   ```
+
+### Summary
+
+The Two Pointer technique is a fundamental optimization that:
+
+- **Reduces time complexity** from O(n^2) to O(n) by eliminating nested loops
+- **Minimizes space usage** to O(1) by avoiding auxiliary data structures
+- **Works best with sorted data** or problems allowing in-place modification
+- **Has four main patterns**: opposite direction, same direction, sliding window, parallel traversal
+
+Master these patterns and you'll recognize two-pointer opportunities in most array, string, and linked list problems.
+
+
+## Dynamic Programming vs Backtracking {#dp-vs-backtracking}
+
+Both **Dynamic Programming (DP)** and **Backtracking** solve problems by exploring subproblems, but they differ fundamentally in **what they optimize for** and **when to use each**. Understanding this distinction is critical for choosing the right approach.
+
+### Core Differences
+
+| Aspect | Dynamic Programming | Backtracking |
+|--------|---------------------|--------------|
+| **Goal** | Find **optimal value** (min/max/count) | Find **all solutions** or **one valid solution** |
+| **Question Type** | "What is the minimum/maximum?" | "What are all possible combinations?" |
+| **Example Question** | "Minimum coins to make amount?" | "All ways to make amount?" |
+| **Exploration** | Bottom-up or memoized recursion | Exhaustive search with pruning |
+| **Overlapping Subproblems** | **Required** - reuses computed results | May exist but not exploited |
+| **State Storage** | Stores **results** of subproblems | Stores **current path/state** |
+| **Time Complexity** | Polynomial (typically $O(n \times m)$) | Exponential (typically $O(b^d)$) |
+| **Optimization** | Uses optimal substructure | Uses pruning to skip invalid paths |
+| **Returns** | Single value (number, boolean) | List of solutions or single path |
+
+### Key Insight: Optimization vs Enumeration
+
+The fundamental difference:
+
+- **DP**: "What is the **best** way?" (optimization)
+- **Backtracking**: "What are **all** the ways?" (enumeration)
+
+### When to Use Dynamic Programming
+
+Use DP when the problem asks for an **optimal value** or **count**, and exhibits:
+
+1. **Optimal Substructure**: Solution to the problem can be built from solutions to subproblems
+2. **Overlapping Subproblems**: Same subproblem is solved multiple times
+
+**DP Question Patterns**:
+- "Find the **minimum/maximum** ..."
+- "Count the **number of ways** ..."
+- "Is it **possible** to reach ...?" (when combined with optimization)
+- "What is the **longest/shortest** ...?"
+
+**Examples**:
+
+| Problem | Question | Why DP? |
+|---------|----------|---------|
+| **Coin Change** | Minimum coins to make amount? | Asks for **minimum count** |
+| **Climbing Stairs** | How many ways to reach top? | Asks for **total count** of ways |
+| **Longest Increasing Subsequence** | Length of longest subsequence? | Asks for **maximum length** |
+| **0/1 Knapsack** | Maximum value with weight limit? | Asks for **maximum value** |
+| **House Robber** | Maximum money without alerting? | Asks for **maximum sum** |
+| **Minimum Plans (HackerRank)** | Minimum plans to reach bandwidth? | Asks for **minimum count** |
+
+**Common DP Patterns**:
+- **Unbounded Knapsack**: Unlimited use of items (Coin Change, Minimum Plans)
+- **0/1 Knapsack**: Each item used at most once
+- **Longest/Shortest Path**: In DAGs or grids
+- **Counting Ways**: Climbing Stairs, Unique Paths
+
+### When to Use Backtracking
+
+Use Backtracking when the problem asks for **all solutions** or **one valid path**, requiring exhaustive search:
+
+**Backtracking Question Patterns**:
+- "Find **all combinations** that ..."
+- "Generate **all permutations** ..."
+- "Return **all valid** arrangements ..."
+- "List **all subsets** ..."
+- "Find **any path** that satisfies ..."
+
+**Examples**:
+
+| Problem | Question | Why Backtracking? |
+|---------|----------|-------------------|
+| **Combination Sum** | All combinations summing to target? | Asks for **all solutions** |
+| **Permutations** | All permutations of array? | Asks for **all arrangements** |
+| **Subsets** | All possible subsets? | Asks for **all subsets** |
+| **N-Queens** | All valid queen placements? | Asks for **all valid boards** |
+| **Word Search** | Does path exist in grid? | Asks for **path existence** |
+| **Index Combinations (HackerRank)** | All index combinations for target? | Asks for **all combinations** |
+
+**Common Backtracking Patterns**:
+- **Choose-Explore-Unchoose**: Combinations, subsets
+- **Permutations**: Track used elements
+- **Grid/Graph Traversal**: Mark-unmark visited cells
+
+### The Critical Distinction: Same Problem, Different Questions
+
+Consider this example with `coins = [1, 2, 5]` and `target = 5`:
+
+| Question | Approach | Answer |
+|----------|----------|--------|
+| **"Minimum coins to make 5?"** | DP | `2` (one coin of 5, or 5+0) |
+| **"All ways to make 5?"** | Backtracking | `[[1,1,1,1,1], [1,1,1,2], [1,2,2], [5]]` |
+| **"Number of ways to make 5?"** | DP | `4` (count without listing) |
+
+**Key Observation**:
+- **Minimum/Maximum/Count** → DP (optimal value, no need for actual combinations)
+- **All combinations** → Backtracking (must enumerate every solution)
+
+### Hybrid Cases: DP with Path Reconstruction
+
+Sometimes you need **both the optimal value AND the actual solution**:
+
+**Example**: "Find the **minimum** coins AND **which coins** to use"
+
+**Approach**: DP + Path Reconstruction
+1. Use DP to find the optimal value
+2. Backtrack through the DP table to reconstruct the solution
+
+```java
+// Step 1: DP to find minimum
+int[] dp = new int[amount + 1];
+Arrays.fill(dp, Integer.MAX_VALUE);
+dp[0] = 0;
+
+for (int i = 1; i <= amount; i++) {
+    for (int coin : coins) {
+        if (coin <= i && dp[i - coin] != Integer.MAX_VALUE) {
+            dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+        }
+    }
+}
+
+// Step 2: Reconstruct the solution
+List<Integer> result = new ArrayList<>();
+int current = amount;
+while (current > 0) {
+    for (int coin : coins) {
+        if (current >= coin && dp[current - coin] == dp[current] - 1) {
+            result.add(coin);
+            current -= coin;
+            break;
+        }
+    }
+}
+```
+
+This is **NOT pure backtracking** because we don't enumerate all solutions—we reconstruct **one optimal solution** from the DP table.
+
+### Overlapping Subproblems: The Deciding Factor
+
+**Without Memoization**, backtracking can be extremely inefficient for optimization problems:
+
+**Example**: Minimum coins for amount 11 with coins [1, 5]
+
+```
+Backtracking (without memo):
+minCoins(11) calls:
+  minCoins(10) + 1  [using coin 1]
+    minCoins(9) + 1
+      minCoins(8) + 1
+        ... (exponential explosion)
+  minCoins(6) + 1   [using coin 5]
+    minCoins(5) + 1
+      minCoins(4) + 1  ← Recalculates minCoins(4) again!
+      ...
+
+With DP:
+dp[0] = 0
+dp[1] = 1
+dp[2] = 2
+...
+dp[4] = 4  ← Calculated once, reused
+...
+dp[11] = 3
+```
+
+**When Overlapping Subproblems Exist**:
+- **For optimization** → Use DP (polynomial time)
+- **For enumeration** → Backtracking is necessary (exponential but unavoidable)
+
+### Decision Tree
+
+```
+┌─────────────────────────────────────────┐
+│ Does the problem ask for:               │
+│ - Minimum/Maximum value?                │
+│ - Count of ways?                        │
+│ - Optimal value?                        │
+└─────────────────┬───────────────────────┘
+                  │
+          ┌───────┴────────┐
+          │                │
+         YES              NO
+          │                │
+          ▼                ▼
+    ┌─────────┐      ┌──────────────┐
+    │   DP    │      │ Does it ask  │
+    │         │      │ for all      │
+    │ O(n×m)  │      │ solutions?   │
+    └─────────┘      └──────┬───────┘
+                            │
+                    ┌───────┴────────┐
+                    │                │
+                   YES              NO
+                    │                │
+                    ▼                ▼
+            ┌──────────────┐   ┌─────────────┐
+            │ Backtracking │   │ Other       │
+            │              │   │ (Greedy,    │
+            │ O(b^d)       │   │  Two Ptr)   │
+            └──────────────┘   └─────────────┘
+```
+
+### Common Mistakes
+
+**1. Using Backtracking for Optimization Problems**
+
+```java
+// ❌ WRONG: Using backtracking to find minimum coins
+int minCoins = Integer.MAX_VALUE;
+
+void backtrack(int[] coins, int remaining, int count) {
+    if (remaining == 0) {
+        minCoins = Math.min(minCoins, count);
+        return;
+    }
+    for (int coin : coins) {
+        if (coin <= remaining) {
+            backtrack(coins, remaining - coin, count + 1);
+        }
+    }
+}
+// Time: O(n^m) - Exponential, recalculates subproblems
+```
+
+```java
+// ✅ CORRECT: Using DP for optimization
+int[] dp = new int[amount + 1];
+Arrays.fill(dp, Integer.MAX_VALUE);
+dp[0] = 0;
+
+for (int i = 1; i <= amount; i++) {
+    for (int coin : coins) {
+        if (coin <= i && dp[i - coin] != Integer.MAX_VALUE) {
+            dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+        }
+    }
+}
+// Time: O(n × m) - Polynomial, solves each subproblem once
+```
+
+**2. Using DP for Enumeration Problems**
+
+```java
+// ❌ WRONG: DP can't enumerate all combinations
+int[] dp = new int[target + 1];
+dp[0] = 1;
+// This counts the number of ways, but doesn't list them!
+```
+
+```java
+// ✅ CORRECT: Backtracking enumerates all solutions
+void backtrack(int[] nums, List<Integer> current, int target, List<List<Integer>> result) {
+    if (target == 0) {
+        result.add(new ArrayList<>(current));  // Store each combination
+        return;
+    }
+    // ... explore all paths
+}
+```
+
+### Summary Table: Which Algorithm for Which Problem?
+
+| Problem Type | Example | Algorithm | Complexity |
+|-------------|---------|-----------|------------|
+| **Minimum/Maximum Value** | Minimum coins for amount | DP | $O(n \times m)$ |
+| **Count Ways (no enumeration)** | Number of paths in grid | DP | $O(n \times m)$ |
+| **All Combinations** | All subsets of array | Backtracking | $O(2^n)$ |
+| **All Permutations** | All orderings of array | Backtracking | $O(n!)$ |
+| **Path Exists (simple)** | Can reach target sum? | DP (boolean) | $O(n \times m)$ |
+| **All Paths** | All paths to target sum | Backtracking | $O(b^d)$ |
+| **Longest/Shortest Sequence** | Longest increasing subsequence | DP | $O(n^2)$ or $O(n \log n)$ |
+| **Generate All Sequences** | All valid parentheses | Backtracking | $O(4^n / \sqrt{n})$ |
+
+### Key Takeaway
+
+**Ask yourself**:
+1. **"What is being asked?"**
+   - Optimal value (min/max/count) → **DP**
+   - All solutions or one valid path → **Backtracking**
+
+2. **"Do I need the actual solutions or just a value?"**
+   - Just a value → **DP**
+   - All solutions → **Backtracking**
+   - One optimal solution → **DP + Path Reconstruction**
+
+3. **"Are there overlapping subproblems?"**
+   - Yes, and optimizing → **DP** (polynomial)
+   - Yes, but enumerating → **Backtracking** (exponential, unavoidable)
+
+When in doubt, look at the problem's return type:
+- Returns `int`, `boolean`, `long` → Likely **DP**
+- Returns `List<List<...>>` → Likely **Backtracking**
