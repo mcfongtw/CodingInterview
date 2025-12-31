@@ -1179,6 +1179,18 @@ Print each combination on a separate line with space-separated indices.
 
 This problem combines **backtracking** with **unbounded knapsack** to find all combinations of indices whose weights sum to a target capacity. The key insight is that we're returning **indices** (not values) and each weight can be **reused unlimited times**.
 
+**2D Traversal Mental Model**:
+
+This problem uses the **2-dimensional traversal mental model** of backtracking (see [Pattern 1: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)):
+
+- **Outer dimension** (recursion parameter): `capacity` / remaining target sum - controls how deep we recurse (from initial capacity down to 0)
+- **Inner dimension** (for-loop): Iterates through available weight indices from `index` to `weights.size() - 1`
+
+The backtracking explores a conceptual 2D grid where:
+- **Rows** represent remaining capacity (from `capacity` down to 0)
+- **Columns** represent choices of which weight index to use next
+- Each cell represents a decision point: "Should I use weight at index i when I have capacity c remaining?"
+
 **Algorithm Strategy**:
 
 The solution uses the classic **Choose-Explore-Unchoose** backtracking pattern:

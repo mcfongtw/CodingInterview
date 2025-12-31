@@ -222,7 +222,17 @@ Explanation: For three pairs, there are 5 valid sequences (Catalan number C(3) =
 
 #### Walkthrough
 
-This solution uses **backtracking** to systematically generate all valid bracket sequences by building them character by character while maintaining validity constraints.
+This problem uses the **2-dimensional traversal mental model** of backtracking, specifically using **Pattern 2 (Pass-by-Value)** (see [Pattern 2: Pass-by-Value](#backtracking-pass-by-value-pattern)):
+
+- **Outer dimension** (recursion parameters): `open` and `close` counts - controls the depth in the decision tree (how many total brackets we've placed, ranging from 0 to 2n)
+- **Inner dimension** (implicit binary choice): At each depth, we have up to 2 choices: add `<` or add `>` (conditional on validity rules)
+
+The backtracking explores a conceptual 2D grid where:
+- **Rows** represent depth/position in the sequence (character 0 to character 2n-1)
+- **Columns** represent the binary choice at each position (try `<`, then try `>`)
+- Each cell in the grid represents a state: `(position, open_count, close_count)`
+
+This 2D traversal systematically explores all valid bracket sequences by making sequential binary decisions at each position.
 
 **Core Idea**: At each step, decide whether to add `<` or `>` based on:
 1. How many opening brackets `<` have been used (tracked by `open`)

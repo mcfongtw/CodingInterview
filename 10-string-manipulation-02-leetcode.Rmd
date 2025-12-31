@@ -349,6 +349,223 @@ public String longestCommonPrefix(String[] strs) {
 ```
 
 
+## Letter Combinations of a Phone Number {#lc-letter-combinations-phone}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 17
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+- **Tags**: `String`, `Backtracking`, `Hash Table`
+- **Interview Tags**: NeetCode 150
+- **Techniques**: [Backtracking](glossary-of-algorithm.html#backtracking), [Recursion](glossary-of-algorithm.html#recursion)
+
+### Description
+
+Given a string containing digits from `2-9` inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
+
+A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
+
+**Digit-to-letter mapping:**
+- 2: "abc"
+- 3: "def"
+- 4: "ghi"
+- 5: "jkl"
+- 6: "mno"
+- 7: "pqrs"
+- 8: "tuv"
+- 9: "wxyz"
+
+### Examples
+
+```
+Input: digits = "23"
+Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+
+Input: digits = ""
+Output: []
+
+Input: digits = "2"
+Output: ["a","b","c"]
+```
+
+### Constraints
+
+- `0 <= digits.length <= 4`
+- `digits[i]` is a digit in the range `['2', '9']`
+
+### Solution - Backtracking
+
+#### Walkthrough
+
+This problem uses the **2-dimensional traversal mental model** of backtracking (see [Pattern 1: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)):
+
+- **Outer dimension** (recursion parameter): `index` / position in the phone number - controls which digit we're processing (depth 0 to n-1)
+- **Inner dimension** (for-loop): Iterates through the 3-4 letter options available for the current digit
+
+The backtracking explores a conceptual 2D grid where:
+- **Rows** represent digit positions (0 to n-1, where n is the number of digits)
+- **Columns** represent letter choices at each position (e.g., for digit 2: columns are 'a', 'b', 'c')
+- **Grid size**: n rows × (3 or 4) columns per row
+
+**Visual 2D Grid for `digits = "23"`:**
+```
+Position 0 (digit '2'):  [a, b, c]
+Position 1 (digit '3'):  [d, e, f]
+
+Grid traversal paths:
+(0,a) → (1,d) = "ad"
+(0,a) → (1,e) = "ae"
+(0,a) → (1,f) = "af"
+(0,b) → (1,d) = "bd"
+(0,b) → (1,e) = "be"
+(0,b) → (1,f) = "bf"
+(0,c) → (1,d) = "cd"
+(0,c) → (1,e) = "ce"
+(0,c) → (1,f) = "cf"
+
+Total combinations: 3 × 3 = 9
+```
+
+This 2D traversal systematically generates all possible combinations by visiting every cell in each row before moving to the next row.
+
+**Key insight**: For a phone number with n digits, we need to make n sequential choices. Backtracking explores all combinations by:
+1. **Choose**: Select a letter for the current digit
+2. **Explore**: Recursively process the next digit
+3. **Unchoose**: Remove the letter and try the next option
+
+**Step-by-step approach:**
+
+1. **Preprocess input**: Convert the digit string into a 2D array where each row contains the letter choices for that digit position
+2. **Backtrack recursively**: For each digit position, iterate through all available letters, append each letter to the current combination, recurse to the next digit, then remove the letter (backtrack)
+3. **Base case**: When the combination length equals the number of digits, we've formed a complete combination
+
+**Visual example with `digits = "23"`:**
+
+```
+Start: current = "", index = 0
+Choices: [['a','b','c'], ['d','e','f']]
+
+├─ Choose 'a' → current = "a", index = 1
+│  ├─ Choose 'd' → current = "ad", index = 2 ✓ Add "ad"
+│  │  └─ Backtrack → current = "a"
+│  ├─ Choose 'e' → current = "ae", index = 2 ✓ Add "ae"
+│  │  └─ Backtrack → current = "a"
+│  └─ Choose 'f' → current = "af", index = 2 ✓ Add "af"
+│     └─ Backtrack → current = "a"
+│  └─ Backtrack → current = ""
+│
+├─ Choose 'b' → current = "b", index = 1
+│  ├─ Choose 'd' → current = "bd", index = 2 ✓ Add "bd"
+│  │  └─ Backtrack → current = "b"
+│  ├─ Choose 'e' → current = "be", index = 2 ✓ Add "be"
+│  │  └─ Backtrack → current = "b"
+│  └─ Choose 'f' → current = "bf", index = 2 ✓ Add "bf"
+│     └─ Backtrack → current = "b"
+│  └─ Backtrack → current = ""
+│
+└─ Choose 'c' → current = "c", index = 1
+   ├─ Choose 'd' → current = "cd", index = 2 ✓ Add "cd"
+   │  └─ Backtrack → current = "c"
+   ├─ Choose 'e' → current = "ce", index = 2 ✓ Add "ce"
+   │  └─ Backtrack → current = "c"
+   └─ Choose 'f' → current = "cf", index = 2 ✓ Add "cf"
+      └─ Backtrack → current = "c"
+   └─ Backtrack → current = ""
+
+Result: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+```
+
+**Edge case handling**: Return empty list for empty input to avoid adding an empty string to the result.
+
+#### Analysis
+
+- **Time Complexity**: $O(4^n \times n)$ where n is the length of the input digits
+  - In the worst case (digits 7 and 9), each digit maps to 4 letters
+  - We generate up to $4^n$ combinations
+  - Each combination requires $O(n)$ time to build the string with StringBuilder
+  - Total: $O(4^n \times n)$
+
+- **Space Complexity**: $O(n)$ not counting output space
+  - Recursion call stack depth: $O(n)$ for n digits
+  - StringBuilder for current combination: $O(n)$
+  - Choices array: $O(n)$ rows with constant-size letter arrays
+  - Output space (not counted): $O(4^n \times n)$ to store all combinations
+
+#### Implementation Steps
+
+1. **Handle edge case**: Return empty list if input is null or empty
+2. **Create digit-to-letter mapping**: Use a 2D char array indexed by digit minus 2 (since digits start at 2)
+3. **Build choices array**: For each digit in the input, store the corresponding letter array
+4. **Invoke backtracking**: Start with empty StringBuilder, choices array, and index 0
+5. **Backtracking logic**:
+   - **Base case**: If current combination length equals number of digits, add to result
+   - **Recursive case**: For each letter at current digit position:
+     - Append letter to current combination
+     - Recurse to next digit (index + 1)
+     - Remove last character (backtrack)
+6. Return the result list containing all combinations
+
+#### Java Code
+
+```java
+class Solution {
+    final char[][] map = new char[][] {
+        new char[]{'a', 'b', 'c'},      // 2
+        new char[]{'d', 'e', 'f'},      // 3
+        new char[]{'g', 'h', 'i'},      // 4
+        new char[]{'j', 'k', 'l'},      // 5
+        new char[]{'m', 'n', 'o'},      // 6
+        new char[]{'p', 'q', 'r', 's'}, // 7
+        new char[]{'t', 'u', 'v'},      // 8
+        new char[]{'w', 'x', 'y', 'z'}  // 9
+    };
+
+    public List<String> letterCombinations(String digits) {
+        List<String> result = new ArrayList<>();
+
+        // Handle edge case: empty input
+        if (digits == null || digits.length() == 0) {
+            return result;
+        }
+
+        char[][] choices = new char[digits.length()][];
+
+        for (int i = 0; i < digits.length(); i++) {
+            char digit = digits.charAt(i);
+            choices[i] = map[(digit - '2')];
+        }
+
+        backtrack(new StringBuilder(), choices, 0, result);
+
+        return result;
+    }
+
+    private void backtrack(StringBuilder current, char[][] choices, int index, List<String> result) {
+        // Base case - valid: we've processed all digits
+        if (current.length() == choices.length) {
+            result.add(current.toString());
+            return;
+        }
+
+        // Iterate through all letter choices for current digit
+        char[] letters = choices[index];
+        for (int i = 0; i < letters.length; i++) {
+            // Choose: add current letter
+            current.append(letters[i]);
+
+            // Explore: recurse to next digit
+            backtrack(current, choices, index + 1, result);
+
+            // Unchoose: remove current letter (backtrack)
+            current.deleteCharAt(current.length() - 1);
+        }
+    }
+}
+```
+
+
 ## Group Anagrams {#lc-group-anagrams}
 
 ### Problem Metadata

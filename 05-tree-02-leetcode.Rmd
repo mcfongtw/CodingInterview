@@ -706,7 +706,14 @@ Find all root-to-leaf paths where the sum of node values equals a target.
 
 #### Walkthrough
 
-Traverse the tree, maintaining the current path lc-list and remaining sum. When a leaf reaches zero remaining sum, append a copy of the path to the answer. Backtrack after exploring each branch.
+This problem uses the **2-dimensional traversal mental model** of backtracking (see [Pattern 1: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)):
+
+- **Outer dimension** (recursion parameter): `node` / depth in the tree - controls how deep we've traversed
+- **Inner dimension** (implicit traversal): At each node, we have up to 2 choices (left child and right child)
+
+The backtracking explores the tree as a conceptual decision space where each level represents a depth in the tree, and at each level we "choose" to include the current node's value in the path.
+
+**Key mechanism**: Traverse the tree, maintaining the current path list and remaining sum. When a leaf reaches zero remaining sum, append a copy of the path to the answer. Backtrack after exploring each branch to try other paths.
 
 #### Analysis
 

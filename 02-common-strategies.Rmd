@@ -423,11 +423,72 @@ There are **three main backtracking patterns**, each suited to different problem
 
 **Best for**: Combination/subset problems where you build solutions incrementally using shared mutable state.
 
-**Core Concept**: The pattern follows three essential steps:
+**Core Concept - 2D Traversal Mental Model**:
 
-1. **Choose**: Make a decision and add it to the current state
-2. **Explore**: Recursively explore the consequences of that decision
-3. **Unchoose**: Undo the decision to restore the original state and try alternatives
+Backtracking is fundamentally a **2-dimensional traversal of the decision space to enumerate all possible combinations**:
+
+- **Outer Dimension (Recursion Parameter)**: Controls the depth/position in the decision tree
+  - Represented by recursion parameters like `index`, `depth`, `remaining`, `start`
+  - Each recursive call advances to the **next level** (next digit, next position, next item)
+  - Analogous to the **outer loop variable** in nested loops
+
+- **Inner Dimension (For-Loop)**: Controls the choice at the current depth
+  - Represented by the for-loop within `backtrack()` that iterates through available choices
+  - Each iteration explores a **different branch** at the current level
+  - Analogous to the **inner loop variable** in nested loops
+
+**Mental Model**: Backtracking = **Nested loops implemented via recursion**
+
+```
+Traditional Nested Loops (iterative):
+for (int depth = 0; depth < n; depth++) {        // Outer dimension
+    for (int choice = 0; choice < m; choice++) {  // Inner dimension
+        process(depth, choice);
+    }
+}
+
+Backtracking (recursive):
+void backtrack(int depth) {                       // Outer dimension
+    if (depth == n) return;
+    for (int choice = 0; choice < m; choice++) {  // Inner dimension
+        choose(choice);
+        backtrack(depth + 1);                     // Advance outer dimension
+        unchoose(choice);
+    }
+}
+```
+
+**Key Insight**: The for-loop explores the **breadth** (all choices at current position), while recursion explores the **depth** (sequential positions). Together, they systematically visit every `(depth, choice)` coordinate in the decision space.
+
+**The Choose-Explore-Unchoose Pattern** implements this 2D traversal:
+
+1. **Choose**: Select a choice from the inner dimension (for-loop iteration)
+2. **Explore**: Move to the next depth in the outer dimension (recursive call)
+3. **Unchoose**: Backtrack to try the next choice in the inner dimension
+
+**Visual Example - Letter Combinations "23"**:
+
+```
+Depth 0: choices = ['a', 'b', 'c']
+Depth 1: choices = ['d', 'e', 'f']
+
+Traversal as 2D grid:
+         Choice 0    Choice 1    Choice 2
+Depth 0:    'a'        'b'         'c'
+Depth 1:    'd'        'e'         'f'
+
+Paths visited:
+(0,'a') → (1,'d') = "ad"
+(0,'a') → (1,'e') = "ae"
+(0,'a') → (1,'f') = "af"
+(0,'b') → (1,'d') = "bd"
+... (9 total paths = 3 × 3)
+```
+
+**Important Nuance**: The inner dimension size can vary based on the outer dimension:
+- In **Combination Sum** with unbounded reuse, choices narrow as depth increases
+- The "grid" is **jagged/triangular**, not rectangular
+- Pruning can skip invalid `(depth, choice)` coordinates
 
 This pattern enables exhaustive search while maintaining a single shared state object, making it memory-efficient compared to creating new states for each recursive call.
 
@@ -595,7 +656,16 @@ private void backtrack(int[] weights, List<Integer> current,
 
 **Best for**: Problems where creating new state objects is cleaner than manual undo operations, or when the state is small (e.g., integers, strings).
 
-**Core Concept**: Instead of modifying and reverting state, create a **new copy** of the state for each recursive call. No unchoose step needed because each branch gets its own independent state.
+**Core Concept**: This pattern uses the **same 2D traversal structure** as Choose-Explore-Unchoose, but achieves backtracking through **state copying** instead of manual undo.
+
+Instead of modifying and reverting state, create a **new copy** of the state for each recursive call. No unchoose step needed because each branch gets its own independent state.
+
+**2D Traversal Structure:**
+- **Outer dimension**: Still controlled by recursion parameter (`index`, `depth`)
+- **Inner dimension**: Still controlled by for-loop over choices
+- **Key difference**: State immutability replaces the unchoose step
+
+The traversal pattern is **identical** to Pattern 1, only the state management differs (copy vs modify-revert).
 
 **Template**:
 ```java
