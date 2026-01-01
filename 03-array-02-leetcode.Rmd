@@ -8,7 +8,7 @@
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/two-sum/
 - **Tags**: `Hash Table`, `Array`
-- **Interview Tags**: Blind 75
+- **Interview Tags**: Blind 75, NeetCode 150
 - **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
 
@@ -255,7 +255,7 @@ private double findKth(int[] nums1, int start1, int end1,
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/container-with-most-water/
 - **Tags**: `Array`, `Two Pointers`, `Greedy`
-- **Interview Tags**: NeetCode 150
+- **Interview Tags**: Blind 75, NeetCode 150
 - **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Greedy](glossary-of-algorithm.html#greedy)
 
 ### Description
@@ -471,7 +471,7 @@ class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/3sum/
 - **Tags**: `Array`, `Sorting`, `Two Pointers`
-- **Interview Tags**: Blind 75
+- **Interview Tags**: Blind 75, NeetCode 150
 - **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Sorting](glossary-of-algorithm.html#sorting)
 
 ### Description
@@ -808,6 +808,7 @@ public List<List<Integer>> fourSum(int[] nums, int target) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/lc-remove-duplicates-from-sorted-array/
 - **Tags**: `Array`, `Two Pointers`
+- **Interview Tags**: NeetCode 150
 - **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
 ### Description
@@ -978,7 +979,7 @@ public int longestValidParentheses(String s) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/search-in-rotated-sorted-array/
 - **Tags**: `Array`, `Binary Search`
-- **Interview Tags**: Blind 75
+- **Interview Tags**: Blind 75, NeetCode 150
 - **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#dnc), [Binary Search](glossary-of-algorithm.html#binary-search)
 
 ### Description
@@ -1055,6 +1056,160 @@ public int search(int[] nums, int target) {
     }
 
     return -1;
+}
+```
+
+
+## Combination Sum {#lc-combination-sum}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 39
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/combination-sum/
+- **Tags**: `Array`, `Backtracking`
+- **Interview Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Backtracking: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)
+
+### Description
+
+Given an array of **distinct** integers `candidates` and a target integer `target`, return a list of all **unique combinations** of `candidates` where the chosen numbers sum to `target`. You may return the combinations in any order.
+
+The **same** number may be chosen from `candidates` an **unlimited number of times**. Two combinations are unique if the frequency of at least one of the chosen numbers is different.
+
+The test cases are generated such that the number of unique combinations that sum up to `target` is less than 150 combinations for the given input.
+
+### Examples
+
+**Example 1:**
+```
+Input: candidates = [2,3,6,7], target = 7
+Output: [[2,2,3],[7]]
+Explanation:
+2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
+7 is a candidate, and 7 = 7.
+These are the only two combinations.
+```
+
+**Example 2:**
+```
+Input: candidates = [2,3,5], target = 8
+Output: [[2,2,2,2],[2,3,3],[3,5]]
+```
+
+**Example 3:**
+```
+Input: candidates = [2], target = 1
+Output: []
+```
+
+### Constraints
+
+- $1 \le \text{candidates.length} \le 30$
+- $2 \le \text{candidates}[i] \le 40$
+- All elements of `candidates` are **distinct**
+- $1 \le \text{target} \le 40$
+
+### Solution - Dynamic Programming (Unbounded Knapsack)
+
+#### Walkthrough
+
+This problem is a classic **Unbounded Knapsack** variant where each candidate can be used unlimited times to reach the target sum.
+
+**Core Strategy:**
+
+Build up solutions from smaller sums to the target. Use a DP table where `dp[i]` stores all combinations that sum to `i`. For each amount from 1 to target, try adding each candidate and extend the combinations from `dp[amount - candidate]`.
+
+**Key Insight - Avoiding Duplicates:**
+
+To prevent duplicate combinations like `[2,3]` and `[3,2]`, only add a candidate if it maintains **non-decreasing order**. Check if the candidate is greater than or equal to the last element in the existing combination.
+
+**Step-by-step execution for `candidates = [2,3,6,7], target = 7`:**
+
+```
+dp[0] = [[]]           (empty combination sums to 0)
+dp[1] = []             (no candidates $\le$ 1)
+dp[2] = [[2]]          (from dp[0] + 2)
+dp[3] = [[3]]          (from dp[0] + 3)
+dp[4] = [[2,2]]        (from dp[2] + 2, since 2 $\ge$ 2)
+dp[5] = [[2,3]]        (from dp[2] + 3, since 3 $\ge$ 2)
+dp[6] = [[2,2,2], [6]] (from dp[4] + 2 and dp[0] + 6)
+dp[7] = [[2,2,3], [7]] (from dp[4] + 3 and dp[0] + 7)
+```
+
+The answer is `dp[7] = [[2,2,3], [7]]`.
+
+**Why Non-Decreasing Order Works:**
+
+- Forces a canonical ordering: `[2,2,3]` exists but `[2,3,2]` and `[3,2,2]` are never generated
+- Only extends a combination if new candidate $\ge$ last element
+- Guarantees uniqueness without needing a Set or post-processing
+
+#### Analysis
+
+- **Time Complexity**: O(target × n × k)
+  - Outer loop: O(target) iterations for each amount
+  - Middle loop: O(n) candidates to try
+  - Inner loop: O(k) where k is the average number of combinations per amount
+  - In worst case, k can be exponential, but bounded by problem constraint (< 150 combinations)
+
+- **Space Complexity**: O(target × k)
+  - DP array has (target + 1) entries
+  - Each entry stores up to k combinations
+  - Each combination stores up to (target / min_candidate) elements
+
+#### Implementation Steps
+
+**Initialization:**
+1. Create array `dp` of size (target + 1) where each entry is a list of combinations
+2. Initialize `dp[0] = [[]]` (base case: empty combination sums to 0)
+
+**DP Table Construction:**
+3. For each amount from 1 to target:
+   1. For each candidate in candidates array:
+      - Skip if candidate $>$ amount (cannot use it)
+      - Calculate `remaining = amount - candidate`
+      - For each combination in `dp[remaining]`:
+        - Check if we can add candidate (maintains non-decreasing order)
+        - If combination is empty OR candidate $\ge$ last element in combination:
+          - Create new combination by copying existing and appending candidate
+          - Add to `dp[amount]`
+
+**Return Result:**
+4. Return `dp[target]` (all combinations that sum to target)
+
+#### Java Code
+
+```java
+public List<List<Integer>> combinationSum(int[] candidates, int target) {
+    // dp[i] = list of all combinations that sum to i
+    List<List<Integer>>[] dp = new ArrayList[target + 1];
+
+    // Initialize
+    for (int i = 0; i <= target; i++) {
+        dp[i] = new ArrayList<>();
+    }
+
+    // Base case
+    dp[0].add(new ArrayList<>());
+
+    // Fill dp table
+    for (int i = 1; i <= target; i++) {
+        for (int c : candidates) {
+            if (c <= i) {
+                for (List<Integer> combo : dp[i - c]) {
+                    if (combo.isEmpty() || c >= combo.get(combo.size() - 1)) {
+                        List<Integer> newCombo = new ArrayList<>(combo);
+                        newCombo.add(c);
+                        dp[i].add(newCombo);
+                    }
+                }
+            }
+        }
+    }
+
+    return dp[target];
 }
 ```
 
@@ -1212,6 +1367,7 @@ private void backtrack(List<Integer> path, int[] nums, boolean[] visited) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/permutations-ii/
 - **Tags**: `Array`, `Backtracking`
+- **Interview Tags**: NeetCode 150
 - **Techniques**: [Backtracking: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)
 
 ### Description
@@ -1372,7 +1528,7 @@ private void backtrack(List<Integer> path, int[] nums, boolean[] visited) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/lc-maximum-subarray/
 - **Tags**: `Array`, `Dynamic Programming`
-- **Interview Tags**: Blind 75
+- **Interview Tags**: Blind 75, NeetCode 150
 - **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation)
 
 ### Description
@@ -1935,7 +2091,7 @@ public List<List<Integer>> generate(int numRows) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 - **Tags**: `Array`, `Greedy`
-- **Interview Tags**: Blind 75
+- **Interview Tags**: Blind 75, NeetCode 150
 - **Techniques**: [Greedy](glossary-of-algorithm.html#greedy)
 
 ### Description
@@ -2238,6 +2394,7 @@ public int maxProduct(int[] nums) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
 - **Tags**: `Array`, `Two Pointers`, `Binary Search`
+- **Interview Tags**: NeetCode 150
 - **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Binary Search](glossary-of-algorithm.html#binary-search)
 
 ### Description
@@ -2444,6 +2601,7 @@ public int rob(int[] nums) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/minimum-size-subarray-sum/
 - **Tags**: `Array`, `Sliding Window`, `Binary Search`, `Prefix Sum`
+- **Interview Tags**: NeetCode 150
 - **Techniques**: [Sliding Window](glossary-of-algorithm.html#sliding-window), [Two Pointers](glossary-of-algorithm.html#two-pointers)
 
 ### Description
@@ -2806,7 +2964,7 @@ public int maxProfit(int[] prices) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/lc-top-k-frequent-elements/
 - **Tags**: `Array`, `Hash Table`, `Heap`
-- **Interview Tags**: Blind 75
+- **Interview Tags**: Blind 75, NeetCode 150
 - **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Min-Heap](glossary-of-algorithm.html#heap)
 
 ### Description
@@ -3845,6 +4003,7 @@ class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/coin-change-ii/
 - **Tags**: `Array`, `Dynamic Programming`
+- **Interview Tags**: NeetCode 150
 - **Techniques**: [Dynamic Programming](#dynamic-programming), [Unbounded Knapsack](#dp-unbounded-knapsack)
 
 ### Description

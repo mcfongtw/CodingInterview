@@ -136,28 +136,11 @@ kable(by_chapter[, c("chapter", "problem_link", "platform", "display_id", "diffi
 
 ## Lookup by Study Plan
 
-### Top 100 Liked
-
-```{r top-100-liked, echo=FALSE}
-# Filter problems that contain "Top 100 Liked" in tags
-top100 <- problems[grepl("Top 100 Liked", problems$tags, ignore.case = TRUE), ]
-if(nrow(top100) > 0) {
-  # Sort by platform priority, then problem_id
-  top100 <- top100[order(top100$platform_priority, top100$problem_id, na.last = TRUE), ]
-  top100$display_id <- ifelse(is.na(top100$problem_id), "-", as.character(top100$problem_id))
-  top100$problem_link <- paste0("[", top100$title, "](", top100$anchor, ".html)")
-  kable(top100[, c("platform", "display_id", "problem_link", "difficulty", "chapter")],
-        col.names = c("Platform", "ID", "Problem", "Difficulty", "Chapter"),
-        row.names = FALSE)
-} else {
-  cat("*No problems tagged as Top 100 Liked yet. Tags will be populated by Codex.*\n")
-}
-```
-
 ### Blind 75
 
 ```{r blind-75, echo=FALSE}
 blind75 <- problems[grepl("Blind 75", problems$tags, ignore.case = TRUE), ]
+cat(sprintf("*Progress: %d / 75 problems.*\n\n", nrow(blind75)))
 if(nrow(blind75) > 0) {
   # Sort by platform priority, then problem_id
   blind75 <- blind75[order(blind75$platform_priority, blind75$problem_id, na.last = TRUE), ]
@@ -175,6 +158,7 @@ if(nrow(blind75) > 0) {
 
 ```{r neetcode-150, echo=FALSE}
 neetcode <- problems[grepl("NeetCode 150", problems$tags, ignore.case = TRUE), ]
+cat(sprintf("*Progress: %d / 150 problems.*\n\n", nrow(neetcode)))
 if(nrow(neetcode) > 0) {
   # Sort by platform priority, then problem_id
   neetcode <- neetcode[order(neetcode$platform_priority, neetcode$problem_id, na.last = TRUE), ]
