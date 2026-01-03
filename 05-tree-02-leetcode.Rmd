@@ -1158,6 +1158,180 @@ private int dfs(TreeNode node, int current, int target, Map<Integer, Integer> pr
 ```
 
 
+## Subtree of Another Tree {#lc-subtree-of-another-tree}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 572
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/subtree-of-another-tree/
+- **Tags**: `Tree`, `DFS`, `Binary Tree`
+- **Interview Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#dfs), [Recursion](glossary-of-algorithm.html#recursion)
+
+### Description
+
+Given the roots of two binary trees `root` and `subRoot`, return `true` if there is a subtree of `root` with the same structure and node values of `subRoot` and `false` otherwise.
+
+A **subtree** of a binary tree `tree` is a tree that consists of a node in `tree` and all of this node's descendants. The tree `tree` could also be considered as a subtree of itself.
+
+### Examples
+
+**Example 1:**
+```
+Input: root = [3,4,5,1,2], subRoot = [4,1,2]
+    3              4
+   / \            / \
+  4   5          1   2
+ / \
+1   2
+
+Output: true
+Explanation: subRoot has the same structure and node values as a subtree of root.
+```
+
+**Example 2:**
+```
+Input: root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]
+      3              4
+     / \            / \
+    4   5          1   2
+   / \
+  1   2
+ /
+0
+
+Output: false
+Explanation: The subtree with root value 4 in root has an additional node 0.
+```
+
+**Example 3:**
+```
+Input: root = [1,1], subRoot = [1]
+Output: true
+```
+
+### Constraints
+
+- The number of nodes in the `root` tree is in the range `[1, 2000]`
+- The number of nodes in the `subRoot` tree is in the range `[1, 1000]`
+- $-10^4 \le \text{root.val} \le 10^4$
+- $-10^4 \le \text{subRoot.val} \le 10^4$
+
+### Solution - DFS with Tree Comparison
+
+#### Walkthrough
+
+This solution uses a **two-level DFS approach**:
+
+1. **Outer DFS** (`isSubtree`): Traverse the main tree to find potential matching points
+2. **Inner DFS** (`isSame`): Verify if two trees are structurally and value-identical
+
+**Key Insight:** A valid subtree match requires **exact structural and value equality** starting from some node in `root`. The solution explores every node in `root` as a potential subtree root.
+
+**Algorithm Flow:**
+
+1. **Base case handling in `isSubtree`**:
+   - If `root` is null, check if `subRoot` is also null (empty tree matches empty tree)
+   - This differs from the common approach of returning `false` when `root` is null
+
+2. **Check current node first**:
+   - Use `isSame(root, subRoot)` to check if trees match starting from current node
+   - If match found, return `true` immediately
+
+3. **Recurse on children**:
+   - If current node doesn't match, search left subtree: `isSubtree(root.left, subRoot)`
+   - If not found in left, search right subtree: `isSubtree(root.right, subRoot)`
+   - Return `true` if found in either subtree
+
+4. **Helper function `isSame`**:
+   - Both null → trees are identical (base case)
+   - One null, one not → trees differ structurally
+   - Values match → recursively verify both left and right subtrees match
+
+**Why This Works:**
+
+The recursive structure ensures we check every possible starting position in `root`. For each position, `isSame` performs a complete structural comparison. The OR operator (`||`) enables early termination once a match is found.
+
+#### Analysis
+
+- **Time Complexity**: O(n × m)
+  - n = number of nodes in `root`
+  - m = number of nodes in `subRoot`
+  - Worst case: we check every node in `root`, and for each node, `isSame` might traverse all m nodes of `subRoot`
+  - Example worst case: `root` is a complete binary tree and `subRoot` doesn't exist as a subtree
+
+- **Space Complexity**: O(h₁ + h₂)
+  - h₁ = height of `root` tree (recursion stack for `isSubtree`)
+  - h₂ = height of `subRoot` tree (recursion stack for `isSame`)
+  - In practice, dominated by O(h₁) since `isSame` calls are nested within `isSubtree`
+  - Best case (balanced trees): O(log n + log m)
+  - Worst case (skewed trees): O(n + m)
+
+**Edge Cases Handled:**
+
+1. Both trees null → `true` (empty subtree exists)
+2. Root null, subRoot not null → `false` (can't find non-empty tree in empty tree)
+3. SubRoot null, root not null → typically depends on problem definition
+4. Single node trees → correctly handled by `isSame`
+
+#### Implementation Steps
+
+1. **Define `isSubtree` main function**:
+   - Handle base case: if `root` is null, check if `subRoot` is also null
+   - Check current position: call `isSame(root, subRoot)`
+   - If match, return `true`
+   - Otherwise, recursively search left and right subtrees with OR logic
+
+2. **Define `isSame` helper function**:
+   - Base case 1: if both nodes null, return `true`
+   - Base case 2: if only one node null, return `false`
+   - Recursive case: check value equality AND recursively verify left and right subtrees
+
+3. **Return logic**:
+   - `isSubtree` returns `true` if match found anywhere
+   - `isSame` returns `true` only if entire structure matches
+
+#### Java Code
+
+```java
+class Solution {
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        // Base case: empty root can only match empty subRoot
+        if (root == null) {
+            return subRoot == null;
+        }
+
+        // Check if current node is root of matching subtree
+        if (isSame(root, subRoot)) {
+            return true;
+        }
+
+        // Recursively search in left and right subtrees
+        return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+    }
+
+    private boolean isSame(TreeNode root1, TreeNode root2) {
+        // Both null: trees are identical
+        if (root1 == null && root2 == null) {
+            return true;
+        }
+
+        // One null, one not: trees are different
+        if (root1 == null || root2 == null) {
+            return false;
+        }
+
+        // Check value equality AND recursive structure match
+        return (root1.val == root2.val)
+            && isSame(root1.left, root2.left)
+            && isSame(root1.right, root2.right);
+    }
+}
+```
+
+
 ## Diameter of Binary Tree {#lc-diameter}
 
 ### Problem Metadata
