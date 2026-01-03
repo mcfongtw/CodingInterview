@@ -9,6 +9,14 @@ library(knitr)
 # Load all problems from CSV file (105 currently in book)
 problems <- read.csv("problems_data.csv", stringsAsFactors = FALSE)
 
+# Ensure techniques column exists for older CSVs
+if (!"techniques" %in% names(problems)) {
+  problems$techniques <- ""
+}
+
+# Normalize missing techniques to empty strings for grepl
+problems$techniques[is.na(problems$techniques)] <- ""
+
 # Convert "NA" strings to actual NA values
 problems$problem_id[problems$problem_id == "NA"] <- NA
 problems$problem_id <- as.numeric(problems$problem_id)
@@ -20,6 +28,25 @@ problems$platform_priority[is.na(problems$platform_priority)] <- max(platform_or
 
 # Add HTML links for clickable problem titles
 problems$html_link <- paste0("[", problems$title, "](", problems$anchor, ".html)")
+
+technique_matches <- function(technique) {
+  pattern <- paste0("(^|,\\s*)", technique, "(,|$)")
+  problems[grepl(pattern, problems$techniques, ignore.case = TRUE), ]
+}
+
+render_technique_table <- function(technique) {
+  matches <- technique_matches(technique)
+  if (nrow(matches) == 0) {
+    cat("*No problems using this technique yet.*\n")
+    return(invisible(NULL))
+  }
+  matches <- matches[order(matches$platform_priority, matches$problem_id, na.last = TRUE), ]
+  matches$display_id <- ifelse(is.na(matches$problem_id), "-", as.character(matches$problem_id))
+  matches$problem_link <- paste0("[", matches$title, "](", matches$anchor, ".html)")
+  kable(matches[, c("platform", "display_id", "problem_link", "difficulty", "chapter")],
+        col.names = c("Platform", "ID", "Problem", "Difficulty", "Chapter"),
+        row.names = FALSE)
+}
 ```
 
 ---
@@ -134,6 +161,130 @@ kable(by_chapter[, c("chapter", "problem_link", "platform", "display_id", "diffi
 
 ---
 
+## Lookup by Technique
+
+This index helps you find problems by the technique they use. Links jump to the detailed explanations in [Common Strategies](#common-strategies) and the [Glossary](#intro).
+
+### Dynamic Programming
+
+#### Tabulation (Bottom-Up)
+
+Problems using [Tabulation](#dp-tabulation):
+
+```{r dp-tabulation-problems, echo=FALSE}
+render_technique_table("dp-tabulation")
+```
+
+#### Memoization (Top-Down)
+
+Problems using [Memoization](#dp-memoization):
+
+```{r dp-memoization-problems, echo=FALSE}
+render_technique_table("dp-memoization")
+```
+
+#### Unbounded Knapsack
+
+Problems using the [Unbounded Knapsack](#dp-unbounded-knapsack) pattern:
+
+```{r dp-unbounded-knapsack-problems, echo=FALSE}
+render_technique_table("dp-unbounded-knapsack")
+```
+
+#### Kadane's Algorithm
+
+Problems using [Kadane's Algorithm](#kadanes-algorithm):
+
+```{r kadanes-algorithm-problems, echo=FALSE}
+render_technique_table("kadanes-algorithm")
+```
+
+### Backtracking
+
+#### Choose-Explore-Unchoose Pattern
+
+Problems using the [Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern) pattern:
+
+```{r backtracking-choose-explore-unchoose-problems, echo=FALSE}
+render_technique_table("backtracking-choose-explore-unchoose-pattern")
+```
+
+#### Pass-by-Value Pattern
+
+Problems using the [Pass-by-Value](#backtracking-pass-by-value-pattern) pattern:
+
+```{r backtracking-pass-by-value-problems, echo=FALSE}
+render_technique_table("backtracking-pass-by-value-pattern")
+```
+
+#### Mark-Unmark Pattern (Grid or Graph)
+
+Problems using the [Mark-Unmark](#backtracking-mark-unmark-pattern) pattern:
+
+```{r backtracking-mark-unmark-problems, echo=FALSE}
+render_technique_table("backtracking-mark-unmark-pattern")
+```
+
+### Two Pointer
+
+Problems using the [Two Pointer](#two-pointer) technique:
+
+```{r two-pointer-problems, echo=FALSE}
+render_technique_table("two-pointer")
+```
+
+### Hash Table
+
+Problems using the [Hash Table](#hash-table) technique:
+
+```{r hash-table-problems, echo=FALSE}
+render_technique_table("hash-table")
+```
+
+### Binary Search
+
+Problems using [Binary Search](#binary-search):
+
+```{r binary-search-problems, echo=FALSE}
+render_technique_table("binary-search")
+```
+
+### Sliding Window
+
+Problems using the [Sliding Window](#sliding-window) technique:
+
+```{r sliding-window-problems, echo=FALSE}
+render_technique_table("sliding-window")
+```
+
+### Graph Traversal
+
+#### Depth-First Search
+
+Problems using [Depth-First Search](#dfs):
+
+```{r dfs-problems, echo=FALSE}
+render_technique_table("dfs")
+```
+
+#### Breadth-First Search
+
+Problems using [Breadth-First Search](#bfs):
+
+```{r bfs-problems, echo=FALSE}
+render_technique_table("bfs")
+```
+
+### Heap
+
+Problems using the [Heap](#heap) technique:
+
+```{r heap-problems, echo=FALSE}
+render_technique_table("heap")
+```
+
+---
+
 ## Lookup by Study Plan
 
 ### Blind 75
@@ -215,14 +366,15 @@ if(has_company_tags) {
 When you add a new problem to the book:
 
 1. Open [problems_data.csv](problems_data.csv) in a spreadsheet or text editor
-2. Add a new row with: `title,platform,problem_id,difficulty,chapter,chapter_num,anchor,tags`
-3. Rebuild the book with `sh build.sh`
-4. All lookup tables will automatically update!
+2. Add a new row with: `title,platform,problem_id,difficulty,chapter,chapter_num,anchor,tags,techniques`
+3. Use comma-separated technique anchors in the `techniques` column and wrap the value in quotes when it contains commas (example: `dp-tabulation, backtracking-choose-explore-unchoose-pattern`)
+4. Rebuild the book with `sh build.sh`
+5. All lookup tables will automatically update!
 
 ### Example CSV Entry
 
 ```
-Your New Problem,LeetCode,9999,Medium,Array,02,new-problem,"Google, Amazon, Top 100 Liked, Blind 75"
+Your New Problem,LeetCode,9999,Medium,Array,02,new-problem,"Google, Amazon, Top 100 Liked, Blind 75","dp-tabulation, hash-table"
 ```
 
 ### Tags Format
@@ -232,6 +384,27 @@ The `tags` field supports comma-separated values for:
 - **Study plans**: Top 100 Liked, Blind 75, NeetCode 150
 
 Use quotes around the tags value if it contains commas.
+
+---
+
+### Techniques Format
+
+The `techniques` field supports comma-separated technique anchor IDs for:
+- **Dynamic Programming**: `dp-memoization`, `dp-tabulation`, `dp-unbounded-knapsack`, `kadanes-algorithm`
+- **Backtracking**: `backtracking-choose-explore-unchoose-pattern`, `backtracking-pass-by-value-pattern`, `backtracking-mark-unmark-pattern`
+- **Two Pointer**: `two-pointer`, `sliding-window`
+- **Data Structures**: `hash-table`, `heap`, `stack`, `queue`, `bst`, `trie`, `linked-list`, `array`
+- **Traversal**: `dfs`, `bfs`, `topological`
+- **Search or Sort**: `binary-search`, `sorting`, `ms`, `qs`, `bs`
+- **Paradigms**: `greedy`, `dnc`, `recursion`
+- **Matrix**: `matrix-traversal`, `matrix-manipulation`
+- **Advanced**: `bitwise`, `simulation`, `probability`, `rejection-sampling`, `reservoir-sampling`, `minimax`
+
+Use quotes around the techniques value if it contains commas.
+
+Cross-reference to technique explanations:
+- Detailed techniques: [Common Strategies](#common-strategies)
+- Quick reference: [Glossary](#intro)
 
 ---
 

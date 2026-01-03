@@ -8,7 +8,7 @@
 - **URL**: https://leetcode.com/problems/longest-substring-without-repeating-characters/
 - **Tags**: `String`, `Sliding Window`, `Hash Table`
 - **Interview Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers), [Hash Table](glossary-of-algorithm.html#hash-table)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointer), [Hash Table](glossary-of-algorithm.html#hash-table)
 
 ### Description
 
@@ -290,7 +290,7 @@ public String longestPalindrome(String s) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/lc-longest-common-prefix/
 - **Tags**: `String`
-- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointers)
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#two-pointer)
 
 ### Description
 
@@ -481,17 +481,17 @@ Result: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
 
 #### Analysis
 
-- **Time Complexity**: $O(4^n \times n)$ where n is the length of the input digits
+- **Time Complexity**: $O(4^n 	imes n)$ where n is the length of the input digits
   - In the worst case (digits 7 and 9), each digit maps to 4 letters
   - We generate up to $4^n$ combinations
   - Each combination requires $O(n)$ time to build the string with StringBuilder
-  - Total: $O(4^n \times n)$
+  - Total: $O(4^n 	imes n)$
 
 - **Space Complexity**: $O(n)$ not counting output space
   - Recursion call stack depth: $O(n)$ for n digits
   - StringBuilder for current combination: $O(n)$
   - Choices array: $O(n)$ rows with constant-size letter arrays
-  - Output space (not counted): $O(4^n \times n)$ to store all combinations
+  - Output space (not counted): $O(4^n 	imes n)$ to store all combinations
 
 #### Implementation Steps
 
@@ -1045,6 +1045,359 @@ class Solution {
 ```
 
 
+## Palindromic Substrings {#lc-palindromic-substrings}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 647
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/palindromic-substrings/
+- **Tags**: `String`, `Dynamic Programming`
+- **Interview Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#dynamic-programming), [Tabulation](#dp-tabulation), [Expand Around Center](glossary-of-algorithm.html#expand-around-center)
+
+### Description
+
+Given a string `s`, return the number of palindromic substrings in it.
+
+A string is a palindrome when it reads the same backward as forward.
+
+A substring is a contiguous sequence of characters within the string.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "abc"
+Output: 3
+Explanation: Three palindromic strings: "a", "b", "c".
+```
+
+**Example 2:**
+```
+Input: s = "aaa"
+Output: 6
+Explanation: Six palindromic strings: "a", "a", "a", "aa", "aa", "aaa".
+```
+
+### Constraints
+
+- $1 \le$ s.length $\le$ 1000
+- `s` consists of lowercase English letters
+
+### Solution 1 - Expand Around Center
+
+#### Walkthrough
+
+The solution leverages the property that **every palindrome has a center point**. By treating each position (and each pair of adjacent positions) as a potential center, we can expand outward and count all palindromic substrings.
+
+**Key insight:** For a string of length n, there are **2n-1 possible centers**:
+- **n single-character centers** for odd-length palindromes (e.g., "aba" centered at 'b')
+- **n-1 two-character centers** for even-length palindromes (e.g., "abba" centered between the two 'b's)
+
+**Algorithm approach:**
+1. Iterate through each position i in the string
+2. For each position, expand around two types of centers:
+   - **Odd-length palindromes**: center at (i, i) - single character
+   - **Even-length palindromes**: center at (i, i+1) - between two adjacent characters
+3. For each center, expand outward (`l--`, `r++`) while characters match
+4. Count each valid palindrome discovered during expansion
+
+**Visual example with `s = "aaaa"`:**
+
+```
+Iteration i=0:
+  Odd center (0,0):   "a" → count = 1
+  Even center (0,1):  "aa" → count = 1
+
+Iteration i=1:
+  Odd center (1,1):   "a", then expand to "aaa" → count = 2
+  Even center (1,2):  "aa", then expand to "aaaa" → count = 2
+
+Iteration i=2:
+  Odd center (2,2):   "a", then expand to "aaa" → count = 2
+  Even center (2,3):  "aa" → count = 1
+
+Iteration i=3:
+  Odd center (3,3):   "a" → count = 1
+  Even center (3,4):  out of bounds → count = 0
+
+Total: 1 + 1 + 2 + 2 + 2 + 1 + 1 = 10 palindromes
+```
+
+**Detailed expansion trace for i=1, odd center (1,1):**
+```
+String: a  a  a  a
+Index:  0  1  2  3
+
+Step 1: l=1, r=1
+  s[1]='a' == s[1]='a' ✓ → "a" (count=1)
+  Expand: l=0, r=2
+
+Step 2: l=0, r=2
+  s[0]='a' == s[2]='a' ✓ → "aaa" (count=2)
+  Expand: l=-1, r=3 → out of bounds, stop
+
+Returns 2
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n²)
+  - Outer loop iterates through n positions
+  - For each position, we check 2 centers (odd and even)
+  - Each expansion can go up to n/2 steps in worst case
+  - Total: O(n × 2 × n/2) = O(n²)
+  - Example: "aaaa" has worst-case expansion for every center
+
+- **Space Complexity**: O(1)
+  - Only uses a constant number of variables (count, l, r)
+  - No additional data structures needed
+  - In-place character comparisons
+
+#### Implementation Steps
+
+1. Initialize result counter to 0
+2. For each index i from 0 to n-1:
+   - Call `expandAroundCenter(s, i, i)` for odd-length palindromes
+   - Call `expandAroundCenter(s, i, i+1)` for even-length palindromes
+   - Add both counts to result
+3. In `expandAroundCenter(s, l, r)`:
+   - Initialize local count to 0
+   - While l $\ge$ 0 AND r $\lt$ length AND s[l] == s[r]:
+     - Increment count (found a palindrome)
+     - Expand outward: decrement l, increment r
+   - Return count
+4. Return total result
+
+#### Java Code
+
+```java
+public int countSubstrings(String s) {
+    int result = 0;
+
+    for (int i = 0; i < s.length(); i++) {
+        // Odd-length palindromes (center at single character)
+        result += expandAroundCenter(s, i, i);
+
+        // Even-length palindromes (center between two characters)
+        result += expandAroundCenter(s, i, i + 1);
+    }
+
+    return result;
+}
+
+private int expandAroundCenter(String s, int l, int r) {
+    int count = 0;
+    int len = s.length();
+
+    // Expand outward while characters match and in bounds
+    while (l >= 0 && r < len && s.charAt(l) == s.charAt(r)) {
+        count++;  // Found a palindrome
+        l--;      // Expand left
+        r++;      // Expand right
+    }
+
+    return count;
+}
+```
+
+### Solution 2 - Dynamic Programming (Tabulation)
+
+#### Walkthrough
+
+The DP solution builds a 2D boolean table where `dp[i][j]` indicates whether the substring from index `i` to index `j` is a palindrome. We fill this table systematically by considering substrings of increasing length, building upon previously computed results.
+
+**Key insight:** A substring `s[i...j]` is a palindrome if:
+1. The characters at both ends match: `s[i] == s[j]`, AND
+2. Either:
+   - The substring has length $\le$ 2 (base case: single char "a" or two chars "aa")
+   - The inner substring `s[i+1...j-1]` is also a palindrome: `dp[i+1][j-1] == true`
+
+**DP Recurrence Relation:**
+```
+dp[i][j] = true if:
+  - s[i] == s[j] AND
+  - (j - i <= 1 OR dp[i+1][j-1] == true)
+```
+
+**Algorithm approach:**
+1. Create a 2D boolean table `dp[n][n]` initialized to false
+2. Fill the table by increasing substring length (from 1 to n)
+3. For each length, iterate through all possible starting positions
+4. Count each `dp[i][j]` that becomes true
+
+**Visual example with `s = "aba"` (n=3):**
+
+```
+Initial DP table (all false):
+      j=0  j=1  j=2
+i=0 [ F    F    F  ]
+i=1 [ -    F    F  ]
+i=2 [ -    -    F  ]
+
+Length 1 (single characters):
+  i=0, j=0: s[0]='a' → dp[0][0] = true, count = 1
+  i=1, j=1: s[1]='b' → dp[1][1] = true, count = 2
+  i=2, j=2: s[2]='a' → dp[2][2] = true, count = 3
+
+After length 1:
+      j=0  j=1  j=2
+i=0 [ T    F    F  ]
+i=1 [ -    T    F  ]
+i=2 [ -    -    T  ]
+
+Length 2 (two adjacent characters):
+  i=0, j=1: s[0]='a' != s[1]='b' → dp[0][1] = false
+  i=1, j=2: s[1]='b' != s[2]='a' → dp[1][2] = false
+
+After length 2:
+      j=0  j=1  j=2
+i=0 [ T    F    F  ]
+i=1 [ -    T    F  ]
+i=2 [ -    -    T  ]
+
+Length 3:
+  i=0, j=2: s[0]='a' == s[2]='a' ✓ AND dp[1][1]=true ✓
+            → dp[0][2] = true, count = 4
+
+Final DP table:
+      j=0  j=1  j=2
+i=0 [ T    F    T  ]  → "a" at [0,0], "aba" at [0,2]
+i=1 [ -    T    F  ]  → "b" at [1,1]
+i=2 [ -    -    T  ]  → "a" at [2,2]
+
+Total: 4 palindromes ("a", "b", "a", "aba")
+```
+
+**Detailed trace for `s = "aaaa"` (n=4):**
+
+```
+Length 1: dp[0][0]=T, dp[1][1]=T, dp[2][2]=T, dp[3][3]=T → count = 4
+
+Length 2:
+  i=0, j=1: s[0]='a' == s[1]='a', length=2 → dp[0][1]=T, count = 5
+  i=1, j=2: s[1]='a' == s[2]='a', length=2 → dp[1][2]=T, count = 6
+  i=2, j=3: s[2]='a' == s[3]='a', length=2 → dp[2][3]=T, count = 7
+
+Length 3:
+  i=0, j=2: s[0]='a' == s[2]='a' AND dp[1][1]=T → dp[0][2]=T, count = 8
+  i=1, j=3: s[1]='a' == s[3]='a' AND dp[2][2]=T → dp[1][3]=T, count = 9
+
+Length 4:
+  i=0, j=3: s[0]='a' == s[3]='a' AND dp[1][2]=T → dp[0][3]=T, count = 10
+
+Final table:
+      j=0  j=1  j=2  j=3
+i=0 [ T    T    T    T  ]  → "a", "aa", "aaa", "aaaa"
+i=1 [ -    T    T    T  ]  → "a", "aa", "aaa"
+i=2 [ -    -    T    T  ]  → "a", "aa"
+i=3 [ -    -    -    T  ]  → "a"
+
+Total: 10 palindromes
+```
+
+**Why fill by length (bottom-up)?**
+- When checking `dp[i][j]`, we need `dp[i+1][j-1]` (inner substring) to already be computed
+- By processing shorter substrings first, we guarantee all dependencies are ready
+- This is the essence of bottom-up DP (tabulation)
+
+#### Analysis
+
+- **Time Complexity**: O(n²)
+  - Two nested loops: outer loop for length (1 to n), inner loop for starting position
+  - Each cell is computed in O(1) time using lookup
+  - Total cells filled: n + (n-1) + (n-2) + ... + 1 = n(n+1)/2 = O(n²)
+
+- **Space Complexity**: O(n²)
+  - 2D DP table of size n × n
+  - Each cell stores a boolean value
+  - Total space: n² cells
+
+#### Implementation Steps
+
+1. Initialize `boolean[][] dp = new boolean[n][n]` and `count = 0`
+2. Outer loop: iterate `length` from 1 to n (substring lengths)
+3. Inner loop: iterate `i` from 0 to `n - length` (starting positions)
+   - Calculate ending position: `j = i + length - 1`
+4. Check palindrome condition:
+   - If `s[i] == s[j]`:
+     - If `length <= 2`: mark `dp[i][j] = true`, increment count
+     - Else if `dp[i+1][j-1] == true`: mark `dp[i][j] = true`, increment count
+5. Return `count`
+
+#### Java Code
+
+```java
+public int countSubstrings(String s) {
+    int n = s.length();
+    boolean[][] dp = new boolean[n][n];
+    int count = 0;
+
+    // Fill DP table by increasing substring length
+    for (int length = 1; length <= n; length++) {
+        for (int i = 0; i <= n - length; i++) {
+            int j = i + length - 1;  // Ending index
+
+            // Check if s[i...j] is a palindrome
+            if (s.charAt(i) == s.charAt(j)) {
+                // Base case: single character or two adjacent characters
+                if (length <= 2) {
+                    dp[i][j] = true;
+                    count++;
+                }
+                // Recursive case: check inner substring
+                else if (dp[i + 1][j - 1]) {
+                    dp[i][j] = true;
+                    count++;
+                }
+            }
+        }
+    }
+
+    return count;
+}
+```
+
+**Alternative Implementation (filling diagonally):**
+
+```java
+public int countSubstringsDP(String s) {
+    int n = s.length();
+    boolean[][] dp = new boolean[n][n];
+    int count = 0;
+
+    // Diagonal 0: single characters
+    for (int i = 0; i < n; i++) {
+        dp[i][i] = true;
+        count++;
+    }
+
+    // Diagonal 1: two adjacent characters
+    for (int i = 0; i < n - 1; i++) {
+        if (s.charAt(i) == s.charAt(i + 1)) {
+            dp[i][i + 1] = true;
+            count++;
+        }
+    }
+
+    // Diagonals 2 to n-1: longer substrings
+    for (int len = 3; len <= n; len++) {
+        for (int i = 0; i <= n - len; i++) {
+            int j = i + len - 1;
+            if (s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1]) {
+                dp[i][j] = true;
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+```
+
+
 ## Verifying an Alien Dictionary {#lc-alien-dictionary}
 
 ### Problem Metadata
@@ -1254,7 +1607,7 @@ class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
 - **Tags**: `String`, `Sliding Window`
-- **Techniques**: [Sliding Window](glossary-of-algorithm.html#sliding-window), [Two Pointers](glossary-of-algorithm.html#two-pointers)
+- **Techniques**: [Sliding Window](glossary-of-algorithm.html#sliding-window), [Two Pointers](glossary-of-algorithm.html#two-pointer)
 
 ### Description
 
@@ -1395,4 +1748,3 @@ class Solution {
     }
 }
 ```
-
