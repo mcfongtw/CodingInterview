@@ -1842,9 +1842,9 @@ public int[][] insert(int[][] intervals, int[] newInterval) {
 - **Problem ID**: 70
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/lc-climbing-stairs/
-- **Tags**: `Dynamic Programming`
+- **Tags**: `Dynamic Programming`, `Math`, `Memoization`
 - **Interview Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation)
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Memoization](#dp-memoization)
 
 ### Description
 
@@ -1862,7 +1862,7 @@ Explanation: (1+1+1), (1+2), (2+1)
 
 - `1 <= n <= 45`
 
-### Solution - Fibonacci DP
+### Solution - DP Tabulation
 
 #### Walkthrough
 
@@ -1901,6 +1901,100 @@ public int climbStairs(int n) {
 }
 
 
+```
+
+
+### Solution - DP Memoization
+
+#### Walkthrough
+
+This solution uses a **top-down recursive approach with memoization**. Instead of building up from the base cases, we recursively compute the number of ways to reach step `n` starting from step `i`.
+
+**Core Strategy:**
+
+From any step `i`, we have two choices:
+1. Take 1 step to reach `i + 1`
+2. Take 2 steps to reach `i + 2`
+
+The total ways from step `i` is the sum of ways from both choices: `ways(i) = ways(i + 1) + ways(i + 2)`.
+
+**Base Cases:**
+- If `i > n`: We've overshot the target → return 0
+- If `i == n`: We've reached exactly the target → return 1
+
+**Memoization:** Cache results in a `memory` array to avoid recomputing the same subproblem multiple times.
+
+**Recursion Tree Example for n = 3:**
+
+```
+ways(0)
+├─ ways(1)
+│  ├─ ways(2)
+│  │  ├─ ways(3) → 1 ✓
+│  │  └─ ways(4) → 0
+│  └─ ways(3) → 1 ✓ (cached)
+└─ ways(2) (cached from above)
+   ├─ ways(3) → 1 ✓
+   └─ ways(4) → 0
+
+Result: ways(0) = ways(1) + ways(2) = 2 + 1 = 3
+```
+
+Without memoization, `ways(2)` and `ways(3)` would be computed multiple times. The cache eliminates redundant calculations.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Each subproblem (step 0 to n) is computed exactly once and cached
+  - Subsequent calls return the cached result in O(1)
+  - Total: n subproblems × O(1) per lookup = O(n)
+
+- **Space Complexity**: O(n)
+  - Memoization array: O(n) space for caching results
+  - Recursion stack: O(n) depth in worst case
+  - Total: O(n) + O(n) = O(n)
+
+**Comparison with Fibonacci DP:**
+- **Fibonacci DP (iterative)**: O(1) space with rolling variables, bottom-up approach
+- **This solution (recursive)**: O(n) space for recursion + memoization, top-down approach
+- Both have O(n) time complexity, but iterative approach is more space-efficient
+
+#### Implementation Steps
+
+1. Create memoization array `memory` of size `n + 1` to cache results for steps 0 to n.
+2. Call helper function `recursion(0, n, memory)` starting from step 0.
+3. In `recursion(i, n, memory)`:
+   1. **Base case 1**: If `i > n`, return 0 (overshot target).
+   2. **Base case 2**: If `i == n`, return 1 (reached target exactly).
+   3. **Check cache**: If `memory[i] > 0`, return cached result.
+   4. **Recursive case**: Compute `memory[i] = recursion(i + 1, n, memory) + recursion(i + 2, n, memory)`.
+   5. Return `memory[i]`.
+4. Return the result from step 2.
+
+#### Java Code
+
+```java
+public int climbStairs(int n) {
+    int memory[] = new int[n + 1];
+    return recursion(0, n, memory);
+}
+
+private int recursion(int i, int n, int[] memory) {
+    if (i > n) {
+        return 0;
+    }
+
+    if (i == n) {
+        return 1;
+    }
+
+    if (memory[i] > 0) {
+        return memory[i];
+    }
+
+    memory[i] = recursion(i + 1, n, memory) + recursion(i + 2, n, memory);
+    return memory[i];
+}
 ```
 
 
