@@ -1156,30 +1156,64 @@ The Two Pointer technique is a fundamental optimization that:
 Master these patterns and you'll recognize two-pointer opportunities in most array, string, and linked list problems.
 
 
-## Dynamic Programming vs Backtracking {#dp-vs-backtracking}
+## Algorithm Selection: Greedy vs Dynamic Programming vs Backtracking {#dp-vs-backtracking}
 
-Both **Dynamic Programming (DP)** and **Backtracking** solve problems by exploring subproblems, but they differ fundamentally in **what they optimize for** and **when to use each**. Understanding this distinction is critical for choosing the right approach.
+Choosing between **Greedy**, **Dynamic Programming (DP)**, and **Backtracking** is one of the most critical decisions in problem-solving. Each approach has distinct characteristics, use cases, and trade-offs. Understanding when to use each is essential for efficient algorithm design.
 
 ### Core Differences
 
-| Aspect | Dynamic Programming | Backtracking |
-|--------|---------------------|--------------|
-| **Goal** | Find **optimal value** (min/max/count) | Find **all solutions** or **one valid solution** |
-| **Question Type** | "What is the minimum/maximum?" | "What are all possible combinations?" |
-| **Example Question** | "Minimum coins to make amount?" | "All ways to make amount?" |
-| **Exploration** | Bottom-up or memoized recursion | Exhaustive search with pruning |
-| **Overlapping Subproblems** | **Required** - reuses computed results | May exist but not exploited |
-| **State Storage** | Stores **results** of subproblems | Stores **current path/state** |
-| **Time Complexity** | Polynomial (typically $O(n \times m)$) | Exponential (typically $O(b^d)$) |
-| **Optimization** | Uses optimal substructure | Uses pruning to skip invalid paths |
-| **Returns** | Single value (number, boolean) | List of solutions or single path |
+| Aspect | Greedy | Dynamic Programming | Backtracking |
+|--------|--------|---------------------|--------------|
+| **Goal** | Find **one optimal solution** via local choices | Find **optimal value** (min/max/count) | Find **all solutions** or **one valid solution** |
+| **Question Type** | "What is the optimal strategy?" | "What is the minimum/maximum?" | "What are all possible combinations?" |
+| **Example Question** | "Capture every price increase?" | "Minimum coins to make amount?" | "All ways to make amount?" |
+| **Decision Making** | **Local optimal choice** → Global optimum | **Optimal substructure** with overlapping subproblems | **Exhaustive search** with pruning |
+| **Reconsiders Choices** | **Never** - choices are irrevocable | Implicitly via memoization/tabulation | **Always** - tries all possibilities |
+| **Overlapping Subproblems** | Not applicable (no subproblems) | **Required** - reuses computed results | May exist but not exploited |
+| **State Storage** | None (stateless decisions) | Stores **results** of subproblems | Stores **current path/state** |
+| **Time Complexity** | Linear to $O(n \log n)$ | Polynomial (typically $O(n \times m)$) | Exponential (typically $O(b^d)$ or $O(n!)$) |
+| **Space Complexity** | $O(1)$ to $O(n)$ | $O(n)$ to $O(n \times m)$ | $O(d)$ recursion stack |
+| **Optimization Technique** | Greedy choice property | Optimal substructure + memoization | Pruning invalid paths |
+| **Returns** | One optimal solution | Single value (number, boolean) | List of all solutions or single path |
+| **Proof Required** | **Yes** - must prove greedy works | No (correctness follows from recurrence) | No (exhaustive search guarantees correctness) |
 
-### Key Insight: Optimization vs Enumeration
+### Key Insight: Local vs Global vs Exhaustive
 
-The fundamental difference:
+The fundamental differences:
 
-- **DP**: "What is the **best** way?" (optimization)
-- **Backtracking**: "What are **all** the ways?" (enumeration)
+- **Greedy**: "Make the **best local choice** now" (assumes local optimum → global optimum)
+- **DP**: "What is the **best global value**?" (builds optimal solution from subproblems)
+- **Backtracking**: "What are **all possible ways**?" (explores entire solution space)
+
+### When to Use Greedy
+
+Use Greedy when the problem has the **greedy choice property**: making locally optimal choices leads to a globally optimal solution.
+
+**Critical Requirement**: You must **prove** that the greedy strategy works (via exchange argument, contradiction, or induction). If greedy fails, use DP instead.
+
+**Greedy Question Patterns**:
+- "Maximize/minimize by making optimal choices at each step"
+- Problems where **choices don't conflict** with each other
+- **No dependencies** between choices (future choices don't depend on past ones)
+
+**Examples**:
+
+| Problem | Greedy Strategy | Why Greedy Works? |
+|---------|----------------|-------------------|
+| **Stock II** | Capture every price increase | No conflicts - all increases are independently profitable |
+| **Activity Selection** | Pick activity with earliest finish time | Leaves maximum room for future activities |
+| **Huffman Coding** | Merge two smallest frequency nodes | Proven optimal by exchange argument |
+| **Fractional Knapsack** | Take items by value/weight ratio | Can take fractions - greedy maximizes value |
+
+**When Greedy FAILS**:
+- **Stock Cooldown**: Selling today forces rest tomorrow (choices conflict) → Use **DP**
+- **0/1 Knapsack**: Can't take fractions, greedy by ratio fails → Use **DP**
+- **Coin Change (minimum coins)**: Greedy by largest coin first fails for `[1,3,4]`, target 6 → Use **DP**
+
+**How to Verify Greedy Works**:
+1. **Try counterexamples** - If you find one where greedy fails, use DP
+2. **Prove via exchange argument** - Show swapping greedy choice with another makes solution worse
+3. **Check for conflicts** - Do current choices block better future choices?
 
 ### When to Use Dynamic Programming
 
@@ -1240,17 +1274,38 @@ Use Backtracking when the problem asks for **all solutions** or **one valid path
 
 ### The Critical Distinction: Same Problem, Different Questions
 
-Consider this example with `coins = [1, 2, 5]` and `target = 5`:
+How you frame the question determines which algorithm to use. Consider these examples:
 
-| Question | Approach | Answer |
-|----------|----------|--------|
-| **"Minimum coins to make 5?"** | DP | `2` (one coin of 5, or 5+0) |
-| **"All ways to make 5?"** | Backtracking | `[[1,1,1,1,1], [1,1,1,2], [1,2,2], [5]]` |
-| **"Number of ways to make 5?"** | DP | `4` (count without listing) |
+#### Example 1: Stock Trading
 
-**Key Observation**:
-- **Minimum/Maximum/Count** → DP (optimal value, no need for actual combinations)
-- **All combinations** → Backtracking (must enumerate every solution)
+| Question | Approach | Answer | Why? |
+|----------|----------|--------|------|
+| **"Maximum profit with unlimited transactions?"** | **Greedy** | Sum all price increases | No conflicts - capture every gain |
+| **"Maximum profit with cooldown?"** | **DP** | Track states (hold/sold/rest) | Choices conflict - selling blocks buying |
+| **"All transaction sequences for profit $\ge$ X?"** | **Backtracking** | List all valid sequences | Need all solutions |
+
+#### Example 2: Coin Change
+
+Consider `coins = [1, 2, 5]` and `target = 5`:
+
+| Question | Approach | Answer | Why? |
+|----------|----------|--------|------|
+| **"Minimum coins to make 5?"** | **DP** | `2` (use coin 5, or coins 2+3) | Asks for optimal count |
+| **"Can greedy (largest first) work?"** | **No** | Fails for `[1,3,4]`, target 6 | Greedy gives [4,1,1]=3, optimal is [3,3]=2 |
+| **"All ways to make 5?"** | **Backtracking** | `[[1,1,1,1,1], [1,1,1,2], [1,2,2], [5]]` | Must enumerate all solutions |
+| **"Number of ways to make 5?"** | **DP** | `4` | Count without listing |
+
+#### Example 3: Activity Selection
+
+| Question | Approach | Answer | Why? |
+|----------|----------|--------|------|
+| **"Maximum non-overlapping activities?"** | **Greedy** | Pick earliest finish time | Greedy choice property proven |
+| **"All valid schedules?"** | **Backtracking** | List all combinations | Need all solutions |
+
+**Key Observations**:
+- **Greedy**: Works when local choices don't conflict → **Fast** ($O(n \log n)$)
+- **DP**: Works when choices conflict but exhibit optimal substructure → **Moderate** ($O(n^2)$)
+- **Backtracking**: Necessary when you need all solutions → **Slow** ($O(2^n)$)
 
 ### Hybrid Cases: DP with Path Reconstruction
 
@@ -1327,39 +1382,113 @@ dp[11] = 3
 ### Decision Tree
 
 ```
-┌─────────────────────────────────────────┐
-│ Does the problem ask for:               │
-│ - Minimum/Maximum value?                │
-│ - Count of ways?                        │
-│ - Optimal value?                        │
-└─────────────────┬───────────────────────┘
-                  │
-          ┌───────┴────────┐
-          │                │
-         YES              NO
-          │                │
-          ▼                ▼
-    ┌─────────┐      ┌──────────────┐
-    │   DP    │      │ Does it ask  │
-    │         │      │ for all      │
-    │ O(n×m)  │      │ solutions?   │
-    └─────────┘      └──────┬───────┘
-                            │
-                    ┌───────┴────────┐
-                    │                │
-                   YES              NO
-                    │                │
-                    ▼                ▼
-            ┌──────────────┐   ┌─────────────┐
-            │ Backtracking │   │ Other       │
-            │              │   │ (Greedy,    │
-            │ O(b^d)       │   │  Two Ptr)   │
-            └──────────────┘   └─────────────┘
+                    ┌────────────────────────────────┐
+                    │ Start: Understand the problem  │
+                    └──────────────┬─────────────────┘
+                                   │
+                    ┌──────────────┴─────────────┐
+                    │ Does it ask for ALL        │
+                    │ solutions/combinations?    │
+                    └──────┬──────────────┬──────┘
+                           │              │
+                          YES            NO
+                           │              │
+                           ▼              │
+                   ┌──────────────┐       │
+                   │ Backtracking │       │
+                   │              │       │
+                   │ O(b^d), O(n!)│       │
+                   └──────────────┘       │
+                                          │
+                           ┌──────────────┴────────────┐
+                           │ Does it ask for optimal   │
+                           │ value (min/max/count)?    │
+                           └──────┬──────────────┬─────┘
+                                  │              │
+                                 YES            NO
+                                  │              │
+                   ┌──────────────┴──────┐       │
+                   │ Can you make local  │       │
+                   │ optimal choices     │       │
+                   │ without conflicts?  │       │
+                   └──────┬──────────┬───┘       │
+                          │          │           │
+                         YES        NO           │
+                          │          │           │
+                          ▼          ▼           ▼
+                  ┌───────────┐ ┌──────────┐ ┌──────────┐
+                  │  Greedy   │ │    DP    │ │  Other   │
+                  │           │ │          │ │(Two Ptr, │
+                  │ O(n logn) │ │  O(n×m)  │ │ MinMax)  │
+                  └───────────┘ └──────────┘ └──────────┘
+                       ↑              ↑
+                       │              │
+                  Must PROVE     Has optimal
+                  it works!      substructure +
+                                overlapping
+                                subproblems
 ```
+
+**Decision Steps**:
+
+1. **Need ALL solutions?** → **Backtracking**
+   - Example: All permutations, all subsets, all combinations
+
+2. **Need ONE optimal value?** → Check greedy first, then DP
+
+   a. **Try Greedy**:
+      - Can you make locally optimal choices?
+      - Do choices conflict with each other?
+      - Can you PROVE greedy works?
+
+      **If YES** → Use **Greedy**
+      **If NO** → Use **DP**
+
+   b. **Use DP if**:
+      - Choices have dependencies
+      - Overlapping subproblems exist
+      - Optimal substructure present
+
+3. **Neither optimization nor enumeration?** → Other techniques
+   - Two Pointers, MinMax, Sliding Window, etc.
 
 ### Common Mistakes
 
-**1. Using Backtracking for Optimization Problems**
+**1. Using Greedy When It Doesn't Work**
+
+```java
+// ❌ WRONG: Greedy for 0/1 Knapsack
+// Take items by value/weight ratio - FAILS!
+Arrays.sort(items, (a,b) -> (b.value/b.weight) - (a.value/a.weight));
+int totalValue = 0;
+for (Item item : items) {
+    if (item.weight <= capacity) {
+        totalValue += item.value;
+        capacity -= item.weight;
+    }
+}
+// Counterexample: items=[(60,10), (100,20), (120,30)], capacity=50
+// Greedy: takes (60,10) + (100,20) = 160, leaves 20 capacity wasted
+// Optimal: takes (100,20) + (120,30) = 220
+```
+
+```java
+// ✅ CORRECT: Use DP for 0/1 Knapsack
+int[][] dp = new int[n+1][capacity+1];
+for (int i = 1; i <= n; i++) {
+    for (int w = 1; w <= capacity; w++) {
+        if (items[i-1].weight <= w) {
+            dp[i][w] = Math.max(dp[i-1][w],
+                               items[i-1].value + dp[i-1][w - items[i-1].weight]);
+        } else {
+            dp[i][w] = dp[i-1][w];
+        }
+    }
+}
+// Time: O(n × capacity) - Guaranteed optimal
+```
+
+**2. Using Backtracking for Optimization Problems**
 
 ```java
 // ❌ WRONG: Using backtracking to find minimum coins
@@ -1419,31 +1548,40 @@ void backtrack(int[] nums, List<Integer> current, int target, List<List<Integer>
 
 | Problem Type | Example | Algorithm | Complexity |
 |-------------|---------|-----------|------------|
-| **Minimum/Maximum Value** | Minimum coins for amount | DP | $O(n \times m)$ |
-| **Count Ways (no enumeration)** | Number of paths in grid | DP | $O(n \times m)$ |
-| **All Combinations** | All subsets of array | Backtracking | $O(2^n)$ |
-| **All Permutations** | All orderings of array | Backtracking | $O(n!)$ |
-| **Path Exists (simple)** | Can reach target sum? | DP (boolean) | $O(n \times m)$ |
-| **All Paths** | All paths to target sum | Backtracking | $O(b^d)$ |
-| **Longest/Shortest Sequence** | Longest increasing subsequence | DP | $O(n^2)$ or $O(n \log n)$ |
-| **Generate All Sequences** | All valid parentheses | Backtracking | $O(4^n / \sqrt{n})$ |
+| **Optimal with Independent Choices** | Stock II (unlimited trades) | **Greedy** | $O(n)$ to $O(n \log n)$ |
+| **Optimal with Conflicting Choices** | Stock Cooldown | **DP** | $O(n)$ to $O(n \times m)$ |
+| **Minimum/Maximum Value** | Minimum coins for amount | **DP** | $O(n \times m)$ |
+| **Count Ways (no enumeration)** | Number of paths in grid | **DP** | $O(n \times m)$ |
+| **All Combinations** | All subsets of array | **Backtracking** | $O(2^n)$ |
+| **All Permutations** | All orderings of array | **Backtracking** | $O(n!)$ |
+| **Path Exists (simple)** | Can reach target sum? | **DP** (boolean) | $O(n \times m)$ |
+| **All Paths** | All paths to target sum | **Backtracking** | $O(b^d)$ |
+| **Longest/Shortest Sequence** | Longest increasing subsequence | **DP** | $O(n^2)$ or $O(n \log n)$ |
+| **Generate All Sequences** | All valid parentheses | **Backtracking** | $O(4^n / \sqrt{n})$ |
+| **Tracking Min/Max** | Best Time to Buy Stock I | **MinMax** | $O(n)$ |
 
 ### Key Takeaway
 
-**Ask yourself**:
-1. **"What is being asked?"**
-   - Optimal value (min/max/count) → **DP**
-   - All solutions or one valid path → **Backtracking**
+**Ask yourself these questions in order**:
 
-2. **"Do I need the actual solutions or just a value?"**
-   - Just a value → **DP**
-   - All solutions → **Backtracking**
-   - One optimal solution → **DP + Path Reconstruction**
+1. **"Does it ask for ALL solutions?"**
+   - **YES** → **Backtracking** (no choice - must enumerate)
+   - **NO** → Continue to question 2
 
-3. **"Are there overlapping subproblems?"**
-   - Yes, and optimizing → **DP** (polynomial)
-   - Yes, but enumerating → **Backtracking** (exponential, unavoidable)
+2. **"Does it ask for an optimal value?"**
+   - **NO** → Other techniques (Two Pointers, MinMax, etc.)
+   - **YES** → Continue to question 3
 
-When in doubt, look at the problem's return type:
-- Returns `int`, `boolean`, `long` → Likely **DP**
-- Returns `List<List<...>>` → Likely **Backtracking**
+3. **"Can I make locally optimal choices without conflicts?"**
+   - **YES** and **can PROVE it** → **Greedy** (fastest)
+   - **NO** (choices conflict) → **DP** (moderate)
+   - **UNSURE** → Try counterexample: if greedy fails → **DP**
+
+4. **"What does the problem return?"**
+   - `int`, `boolean`, `long` → Likely **Greedy** or **DP**
+   - `List<List<...>>` → Likely **Backtracking**
+
+**Decision Priority**:
+1. **Greedy** (if applicable) - Try first, fastest
+2. **DP** (if greedy fails) - Handles complex dependencies
+3. **Backtracking** (if need all solutions) - Last resort, slowest
