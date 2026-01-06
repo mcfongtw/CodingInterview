@@ -487,57 +487,83 @@ Output: true
 
 #### Walkthrough
 
-Try every cell as a starting point. Recursively match characters by exploring four directions, marking the current cell as visited to avoid reuse. If we reach the end of the word, return true; otherwise backtrack by restoring the cell.
+Try every cell as a starting point by iterating through the entire board. For each starting position, create a fresh `visited` array to track which cells are used in the current path. Use DFS to recursively match characters by exploring all four directions (up, down, left, right).
+
+**Key Backtracking Steps:**
+1. **Mark**: Mark the current cell as visited before exploring neighbors
+2. **Explore**: Recursively try all four directions with the next character
+3. **Unmark**: Restore the cell to unvisited before returning (critical for backtracking!)
+
+This mark-unmark pattern ensures cells can be reused when trying different starting positions or different paths. If we successfully match all characters (reach the end of the word), return true. Otherwise, backtrack and try other paths.
 
 #### Analysis
 
-- **Time Complexity**: O(m * n * 4^L) where `L` is the word length
-- **Space Complexity**: O(L) recursion stack
+- **Time Complexity**: O(m × n × 4^L) where `L` is the word length. For each of `m × n` starting positions, DFS explores up to 4^L paths (4 directions at each of L steps, though pruned by visited checks)
+- **Space Complexity**: O(m × n + L) where O(m × n) is for the visited array and O(L) is the recursion stack depth
 
 #### Implementation Steps
 
-1. Loop over all cells `(i, j)`.
-2. Call `dfs(i, j, index)` when the character matches `word[index]`.
-3. Base case: `index == word.length()` → success.
-4. On mismatch or out of bounds, return false.
-5. Temporarily mark cell as visited, recurse to neighbors, then restore.
+1. Loop over all cells `(i, j)` in the board as potential starting positions
+2. For each starting position, create a fresh `visited[m][n]` boolean array
+3. Call `dfs(board, visited, i, j, word, 0)` to attempt matching from that position
+4. **DFS Base Cases:**
+   - If `index >= word.length()`, return true (found complete word)
+   - If out of bounds, return false
+   - If already visited OR character doesn't match, return false
+5. **DFS Recursive Case:**
+   - Mark `visited[i][j] = true`
+   - Recursively explore all 4 directions with `index + 1`
+   - **Backtrack**: Set `visited[i][j] = false` before returning
+6. Return true if any starting position succeeds
 
 #### Java Code
 
 ```java
-private static final char VISITED = '#';
-
 public boolean exist(char[][] board, String word) {
     for (int i = 0; i < board.length; i++) {
-        for (int j = 0; j < board[0].length; j++) {
-            if (dfs(board, word, i, j, 0)) {
+        for (int j = 0; j < board[i].length; j++) {
+            boolean[][] visited = new boolean[board.length][board[0].length];
+
+            boolean result = dfs(board, visited, i, j, word, 0);
+
+            if (result) {
                 return true;
             }
         }
     }
+
     return false;
 }
 
-private boolean dfs(char[][] board, String word, int row, int col, int index) {
-    if (index == word.length()) {
+private boolean dfs(char[][] board, boolean[][] visited, int i, int j, String word, int index) {
+    // End of word reached - success
+    if (index >= word.length()) {
         return true;
     }
-    if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) {
+
+    // Out of bounds check
+    if (i < 0 || i >= board.length || j < 0 || j >= board[0].length) {
         return false;
     }
-    if (board[row][col] != word.charAt(index)) {
+
+    // Already visited OR character doesn't match
+    if (visited[i][j] || word.charAt(index) != board[i][j]) {
         return false;
     }
 
-    char saved = board[row][col];
-    board[row][col] = VISITED;
+    // Mark current cell as visited
+    visited[i][j] = true;
 
-    boolean found = dfs(board, word, row + 1, col, index + 1)
-            || dfs(board, word, row - 1, col, index + 1)
-            || dfs(board, word, row, col + 1, index + 1)
-            || dfs(board, word, row, col - 1, index + 1);
+    // Explore all four directions
+    boolean found =
+        dfs(board, visited, i + 1, j, word, index + 1) || // down
+        dfs(board, visited, i - 1, j, word, index + 1) || // up
+        dfs(board, visited, i, j + 1, word, index + 1) || // right
+        dfs(board, visited, i, j - 1, word, index + 1);   // left
 
-    board[row][col] = saved;
+    // BACKTRACK: Unmark visited cell before returning
+    visited[i][j] = false;
+
     return found;
 }
 ```
