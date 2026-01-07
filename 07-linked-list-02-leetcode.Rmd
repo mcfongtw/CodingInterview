@@ -442,20 +442,65 @@ public ListNode detectCycle(ListNode head) {
 - **Platform**: LeetCode
 - **Problem ID**: 143
 - **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/reorder-list/
 - **Tags**: Blind 75, NeetCode 150
 - **Techniques**: [Linked List](glossary-of-algorithm.html#glossary-linked-list), [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer)
 
+### Description
+
+Reorder a linked list from `L0 → L1 → ... → Ln-1 → Ln` to `L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → ...`. You must do this in-place without modifying node values.
+
+### Solution - Find Middle, Reverse, Merge
+
+#### Walkthrough
+
+The solution uses three distinct phases:
+
+1. **Find the middle**: Use Floyd's slow/fast pointers to locate the midpoint. After the loop, `slow` points to the middle node.
+
+2. **Reverse the second half**: Reverse the portion after the middle, then disconnect it from the first half by setting `slow.next = null`.
+
+3. **Merge alternately**: Interleave nodes from the first half and reversed second half. For each iteration, save next pointers, link first to second, link second to first's original next, then advance both pointers.
+
+**Example**: `1 → 2 → 3 → 4 → 5`
+- After finding middle: `slow` at node 3
+- After reverse: first half `1 → 2 → 3`, second half `5 → 4`
+- After split: first `1 → 2 → 3 → null`, second `5 → 4 → null`
+- After merge: `1 → 5 → 2 → 4 → 3`
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Three passes: find middle, reverse, merge
+- **Space Complexity**: O(1) - Only pointer variables used
+
+#### Implementation Steps
+
+1. Handle edge cases (null or single node).
+2. Use slow/fast pointers to find the middle node.
+3. Reverse the list starting from `slow.next`.
+4. Split the list by setting `slow.next = null`.
+5. Merge the two halves by alternating nodes.
+
+#### Java Code
+
 ```java
 public void reorderList(ListNode head) {
-    if (head == null || head.next == null) return;
+    if (head == null || head.next == null) {
+        return;
+    }
+
     ListNode slow = head, fast = head;
+    //slow is the mid
     while (fast != null && fast.next != null) {
         slow = slow.next;
         fast = fast.next.next;
     }
-    ListNode second = reverse(slow.next);
-    slow.next = null;
+
     ListNode first = head;
+    ListNode second = reverse(slow.next);
+    //split the list
+    slow.next = null;
+
     while (second != null) {
         ListNode tmp1 = first.next;
         ListNode tmp2 = second.next;
@@ -464,6 +509,22 @@ public void reorderList(ListNode head) {
         first = tmp1;
         second = tmp2;
     }
+}
+
+private ListNode reverse(ListNode head) {
+    ListNode current = head, prev = null;
+
+    while(current != null) {
+        ListNode next = current.next;
+        //reverse link: current -> prev
+        current.next = prev;
+
+        //next
+        prev = current;
+        current = next;
+    }
+
+    return prev;
 }
 ```
 
