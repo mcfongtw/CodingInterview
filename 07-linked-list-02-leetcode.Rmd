@@ -338,9 +338,29 @@ public Node copyRandomList(Node head) {
 
 ### Description
 
-Detect whether a linked lc-list has a cycle.
+Detect whether a linked list has a cycle.
 
-### Solution - Floyd’s Algorithm
+### Solution - Floyd's Cycle Detection
+
+#### Walkthrough
+
+Floyd's algorithm uses two pointers moving at different speeds. The slow pointer advances one node at a time while the fast pointer advances two nodes. If there's a cycle, the fast pointer will eventually catch up to the slow pointer from behind (they will meet). If there's no cycle, the fast pointer will reach the end (null).
+
+**Why they must meet if a cycle exists:** Once both pointers enter the cycle, the fast pointer closes the gap by 1 node per iteration. Since the gap decreases by exactly 1 each step, they will eventually meet.
+
+#### Analysis
+
+- **Time Complexity**: O(n) - In the worst case, we traverse the list twice (once to enter the cycle, once to meet)
+- **Space Complexity**: O(1) - Only two pointers used
+
+#### Implementation Steps
+
+1. Initialize both `slow` and `fast` pointers to `head`.
+2. Move `slow` by one step and `fast` by two steps in each iteration.
+3. If `slow == fast` at any point, a cycle exists.
+4. If `fast` or `fast.next` becomes null, no cycle exists.
+
+#### Java Code
 
 ```java
 public boolean hasCycle(ListNode head) {
@@ -372,6 +392,28 @@ public boolean hasCycle(ListNode head) {
 ### Description
 
 Return the node where the cycle begins, or null if none.
+
+### Solution - Floyd's Cycle Detection with Entry Point
+
+#### Walkthrough
+
+This problem extends Floyd's cycle detection to find where the cycle starts. After detecting a cycle (when slow and fast meet), reset one pointer to head and move both pointers one step at a time. They will meet at the cycle's entry point.
+
+**Mathematical proof:** Let `a` be the distance from head to cycle start, and `b` be the distance from cycle start to meeting point. When they meet, slow traveled `a + b` steps, fast traveled `2(a + b)` steps. The difference `a + b` equals the cycle length `c`. So `a = c - b`, meaning the distance from head to cycle start equals the distance from meeting point to cycle start (going forward in the cycle).
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Two traversals at most
+- **Space Complexity**: O(1) - Only pointer variables used
+
+#### Implementation Steps
+
+1. Use Floyd's algorithm to detect if a cycle exists and find the meeting point.
+2. If no cycle, return null.
+3. Reset one pointer (`ptr`) to head, keep `slow` at meeting point.
+4. Move both one step at a time until they meet - that's the cycle entry.
+
+#### Java Code
 
 ```java
 public ListNode detectCycle(ListNode head) {
