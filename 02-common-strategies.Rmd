@@ -1585,3 +1585,554 @@ void backtrack(int[] nums, List<Integer> current, int target, List<List<Integer>
 1. **Greedy** (if applicable) - Try first, fastest
 2. **DP** (if greedy fails) - Handles complex dependencies
 3. **Backtracking** (if need all solutions) - Last resort, slowest
+
+
+## Sorting Algorithms {#sorting-algorithms}
+
+Sorting is a fundamental operation in computer science that arranges elements in a specific order (ascending or descending). Understanding different sorting algorithms, their trade-offs, and when to use each is essential for technical interviews.
+
+### Core Concepts
+
+**Stability**: A sorting algorithm is **stable** if elements with equal keys maintain their relative order after sorting. This matters when sorting by multiple criteria.
+
+**In-place**: An algorithm is **in-place** if it uses only O(1) extra space (excluding the input array).
+
+**Comparison-based**: Most common sorting algorithms compare elements pairwise. The theoretical lower bound for comparison-based sorting is $O(n \log n)$.
+
+### Bubble Sort {#sorting-bubble-sort}
+
+**Bubble Sort** is the simplest sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. The pass through the list is repeated until the list is sorted.
+
+**Key Characteristics**:
+- Compares and swaps adjacent elements
+- Largest elements "bubble up" to their correct position
+- Easy to understand and implement
+- Rarely used in practice due to poor performance
+
+**Algorithm**:
+1. Compare each pair of adjacent elements
+2. Swap if they are in the wrong order
+3. Repeat until no swaps are needed
+
+**Implementation**:
+```java
+public void bubbleSort(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i < n - 1; i++) {
+        boolean swapped = false;
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // Swap adjacent elements
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = true;
+            }
+        }
+        // Optimization: if no swaps, array is sorted
+        if (!swapped) break;
+    }
+}
+```
+
+**Complexity Analysis**:
+- **Time**: $O(n^2)$ worst/average case, $O(n)$ best case (already sorted with optimization)
+- **Space**: $O(1)$ - in-place
+- **Stable**: Yes
+
+**When to Use**: Almost never in practice. Useful for educational purposes or when simplicity is more important than performance on very small arrays.
+
+### Insertion Sort {#sorting-insertion-sort}
+
+**Insertion Sort** builds the final sorted array one element at a time by repeatedly picking the next element and inserting it into its correct position among the previously sorted elements.
+
+**Key Characteristics**:
+- Builds sorted portion from left to right
+- Efficient for small arrays and nearly sorted data
+- Online algorithm (can sort as data arrives)
+- Used as the base case in hybrid sorting algorithms
+
+**Algorithm**:
+1. Start with the second element (first element is trivially sorted)
+2. Compare with elements in the sorted portion (moving right to left)
+3. Shift larger elements right to make room
+4. Insert the current element in its correct position
+5. Repeat for all remaining elements
+
+**Implementation**:
+```java
+public void insertionSort(int[] arr) {
+    int n = arr.length;
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        // Shift elements greater than key to the right
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+
+        // Insert key at correct position
+        arr[j + 1] = key;
+    }
+}
+```
+
+**Complexity Analysis**:
+- **Time**: $O(n^2)$ worst/average case, $O(n)$ best case (already sorted)
+- **Space**: $O(1)$ - in-place
+- **Stable**: Yes
+
+**When to Use**:
+- Small arrays (n < 10-20)
+- Nearly sorted data
+- As the base case in hybrid algorithms (e.g., Timsort uses insertion sort for small subarrays)
+- When you need an online algorithm
+
+### Merge Sort {#sorting-merge-sort}
+
+**Merge Sort** is a divide-and-conquer algorithm that divides the array into halves, recursively sorts each half, and then merges the sorted halves back together.
+
+**Key Characteristics**:
+- Divide and conquer approach
+- Guaranteed $O(n \log n)$ performance
+- Stable sorting algorithm
+- Requires $O(n)$ extra space
+- Well-suited for linked lists (can be done in-place)
+
+**Algorithm**:
+1. **Divide**: Split the array into two halves
+2. **Conquer**: Recursively sort each half
+3. **Combine**: Merge the two sorted halves
+
+**Implementation**:
+```java
+public void mergeSort(int[] arr, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        // Recursively sort both halves
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+
+        // Merge sorted halves
+        merge(arr, left, mid, right);
+    }
+}
+
+private void merge(int[] arr, int left, int mid, int right) {
+    // Create temporary arrays
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    int[] leftArr = new int[n1];
+    int[] rightArr = new int[n2];
+
+    // Copy data to temporary arrays
+    for (int i = 0; i < n1; i++) {
+        leftArr[i] = arr[left + i];
+    }
+    for (int j = 0; j < n2; j++) {
+        rightArr[j] = arr[mid + 1 + j];
+    }
+
+    // Merge temporary arrays back
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k] = leftArr[i];
+            i++;
+        } else {
+            arr[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copy remaining elements
+    while (i < n1) {
+        arr[k] = leftArr[i];
+        i++;
+        k++;
+    }
+    while (j < n2) {
+        arr[k] = rightArr[j];
+        j++;
+        k++;
+    }
+}
+```
+
+**Complexity Analysis**:
+- **Time**: $O(n \log n)$ for all cases (worst, average, best)
+- **Space**: $O(n)$ for temporary arrays
+- **Stable**: Yes
+
+**When to Use**:
+- When stability is required
+- When guaranteed $O(n \log n)$ is needed (no worst-case degradation)
+- Sorting linked lists (can achieve $O(1)$ space)
+- External sorting (sorting data too large to fit in memory)
+
+### Quick Sort {#sorting-quick-sort}
+
+**Quick Sort** is a divide-and-conquer algorithm that selects a "pivot" element and partitions the array around the pivot, placing smaller elements before it and larger elements after it.
+
+**Key Characteristics**:
+- Divide and conquer with in-place partitioning
+- Average case $O(n \log n)$, but $O(n^2)$ worst case
+- Not stable (relative order of equal elements may change)
+- Cache-friendly due to in-place operations
+- Most practical choice for general-purpose sorting
+
+**Algorithm**:
+1. **Choose pivot**: Select an element as pivot (first, last, middle, or random)
+2. **Partition**: Rearrange so elements < pivot are left, elements > pivot are right
+3. **Recurse**: Recursively sort the left and right partitions
+
+**Implementation (Lomuto Partition Scheme)**:
+```java
+public void quickSort(int[] arr, int low, int high) {
+    if (low < high) {
+        int pivotIndex = partition(arr, low, high);
+        quickSort(arr, low, pivotIndex - 1);
+        quickSort(arr, pivotIndex + 1, high);
+    }
+}
+
+private int partition(int[] arr, int low, int high) {
+    int pivot = arr[high];  // Choose last element as pivot
+    int i = low - 1;        // Index of smaller element
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            // Swap arr[i] and arr[j]
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+
+    // Place pivot in correct position
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+
+    return i + 1;
+}
+```
+
+**Implementation (Hoare Partition Scheme - More Efficient)**:
+```java
+private int partitionHoare(int[] arr, int low, int high) {
+    int pivot = arr[low + (high - low) / 2];  // Middle element as pivot
+    int i = low - 1;
+    int j = high + 1;
+
+    while (true) {
+        do {
+            i++;
+        } while (arr[i] < pivot);
+
+        do {
+            j--;
+        } while (arr[j] > pivot);
+
+        if (i >= j) {
+            return j;
+        }
+
+        // Swap arr[i] and arr[j]
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
+```
+
+**Complexity Analysis**:
+- **Time**: $O(n \log n)$ average, $O(n^2)$ worst case (already sorted with bad pivot)
+- **Space**: $O(\log n)$ for recursion stack (average), $O(n)$ worst case
+- **Stable**: No
+
+**Pivot Selection Strategies**:
+- **First/Last element**: Simple but vulnerable to sorted input
+- **Middle element**: Better for sorted input
+- **Random element**: Avoids worst case with high probability
+- **Median-of-three**: Choose median of first, middle, and last elements
+
+**When to Use**:
+- General-purpose sorting when average performance matters
+- When in-place sorting is required
+- When stability is not required
+- Arrays (not as efficient for linked lists)
+
+### Topological Sort {#sorting-topological-sort}
+
+**Topological Sort** is an ordering of vertices in a Directed Acyclic Graph (DAG) such that for every directed edge (u, v), vertex u comes before vertex v in the ordering. It's not a comparison-based sort like the others, but rather a graph algorithm that produces a linear ordering of dependencies.
+
+**Key Characteristics**:
+- Only works on Directed Acyclic Graphs (DAGs)
+- Multiple valid topological orderings may exist
+- Used for dependency resolution and scheduling
+- Detects cycles (if a topological sort is impossible, the graph has a cycle)
+
+**Common Use Cases**:
+- Build systems (compile dependencies in correct order)
+- Course scheduling (prerequisites before courses)
+- Task scheduling with dependencies
+- Package managers (install dependencies first)
+
+**Algorithm 1: Kahn's Algorithm (BFS-based)**
+
+Uses in-degree tracking: repeatedly remove nodes with no incoming edges.
+
+```java
+public List<Integer> topologicalSortKahn(int numNodes, int[][] edges) {
+    // Build adjacency list and in-degree array
+    List<List<Integer>> graph = new ArrayList<>();
+    int[] inDegree = new int[numNodes];
+
+    for (int i = 0; i < numNodes; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    for (int[] edge : edges) {
+        graph.get(edge[0]).add(edge[1]);
+        inDegree[edge[1]]++;
+    }
+
+    // Start with nodes having no incoming edges
+    Queue<Integer> queue = new LinkedList<>();
+    for (int i = 0; i < numNodes; i++) {
+        if (inDegree[i] == 0) {
+            queue.offer(i);
+        }
+    }
+
+    List<Integer> result = new ArrayList<>();
+    while (!queue.isEmpty()) {
+        int node = queue.poll();
+        result.add(node);
+
+        // Remove this node's outgoing edges
+        for (int neighbor : graph.get(node)) {
+            inDegree[neighbor]--;
+            if (inDegree[neighbor] == 0) {
+                queue.offer(neighbor);
+            }
+        }
+    }
+
+    // Check for cycle
+    if (result.size() != numNodes) {
+        return Collections.emptyList(); // Cycle detected
+    }
+
+    return result;
+}
+```
+
+**Algorithm 2: DFS-based**
+
+Uses post-order DFS traversal: add node to result after visiting all descendants.
+
+```java
+public List<Integer> topologicalSortDFS(int numNodes, int[][] edges) {
+    List<List<Integer>> graph = new ArrayList<>();
+    for (int i = 0; i < numNodes; i++) {
+        graph.add(new ArrayList<>());
+    }
+    for (int[] edge : edges) {
+        graph.get(edge[0]).add(edge[1]);
+    }
+
+    boolean[] visited = new boolean[numNodes];
+    boolean[] inStack = new boolean[numNodes]; // For cycle detection
+    Deque<Integer> stack = new ArrayDeque<>();
+
+    for (int i = 0; i < numNodes; i++) {
+        if (!visited[i]) {
+            if (!dfs(graph, i, visited, inStack, stack)) {
+                return Collections.emptyList(); // Cycle detected
+            }
+        }
+    }
+
+    List<Integer> result = new ArrayList<>();
+    while (!stack.isEmpty()) {
+        result.add(stack.pop());
+    }
+    return result;
+}
+
+private boolean dfs(List<List<Integer>> graph, int node,
+                    boolean[] visited, boolean[] inStack, Deque<Integer> stack) {
+    visited[node] = true;
+    inStack[node] = true;
+
+    for (int neighbor : graph.get(node)) {
+        if (inStack[neighbor]) {
+            return false; // Cycle detected
+        }
+        if (!visited[neighbor]) {
+            if (!dfs(graph, neighbor, visited, inStack, stack)) {
+                return false;
+            }
+        }
+    }
+
+    inStack[node] = false;
+    stack.push(node); // Add after all descendants
+    return true;
+}
+```
+
+**Complexity Analysis**:
+- **Time**: $O(V + E)$ where V is vertices and E is edges
+- **Space**: $O(V)$ for visited arrays and result
+
+**Kahn's vs DFS Comparison**:
+
+| Aspect | Kahn's (BFS) | DFS-based |
+|--------|--------------|-----------|
+| **Approach** | Remove zero in-degree nodes | Post-order traversal |
+| **Cycle Detection** | result.size() != numNodes | Track nodes in current path |
+| **Implementation** | Queue + in-degree array | Recursion + stack |
+| **Parallelization** | Easier (process level by level) | Harder |
+| **Use Case** | When you need levels/layers | When order doesn't matter |
+
+**When to Use Topological Sort**:
+- Problems involving dependencies or prerequisites
+- "Order of execution" problems
+- Course schedule problems (LeetCode 207, 210)
+- Build order problems
+- Detecting cycles in directed graphs
+
+### When to Use Which Sorting Algorithm {#sorting-algorithm-selection}
+
+Choosing the right sorting algorithm depends on several factors: input size, data characteristics, memory constraints, and stability requirements.
+
+#### Decision Matrix
+
+| Factor | Bubble Sort | Insertion Sort | Merge Sort | Quick Sort |
+|--------|-------------|----------------|------------|------------|
+| **Time (Average)** | $O(n^2)$ | $O(n^2)$ | $O(n \log n)$ | $O(n \log n)$ |
+| **Time (Worst)** | $O(n^2)$ | $O(n^2)$ | $O(n \log n)$ | $O(n^2)$ |
+| **Space** | $O(1)$ | $O(1)$ | $O(n)$ | $O(\log n)$ |
+| **Stable** | Yes | Yes | Yes | No |
+| **In-place** | Yes | Yes | No | Yes |
+| **Adaptive** | Yes* | Yes | No | No |
+
+*With early termination optimization
+
+#### Decision Tree
+
+```
+                    ┌─────────────────────────────┐
+                    │ Need to sort data?          │
+                    └──────────────┬──────────────┘
+                                   │
+                    ┌──────────────┴──────────────┐
+                    │ Is n very small (< 10-20)?  │
+                    └──────┬──────────────┬───────┘
+                           │              │
+                          YES            NO
+                           │              │
+                           ▼              │
+                   ┌───────────────┐      │
+                   │Insertion Sort │      │
+                   │ Simple, fast  │      │
+                   │ for small n   │      │
+                   └───────────────┘      │
+                                          │
+                           ┌──────────────┴──────────────┐
+                           │ Is data nearly sorted?      │
+                           └──────┬──────────────┬───────┘
+                                  │              │
+                                 YES            NO
+                                  │              │
+                                  ▼              │
+                          ┌───────────────┐      │
+                          │Insertion Sort │      │
+                          │ O(n) for      │      │
+                          │ nearly sorted │      │
+                          └───────────────┘      │
+                                                 │
+                                  ┌──────────────┴──────────────┐
+                                  │ Is stability required?      │
+                                  └──────┬──────────────┬───────┘
+                                         │              │
+                                        YES            NO
+                                         │              │
+                                         ▼              │
+                                 ┌───────────────┐      │
+                                 │  Merge Sort   │      │
+                                 │  Guaranteed   │      │
+                                 │  O(n log n)   │      │
+                                 │  + stable     │      │
+                                 └───────────────┘      │
+                                                        │
+                                         ┌──────────────┴──────────────┐
+                                         │ Is worst-case O(n²)         │
+                                         │ acceptable?                 │
+                                         └──────┬──────────────┬───────┘
+                                                │              │
+                                               YES            NO
+                                                │              │
+                                                ▼              ▼
+                                        ┌───────────────┐ ┌───────────────┐
+                                        │  Quick Sort   │ │  Merge Sort   │
+                                        │  Fastest avg  │ │  Guaranteed   │
+                                        │  In-place     │ │  O(n log n)   │
+                                        └───────────────┘ └───────────────┘
+```
+
+#### Practical Guidelines
+
+**Use Insertion Sort when**:
+- Array size is small (n < 10-20)
+- Data is nearly sorted
+- Need an online algorithm (sorting as data arrives)
+- As base case in hybrid algorithms
+
+**Use Merge Sort when**:
+- Stability is required
+- Guaranteed $O(n \log n)$ is needed
+- Sorting linked lists
+- External sorting (data doesn't fit in memory)
+- Parallelization is desired (easily parallelizable)
+
+**Use Quick Sort when**:
+- General-purpose sorting
+- In-place sorting is required
+- Average-case performance is acceptable
+- Working with arrays (cache-friendly)
+- Memory is constrained
+
+**Use Bubble Sort when**:
+- Educational purposes only
+- Extremely simple implementation is needed
+- Array is very small and simplicity trumps performance
+
+#### Real-World Implementations
+
+Most production sorting implementations use **hybrid algorithms**:
+
+- **Java's `Arrays.sort()`**: Uses Dual-Pivot Quick Sort for primitives, Timsort for objects
+- **Python's `sorted()`**: Uses Timsort (hybrid of Merge Sort and Insertion Sort)
+- **C++'s `std::sort()`**: Uses Introsort (Quick Sort + Heap Sort + Insertion Sort)
+
+**Timsort** combines the best of Merge Sort and Insertion Sort:
+1. Divide array into small "runs"
+2. Sort each run with Insertion Sort (efficient for small/sorted data)
+3. Merge runs using Merge Sort (stable, $O(n \log n)$)
+
+#### Interview Tips
+
+1. **Know the trade-offs**: Be prepared to discuss time/space complexity, stability, and use cases
+2. **Mention optimizations**: Random pivot for Quick Sort, early termination for Bubble Sort
+3. **Consider the data**: Nearly sorted? Small? Linked list? These affect algorithm choice
+4. **Hybrid approaches**: Mentioning Timsort or Introsort shows deeper understanding
+5. **In-place vs. stable**: These are often the deciding factors between Quick Sort and Merge Sort
