@@ -7,13 +7,61 @@
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/clone-graph/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), Graph
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), Graph
 
 ### Description
 
-Deep-copy an undirected graph.
+Deep-copy an undirected graph represented as adjacency lists where each node holds a `val` and a list of neighbors. Input is a reference to a node in the original graph; output should be a **structurally identical graph** with all new nodes.
+
+### Examples
+
+**Example 1: Simple Connected Graph**
+```
+Input: adjacencyList = [[2,4],[1,3],[2,4],[1,3]]
+(Node 1 → neighbors [2,4], Node 2 → neighbors [1,3], Node 3 → neighbors [2,4], Node 4 → neighbors [1,3])
+Output: A clone graph with the same structure and values but different node objects
+```
+
+**Example 2: Single Node**
+```
+Input: adjacencyList = [[]]
+Output: A clone of the single node with empty neighbor list
+```
+
+**Example 3: Disconnected Component**
+```
+Input: adjacencyList = [[2],[1]]
+Output: A clone graph with just nodes 1 and 2 connected to each other
+```
+
+### Constraints
+
+- `1 ≤ Node.val ≤ 100`
+- `Graph nodes are numbered 1 to 100`
+- Graph is undirected (if A is neighbor of B, then B is neighbor of A)
+- No self-loops and no multiple edges between same nodes
 
 ### Solution - DFS with Map
+
+#### Walkthrough
+
+Use DFS with a hash map to avoid re-cloning nodes:
+
+1. **Visited map**: `Map<Node, Node>` from original → clone. Prevents infinite recursion on cycles and reuses already-built neighbors.
+2. **DFS recursion**:
+   - If node is null, return null.
+   - If node already cloned (`map.containsKey(node)`), return the clone.
+   - Otherwise, create a new node with the same value, store in map, then recursively clone each neighbor and append to the clone's neighbor list.
+3. Return the clone for the starting node.
+
+This mirrors the traversal of the original graph while reusing clones through the map.
+
+#### Analysis
+
+- **Time Complexity**: O(V + E) — each edge and node is visited once.
+- **Space Complexity**: O(V) — hash map plus recursion stack in worst case.
+
+#### Java Code
 
 ```
 public Node cloneGraph(Node node) {
@@ -47,13 +95,62 @@ private Node clone(Node node, Map<Node, Node> map) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/course-schedule/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#glossary-topological), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Graph, Topological Sort
+- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#glossary-topological), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Graph
 
 ### Description
 
-Determine if all courses can be finished given prerequisites.
+Given `numCourses` labeled `0..n-1` and prerequisite pairs `[a, b]` meaning `b -> a`, determine if it's possible to finish all courses (i.e., the graph is acyclic).
+
+### Examples
+
+**Example 1: All Courses Finishable**
+```
+Input: numCourses = 2, prerequisites = [[1,0]]
+(Course 0 must be completed before Course 1)
+Output: true
+Explanation: Course order: [0, 1]
+```
+
+**Example 2: Cycle Exists**
+```
+Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+Output: false
+Explanation: Course 1 requires Course 0, and Course 0 requires Course 1 — impossible!
+```
+
+**Example 3: No Prerequisites**
+```
+Input: numCourses = 3, prerequisites = []
+Output: true
+Explanation: No dependencies, can finish all courses in any order
+```
+
+### Constraints
+
+- `1 ≤ numCourses ≤ 2000`
+- `0 ≤ prerequisites.length ≤ 5000`
+- Each prerequisite pair `[a, b]` satisfies `0 ≤ a, b < numCourses`
+- All prerequisite pairs are unique
 
 ### Solution - Kahn's Algorithm
+
+#### Walkthrough
+
+Kahn's algorithm performs BFS topological sorting to detect cycles:
+
+1. Build an adjacency list `graph[b] -> list of a` and indegree array for each course.
+2. Push all zero-indegree courses into a queue — these have no unmet prerequisites.
+3. Pop from queue, increment `visited`, and decrement indegree of neighbors; when a neighbor hits zero, enqueue it.
+4. If we process all courses (`visited == numCourses`), the graph is acyclic and all courses can be finished; otherwise a cycle exists.
+
+This works because nodes in a cycle never reach indegree zero, preventing full traversal.
+
+#### Analysis
+
+- **Time Complexity**: O(V + E)
+- **Space Complexity**: O(V + E) for adjacency list, indegrees, and queue
+
+#### Java Code
 
 ```
 public boolean canFinish(int numCourses, int[][] prerequisites) {
@@ -96,15 +193,59 @@ public boolean canFinish(int numCourses, int[][] prerequisites) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/course-schedule-ii/
 - **Tags**: NeetCode 150
-- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#glossary-topological), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Graph, Topological Sort
+- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#glossary-topological), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Graph
 
 ### Description
 
-Return a valid order of courses using topological sort, or empty if impossible.
+Return a valid topological ordering of courses using prerequisites; return empty if a cycle prevents completion.
+
+### Examples
+
+**Example 1: Valid Topological Order**
+```
+Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+Output: [0,1,2,3]
+Explanation: Course 0 is a prerequisite for courses 1 and 2; courses 1 and 2 are prerequisites for course 3
+```
+
+**Example 2: Another Valid Order**
+```
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: [0,1]
+Explanation: Course 0 must be completed before Course 1
+```
+
+**Example 3: Cycle Exists**
+```
+Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+Output: []
+Explanation: Impossible dependency cycle
+```
+
+### Constraints
+
+- `1 ≤ numCourses ≤ 2000`
+- `0 ≤ prerequisites.length ≤ 5000`
+- Each prerequisite pair `[a, b]` satisfies `0 ≤ a, b < numCourses`
+- All prerequisite pairs are unique
 
 ### Solution - BFS Order
 
-Use same graph construction as problem 207 but append nodes to order when dequeued.
+Use the same Kahn BFS as Course Schedule I, but record dequeue order as the topological order.
+
+#### Walkthrough
+
+1. Build adjacency list and indegree counts.
+2. Enqueue all zero-indegree nodes.
+3. While queue not empty, pop course, append to `order`, and relax neighbors by decrementing indegree; enqueue neighbors that reach zero.
+4. If we placed all courses, return `order`; otherwise return empty array (cycle).
+
+#### Analysis
+
+- **Time Complexity**: O(V + E)
+- **Space Complexity**: O(V + E)
+
+#### Java Code
 
 ```
 public int[] findOrder(int numCourses, int[][] prerequisites) {
@@ -140,13 +281,62 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/graph-valid-tree/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: Union Find, Graph
+- **Techniques**: [Union Find](glossary-of-algorithm.html#glossary-union-find), Graph
 
 ### Description
 
-Determine if edges form a valid tree.
+Given `n` nodes labeled `0..n-1` and edges, determine if they form a valid tree (connected and acyclic).
+
+### Examples
+
+**Example 1: Valid Tree**
+```
+Input: n = 4, edges = [[1,0],[1,2],[2,3]]
+Output: true
+Explanation: Forms a tree: 0 - 1 - 2 - 3 (all connected, no cycles, n-1 edges)
+```
+
+**Example 2: Cycle Exists**
+```
+Input: n = 4, edges = [[0,1],[1,2],[2,3],[2,0]]
+Output: false
+Explanation: Contains a cycle: 0 - 1 - 2 - 0
+```
+
+**Example 3: Disconnected Graph**
+```
+Input: n = 4, edges = [[0,1],[2,3]]
+Output: false
+Explanation: Two separate components, not a single connected tree
+```
+
+### Constraints
+
+- `1 ≤ n ≤ 2000`
+- `0 ≤ edges.length ≤ 2000`
+- Each edge is `[u, v]` where `0 ≤ u, v < n`
+- No self-loops (`u ≠ v`)
+- No duplicate edges
+- Graph is undirected
 
 ### Solution - Union Find
+
+#### Walkthrough
+
+Two conditions for a tree:
+1. Exactly `n - 1` edges (otherwise impossible to connect or guaranteed a cycle).
+2. No cycles while connecting all nodes.
+
+Use Union-Find to detect cycles while merging edges:
+- If an edge connects two nodes already in the same set, a cycle exists → not a tree.
+- After processing all edges, return true (edge count already checked) — connectivity follows from having `n - 1` edges without cycles.
+
+#### Analysis
+
+- **Time Complexity**: O(E · α(V)) ~ O(E)
+- **Space Complexity**: O(V) for parent/rank arrays
+
+#### Java Code
 
 ```
 public boolean validTree(int n, int[][] edges) {

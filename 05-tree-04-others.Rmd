@@ -5,15 +5,63 @@
 - **Platform**: Firecode/LeetCode 297
 - **Difficulty**: Medium
 - **Tags**:
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), [Tree](glossary-of-algorithm.html#glossary-tree)
 
 ### Description
 
-Serialize a binary tree to string and deserialize back.
+Design an algorithm to serialize and deserialize a binary tree. Serialization is converting a tree to a string, and deserialization is reconstructing the tree from that string.
+
+### Examples
+
+```
+Input: root = [1,2,3,null,null,4,5]
+Serialized: "1,2,#,#,3,4,#,#,5,#,#"
+Output after deserialize: [1,2,3,null,null,4,5]
+```
+
+### Constraints
+
+- The number of nodes is in the range `[0, 10^4]`
+- `-1000 <= Node.val <= 1000`
 
 ### Solution - Preorder with Null Markers
 
+#### Walkthrough
+
+This solution uses **preorder traversal** with null markers to achieve a complete and reversible serialization.
+
+**Core Strategy:**
+
+1. **Serialize:** Perform preorder DFS, recording each node's value. Use a special marker (`#`) for null nodes.
+2. **Deserialize:** Read values in order, recursively building the tree. When `#` is encountered, return null.
+
+**Why Preorder Works:** Preorder visits root first, then left subtree, then right subtree. By marking null children, we have enough information to uniquely reconstruct the tree.
+
+**Example**: Tree `[1,2,3,null,null,4,5]`:
 ```
+      1
+     / \
+    2   3
+       / \
+      4   5
+
+Serialize (preorder): 1 → 2 → # → # → 3 → 4 → # → # → 5 → # → #
+Result: "1,2,#,#,3,4,#,#,5,#,#"
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Each node visited once in both operations
+- **Space Complexity**: O(n) - String storage for serialization, O(h) recursion stack
+
+#### Implementation Steps
+
+1. **Serialize:** DFS preorder, append value or `#` for null, separate with delimiter.
+2. **Deserialize:** Split string into queue, recursively build tree by polling values.
+
+#### Java Code
+
+```java
 private static final String SEP = ",";
 private static final String NULL = "#";
 
@@ -53,15 +101,64 @@ private TreeNode deserialize(Queue<String> queue) {
 
 ## Fill in the Ancestors of the Node {#other-fill-ancestors}
 
+### Problem Metadata
+
+- **Platform**: Interview
+- **Difficulty**: Easy
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), [Tree](glossary-of-algorithm.html#glossary-tree)
+
 ### Description
 
-Given a node, print ancestors from root to parent.
+Given a binary tree and a target node value, find and return all ancestors of the target node (from the node's parent up to the root).
 
-### Solution
-
-Do DFS and build path; when target found, print path.
+### Examples
 
 ```
+Input: root = [1,2,3,4,5], key = 5
+Output: [2, 1]
+Explanation: Node 5's parent is 2, and 2's parent is 1 (root)
+
+       1
+      / \
+     2   3
+    / \
+   4   5
+```
+
+### Solution - DFS Path Building
+
+#### Walkthrough
+
+Use DFS to search for the target node. When found, backtrack and collect ancestors along the path.
+
+**Core Strategy:**
+
+1. Recursively search left and right subtrees for the target
+2. When target is found, return true to signal success
+3. On the way back up, add each node to the ancestors list
+
+**Example**: Find ancestors of 5 in `[1,2,3,4,5]`:
+```
+DFS path: 1 → 2 → 4 (not found) → backtrack → 5 (found!)
+Backtrack: 5 found → add 2 to ancestors → add 1 to ancestors
+Result: [2, 1]
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Visit each node once in worst case
+- **Space Complexity**: O(h) - Recursion stack depth
+
+#### Implementation Steps
+
+1. If root is null, return false.
+2. If root matches key, return true (found).
+3. Recursively check left and right children.
+4. If either returns true, add current node to ancestors and return true.
+
+#### Java Code
+
+```java
 public boolean printAncestors(TreeNode root, int key, List<Integer> ancestors) {
     if (root == null) {
         return false;
@@ -80,13 +177,69 @@ public boolean printAncestors(TreeNode root, int key, List<Integer> ancestors) {
 
 ## Find the k-th Largest Node in a BST {#other-kth-largest-bst}
 
+### Problem Metadata
+
+- **Platform**: Interview
+- **Difficulty**: Medium
+- **Techniques**: [Binary Search Tree](glossary-of-algorithm.html#glossary-bst), [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Stack](glossary-of-algorithm.html#glossary-stack)
+
 ### Description
 
-Return the k-th largest node value in a BST.
+Given the root of a Binary Search Tree (BST) and an integer `k`, return the k-th largest value in the BST.
+
+### Examples
+
+```
+Input: root = [5,3,6,2,4,null,null,1], k = 3
+Output: 4
+Explanation: Values in descending order: 6, 5, 4, 3, 2, 1. The 3rd largest is 4.
+
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+```
+
+### Constraints
+
+- The number of nodes in the tree is `n`
+- `1 <= k <= n <= 10^4`
+- `0 <= Node.val <= 10^4`
 
 ### Solution - Reverse Inorder
 
+#### Walkthrough
+
+Use **reverse inorder traversal** (right → root → left) to visit nodes in descending order. Stop when we've visited k nodes.
+
+**Core Strategy:**
+
+In a BST, inorder traversal (left → root → right) visits nodes in ascending order. Reverse inorder (right → root → left) visits them in descending order. The k-th node visited is the k-th largest.
+
+**Example**: Find 3rd largest in `[5,3,6,2,4,null,null,1]`:
 ```
+Reverse inorder: 6 → 5 → 4 → 3 → 2 → 1
+                 1st   2nd   3rd (return 4)
+```
+
+#### Analysis
+
+- **Time Complexity**: O(h + k) - Traverse to rightmost, then k steps back
+- **Space Complexity**: O(h) - Stack stores at most h nodes
+
+#### Implementation Steps
+
+1. Use iterative traversal with a stack.
+2. Go right as far as possible (to largest element).
+3. Pop and decrement k; if k becomes 0, return current value.
+4. Then go left to continue in descending order.
+
+#### Java Code
+
+```java
 public int kthLargest(TreeNode root, int k) {
     Stack<TreeNode> stack = new Stack<>();
     TreeNode current = root;

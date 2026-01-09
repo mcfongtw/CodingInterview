@@ -78,8 +78,80 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 - **Platform**: LeetCode
 - **Problem ID**: 19
 - **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer)
+- **Techniques**: [Two Pointers](\@ref(two-pointer)), [Linked List](glossary-of-algorithm.html#glossary-linked-list)
+
+### Description
+
+Given the `head` of a linked list, remove the `n`th node from the end of the list and return its head.
+
+### Examples
+
+```
+Input: head = [1,2,3,4,5], n = 2
+Output: [1,2,3,5]
+
+Input: head = [1], n = 1
+Output: []
+```
+
+### Constraints
+
+- The number of nodes in the list is `sz`
+- `1 <= sz <= 30`
+- `0 <= Node.val <= 100`
+- `1 <= n <= sz`
+
+### Solution - Two Pointers with Gap
+
+#### Walkthrough
+
+This solution uses a **two-pointer technique with a fixed gap** to find the n-th node from the end in a single pass.
+
+**Core Strategy:**
+
+1. Create a gap of `n+1` nodes between two pointers
+2. When the fast pointer reaches the end, the slow pointer is at the node **before** the target
+3. Skip over the target node by updating `slow.next`
+
+**Why n+1 gap?** We need the slow pointer to stop at the node *before* the one we want to remove, so we can update `slow.next` to skip the target.
+
+**Example**: Remove 2nd from end in `[1,2,3,4,5]`:
+```
+Initial: dummy → 1 → 2 → 3 → 4 → 5 → null
+         first
+         second
+
+After n+1 (3) moves of first:
+         dummy → 1 → 2 → 3 → 4 → 5 → null
+                           first
+         second
+
+Move both until first is null:
+         dummy → 1 → 2 → 3 → 4 → 5 → null
+                                     first (null)
+                      second (at node 3)
+
+Remove: second.next = second.next.next
+Result: 1 → 2 → 3 → 5
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Single pass through the list
+- **Space Complexity**: O(1) - Only pointer variables used
+
+#### Implementation Steps
+
+1. Create a dummy node pointing to head (handles edge case of removing head).
+2. Initialize both `first` and `second` pointers at dummy.
+3. Move `first` forward `n+1` times to create the gap.
+4. Move both pointers until `first` reaches null.
+5. Skip the target node: `second.next = second.next.next`.
+6. Return `dummy.next`.
+
+#### Java Code
 
 ```java
 public ListNode removeNthFromEnd(ListNode head, int n) {
@@ -105,8 +177,67 @@ public ListNode removeNthFromEnd(ListNode head, int n) {
 - **Platform**: LeetCode
 - **Problem ID**: 21
 - **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/merge-two-sorted-lists/
 - **Tags**: Blind 75, NeetCode 150
 - **Techniques**: [Linked List](glossary-of-algorithm.html#glossary-linked-list)
+
+### Description
+
+Merge two sorted linked lists and return it as a **sorted** list. The list should be made by splicing together the nodes of the first two lists.
+
+### Examples
+
+```
+Input: list1 = [1,2,4], list2 = [1,3,4]
+Output: [1,1,2,3,4,4]
+
+Input: list1 = [], list2 = [0]
+Output: [0]
+```
+
+### Constraints
+
+- The number of nodes in both lists is in the range `[0, 50]`
+- `-100 <= Node.val <= 100`
+- Both lists are sorted in non-decreasing order
+
+### Solution - Iterative Merge
+
+#### Walkthrough
+
+This solution uses a **dummy head and tail pointer** to iteratively build the merged list by always appending the smaller node.
+
+**Core Strategy:**
+
+1. Create a dummy node as the anchor for the result list
+2. Compare the current nodes of both lists
+3. Append the smaller one to the result and advance that pointer
+4. When one list is exhausted, append the remaining list directly
+
+**Example**: Merge `[1,2,4]` and `[1,3,4]`:
+```
+Step 1: Compare 1 vs 1 → take l1's 1, result: [1]
+Step 2: Compare 2 vs 1 → take l2's 1, result: [1,1]
+Step 3: Compare 2 vs 3 → take l1's 2, result: [1,1,2]
+Step 4: Compare 4 vs 3 → take l2's 3, result: [1,1,2,3]
+Step 5: Compare 4 vs 4 → take l1's 4, result: [1,1,2,3,4]
+Step 6: l1 exhausted → append l2's remaining [4]
+Final: [1,1,2,3,4,4]
+```
+
+#### Analysis
+
+- **Time Complexity**: O(m + n) - Each node is visited exactly once
+- **Space Complexity**: O(1) - Only pointer variables used (reusing existing nodes)
+
+#### Implementation Steps
+
+1. Create a dummy node and a tail pointer.
+2. While both lists have nodes, compare and append the smaller one.
+3. Append the remaining non-empty list.
+4. Return `dummy.next`.
+
+#### Java Code
 
 ```java
 public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
@@ -135,13 +266,76 @@ public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
 - **Platform**: LeetCode
 - **Problem ID**: 23
 - **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/merge-k-sorted-lists/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Heap](glossary-of-algorithm.html#glossary-heap)
+- **Techniques**: [Heap](glossary-of-algorithm.html#glossary-heap), [Linked List](glossary-of-algorithm.html#glossary-linked-list)
+
+### Description
+
+You are given an array of `k` linked-lists, each sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.
+
+### Examples
+
+```
+Input: lists = [[1,4,5],[1,3,4],[2,6]]
+Output: [1,1,2,3,4,4,5,6]
+
+Input: lists = []
+Output: []
+```
+
+### Constraints
+
+- `k == lists.length`
+- `0 <= k <= 10^4`
+- `0 <= lists[i].length <= 500`
+- `-10^4 <= lists[i][j] <= 10^4`
+- All lists are sorted in ascending order
+
+### Solution - Min-Heap
+
+#### Walkthrough
+
+This solution uses a **min-heap (priority queue)** to efficiently select the smallest node across all k lists at each step.
+
+**Core Strategy:**
+
+1. Add the head of each non-empty list to the min-heap
+2. Repeatedly extract the minimum node, append it to the result
+3. If the extracted node has a next, add it to the heap
+4. Continue until the heap is empty
+
+**Why Min-Heap?** With k lists, a naive comparison would take O(k) per node. A min-heap reduces this to O(log k), making the overall time O(n log k) instead of O(nk).
+
+**Example**: Merge `[[1,4,5],[1,3,4],[2,6]]`:
+```
+Initial heap: [1, 1, 2] (heads of each list)
+Extract 1 → add to result, push 4 → heap: [1, 2, 4]
+Extract 1 → add to result, push 3 → heap: [2, 3, 4]
+Extract 2 → add to result, push 6 → heap: [3, 4, 6]
+Extract 3 → add to result, push 4 → heap: [4, 4, 6]
+...continue until heap empty
+Result: [1,1,2,3,4,4,5,6]
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n log k) - Each of n nodes is added/removed from heap once, heap operations are O(log k)
+- **Space Complexity**: O(k) - Heap contains at most k nodes at any time
+
+#### Implementation Steps
+
+1. Create a min-heap ordered by node value.
+2. Add the head of each non-empty list to the heap.
+3. While heap is not empty, extract min, append to result, push next if exists.
+4. Return `dummy.next`.
+
+#### Java Code
 
 ```java
-public ListNode mergeKLists(ListNode[] lc-lists) {
+public ListNode mergeKLists(ListNode[] lists) {
     PriorityQueue<ListNode> pq = new PriorityQueue<>(Comparator.comparingInt(n -> n.val));
-    for (ListNode node : lc-lists) {
+    for (ListNode node : lists) {
         if (node != null) {
             pq.offer(node);
         }
@@ -170,13 +364,66 @@ public ListNode mergeKLists(ListNode[] lc-lists) {
 - **Difficulty**: Hard
 - **URL**: https://leetcode.com/problems/reverse-nodes-in-k-group/
 - **Tags**: NeetCode 150
-- **Techniques**: [Linked List](glossary-of-algorithm.html#glossary-linked-list), [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer)
+- **Techniques**: [Linked List](glossary-of-algorithm.html#glossary-linked-list)
 
 ### Description
 
-Reverse the lc-list in groups of size `k`. Remaining nodes (< k) stay as-is.
+Given the head of a linked list, reverse the nodes of the list `k` at a time, and return the modified list. If the number of nodes is not a multiple of `k`, the remaining nodes at the end should stay as-is.
+
+### Examples
+
+```
+Input: head = [1,2,3,4,5], k = 2
+Output: [2,1,4,3,5]
+
+Input: head = [1,2,3,4,5], k = 3
+Output: [3,2,1,4,5]
+```
+
+### Constraints
+
+- The number of nodes in the list is `n`
+- `1 <= k <= n <= 5000`
+- `0 <= Node.val <= 1000`
 
 ### Solution - Iterative Group Reversal
+
+#### Walkthrough
+
+This solution processes the list in groups of k nodes, reversing each group in-place.
+
+**Core Strategy:**
+
+1. Use a dummy node to simplify edge cases
+2. For each group: find the k-th node, then reverse the group
+3. Reconnect the reversed group to the rest of the list
+4. Move to the next group and repeat
+
+**Key Insight:** Track `groupPrev` (node before current group) and `groupNext` (node after current group) to properly reconnect after reversal.
+
+**Example**: Reverse `[1,2,3,4,5]` with k=2:
+```
+Initial: dummy → 1 → 2 → 3 → 4 → 5
+Group 1: Reverse [1,2] → dummy → 2 → 1 → 3 → 4 → 5
+Group 2: Reverse [3,4] → dummy → 2 → 1 → 4 → 3 → 5
+Group 3: Only 1 node, skip
+Result: [2,1,4,3,5]
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Each node is visited at most twice (once to count, once to reverse)
+- **Space Complexity**: O(1) - Only pointer variables used
+
+#### Implementation Steps
+
+1. Create dummy node, track `groupPrev` as the node before each group.
+2. Find the k-th node from `groupPrev`. If null, break (remaining nodes stay as-is).
+3. Reverse nodes from `groupPrev.next` to `kth`.
+4. Reconnect: `groupPrev.next` points to `kth`, move `groupPrev` to old first node.
+5. Repeat until no complete group remains.
+
+#### Java Code
 
 ```java
 public ListNode reverseKGroup(ListNode head, int k) {
@@ -225,7 +472,65 @@ private ListNode getKth(ListNode start, int k) {
 - **Platform**: LeetCode
 - **Problem ID**: 83
 - **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/remove-duplicates-from-sorted-list/
 - **Techniques**: [Linked List](glossary-of-algorithm.html#glossary-linked-list)
+
+### Description
+
+Given the head of a sorted linked list, delete all duplicates such that each element appears only once. Return the linked list sorted as well.
+
+### Examples
+
+```
+Input: head = [1,1,2]
+Output: [1,2]
+
+Input: head = [1,1,2,3,3]
+Output: [1,2,3]
+```
+
+### Constraints
+
+- The number of nodes is in the range `[0, 300]`
+- `-100 <= Node.val <= 100`
+- The list is guaranteed to be sorted in ascending order
+
+### Solution - In-Place Skip
+
+#### Walkthrough
+
+Since the list is sorted, duplicates are always adjacent. We simply traverse and skip over duplicate nodes.
+
+**Core Strategy:**
+
+1. For each node, compare its value with the next node's value
+2. If equal, skip the next node by updating `curr.next`
+3. If different, move to the next node
+
+**Example**: Remove duplicates from `[1,1,2,3,3]`:
+```
+curr at 1: curr.val (1) == curr.next.val (1) → skip: 1 → 2 → 3 → 3
+curr at 1: curr.val (1) != curr.next.val (2) → move curr to 2
+curr at 2: curr.val (2) != curr.next.val (3) → move curr to 3
+curr at 3: curr.val (3) == curr.next.val (3) → skip: 1 → 2 → 3 → null
+curr at 3: curr.next is null → done
+Result: [1,2,3]
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Each node visited at most once
+- **Space Complexity**: O(1) - Only pointer variables used
+
+#### Implementation Steps
+
+1. Start with `curr` at head.
+2. While `curr` and `curr.next` exist, compare values.
+3. If duplicate, skip: `curr.next = curr.next.next`.
+4. Otherwise, advance: `curr = curr.next`.
+5. Return head.
+
+#### Java Code
 
 ```java
 public ListNode deleteDuplicates(ListNode head) {
@@ -249,15 +554,76 @@ public ListNode deleteDuplicates(ListNode head) {
 - **Platform**: LeetCode
 - **Problem ID**: 92
 - **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/reverse-linked-lc-list-ii/
-- **Tags**:
-- **Techniques**: In-place reversal, [Linked List](glossary-of-algorithm.html#glossary-linked-list)
+- **URL**: https://leetcode.com/problems/reverse-linked-list-ii/
+- **Techniques**: [Linked List](glossary-of-algorithm.html#glossary-linked-list)
 
 ### Description
 
-Reverse the nodes between positions `left` and `right` (1-indexed) in a linked lc-list.
+Given the `head` of a singly linked list and two integers `left` and `right` where `left <= right`, reverse the nodes of the list from position `left` to position `right`, and return the reversed list.
+
+### Examples
+
+```
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+
+Input: head = [5], left = 1, right = 1
+Output: [5]
+```
+
+### Constraints
+
+- The number of nodes in the list is `n`
+- `1 <= n <= 500`
+- `-500 <= Node.val <= 500`
+- `1 <= left <= right <= n`
 
 ### Solution - Head Insertion
+
+#### Walkthrough
+
+This solution uses a **head insertion technique** to reverse the sublist in-place with a single pass.
+
+**Core Strategy:**
+
+1. Find `prev`, the node before position `left`
+2. Keep `curr` fixed at position `left` (it becomes the tail of reversed portion)
+3. Repeatedly take `curr.next` and insert it at position `left` (right after `prev`)
+
+**Key Insight:** Instead of standard reversal, we "bubble" each node to the front of the reversal range. After each iteration, `curr.next` moves one position to the right.
+
+**Example**: Reverse positions 2-4 in `[1,2,3,4,5]`:
+```
+Initial: 1 → 2 → 3 → 4 → 5
+         prev curr
+
+Step 1: Move 3 to front of range
+        1 → 3 → 2 → 4 → 5
+        prev     curr
+
+Step 2: Move 4 to front of range
+        1 → 4 → 3 → 2 → 5
+        prev         curr
+
+Result: [1,4,3,2,5]
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Single pass to position `left`, then `right - left` operations
+- **Space Complexity**: O(1) - Only pointer variables used
+
+#### Implementation Steps
+
+1. Create dummy node, find `prev` (node before position `left`).
+2. Set `curr` to `prev.next` (the node at position `left`).
+3. For `right - left` iterations:
+   - Save `next = curr.next`
+   - Remove `next` from its position: `curr.next = next.next`
+   - Insert `next` after `prev`: `next.next = prev.next; prev.next = next`
+4. Return `dummy.next`.
+
+#### Java Code
 
 ```java
 public ListNode reverseBetween(ListNode head, int left, int right) {
@@ -291,12 +657,70 @@ public ListNode reverseBetween(ListNode head, int left, int right) {
 - **Platform**: LeetCode
 - **Problem ID**: 138
 - **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/copy-lc-list-with-random-pointer/
-- **Techniques**: [Linked List](glossary-of-algorithm.html#glossary-linked-list)
+- **URL**: https://leetcode.com/problems/copy-list-with-random-pointer/
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#glossary-hash-table), [Linked List](glossary-of-algorithm.html#glossary-linked-list)
 
 ### Description
 
-Deep copy a linked lc-list where each node has `next` and `random` pointers.
+A linked list of length `n` is given such that each node contains an additional random pointer, which could point to any node in the list, or null. Construct a deep copy of the list.
+
+### Examples
+
+```
+Input: head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+Output: [[7,null],[13,0],[11,4],[10,2],[1,0]]
+
+Input: head = [[1,1],[2,1]]
+Output: [[1,1],[2,1]]
+```
+
+### Constraints
+
+- `0 <= n <= 1000`
+- `-10^4 <= Node.val <= 10^4`
+- `Node.random` is null or pointing to some node in the list
+
+### Solution - Interleaving Nodes
+
+#### Walkthrough
+
+This solution achieves O(1) space by **interleaving** copied nodes with original nodes, then separating them.
+
+**Three-Pass Strategy:**
+
+1. **Pass 1 - Interleave:** Insert each copy right after its original
+   - `A → B → C` becomes `A → A' → B → B' → C → C'`
+
+2. **Pass 2 - Set random pointers:** For each original node, set its copy's random
+   - `copy.random = original.random.next` (the copy of random target)
+
+3. **Pass 3 - Separate:** Extract copied nodes into their own list
+
+**Why This Works:** By placing each copy adjacent to its original, we can find any random target's copy in O(1) by looking at `original.random.next`.
+
+**Example**: Copy `A → B → C` where A.random → C, B.random → A:
+```
+Pass 1: A → A' → B → B' → C → C'
+
+Pass 2: A.random = C, so A'.random = C.next = C'
+        B.random = A, so B'.random = A.next = A'
+
+Pass 3: Separate into A → B → C and A' → B' → C'
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Three passes through the list
+- **Space Complexity**: O(1) - No extra data structures (copies don't count as auxiliary space)
+
+#### Implementation Steps
+
+1. **Pass 1:** For each node, create copy and insert after original.
+2. **Pass 2:** For each original, set `original.next.random = original.random.next`.
+3. **Pass 3:** Separate the interleaved list into original and copy lists.
+4. Return the head of the copy list.
+
+#### Java Code
 
 ```java
 public Node copyRandomList(Node head) {

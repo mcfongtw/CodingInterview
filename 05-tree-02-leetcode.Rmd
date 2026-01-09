@@ -4,7 +4,7 @@
 
 - **Platform**: LeetCode
 - **Problem ID**: 94
-- **Difficulty**: Medium
+- **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/binary-tree-inorder-traversal/
 - **Tags**:
 - **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
@@ -13,7 +13,58 @@
 
 Return the inorder traversal (left-root-right) of a binary tree.
 
+### Examples
+
+**Example 1: Regular Binary Tree**
+```
+Input:
+    1
+   / \
+  2   3
+Output: [2,1,3]
+Explanation: In-order visits left subtree first (2), then root (1), then right subtree (3)
+```
+
+**Example 2: Empty Tree**
+```
+Input: null
+Output: []
+```
+
+**Example 3: Skewed Tree**
+```
+Input:
+    1
+     \
+      2
+       \
+        3
+Output: [1,2,3]
+Explanation: No left children, visits nodes in order down the right spine
+```
+
+### Constraints
+
+- The number of nodes in the tree is in the range `[0, 100]`
+- `-100 <= Node.val <= 100`
+
 ### Solution - Iterative Stack
+
+#### Walkthrough
+
+Use a stack to simulate recursion and always dive left first:
+
+1. Maintain `current` pointer starting at root.
+2. **Traverse left spine**: push nodes while moving `current = current.left` until null.
+3. Pop from stack, record value (the "root" between left and right), then shift to right subtree `current = node.right`.
+4. Repeat until both `current` is null and stack is empty.
+
+This yields nodes in left-root-right order without recursion.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) worst case stack on a skewed tree
 
 ```
 public List<Integer> inorderTraversal(TreeNode root) {
@@ -43,13 +94,13 @@ public List<Integer> inorderTraversalRecursive(TreeNode root) {
     return result;
 }
 
-private void dfs(TreeNode node, List<Integer> lc-list) {
+private void dfs(TreeNode node, List<Integer> list) {
     if (node == null) {
         return;
     }
-    dfs(node.left, lc-list);
-    lc-list.add(node.val);
-    dfs(node.right, lc-list);
+    dfs(node.left, list);
+    list.add(node.val);
+    dfs(node.right, list);
 }
 ```
 
@@ -69,9 +120,60 @@ private void dfs(TreeNode node, List<Integer> lc-list) {
 
 Check whether a binary tree is a valid BST.
 
+### Examples
+
+**Example 1: Valid BST**
+```
+Input:
+    2
+   / \
+  1   3
+Output: true
+Explanation: All left values (1) are less than root (2), all right values (3) are greater
+```
+
+**Example 2: Invalid BST**
+```
+Input:
+    5
+   / \
+  1   4
+     / \
+    3   6
+Output: false
+Explanation: Node 4's left child (3) violates the BST property for subtree rooted at 5
+```
+
+**Example 3: Single Node**
+```
+Input: 1
+Output: true
+Explanation: A single node is always a valid BST
+```
+
+### Constraints
+
+- The number of nodes in the tree is in the range `[1, 10^4]`
+- `-2^31 <= Node.val <= 2^31 - 1`
+
 ### Solution - Inorder Bounds
 
-Use DFS while carrying min/max bounds.
+#### Walkthrough
+
+Perform DFS carrying the valid range for each subtree:
+
+1. Start with no bounds at root.
+2. For a node, if its value is not strictly within `(low, high)`, return false.
+3. Recurse left with updated `high = node.val` (all left nodes must be smaller).
+4. Recurse right with updated `low = node.val` (all right nodes must be larger).
+5. Return true only if both subtrees are valid.
+
+Passing bounds prevents false positives that would slip through a simple local child comparison.
+
+#### Analysis
+
+- **Time Complexity**: O(n) — visit each node once
+- **Space Complexity**: O(h) recursion stack (h = tree height)
 
 ```
 public boolean isValidBST(TreeNode root) {
@@ -92,7 +194,6 @@ private boolean validate(TreeNode node, Integer low, Integer high) {
 
 ## Binary Tree Zigzag Level Order Traversal {#lc-zigzag-level-order}
 
-```
 ### Problem Metadata
 
 - **Platform**: LeetCode
@@ -131,8 +232,8 @@ Perform level-order traversal. Track a boolean indicating whether to append valu
 #### Implementation Steps
 
 1. Initialize queue with root and a boolean `leftToRight = true`.
-2. For each level, collect values in a lc-list.
-3. If `leftToRight`, append; otherwise insert at front or use reverse lc-list.
+2. For each level, collect values in a list.
+3. If `leftToRight`, append; otherwise insert at front or use reverse list.
 4. Toggle `leftToRight` each level.
 
 #### Java Code
@@ -185,13 +286,74 @@ public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/maximum-depth-of-binary-tree/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), DFS, Tree
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree
 
 ### Description
 
 Return the maximum depth (number of nodes along the longest path from root down to a leaf).
 
-### Solution - DFS
+### Examples
+
+**Example 1: Balanced Tree**
+```
+Input:
+    3
+   / \
+  9  20
+    /  \
+   15   7
+Output: 3
+Explanation: Longest path is 3 → 20 → 15 (or 3 → 20 → 7), which has 3 nodes
+```
+
+**Example 2: Single Node**
+```
+Input: 1
+Output: 1
+```
+
+**Example 3: Skewed Tree**
+```
+Input:
+  1
+   \
+    2
+     \
+      3
+Output: 3
+Explanation: Linear right spine, depth equals number of nodes
+```
+
+### Constraints
+
+- The number of nodes in the tree is in the range `[0, 10^4]`
+- `-100 <= Node.val <= 100`
+
+### Solution - DFS Recursion
+
+#### Walkthrough
+
+The maximum depth is the longest path from root to any leaf node. Use a recursive DFS approach:
+
+1. **Base case**: If current node is null, return 0 (no depth).
+2. **Recursive case**: The depth of the current node is 1 (for the node itself) plus the maximum of the depths of its left and right subtrees.
+3. This naturally explores all paths and returns the longest one.
+
+The elegance of this approach is that max(left_depth, right_depth) inherently finds the longest path at each level as it bubbles up the recursion stack.
+
+#### Analysis
+
+- **Time Complexity**: O(n) — each node is visited exactly once
+- **Space Complexity**: O(h) — recursion stack depth, where h is tree height (O(n) in worst case for skewed tree)
+
+#### Implementation Steps
+
+1. Handle null node as base case returning 0
+2. Recursively calculate depth of left subtree
+3. Recursively calculate depth of right subtree
+4. Return 1 + max(left_depth, right_depth)
+
+#### Java Code
 
 ```
 public int maxDepth(TreeNode root) {
@@ -218,7 +380,84 @@ public int maxDepth(TreeNode root) {
 
 Build a binary tree from preorder and inorder traversals.
 
-### Solution - Hash Map Recursion
+### Examples
+
+**Example 1: Balanced Tree**
+```
+Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+Output:
+    3
+   / \
+  9  20
+    /  \
+   15   7
+Explanation:
+- Preorder: root first (3), then left subtree (9,20,15,7), ... wait that's wrong
+- Preorder: 3 (root), 9 (left subtree root), 20 (right subtree root), 15, 7
+- Inorder: 9 (left), 3 (root), 15,20,7 (right)
+```
+
+**Example 2: Single Node**
+```
+Input: preorder = [1], inorder = [1]
+Output: 1
+```
+
+**Example 3: Left-Skewed Tree**
+```
+Input: preorder = [1,2,3], inorder = [3,2,1]
+Output:
+  1
+ /
+2
+/
+3
+```
+
+### Constraints
+
+- `1 <= preorder.length <= 3000`
+- `inorder.length == preorder.length`
+- `-3000 <= preorder[i], inorder[i] <= 3000`
+- `preorder` and `inorder` consist of unique values
+- Each value of `inorder` also appears in `preorder`
+- `preorder` is guaranteed to be a valid preorder traversal
+- `inorder` is guaranteed to be a valid inorder traversal
+
+### Solution - Hash Map with Divide and Conquer
+
+#### Walkthrough
+
+The key insight is that **the first element of preorder is always the root**. Once we find the root in inorder, we can divide the remaining elements into left and right subtrees:
+
+1. **Preorder property**: First element is always the root; remaining elements are [left subtree elements, right subtree elements]
+2. **Inorder property**: Elements are [left subtree elements, root, right subtree elements]
+3. **Algorithm**:
+   - Take first element of preorder as root
+   - Find its position in inorder
+   - Elements to the left of root in inorder form the left subtree
+   - Elements to the right of root in inorder form the right subtree
+   - Recursively build left and right subtrees using the corresponding preorder and inorder subarrays
+4. **Optimization**: Use a HashMap to store inorder indices for O(1) root position lookup
+
+#### Analysis
+
+- **Time Complexity**: O(n) — each node is visited once, and HashMap lookup is O(1)
+- **Space Complexity**: O(n) — HashMap stores all n values; recursion stack is O(h) where h is tree height
+
+#### Implementation Steps
+
+1. Build a HashMap: `value → index` from the inorder array for fast lookup
+2. Define a recursive helper function that takes preorder bounds and inorder bounds
+3. In each recursion:
+   - Extract root value from preorder[preL]
+   - Find root position in inorder using HashMap
+   - Calculate left subtree size = (root position in inorder) - inL
+   - Recursively build left subtree: preorder[preL+1 to preL+leftSize], inorder[inL to rootPos-1]
+   - Recursively build right subtree: preorder[preL+leftSize+1 to preR], inorder[rootPos+1 to inR]
+4. Base case: when preL > preR, return null
+
+#### Java Code
 
 ```
 public TreeNode buildTree(int[] preorder, int[] inorder) {
@@ -273,7 +512,7 @@ Output: [[15,7],[9,20],[3]]
 
 #### Walkthrough
 
-Perform BFS collecting nodes level by level. Instead of appending to the end, insert each level at the front of a linked lc-list (or append and reverse at the end).
+Perform BFS collecting nodes level by level. Instead of appending to the end, insert each level at the front of a linked list (or append and reverse at the end).
 
 #### Analysis
 
@@ -284,7 +523,7 @@ Perform BFS collecting nodes level by level. Instead of appending to the end, in
 
 1. Run BFS using a queue.
 2. For each level size, dequeue nodes, record values, enqueue children.
-3. Insert level lc-list at the start of the result.
+3. Insert level list at the start of the result.
 
 #### Java Code
 ```java
@@ -335,7 +574,71 @@ public List<List<Integer>> levelOrderBottom(TreeNode root) {
 
 Convert a sorted array to a height-balanced BST.
 
+### Examples
+
+**Example 1: Array with Odd Length**
+```
+Input: nums = [-10,-3,0,5,9]
+Output:
+    0
+   / \
+ -3   9
+ /   /
+-10 5
+Explanation: Middle element (0) becomes root; recurse on left and right halves
+```
+
+**Example 2: Array with Even Length**
+```
+Input: nums = [1,3]
+Output:
+  3
+ /
+1
+(or vice versa, both are valid height-balanced BSTs)
+```
+
+**Example 3: Single Element**
+```
+Input: nums = [1]
+Output: 1
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10^4`
+- `-10^4 <= nums[i] <= 10^4`
+- `nums` is sorted in strictly increasing order
+
 ### Solution - Divide and Conquer
+
+#### Walkthrough
+
+To build a height-balanced BST from a sorted array, use the middle element as the root. This ensures the tree remains balanced since it divides the remaining elements equally between left and right subtrees:
+
+1. **Base case**: If left > right, return null (no elements).
+2. **Find middle**: Calculate mid = left + (right - left) / 2 to avoid integer overflow.
+3. **Create root**: Use nums[mid] as the current node.
+4. **Recurse left**: Recursively build left subtree from nums[left...mid-1].
+5. **Recurse right**: Recursively build right subtree from nums[mid+1...right].
+6. The middle element selection ensures all left subtree values < root < all right subtree values (BST property).
+
+#### Analysis
+
+- **Time Complexity**: O(n) — each element is visited once
+- **Space Complexity**: O(log n) — recursion stack depth for balanced tree (O(n) in worst case)
+
+#### Implementation Steps
+
+1. Define a recursive helper function with left and right indices
+2. Handle base case when left > right
+3. Calculate middle index
+4. Create node with middle value
+5. Recursively build left subtree (left to mid-1)
+6. Recursively build right subtree (mid+1 to right)
+7. Return the constructed node
+
+#### Java Code
 
 ```
 public TreeNode sortedArrayToBST(int[] nums) {
@@ -496,30 +799,60 @@ private int getHeight(TreeNode root) {
 }
 ```
 
+## Binary Tree Level Order Traversal {#lc-level-order}
 
+### Problem Metadata
 
+- **Platform**: LeetCode
+- **Problem ID**: 102
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/binary-tree-level-order-traversal/
+- **Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Tree
 
+### Description
+Given the root of a binary tree, return the level order traversal of its nodes' values (i.e., from left to right, level by level).
 
+### Examples
 
+**Example 1:**
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[9,20],[15,7]]
 
+**Example 2:**
+Input: root = [1]
+Output: [[1]]
 
+**Example 3:**
+Input: root = []
+Output: []
 
+### Constraints
+- The number of nodes in the tree is in the range `[0, 2000]`
+- `-1000 <= Node.val <= 1000`
 
-
-### Solution - BFS with One Loops
+### Solution - BFS with Two Queues
 #### Walkthrough
-Create a queue and push node of the same level in a two dimensional array lc-list while traversing the tree with
-BFS algorithm.
+Use level-order traversal while keeping two queues: one for the current level, one for the next.
+
+1. Seed `currentLevelQueue` with root.
+2. Pop nodes from the current queue, append their values to the `level` list, and push their children into `nextLevelQueue`.
+3. When the current queue empties, swap queues, reset `level`, and continue; each swap marks a new level in `levels`.
+
+This separates nodes by depth without tracking counts.
 
 #### Analysis
-Breadth first traversal has time complexity of O(n), as every node is visited and thus  the space
-complexity is also O(n).
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) for queues and result
 
 #### Implementation Steps
 
- bfs \@ref(glossary-bfs)
+1. Initialize two queues and an empty result list.
+2. While current queue not empty, pop nodes, append values, and enqueue children to the next queue.
+3. When current queue empties, swap queues and start a new level list.
 
-#### Java Code - BFS with One Loop
+#### Java Code - BFS with Two Queues
 ```java
 public List<List<Integer>> levelOrder(TreeNode root) {
     List<List<Integer>> levels = new ArrayList<>();
@@ -793,7 +1126,7 @@ public Node connect(Node root) {
 
 - **Platform**: LeetCode
 - **Problem ID**: 144
-- **Difficulty**: Medium
+- **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/binary-tree-preorder-traversal/
 - **Tags**:
 - **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
@@ -847,13 +1180,13 @@ public List<Integer> preorderTraversalRecursive(TreeNode root) {
     return result;
 }
 
-private void dfs(TreeNode node, List<Integer> lc-list) {
+private void dfs(TreeNode node, List<Integer> list) {
     if (node == null) {
         return;
     }
-    lc-list.add(node.val);
-    dfs(node.left, lc-list);
-    dfs(node.right, lc-list);
+    list.add(node.val);
+    dfs(node.left, list);
+    dfs(node.right, list);
 }
 ```
 
@@ -864,7 +1197,7 @@ private void dfs(TreeNode node, List<Integer> lc-list) {
 
 - **Platform**: LeetCode
 - **Problem ID**: 145
-- **Difficulty**: Hard
+- **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/binary-tree-postorder-traversal/
 - **Tags**:
 - **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
@@ -874,6 +1207,20 @@ private void dfs(TreeNode node, List<Integer> lc-list) {
 Return the postorder traversal (left-right-root) of a binary tree.
 
 ### Solution - Iterative Stack
+
+#### Walkthrough
+
+Use a reversed-preorder trick to achieve postorder without two stacks:
+
+1. Push root.
+2. Pop node, prepend its value (`addFirst`) to result.
+3. Push left then right children (so right is processed before left).
+4. Prepending reverses the root-right-left traversal into left-right-root.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) for stack + output list
 
 ```
 public List<Integer> postorderTraversal(TreeNode root) {
@@ -901,13 +1248,13 @@ public List<Integer> postorderTraversal(TreeNode root) {
 ### Solution - Recursive
 
 ```
-private void dfs(TreeNode node, List<Integer> lc-list) {
+private void dfs(TreeNode node, List<Integer> list) {
     if (node == null) {
         return;
     }
-    dfs(node.left, lc-list);
-    dfs(node.right, lc-list);
-    lc-list.add(node.val);
+    dfs(node.left, list);
+    dfs(node.right, list);
+    list.add(node.val);
 }
 ```
 
@@ -1008,6 +1355,20 @@ Find the inorder successor of a given node in a BST.
 
 ### Solution - BST Properties
 
+#### Walkthrough
+
+Exploit BST ordering:
+
+- If `p` has a right subtree, successor is the **leftmost node in `p.right`**.
+- Otherwise, walk down from root tracking the deepest ancestor whose value is greater than `p.val` (first left turn on the search path).
+
+Iteratively compare `p.val` with `root.val`: when `p.val < root.val`, record `root` as a candidate successor and move left; otherwise move right to search larger values.
+
+#### Analysis
+
+- **Time Complexity**: O(h) where h is tree height
+- **Space Complexity**: O(1)
+
 ```
 public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
     TreeNode succ = null;
@@ -1079,7 +1440,7 @@ Collect nodes layer by layer from leaves upward.
 
 ### Solution - Height DFS
 
-Compute the height of each node (distance from leaf). Use height as index to append values to the result lc-list.
+Compute the height of each node (distance from leaf). Use height as index to append values to the result list.
 
 ```
 public List<List<Integer>> findLeaves(TreeNode root) {
