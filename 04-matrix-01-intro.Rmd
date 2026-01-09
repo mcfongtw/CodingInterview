@@ -1,2 +1,182 @@
 # Matrix
 
+### Definition and Properties {#intro-matrix-definition}
+
+#### Matrix Definition and Basic Properties {#intro-matrix-basics}
+
+A **matrix** (plural: matrices) is a two-dimensional array of elements arranged in rows and columns. In coding interviews, matrices are typically represented as 2D arrays.
+
+**Key Properties:**
+- **Dimensions**: An $m \times n$ matrix has $m$ rows and $n$ columns
+- **Indexing**: Elements are accessed via row and column indices (0-indexed or 1-indexed depending on the context)
+- **Square Matrix**: A matrix where the number of rows equals the number of columns ($m = n$)
+- **Sparse Matrix**: A matrix with many zero elements, often requiring special handling for memory efficiency
+- **Dense Matrix**: A matrix with mostly non-zero elements
+
+**Common Matrix Types:**
+- **Identity Matrix**: Square matrix with 1s on the diagonal and 0s elsewhere
+- **Diagonal Matrix**: Non-zero elements only on the main diagonal
+- **Symmetric Matrix**: A square matrix that equals its transpose ($A = A^T$)
+- **Triangular Matrix**: Upper triangular (zeros below diagonal) or lower triangular (zeros above diagonal)
+
+### Time and Space Complexity Considerations {#intro-matrix-complexity}
+
+For a matrix with $m$ rows and $n$ columns:
+- **Full traversal**: $O(m \cdot n)$ time and space
+- **Single row or column**: $O(\max(m, n))$ time and space
+- **Most matrix algorithms require at least** $O(m \cdot n)$ time since every element may need inspection
+- **In-place modifications** can reduce space complexity from $O(m \cdot n)$ to $O(1)$ auxiliary space
+
+### Traversal Patterns {#intro-matrix-traversal}
+
+#### Row-wise and Column-wise Traversal {#intro-matrix-linear-traversal}
+
+**Row-wise (left to right, top to bottom):**
+```
+for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+        process(matrix[i][j]);
+    }
+}
+```
+
+**Column-wise (top to bottom, left to right):**
+```
+for (int j = 0; j < n; j++) {
+    for (int i = 0; i < m; i++) {
+        process(matrix[i][j]);
+    }
+}
+```
+
+#### Spiral Traversal {#intro-matrix-spiral}
+
+Visit elements in a clockwise spiral pattern starting from the outside and moving inward. Commonly tested in interviews.
+
+**Key technique:**
+- Maintain four boundaries: top, bottom, left, right
+- Traverse right along top boundary, then collapse top
+- Traverse down along right boundary, then collapse right
+- Traverse left along bottom boundary (if exists), then collapse bottom
+- Traverse up along left boundary (if exists), then collapse left
+- Repeat until boundaries cross
+
+**Time Complexity**: $O(m \cdot n)$ | **Space Complexity**: $O(1)$ (excluding output)
+
+#### Diagonal Traversal {#intro-matrix-diagonal}
+
+Visit elements along diagonals (top-left to bottom-right or other directions). Useful for certain problems.
+
+**Main diagonal:** Elements where row index equals column index ($i = j$)
+**Anti-diagonal:** Elements where row index plus column index equals a constant ($i + j = k$)
+
+#### Boundary and Layer Traversal {#intro-matrix-boundary}
+
+Process matrices layer by layer from the outside inward (like peeling an onion).
+
+**Key technique:**
+- Use similar boundary tracking as spiral traversal
+- Process one complete layer (top row, right column, bottom row, left column)
+- Shrink boundaries inward after each layer
+
+**Time Complexity**: $O(m \cdot n)$ | **Space Complexity**: $O(1)$ (excluding output)
+
+### Transformation Operations {#intro-matrix-transforms}
+
+#### Matrix Transpose {#intro-matrix-transpose}
+
+Swap rows and columns: element at position $(i, j)$ moves to position $(j, i)$.
+
+**In-place transpose (square matrix only):**
+```
+for (int i = 0; i < n; i++) {
+    for (int j = i + 1; j < n; j++) {
+        swap(matrix[i][j], matrix[j][i]);
+    }
+}
+```
+
+**Key insight:** Only swap upper triangle with lower triangle; diagonal remains unchanged.
+
+#### Rotation {#intro-matrix-rotation}
+
+**90° Clockwise Rotation:**
+1. Transpose the matrix
+2. Reverse each row
+
+**90° Counter-clockwise Rotation:**
+1. Transpose the matrix
+2. Reverse each column (or reverse the order of rows)
+
+**Key insight:** For square matrices, rotation can be done in-place using layer-by-layer approach.
+
+#### Matrix Flip/Reflection {#intro-matrix-flip}
+
+**Horizontal flip (left-right):**
+- Reverse each row independently
+
+**Vertical flip (top-bottom):**
+- Reverse the order of rows
+
+**Time Complexity**: $O(m \cdot n)$ | **Space Complexity**: $O(1)$ for in-place operations
+
+### Algorithmic Techniques {#intro-matrix-algorithms}
+
+#### Depth-First Search (DFS) in Matrices {#intro-matrix-dfs}
+
+Explore connected components or paths in a matrix (e.g., finding islands, paths through cells).
+
+**Key considerations:**
+- Track visited cells to avoid cycles
+- Use 4-directional neighbors (up, down, left, right) or 8-directional (including diagonals)
+- Base cases: out of bounds, already visited, or invalid cell
+- Recursion or explicit stack
+
+**Time Complexity**: $O(m \cdot n)$ | **Space Complexity**: $O(m \cdot n)$ worst case (call stack)
+
+#### Breadth-First Search (BFS) in Matrices {#intro-matrix-bfs}
+
+Find shortest paths or explore level-by-level in a matrix.
+
+**Key considerations:**
+- Use a queue for level-by-level traversal
+- Track visited cells to avoid reprocessing
+- Useful for finding shortest distance/path
+- Can track distance or parent pointers
+
+**Time Complexity**: $O(m \cdot n)$ | **Space Complexity**: $O(m \cdot n)$ worst case (queue)
+
+#### Dynamic Programming on Matrices {#intro-matrix-dp}
+
+Solve optimization problems like minimum path sum, maximum rectangle, edit distance problems.
+
+**Common DP approaches:**
+- **Top-down (memoization):** Recursively compute with caching
+- **Bottom-up (tabulation):** Build solution table from smaller subproblems
+- **Space optimization:** Use rolling arrays to reduce space from $O(m \cdot n)$ to $O(n)$ or $O(m)$
+
+**Key insight:** Matrix DP problems often require 1D or 2D DP tables.
+
+#### Two-Pointer or Sliding Window in Matrices {#intro-matrix-pointers}
+
+Apply linear techniques to matrix rows/columns or use pointers for searching.
+
+**Common patterns:**
+- Binary search on 2D sorted matrix (search rows or use space-filling curves)
+- Two pointers starting from opposite corners (e.g., top-right and bottom-left)
+- Sliding window on matrix rows for contiguous sub-matrix problems
+
+#### Important Variations {#intro-matrix-variations}
+
+**Sorted Matrix Search:**
+- If rows are sorted and columns are sorted, start from top-right corner
+- Move left if target is smaller, move down if target is larger
+
+**Rotated Matrix Search:**
+- Identify which quadrant contains the target
+- Apply binary search on the identified section
+
+**Matrix Prefix Sum:**
+- Precompute cumulative sums for fast range query
+- 2D prefix sum: $\text{prefix}[i][j] = \text{prefix}[i-1][j] + \text{prefix}[i][j-1] - \text{prefix}[i-1][j-1] + \text{matrix}[i][j]$
+
