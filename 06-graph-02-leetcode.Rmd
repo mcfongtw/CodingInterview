@@ -272,6 +272,231 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 ```
 
 
+## Number of Connected Components in an Undirected Graph {#lc-connected-components}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 323
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
+- **Tags**: NeetCode 150
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), [Union Find](glossary-of-algorithm.html#glossary-union-find), Graph
+
+### Description
+
+Given `n` nodes labeled `0..n-1` and a list of undirected edges, return the number of connected components in the graph.
+
+### Examples
+
+**Example 1: Two Components**
+```
+Input: n = 5, edges = [[0,1],[1,2],[3,4]]
+Output: 2
+Explanation: Component 1: [0,1,2], Component 2: [3,4]
+```
+
+**Example 2: Single Component**
+```
+Input: n = 5, edges = [[0,1],[0,2],[0,3],[1,4]]
+Output: 1
+Explanation: All nodes are connected in a single component
+```
+
+**Example 3: All Isolated Nodes**
+```
+Input: n = 5, edges = []
+Output: 5
+Explanation: No edges, so 5 isolated components
+```
+
+### Constraints
+
+- `1 ≤ n ≤ 10^5`
+- `0 ≤ edges.length ≤ 10^5`
+- Each edge is `[u, v]` where `0 ≤ u, v < n`
+- No self-loops and no duplicate edges
+- Graph is undirected
+
+### Solution - DFS Traversal
+
+#### Walkthrough
+
+Build an adjacency list upfront, then use DFS to explore each component. Each time DFS returns, we've discovered a new connected component.
+
+**Step 1: Build Adjacency List**
+
+Pre-build the graph structure so we can efficiently query neighbors without rescanning edges. Since the graph is undirected, add edges in both directions: when we see edge `[u, v]`, add `v` to `u`'s neighbor list and `u` to `v`'s neighbor list.
+
+**Step 2: Iterate Through All Nodes**
+
+For each node $i$ from 0 to $n-1$, check if it's been visited:
+- If **already visited**, skip it (already counted as part of a previous component)
+- If **unvisited**, start a DFS from that node and increment component count
+
+**Step 3: DFS Traversal**
+
+When DFS starts from an unvisited node, it recursively explores all reachable neighbors, marking each as visited. Once DFS returns, all nodes in that component have been marked visited, ensuring we count each component exactly once.
+
+**Example Trace: $n = 5$, edges $= [[0,1],[1,2],[3,4]]$**
+
+After building the graph:
+```
+0 → [1]
+1 → [0, 2]
+2 → [1]
+3 → [4]
+4 → [3]
+```
+
+Iteration:
+- $i = 0$ (unvisited): Call `dfs(0)` → marks 0, 1, 2 as visited → `result = 1`
+- $i = 1$ (visited): Skip
+- $i = 2$ (visited): Skip
+- $i = 3$ (unvisited): Call `dfs(3)` → marks 3, 4 as visited → `result = 2`
+- $i = 4$ (visited): Skip
+
+Return 2 ✓
+
+#### Analysis
+
+- **Time Complexity**: O(V $+$ E) — Each node is visited once and each edge is traversed once during DFS
+- **Space Complexity**: O(V $+$ E) — Adjacency list uses O(V $+$ E) space; recursion stack uses at most O(V) in worst case (linear chain)
+
+#### Java Code
+
+```
+public int countComponents(int n, int[][] edges) {
+    List<List<Integer>> graph = new ArrayList<>();
+    boolean[] visited = new boolean[n];
+    int result = 0;
+
+    // Pre-build adjacency list
+    for(int i = 0; i < n; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    // Build edges in graph (undirected)
+    for(int[] edge: edges) {
+        graph.get(edge[0]).add(edge[1]);
+        graph.get(edge[1]).add(edge[0]);
+    }
+
+    // Count components: each unvisited node starts a new component
+    for(int i = 0; i < n; i++) {
+        if(!visited[i]) {
+            dfs(i, graph, visited);
+            result++;
+        }
+    }
+
+    return result;
+}
+
+private void dfs(int node, List<List<Integer>> graph, boolean[] visited) {
+    List<Integer> neighbors = graph.get(node);
+    visited[node] = true;
+
+    // Traverse all unvisited neighbors
+    for(int neighbor: neighbors) {
+        if(!visited[neighbor]) {
+            dfs(neighbor, graph, visited);
+        }
+    }
+}
+```
+
+### Solution - BFS Traversal
+
+#### Walkthrough
+
+Use BFS with a queue to explore each component level-by-level. The algorithm is similar to DFS but uses an explicit queue instead of recursion.
+
+**Step 1: Build Adjacency List**
+
+Same as DFS—pre-build the graph with both directions for undirected edges.
+
+**Step 2: Iterate Through All Nodes**
+
+For each unvisited node, start a BFS and increment the component count. This ensures each component is counted exactly once.
+
+**Step 3: BFS Exploration**
+
+Enqueue the starting node and mark it visited. While the queue is not empty:
+- Dequeue a node
+- For each unvisited neighbor, mark it visited and enqueue it
+- Continue until queue is empty (entire component explored)
+
+**Example Trace: $n = 5$, edges $= [[0,1],[1,2],[3,4]]$**
+
+**Component 1:**
+- Start BFS at node 0: enqueue 0, mark visited
+- Dequeue 0: neighbors are [1] → mark 1, enqueue 1
+- Dequeue 1: neighbors are [0, 2] → 0 visited, mark 2, enqueue 2
+- Dequeue 2: neighbors are [1] → 1 visited
+- Queue empty → `result = 1`
+
+**Component 2:**
+- Start BFS at node 3: enqueue 3, mark visited
+- Dequeue 3: neighbors are [4] → mark 4, enqueue 4
+- Dequeue 4: neighbors are [3] → 3 visited
+- Queue empty → `result = 2`
+
+Return 2 ✓
+
+#### Analysis
+
+- **Time Complexity**: O(V $+$ E) — Each node is visited once and each edge is traversed once
+- **Space Complexity**: O(V $+$ E) — Adjacency list uses O(V $+$ E) space; queue uses at most O(V) in worst case
+
+#### Java Code
+
+```
+public int countComponents(int n, int[][] edges) {
+    List<List<Integer>> graph = new ArrayList<>();
+    boolean[] visited = new boolean[n];
+    int result = 0;
+
+    // Pre-build adjacency list
+    for(int i = 0; i < n; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    // Build edges in graph (undirected)
+    for(int[] edge: edges) {
+        graph.get(edge[0]).add(edge[1]);
+        graph.get(edge[1]).add(edge[0]);
+    }
+
+    // Count components: each unvisited node starts a new component
+    for(int i = 0; i < n; i++) {
+        if(!visited[i]) {
+            bfs(i, graph, visited);
+            result++;
+        }
+    }
+
+    return result;
+}
+
+private void bfs(int start, List<List<Integer>> graph, boolean[] visited) {
+    Queue<Integer> queue = new LinkedList<>();
+    queue.offer(start);
+    visited[start] = true;
+
+    while(!queue.isEmpty()) {
+        int node = queue.poll();
+        for(int neighbor: graph.get(node)) {
+            if(!visited[neighbor]) {
+                visited[neighbor] = true;
+                queue.offer(neighbor);
+            }
+        }
+    }
+}
+```
+
+
 ## Graph Validate Tree {#lc-graph-valid-tree}
 
 ### Problem Metadata

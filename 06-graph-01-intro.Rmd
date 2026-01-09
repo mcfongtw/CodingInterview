@@ -1,5 +1,7 @@
 # Graph
 
+### Undirected Graphs
+
 Imagine a graph with as the following:
 ```
 1 -- 0 -- 4
@@ -12,9 +14,9 @@ Imagine a graph with as the following:
 
 \subsubsection{Typical Implementation - Adjacency List}
 
-An adjacency lc-list is created with an array of lc-lists. Size of the array is equal to the number of vertices. Each entry
-represents the lc-list of vertices adjacent to the $i^{th}$ vertex. Each node maintains a lc-list of all its adjacent edges,
-then, for each node, you could discover all its neighbors by traversing its adjacency lc-list just once in linear time.
+An adjacency list is created with an array of lists. Size of the array is equal to the number of vertices. Each entry
+represents the list of vertices adjacent to the $i^{th}$ vertex. Each node maintains a list of all its adjacent edges,
+then, for each node, you could discover all its neighbors by traversing its adjacency list just once in linear time.
 
 ```
 | 0 | -- 1 -- 4
@@ -65,7 +67,7 @@ class Graph  {
 }
 ```
 
-There is an alternative implementation to represent per node with a lc-list of adjacent nodes.
+There is an alternative implementation to represent per node with a list of adjacent nodes.
 \subsubsection{Typical Implementation - per Node based}
 ```java
 class Node {
@@ -81,7 +83,9 @@ class Node {
 }
 ```
 
-### Depth First Traversal
+#### Graph Traversal
+
+##### Depth First Traversal
 A depth first traversal without labeling the visited node usually ends up in exponential time complexity. There will be
 many subproblems being reevaluated (which were visited in past). Thus, the time complexity is $O(2^{h+1} - 1)$ (as a
 full binary tree)
@@ -95,7 +99,7 @@ For a directed graph, the sum of the sizes of the adjacency lc-lists of all the 
 complexity of DFS is O(V) + O(E) = O(V + E). For an undirected graph, each edge will appear twice. Once in the adjacency
 lc-list of either end of the edge. So, the overall complexity will be $O(|V|) + O (2\cdot |E|) = O(|V + E|)$.
 
-#### Implementation Steps
+###### Implementation Steps
 
 dfs \@ref(glossary-dfs)
 
@@ -123,7 +127,7 @@ void dfs(int root) {
 }
 ```
 
-### Bread First Traversal
+##### Bread First Traversal
 For every single vertex in the graph, we will end up looking at its neighboring nodes only once (directed graph) or
 twice (undirected graph). The time complexity for both a directed and undirected graph is the sum of the vertices and
 their edges as represented by the graph in its adjacency lc-list representation, or $O(|V| + |E|)$
@@ -131,7 +135,7 @@ their edges as represented by the graph in its adjacency lc-list representation,
 The power of using breadth-first search to traverse through a graph is that it can easily tell us the shortest way to
 get from one node to another.
 
-#### Implementation Steps
+###### Implementation Steps
 
  bfs \@ref(glossary-bfs)
 
@@ -163,7 +167,8 @@ class Graph  {
             // If a adjacent has not been visited, then mark it
             // visited and enqueue it
             for(Integer adjNode : adj[node]) {
-                if (!visited[adjNode] && !queue.contain(adjNode)) {
+                if (!visited[adjNode]) {
+                    visited[adjNode] = true;
                     queue.offer(adjNode);
                 }
             }
@@ -172,11 +177,20 @@ class Graph  {
 }
 ```
 
-### Topological Sorting
-A traversal algorithm for \textbf{Directed Acyclic Graph (DAG)} is a linear ordering of vertices such that for every
-directed edge $[u,v]$, vertex u comes before v in the ordering.
+### Directed Acyclic Graph
 
-\subsubsection{By DFS}
+A **Directed Acyclic Graph (DAG)** is a directed graph that contains no cycles. This means:
+- All edges point in a direction (directed)
+- If you follow edges, you can never return to a node you've already visited
+- There exists at least one topological ordering of its vertices
+
+DAGs are commonly used to represent dependencies: task scheduling, build systems, course prerequisites, etc.
+
+#### Topological Sorting
+
+Topological sorting is a **linear ordering** of vertices in a DAG such that for every directed edge $[u,v]$, vertex u comes before v in the ordering. This ordering respects all dependency constraints in the graph.
+
+##### Depth First Traversal
 In DFS implementation of Topological Sort we focused on sink vertices, i.e, vertices with zero out-going edges, and then
 at last had to reverse the order in which we got the \textbf{sink vertices} (which we did by using a stack, which is a
 Last In First Out data structure). A DAG has to have at least one sink vertex which is the vertex which has no outbound
@@ -201,13 +215,12 @@ In topological sorting, we use a temporary stack. We don’t print the vertex im
 topological sorting for all its adjacent vertices, then push it to a stack. Finally, print contents of stack.  The
 final sequence is [5, 4, 2, 3, 1, 0]
 
-#### Implementation Steps
-
-    topological \@ref(glossary-topological), dfs \@ref(glossary-dfs)
+###### Implementation Steps
+topological \@ref(glossary-topological), dfs \@ref(glossary-dfs)
 
 \subsubsection{Typical Implementation - Java Code}
 ```java
-void helper(Integer v, Stack stack) {
+void helper(Integer v, boolean[] visited, Stack stack) {
     visited[v] = true;
 
     // Recur for all the vertices adjacent to this
@@ -247,7 +260,7 @@ List<Integer> topologicalSort(Graph graph) {
 }
 ```
 
-\subsubsection{By BFS}
+##### Bread First Traversal
 In BFS implementation of the Topological sort we do the opposite: We look for for edges with no inbound edges
 (\textbf{source vertex}). And consequently in BFS implementation we don’t have to reverse the order in which we get the
 vertices, since we get the vertices in order of the topological ordering. We use First-In-First-Out data structure
@@ -259,7 +272,7 @@ decrementing.
 
 ![in-degree, out-degree](img/graph_dag_degrees.png)
 
-#### Implementation Steps
+###### Implementation Steps
 
 topological \@ref(glossary-topological), bfs \@ref(glossary-bfs)
 
@@ -280,9 +293,9 @@ public List topological_sort_bfs(int[][] graph) {
     Queue<Integer> queue = new LinkedList<>();
 
     // initialize the queue with all the vertices with no inbound edges
-    for (Integer vertex = 0; index < numOfVertices; index++) {
-        if (indegree[vertex] == 0) {
-            queue.offer(vertex);
+    for (int i = 0; i < numOfVertices; i++) {
+        if (indegree[i] == 0) {
+            queue.offer(i);
         }
     }
 
@@ -290,9 +303,9 @@ public List topological_sort_bfs(int[][] graph) {
         Integer vertex = queue.poll();
         result.add(vertex);
 
-        // now disconnect vertex1 from the graph
+        // now disconnect vertex from the graph
         // and decrease the indegree of the other end of the edge by 1
-        for (Integer adjVertex : adj[i]) {
+        for (Integer adjVertex : adj[vertex]) {
             indegree[adjVertex]--;
             if (indegree[adjVertex] == 0) {
                 queue.offer(adjVertex);
