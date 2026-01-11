@@ -85,7 +85,7 @@ class Node {
 
 #### Graph Traversal
 
-##### Depth First Traversal
+##### Depth First Traversal {#undirected-graph-dfs}
 A depth first traversal without labeling the visited node usually ends up in exponential time complexity. There will be
 many subproblems being reevaluated (which were visited in past). Thus, the time complexity is $O(2^{h+1} - 1)$ (as a
 full binary tree)
@@ -127,7 +127,7 @@ void dfs(int root) {
 }
 ```
 
-##### Bread First Traversal
+##### Bread First Traversal {#undirected-graph-bfs}
 For every single vertex in the graph, we will end up looking at its neighboring nodes only once (directed graph) or
 twice (undirected graph). The time complexity for both a directed and undirected graph is the sum of the vertices and
 their edges as represented by the graph in its adjacency lc-list representation, or $O(|V| + |E|)$
@@ -190,7 +190,7 @@ DAGs are commonly used to represent dependencies: task scheduling, build systems
 
 Topological sorting is a **linear ordering** of vertices in a DAG such that for every directed edge $[u,v]$, vertex u comes before v in the ordering. This ordering respects all dependency constraints in the graph.
 
-##### Depth First Traversal
+##### Depth First Traversal {#dag-dfs}
 In DFS implementation of Topological Sort we focused on sink vertices, i.e, vertices with zero out-going edges, and then
 at last had to reverse the order in which we got the \textbf{sink vertices} (which we did by using a stack, which is a
 Last In First Out data structure). A DAG has to have at least one sink vertex which is the vertex which has no outbound
@@ -260,7 +260,7 @@ List<Integer> topologicalSort(Graph graph) {
 }
 ```
 
-##### Bread First Traversal
+##### Bread First Traversal {#dag-bfs}
 In BFS implementation of the Topological sort we do the opposite: We look for for edges with no inbound edges
 (\textbf{source vertex}). And consequently in BFS implementation we don’t have to reverse the order in which we get the
 vertices, since we get the vertices in order of the topological ordering. We use First-In-First-Out data structure

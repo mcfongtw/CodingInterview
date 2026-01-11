@@ -7,7 +7,7 @@
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/clone-graph/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), Graph
+- **Techniques**: [Depth First Search](#undirected-graph-dfs), [Breadth First Search](#undirected-graph-bfs), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), Graph
 
 ### Description
 
@@ -95,7 +95,7 @@ private Node clone(Node node, Map<Node, Node> map) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/course-schedule/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#glossary-topological), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Graph
+- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#glossary-topological), [Depth First Search](#dag-dfs), [Breadth First Search](#dag-bfs), Graph
 
 ### Description
 
@@ -150,29 +150,35 @@ This works because nodes in a cycle never reach indegree zero, preventing full t
 - **Time Complexity**: O(V + E)
 - **Space Complexity**: O(V + E) for adjacency list, indegrees, and queue
 
-#### Java Code
+#### Java Code - BFS
 
-```
+```java
 public boolean canFinish(int numCourses, int[][] prerequisites) {
     List<List<Integer>> graph = new ArrayList<>();
     int[] indegree = new int[numCourses];
+
     for (int i = 0; i < numCourses; i++) {
         graph.add(new ArrayList<>());
     }
+
+    // Build graph: prereq[1] -> prereq[0]
     for (int[] edge : prerequisites) {
         graph.get(edge[1]).add(edge[0]);
         indegree[edge[0]]++;
     }
+
     Queue<Integer> queue = new LinkedList<>();
     for (int i = 0; i < numCourses; i++) {
         if (indegree[i] == 0) {
             queue.offer(i);
         }
     }
+
     int visited = 0;
     while (!queue.isEmpty()) {
         int course = queue.poll();
         visited++;
+        
         for (int next : graph.get(course)) {
             if (--indegree[next] == 0) {
                 queue.offer(next);
@@ -182,6 +188,243 @@ public boolean canFinish(int numCourses, int[][] prerequisites) {
     return visited == numCourses;
 }
 ```
+
+### Solution - DFS with Color Marking
+
+#### Walkthrough
+
+Use DFS with a three-state color marking system to detect cycles:
+
+**State Definitions:**
+- **White (0)**: Node not yet visited
+- **Gray (1)**: Node is currently in the recursion stack (part of the current DFS path)
+- **Black (2)**: Node is fully processed (all descendants explored)
+
+**Algorithm:**
+
+1. Create a state array `state[numCourses]` initialized to 0 (white).
+2. Build the adjacency list: for each prerequisite `[a, b]`, add edge `b → a` (course `b` must be done before `a`).
+3. For each unvisited node (state = 0), start a DFS traversal.
+4. In DFS:
+   - If we encounter a **gray node**, a cycle exists (we're revisiting a node in the current path) → return false.
+   - If we encounter a **black node**, it's already safe → return true.
+   - Mark the current node as gray, recursively visit all neighbors, then mark as black.
+5. If all nodes can be traversed without encountering a gray node, no cycle exists → return true.
+
+**Why This Works:**
+A cycle exists if and only if we revisit a node while it's still on the current recursion path (gray state). Once a node finishes processing (black state), we know that subtree is acyclic.
+
+#### Analysis
+
+- **Time Complexity**: O(V + E) — each node is visited once and each edge is traversed once
+- **Space Complexity**: O(V + E) — adjacency list uses O(V + E) space; recursion stack uses O(V) in worst case
+
+#### Java Code - DFS with Color Marking
+
+```
+public boolean canFinish(int numCourses, int[][] prerequisites) {
+    List<List<Integer>> graph = new ArrayList<>();
+    int[] state = new int[numCourses]; // 0: white, 1: gray, 2: black
+
+    for (int i = 0; i < numCourses; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    // Build graph: prereq[1] -> prereq[0]
+    for (int[] prereq : prerequisites) {
+        graph.get(prereq[1]).add(prereq[0]);
+    }
+
+    // Check each unvisited node
+    for (int i = 0; i < numCourses; i++) {
+        if (state[i] == 0 && !dfs(graph, i, state)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+private boolean dfs(List<List<Integer>> graph, int node, int[] state) {
+    if (state[node] == 1) {
+        return false; // Gray node = cycle detected
+    }
+    if (state[node] == 2) {
+        return true;  // Black node = already safe
+    }
+
+    state[node] = 1; // Mark as gray (in current path)
+
+    for (int neighbor : graph.get(node)) {
+        if (!dfs(graph, neighbor, state)) {
+            return false;
+        }
+    }
+
+    state[node] = 2; // Mark as black (finished)
+    return true;
+}
+```
+
+### Solution - DFS with Recursion Stack
+
+#### Walkthrough
+
+Use DFS with an explicit `recursion stack` (a Set) to track nodes currently in the current recursion path. This is conceptually equivalent to the color marking approach but uses a Set instead of a state array.
+
+**Algorithm:**
+
+1. Build the adjacency list with edges `b → a` for each prerequisite `[a, b]`.
+2. Create a `visited` Set to track fully processed nodes and a `recursionStack` Set to track nodes currently in the recursion path.
+3. For each unvisited node, start a DFS traversal.
+4. In DFS:
+   - If the node is in `recursionStack`, a cycle exists (we're revisiting a node in the current path) → return false.
+   - If the node is in `visited`, it's already safe → return true.
+   - Add the node to `recursionStack`, recursively visit all neighbors, then remove from `recursionStack` and add to `visited`.
+5. If all nodes complete without cycles, return true.
+
+**Key Difference from Color Marking:**
+Instead of using state values (0/1/2), we maintain two Sets:
+- `recursionStack`: Nodes currently on the recursion path (equivalent to "gray")
+- `visited`: Nodes fully processed (equivalent to "black")
+
+#### Analysis
+
+- **Time Complexity**: O(V + E)
+- **Space Complexity**: O(V + E) — adjacency list plus two Sets, recursion stack uses O(V)
+
+#### Java Code - DFS with Recursion Stack
+
+```java
+public boolean canFinish(int numCourses, int[][] prerequisites) {
+    List<List<Integer>> graph = new ArrayList<>();
+    Set<Integer> visited = new HashSet<>();
+    Set<Integer> recursionStack = new HashSet<>();
+
+    for (int i = 0; i < numCourses; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    // Build graph: prereq[1] -> prereq[0]
+    for (int[] prereq : prerequisites) {
+        graph.get(prereq[1]).add(prereq[0]);
+    }
+
+    // Check each unvisited node
+    for (int i = 0; i < numCourses; i++) {
+        if (!visited.contains(i) && !dfs(graph, i, visited, recursionStack)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+private boolean dfs(List<List<Integer>> graph, int node, Set<Integer> visited, Set<Integer> recursionStack) {
+    if (recursionStack.contains(node)) {
+        return false; // Cycle detected: node is in current path
+    }
+    if (visited.contains(node)) {
+        return true;  // Node already safe
+    }
+
+    recursionStack.add(node); // Add to current path
+
+    for (int neighbor : graph.get(node)) {
+        if (!dfs(graph, neighbor, visited, recursionStack)) {
+            return false;
+        }
+    }
+
+    recursionStack.remove(node); // Remove from current path
+    visited.add(node);           // Mark as fully processed
+    return true;
+}
+```
+
+### Solution - DFS with Post-order Visiting
+
+#### Walkthrough
+
+Use DFS with post-order visiting: mark a node as "safe" only **after** processing all its descendants. This approach uses a `visiting` Set to detect cycles and a `visited` Set to mark completed nodes.
+
+**Algorithm:**
+
+1. Build the adjacency list with edges `b → a`.
+2. Create a `visiting` Set to track nodes currently being processed and a `visited` Set for fully processed nodes.
+3. For each unvisited node, start a DFS traversal.
+4. In DFS:
+   - If the node is in `visiting`, a cycle exists → return false.
+   - If the node is in `visited`, it's already safe → return true.
+   - Add the node to `visiting`, recursively visit all neighbors, then remove from `visiting` and add to `visited`.
+5. Post-order means nodes are marked "visited" only after all their descendants are safely processed.
+
+**When This is Useful:**
+This approach is conceptually similar to the recursion stack method but emphasizes the post-order traversal pattern, which is useful when you need to process nodes *after* their dependencies are resolved.
+
+#### Analysis
+
+- **Time Complexity**: O(V + E)
+- **Space Complexity**: O(V + E) — adjacency list plus two Sets, recursion stack uses O(V)
+
+#### Java Code - DFS with Post-order
+
+```java
+public boolean canFinish(int numCourses, int[][] prerequisites) {
+    List<List<Integer>> graph = new ArrayList<>();
+    Set<Integer> visiting = new HashSet<>();
+    Set<Integer> visited = new HashSet<>();
+
+    for (int i = 0; i < numCourses; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    // Build graph: prereq[1] -> prereq[0]
+    for (int[] prereq : prerequisites) {
+        graph.get(prereq[1]).add(prereq[0]);
+    }
+
+    // Check each unvisited node
+    for (int i = 0; i < numCourses; i++) {
+        if (!visited.contains(i) && !dfs(graph, i, visiting, visited)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+private boolean dfs(List<List<Integer>> graph, int node, Set<Integer> visiting, Set<Integer> visited) {
+    if (visiting.contains(node)) {
+        return false; // Cycle detected during traversal
+    }
+    if (visited.contains(node)) {
+        return true;  // Already processed in post-order
+    }
+
+    visiting.add(node); // Mark as currently visiting
+
+    for (int neighbor : graph.get(node)) {
+        if (!dfs(graph, neighbor, visiting, visited)) {
+            return false;
+        }
+    }
+
+    visiting.remove(node);  // Done with current path
+    visited.add(node);      // Post-order: mark as visited after processing descendants
+    return true;
+}
+```
+
+**Comparison of All Three DFS Approaches:**
+
+| Approach | State Tracking | Cycle Detection | Space |
+|----------|---|---|---|
+| Color Marking | `int[] state` (0/1/2) | Check for gray (state=1) | O(V) array |
+| Recursion Stack | Two Sets | Check recursionStack Set | O(V) Sets |
+| Post-order | Two Sets | Check visiting Set | O(V) Sets |
+
+All three are equivalent in terms of time/space complexity and correctness. Choose based on code clarity preference.
 
 
 ## Course Schedule II {#lc-course-schedule-ii}
@@ -193,7 +436,7 @@ public boolean canFinish(int numCourses, int[][] prerequisites) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/course-schedule-ii/
 - **Tags**: NeetCode 150
-- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#glossary-topological), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Graph
+- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#glossary-topological), [Breadth First Search](#dag-bfs), Graph
 
 ### Description
 
@@ -281,7 +524,7 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 - **Tags**: NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), [Union Find](glossary-of-algorithm.html#glossary-union-find), Graph
+- **Techniques**: [Depth First Search](#undirected-graph-dfs), [Breadth First Search](#undirected-graph-bfs), [Union Find](glossary-of-algorithm.html#glossary-union-find), Graph
 
 ### Description
 
