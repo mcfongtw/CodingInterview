@@ -177,6 +177,153 @@ class Graph  {
 }
 ```
 
+#### Graph Cycle Detection in Undirected Graph {#undirected-graph-cycle-detection}
+
+In an undirected graph, a cycle exists if during traversal we encounter a visited node that is **not the parent** of the current node. Since edges are bidirectional, we must track the parent to avoid false positives.
+
+##### Approach 1: DFS with Parent Tracking
+
+**Key Insight:**
+
+When traversing from node A to node B in an undirected graph, B will list A as a neighbor. Without parent tracking, the algorithm would incorrectly detect a cycle when seeing A from B. By tracking the parent (the node we came from), we can distinguish between:
+- **Parent edge**: The edge we just traversed (not a cycle)
+- **Back edge**: An edge to a visited node that's not the parent (indicates a cycle)
+
+**Algorithm:**
+
+1. Build adjacency list with edges in both directions
+2. For each unvisited node, start DFS
+3. In DFS, for each neighbor:
+   - Skip if it's the parent
+   - If visited and not parent → cycle detected
+   - Otherwise, recursively visit with current node as parent
+
+**Example:**
+
+For graph with cycle:
+```
+0 - 1 - 2
+    |   |
+    4 - 3
+```
+
+DFS from node 0:
+- Visit 0 → Visit 1 (parent: 0)
+  - Check 0: skip (parent)
+  - Visit 2 (parent: 1)
+    - Check 1: skip (parent)
+    - Visit 3 (parent: 2)
+      - Check 2: skip (parent)
+      - Visit 4 (parent: 3)
+        - Check 3: skip (parent)
+        - Check 1: **visited and not parent** → **Cycle detected!**
+
+**Time Complexity**: O(V + E)
+
+**Java Implementation:**
+```java
+boolean hasCycle(List<List<Integer>> graph, int n) {
+    boolean[] visited = new boolean[n];
+
+    // Check all components
+    for (int i = 0; i < n; i++) {
+        if (!visited[i]) {
+            if (dfs(i, -1, graph, visited)) {
+                return true; // Cycle found
+            }
+        }
+    }
+    return false;
+}
+
+boolean dfs(int node, int parent, List<List<Integer>> graph, boolean[] visited) {
+    visited[node] = true;
+
+    for (int neighbor : graph.get(node)) {
+        if (neighbor == parent) continue; // Skip parent
+
+        if (visited[neighbor]) return true; // Cycle found
+
+        if (dfs(neighbor, node, graph, visited)) {
+            return true;
+        }
+    }
+    return false;
+}
+```
+
+##### Approach 2: Union-Find (Disjoint Set)
+
+**Key Insight:**
+
+Process edges one by one. For each edge connecting two nodes:
+- If they're already in the same component → adding this edge creates a cycle
+- Otherwise, union them into one component
+
+**Algorithm:**
+
+1. Initialize Union-Find with each node as its own parent
+2. For each edge `[u, v]`:
+   - Find root of `u` and root of `v`
+   - If same root → cycle detected
+   - Otherwise, union the two sets
+
+**Example:**
+
+For edges `[[0,1], [1,2], [2,3], [3,4], [4,1]]`:
+
+```
+Process [0,1]: Union(0,1) ✓ Parent: [1,1,2,3,4]
+Process [1,2]: Union(1,2) ✓ Parent: [1,2,2,3,4]
+Process [2,3]: Union(2,3) ✓ Parent: [1,2,3,3,4]
+Process [3,4]: Union(3,4) ✓ Parent: [1,2,3,4,4]
+Process [4,1]: Find(4)=4, Find(1)=2
+               Union(4,2) - wait, need to trace...
+               Actually: Find(4)→3→2, Find(1)→2
+               Same root! → Cycle detected!
+```
+
+**Time Complexity**: O(E · α(V)) ≈ O(E) where α is the inverse Ackermann function
+
+**Java Implementation:**
+```java
+boolean hasCycle(int n, int[][] edges) {
+    UnionFind uf = new UnionFind(n);
+
+    for (int[] edge : edges) {
+        if (!uf.union(edge[0], edge[1])) {
+            return true; // Cycle detected
+        }
+    }
+    return false;
+}
+
+class UnionFind {
+    int[] parent, rank;
+
+    UnionFind(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;
+    }
+
+    int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    boolean union(int a, int b) {
+        int rootA = find(a), rootB = find(b);
+        if (rootA == rootB) return false; // Same set = cycle
+
+        if (rank[rootA] < rank[rootB]) parent[rootA] = rootB;
+        else if (rank[rootB] < rank[rootA]) parent[rootB] = rootA;
+        else { parent[rootB] = rootA; rank[rootA]++; }
+        return true;
+    }
+}
+```
+
 ### Directed Acyclic Graph
 
 A **Directed Acyclic Graph (DAG)** is a directed graph that contains no cycles. This means:
@@ -321,3 +468,246 @@ public List topological_sort_bfs(int[][] graph) {
 }
 ```
 
+#### Graph Cycle Detection in DAG {#dag-cycle-detection}
+
+In a directed graph, cycle detection is more complex because we must distinguish between:
+- **Cross edges**: Edges to already-visited nodes in different branches (not a cycle)
+- **Back edges**: Edges to nodes currently in the recursion stack (indicates a cycle)
+
+##### Approach 1: DFS with Three-State Coloring
+
+**Key Insight:**
+
+Use three states to track node status:
+- **White (0)**: Unvisited node
+- **Gray (1)**: Currently in recursion stack (visiting)
+- **Black (2)**: Fully processed (visited)
+
+If we encounter a **gray** node during DFS, we've found a back edge → cycle detected.
+
+**Algorithm:**
+
+1. Initialize all nodes as white (0)
+2. For each white node, start DFS
+3. In DFS:
+   - If node is gray → back edge → cycle detected
+   - If node is black → already processed → return safe
+   - Mark node as gray (in current path)
+   - Recursively visit all neighbors
+   - Mark node as black (finished processing)
+
+**Example:**
+
+For graph with cycle:
+```
+0 → 1 → 2
+↑       ↓
+└───────3
+```
+
+DFS from node 0:
+```
+State: [W, W, W, W]
+
+Visit 0: mark gray
+State: [G, W, W, W]
+  Visit 1: mark gray
+  State: [G, G, W, W]
+    Visit 2: mark gray
+    State: [G, G, G, W]
+      Visit 3: mark gray
+      State: [G, G, G, G]
+        Check 0: GRAY! → Cycle detected!
+```
+
+**Time Complexity**: O(V + E)
+
+**Java Implementation:**
+```java
+boolean hasCycle(List<List<Integer>> graph, int n) {
+    int[] state = new int[n]; // 0: white, 1: gray, 2: black
+
+    for (int i = 0; i < n; i++) {
+        if (state[i] == 0 && dfs(i, graph, state)) {
+            return true; // Cycle found
+        }
+    }
+    return false;
+}
+
+boolean dfs(int node, List<List<Integer>> graph, int[] state) {
+    if (state[node] == 1) return true;  // Gray = back edge = cycle
+    if (state[node] == 2) return false; // Black = already safe
+
+    state[node] = 1; // Mark as gray (visiting)
+
+    for (int neighbor : graph.get(node)) {
+        if (dfs(neighbor, graph, state)) {
+            return true;
+        }
+    }
+
+    state[node] = 2; // Mark as black (visited)
+    return false;
+}
+```
+
+##### Approach 2: DFS with Recursion Stack
+
+**Key Insight:**
+
+Use two sets instead of three states:
+- `visited`: Nodes that are fully processed
+- `recursionStack`: Nodes currently in the recursion path
+
+If we encounter a node in `recursionStack`, we've found a cycle.
+
+**Algorithm:**
+
+1. Create `visited` and `recursionStack` sets
+2. For each unvisited node, start DFS
+3. In DFS:
+   - If node in `recursionStack` → cycle detected
+   - If node in `visited` → already safe
+   - Add node to `recursionStack`
+   - Recursively visit all neighbors
+   - Remove from `recursionStack`, add to `visited`
+
+**Example:**
+
+Same graph as above:
+```
+Visit 0: recursionStack={0}
+  Visit 1: recursionStack={0,1}
+    Visit 2: recursionStack={0,1,2}
+      Visit 3: recursionStack={0,1,2,3}
+        Check 0: IN RECURSION STACK! → Cycle detected!
+```
+
+**Time Complexity**: O(V + E)
+
+**Java Implementation:**
+```java
+boolean hasCycle(List<List<Integer>> graph, int n) {
+    Set<Integer> visited = new HashSet<>();
+    Set<Integer> recursionStack = new HashSet<>();
+
+    for (int i = 0; i < n; i++) {
+        if (!visited.contains(i) && dfs(i, graph, visited, recursionStack)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+boolean dfs(int node, List<List<Integer>> graph, Set<Integer> visited, Set<Integer> recursionStack) {
+    if (recursionStack.contains(node)) return true;  // Cycle found
+    if (visited.contains(node)) return false;        // Already safe
+
+    recursionStack.add(node); // Add to current path
+
+    for (int neighbor : graph.get(node)) {
+        if (dfs(neighbor, graph, visited, recursionStack)) {
+            return true;
+        }
+    }
+
+    recursionStack.remove(node); // Remove from current path
+    visited.add(node);           // Mark as fully processed
+    return false;
+}
+```
+
+##### Approach 3: Kahn's Algorithm (BFS Topological Sort)
+
+**Key Insight:**
+
+Use BFS with indegree tracking. In a DAG, we can process all nodes in topological order. If we can't process all nodes, a cycle exists (nodes in a cycle never reach indegree 0).
+
+**Algorithm:**
+
+1. Calculate indegree for all nodes
+2. Enqueue all zero-indegree nodes
+3. While queue not empty:
+   - Dequeue node and increment processed count
+   - Decrease indegree of neighbors
+   - Enqueue neighbors that reach zero indegree
+4. If processed count $\\ne$ total nodes → cycle exists
+
+**Example:**
+
+For graph with cycle:
+```
+0 → 1 → 2
+↑       ↓
+└───────3
+```
+
+Indegrees: `[1, 1, 1, 1]` (all nodes have indegree 1)
+
+No zero-indegree nodes to start! Queue remains empty → processed = 0 → Cycle detected!
+
+For acyclic graph:
+```
+0 → 1 → 2
+    ↓
+    3
+```
+
+Indegrees: `[0, 1, 1, 1]`
+- Start: queue = [0]
+- Process 0: queue = [1], processed = 1
+- Process 1: queue = [2, 3], processed = 2
+- Process 2: queue = [3], processed = 3
+- Process 3: queue = [], processed = 4
+- All nodes processed → No cycle!
+
+**Time Complexity**: O(V + E)
+
+**Java Implementation:**
+```java
+boolean hasCycle(List<List<Integer>> graph, int n) {
+    int[] indegree = new int[n];
+
+    // Calculate indegrees
+    for (int i = 0; i < n; i++) {
+        for (int neighbor : graph.get(i)) {
+            indegree[neighbor]++;
+        }
+    }
+
+    Queue<Integer> queue = new LinkedList<>();
+    for (int i = 0; i < n; i++) {
+        if (indegree[i] == 0) {
+            queue.offer(i);
+        }
+    }
+
+    int processed = 0;
+    while (!queue.isEmpty()) {
+        int node = queue.poll();
+        processed++;
+
+        for (int neighbor : graph.get(node)) {
+            if (--indegree[neighbor] == 0) {
+                queue.offer(neighbor);
+            }
+        }
+    }
+
+    return processed != n; // Cycle exists if not all nodes processed
+}
+```
+
+**Comparison of DAG Cycle Detection Approaches:**
+
+| Approach | State Tracking | Cycle Detection | Space | Best For |
+|----------|---------------|-----------------|-------|----------|
+| 3-State DFS | `int[] state` | Gray node found | O(V) | Compact state representation |
+| RecStack DFS | Two Sets | Node in recursion stack | O(V) | Clear separation of states |
+| Kahn's BFS | Indegree array | Not all nodes processed | O(V+E) | Need topological sort anyway |
+
+All three approaches have O(V + E) time complexity and are equally correct. Choose based on:
+- **3-State DFS**: Most memory-efficient (single array)
+- **RecStack DFS**: Most intuitive for understanding recursion paths
+- **Kahn's BFS**: Produces topological order as a bonus

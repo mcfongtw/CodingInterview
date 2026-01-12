@@ -749,7 +749,7 @@ private void bfs(int start, List<List<Integer>> graph, boolean[] visited) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/graph-valid-tree/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Union Find](glossary-of-algorithm.html#glossary-union-find), Graph
+- **Techniques**: [Cycle Detection in Undirected Graph](#undirected-graph-cycle-detection), [Depth First Search](#undirected-graph-dfs), [Breadth First Search](#undirected-graph-bfs), Graph
 
 ### Description
 
@@ -791,13 +791,73 @@ Explanation: Two separate components, not a single connected tree
 
 #### Walkthrough
 
-Two conditions for a tree:
-1. Exactly `n - 1` edges (otherwise impossible to connect or guaranteed a cycle).
-2. No cycles while connecting all nodes.
+Union-Find (Disjoint Set Union) provides an elegant way to detect cycles by tracking connected components.
 
-Use Union-Find to detect cycles while merging edges:
-- If an edge connects two nodes already in the same set, a cycle exists → not a tree.
-- After processing all edges, return true (edge count already checked) — connectivity follows from having `n - 1` edges without cycles.
+**Tree Properties:**
+1. Exactly `n - 1` edges (necessary but not sufficient)
+2. No cycles (all nodes connected in a single component)
+
+**Key Insight:**
+
+In Union-Find, each node starts in its own set. When we union two nodes:
+- If they're already in the same set → adding this edge creates a cycle
+- If they're in different sets → merge them into one component
+
+For a valid tree with `n` nodes and `n - 1` edges:
+- All edges should successfully union different components
+- After processing all edges, we'll have exactly 1 connected component
+
+**Algorithm:**
+
+1. **Early termination**: Check if `edges.length == n - 1`. A tree must have exactly `n - 1` edges.
+
+2. **Initialize Union-Find**: Each node starts as its own parent (isolated component).
+
+3. **Process each edge**: For each edge `[u, v]`:
+   - Find the root of `u` and root of `v`
+   - If they share the same root → **cycle detected** → return false
+   - Otherwise, union them (merge components)
+
+4. **Success**: If all edges successfully unite different components, we have a valid tree.
+
+**Why This Works:**
+
+- **Cycle detection**: If an edge connects two nodes already in the same component, it must create a cycle
+- **Connectivity guarantee**: With `n - 1` edges and no cycles, the graph must be connected (can't have isolated components)
+- **Efficiency**: Path compression and union by rank make operations nearly O(1)
+
+**Example Trace: `n = 4, edges = [[1,0],[1,2],[2,3]]`**
+
+Initial state: Each node is its own parent
+```
+Parent: [0, 1, 2, 3]
+Rank:   [0, 0, 0, 0]
+```
+
+Process edge `[1, 0]`:
+- Find(1) = 1, Find(0) = 0 → Different sets ✓
+- Union(1, 0): Set parent[0] = 1
+- Parent: [1, 1, 2, 3]
+
+Process edge `[1, 2]`:
+- Find(1) = 1, Find(2) = 2 → Different sets ✓
+- Union(1, 2): Set parent[2] = 1
+- Parent: [1, 1, 1, 3]
+
+Process edge `[2, 3]`:
+- Find(2) = 1 (path compression), Find(3) = 3 → Different sets ✓
+- Union(1, 3): Set parent[3] = 1
+- Parent: [1, 1, 1, 1]
+
+All edges processed without cycles → Return true ✓
+
+**Example with Cycle: `n = 4, edges = [[0,1],[1,2],[2,3],[2,0]]`**
+
+Process edges `[0,1]`, `[1,2]`, `[2,3]` → Parent: [1, 1, 1, 1]
+
+Process edge `[2, 0]`:
+- Find(2) = 1, Find(0) = 1 → **Same root!** → Cycle detected
+- Return false ✓
 
 #### Analysis
 
@@ -839,5 +899,305 @@ class UnionFind {
         else { parent[rootB] = rootA; rank[rootA]++; }
         return true;
     }
+}
+```
+
+### Solution - DFS with Parent Tracking
+
+#### Walkthrough
+
+Use DFS to verify both tree properties: no cycles and full connectivity.
+
+**Key Insight for Undirected Graphs:**
+
+In an undirected graph, edges exist in both directions. When traversing from node A to node B, node B will list A as a neighbor. Without parent tracking, the algorithm would incorrectly detect a cycle when it sees A from B.
+
+**Algorithm:**
+
+1. **Early termination**: Check if `edges.length == n - 1`. A tree with `n` nodes must have exactly `n - 1` edges. If not, return false immediately.
+
+2. **Build adjacency list**: For each edge `[u, v]`, add both `v` to `u`'s neighbors and `u` to `v`'s neighbors (undirected graph).
+
+3. **DFS with parent tracking**: Start DFS from node 0 with parent `-1`. For each neighbor:
+   - **Skip parent**: If neighbor equals parent, continue (this is the edge we came from)
+   - **Detect cycle**: If neighbor is already visited and not the parent, a cycle exists → return false
+   - **Recurse**: Visit unvisited neighbors, passing current node as parent
+
+4. **Verify connectivity**: After DFS completes, check if all nodes were visited. If any node remains unvisited, the graph is disconnected → return false.
+
+**Why This Works:**
+
+- **Cycle detection**: A cycle exists if we encounter a visited node that isn't our parent
+- **Connectivity**: If the graph is connected with no cycles and `n - 1` edges, all nodes will be visited in a single DFS traversal
+- **Parent tracking**: Prevents false cycle detection in undirected graphs
+
+**Example Trace: `n = 4, edges = [[1,0],[1,2],[2,3]]`**
+
+Build graph:
+```
+0 ↔ 1 ↔ 2 ↔ 3
+```
+
+DFS from node 0:
+- Visit 0 (parent: -1) → neighbors: [1]
+  - Visit 1 (parent: 0) → neighbors: [0, 2]
+    - Skip 0 (parent)
+    - Visit 2 (parent: 1) → neighbors: [1, 3]
+      - Skip 1 (parent)
+      - Visit 3 (parent: 2) → neighbors: [2]
+        - Skip 2 (parent)
+        - Return true
+      - Return true
+    - Return true
+  - Return true
+
+All nodes visited: [true, true, true, true] → Return true ✓
+
+**Example with Cycle: `n = 4, edges = [[0,1],[1,2],[2,3],[2,0]]`**
+
+Build graph:
+```
+0 ↔ 1 ↔ 2 ↔ 3
+    ↖___↗
+```
+
+DFS from node 0:
+- Visit 0 (parent: -1) → neighbors: [1, 2]
+  - Visit 1 (parent: 0) → neighbors: [0, 2]
+    - Skip 0 (parent)
+    - Visit 2 (parent: 1) → neighbors: [1, 3, 0]
+      - Skip 1 (parent)
+      - Visit 3 (parent: 2) → return true
+      - Check 0: **visited and not parent** → Cycle detected! → Return false
+
+Return false ✓
+
+#### Analysis
+
+- **Time Complexity**: O(V + E)
+  - Building adjacency list: O(E)
+  - DFS traversal: O(V + E) — visit each node once, check each edge twice (undirected)
+  - Connectivity verification: O(V)
+
+- **Space Complexity**: O(V + E)
+  - Adjacency list: O(V + E)
+  - Visited array: O(V)
+  - Recursion stack: O(V) in worst case (linear tree)
+
+#### Java Code
+
+```java
+public boolean validTree(int n, int[][] edges) {
+    List<List<Integer>> graph = new ArrayList<>();
+
+    // A tree needs to have n-1 edges with n nodes
+    if (edges.length != n - 1) {
+        return false;
+    }
+
+    // Initialize adjacency list
+    for (int i = 0; i < n; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    // Build undirected graph: add edges in both directions
+    for (int[] edge : edges) {
+        graph.get(edge[0]).add(edge[1]);
+        graph.get(edge[1]).add(edge[0]);
+    }
+
+    boolean[] visited = new boolean[n];
+
+    // Check for cycles using DFS from node 0
+    if (!dfs(-1, 0, graph, visited)) {
+        return false;
+    }
+
+    // Verify all nodes are connected
+    for (boolean v : visited) {
+        if (!v) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+private boolean dfs(int parent, int node, List<List<Integer>> graph, boolean[] visited) {
+    visited[node] = true;
+
+    for (int child : graph.get(node)) {
+        // Skip the parent to avoid false cycle detection
+        if (child == parent) {
+            continue;
+        }
+
+        // If already visited and not parent, we found a cycle
+        if (visited[child]) {
+            return false;
+        }
+
+        // Visit all child nodes recursively
+        if (!dfs(node, child, graph, visited)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+```
+
+### Solution - BFS with Parent Tracking
+
+#### Walkthrough
+
+Use BFS (level-order traversal) to verify tree properties: no cycles and full connectivity. This approach is similar to DFS but uses an explicit queue instead of recursion.
+
+**Key Advantage of BFS:**
+
+BFS explores nodes level-by-level, which can be more intuitive for visualizing graph traversal and avoids potential stack overflow issues with very deep trees.
+
+**Algorithm:**
+
+1. **Early termination**: Check if `edges.length == n - 1`. A tree must have exactly `n - 1` edges.
+
+2. **Build adjacency list**: For each edge `[u, v]`, add both directions (undirected graph).
+
+3. **BFS with parent tracking**:
+   - Use a queue to store `(node, parent)` pairs
+   - Start from node 0 with parent `-1`
+   - For each node dequeued:
+     - Mark it visited
+     - For each neighbor:
+       - **Skip parent** (the edge we came from)
+       - **Detect cycle**: If neighbor is visited and not parent → cycle exists
+       - **Enqueue**: Add unvisited neighbors to queue with current node as parent
+
+4. **Verify connectivity**: After BFS completes, check if all nodes were visited.
+
+**Why This Works:**
+
+- **Level-by-level exploration**: BFS explores all neighbors at distance `k` before exploring distance `k+1`
+- **Cycle detection**: Same logic as DFS—if we encounter a visited node that isn't our parent, a cycle exists
+- **Connectivity**: All nodes reachable from node 0 will be visited; if any remain unvisited, graph is disconnected
+
+**Example Trace: `n = 4, edges = [[1,0],[1,2],[2,3]]`**
+
+Build graph:
+```
+0 ↔ 1 ↔ 2 ↔ 3
+```
+
+BFS from node 0:
+
+**Level 0:**
+- Queue: [(0, -1)]
+- Dequeue (0, -1): visited[0] = true
+  - Neighbor 1: not visited → enqueue (1, 0)
+- Queue: [(1, 0)]
+
+**Level 1:**
+- Dequeue (1, 0): visited[1] = true
+  - Neighbor 0: skip (parent)
+  - Neighbor 2: not visited → enqueue (2, 1)
+- Queue: [(2, 1)]
+
+**Level 2:**
+- Dequeue (2, 1): visited[2] = true
+  - Neighbor 1: skip (parent)
+  - Neighbor 3: not visited → enqueue (3, 2)
+- Queue: [(3, 2)]
+
+**Level 3:**
+- Dequeue (3, 2): visited[3] = true
+  - Neighbor 2: skip (parent)
+- Queue: []
+
+All nodes visited: [true, true, true, true] → Return true ✓
+
+**Example with Cycle: `n = 4, edges = [[0,1],[1,2],[2,3],[2,0]]`**
+
+Build graph:
+```
+0 ↔ 1 ↔ 2 ↔ 3
+    ↖___↗
+```
+
+BFS from node 0:
+- Dequeue (0, -1): visited[0] = true → enqueue (1, 0), (2, 0)
+- Dequeue (1, 0): visited[1] = true
+  - Neighbor 0: skip (parent)
+  - Neighbor 2: **already visited and not parent** → Cycle detected!
+- Return false ✓
+
+#### Analysis
+
+- **Time Complexity**: O(V + E)
+  - Building adjacency list: O(E)
+  - BFS traversal: O(V + E) — visit each node once, check each edge twice (undirected)
+  - Connectivity verification: O(V)
+
+- **Space Complexity**: O(V + E)
+  - Adjacency list: O(V + E)
+  - Visited array: O(V)
+  - Queue: O(V) in worst case (all nodes at same level)
+
+#### Java Code
+
+```java
+public boolean validTree(int n, int[][] edges) {
+    // A tree needs to have n-1 edges with n nodes
+    if (edges.length != n - 1) {
+        return false;
+    }
+
+    // Build adjacency list
+    List<List<Integer>> graph = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    // Add edges in both directions (undirected graph)
+    for (int[] edge : edges) {
+        graph.get(edge[0]).add(edge[1]);
+        graph.get(edge[1]).add(edge[0]);
+    }
+
+    // BFS with parent tracking
+    boolean[] visited = new boolean[n];
+    Queue<int[]> queue = new LinkedList<>();
+    queue.offer(new int[]{0, -1}); // {node, parent}
+
+    while (!queue.isEmpty()) {
+        int[] curr = queue.poll();
+        int node = curr[0];
+        int parent = curr[1];
+
+        visited[node] = true;
+
+        for (int neighbor : graph.get(node)) {
+            // Skip the parent to avoid false cycle detection
+            if (neighbor == parent) {
+                continue;
+            }
+
+            // If already visited and not parent, we found a cycle
+            if (visited[neighbor]) {
+                return false;
+            }
+
+            // Add unvisited neighbor to queue
+            queue.offer(new int[]{neighbor, node});
+        }
+    }
+
+    // Verify all nodes are connected
+    for (boolean v : visited) {
+        if (!v) {
+            return false;
+        }
+    }
+
+    return true;
 }
 ```
