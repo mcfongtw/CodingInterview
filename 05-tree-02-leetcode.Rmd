@@ -952,6 +952,16 @@ Return the minimum depth from root to the nearest leaf.
 
 ### Solution - DFS
 
+#### Walkthrough
+
+Return 0 for a null node. If one child is null, the minimum depth must go through the other child. Otherwise, take `1 + min(leftDepth, rightDepth)`.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(h)
+
+#### Code
 ```
 public int minDepth(TreeNode root) {
     if (root == null) {
@@ -1098,6 +1108,16 @@ Connect each node's `next` pointer to its right neighbor on the same level in a 
 
 ### Solution - O(1) Level Traversal
 
+#### Walkthrough
+
+Use the `next` pointers to traverse each level without a queue. For each node, connect `left -> right`, and if a `next` neighbor exists, connect `right -> neighbor.left`. Then advance to the leftmost node of the next level.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Code
 ```
 public Node connect(Node root) {
     if (root == null) {
@@ -1276,6 +1296,16 @@ Flip the tree so that every right child becomes a left sibling.
 
 ### Solution - Recursive Rotation
 
+#### Walkthrough
+
+Recurse down the left spine to find the new root. On the way back, rotate pointers: set the left child's left pointer to the current right child, and the left child's right pointer to the current node. Null out the original children to avoid cycles.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(h)
+
+#### Code
 ```
 public TreeNode upsideDownBinaryTree(TreeNode root) {
     if (root == null || root.left == null) {
@@ -1308,7 +1338,16 @@ Count subtrees where every node has the same value.
 
 ### Solution - DFS
 
-Traverse bottom-up. A node is univalue if both children are univalue and match the current value.
+#### Walkthrough
+
+Traverse bottom-up and return whether each subtree is univalue. A node is univalue if both children are univalue and (when present) match the current node's value. Count each node that satisfies the condition.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(h)
+
+#### Code
 
 ```
 public int countUnivalSubtrees(TreeNode root) {
@@ -1402,6 +1441,16 @@ Find the length of the longest path where consecutive nodes differ by +1.
 
 ### Solution - DFS Tracking
 
+#### Walkthrough
+
+DFS down the tree while carrying the current consecutive length and the parent value. If the current node extends the sequence (`node.val == parent.val + 1`), increment the length; otherwise reset to 1. Track the maximum over all paths.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(h)
+
+#### Code
 ```
 public int longestConsecutive(TreeNode root) {
     return dfs(root, null, 0);
@@ -1440,7 +1489,16 @@ Collect nodes layer by layer from leaves upward.
 
 ### Solution - Height DFS
 
-Compute the height of each node (distance from leaf). Use height as index to append values to the result list.
+#### Walkthrough
+
+Compute each node's height measured from the nearest leaf. Leaves have height 0, and a node's height is `1 + max(left, right)`. Use the height as an index into the result list to group nodes by removal round.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(h)
+
+#### Code
 
 ```
 public List<List<Integer>> findLeaves(TreeNode root) {
@@ -1705,7 +1763,16 @@ Return the length of the longest path between any two nodes.
 
 ### Solution - Depth Helper
 
-Use DFS to compute depth of each subtree and track the maximum `leftDepth + rightDepth`.
+#### Walkthrough
+
+Use DFS to return the depth of each subtree. At every node, update the diameter with `leftDepth + rightDepth` and return `1 + max(leftDepth, rightDepth)` to the parent.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(h)
+
+#### Code
 
 ```
 public int diameterOfBinaryTree(TreeNode root) {

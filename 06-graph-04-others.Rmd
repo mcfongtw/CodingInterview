@@ -13,7 +13,16 @@ Given a binary matrix, for every cell compute the distance to the nearest cell c
 
 ### Solution - Multi-source BFS
 
-Enqueue all cells containing 1 with distance 0 and run BFS to fill distances for zeros.
+#### Walkthrough
+
+Enqueue all cells containing 1 with distance 0 and run BFS to fill distances for zeros. Each expansion relaxes the first time a cell is reached, guaranteeing the shortest distance.
+
+#### Analysis
+
+- **Time Complexity**: O(m * n)
+- **Space Complexity**: O(m * n)
+
+#### Code
 
 ```
 public int[][] nearestOne(int[][] mat) {
@@ -62,7 +71,16 @@ Serialize an undirected graph into a string and reconstruct it back.
 
 ### Solution - BFS
 
-Traverse the graph with BFS, recording each node and its neighbors. Use a visited set to avoid cycles. For deserialization, parse each line and rebuild adjacency lc-lists.
+#### Walkthrough
+
+Traverse the graph with BFS, recording each node and its neighbors. Use a visited set to avoid cycles. For deserialization, parse each line and rebuild adjacency lists.
+
+#### Analysis
+
+- **Time Complexity**: O(V + E)
+- **Space Complexity**: O(V + E)
+
+#### Code
 
 ```
 public String serialize(Node node) {
@@ -89,4 +107,3 @@ public String serialize(Node node) {
     return sb.toString();
 }
 ```
-
