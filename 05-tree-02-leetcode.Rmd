@@ -236,7 +236,7 @@ Perform level-order traversal. Track a boolean indicating whether to append valu
 3. If `leftToRight`, append; otherwise insert at front or use reverse list.
 4. Toggle `leftToRight` each level.
 
-#### Java Code
+#### Code
 ```java
 public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
     List<List<Integer>> result = new ArrayList<>();
@@ -353,7 +353,7 @@ The elegance of this approach is that max(left_depth, right_depth) inherently fi
 3. Recursively calculate depth of right subtree
 4. Return 1 + max(left_depth, right_depth)
 
-#### Java Code
+#### Code
 
 ```
 public int maxDepth(TreeNode root) {
@@ -457,7 +457,7 @@ The key insight is that **the first element of preorder is always the root**. On
    - Recursively build right subtree: preorder[preL+leftSize+1 to preR], inorder[rootPos+1 to inR]
 4. Base case: when preL > preR, return null
 
-#### Java Code
+#### Code
 
 ```
 public TreeNode buildTree(int[] preorder, int[] inorder) {
@@ -525,7 +525,7 @@ Perform BFS collecting nodes level by level. Instead of appending to the end, in
 2. For each level size, dequeue nodes, record values, enqueue children.
 3. Insert level list at the start of the result.
 
-#### Java Code
+#### Code
 ```java
 public List<List<Integer>> levelOrderBottom(TreeNode root) {
     LinkedList<List<Integer>> result = new LinkedList<>();
@@ -638,7 +638,7 @@ To build a height-balanced BST from a sorted array, use the middle element as th
 6. Recursively build right subtree (mid+1 to right)
 7. Return the constructed node
 
-#### Java Code
+#### Code
 
 ```
 public TreeNode sortedArrayToBST(int[] nums) {
@@ -769,7 +769,7 @@ The key insight is to combine height calculation with balance checking in a sing
 5. If `|lHeight - rHeight| > 1`, return -1 (unbalanced)
 6. Otherwise, return `max(lHeight, rHeight) + 1`
 
-#### Java Code
+#### Code
 
 ```java
 public boolean isBalanced(TreeNode root) {
@@ -852,7 +852,7 @@ This separates nodes by depth without tracking counts.
 2. While current queue not empty, pop nodes, append values, and enqueue children to the next queue.
 3. When current queue empties, swap queues and start a new level list.
 
-#### Java Code - BFS with Two Queues
+#### Code - BFS with Two Queues
 ```java
 public List<List<Integer>> levelOrder(TreeNode root) {
     List<List<Integer>> levels = new ArrayList<>();
@@ -909,7 +909,7 @@ DFS has time complexity of O(n) as every node is visited and thus Auxiliary Spac
 
  dfs \@ref(glossary-dfs)
 
-#### Java Code - DFS
+#### Code - DFS
 ```java
 public List<List<Integer>> levelOrder(TreeNode root) {
     List<List<Integer>> ans = new ArrayList<>();
@@ -1005,7 +1005,7 @@ Traverse the tree, accumulating the current sum along the path. When a leaf is r
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(h)
 
-#### Java Code
+#### Code
 ```
 public boolean hasPathSum(TreeNode root, int targetSum) {
     if (root == null) {
@@ -1053,7 +1053,7 @@ The backtracking explores the tree as a conceptual decision space where each lev
 - **Time Complexity**: O(n * h)
 - **Space Complexity**: O(h)
 
-#### Java Code
+#### Code
 ```
 public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
     List<List<Integer>> result = new ArrayList<>();
@@ -1146,7 +1146,7 @@ Push root to a stack. Pop, record value, then push right and left children (righ
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n)
 
-#### Java Code
+#### Code
 ```
 public List<Integer> preorderTraversal(TreeNode root) {
     List<Integer> result = new ArrayList<>();
@@ -1385,7 +1385,7 @@ public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
 ```
 
 
-## Binary Tree Longest Consecutive Sequence {#lc-longest-consecutive}
+## Binary Tree Longest Consecutive Sequence {#lc-bst-longest-consecutive}
 
 ### Problem Metadata
 
@@ -1489,7 +1489,7 @@ Use DFS while tracking a running prefix sum and a hash map of prefix counts. For
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(h)
 
-#### Java Code
+#### Code
 ```
 public int pathSum(TreeNode root, int targetSum) {
     Map<Integer, Integer> prefix = new HashMap<>();
@@ -1649,7 +1649,7 @@ The recursive structure ensures we check every possible starting position in `ro
    - `isSubtree` returns `true` if match found anywhere
    - `isSame` returns `true` only if entire structure matches
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {

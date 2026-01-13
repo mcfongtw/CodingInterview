@@ -85,7 +85,7 @@ This allows us to find the complement in O(1) time.
    3. Otherwise, record the current value with `map.put(nums[i], i)`.
 3. Return an empty array (the problem guarantees this line is unreachable).
 
-#### Java Code
+#### Code
 
 ```java
 public int[] twoSum(int[] nums, int target) {
@@ -121,7 +121,7 @@ Similar to the previous approach, but instead of storing the current number, sto
 **Comparison with Previous Approach**: Both solutions have identical complexity. The first approach stores `<value, index>` and checks for complements; this approach stores `<complement, index>` and checks for values. Choose based on readability preference—most implementations favor the first approach as it's more intuitive.
 
 
-#### Java Code
+#### Code
 
 ```java
 public int[] twoSum(int[] nums, int target) {
@@ -193,7 +193,7 @@ The median can be expressed using the `k`-th smallest element where `k = (m + n 
 3. Otherwise compute `left = findKth(..., total / 2)` and `right = findKth(..., total / 2 + 1)` and return `(left + right) / 2`.
 4. In `findKth`, handle base cases when one array is exhausted or `k == 1`; otherwise compare the `k/2`-th elements and discard the smaller block.
 
-#### Java Code
+#### Code
 ```java
 public double findMedianSortedArrays(int[] nums1, int[] nums2) {
     int len1 = nums1.length;
@@ -431,7 +431,7 @@ For each iteration:
 
 7. Return `result` (maximum area found)
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -557,7 +557,7 @@ This solution uses a **Sort + Two Pointers** approach to find all unique triplet
         - Decrement `right` to decrease sum
 4. Return result lc-list containing all unique triplets
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -665,7 +665,7 @@ Explanation: The triplet [-1,2,1] sums to 2, which is closest to target.
       - Move `left` or `right` inward depending on whether `sum` is less or greater than `target`.
 4. Return `closest`.
 
-#### Java Code
+#### Code
 
 ```java
 public int threeSumClosest(int[] nums, int target) {
@@ -748,7 +748,7 @@ Sort the array, then fix two indices `i` and `j`. For each pair, run a two-point
       - Otherwise shift the pointer whose movement drives the sum toward `target`.
 3. Return the lc-list of quadruplets.
 
-#### Java Code
+#### Code
 
 ```java
 public List<List<Integer>> fourSum(int[] nums, int target) {
@@ -872,7 +872,7 @@ Use a **read/write two-pointer approach** to overwrite duplicates in-place.
    2. Otherwise, skip the duplicate (do nothing).
 3. Return `w` as the count of unique elements.
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -940,7 +940,7 @@ Maintain a stack of indices. Push `-1` as a sentinel. For each character:
    - Else pop; if stack empty push `i`, else `maxLen = max(maxLen, i - stack.peek())`.
 3. Return `maxLen`.
 
-#### Java Code
+#### Code
 ```java
 public int longestValidParentheses(String s) {
     Deque<Integer> stack = new ArrayDeque<>();
@@ -1020,7 +1020,7 @@ At each step, a sorted half still exists. Compare `nums[mid]` with `nums[left]` 
       - If `target` in `(nums[mid], nums[right]]`, set `left = mid + 1` else `right = mid - 1`.
 3. Return `-1`.
 
-#### Java Code
+#### Code
 
 ```java
 public int search(int[] nums, int target) {
@@ -1172,7 +1172,7 @@ The answer is `dp[7] = [[2,2,3], [7]]`.
 **Return Result:**
 4. Return `dp[target]` (all combinations that sum to target)
 
-#### Java Code
+#### Code
 
 ```java
 public List<List<Integer>> combinationSum(int[] candidates, int target) {
@@ -1264,7 +1264,7 @@ The backtracking explores a conceptual grid where each row represents depth (num
       - Remove last element from `path` (unchoose)
 3. Call `backtrack(new ArrayList<>(), nums, result)` to start with empty path, then return `result`.
 
-#### Java Code
+#### Code
 ```java
 public List<List<Integer>> permute(int[] nums) {
     List<List<Integer>> result = new ArrayList<>();
@@ -1320,7 +1320,7 @@ Build lc-permutations by exploring each number once per path. Maintain a `visite
       - Mark visited, append value, recurse, then undo.
 3. Call `backtrack(new ArrayList<>())` and return `result`.
 
-#### Java Code
+#### Code
 ```java
 List<List<Integer>> result = new ArrayList<>();
 
@@ -1410,7 +1410,7 @@ The backtracking explores a conceptual grid where each row represents depth (num
       - Increment `freqMap.get(num)` by 1 (unchoose)
 4. Call `backtrack(new ArrayList<>(), freqMap, result, nums.length)` to start, then return `result`.
 
-#### Java Code
+#### Code
 ```java
 public List<List<Integer>> permuteUnique(int[] nums) {
     // Build frequency map
@@ -1476,7 +1476,7 @@ Sort the input so duplicates are adjacent. During backtracking, skip an index `i
       - Mark visited, append, recurse, then undo.
 3. Return result.
 
-#### Java Code
+#### Code
 ```java
 List<List<Integer>> result = new ArrayList<>();
 
@@ -1658,7 +1658,7 @@ For each element `nums[i]`:
 
 5. Return `maxSum` (the maximum subarray sum)
 
-#### Java Code
+#### Code
 ```java
 public int maxSubArray(int[] nums) {
     int current = nums[0];
@@ -1723,7 +1723,7 @@ Sort the intervals by starting point. Iterate through them, merging with the las
    2. Else set `merged.last.end = max(merged.last.end, current.end)`.
 4. Return `merged` as an array.
 
-#### Java Code
+#### Code
 ```java
 public int[][] merge(int[][] intervals) {
     if (intervals.length == 0) {
@@ -1796,7 +1796,7 @@ Iterate through intervals, appending those ending before the new interval. Merge
 4. Append the merged new interval.
 5. Append remaining intervals.
 
-#### Java Code
+#### Code
 ```java
 public int[][] insert(int[][] intervals, int[] newInterval) {
     List<int[]> result = new ArrayList<>();
@@ -1875,7 +1875,7 @@ Let `dp[i]` be the number of ways to reach step `i`. You can arrive at `i` from 
 3. Iterate from 3 to `n`, computing the sum and shifting the variables.
 4. Return the last computed value.
 
-#### Java Code
+#### Code
 ```java
 public int climbStairs(int n) {
     if (n <= 2) {
@@ -1965,7 +1965,7 @@ Without memoization, `ways(2)` and `ways(3)` would be computed multiple times. T
    5. Return `memory[i]`.
 4. Return the result from step 2.
 
-#### Java Code
+#### Code
 
 ```java
 public int climbStairs(int n) {
@@ -2050,7 +2050,7 @@ The backtracking explores a conceptual grid where each row represents a depth le
       - Remove last element from `path` (unchoose)
 4. Call `backtrack(nums, 0, new ArrayList<>(), result)` to start, then return `result`.
 
-#### Java Code
+#### Code
 ```java
 public List<List<Integer>> subsetsWithDup(int[] nums) {
     Arrays.sort(nums);
@@ -2139,7 +2139,7 @@ Start with the first row `[1]`, then iteratively build each subsequent row by in
    - End the row with `1` and append it to the triangle.
 4. Return the triangle.
 
-#### Java Code
+#### Code
 
 ```java
 public List<List<Integer>> generate(int numRows) {
@@ -2282,7 +2282,7 @@ Result: 5 (Buy at day 1 price=1, sell at day 4 price=6)
    - `minPrice = min(minPrice, p)`.
 3. Return `maxProfit`.
 
-#### Java Code
+#### Code
 ```java
 public int maxProfit(int[] prices) {
     int minPrice = Integer.MAX_VALUE;
@@ -2419,7 +2419,7 @@ We ride up from 1→5 (profit=4) and 3→6 (profit=3), total=7.
 2. For each day `i > 0`, if `prices[i] > prices[i-1]`, add the difference to `profit`.
 3. Return `profit`.
 
-#### Java Code
+#### Code
 ```java
 public int maxProfit(int[] prices) {
     int profit = 0;
@@ -2586,7 +2586,7 @@ For each element `num = nums[i]`:
 
 8. Return `answer` (the maximum product found across all subarrays)
 
-#### Java Code
+#### Code
 ```java
 public int maxProduct(int[] nums) {
     int maxSoFar = nums[0];
@@ -2665,7 +2665,7 @@ Use two indices, `left` at the start and `right` at the end of the array. Compar
    4. Otherwise, decrement `right` to decrease the sum.
 3. Return an empty array (the problem guarantees this branch is unreachable).
 
-#### Java Code
+#### Code
 
 ```java
 public int[] twoSum(int[] numbers, int target) {
@@ -2710,7 +2710,7 @@ Treat each `numbers[i]` as the first addend and binary-search for `target - numb
 3. Binary search for `complement` in `[i + 1, numbers.length)`.
 4. If found at `j`, return `[i + 1, j + 1]`.
 
-#### Java Code
+#### Code
 
 ```java
 public int[] twoSum(int[] numbers, int target) {
@@ -2792,7 +2792,7 @@ Let `dp[i]` be the best we can do up to house `i`. For each house, we either rob
 4. Shift `prev2 = prev1`, `prev1 = current`.
 5. Return `prev1`.
 
-#### Java Code
+#### Code
 ```java
 public int rob(int[] nums) {
     if (nums.length == 1) {
@@ -2923,7 +2923,7 @@ This invariant ensures $r - l + 1$ is always a valid positive length.
    - If `result` is still `Integer.MAX_VALUE`, no valid subarray exists → return 0
    - Otherwise, return `result`
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -3007,7 +3007,7 @@ Keep three running totals for the cost of painting up to the current house when 
    2. Update `red`, `green`, `blue` to these new totals.
 3. Return `min(red, green, blue)`.
 
-#### Java Code
+#### Code
 ```java
 public int minCost(int[][] costs) {
     int red = 0, green = 0, blue = 0;
@@ -3055,7 +3055,7 @@ Output: 4  (the LIS is [2,3,7,101])
 - `1 <= nums.length <= 2500`
 - `-10^4 <= nums[i] <= 10^4`
 
-### Solution - Patience Sorting
+### Solution - Binary Search
 
 #### Walkthrough
 
@@ -3068,36 +3068,40 @@ Maintain an array `tails` where `tails[len]` holds the smallest possible tail fo
 
 #### Implementation Steps
 
-1. Initialize empty lc-list `tails`.
+1. Initialize empty list `tails`.
 2. For each number `x`:
    - Binary search `tails` to find the leftmost index `i` with `tails[i] >= x`.
    - If such index exists set `tails[i] = x`, else append `x`.
 3. Return `tails.size()`.
 
-#### Java Code
+#### Code
 ```java
 public int lengthOfLIS(int[] nums) {
-    int[] tails = new int[nums.length];
+    int[] sorted = new int[nums.length];
     int size = 0;
 
     for (int num : nums) {
         int left = 0;
         int right = size;
+
+        //Find the sorted index of num in **sorted array** using binary search
         while (left < right) {
             int mid = left + (right - left) / 2;
-            if (tails[mid] < num) {
+            if (sorted[mid] < num) {
                 left = mid + 1;
             } else {
                 right = mid;
             }
         }
-        tails[left] = num;
+        sorted[left] = num;
+
+        //length of **sorted array**
         if (left == size) {
             size++;
-        }
+        }          
     }
 
-    return size;
+    return size;        
 }
 ```
 
@@ -3242,7 +3246,7 @@ Notice we only need the previous day's states, so we use three variables instead
    - `rest = Math.max(rest, prevSold);`
 3. Return `Math.max(sold, rest)`.
 
-#### Java Code
+#### Code
 ```java
 public int maxProfit(int[] prices) {
     int hold = -prices[0];
@@ -3368,7 +3372,7 @@ Extract results: [1, 2]
    - Poll all remaining heap entries (in reverse order to maintain heap structure)
    - Extract the value (second element) from each heap entry
 
-#### Java Code
+#### Code
 ```java
 public int[] topKFrequent(int[] nums, int k) {
     Map<Integer, Integer> counts = new HashMap<>();
@@ -3546,7 +3550,7 @@ Final: Each index (2, 3, 4) has exactly 1/3 probability
 - Each value has probability `1/count`
 - Checking for `== 0` gives us exactly `1/count` probability
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -3649,7 +3653,7 @@ Java's `Random.nextInt(n)` generates integers in `[0, n)` with uniform distribut
    - Generate random index: `rand.nextInt(indexList.size())`
    - Return `indexList.get(randomIndex)`
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -3827,7 +3831,7 @@ This insertion point is exactly the index we need, as it represents the first el
    - All equal weights: Uniform distribution
    - Large weights: Proper handling with `int` arithmetic
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -3914,7 +3918,7 @@ Sort intervals by end time; keep a running end boundary for the last accepted in
    - If `interval[0] >= end`, increment `count` and set `end = interval[1]`.
 4. Return `n - count` removals.
 
-#### Java Code
+#### Code
 ```java
 public int eraseOverlapIntervals(int[][] intervals) {
     if (intervals.length == 0) {
@@ -4000,7 +4004,7 @@ Rearrange the equation to `(A[i] + B[j]) = -(C[k] + D[l])`. Precompute all pair 
    - If `sum` exists in the map, add `map[sum]` to the answer.
 3. Return the accumulated total.
 
-#### Java Code
+#### Code
 
 ```java
 public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
@@ -4268,7 +4272,7 @@ Unlike some DP problems that need 2D arrays to avoid overwriting, Coin Change wo
 if (dp[amount] == amount + 1) return -1;  // Still impossible
 ```
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -4535,7 +4539,7 @@ But notice we only need the **previous coin row** and **current coin row**. By i
 - **Inner loop (amounts)**: Builds up solutions for increasing amounts
 - **Left-to-right inner loop**: Allows reusing the same coin multiple times (unbounded)
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -4641,7 +4645,7 @@ Because every value is checked exactly once, the traversal stays linear.
    4. Recurse into left or right subtrees; return `true` if either side finds a match.
 3. Return `false` if no pair exists.
 
-#### Java Code
+#### Code
 
 ```java
 public boolean findTarget(TreeNode root, int k) {
@@ -4712,7 +4716,7 @@ Let `keep[i]` be the minimum swaps to keep index `i` un-swapped, and `swap[i]` w
    - Assign `keep = nextKeep`, `swap = nextSwap`.
 3. Return `min(keep, swap)`.
 
-#### Java Code
+#### Code
 ```java
 public int minSwap(int[] A, int[] B) {
     int keep = 0;
@@ -4842,7 +4846,7 @@ The maximum of these three distances is the answer.
    - Update `max = Math.max(max, dist)`.
 5. Return `max`.
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -4930,7 +4934,7 @@ Use two pointers. Advance `left` until an odd number is found and decrement `rig
    3. If `left < right`, swap `A[left]` and `A[right]`.
 3. Return `A`.
 
-#### Java Code
+#### Code
 ```java
 public int[] sortArrayByParity(int[] A) {
     int left = 0;
@@ -5003,7 +5007,7 @@ Traverse both lc-lists with indices `i` and `j`. For each pair of intervals, com
    3. Increment pointer whose interval ends first.
 3. Return the result lc-list as an array.
 
-#### Java Code
+#### Code
 ```java
 public int[][] intervalIntersection(int[][] A, int[][] B) {
     List<int[]> result = new ArrayList<>();
@@ -5076,7 +5080,7 @@ Track the frequency of each letter in the first string. For every next string, c
    2. Update `minFreq[i] = min(minFreq[i], temp[i])`.
 3. Build the result by outputting each character `minFreq[i]` times.
 
-#### Java Code
+#### Code
 ```java
 public List<String> commonChars(String[] A) {
     int[] minFreq = new int[26];
@@ -5275,7 +5279,7 @@ Exit (only 1 iteration needed!)
 4. Return `result` (maximum valid length, or 0 if impossible)
 5. In `isEnoughRibbons`: count total ribbons by summing ribbon / len for each ribbon, return true if count ≥ `k`
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -5437,7 +5441,7 @@ The key insight is that we should eliminate monsters in order of their **arrival
 4. If all monsters eliminated, return `n`
 
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -5582,7 +5586,7 @@ The sum is: `k + (k-1) + (k-2) + ... + 1 = k * (k + 1) / 2`
    - Apply triangular formula: `result += zeroCount * (zeroCount + 1) / 2`.
 5. Return `result`.
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -5700,7 +5704,7 @@ If it's possible to form valid groups at all, grouping consecutive elements afte
 4. If any group violates the constraint (max - min > k), return an empty array
 5. Otherwise, add the group to the result and continue
 
-#### Java Code
+#### Code
 
 ```java
 class Solution {
@@ -5854,7 +5858,7 @@ Scan the array while recording the latest indices of `word1` and `word2`. Whenev
    - If both indices are valid, update `answer = min(answer, |idx1 - idx2|)`.
 3. Return `answer`.
 
-#### Java Code
+#### Code
 ```java
 public int shortestDistance(String[] words, String word1, String word2) {
     int idx1 = -1;
