@@ -66,7 +66,10 @@ This yields nodes in left-root-right order without recursion.
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n) worst case stack on a skewed tree
 
-```
+
+#### Code - Java
+
+```java
 public List<Integer> inorderTraversal(TreeNode root) {
     List<Integer> result = new ArrayList<>();
     Deque<TreeNode> stack = new ArrayDeque<>();
@@ -87,7 +90,14 @@ public List<Integer> inorderTraversal(TreeNode root) {
 
 ### Solution - Recursive
 
-```
+#### Walkthrough
+
+Recursively traverse left subtree, visit the current node, then traverse right subtree. This mirrors the inorder definition and appends values in left-root-right order.
+
+
+#### Code - Java
+
+```java
 public List<Integer> inorderTraversalRecursive(TreeNode root) {
     List<Integer> result = new ArrayList<>();
     dfs(root, result);
@@ -175,6 +185,8 @@ Passing bounds prevents false positives that would slip through a simple local c
 - **Time Complexity**: O(n) — visit each node once
 - **Space Complexity**: O(h) recursion stack (h = tree height)
 
+#### Code - Java
+
 ```
 public boolean isValidBST(TreeNode root) {
     return validate(root, null, null);
@@ -191,6 +203,25 @@ private boolean validate(TreeNode node, Integer low, Integer high) {
 }
 ```
 
+#### Code - Golang
+
+```go
+func isValidBST(root *TreeNode) bool {
+    return validate(root, math.MinInt32 - 1, math.MaxInt32 + 1)
+}
+
+func validate(node *TreeNode, low int, high int) bool {
+    if node == nil {
+        return true;
+    }
+
+    if node.Val <= low || node.Val >= high {
+        return false;
+    }
+
+    return validate(node.Left, low, node.Val) && validate(node.Right, node.Val, high);
+}
+```
 
 ## Binary Tree Zigzag Level Order Traversal {#lc-zigzag-level-order}
 
@@ -459,7 +490,7 @@ The key insight is that **the first element of preorder is always the root**. On
 
 #### Code - Java
 
-```
+```java
 public TreeNode buildTree(int[] preorder, int[] inorder) {
     Map<Integer, Integer> indexMap = new HashMap<>();
     for (int i = 0; i < inorder.length; i++) {
@@ -1106,7 +1137,7 @@ private void backtrack(TreeNode node, int remain, List<Integer> path, List<List<
 
 Connect each node's `next` pointer to its right neighbor on the same level in a perfect binary tree.
 
-### Solution - O(1) Level Traversal
+### Solution - Level Traversal
 
 #### Walkthrough
 
