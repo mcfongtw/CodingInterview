@@ -236,7 +236,7 @@ Perform level-order traversal. Track a boolean indicating whether to append valu
 3. If `leftToRight`, append; otherwise insert at front or use reverse list.
 4. Toggle `leftToRight` each level.
 
-#### Code
+#### Code - Java
 ```java
 public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
     List<List<Integer>> result = new ArrayList<>();
@@ -353,7 +353,7 @@ The elegance of this approach is that max(left_depth, right_depth) inherently fi
 3. Recursively calculate depth of right subtree
 4. Return 1 + max(left_depth, right_depth)
 
-#### Code
+#### Code - Java
 
 ```
 public int maxDepth(TreeNode root) {
@@ -457,7 +457,7 @@ The key insight is that **the first element of preorder is always the root**. On
    - Recursively build right subtree: preorder[preL+leftSize+1 to preR], inorder[rootPos+1 to inR]
 4. Base case: when preL > preR, return null
 
-#### Code
+#### Code - Java
 
 ```
 public TreeNode buildTree(int[] preorder, int[] inorder) {
@@ -525,7 +525,7 @@ Perform BFS collecting nodes level by level. Instead of appending to the end, in
 2. For each level size, dequeue nodes, record values, enqueue children.
 3. Insert level list at the start of the result.
 
-#### Code
+#### Code - Java
 ```java
 public List<List<Integer>> levelOrderBottom(TreeNode root) {
     LinkedList<List<Integer>> result = new LinkedList<>();
@@ -638,7 +638,7 @@ To build a height-balanced BST from a sorted array, use the middle element as th
 6. Recursively build right subtree (mid+1 to right)
 7. Return the constructed node
 
-#### Code
+#### Code - Java
 
 ```
 public TreeNode sortedArrayToBST(int[] nums) {
@@ -769,7 +769,7 @@ The key insight is to combine height calculation with balance checking in a sing
 5. If `|lHeight - rHeight| > 1`, return -1 (unbalanced)
 6. Otherwise, return `max(lHeight, rHeight) + 1`
 
-#### Code
+#### Code - Java
 
 ```java
 public boolean isBalanced(TreeNode root) {
@@ -961,7 +961,7 @@ Return 0 for a null node. If one child is null, the minimum depth must go throug
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(h)
 
-#### Code
+#### Code - Java
 ```
 public int minDepth(TreeNode root) {
     if (root == null) {
@@ -1015,7 +1015,7 @@ Traverse the tree, accumulating the current sum along the path. When a leaf is r
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(h)
 
-#### Code
+#### Code - Java
 ```
 public boolean hasPathSum(TreeNode root, int targetSum) {
     if (root == null) {
@@ -1063,7 +1063,7 @@ The backtracking explores the tree as a conceptual decision space where each lev
 - **Time Complexity**: O(n * h)
 - **Space Complexity**: O(h)
 
-#### Code
+#### Code - Java
 ```
 public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
     List<List<Integer>> result = new ArrayList<>();
@@ -1117,7 +1117,7 @@ Use the `next` pointers to traverse each level without a queue. For each node, c
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(1)
 
-#### Code
+#### Code - Java
 ```
 public Node connect(Node root) {
     if (root == null) {
@@ -1166,7 +1166,7 @@ Push root to a stack. Pop, record value, then push right and left children (righ
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n)
 
-#### Code
+#### Code - Java
 ```
 public List<Integer> preorderTraversal(TreeNode root) {
     List<Integer> result = new ArrayList<>();
@@ -1305,7 +1305,7 @@ Recurse down the left spine to find the new root. On the way back, rotate pointe
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(h)
 
-#### Code
+#### Code - Java
 ```
 public TreeNode upsideDownBinaryTree(TreeNode root) {
     if (root == null || root.left == null) {
@@ -1347,7 +1347,7 @@ Traverse bottom-up and return whether each subtree is univalue. A node is unival
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(h)
 
-#### Code
+#### Code - Java
 
 ```
 public int countUnivalSubtrees(TreeNode root) {
@@ -1450,7 +1450,7 @@ DFS down the tree while carrying the current consecutive length and the parent v
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(h)
 
-#### Code
+#### Code - Java
 ```
 public int longestConsecutive(TreeNode root) {
     return dfs(root, null, 0);
@@ -1498,7 +1498,7 @@ Compute each node's height measured from the nearest leaf. Leaves have height 0,
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(h)
 
-#### Code
+#### Code - Java
 
 ```
 public List<List<Integer>> findLeaves(TreeNode root) {
@@ -1547,7 +1547,7 @@ Use DFS while tracking a running prefix sum and a hash map of prefix counts. For
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(h)
 
-#### Code
+#### Code - Java
 ```
 public int pathSum(TreeNode root, int targetSum) {
     Map<Integer, Integer> prefix = new HashMap<>();
@@ -1707,7 +1707,7 @@ The recursive structure ensures we check every possible starting position in `ro
    - `isSubtree` returns `true` if match found anywhere
    - `isSame` returns `true` only if entire structure matches
 
-#### Code
+#### Code - Java
 
 ```java
 class Solution {
@@ -1772,7 +1772,7 @@ Use DFS to return the depth of each subtree. At every node, update the diameter 
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(h)
 
-#### Code
+#### Code - Java
 
 ```
 public int diameterOfBinaryTree(TreeNode root) {

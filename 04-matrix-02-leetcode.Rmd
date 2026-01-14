@@ -52,7 +52,7 @@ This achieves the 90-degree rotation in-place.
 1. For each `i`, `j < i`, swap `matrix[i][j]` with `matrix[j][i]`.
 2. For each row, swap `matrix[row][left]` with `matrix[row][right]` while moving inward.
 
-#### Code
+#### Code - Java
 
 ```java
 public void rotate(int[][] matrix) {
@@ -129,7 +129,7 @@ Maintain four boundaries (`top`, `bottom`, `left`, `right`). Traverse in the ord
    - If `top <= bottom`, traverse bottom row right→left, decrement `bottom`.
    - If `left <= right`, traverse left column bottom→top, increment `left`.
 
-#### Code
+#### Code - Java
 
 ```java
 public List<Integer> spiralOrder(int[][] matrix) {
@@ -276,7 +276,7 @@ Paths to `(i, j)` equal the sum of paths to `(i-1, j)` and `(i, j-1)` since thos
 2. For each cell from `(1,1)` to `(m-1,n-1)` compute `dp[i][j] = dp[i-1][j] + dp[i][j-1]`.
 3. Return `dp[m-1][n-1]`.
 
-#### Code
+#### Code - Java
 
 ```java
 public int uniquePaths(int m, int n) {
@@ -341,7 +341,7 @@ Set `dp[i][j]` to the minimum sum needed to reach `(i, j)`. Initialize the first
 3. For `i > 0`, `j > 0`, set `dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])`.
 4. Return `dp[m-1][n-1]`.
 
-#### Code
+#### Code - Java
 
 ```java
 public int minPathSum(int[][] grid) {
@@ -415,7 +415,7 @@ Because every row starts after the prior row ends, we can treat the matrix as a 
    3. Compare `matrix[row][col]` with target and adjust bounds.
 3. Return `false` if not found.
 
-#### Code
+#### Code - Java
 
 ```java
 public boolean searchMatrix(int[][] matrix, int target) {
@@ -511,7 +511,7 @@ This mark-unmark pattern ensures cells can be reused when trying different start
    - **Backtrack**: Set `visited[i][j] = false` before returning
 6. Return true if any starting position succeeds
 
-#### Code
+#### Code - Java
 
 ```java
 public boolean exist(char[][] board, String word) {
@@ -616,7 +616,7 @@ All `'O'` connected to the border must remain `'O'`. DFS from every border `'O'`
    - Flip `'O'` to `'X'` (enclosed region).
    - Flip `'#'` back to `'O'`.
 
-#### Code
+#### Code - Java
 
 ```java
 public void solve(char[][] board) {
@@ -708,7 +708,7 @@ Scan every cell. Upon encountering a `'1'`, increment the island count and perfo
    - If it is `'1'`, run DFS that changes it and its connected neighbors to `'0'`, and increment `count`.
 3. Return `count`.
 
-#### Code
+#### Code - Java
 
 ```java
 public int numIslands(char[][] grid) {
@@ -846,7 +846,7 @@ The maximum side length is 2, so the area is 2 × 2 = 4.
    - If `matrix[r][c] == '0'`, set `dp[r][c] = 0`
 3. Return `max_side × max_side` (area = side²)
 
-#### Code
+#### Code - Java
 
 ```java
 class Solution {
@@ -938,7 +938,7 @@ Because of the sorted property, one direction always reduces the search space.
    - If greater, `col--`; otherwise `row++`.
 3. Return false if not found.
 
-#### Code
+#### Code - Java
 
 ```java
 public boolean searchMatrix(int[][] matrix, int target) {
@@ -1011,7 +1011,7 @@ The Manhattan distance sum is minimized by the median of row coordinates and col
 3. Median row = `rows[rows.size/2]`, same for columns.
 4. Sum absolute differences from medians.
 
-#### Code
+#### Code - Java
 
 ```java
 public int minTotalDistance(int[][] grid) {
@@ -1163,7 +1163,7 @@ By checking `Math.abs(counter) == n`, we only need ONE set of counters instead o
 3. Update diagonals when applicable.
 4. Check if any absolute value equals `n`; return winner or `0`.
 
-#### Code
+#### Code - Java
 
 ```java
 class TicTacToe {
@@ -1325,7 +1325,7 @@ Only cells that pass both guard checks are battleship starting points.
    - **Count if top-left corner**: If both guard clauses pass, this is a ship's starting point, so increment `result`
 4. Return `result`
 
-#### Code
+#### Code - Java
 
 ```java
 class Solution {
@@ -1461,7 +1461,7 @@ Drawing the line at position 4 crosses only `6 - 4 = 2` bricks.
 3. Find the maximum edge count across all positions in the HashMap
 4. Return `total rows - maximum edge count` (minimum bricks crossed)
 
-#### Code
+#### Code - Java
 
 ```java
 class Solution {
@@ -1660,7 +1660,7 @@ The elegant part of this solution is that **the DP value at each cell directly t
        - Add `matrix[r][c] - 1` to result (additional squares of size 2×2, 3×3, etc.)
 3. Return `result`
 
-#### Code
+#### Code - Java
 
 ```java
 class Solution {

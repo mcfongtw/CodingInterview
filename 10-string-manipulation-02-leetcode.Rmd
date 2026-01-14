@@ -174,7 +174,7 @@ Final result: 3
 4. Add `s[right]`, update `best = max(best, right - left + 1)`.
 5. Return `best`.
 
-#### Code
+#### Code - Java
 
 ```java
 public int lengthOfLongestSubstring(String s) {
@@ -245,7 +245,7 @@ Compute the longest common substring between `s` and its reverse. Matches corres
 3. When `dp[i][j] > currentMax`, ensure the substring indices align (`n - 1 - j + dp[i][j] - 1 == i`).
 4. Update best boundaries accordingly.
 
-#### Code
+#### Code - Java
 
 ```java
 public String longestPalindrome(String s) {
@@ -327,7 +327,7 @@ Use the first string as a baseline. For each character index, ensure all other s
 3. For each `i`, compare `strs[j].charAt(i)` with `strs[0].charAt(i)`; return `strs[0].substring(0, i)` on mismatch.
 4. If no mismatch, return the entire first string.
 
-#### Code
+#### Code - Java
 
 ```java
 public String longestCommonPrefix(String[] strs) {
@@ -504,7 +504,7 @@ Result: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
      - Remove last character (backtrack)
 6. Return the result list containing all combinations
 
-#### Code
+#### Code - Java
 
 ```java
 class Solution {
@@ -610,7 +610,7 @@ Anagrams reduce to the same canonical representation once their letters are sort
 3. Append `s` to `groups.get(key)`, creating the bucket if needed.
 4. Return a lc-list built from the map values.
 
-#### Code
+#### Code - Java
 
 ```java
 public List<List<String>> groupAnagrams(String[] strs) {
@@ -676,7 +676,7 @@ Perform BFS from `beginWord`. Each step generates all words formed by replacing 
 5. If mutation existed in the dictionary, remove it and enqueue with incremented level.
 6. Return `0` when the queue empties without finding `endWord`.
 
-#### Code
+#### Code - Java
 
 ```java
 public int ladderLength(String beginWord, String endWord, List<String> wordList) {
@@ -763,7 +763,7 @@ Try every prefix; if it exists in the dictionary, recursively solve the remainin
 2. Iterate `end` from `start+1` to `n`, check whether `s[start:end]` is in the dictionary and `dfs(end)` is true.
 3. Memoize failed indices to avoid recomputation.
 
-#### Code
+#### Code - Java
 
 ```java
 public boolean wordBreakRecursive(String s, List<String> wordDict) {
@@ -806,7 +806,7 @@ Let `dp[i]` denote whether prefix `s[0:i)` can be segmented. For each ending ind
 3. If `word` fits at the end and `dp[end - word.length()]` is true, set `dp[end] = true`.
 4. Return `dp[n]`.
 
-#### Code
+#### Code - Java
 
 ```java
 public boolean wordBreakDP(String s, List<String> wordDict) {
@@ -844,7 +844,7 @@ Insert dictionary words into a trie. While scanning the string, whenever `dp[i]`
 3. For each index `i`, if `dp[i]` is true, traverse trie edges following `s[i...]`.
 4. Whenever a trie node is terminal at index `j`, set `dp[j] = true`.
 
-#### Code
+#### Code - Java
 
 ```java
 class TrieNode {
@@ -1003,7 +1003,7 @@ Output: "eetr" (also valid: "eert")
    - Append character `c` exactly `f` times to the result string
 6. Return the final result string
 
-#### Code
+#### Code - Java
 
 ```java
 class Solution {
@@ -1164,7 +1164,7 @@ Returns 2
    - Return count
 4. Return total result
 
-#### Code
+#### Code - Java
 
 ```java
 public int countSubstrings(String s) {
@@ -1320,7 +1320,7 @@ Total: 10 palindromes
      - Else if `dp[i+1][j-1] == true`: mark `dp[i][j] = true`, increment count
 5. Return `count`
 
-#### Code
+#### Code - Java
 
 ```java
 public int countSubstrings(String s) {
@@ -1442,7 +1442,7 @@ Precompute the order rank for each letter. Compare consecutive words character b
    3. If all equal but `len1 > len2`, return false.
 3. Return true if no violations occur.
 
-#### Code
+#### Code - Java
 
 ```java
 public boolean isAlienSorted(String[] words, String order) {
@@ -1560,7 +1560,7 @@ To make `t` an anagram of `s`, both strings must have identical character freque
 5. For each character, if `s_freq[i] > t_freq[i]`, add the difference to `result`
 6. Return `result` as the minimum number of steps
 
-#### Code
+#### Code - Java
 
 ```java
 class Solution {
@@ -1699,7 +1699,7 @@ Total: 7 + 5 + 4 + 4 + 1 + 1 + 1 = 23 ✓
    3. If any character count becomes zero, decrement `uniqueAbc`.
 5. Return the total count.
 
-#### Code
+#### Code - Java
 
 ```java
 class Solution {
