@@ -50,16 +50,21 @@ Total: 0
 
 #### Walkthrough
 
-TODO: Add walkthrough explanation
+Maintain a running prefix sum (or average) of the elements processed so far. For each element `arr[i]`, compare it against the average of the previous `i` elements. If `arr[i]` is strictly greater than this average, increment the count. Note that the problem asks to skip the first element as there are no previous elements to average.
 
 #### Analysis
 
-- **Time Complexity**: TODO
-- **Space Complexity**: TODO
+- **Time Complexity**: O(n) - We iterate through the array once.
+- **Space Complexity**: O(n) - We store the prefix averages in an array (could be optimized to O(1) by tracking running sum).
 
 #### Implementation Steps
 
-TODO: Add implementation steps
+1. Initialize a `prefixAvg` array to store the running average up to each index.
+2. Iterate through the `responseTimes` list.
+3. For each element, calculate the new average including it.
+4. If the current element is greater than the *previous* average (and it's not the first element), increment the result counter.
+5. Update the `prefixAvg` array for future comparisons.
+6. Return the result.
 
 #### Code - Java
 

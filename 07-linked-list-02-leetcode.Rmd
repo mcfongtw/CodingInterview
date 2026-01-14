@@ -1135,6 +1135,19 @@ public class Solution {
 - **Difficulty**: Easy
 - **Techniques**: [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer)
 
+### Solution - Two Pointers
+
+#### Walkthrough
+
+Calculate the length of both lists. Advance the pointer of the longer list by the difference in lengths. Then traverse both lists together until they meet. Alternatively, use the two-pointer approach where we switch heads when reaching the end, effectively traversing `lenA + lenB`.
+
+#### Analysis
+
+- **Time Complexity**: O(n + m)
+- **Space Complexity**: O(1)
+
+#### Code - Java
+
 ```java
 public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
     if (headA == null || headB == null) return null;
@@ -1192,6 +1205,17 @@ public ListNode reverseList(ListNode head) {
 
 ### Solution - Recursive
 
+#### Walkthrough
+
+Recursively reverse the rest of the list, then set `head.next.next = head` and `head.next = null` to reverse the current edge.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) recursion stack
+
+#### Code - Java
+
 ```java
 public ListNode reverseListRecursive(ListNode head) {
     if (head == null || head.next == null) {
@@ -1213,6 +1237,19 @@ public ListNode reverseListRecursive(ListNode head) {
 - **Problem ID**: 234
 - **Difficulty**: Easy
 - **Techniques**: [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer)
+
+### Solution - Two Pointers
+
+#### Walkthrough
+
+Find the middle of the linked list using slow and fast pointers. Reverse the second half. Compare the first half with the reversed second half. Restore the list (optional but recommended).
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Code - Java
 
 ```java
 public boolean isPalindrome(ListNode head) {
@@ -1250,6 +1287,19 @@ public boolean isPalindrome(ListNode head) {
 ### Description
 
 Group odd-position nodes followed by even-position nodes.
+
+### Solution - Two Pointers
+
+#### Walkthrough
+
+Maintain two pointers `odd` and `even`, and a `evenHead`. Traverse the list, linking odd nodes to odd nodes and even nodes to even nodes. Finally, connect the tail of the odd list to `evenHead`.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Code - Java
 
 ```java
 public ListNode oddEvenList(ListNode head) {
