@@ -1310,6 +1310,277 @@ private void dfs(TreeNode node, List<Integer> list) {
 ```
 
 
+## Implement Trie (Prefix Tree) {#lc-implement-trie}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 208
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/implement-trie-prefix-tree/
+- **Tags**: NeetCode 150
+- **Techniques**: [Trie](glossary-of-algorithm.html#glossary-trie), Tree, [Hash Table](glossary-of-algorithm.html#glossary-hash-table)
+
+### Description
+
+A **trie** (pronounced as "try") or **prefix tree** is a tree data structure used to efficiently store and retrieve keys in a dataset of strings. There are various applications of this data structure, such as autocomplete and spellchecker.
+
+Implement the Trie class:
+
+- `Trie()` Initializes the trie object.
+- `void insert(String word)` Inserts the string `word` into the trie.
+- `boolean search(String word)` Returns `true` if the string `word` is in the trie (i.e., was inserted before), and `false` otherwise.
+- `boolean startsWith(String prefix)` Returns `true` if there is a previously inserted string `word` that has the prefix `prefix`, and `false` otherwise.
+
+### Examples
+
+**Example 1:**
+```
+Input:
+["Trie", "insert", "search", "search", "startsWith", "insert", "search"]
+[[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]
+
+Output:
+[null, null, true, false, true, null, true]
+
+Explanation:
+Trie trie = new Trie();
+trie.insert("apple");
+trie.search("apple");   // return True
+trie.search("app");     // return False
+trie.startsWith("app"); // return True
+trie.insert("app");
+trie.search("app");     // return True
+```
+
+### Constraints
+
+- `1 <= word.length, prefix.length <= 2000`
+- `word` and `prefix` consist only of lowercase English letters.
+- At most $3 \times 10^4$ calls in total will be made to `insert`, `search`, and `startsWith`.
+
+### Solution - TrieNode with HashMap
+
+#### Walkthrough
+
+A Trie is a tree-like data structure where each node represents a character. The key insight is that words sharing common prefixes share the same path from the root.
+
+**Data Structure Design:**
+
+1. **TrieNode structure**: Each node contains:
+   - A `Map<Character, TrieNode>` to store child nodes (one for each possible next character)
+   - A `boolean isEndOfWord` flag to mark if this node completes a valid word
+
+2. **Root node**: Empty node serving as the entry point for all words
+
+**Algorithm for each operation:**
+
+**Insert(word):**
+1. Start at root node
+2. For each character in word:
+   - If character doesn't exist as a child, create new TrieNode
+   - Move to child node
+3. Mark final node as end of word
+
+**Search(word):**
+1. Start at root node
+2. For each character in word:
+   - If character doesn't exist as a child, return false
+   - Move to child node
+3. Return true only if final node is marked as end of word
+
+**StartsWith(prefix):**
+1. Start at root node
+2. For each character in prefix:
+   - If character doesn't exist as a child, return false
+   - Move to child node
+3. Return true (we've found the complete prefix path)
+
+**Why HashMap for children?**
+- Supports only lowercase letters (26 possible children)
+- HashMap provides O(1) lookup and insertion
+- Alternative: array of size 26 (faster but wastes space for sparse tries)
+
+#### Analysis
+
+Let n = length of word/prefix being processed, m = total number of characters inserted
+
+- **Time Complexity**:
+  - `insert(word)`: O(n) - traverse each character once
+  - `search(word)`: O(n) - traverse each character once
+  - `startsWith(prefix)`: O(n) - traverse each character once
+
+- **Space Complexity**: O(m) - In worst case, no words share common prefixes, requiring one node per character inserted
+
+#### Implementation Steps
+
+1. **Define TrieNode class**:
+   - HashMap to store children nodes
+   - Boolean flag for end of word marker
+
+2. **Initialize Trie**:
+   - Create root node (empty node)
+
+3. **Implement insert**:
+   - Start from root
+   - For each character, create node if not exists
+   - Navigate to child node
+   - Mark final node as word ending
+
+4. **Implement search**:
+   - Traverse character by character
+   - Return false if path breaks
+   - Check end-of-word flag at final node
+
+5. **Implement startsWith**:
+   - Same as search but skip end-of-word check
+   - Return true if complete prefix path exists
+
+#### Code - Java
+
+```java
+class Trie {
+    private class TrieNode {
+        Map<Character, TrieNode> children;
+        boolean isEndOfWord;
+
+        TrieNode() {
+            children = new HashMap<>();
+            isEndOfWord = false;
+        }
+    }
+
+    private TrieNode root;
+
+    public Trie() {
+        root = new TrieNode();
+    }
+
+    public void insert(String word) {
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            current.children.putIfAbsent(ch, new TrieNode());
+            current = current.children.get(ch);
+        }
+        current.isEndOfWord = true;
+    }
+
+    public boolean search(String word) {
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            current = current.children.get(ch);
+            if (current == null) {
+                return false;
+            }
+        }
+        return current.isEndOfWord;
+    }
+
+    public boolean startsWith(String prefix) {
+        TrieNode current = root;
+        for (char ch : prefix.toCharArray()) {
+            current = current.children.get(ch);
+            if (current == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+### Solution - Array-Based TrieNode
+
+#### Walkthrough
+
+Instead of using a HashMap, we can use a **fixed-size array of 26 elements** to represent children nodes, where each index corresponds to a letter (0 for 'a', 1 for 'b', ..., 25 for 'z').
+
+**Key Differences from HashMap approach:**
+
+1. **Space Optimization**: Only allocate array when first child is added (lazy initialization)
+2. **Direct Access**: Character mapping via `ch - 'a'` gives O(1) array index
+3. **Better Cache Locality**: Array elements stored contiguously in memory
+
+**Algorithm remains the same**, but child lookup becomes:
+- HashMap: `children.get(ch)` → hash computation + bucket lookup
+- Array: `letters[ch - 'a']` → direct array access
+
+**Trade-offs:**
+- **Pros**: Faster access (no hashing), better for small alphabets
+- **Cons**: Wastes space if words are sparse (many empty array slots)
+
+#### Analysis
+Let n = length of word/prefix being processed, m = total number of characters inserted
+
+- **Time Complexity**: Same as HashMap version - O(n) for all operations
+- **Space Complexity**: O(m × 26) worst case, but often better in practice due to fewer object allocations
+
+#### Code - Java (Array-Based, Recursive)
+
+```java
+class Trie {
+    private Trie[] letters = new Trie[26];
+    private boolean isEndOfWord = false;
+
+    public Trie() {
+    }
+
+    public void insert(String word) {
+        insertRec(word, 0, this);
+    }
+
+    private void insertRec(String word, int i, Trie node) {
+        if (i >= 0 && i < word.length()) {
+            int index = word.charAt(i) - 'a';
+
+            // Insert a node at letter index if not exists
+            if (node.letters[index] == null) {
+                node.letters[index] = new Trie();
+            }
+
+            insertRec(word, i + 1, node.letters[index]);
+        }
+
+        if (i == word.length()) {
+            node.isEndOfWord = true;
+        }
+    }
+
+    public boolean search(String word) {
+        Trie result = findRec(word, 0, this);
+        return result != null && result.isEndOfWord;
+    }
+
+    public boolean startsWith(String prefix) {
+        return findRec(prefix, 0, this) != null;
+    }
+
+    private Trie findRec(String word, int i, Trie node) {
+        if (i >= 0 && i < word.length()) {
+            int index = word.charAt(i) - 'a';
+
+            // Fail to find letter at letter index
+            if (node.letters[index] == null) {
+                return null;
+            }
+
+            return findRec(word, i + 1, node.letters[index]);
+        } else {
+            // Leaf node
+            return node;
+        }
+    }
+}
+```
+
+**Implementation Notes:**
+
+- **Recursive Design**: Uses helper methods `insertRec` and `findRec` for cleaner separation
+- **Index Calculation**: `word.charAt(i) - 'a'` maps 'a' to 0, 'b' to 1, etc.
+- **Base Case**: When `i == word.length()`, we've processed all characters
+- **Null Check**: `letters[index] == null` indicates character path doesn't exist
+
+
 ## Binary Tree Upside Down {#lc-upside-down}
 
 ### Problem Metadata
