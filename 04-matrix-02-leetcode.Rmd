@@ -965,6 +965,209 @@ public boolean searchMatrix(int[][] matrix, int target) {
 ```
 
 
+## Pacific Atlantic Water Flow {#lc-pacific-atlantic-water-flow}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 417
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/pacific-atlantic-water-flow/
+- **Tags**: NeetCode 150
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation)
+
+### Description
+
+There is an `m x n` rectangular island that borders both the Pacific Ocean and Atlantic Ocean. The Pacific Ocean touches the island's left and top edges, and the Atlantic Ocean touches the island's right and bottom edges.
+
+The island is partitioned into a grid of square cells. You are given an `m x n` integer matrix `heights` where `heights[r][c]` represents the height above sea level of the cell at coordinate `(r, c)`.
+
+The island receives a lot of rain, and the rain water can flow to neighboring cells directly north, south, east, and west if the neighboring cell's height is **less than or equal to** the current cell's height. Water can flow from any cell adjacent to an ocean into the ocean.
+
+Return a 2D list of grid coordinates `result` where `result[i] = [ri, ci]` denotes that rain water can flow from cell `(ri, ci)` to **both** the Pacific and Atlantic oceans.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: heights = [[1,2,2,3,5],
+                  [3,2,3,4,4],
+                  [2,4,5,3,1],
+                  [6,7,1,4,5],
+                  [5,1,1,2,4]]
+Output: [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]
+Explanation: The following cells can flow to the Pacific and Atlantic oceans:
+[0,4]: [0,4] -> Pacific Ocean
+       [0,4] -> Atlantic Ocean
+[1,3]: [1,3] -> [0,3] -> Pacific Ocean
+       [1,3] -> [1,4] -> Atlantic Ocean
+```
+
+**Example 2:**
+
+```
+Input: heights = [[1]]
+Output: [[0,0]]
+Explanation: The water can flow from the only cell to both oceans.
+```
+
+### Constraints
+
+- `m == heights.length`
+- `n == heights[r].length`
+- `1 <= m, n <= 200`
+- `0 <= heights[r][c] <= 10^5`
+
+### Solution - DFS from Ocean Borders
+
+#### Walkthrough
+
+The key insight is to **reverse the problem**: instead of checking if each cell can flow to both oceans, start from the ocean borders and find all cells that each ocean can reach by flowing **backward** (upward to higher/equal elevations).
+
+**Why this works:**
+- Water flows from HIGH to LOW (or equal) elevation
+- If we start from ocean borders and move to cells with $\ge$ elevation, we're tracing the reverse path
+- Any cell reachable by BOTH oceans is a valid answer
+
+**Algorithm:**
+
+1. **Mark cells reachable from Pacific Ocean**:
+   - Start DFS from all top border cells (row 0)
+   - Start DFS from all left border cells (column 0)
+   - Mark all cells reachable by flowing upward (to $\ge$ height)
+
+2. **Mark cells reachable from Atlantic Ocean**:
+   - Start DFS from all bottom border cells (row m-1)
+   - Start DFS from all right border cells (column n-1)
+   - Mark all cells reachable by flowing upward
+
+3. **Find intersection**: Any cell marked by BOTH oceans can flow to both
+
+**Visual Example:**
+
+For `heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]`:
+
+```
+Pacific reachable:      Atlantic reachable:     Both (Answer):
+[X X X X X]            [. . . X X]            [. . . . X]
+[X X X X X]            [. . X X X]            [. . . X X]
+[X X X X .]            [. X X X .]            [. . X . .]
+[X X . X X]            [X X . X X]            [X X . . .]
+[X . . X X]            [X . . X X]            [X . . . .]
+```
+
+Cell `(0,4)` with height 5:
+- Can reach Pacific: 5 → 3 → 2 → 2 (top border)
+- Can reach Atlantic: 5 (already at top-right, adjacent to Atlantic)
+
+Cell `(3,0)` with height 6:
+- Can reach Pacific: 6 (already at left border)
+- Can reach Atlantic: 6 → 7 → 4 → 5 (bottom border)
+
+#### Analysis
+
+- **Time Complexity**: O(m × n) where m is the number of rows and n is the number of columns. Each cell is visited at most twice (once from each ocean's DFS).
+- **Space Complexity**: O(m × n) for the two boolean matrices tracking reachability, plus O(m × n) recursion stack depth in the worst case.
+
+#### Implementation Steps
+
+1. Initialize two boolean matrices `canReachPacific` and `canReachAtlantic` to track which cells each ocean can reach
+2. **DFS from Pacific borders**:
+   - For each cell in top row (row 0), run DFS
+   - For each cell in left column (col 0), run DFS
+   - In DFS, mark current cell as reachable and explore neighbors with $\ge$ height
+3. **DFS from Atlantic borders**:
+   - For each cell in bottom row (row m-1), run DFS
+   - For each cell in right column (col n-1), run DFS
+4. **Find intersection**: Iterate through all cells and add those marked by both oceans to result
+5. **DFS helper logic**:
+   - Mark current cell as visited
+   - For each of 4 directions (up, down, left, right):
+     - Skip if out of bounds or already visited
+     - If neighbor height $\ge$ current height, recursively DFS to neighbor
+
+#### Code - Java
+
+```java
+class Solution {
+    private int rows;
+    private int cols;
+
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        if (heights == null || heights.length == 0 || heights[0].length == 0) {
+            return result;
+        }
+
+        rows = heights.length;
+        cols = heights[0].length;
+
+        // Track which cells can reach each ocean
+        boolean[][] canReachPacific = new boolean[rows][cols];
+        boolean[][] canReachAtlantic = new boolean[rows][cols];
+
+        // DFS from Pacific Ocean borders (top row and left column)
+        for (int col = 0; col < cols; col++) {
+            dfs(0, col, heights, canReachPacific);  // Top border
+        }
+        for (int row = 0; row < rows; row++) {
+            dfs(row, 0, heights, canReachPacific);  // Left border
+        }
+
+        // DFS from Atlantic Ocean borders (bottom row and right column)
+        for (int col = 0; col < cols; col++) {
+            dfs(rows - 1, col, heights, canReachAtlantic);  // Bottom border
+        }
+        for (int row = 0; row < rows; row++) {
+            dfs(row, cols - 1, heights, canReachAtlantic);  // Right border
+        }
+
+        // Find cells that can reach BOTH oceans
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (canReachPacific[i][j] && canReachAtlantic[i][j]) {
+                    result.add(Arrays.asList(i, j));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private void dfs(int row, int col, int[][] heights, boolean[][] canReach) {
+        // Mark current cell as reachable
+        canReach[row][col] = true;
+
+        // Four directions: up, down, left, right
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+        for (int[] dir : directions) {
+            int newRow = row + dir[0];
+            int newCol = col + dir[1];
+
+            // Check bounds
+            if (newRow < 0 || newRow >= rows || newCol < 0 || newCol >= cols) {
+                continue;
+            }
+
+            // Skip if already visited
+            if (canReach[newRow][newCol]) {
+                continue;
+            }
+
+            // Water can flow from higher/equal cells TO current cell
+            // So we explore neighbors that are >= current height
+            if (heights[newRow][newCol] >= heights[row][col]) {
+                dfs(newRow, newCol, heights, canReach);
+            }
+        }
+    }
+}
+```
+
+
 ## Best Meeting Point {#lc-best-meeting-point}
 
 ### Problem Metadata
