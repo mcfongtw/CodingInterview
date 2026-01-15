@@ -3091,7 +3091,7 @@ public int minCost(int[][] costs) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/longest-increasing-subsequence/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Dynamic Programming](#dynamic-programming), [Binary Search](glossary-of-algorithm.html#glossary-binary-search), [Array](glossary-of-algorithm.html#glossary-array)
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Binary Search](glossary-of-algorithm.html#glossary-binary-search), [Array](glossary-of-algorithm.html#glossary-array)
 
 ### Description
 
@@ -3109,11 +3109,102 @@ Output: 4  (the LIS is [2,3,7,101])
 - `1 <= nums.length <= 2500`
 - `-10^4 <= nums[i] <= 10^4`
 
-### Solution - Binary Search
+### Solution - Binary Search (Patience Sorting)
 
 #### Walkthrough
 
-Maintain an array `tails` where `tails[len]` holds the smallest possible tail for an increasing subsequence of length `len+1`. For each number, binary search the first tail greater or equal to it and replace it; if none, append to extend the LIS.
+This solution uses a **Binary Search with Patience Sorting** approach to find the length of the longest increasing subsequence in O(n log n) time.
+
+**Core Strategy:**
+
+Maintain a `tails` array where `tails[i]` represents the **smallest possible tail element** for all increasing subsequences of length `i + 1`. This invariant allows us to efficiently determine where to place new elements.
+
+**Key Insight: Why Track Smallest Tails?**
+
+By keeping the smallest possible tail for each length, we maximize opportunities for future elements to extend subsequences. Consider two subsequences of length 3:
+- `[2, 5, 9]` with tail 9
+- `[2, 3, 7]` with tail 7
+
+The second subsequence with tail 7 has more potential to be extended by future elements (any element $>$ 7 works, whereas only elements $>$ 9 work for the first).
+
+**Algorithm Steps:**
+
+For each element `num` in the array:
+
+1. **Binary search** in `tails` to find the leftmost position where `tails[i] >= num`
+2. **Two cases:**
+   - **Found position `i`**: Replace `tails[i] = num` (update to smaller tail for this length)
+   - **Not found** (num is larger than all tails): Append `num` to extend the LIS length
+
+**Why Binary Search Works:**
+
+The `tails` array maintains a sorted order by construction:
+- If `tails[i] < tails[j]` for `i < j`, it's because we found an increasing subsequence of length `j + 1` with a tail value greater than the tail of length `i + 1`
+- This monotonic property allows binary search to find the insertion point in O(log n)
+
+**Visual Example Walkthrough:**
+
+Using `nums = [10, 9, 2, 5, 3, 7, 101, 18]`:
+
+```
+Step 1: num=10
+  tails = [10]
+  Binary search: position 0 (empty array), append 10
+  LIS length = 1
+
+Step 2: num=9
+  tails = [9]
+  Binary search: position 0 (9 $<$ 10), replace tails[0] = 9
+  LIS length = 1
+  (9 is a better tail for length-1 subsequences than 10)
+
+Step 3: num=2
+  tails = [2]
+  Binary search: position 0 (2 $<$ 9), replace tails[0] = 2
+  LIS length = 1
+  (2 is an even better tail for length-1 subsequences)
+
+Step 4: num=5
+  tails = [2, 5]
+  Binary search: position 1 (5 $>$ 2), append 5
+  LIS length = 2
+  (Found subsequence [2, 5] of length 2)
+
+Step 5: num=3
+  tails = [2, 3]
+  Binary search: position 1 (3 $>$ 2 but 3 $<$ 5), replace tails[1] = 3
+  LIS length = 2
+  (3 is a better tail for length-2 subsequences than 5)
+
+Step 6: num=7
+  tails = [2, 3, 7]
+  Binary search: position 2 (7 $>$ 3), append 7
+  LIS length = 3
+  (Found subsequence [2, 3, 7] of length 3)
+
+Step 7: num=101
+  tails = [2, 3, 7, 101]
+  Binary search: position 3 (101 $>$ 7), append 101
+  LIS length = 4
+  (Found subsequence [2, 3, 7, 101] of length 4)
+
+Step 8: num=18
+  tails = [2, 3, 7, 18]
+  Binary search: position 3 (18 $>$ 7 but 18 $<$ 101), replace tails[3] = 18
+  LIS length = 4
+  (18 is a better tail for length-4 subsequences)
+
+Result: 4 (the LIS could be [2, 3, 7, 101] or [2, 3, 7, 18])
+```
+
+**Important Note:** The `tails` array tracks the **length** of the LIS, not the actual LIS itself. To reconstruct the actual subsequence, additional bookkeeping (parent pointers) would be needed.
+
+**Why This Approach is Optimal:**
+
+- Each element is processed once: O(n) iterations
+- Each iteration performs binary search: O(log n)
+- Total: O(n log n), which is the best known time complexity for LIS
+- Space: O(n) for the `tails` array
 
 #### Analysis
 
@@ -3131,31 +3222,206 @@ Maintain an array `tails` where `tails[len]` holds the smallest possible tail fo
 #### Code - Java
 ```java
 public int lengthOfLIS(int[] nums) {
-    int[] sorted = new int[nums.length];
+    int[] tails = new int[nums.length];
     int size = 0;
 
     for (int num : nums) {
         int left = 0;
         int right = size;
 
-        //Find the sorted index of num in **sorted array** using binary search
+        // Binary search: find leftmost position where tails[i] >= num
         while (left < right) {
             int mid = left + (right - left) / 2;
-            if (sorted[mid] < num) {
+            if (tails[mid] < num) {
                 left = mid + 1;
             } else {
                 right = mid;
             }
         }
-        sorted[left] = num;
 
-        //length of **sorted array**
+        // Update or append
+        tails[left] = num;
+
+        // Extend LIS length if we appended
         if (left == size) {
             size++;
-        }          
+        }
     }
 
-    return size;        
+    return size;
+}
+```
+
+
+### Solution - Dynamic Programming
+
+#### Walkthrough
+
+This solution uses a **classic tabulation DP approach** to find the LIS length. While slower than the binary search method, it's more intuitive and easier to extend for related problems (like reconstructing the actual subsequence).
+
+**Core Strategy:**
+
+Build up solutions from smaller subarrays. Let `dp[i]` represent the length of the longest increasing subsequence **ending at index i**. For each position, look back at all previous elements and extend their subsequences if possible.
+
+**Recurrence Relation:**
+
+For each index `i`:
+```
+dp[i] = 1 + max(dp[j]) for all j < i where nums[j] < nums[i]
+```
+
+If no such `j` exists (no smaller element before `i`), then `dp[i] = 1` (subsequence of just `nums[i]`).
+
+**Key Insight:**
+
+Unlike Kadane's algorithm (which works for contiguous subarrays), LIS deals with **subsequences** (non-contiguous). We cannot use a greedy approach because skipping an element might lead to a longer subsequence later.
+
+Example: `[1, 10, 2, 3]`
+- Greedy approach taking 10 gives length 2: `[1, 10]`
+- Optimal approach skipping 10 gives length 3: `[1, 2, 3]`
+
+This is why we need DP to track all possible subsequence endings.
+
+**Visual Example Walkthrough:**
+
+Using `nums = [10, 9, 2, 5, 3, 7, 101, 18]`:
+
+```
+i=0: nums[0]=10
+  dp[0] = 1 (no previous elements)
+  Subsequences ending at 0: [10]
+
+i=1: nums[1]=9
+  Check j=0: 10 $>$ 9, cannot extend
+  dp[1] = 1
+  Subsequences ending at 1: [9]
+
+i=2: nums[2]=2
+  Check j=0: 10 $>$ 2, cannot extend
+  Check j=1: 9 $>$ 2, cannot extend
+  dp[2] = 1
+  Subsequences ending at 2: [2]
+
+i=3: nums[3]=5
+  Check j=0: 10 $>$ 5, cannot extend
+  Check j=1: 9 $>$ 5, cannot extend
+  Check j=2: 2 $<$ 5, can extend! dp[3] = 1 + dp[2] = 2
+  Subsequences ending at 3: [2, 5]
+
+i=4: nums[4]=3
+  Check j=0,1: cannot extend
+  Check j=2: 2 $<$ 3, can extend! dp[4] = 1 + dp[2] = 2
+  Check j=3: 5 $>$ 3, cannot extend
+  dp[4] = 2
+  Subsequences ending at 4: [2, 3]
+
+i=5: nums[5]=7
+  Check j=0,1: cannot extend
+  Check j=2: 2 $<$ 7, dp[5] = max(dp[5], 1 + dp[2]) = 2
+  Check j=3: 5 $<$ 7, dp[5] = max(dp[5], 1 + dp[3]) = 3 ✓
+  Check j=4: 3 $<$ 7, dp[5] = max(dp[5], 1 + dp[4]) = 3
+  dp[5] = 3
+  Subsequences ending at 5: [2, 5, 7] or [2, 3, 7]
+
+i=6: nums[6]=101
+  All previous elements $<$ 101
+  Best: dp[6] = 1 + dp[5] = 4
+  Subsequences ending at 6: [2, 5, 7, 101] or [2, 3, 7, 101]
+
+i=7: nums[7]=18
+  Check all j $<$ 7 where nums[j] $<$ 18:
+  Best: dp[7] = 1 + dp[5] = 4
+  Subsequences ending at 7: [2, 5, 7, 18] or [2, 3, 7, 18]
+
+dp = [1, 1, 1, 2, 2, 3, 4, 4]
+Result: max(dp) = 4
+```
+
+**Why Two Nested Loops:**
+- **Outer loop** (i): Process each element as a potential end of a subsequence
+- **Inner loop** (j): Check all previous elements that could extend to position i
+- This ensures we consider all possible subsequences ending at each position
+
+#### Analysis
+
+- **Time Complexity**: O(n²)
+  - Outer loop: O(n) iterations (one per element)
+  - Inner loop: O(n) iterations per outer iteration (check all previous elements)
+  - Each iteration performs constant-time comparison and update
+  - Total: O(n) × O(n) = O(n²)
+
+- **Space Complexity**: O(n)
+  - DP array stores one value per input element
+  - No recursion stack needed (iterative approach)
+  - This is optimal for the DP approach
+
+**Comparison with Binary Search:**
+- **DP**: O(n²) time, easier to understand, easier to reconstruct actual LIS
+- **Binary Search**: O(n log n) time, more efficient for large inputs, trickier to implement
+
+#### Implementation Steps
+
+**Initialization:**
+1. Create `dp` array of size n, initialized to 1 (each element forms a subsequence of length 1)
+2. Initialize `maxLength = 1` to track the global maximum
+
+**DP Table Construction:**
+3. For each index `i` from 0 to n-1 (outer loop - potential end position):
+   1. For each index `j` from 0 to i-1 (inner loop - check all previous elements):
+      - If `nums[j] < nums[i]` (can extend subsequence ending at j):
+        - Update `dp[i] = max(dp[i], dp[j] + 1)`
+   2. Update global maximum: `maxLength = max(maxLength, dp[i])`
+
+**Return Result:**
+4. Return `maxLength` (the maximum value in the dp array)
+
+#### Code - Java
+```java
+public int lengthOfLIS(int[] nums) {
+    int n = nums.length;
+    int[] dp = new int[n];
+    Arrays.fill(dp, 1); // Base case: each element is a subsequence of length 1
+
+    int maxLength = 1;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (nums[j] < nums[i]) {
+                dp[i] = Math.max(dp[i], dp[j] + 1);
+            }
+        }
+        maxLength = Math.max(maxLength, dp[i]);
+    }
+
+    return maxLength;
+}
+```
+
+#### Code - Golang
+```go
+func lengthOfLIS(nums []int) int {
+    n := len(nums)
+    if n == 0 {
+        return 0
+    }
+
+    dp := make([]int, n)
+    for i := range dp {
+        dp[i] = 1 // Each element forms a subsequence of length 1
+    }
+
+    maxLength := 1
+
+    for i := 0; i < n; i++ {
+        for j := 0; j < i; j++ {
+            if nums[j] < nums[i] {
+                dp[i] = max(dp[i], dp[j] + 1)
+            }
+        }
+        maxLength = max(maxLength, dp[i])
+    }
+
+    return maxLength
 }
 ```
 
