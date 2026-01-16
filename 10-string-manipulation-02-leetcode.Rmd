@@ -626,6 +626,383 @@ public List<List<String>> groupAnagrams(String[] strs) {
 ```
 
 
+## Decode Ways {#lc-decode-ways}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 91
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/decode-ways/
+- **Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#glossary-dynamic-programming), [Memoization](#dp-memoization), [Tabulation](#dp-tabulation), String
+
+### Description
+
+A message containing letters from `A-Z` can be encoded into numbers using the following mapping:
+
+```
+'A' -> "1"
+'B' -> "2"
+...
+'Z' -> "26"
+```
+
+To decode an encoded message, all the digits must be grouped then mapped back into letters using the reverse of the mapping above (there may be multiple ways). For example, `"11106"` can be mapped into:
+
+- `"AAJF"` with the grouping `(1 1 10 6)`
+- `"KJF"` with the grouping `(11 10 6)`
+
+Note that the grouping `(1 11 06)` is invalid because `"06"` cannot be mapped into `'F'` since `"6"` is different from `"06"`.
+
+Given a string `s` containing only digits, return the number of ways to decode it.
+
+The test cases are generated so that the answer fits in a **32-bit** integer.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "12"
+Output: 2
+Explanation: "12" could be decoded as "AB" (1 2) or "L" (12).
+```
+
+**Example 2:**
+```
+Input: s = "226"
+Output: 3
+Explanation: "226" could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
+```
+
+**Example 3:**
+```
+Input: s = "06"
+Output: 0
+Explanation: "06" cannot be mapped to "F" because of the leading zero ("6" is different from "06").
+```
+
+### Constraints
+
+- `1 <= s.length <= 100`
+- `s` contains only digits and may contain leading zero(s)
+
+### Solution - Bottom-Up Dynamic Programming (Tabulation)
+
+#### Walkthrough
+
+This problem is a classic DP problem where we need to count the number of ways to decode a digit string. The key insight is that at each position, we can decode either:
+1. **One digit** (if it's '1'-'9')
+2. **Two digits** (if they form '10'-'26')
+
+We build a DP table where `dp[i]` represents the number of ways to decode the first `i` characters of the string.
+
+**DP State Definition:**
+- `dp[i]` = number of ways to decode substring `s[0...i-1]` (first `i` characters)
+
+**Base Case:**
+- `dp[0] = 1` - empty string has one way to decode (do nothing)
+
+**Transition:**
+For each position `i` from 1 to n:
+- Check if we can decode **1 digit** at position `i-1`:
+  - If `s[i-1]` is '1'-'9', add `dp[i-1]` to `dp[i]`
+- Check if we can decode **2 digits** at positions `i-2` and `i-1`:
+  - If `s[i-2:i]` forms '10'-'26', add `dp[i-2]` to `dp[i]`
+
+**Visual Example with `s = "226"`:**
+
+```
+String: "226"
+Index:   0   1   2   3
+Chars:  ""  "2" "22" "226"
+dp:     [1,  ?,  ?,  ?]
+
+Step 1: i=1, processing s[0]='2'
+  One digit: '2' (valid, 1 $\le$ 2 $\le$ 9)
+    dp[1] += dp[0] = 0 + 1 = 1
+  Two digits: N/A (i < 2)
+  dp = [1, 1, 0, 0]
+
+Step 2: i=2, processing s[0:2]="22"
+  One digit: '2' at s[1] (valid, 1 $\le$ 2 $\le$ 9)
+    dp[2] += dp[1] = 0 + 1 = 1
+  Two digits: "22" (valid, 10 $\le$ 22 $\le$ 26)
+    dp[2] += dp[0] = 1 + 1 = 2
+  dp = [1, 1, 2, 0]
+
+  Decodings so far: "BB" (2,2) and "V" (22)
+
+Step 3: i=3, processing s[0:3]="226"
+  One digit: '6' at s[2] (valid, 1 $\le$ 6 $\le$ 9)
+    dp[3] += dp[2] = 0 + 2 = 2
+    This adds: "BBF" (2,2,6) and "VF" (22,6)
+  Two digits: "26" (valid, 10 $\le$ 26 $\le$ 26)
+    dp[3] += dp[1] = 2 + 1 = 3
+    This adds: "BZ" (2,26)
+  dp = [1, 1, 2, 3]
+
+Final result: dp[3] = 3
+Three ways: "BZ" (2,26), "VF" (22,6), "BBF" (2,2,6)
+```
+
+**Handling Edge Cases:**
+
+1. **Leading zeros**: "06" → dp[1] = 0 because '0' is not in range [1,9]
+2. **Zeros in middle**: "10" → Only valid as two-digit "10" → 'J'
+3. **Invalid two-digit**: "27" → Only one-digit decode possible
+
+**Example with `s = "10"`:**
+```
+Step 1: i=1, s[0]='1'
+  One digit: '1' (valid) → dp[1] = 1
+  dp = [1, 1, 0]
+
+Step 2: i=2, s[1]='0'
+  One digit: '0' (invalid, not in [1,9]) → skip
+  Two digits: "10" (valid, 10 $\le$ 10 $\le$ 26) → dp[2] += dp[0] = 1
+  dp = [1, 1, 1]
+
+Result: 1 way ("10" → 'J')
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Single pass through the string with constant-time operations at each position
+  - Each character is processed exactly once
+
+- **Space Complexity**: O(n)
+  - DP array of size n+1 to store results for all positions
+  - Can be optimized to O(1) by using only two variables (similar to Fibonacci)
+
+#### Implementation Steps
+
+1. Create a DP array `dp` of size `n+1` where n is the length of the string
+2. Initialize base case: `dp[0] = 1` (empty string has one way to decode)
+3. For each position `i` from 1 to n:
+   - Extract the digit at position `i-1` using helper method `decode()`
+   - **Check one-digit decode**: If digit is in range [1, 9], add `dp[i-1]` to `dp[i]`
+   - **Check two-digit decode** (if `i >= 2`):
+     - Compute two-digit number from positions `i-2` and `i-1`
+     - If in range [10, 26], add `dp[i-2]` to `dp[i]`
+4. Return `dp[n]` as the final answer
+5. Helper method `decode(char c)` converts character digit to integer: `c - '0'`
+
+#### Code - Java
+
+```java
+public int numDecodings(String s) {
+    int[] dp = new int[s.length() + 1]; // ways to decode first i-th chars
+
+    dp[0] = 1; // only one way
+
+    for(int i = 1; i <= s.length(); i++) {
+        int prev = decode(s.charAt(i - 1));
+
+        if(prev >= 1 && prev <= 9) {
+            dp[i] += dp[i-1];
+        }
+
+        if(i >= 2) {
+            int prev2 = decode(s.charAt(i - 2)) * 10 + decode(s.charAt(i - 1));
+            if(prev2 >= 10 && prev2 <= 26) {
+                dp[i] += dp[i-2];
+            }
+        }
+
+    }
+
+    return dp[s.length()];
+}
+
+private int decode(char c) {
+    return c - '0';
+}
+```
+
+#### Code - Golang
+
+```go
+func numDecodings(s string) int {
+    dp := make([]int, len(s)+1)
+    dp[0] = 1 // only one way
+
+    for i := 1; i <= len(s); i++ {
+        prev := decode(s[i-1])
+
+        if prev >= 1 && prev <= 9 {
+            dp[i] += dp[i-1]
+        }
+
+        if i >= 2 {
+            prev2 := decode(s[i-2])*10 + decode(s[i-1])
+            if prev2 >= 10 && prev2 <= 26 {
+                dp[i] += dp[i-2]
+            }
+        }
+    }
+
+    return dp[len(s)]
+}
+
+func decode(c byte) int {
+    return int(c - '0')
+}
+```
+
+### Solution 2 - Top-Down Dynamic Programming (Memoization)
+
+#### Walkthrough
+
+The memoization approach uses **recursive thinking** to solve the problem by breaking it down into subproblems. We start from index 0 and recursively explore all valid decoding paths, caching results to avoid redundant computation.
+
+**Recursive State Definition:**
+- `dfs(index)` = number of ways to decode substring `s[index...n-1]`
+
+**Base Cases:**
+- If `index == n`, we've successfully decoded the entire string → return 1
+- If `s[index] == '0'`, this is an invalid starting digit → return 0
+
+**Recursive Choices:**
+At each position `index`, we can:
+1. **Take one digit** (if valid: '1'-'9')
+   - Recurse to `dfs(index + 1)`
+2. **Take two digits** (if valid: '10'-'26')
+   - Recurse to `dfs(index + 2)`
+
+The total ways = sum of ways from both choices.
+
+**Recurrence Relation:**
+```
+dfs(index) = 0                                    if s[index] == '0'
+           = dfs(index+1)                         if only 1-digit valid
+           + dfs(index+2)                         if 2-digit also valid
+```
+
+**Visual Example with `s = "226"`:**
+
+```
+                        dfs(0)
+                        ↓
+                s[0]='2', choices: '2' or '22'
+                    /              \
+              dfs(1)                dfs(2)
+          s[1]='2'                  s[2]='6'
+      '2' or '26'                   '6' only
+        /      \                       |
+    dfs(2)    dfs(3)               dfs(3)
+    s[2]='6'   [base:1]             [base:1]
+    '6' only
+       |
+    dfs(3)
+    [base:1]
+
+Paths (bottom-up):
+1. dfs(0) → '2' → dfs(1) → '2' → dfs(2) → '6' → dfs(3) = 1  ["2","2","6"]
+2. dfs(0) → '2' → dfs(1) → '26' → dfs(3) = 1                ["2","26"]
+3. dfs(0) → '22' → dfs(2) → '6' → dfs(3) = 1                ["22","6"]
+
+Total: 3 ways
+```
+
+**Memoization Optimization:**
+Without memoization, we would recompute `dfs(2)` and `dfs(3)` multiple times. By caching results in a `memo` array, each subproblem is solved exactly once.
+
+**Example with `s = "12"`:**
+```
+dfs(0): s[0]='1'
+  - One digit '1': ways1 = dfs(1)
+    dfs(1): s[1]='2'
+      - One digit '2': ways1 = dfs(2) = 1 (base case)
+      - Two digits: index+1 >= n, skip
+      - memo[1] = 1
+  - Two digits '12': ways2 = dfs(2)
+    dfs(2): base case, return 1
+    memo[2] = 1
+  - memo[0] = ways1 + ways2 = 1 + 1 = 2
+
+Result: 2 ways ("1","2") and ("12")
+```
+
+**Handling Edge Cases:**
+
+1. **Starting with '0'**: Immediately return 0 from that recursive call
+2. **Out of bounds two-digit**: Check `index + 1 < n` before forming two-digit number
+3. **Invalid two-digit**: If $\gt$ 26, only count one-digit decode
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Each index from 0 to n is computed at most once due to memoization
+  - Each computation involves O(1) work
+  - Total: O(n)
+
+- **Space Complexity**: O(n)
+  - Memoization array: O(n)
+  - Recursion call stack depth: O(n) in worst case
+  - Total: O(n)
+
+#### Implementation Steps
+
+1. Create a memoization array `memo` of size n, initialized to `-1` (uncomputed state)
+2. Define recursive helper method `dfs(s, index, memo)`:
+   - **Base case 1**: If `index == n`, return 1 (successful decode)
+   - **Base case 2**: If `s[index] == '0'`, return 0 (invalid)
+   - **Memoization check**: If `memo[index] != -1`, return cached result
+   - **Recursive computation**:
+     - Initialize `ways = 0`
+     - **One-digit choice**: If `s[index]` is '1'-'9', add `dfs(index + 1)`
+     - **Two-digit choice**: If `index + 1 < n` and `s[index:index+2]` forms '10'-'26', add `dfs(index + 2)`
+   - Store result in `memo[index]` and return
+3. Call `dfs(s, 0, memo)` to start recursion from beginning
+4. Return the result
+
+#### Code - Java
+
+```java
+public int numDecodings(String s) {
+    int[] memo = new int[s.length()];
+    Arrays.fill(memo, -1);
+    return dfs(s, 0, memo);
+}
+
+private int dfs(String s, int index, int[] memo) {
+    // Base case: reached end of string
+    if (index == s.length()) {
+        return 1;
+    }
+
+    // Invalid: string starting with '0'
+    if (s.charAt(index) == '0') {
+        return 0;
+    }
+
+    // Return cached result if already computed
+    if (memo[index] != -1) {
+        return memo[index];
+    }
+
+    int ways = 0;
+
+    // Choice 1: Decode one digit
+    ways += dfs(s, index + 1, memo);
+
+    // Choice 2: Decode two digits (if valid)
+    if (index + 1 < s.length()) {
+        int twoDigit = (s.charAt(index) - '0') * 10 + (s.charAt(index + 1) - '0');
+        if (twoDigit >= 10 && twoDigit <= 26) {
+            ways += dfs(s, index + 2, memo);
+        }
+    }
+
+    // Cache and return result
+    memo[index] = ways;
+    return ways;
+}
+```
+
+
 ## Word Ladder {#lc-word-ladder}
 
 ### Problem Metadata
