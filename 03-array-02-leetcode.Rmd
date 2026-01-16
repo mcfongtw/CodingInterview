@@ -1224,13 +1224,16 @@ public List<List<Integer>> combinationSum(int[] candidates, int target) {
 
     // Base case
     dp[0].add(new ArrayList<>());
-
-    // Fill dp table
+    
     for (int i = 1; i <= target; i++) {
+        //for each candidate c
         for (int c : candidates) {
+            // skip if candidate is too big, c > i
             if (c <= i) {
+                //for each combination in dp[remaining]
                 for (List<Integer> combo : dp[i - c]) {
                     if (combo.isEmpty() || c >= combo.get(combo.size() - 1)) {
+                        //create new combination by 1. cloning 2. appending candidate in increasing order
                         List<Integer> newCombo = new ArrayList<>(combo);
                         newCombo.add(c);
                         dp[i].add(newCombo);
@@ -1244,6 +1247,40 @@ public List<List<Integer>> combinationSum(int[] candidates, int target) {
 }
 ```
 
+
+#### Code - Golang
+```go
+func combinationSum(candidates []int, target int) [][]int {
+    // dp[i] = list of all combinations that sum to i
+    dp := make([][][]int, target + 1);
+
+    for i := 0; i <= target; i++ {
+        dp[i] = make([][]int, 0)
+    }
+
+    dp[0] = append(dp[0], make([]int, 0))
+
+    for i := 1; i<= target; i++ {
+        //for each candidate c
+        for _, c := range(candidates) {
+            // skip if candidate is too big, c > i
+            if c <= i { 
+                //for each combination in dp[remaining]
+                for _, combo := range(dp[i-c]) {
+                    if len(combo) == 0 || c >= combo[len(combo) - 1] {
+                        //create new combination by 1. cloning 2. appending candidate in increasing order
+                        newCombo := append([]int{}, combo...)                    
+                        newCombo = append(newCombo, c)
+                        dp[i] = append(dp[i], newCombo)
+                    }
+                }
+            }
+        }
+    }
+
+    return dp[target];
+}
+```
 
 ## Permutations {#lc-permutations}
 
