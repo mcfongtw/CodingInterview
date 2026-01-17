@@ -58,6 +58,8 @@ This achieves the 90-degree rotation in-place.
 public void rotate(int[][] matrix) {
     int n = matrix.length;
 
+    // Step 1: Transpose the matrix along the main diagonal
+    // Swap matrix[i][j] with matrix[j][i] for all i < j
     for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
             int tmp = matrix[i][j];
@@ -66,14 +68,52 @@ public void rotate(int[][] matrix) {
         }
     }
 
+    // Step 2: Reverse each row (swap columns around the vertical midline)
     for (int row = 0; row < n; row++) {
         int left = 0, right = n - 1;
+
+        // Use two pointers to swap matrix[i][l] with matrix[i][r]        
         while (left < right) {
             int tmp = matrix[row][left];
             matrix[row][left] = matrix[row][right];
             matrix[row][right] = tmp;
             left++;
             right--;
+        }
+    }
+}
+```
+
+#### Code - Golang
+
+```go
+func rotate(matrix [][]int) {
+    n := len(matrix)
+
+    // Step 1: Transpose the matrix along the main diagonal
+    // Swap matrix[i][j] with matrix[j][i] for all i < j
+    for i := 0; i < n; i++ {
+        // Start j from i+1 to avoid double swapping (upper triangle only)
+        for j := i + 1; j < n; j++ {
+            temp := matrix[i][j]
+            matrix[i][j] = matrix[j][i]
+            matrix[j][i] = temp
+        }
+    }
+
+    // Step 2: Reverse each row (swap columns around the vertical midline)
+    for i := 0; i < n; i++ {
+        l := 0
+        r := n - 1
+
+        // Use two pointers to swap matrix[i][l] with matrix[i][r]
+        for l < r {
+            temp := matrix[i][l]
+            matrix[i][l] = matrix[i][r]
+            matrix[i][r] = temp
+
+            l++
+            r--
         }
     }
 }
