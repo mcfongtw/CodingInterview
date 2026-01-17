@@ -1276,6 +1276,171 @@ public boolean wordBreakTrie(String s, List<String> wordDict) {
 ```
 
 
+## Ransom Note {#lc-ransom-note}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 383
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/ransom-note/
+- **Tags**:
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#glossary-hash-table), String, Counting
+
+### Description
+
+Given two strings `ransomNote` and `magazine`, return `true` if `ransomNote` can be constructed by using the letters from `magazine` and `false` otherwise.
+
+Each letter in `magazine` can only be used once in `ransomNote`.
+
+### Examples
+
+**Example 1:**
+```
+Input: ransomNote = "a", magazine = "b"
+Output: false
+```
+
+**Example 2:**
+```
+Input: ransomNote = "aa", magazine = "ab"
+Output: false
+```
+
+**Example 3:**
+```
+Input: ransomNote = "aa", magazine = "aab"
+Output: true
+```
+
+### Constraints
+
+- $1 \le$ ransomNote.length, magazine.length $\le$ $10^5$
+- `ransomNote` and `magazine` consist of lowercase English letters
+
+### Solution - Frequency Counting
+
+#### Walkthrough
+
+This problem requires checking if we have enough of each character in `magazine` to construct `ransomNote`. The solution uses a **frequency counting** approach:
+
+1. Count the frequency of each character available in `magazine` using a hash map
+2. Iterate through `ransomNote` and for each character:
+   - Check if the character exists in the hash map with count greater than 0
+   - If yes, decrement the count (use one instance from magazine)
+   - If no, return `false` (insufficient characters in magazine)
+3. If we successfully process all characters in `ransomNote`, return `true`
+
+**Key insight**: We only need to track characters from `magazine`. As we consume characters for the ransom note, we decrement their counts. If we ever need a character that's unavailable or exhausted, we immediately know construction is impossible.
+
+**Example walkthrough with `ransomNote = "aa"`, `magazine = "aab"`:**
+
+```
+Step 1: Build frequency map from magazine
+  magazine = "aab"
+  dict = {a: 2, b: 1}
+
+Step 2: Process ransomNote character by character
+  i=0, c='a': dict[a]=2 > 0 ✓ → decrement → dict = {a: 1, b: 1}
+  i=1, c='a': dict[a]=1 > 0 ✓ → decrement → dict = {a: 0, b: 1}
+
+Step 3: All characters processed successfully
+  Return true
+```
+
+**Example with `ransomNote = "aa"`, `magazine = "ab"`:**
+
+```
+Step 1: Build frequency map from magazine
+  magazine = "ab"
+  dict = {a: 1, b: 1}
+
+Step 2: Process ransomNote character by character
+  i=0, c='a': dict[a]=1 > 0 ✓ → decrement → dict = {a: 0, b: 1}
+  i=1, c='a': dict[a]=0, not available ✗ → Return false
+```
+
+#### Analysis
+
+- **Time Complexity**: O(m + n) where m is the length of `magazine` and n is the length of `ransomNote`
+  - Building frequency map from magazine: O(m)
+  - Checking each character in ransomNote: O(n)
+  - Total: O(m + n)
+
+- **Space Complexity**: O(k) where k is the number of unique characters in `magazine`
+  - Hash map stores at most 26 entries (lowercase English letters)
+  - In practice: O(1) since alphabet size is constant
+  - Total: O(1) or O(k) where k $\le$ 26
+
+#### Implementation Steps
+
+1. Initialize a hash map `dict` to store character frequencies from `magazine`
+2. Iterate through `magazine` and populate the frequency map:
+   - For each character, increment its count in `dict`
+3. Iterate through `ransomNote`:
+   - For each character `c`, check if it exists in `dict` with count greater than 0
+   - If yes, decrement `dict[c]`
+   - If no (either not in map or count is 0), return `false`
+4. If all characters are successfully processed, return `true`
+
+#### Code - Java
+
+```java
+class Solution {
+    public boolean canConstruct(String ransomNote, String magazine) {
+        Map<Character, Integer> dict = new HashMap<>();
+
+        // Build frequency map from magazine
+        for (int i = 0; i < magazine.length(); i++) {
+            char c = magazine.charAt(i);
+            dict.put(c, dict.getOrDefault(c, 0) + 1);
+        }
+
+        // Check if ransomNote can be constructed
+        for (int i = 0; i < ransomNote.length(); i++) {
+            char c = ransomNote.charAt(i);
+            Integer count = dict.get(c);
+
+            if (count != null && count > 0) {
+                dict.put(c, count - 1);
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+```
+
+#### Code - Golang
+
+```go
+func canConstruct(ransomNote string, magazine string) bool {
+    dict := make(map[byte]int)
+
+    for i := 0; i < len(magazine); i++ {
+        c := magazine[i]
+        dict[c]++
+    }
+
+    for i := 0; i < len(ransomNote); i++ {
+        c := ransomNote[i]
+
+        val, ok := dict[c]
+
+        if ok && val > 0{
+            dict[c]--
+        } else {
+            return false
+        }
+    }
+
+    return true
+}
+```
+
+
 ## Sort Characters By Frequency {#lc-sort-characters-by-frequency}
 
 ### Problem Metadata
