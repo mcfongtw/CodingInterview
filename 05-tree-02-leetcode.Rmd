@@ -2120,33 +2120,116 @@ class Solution {
 
 Return the length of the longest path between any two nodes.
 
-### Solution - Depth Helper
+### Solution - DFS
+
+#### Visual Walkthrough
+
+Consider this tree where the longest path does **not** pass through the root:
+
+```text
+        1
+       / \
+      2   3
+     / \
+    4   5
+   /     \
+  6       7
+```
+
+**Step-by-Step Trace (Post-order):**
+
+1.  **Leaf Nodes (6, 7, 3)**:
+    - `Height = 1`, `Local Diameter = 0 + 0 = 0`
+2.  **Node 4**:
+    - Left height (from 6) = 1, Right height = 0
+    - `Height = 1 + max(1, 0) = 2`
+    - `Local Diameter = 1 + 0 = 1`
+3.  **Node 5**:
+    - Left height = 0, Right height (from 7) = 1
+    - `Height = 1 + max(0, 1) = 2`
+    - `Local Diameter = 0 + 1 = 1`
+4.  **Node 2**:
+    - Left height (from 4) = 2, Right height (from 5) = 2
+    - `Height = 1 + max(2, 2) = 3`
+    - `Local Diameter = 2 + 2 = 4`  <-- **New Global Max**
+5.  **Node 1 (Root)**:
+    - Left height (from 2) = 3, Right height (from 3) = 1
+    - `Height = 1 + max(3, 1) = 4`
+    - `Local Diameter = 3 + 1 = 4`
+
+**Final Result**: The maximum diameter encountered was **4** (path: 6 → 4 → 2 → 5 → 7).
 
 #### Walkthrough
 
-Use DFS to return the depth of each subtree. At every node, update the diameter with `leftDepth + rightDepth` and return `1 + max(leftDepth, rightDepth)` to the parent.
+The diameter of a binary tree is the longest path between any two nodes. This path may or may not pass through the root. The key insight is that for every node, the longest path that "turns" at that node is the sum of the heights of its left and right subtrees.
+
+**Algorithm:**
+1. Use a post-order traversal (DFS) to compute the height of each node's subtrees.
+2. For each node, calculate the path length passing through it: `left_height + right_height`.
+3. Track the global maximum of these path lengths.
+4. Return the height of the current node (`1 + max(left_height, right_height)`) to its parent to facilitate their height calculations.
 
 #### Analysis
 
-- **Time Complexity**: O(n)
-- **Space Complexity**: O(h)
+- **Time Complexity**: O(n) — each node is visited exactly once.
+- **Space Complexity**: O(h) — recursion stack depth depends on tree height.
 
 #### Code - Java
 
-```
+```java
 public int diameterOfBinaryTree(TreeNode root) {
+    // Use an array to store the global maximum (simulating a pointer/reference)
     int[] diameter = new int[1];
-    depth(root, diameter);
+    dfs(root, diameter);
     return diameter[0];
 }
 
-private int depth(TreeNode node, int[] diameter) {
+private int dfs(TreeNode node, int[] diameter) {
+    // Base case: a null node contributes 0 to the path height
     if (node == null) {
         return 0;
     }
-    int left = depth(node.left, diameter);
-    int right = depth(node.right, diameter);
-    diameter[0] = Math.max(diameter[0], left + right);
-    return Math.max(left, right) + 1;
+
+    // Recursively find the height of left and right subtrees
+    int leftHeight = dfs(node.left, diameter);
+    int rightHeight = dfs(node.right, diameter);
+
+    // The diameter passing through this node is the sum of left and right heights
+    // Update global maximum if this local path is longer
+    diameter[0] = Math.max(diameter[0], leftHeight + rightHeight);
+
+    // Return the height of the current node to the parent
+    return 1 + Math.max(leftHeight, rightHeight);
+}
+```
+
+#### Code - Golang
+
+```go
+func diameterOfBinaryTree(root *TreeNode) int {
+    // Initialize diameter to 0 (minimum possible value)
+    diameter := 0
+
+    // Use a helper function to perform DFS and update diameter
+    dfs(root, &diameter)
+    return diameter
+}
+
+func dfs(node *TreeNode, diameter *int) int {
+    // Base case: null nodes have a height of 0
+    if node == nil {
+        return 0
+    }
+
+    // Recursively find the height of left and right subtrees
+    left := dfs(node.Left, diameter)
+    right := dfs(node.Right, diameter)
+
+    // The diameter passing through this node is left height + right height
+    // Update the global maximum if this local path is longer
+    *diameter = max(*diameter, left + right)
+
+    // Return the height of the current node (1 + max subtree height)
+    return max(left, right) + 1
 }
 ```
