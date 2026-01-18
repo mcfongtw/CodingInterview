@@ -883,48 +883,105 @@ This separates nodes by depth without tracking counts.
 2. While current queue not empty, pop nodes, append values, and enqueue children to the next queue.
 3. When current queue empties, swap queues and start a new level list.
 
-#### Code - BFS with Two Queues
+#### Code - Java
 ```java
 public List<List<Integer>> levelOrder(TreeNode root) {
     List<List<Integer>> levels = new ArrayList<>();
     if (root == null) {
         return levels;
     }
-    Queue<TreeNode> currentLevelQueue = new LinkedList<TreeNode>();
-    Queue<TreeNode> nextLevelQueue = new LinkedList<TreeNode>();
 
-    currentLevelQueue.offer(root);
-    //init level to null
-    List<Integer> level = null;
+    // Two queues for current level and next level
+    Queue<TreeNode> currLvlQ = new LinkedList<>();
+    Queue<TreeNode> nextLvlQ = new LinkedList<>();
+    // One list for storing current level values
+    List<Integer> level = new ArrayList<>();
 
-    while(!currentLevelQueue.isEmpty()) {
-        TreeNode node = currentLevelQueue.poll();
+    // Enqueue root
+    currLvlQ.offer(root);
 
-        //starting a new level
-        if (level == null) {
-            level = new LinkedList<Integer>();
-            levels.add(level);
-        }
+    while (!currLvlQ.isEmpty()) {
+        // Dequeue from current level
+        TreeNode node = currLvlQ.poll();
+
+        // Add node value to current level list
         level.add(node.val);
 
-        //push children to next level queue
+        // Enqueue left/right children to next level queue
         if (node.left != null) {
-            nextLevelQueue.offer(node.left);
+            nextLvlQ.offer(node.left);
         }
         if (node.right != null) {
-            nextLevelQueue.offer(node.right);
+            nextLvlQ.offer(node.right);
         }
 
-        //swap queue and next, where next collects all nodes for next level
-        if (currentLevelQueue.isEmpty()) {
-            Queue<TreeNode> temp = currentLevelQueue;
-            currentLevelQueue = nextLevelQueue;
-            nextLevelQueue = temp;
-            //init level to null
-            level = null;
+        // Proceed to next level when current queue is empty
+        if (currLvlQ.isEmpty()) {
+            // Replace currLvlQ with nextLvlQ
+            currLvlQ = nextLvlQ;
+            nextLvlQ = new LinkedList<>();
+
+            // Add current level to result 2D list
+            levels.add(level);
+
+            // Initialize new level list
+            level = new ArrayList<>();
         }
     }
+
     return levels;
+}
+```
+
+#### Code - Golang
+```go
+func levelOrder(root *TreeNode) [][]int {
+    levels := make([][]int, 0)
+
+    if root == nil {
+        return levels
+    }
+
+    // Two queues for current level and next level
+    currLvlQ := make([]*TreeNode, 0)
+    nextLvlQ := make([]*TreeNode, 0)
+    // One list for storing current level values
+    level := make([]int, 0)
+
+    // Enqueue root
+    currLvlQ = append(currLvlQ, root)
+
+    for len(currLvlQ) != 0 {
+        // Dequeue from current level
+        node := currLvlQ[0]
+        currLvlQ = currLvlQ[1:]
+
+        // Add node value to current level list
+        level = append(level, node.Val)
+
+        // Enqueue left/right children to next level queue
+        if node.Left != nil {
+            nextLvlQ = append(nextLvlQ, node.Left)
+        }
+        if node.Right != nil {
+            nextLvlQ = append(nextLvlQ, node.Right)
+        }
+
+        // Proceed to next level when current queue is empty
+        if len(currLvlQ) == 0 {
+            // Replace currLvlQ with nextLvlQ
+            currLvlQ = nextLvlQ
+            nextLvlQ = make([]*TreeNode, 0)
+
+            // Add current level to result 2D list
+            levels = append(levels, level)
+
+            // Initialize new level list
+            level = make([]int, 0)
+        }
+    }
+
+    return levels
 }
 ```
 
