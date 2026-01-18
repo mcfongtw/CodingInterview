@@ -5055,6 +5055,151 @@ private boolean dfs(TreeNode node, int target, Set<Integer> seen) {
 ```
 
 
+## Binary Search {#lc-binary-search}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 704
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/binary-search/
+- **Tags**: NeetCode 150
+- **Techniques**: [Binary Search](glossary-of-algorithm.html#glossary-binary-search), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Given an array of integers `nums` which is sorted in **ascending order**, and an integer `target`, write a function to search `target` in `nums`. If `target` exists, then return its index. Otherwise, return `-1`.
+
+You must write an algorithm with **O(log n)** runtime complexity.
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [-1,0,3,5,9,12], target = 9
+Output: 4
+Explanation: 9 exists in nums and its index is 4
+```
+
+**Example 2:**
+```
+Input: nums = [-1,0,3,5,9,12], target = 2
+Output: -1
+Explanation: 2 does not exist in nums so return -1
+```
+
+### Constraints
+
+- $1 \\le \\text{nums.length} \\le 10^4$
+- $-10^4 \\le \\text{nums}[i], \\text{target} \\le 10^4$
+- All integers in `nums` are **unique**
+- `nums` is sorted in **ascending order**
+
+### Solution - Binary Search (Recursive)
+
+#### Walkthrough
+
+This solution uses a **recursive divide-and-conquer approach** to implement classic binary search.
+
+**Core Strategy:**
+
+At each recursive call, we examine the middle element of the current search range:
+- If the middle element equals the target, we've found it - return the index
+- If the middle element is greater than the target, the target must be in the left half (smaller values)
+- If the middle element is less than the target, the target must be in the right half (larger values)
+
+The recursion naturally divides the search space in half at each step, achieving O(log n) time complexity.
+
+**Key Insight:**
+
+The sorted property guarantees that if `nums[mid] > target`, then all elements to the right of `mid` are also greater than the target, so we can safely discard the entire right half. Similarly, if `nums[mid] < target`, we can discard the entire left half.
+
+**Base Case:**
+
+When the right pointer becomes less than the left pointer (search range is empty), the target doesn't exist in the array - return -1.
+
+#### Analysis
+
+- **Time Complexity**: O(log n)
+  - Each recursive call divides the search space in half
+  - Maximum recursion depth is log₂(n)
+  - Each call performs constant-time operations (comparison, arithmetic)
+
+- **Space Complexity**: O(log n)
+  - Recursion stack depth is proportional to log₂(n)
+  - Each recursive call uses constant space for parameters
+  - For iterative version, space complexity would be O(1)
+
+#### Implementation Steps
+
+1. **Main function**: Call helper function with initial range covering entire array
+   - Left pointer starts at index 0
+   - Right pointer starts at index `len(nums) - 1`
+
+2. **Recursive helper function**:
+   1. **Base case**: If right minus left $<$ 0 (invalid range), return -1
+   2. Calculate mid index as left plus half the range to avoid integer overflow
+   3. **Found case**: If `nums[mid]` equals target, return mid index
+   4. **Search left half**: If `nums[mid]` greater than target, recurse on left portion
+   5. **Search right half**: If `nums[mid]` less than target, recurse on right portion
+
+3. Return the result from the recursive search
+
+#### Code - Java
+
+```java
+public int search(int[] nums, int target) {
+    return binarySearch(nums, 0, nums.length - 1, target);
+}
+
+private int binarySearch(int[] nums, int l, int r, int target) {
+    if (r - l < 0) {
+        return -1;
+    }
+
+    int mid = l + (r - l) / 2;
+
+    if (nums[mid] == target) {
+        return mid;
+    } else if (nums[mid] > target) {
+        // Search left (smaller) half
+        return binarySearch(nums, l, mid - 1, target);
+    } else { // nums[mid] < target
+        // Search right (larger) half
+        return binarySearch(nums, mid + 1, r, target);
+    }
+}
+```
+
+#### Code - Golang
+
+```go
+func search(nums []int, target int) int {
+    return binarySearch(nums, 0, len(nums) - 1, target)
+}
+
+func binarySearch(nums []int, l int, r int, target int) int {
+    if r - l < 0 {
+        return -1
+    }
+
+    mid := l + (r - l) / 2
+
+    if nums[mid] == target {
+        return mid
+    } else if nums[mid] > target {
+        // Search left (smaller) half
+        return binarySearch(nums, l, mid - 1, target)
+    } else if nums[mid] < target {
+        // Search right (larger) half
+        return binarySearch(nums, mid + 1, r, target)
+    } else {
+        return -1
+    }
+}
+```
+
+
 ## Minimum Swaps to Make Sequences Increasing {#lc-min-swaps-increasing}
 
 ### Problem Metadata
