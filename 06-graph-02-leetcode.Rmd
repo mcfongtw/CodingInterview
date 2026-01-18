@@ -63,7 +63,7 @@ This mirrors the traversal of the original graph while reusing clones through th
 
 #### Code - Java
 
-```
+```java
 public Node cloneGraph(Node node) {
     if (node == null) {
         return null;
@@ -82,6 +82,136 @@ private Node clone(Node node, Map<Node, Node> map) {
         copy.neighbors.add(clone(neighbor, map));
     }
     return copy;
+}
+```
+
+#### Code - Golang
+
+```go
+func cloneGraph(node *Node) *Node {
+    if node == nil {
+        return node
+    }
+
+    cloneMap := make(map[*Node]*Node)
+
+    return dfs(node, cloneMap)
+}
+
+func dfs(node *Node, cloneMap map[*Node]*Node) *Node {
+    clone, exist := cloneMap[node]
+
+    if exist {
+        return clone
+    }
+
+    copy := &Node{Val: node.Val, Neighbors: []*Node{}}
+
+    cloneMap[node] = copy
+
+    for _, neighbor := range node.Neighbors {
+        copy.Neighbors = append(copy.Neighbors, dfs(neighbor, cloneMap))
+    }
+
+    return copy
+}
+```
+
+### Solution - BFS with Map
+
+#### Walkthrough
+
+Use BFS with a queue to perform level-order traversal while maintaining a clone map:
+
+1. **Visited map**: `Map<Node, Node>` from original → clone. Prevents re-cloning and handles cycles.
+2. **BFS with queue**:
+   - If node is null, return null.
+   - Create initial clone, add to map, and enqueue the original node.
+   - While queue not empty: dequeue node, iterate through its neighbors.
+   - For each neighbor: if not yet cloned, create clone and enqueue original neighbor; append neighbor's clone to current clone's neighbor list.
+3. Return the clone for the starting node.
+
+This explores the graph level-by-level, building the clone structure iteratively.
+
+#### Analysis
+
+- **Time Complexity**: O(V + E) — each edge and node is visited once.
+- **Space Complexity**: O(V) — hash map plus queue in worst case.
+
+#### Code - Java
+
+```java
+public Node cloneGraph(Node node) {
+    if (node == null) {
+        return null;
+    }
+
+    Map<Node, Node> map = new HashMap<>();
+    Queue<Node> queue = new LinkedList<>();
+
+    // Clone starting node and add to queue
+    Node clone = new Node(node.val);
+    map.put(node, clone);
+    queue.offer(node);
+
+    while (!queue.isEmpty()) {
+        Node curr = queue.poll();
+
+        for (Node neighbor : curr.neighbors) {
+            if (!map.containsKey(neighbor)) {
+                // Clone neighbor and enqueue original
+                map.put(neighbor, new Node(neighbor.val));
+                queue.offer(neighbor);
+            }
+            // Add cloned neighbor to current clone's neighbors
+            map.get(curr).neighbors.add(map.get(neighbor));
+        }
+    }
+
+    return clone;
+}
+```
+
+#### Code - Golang
+
+```go
+func cloneGraph(node *Node) *Node {
+    if node == nil {
+        return node
+    }
+
+    return bfs(node)
+}
+
+func bfs(root *Node) *Node {
+    cloneMap := make(map[*Node]*Node)
+
+    queue := make([]*Node, 0)
+    queue = append(queue, root)
+    copyRoot := &Node{Val: root.Val, Neighbors: []*Node{}}
+    cloneMap[root] = copyRoot
+
+    for len(queue) > 0 {
+        current := queue[0]
+        queue = queue[1:]
+
+        for _, neighbor := range current.Neighbors {
+            _, visited := cloneMap[neighbor]
+            if !visited {
+                copyNeighbor := &Node{Val: neighbor.Val, Neighbors: []*Node{}}
+                cloneMap[neighbor] = copyNeighbor
+                queue = append(queue, neighbor)
+            }
+
+            // Add cloned neighbor to current clone's neighbors
+            copyCurrent := cloneMap[current]
+            copyNeighbor := cloneMap[neighbor]
+
+            copyCurrent.Neighbors = append(copyCurrent.Neighbors, copyNeighbor)
+        }
+    }
+
+    return copyRoot
 }
 ```
 
