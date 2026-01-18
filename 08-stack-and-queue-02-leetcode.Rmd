@@ -1,3 +1,208 @@
+## Min Stack {#lc-min-stack}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 155
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/min-stack/
+- **Tags**: Top 100 Liked, Blind 75
+- **Techniques**: [Stack](glossary-of-algorithm.html#glossary-stack), [Design](glossary-of-algorithm.html#glossary-design)
+
+### Description
+
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+Implement the `MinStack` class:
+
+- `MinStack()` initializes the stack object
+- `void push(int val)` pushes the element val onto the stack
+- `void pop()` removes the element on the top of the stack
+- `int top()` gets the top element of the stack
+- `int getMin()` retrieves the minimum element in the stack
+
+You must implement a solution with O(1) time complexity for each function.
+
+### Examples
+
+```
+Input:
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+Output:
+[null,null,null,null,-3,null,0,-2]
+
+Explanation:
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin(); // return -3
+minStack.pop();
+minStack.top();    // return 0
+minStack.getMin(); // return -2
+```
+
+### Constraints
+
+- $-2^{31} \le \text{val} \le 2^{31} - 1$
+- Methods `pop`, `top` and `getMin` operations will always be called on non-empty stacks
+- At most $3 \times 10^4$ calls will be made to `push`, `pop`, `top`, and `getMin`
+
+### Solution - Single Stack with Paired Values
+
+#### Walkthrough
+
+The challenge is to support `getMin()` in O(1) time. A naive approach would scan the entire stack on each `getMin()` call, resulting in O(n) time complexity. The key insight is to **store the running minimum alongside each value**.
+
+**Understanding the "Running Minimum" Concept:**
+
+The term "running minimum" means maintaining a **continuously updated minimum value as we build the stack**. Think of it as asking at each level: "What is the smallest element I've seen from the bottom of the stack up to this point?"
+
+Consider building a stack with values: -2, 0, -3
+
+- After pushing -2: running min is -2 (only element so far)
+- After pushing 0: running min is still -2 (minimum of {-2, 0})
+- After pushing -3: running min becomes -3 (minimum of {-2, 0, -3})
+
+The crucial realization: **if we store this running minimum with each element, we never need to recalculate it**. When we pop an element, the previous running minimum is already stored in the element below it. This transforms an O(n) scanning problem into an O(1) lookup problem.
+
+**Why "running" matters:**
+
+The word "running" emphasizes that the minimum is **calculated incrementally as elements are pushed**, not computed on-demand when `getMin()` is called. This precomputation is what enables constant-time retrieval.
+
+**Core Idea:**
+
+Store each stack element as a pair: `[value, currentMin]` where:
+- `value`: the actual element being pushed
+- `currentMin`: the minimum element in the stack up to and including this position
+
+**Why this works:**
+
+1. **Push operation**: When pushing a new value, compare it with the current minimum (from the top element). Store both the new value and the updated minimum as a pair.
+2. **Pop operation**: When popping, the minimum automatically reverts to the previous level's minimum (stored in the new top element).
+3. **GetMin operation**: Simply return the minimum from the top pair - no scanning needed.
+
+**Visual Example:**
+
+```
+Operation          Stack State              Explanation
+---------          -----------              -----------
+push(-2)          [(-2, -2)]               First element, min is -2
+push(0)           [(-2, -2), (0, -2)]      0 > -2, so min stays -2
+push(-3)          [(-2, -2), (0, -2), (-3, -3)]  -3 < -2, new min is -3
+getMin()          returns -3               Top pair has min = -3
+pop()             [(-2, -2), (0, -2)]      Remove (-3, -3)
+top()             returns 0                Top pair has value = 0
+getMin()          returns -2               Top pair has min = -2
+```
+
+**Why paired values beat two separate stacks:**
+
+Alternative solutions use two stacks (one for values, one for minimums). The paired approach is more elegant:
+- Only one data structure to manage
+- Automatic synchronization between values and minimums
+- Clearer conceptual model: each value "knows" its context
+
+#### Analysis
+
+- **Time Complexity**: O(1) for all operations (push, pop, top, getMin). Each operation performs constant work regardless of stack size.
+- **Space Complexity**: O(n) where n is the number of elements. Each element stores two integers, so actual space is 2n, which simplifies to O(n).
+
+#### Implementation Steps
+
+1. Declare a stack that stores integer arrays of size 2
+2. **Push operation**:
+   - If stack is empty, push `[val, val]` (value is both the element and the minimum)
+   - Otherwise, push `[val, min(val, currentMin)]` where currentMin comes from the top element's second value
+3. **Pop operation**: Simply pop the top element from the stack
+4. **Top operation**: Return the first element of the top pair (index 0)
+5. **GetMin operation**: Return the second element of the top pair (index 1)
+
+#### Code - Java
+
+```java
+class MinStack {
+    // Each entry stores [value, minimum up to this point]
+    private Stack<int[]> stack = new Stack<>();
+
+    public MinStack() {
+
+    }
+
+    public void push(int val) {
+        if(stack.isEmpty()) {
+            // First element: both value and min are the same
+            stack.push(new int[] {val, val});
+        } else {
+            // Store value and updated minimum
+            stack.push(new int[] {val, Math.min(val, stack.peek()[1])});
+        }
+    }
+
+    public void pop() {
+        stack.pop();
+    }
+
+    public int top() {
+        return stack.peek()[0];  // Return the value
+    }
+
+    public int getMin() {
+        return stack.peek()[1];  // Return the minimum
+    }
+}
+```
+
+#### Code - Golang
+
+```go
+type MinStack struct {
+    // Each entry stores [value, minimum up to this point]
+    Items [][]int
+    Len   int  // Track stack size to avoid repeated len() calls
+}
+
+func Constructor() MinStack {
+    return MinStack{Items: make([][]int, 0), Len: 0}
+}
+
+func (this *MinStack) Push(val int)  {
+    if this.Len == 0 {
+        // First element: both value and min are the same
+        this.Items = append(this.Items, []int{val, val})
+    } else {
+        // Store value and updated minimum
+        this.Items = append(this.Items, []int{val, min(val, this.Items[this.Len - 1][1])})
+    }
+    this.Len++
+}
+
+func (this *MinStack) Pop()  {
+    if this.Len > 0 {
+        // Remove last element by slicing
+        this.Items = this.Items[:this.Len - 1]
+        this.Len--
+    }
+}
+
+func (this *MinStack) Top() int {
+    if this.Len > 0 {
+        return this.Items[this.Len - 1][0]  // Return the value
+    }
+    return -1  // Should not happen per constraints
+}
+
+func (this *MinStack) GetMin() int {
+    if this.Len > 0 {
+        return this.Items[this.Len - 1][1]  // Return the minimum
+    }
+    return -1  // Should not happen per constraints
+}
+```
+
+
 ## Maximum Score From Removing Substrings {#lc-max-score-removing-substrings}
 
 ### Problem Metadata
