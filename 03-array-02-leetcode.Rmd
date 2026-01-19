@@ -2083,6 +2083,167 @@ private int recursion(int i, int n, int[] memory) {
 ```
 
 
+## Sort Colors {#lc-sort-colors}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 75
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/sort-colors/
+- **Tags**:
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer), [Array](glossary-of-algorithm.html#glossary-array), [Sorting](glossary-of-algorithm.html#glossary-sorting)
+
+### Description
+
+Given an array `nums` with `n` objects colored red, white, or blue, sort them **in-place** so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
+
+We will use the integers `0`, `1`, and `2` to represent the color red, white, and blue, respectively.
+
+You must solve this problem **without using the library's sort function**.
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [2,0,2,1,1,0]
+Output: [0,0,1,1,2,2]
+```
+
+**Example 2:**
+```
+Input: nums = [2,0,1]
+Output: [0,1,2]
+```
+
+### Constraints
+
+- `n == nums.length`
+- $1 \le n \le 300$
+- `nums[i]` is either `0`, `1`, or `2`
+
+### Follow-up
+
+Could you come up with a one-pass algorithm using only constant extra space?
+
+### Solution - Two Pointers (Two Pass)
+
+#### Walkthrough
+
+This solution uses a **two-pass partitioning approach** where we move elements of each color to their correct positions sequentially.
+
+**Core Strategy:**
+
+Instead of sorting all three colors simultaneously, we partition the array in two passes:
+1. **First pass**: Move all `0`s (red) to the left side
+2. **Second pass**: Move all `1`s (white) to the middle (right after the `0`s)
+3. **Result**: All `2`s (blue) are automatically in the correct position on the right
+
+**Key Insight:**
+
+The `sortIdx` pointer acts as a **boundary marker** that tracks where the next element of the current color should be placed. Everything before `sortIdx` is already sorted and in the correct position.
+
+**Step-by-step execution for `nums = [2,0,2,1,1,0]`:**
+
+**Pass 1: Partition 0s to the left**
+```
+Initial:        [2,0,2,1,1,0]  sortIdx=0
+i=0, nums[0]=2: [2,0,2,1,1,0]  sortIdx=0 (skip, not a 0)
+i=1, nums[1]=0: [0,2,2,1,1,0]  sortIdx=1 (swap with sortIdx, sortIdx++)
+i=2, nums[2]=2: [0,2,2,1,1,0]  sortIdx=1 (skip, not a 0)
+i=3, nums[3]=1: [0,2,2,1,1,0]  sortIdx=1 (skip, not a 0)
+i=4, nums[4]=1: [0,2,2,1,1,0]  sortIdx=1 (skip, not a 0)
+i=5, nums[5]=0: [0,0,2,1,1,2]  sortIdx=2 (swap with sortIdx, sortIdx++)
+
+After Pass 1:   [0,0,2,1,1,2]  sortIdx=2 (all 0s are sorted)
+```
+
+**Pass 2: Partition 1s after the 0s**
+```
+Start from sortIdx=2 (right after the 0s):
+i=2, nums[2]=2: [0,0,2,1,1,2]  sortIdx=2 (skip, not a 1)
+i=3, nums[3]=1: [0,0,1,2,1,2]  sortIdx=3 (swap with sortIdx, sortIdx++)
+i=4, nums[4]=1: [0,0,1,1,2,2]  sortIdx=4 (swap with sortIdx, sortIdx++)
+i=5, nums[5]=2: [0,0,1,1,2,2]  sortIdx=4 (skip, not a 1)
+
+Result:         [0,0,1,1,2,2] ✓
+```
+
+**Why This Works:**
+
+- After Pass 1, all `0`s are on the left, and `sortIdx` points to the first position after all `0`s
+- Pass 2 starts from `sortIdx` (skipping the already-sorted `0`s) and moves all `1`s to the left
+- Since we only have three values (0, 1, 2), after placing `0`s and `1`s correctly, all `2`s are automatically in their correct positions on the right
+
+**Invariants Maintained:**
+- **Pass 1**: `nums[0...sortIdx-1]` contains all `0`s encountered so far
+- **Pass 2**: `nums[0...initialSortIdx-1]` contains all `0`s, and `nums[initialSortIdx...sortIdx-1]` contains all `1`s
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Pass 1: O(n) to scan the entire array and move all 0s
+  - Pass 2: O(n) to scan from sortIdx to end and move all 1s
+  - Total: O(2n) = O(n) linear time
+  - Each element is visited at most twice
+
+- **Space Complexity**: O(1)
+  - Only uses two variables (`sortIdx` and loop variable `i`)
+  - All operations are done in-place with no additional data structures
+  - This meets the constant extra space requirement
+
+**Note:** While this is a two-pass solution, it still runs in O(n) time. The follow-up asks for a one-pass algorithm, which can be achieved using the Dutch National Flag three-pointer approach (see alternative solution below).
+
+#### Implementation Steps
+
+**Pass 1: Move all 0s to the left**
+1. Initialize `sortIdx = 0` (boundary for sorted 0s)
+2. For each index `i` from 0 to `nums.length - 1`:
+   - If `nums[i] == 0`:
+     - Swap `nums[i]` with `nums[sortIdx]`
+     - Increment `sortIdx`
+3. After this pass, all 0s are on the left, `sortIdx` points to first position after all 0s
+
+**Pass 2: Move all 1s to the middle**
+4. For each index `i` from `sortIdx` to `nums.length - 1`:
+   - If `nums[i] == 1`:
+     - Swap `nums[i]` with `nums[sortIdx]`
+     - Increment `sortIdx`
+5. After this pass, all 1s are in the middle, all 2s are automatically on the right
+
+#### Code - Java
+```java
+public void sortColors(int[] nums) {
+    int sortIdx = 0; // everything before sortIdx is sorted
+
+    // Move all 0s to the left
+    for (int i = 0; i < nums.length; i++) {
+        if (nums[i] == 0) {
+            swap(nums, i, sortIdx);
+            sortIdx++;
+        }
+    }
+
+    // Move all 1s to the left (after initial sortIdx)
+    for (int i = sortIdx; i < nums.length; i++) {
+        if (nums[i] == 1) {
+            swap(nums, i, sortIdx);
+            sortIdx++;
+        }
+    }
+
+    // All 2s are in the right place
+}
+
+private void swap(int[] nums, int i, int j) {
+    // Swap nums[i] with nums[j]
+    int temp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = temp;
+}
+```
+
+
 ## Subsets {#lc-subsets}
 
 ### Problem Metadata
