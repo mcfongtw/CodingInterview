@@ -830,6 +830,40 @@ private int getHeight(TreeNode root) {
 }
 ```
 
+#### Code - Golang
+
+```go
+func isBalanced(root *TreeNode) bool {
+    if root == nil {
+        return true
+    }
+
+    return dfs(root) != -1
+}
+
+func dfs(node *TreeNode) int {
+    if node == nil {
+        return 0
+    }
+
+    lHeight := dfs(node.Left)
+    rHeight := dfs(node.Right)
+
+    // If left or right subtree is unbalanced, return -1
+    if lHeight == -1 || rHeight == -1 {
+        return -1
+    }
+
+    // If current node is unbalanced, return -1
+    if math.Abs(float64(lHeight - rHeight)) > 1 {
+        return -1
+    }
+
+    // return height of current subtree
+    return max(lHeight, rHeight) + 1
+}
+```
+
 ## Binary Tree Level Order Traversal {#lc-level-order}
 
 ### Problem Metadata
