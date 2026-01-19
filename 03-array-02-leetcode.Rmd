@@ -2083,6 +2083,165 @@ private int recursion(int i, int n, int[] memory) {
 ```
 
 
+## Subsets {#lc-subsets}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 78
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/subsets/
+- **Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Backtracking: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern), [Array](glossary-of-algorithm.html#glossary-array), [Backtracking](glossary-of-algorithm.html#glossary-backtracking)
+
+### Description
+
+Given an integer array `nums` of **unique** elements, return all possible subsets (the power set).
+
+The solution set **must not** contain duplicate subsets. Return the solution in **any order**.
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [1,2,3]
+Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+```
+
+**Example 2:**
+```
+Input: nums = [0]
+Output: [[],[0]]
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10`
+- `-10 <= nums[i] <= 10`
+- All the numbers of `nums` are **unique**
+
+### Solution - Backtracking
+
+#### Walkthrough
+
+This problem uses the **2-dimensional traversal mental model** of backtracking (see [Pattern 1: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)):
+
+- **Outer dimension** (recursion parameter): `index` / depth in the decision tree - controls which subset of elements we're considering
+- **Inner dimension** (for-loop): Iterates through available indices `i` from `index` to `nums.length - 1` at each depth
+
+The backtracking explores a conceptual grid where each row represents a depth level and each column represents a choice of including or excluding an element. At each node, we append the current path (representing one subset) to results.
+
+**Key Insight:** Unlike Permutations, we don't need to track "visited" elements because subsets are order-independent. We use the `index` parameter to ensure we only consider elements at or after the current position, preventing duplicates like `[1,2]` and `[2,1]`.
+
+**Step-by-step execution for `nums = [1,2,3]`:**
+
+```
+Initial call: backtrack(nums, 0, [], result)
+├─ Add [] to result
+├─ i=0: Choose 1
+│  ├─ backtrack(nums, 1, [1], result)
+│  │  ├─ Add [1] to result
+│  │  ├─ i=1: Choose 2
+│  │  │  ├─ backtrack(nums, 2, [1,2], result)
+│  │  │  │  ├─ Add [1,2] to result
+│  │  │  │  ├─ i=2: Choose 3
+│  │  │  │  │  ├─ backtrack(nums, 3, [1,2,3], result)
+│  │  │  │  │  │  └─ Add [1,2,3] to result
+│  │  │  │  │  └─ Unchoose 3
+│  │  │  │  └─ Loop ends
+│  │  │  └─ Unchoose 2
+│  │  ├─ i=2: Choose 3
+│  │  │  ├─ backtrack(nums, 3, [1,3], result)
+│  │  │  │  └─ Add [1,3] to result
+│  │  │  └─ Unchoose 3
+│  │  └─ Loop ends
+│  └─ Unchoose 1
+├─ i=1: Choose 2
+│  ├─ backtrack(nums, 2, [2], result)
+│  │  ├─ Add [2] to result
+│  │  ├─ i=2: Choose 3
+│  │  │  ├─ backtrack(nums, 3, [2,3], result)
+│  │  │  │  └─ Add [2,3] to result
+│  │  │  └─ Unchoose 3
+│  │  └─ Loop ends
+│  └─ Unchoose 2
+├─ i=2: Choose 3
+│  ├─ backtrack(nums, 3, [3], result)
+│  │  ├─ Add [3] to result
+│  │  └─ Loop ends (no more elements)
+│  └─ Unchoose 3
+└─ Loop ends
+
+Result: [[], [1], [1,2], [1,2,3], [1,3], [2], [2,3], [3]]
+```
+
+**Why This Works:**
+- We generate all $2^n$ possible subsets by exploring every combination
+- The `index` parameter ensures we never revisit earlier elements, preventing duplicate subsets
+- Every recursive call adds its current path to results, capturing subsets of all sizes (0 to n)
+
+#### Analysis
+
+- **Time Complexity**: O($n \times 2^n$)
+  - There are $2^n$ possible subsets (each element can be included or excluded)
+  - Each subset takes O(n) time to copy into the result list
+  - Total: O($n \times 2^n$)
+
+- **Space Complexity**: O(n)
+  - Recursion stack depth: O(n) in the worst case
+  - Path list: O(n) maximum size
+  - Result storage not counted as auxiliary space (it's the required output)
+  - Note: The output itself requires O($n \times 2^n$) space
+
+#### Implementation Steps
+
+**Initialization:**
+1. Initialize empty `result` list to store all subsets.
+
+**Backtracking Function** `backtrack(nums, index, path, result)`:
+
+2. **Add current subset to results:**
+   - Add a copy of `path` to `result` (every path represents a valid subset)
+   - This happens at every node in the decision tree, not just at leaves
+
+3. **Recursive case** - For each index `i` from `index` to `nums.length - 1`:
+   1. **Choose:** Add `nums[i]` to `path`
+   2. **Explore:** Recursively call `backtrack(nums, i + 1, path, result)`
+      - Note: `i + 1` ensures we only consider elements after current position
+      - This prevents generating duplicate subsets like `[1,2]` and `[2,1]`
+   3. **Unchoose:** Remove last element from `path` to try next option
+
+**Return:**
+4. Call `backtrack(nums, 0, new ArrayList<>(), result)` to start with empty path, then return `result`.
+
+#### Code - Java
+
+```java
+public List<List<Integer>> subsets(int[] nums) {
+    List<List<Integer>> result = new ArrayList<>();
+    backtrack(nums, 0, new ArrayList<>(), result);
+    return result;
+}
+
+private void backtrack(int[] nums, int index, List<Integer> path, List<List<Integer>> result) {
+    // Add current subset to results (every path is a valid subset)
+    result.add(new ArrayList<>(path));
+
+    // Try adding each remaining element
+    for (int i = index; i < nums.length; i++) {
+        // Choose: add current element
+        path.add(nums[i]);
+
+        // Explore: recurse with next start index
+        backtrack(nums, i + 1, path, result);
+
+        // Unchoose: remove element for next iteration
+        path.remove(path.size() - 1);
+    }
+}
+```
+
+
 ## Subsets II {#lc-subsets-ii}
 
 ### Problem Metadata
