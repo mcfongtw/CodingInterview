@@ -268,7 +268,7 @@ public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
 - **Difficulty**: Hard
 - **URL**: https://leetcode.com/problems/merge-k-sorted-lists/
 - **Tags**: Grind 75, Blind 75, NeetCode 150
-- **Techniques**: [Heap](glossary-of-algorithm.html#glossary-heap), [Linked List](glossary-of-algorithm.html#glossary-linked-list)
+- **Techniques**: [Heap](#intro-heap), [Linked List](glossary-of-algorithm.html#glossary-linked-list)
 
 ### Description
 
@@ -334,14 +334,22 @@ Result: [1,1,2,3,4,4,5,6]
 
 ```java
 public ListNode mergeKLists(ListNode[] lists) {
+    //Add the head of each non-empty list to the min-heap
     PriorityQueue<ListNode> pq = new PriorityQueue<>(Comparator.comparingInt(n -> n.val));
     for (ListNode node : lists) {
         if (node != null) {
             pq.offer(node);
         }
     }
+
     ListNode dummy = new ListNode(0);
     ListNode tail = dummy;
+
+    /*
+     *  Repeatedly extract the minimum node from min-heap, append it to the result list
+     *  If the extracted node has a next, add it to the min-heap
+     *  Continue until the min-heap is empty        
+     */
     while (!pq.isEmpty()) {
         ListNode node = pq.poll();
         tail.next = node;
@@ -351,6 +359,71 @@ public ListNode mergeKLists(ListNode[] lists) {
         }
     }
     return dummy.next;
+}
+```
+
+#### Code - Golang
+
+Go requires implementing the `heap.Interface` for custom types. See [Heap Implementation](#intro-heap) for detailed explanation of the heap interface and how `container/heap` works.
+
+```go
+import "container/heap"
+
+func mergeKLists(lists []*ListNode) *ListNode {
+    // Create and initialize min-heap
+    h := &MinHeap{}
+    heap.Init(h)
+
+    // Add the head of each non-empty list to the min-heap
+    for _, node := range lists {
+        if node != nil {
+            heap.Push(h, node)
+        }
+    }
+
+    dummy := &ListNode{}
+    tail := dummy
+
+    // Repeatedly extract the minimum node from min-heap, append it to the result
+    // If the extracted node has a next, add it to the min-heap
+    // Continue until the min-heap is empty
+    for h.Len() > 0 {
+        node := heap.Pop(h).(*ListNode)
+        tail.Next = node
+        tail = tail.Next
+        if node.Next != nil {
+            heap.Push(h, node.Next)
+        }
+    }
+
+    return dummy.Next
+}
+
+// MinHeap implements heap.Interface for *ListNode
+type MinHeap []*ListNode
+
+func (h MinHeap) Len() int {
+    return len(h)
+}
+
+func (h MinHeap) Less(i, j int) bool {
+    return h[i].Val < h[j].Val
+}
+
+func (h MinHeap) Swap(i, j int) {
+    h[i], h[j] = h[j], h[i]
+}
+
+func (h *MinHeap) Push(x interface{}) {
+    *h = append(*h, x.(*ListNode))
+}
+
+func (h *MinHeap) Pop() interface{} {
+    old := *h
+    n := len(old)
+    x := old[n-1]
+    *h = old[0 : n-1]
+    return x
 }
 ```
 

@@ -2,3 +2,350 @@
 
 This chapter collects heap-centric interview problems, including priority-queue manipulations, top-k extractions, and heap-based merges.
 
+
+## Heap Implementation {#intro-heap}
+
+### Overview
+
+A **Heap** is a complete binary tree that maintains a specific ordering property between parent and child nodes. The two main variants are:
+
+- **Min Heap**: Each parent node has a value **less than or equal to** its children (minimum at root)
+- **Max Heap**: Each parent node has a value **greater than or equal to** its children (maximum at root)
+
+This property ensures that the extreme element (min or max) is always at the root, making heaps efficient for priority queue operations.
+
+**Key Properties:**
+
+1. **Complete Binary Tree**: All levels are filled except possibly the last, which is filled from left to right
+2. **Heap Property**:
+   - **Min Heap**: For every node `i`, `heap[i] <= heap[2*i+1]` and `heap[i] <= heap[2*i+2]` (if children exist)
+   - **Max Heap**: For every node `i`, `heap[i] >= heap[2*i+1]` and `heap[i] >= heap[2*i+2]` (if children exist)
+3. **Root Contains Extreme**: The smallest (min heap) or largest (max heap) element is always at index 0
+
+**Use Cases:**
+
+- Priority queues (job scheduling, event simulation)
+- Finding k smallest/largest elements
+- Merging k sorted lists/arrays
+- Dijkstra's shortest path algorithm
+- Huffman coding
+- Median maintenance (using both min and max heaps)
+
+### Core Operations
+
+**1. Insert (Push)** - O(log n)
+- Add element at the end of the array
+- "Bubble up" (heapify-up) to restore heap property
+- **Min heap**: Compare with parent, swap if **smaller**, repeat until root or no swap needed
+- **Max heap**: Compare with parent, swap if **larger**, repeat until root or no swap needed
+
+**2. Extract (Pop)** - O(log n)
+- Remove root (extreme element: minimum for min heap, maximum for max heap)
+- Move last element to root
+- "Bubble down" (heapify-down) to restore heap property
+- **Min heap**: Compare with children, swap with **smaller** child, repeat until leaf or no swap needed
+- **Max heap**: Compare with children, swap with **larger** child, repeat until leaf or no swap needed
+
+**3. Peek** - O(1)
+- Return root element without removing it
+- **Min heap**: Returns minimum element
+- **Max heap**: Returns maximum element
+
+**4. Heapify** - O(n)
+- Build heap from unsorted array
+- Start from last non-leaf node, heapify-down each node
+- Works for both min and max heaps (depends on comparison function)
+
+#### Time Complexity Analysis
+
+| Operation | Average Case | Worst Case | Notes |
+|-----------|-------------|------------|-------|
+| **Insert** | O(log n) | O(log n) | Bubble up max log n levels |
+| **Extract Min** | O(log n) | O(log n) | Bubble down max log n levels |
+| **Peek** | O(1) | O(1) | Direct array access |
+| **Build Heap** | O(n) | O(n) | More efficient than n inserts |
+| **Search** | O(n) | O(n) | No ordering between siblings |
+
+**Space Complexity**: O(n) to store n elements
+
+### Implementation - Golang
+
+**Important:** Go's `container/heap` package provides the **heap algorithms** (heapify-up, heapify-down), but requires you to implement `heap.Interface` to define **how your data structure works**.
+
+**What `container/heap` Provides:**
+- `heap.Init(h)` - Builds heap from unsorted data (O(n))
+- `heap.Push(h, x)` - Inserts element with heapify-up (O(log n))
+- `heap.Pop(h)` - Extracts root with heapify-down (O(log n))
+
+**What You Implement (5 required methods):**
+- `Len()` - Return size
+- `Less(i, j)` - **Comparison logic** (determines min vs max heap)
+- `Swap(i, j)` - Swap two elements
+- `Push(x)` - Append to underlying slice (**NOT heap insertion**)
+- `Pop()` - Remove last element from slice (**NOT heap extraction**)
+
+**Critical:** Your `Push/Pop` methods only manipulate the slice. The `container/heap` package calls them internally while handling the heap property maintenance.
+
+**Min Heap for Integers:**
+
+```go
+import "container/heap"
+
+// MinHeap implements heap.Interface for integers
+type MinHeap []int
+
+// Len returns the number of elements
+func (h MinHeap) Len() int { return len(h) }
+
+// Less defines the heap property: true if h[i] should be closer to root than h[j]
+// For MIN heap: smaller values should be closer to root, so return h[i] < h[j]
+func (h MinHeap) Less(i, j int) bool { return h[i] < h[j] }
+
+// Swap exchanges two elements
+func (h MinHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+
+// Push appends an element to the slice
+// NOTE: This does NOT maintain heap property - heap.Push() calls this then heapifies
+func (h *MinHeap) Push(x interface{}) {
+    *h = append(*h, x.(int))
+}
+
+// Pop removes and returns the LAST element from slice
+// NOTE: This does NOT extract the root - heap.Pop() moves root to end, calls this, then returns it
+func (h *MinHeap) Pop() interface{} {
+    old := *h
+    n := len(old)
+    x := old[n-1]
+    *h = old[0 : n-1]
+    return x
+}
+```
+
+**Max Heap for Integers:**
+
+```go
+// MaxHeap implements heap.Interface for integers
+type MaxHeap []int
+
+func (h MaxHeap) Len() int { return len(h) }
+
+// Less defines the heap property: true if h[i] should be closer to root than h[j]
+// For MAX heap: larger values should be closer to root, so return h[i] > h[j]
+func (h MaxHeap) Less(i, j int) bool { return h[i] > h[j] }
+
+func (h MaxHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+
+// Push/Pop work identically for both min and max heaps
+// The Less() method is what determines the heap type
+func (h *MaxHeap) Push(x interface{}) {
+    *h = append(*h, x.(int))
+}
+
+func (h *MaxHeap) Pop() interface{} {
+    old := *h
+    n := len(old)
+    x := old[n-1]
+    *h = old[0 : n-1]
+    return x
+}
+```
+
+**Example Usage:**
+
+```go
+func exampleHeaps() {
+    // ===== MIN HEAP EXAMPLE =====
+    minH := &MinHeap{}
+    heap.Init(minH)  // Initialize empty heap (not needed for empty heap, but good practice)
+
+    // Use heap.Push() from container/heap package (NOT our Push method directly)
+    heap.Push(minH, 5)  // container/heap.Push calls our Push() then heapifies up
+    heap.Push(minH, 3)
+    heap.Push(minH, 7)
+    heap.Push(minH, 1)
+
+    // Peek at minimum (root is always at index 0)
+    min := (*minH)[0]  // min = 1
+
+    // Extract elements in ascending order
+    for minH.Len() > 0 {
+        // Use heap.Pop() from container/heap package (NOT our Pop method directly)
+        val := heap.Pop(minH).(int)  // Extracts: 1, 3, 5, 7
+        fmt.Println(val)
+    }
+
+    // ===== MAX HEAP EXAMPLE =====
+    maxH := &MaxHeap{}
+    heap.Init(maxH)
+
+    heap.Push(maxH, 5)  // Same API, different behavior due to Less()
+    heap.Push(maxH, 3)
+    heap.Push(maxH, 7)
+    heap.Push(maxH, 1)
+
+    // Peek at maximum
+    max := (*maxH)[0]  // max = 7
+
+    // Extract elements in descending order
+    for maxH.Len() > 0 {
+        val := heap.Pop(maxH).(int)  // Extracts: 7, 5, 3, 1
+        fmt.Println(val)
+    }
+}
+```
+
+**Critical Usage Rules:**
+1. ✅ **Always use** `heap.Push()` from `container/heap` package
+2. ✅ **Always use** `heap.Pop()` from `container/heap` package
+3. ❌ **Never call** your struct's `Push()` or `Pop()` methods directly
+4. **Peek** by accessing `(*h)[0]` (container/heap has no Peek function)
+
+**Key Difference Between Min/Max:**
+- Only the `Less` method implementation differs
+- **Min heap**: `h[i] < h[j]` (smaller values closer to root)
+- **Max heap**: `h[i] > h[j]` (larger values closer to root)
+- All other methods are identical
+
+### Implementation - Java
+
+Java provides `PriorityQueue` which is a **min heap by default** (natural ordering). Use a custom comparator for max heap or complex types.
+
+**Min Heap (Default):**
+
+```java
+import java.util.PriorityQueue;
+
+PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+// Insert elements
+minHeap.offer(5);
+minHeap.offer(3);
+minHeap.offer(7);
+minHeap.offer(1);
+
+int min = minHeap.peek();  // Peek: min = 1
+
+while (!minHeap.isEmpty()) {
+    int val = minHeap.poll();  // Extracts: 1, 3, 5, 7
+}
+```
+
+**Max Heap (Reverse Order):**
+
+```java
+import java.util.Collections;
+
+PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+
+// Insert elements
+maxHeap.offer(5);
+maxHeap.offer(3);
+maxHeap.offer(7);
+maxHeap.offer(1);
+
+int max = maxHeap.peek();  // Peek: max = 7
+
+while (!maxHeap.isEmpty()) {
+    int val = maxHeap.poll();  // Extracts: 7, 5, 3, 1
+}
+```
+
+**Custom Comparator for Complex Types:**
+
+```java
+import java.util.Comparator;
+
+// Min heap for ListNode based on val field
+PriorityQueue<ListNode> minHeapNodes = new PriorityQueue<>(
+    Comparator.comparingInt(n -> n.val)
+);
+
+// Max heap for ListNode based on val field
+PriorityQueue<ListNode> maxHeapNodes = new PriorityQueue<>(
+    Comparator.comparingInt((ListNode n) -> n.val).reversed()
+);
+
+// Alternative syntax for max heap
+PriorityQueue<ListNode> maxHeapNodes2 = new PriorityQueue<>(
+    (a, b) -> b.val - a.val  // Reverse comparison
+);
+```
+
+**Key Operations:**
+- `offer(e)` / `add(e)` - Insert element (O(log n))
+- `poll()` - Remove and return min/max (O(log n))
+- `peek()` - View min/max without removing (O(1))
+- `size()` - Get number of elements (O(1))
+- `isEmpty()` - Check if empty (O(1))
+
+#### Array Representation
+
+Heaps are efficiently stored in arrays using index arithmetic:
+
+```
+For node at index i (0-indexed):
+- Parent:       (i - 1) / 2
+- Left child:   2 * i + 1
+- Right child:  2 * i + 2
+
+Example: [1, 3, 5, 7, 9, 8, 6]
+
+         1           <- index 0
+       /   \
+      3     5        <- indices 1, 2
+     / \   / \
+    7   9 8   6      <- indices 3, 4, 5, 6
+```
+
+### Common Patterns
+
+**Pattern 1: Finding k Smallest Elements**
+- Use **max heap of size k**
+- Keep removing the largest element when heap size exceeds k
+- Final heap contains k smallest elements
+- Root of max heap is the k-th smallest element
+
+**Pattern 2: Finding k Largest Elements**
+- Use **min heap of size k**
+- Keep removing the smallest element when heap size exceeds k
+- Final heap contains k largest elements
+- Root of min heap is the k-th largest element
+
+**Pattern 3: Merging k Sorted Lists/Arrays**
+- Use **min heap** to efficiently find the next smallest element
+- Add first element from each list to the heap
+- Repeatedly extract min and add its successor from the same list
+- Time: O(n log k) where n is total elements, k is number of lists
+
+**Pattern 4: Median Maintenance (Dual Heap)**
+- Use **two heaps** to efficiently track median
+- **Max heap**: stores the smaller half of elements (can quickly access largest of small half)
+- **Min heap**: stores the larger half of elements (can quickly access smallest of large half)
+- Balance sizes: difference should be at most 1
+- Median is accessible in O(1):
+  - If heaps equal size: average of both roots
+  - Otherwise: root of the larger heap
+
+**Pattern 5: Top K Frequent Elements**
+- Use **hash map** to count frequencies
+- Use **min heap of size k** to track k most frequent elements
+- Keep removing element with smallest frequency when heap exceeds k
+
+### Min Heap vs Max Heap Comparison
+
+| Aspect | Min Heap | Max Heap |
+|--------|----------|----------|
+| **Root Element** | Minimum element | Maximum element |
+| **Heap Property** | Parent $\le$ Children | Parent $\ge$ Children |
+| **Go Less Method** | `h[i] < h[j]` (smaller bubbles up) | `h[i] > h[j]` (larger bubbles up) |
+| **Java Default** | `PriorityQueue<>()` | `PriorityQueue<>(Collections.reverseOrder())` |
+| **Primary Use** | Get minimum quickly | Get maximum quickly |
+| **Extract Order** | Ascending (smallest first) | Descending (largest first) |
+| **K Smallest** | Not ideal (use max heap) | ✓ Maintain max heap of size k |
+| **K Largest** | ✓ Maintain min heap of size k | Not ideal (use min heap) |
+| **Merge K Lists** | ✓ Always extract smallest | Could use, but typically min heap |
+| **Median (lower half)** | Not used | ✓ Stores smaller half, root is largest of small |
+| **Median (upper half)** | ✓ Stores larger half, root is smallest of large | Not used |
+
+**Key Insight:** The choice between min and max heap depends on which extreme (minimum or maximum) you need quick access to. For k-element problems, use the **opposite** heap type (max heap for k smallest, min heap for k largest) to efficiently maintain the boundary element.
+
