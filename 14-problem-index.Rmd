@@ -485,6 +485,24 @@ if(nrow(neetcode) > 0) {
 }
 ```
 
+### Grind 75
+
+```{r grind-75, echo=FALSE}
+grind75 <- problems[grepl("Grind 75", problems$tags, ignore.case = TRUE), ]
+cat(sprintf("*Progress: %d / 75 problems.*\n\n", nrow(grind75)))
+if(nrow(grind75) > 0) {
+  # Sort by platform priority, then problem_id
+  grind75 <- grind75[order(grind75$platform_priority, grind75$problem_id, na.last = TRUE), ]
+  grind75$display_id <- ifelse(is.na(grind75$problem_id), "-", as.character(grind75$problem_id))
+  grind75$problem_link <- paste0("[", grind75$title, "](", grind75$anchor, ".html)")
+  kable(grind75[, c("platform", "display_id", "problem_link", "difficulty", "chapter")],
+        col.names = c("Platform", "ID", "Problem", "Difficulty", "Chapter"),
+        row.names = FALSE)
+} else {
+  cat("*No problems tagged as Grind 75 yet. Tags will be populated by Codex.*\n")
+}
+```
+
 ---
 
 ## Lookup by Company
