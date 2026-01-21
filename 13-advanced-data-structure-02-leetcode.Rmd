@@ -40,6 +40,56 @@ cache.get(4); // 4
 
 Store key-to-node mappings in a hash map, while nodes form a doubly linked lc-list ordered by recency. The head is most recent, tail is least recent. `get` moves the node to the head. `put` updates existing keys similarly or inserts a new node at the head and, if over capacity, removes the tail node and deletes it from the map. Sentinel head/tail nodes simplify pointer updates.
 
+#### Pointer Diagrams
+
+The diagrams below show how the doubly linked list pointers change for each helper. `H` and `T` are sentinel nodes. `X` is the node we are moving or removing.
+
+**addAfterHead(X)**
+
+```
+Before:
+H <-> A <-> ... <-> T
+
+Step 1: X hooks forward
+H <-> A <-> ... <-> T
+|\
+| X -> A (X.next = a)
+|
+(X.prev = H)
+
+Step 2: neighbors point back to X
+H <-> X <-> A <-> ... <-> T
+```
+
+**remove(X)**
+
+```
+Before:
+... <-> P <-> X <-> N <-> ...
+
+Step 1: bypass X forward (P.next = X.next)
+... <-> P ----> N <-> ...
+
+Step 2: bypass X backward (N.prev = X.prev)
+... <-> P <---- N <-> ...
+
+After:
+... <-> P <-> N <-> ...
+```
+
+**moveToHead(X) = remove(X) + addAfterHead(X)**
+
+```
+Before:
+H <-> A <-> ... <-> P <-> X <-> N <-> ... <-> T
+
+Step 1: remove(X)
+H <-> A <-> ... <-> P <-> N <-> ... <-> T
+
+Step 2: addAfterHead(X)
+H <-> X <-> A <-> ... <-> P <-> N <-> ... <-> T
+```
+
 #### Analysis
 
 - **Time Complexity**: O(1) per operation
@@ -71,7 +121,10 @@ class LRUCache {
     }
 
     private final Map<Integer, Node> cache = new HashMap<>();
+    //dummy pointers for head and tail. 
+    //Real head is head.next
     private final Node head = new Node(0, 0);
+    //Real tail is tail.prev
     private final Node tail = new Node(0, 0);
     private final int capacity;
 
@@ -677,4 +730,3 @@ class Bank {
     }
 }
 ```
-

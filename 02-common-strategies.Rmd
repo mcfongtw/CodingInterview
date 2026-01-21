@@ -2136,3 +2136,356 @@ Most production sorting implementations use **hybrid algorithms**:
 3. **Consider the data**: Nearly sorted? Small? Linked list? These affect algorithm choice
 4. **Hybrid approaches**: Mentioning Timsort or Introsort shows deeper understanding
 5. **In-place vs. stable**: These are often the deciding factors between Quick Sort and Merge Sort
+
+
+## Searching Algorithms {#searching-algorithms}
+
+Searching algorithms are fundamental techniques for finding specific elements or values within data structures. Understanding different search strategies and when to apply them is crucial for efficient problem-solving.
+
+### Binary Search {#binary-search-strategy}
+
+**Binary Search** is a highly efficient divide-and-conquer algorithm for finding a target value in a **sorted** array. It repeatedly divides the search space in half, eliminating half of the remaining elements with each comparison.
+
+#### Prerequisites
+
+Before applying binary search, ensure these conditions are met:
+
+1. **The array/list must be sorted** - Either in ascending or descending order
+   - This is the most critical requirement
+   - If the array is unsorted, you must sort it first ($O(n \log n)$) or use a different search strategy
+   - Interviewers often test this - always verify the data is sorted before applying binary search
+
+2. **Random access to elements** - Direct index access in $O(1)$ time
+   - Works well with arrays and array-based data structures
+   - Not suitable for linked lists (cannot jump to middle element efficiently)
+
+3. **Consistent comparison operation** - The comparison logic must be well-defined and consistent
+   - For custom objects, ensure proper comparator implementation
+   - The sorted property must be maintained throughout the search
+
+**When the data is not sorted**: Consider using linear search $O(n)$, hash table $O(1)$ lookup, or sorting first if multiple searches are needed.
+
+#### Core Concept
+
+At each step, compare the target with the middle element:
+- If target equals middle: Found!
+- If target is less than middle: Search left half
+- If target is greater than middle: Search right half
+
+This halving process continues until the target is found or the search space is empty.
+
+**Time Complexity**: $O(\log n)$ - Each comparison halves the search space
+**Space Complexity**:
+- Iterative: $O(1)$ - Only uses pointer variables
+- Recursive: $O(\log n)$ - Call stack depth
+
+#### Iterative Implementation (Two Pointers)
+
+The iterative approach uses two pointers (`left` and `right`) to define the current search space and a loop to repeatedly narrow it down.
+
+**Template**:
+```java
+public int binarySearch(int[] nums, int target) {
+    int left = 0;
+    int right = nums.length - 1;
+
+    while (left <= right) {
+        // Avoid integer overflow: use (left + right) / 2 carefully
+        int mid = left + (right - left) / 2;
+
+        if (nums[mid] == target) {
+            return mid;  // Found target
+        } else if (nums[mid] < target) {
+            left = mid + 1;  // Search right half
+        } else {
+            right = mid - 1;  // Search left half
+        }
+    }
+
+    return -1;  // Target not found
+}
+```
+
+**Key Details**:
+
+1. **Loop Condition**: `left <= right` (not `left < right`)
+   - Allows checking when left and right converge to the same index
+   - Without `=`, we'd miss the case where target is at the last remaining position
+
+2. **Mid Calculation**: `mid = left + (right - left) / 2`
+   - Prevents integer overflow that could occur with `(left + right) / 2`
+   - When `left + right > Integer.MAX_VALUE`, direct addition overflows
+   - Mathematically equivalent but safer
+
+3. **Pointer Updates**:
+   - `left = mid + 1`: We've checked `mid`, so exclude it from the left search
+   - `right = mid - 1`: We've checked `mid`, so exclude it from the right search
+   - Using `mid` instead of `mid ± 1` could cause infinite loops
+
+**Example Trace**: Find target `6` in `[1, 3, 5, 6, 8, 9, 11]`
+
+```
+Iteration 1: left=0, right=6, mid=3
+  nums[3]=6 equals target → Found! Return 3
+```
+
+**Example Trace**: Find target `7` in `[1, 3, 5, 6, 8, 9, 11]`
+
+```
+Iteration 1: left=0, right=6, mid=3
+  nums[3]=6 < 7 → left=4
+
+Iteration 2: left=4, right=6, mid=5
+  nums[5]=9 > 7 → right=4
+
+Iteration 3: left=4, right=4, mid=4
+  nums[4]=8 > 7 → right=3
+
+Iteration 4: left=4, right=3
+  left > right → Not found, return -1
+```
+
+#### Recursive Implementation
+
+The recursive approach divides the problem into smaller subproblems, mirroring the divide-and-conquer nature of binary search.
+
+**Template**:
+```java
+public int binarySearchRecursive(int[] nums, int target) {
+    return binarySearchHelper(nums, target, 0, nums.length - 1);
+}
+
+private int binarySearchHelper(int[] nums, int target, int left, int right) {
+    // Base case: search space is empty
+    if (left > right) {
+        return -1;
+    }
+
+    int mid = left + (right - left) / 2;
+
+    if (nums[mid] == target) {
+        return mid;  // Found target
+    } else if (nums[mid] < target) {
+        // Recurse on right half
+        return binarySearchHelper(nums, target, mid + 1, right);
+    } else {
+        // Recurse on left half
+        return binarySearchHelper(nums, target, left, mid - 1);
+    }
+}
+```
+
+**Key Details**:
+
+1. **Base Case**: `left > right` indicates empty search space
+2. **Recursive Calls**: Pass updated boundaries (`mid + 1` or `mid - 1`)
+3. **Return Values**: Propagate the result back up the call stack
+
+**Example Trace**: Find target `6` in `[1, 3, 5, 6, 8, 9, 11]`
+
+```
+Call 1: helper(nums, 6, 0, 6)
+  mid=3, nums[3]=6 equals target → Return 3
+```
+
+#### Iterative vs Recursive Comparison
+
+| Aspect | Iterative (Two Pointers) | Recursive |
+|--------|--------------------------|-----------|
+| **Implementation** | Loop with pointers | Recursive function calls |
+| **Intuition** | Explicit pointer manipulation | Natural divide-and-conquer |
+| **Space Complexity** | $O(1)$ - No extra space | $O(\log n)$ - Call stack |
+| **Performance** | Slightly faster (no function call overhead) | Slightly slower (call overhead) |
+| **Readability** | More verbose | Cleaner, mirrors problem structure |
+| **Stack Overflow Risk** | None | Possible for very large arrays (rare) |
+| **Debugging** | Easier to step through | Harder to trace recursion |
+| **Interview Preference** | More common in production | Shows understanding of recursion |
+
+**Pros of Iterative**:
+- ✅ More space-efficient ($O(1)$ vs $O(\log n)$)
+- ✅ Faster in practice (no function call overhead)
+- ✅ No risk of stack overflow
+- ✅ Easier to debug with breakpoints
+- ✅ Preferred in production code
+
+**Cons of Iterative**:
+- ❌ Slightly more complex to write correctly (pointer management)
+- ❌ Less elegant than recursive version
+
+**Pros of Recursive**:
+- ✅ Cleaner, more readable code
+- ✅ Directly mirrors the divide-and-conquer strategy
+- ✅ Easier to understand conceptually
+- ✅ Natural for problems with recursive structure
+
+**Cons of Recursive**:
+- ❌ Uses $O(\log n)$ extra space for call stack
+- ❌ Function call overhead makes it slower
+- ❌ Risk of stack overflow (though unlikely with $\log n$ depth)
+- ❌ Harder to debug (call stack tracing)
+
+#### When to Use Which Approach
+
+**Use Iterative (Two Pointers) when**:
+- Production code where space efficiency matters
+- Performance is critical
+- Working with very large datasets
+- Need to avoid any risk of stack overflow
+- Interviewer asks for optimal space complexity
+
+**Use Recursive when**:
+- Problem naturally fits recursive thinking
+- Interviewers ask specifically for recursive solution
+- Demonstrating understanding of recursion
+- Code clarity is more important than minor performance gains
+- Problem is a variant requiring recursive modifications
+
+**In Practice**: Most production code uses **iterative binary search** due to better space complexity and performance. However, knowing both approaches demonstrates a deeper understanding.
+
+#### Common Binary Search Variants
+
+**1. Find First Occurrence (Leftmost)**
+
+Find the leftmost (first) index where target appears.
+
+```java
+public int findFirst(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    int result = -1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (nums[mid] == target) {
+            result = mid;       // Record position
+            right = mid - 1;    // Continue searching left
+        } else if (nums[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    return result;
+}
+```
+
+**2. Find Last Occurrence (Rightmost)**
+
+Find the rightmost (last) index where target appears.
+
+```java
+public int findLast(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    int result = -1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (nums[mid] == target) {
+            result = mid;       // Record position
+            left = mid + 1;     // Continue searching right
+        } else if (nums[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    return result;
+}
+```
+
+**3. Search Insert Position**
+
+Find the index where target should be inserted to maintain sorted order.
+
+```java
+public int searchInsert(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (nums[mid] == target) {
+            return mid;
+        } else if (nums[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    // After loop: left is the insertion position
+    return left;
+}
+```
+
+**Key Insight**: When the loop exits without finding the target, `left` points to where the target should be inserted.
+
+#### Common Pitfalls
+
+**1. Infinite Loop with Wrong Bounds**
+
+```java
+// ❌ WRONG: Can cause infinite loop
+while (left < right) {  // Missing = sign
+    int mid = left + (right - left) / 2;
+    if (nums[mid] < target) {
+        left = mid;      // ❌ Should be mid + 1
+    } else {
+        right = mid - 1;
+    }
+}
+
+// ✅ CORRECT
+while (left <= right) {
+    int mid = left + (right - left) / 2;
+    if (nums[mid] < target) {
+        left = mid + 1;  // ✅ Exclude mid
+    } else {
+        right = mid - 1;
+    }
+}
+```
+
+**2. Integer Overflow**
+
+```java
+// ❌ WRONG: Can overflow
+int mid = (left + right) / 2;
+
+// ✅ CORRECT: Prevents overflow
+int mid = left + (right - left) / 2;
+```
+
+**3. Off-by-One Errors**
+
+```java
+// Common mistakes:
+right = nums.length;     // ❌ Should be nums.length - 1
+left = mid;              // ❌ Should be mid + 1 (causes infinite loop)
+right = mid;             // ❌ Should be mid - 1 (for standard search)
+```
+
+#### Related Problems
+
+Binary search is a fundamental technique that appears in many problem variants:
+
+- **Standard Search**: [Binary Search](#lc-binary-search) (LeetCode 704)
+- **Rotated Array**: [Search in Rotated Sorted Array](#lc-search-rotated-array) (LeetCode 33)
+- **2D Matrix**: [Search a 2D Matrix](#lc-search-matrix) (LeetCode 74)
+- **First Bad Version**: [First Bad Version](#lc-first-bad-version) (LeetCode 278)
+- **Finding Bounds**: Finding first/last occurrence in sorted array
+
+#### Summary
+
+Binary Search is one of the most important algorithms in computer science:
+
+- **When to Use**: Searching in sorted data, or when you can define a monotonic search space
+- **Key Insight**: Eliminate half the search space with each comparison
+- **Space-Time Tradeoff**: Iterative uses $O(1)$ space, recursive uses $O(\log n)$ space
+- **Production Choice**: Iterative approach is preferred for efficiency
+- **Interview Strategy**: Know both approaches and their trade-offs
+
+The power of binary search lies in reducing $O(n)$ linear search to $O(\log n)$ logarithmic search - a massive improvement for large datasets.
