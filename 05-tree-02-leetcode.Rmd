@@ -1672,6 +1672,193 @@ class Trie {
 - **Null Check**: `letters[index] == null` indicates character path doesn't exist
 
 
+## Lowest Common Ancestor of a Binary Search Tree {#lc-lca-bst}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 235
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+- **Tags**:
+- **Techniques**: [Binary Search Tree](glossary-of-algorithm.html#glossary-bst), [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
+
+### Description
+
+Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST.
+
+The lowest common ancestor is defined as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).
+
+### Examples
+
+**Example 1:**
+```
+Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+Output: 6
+Explanation: The LCA of nodes 2 and 8 is 6.
+```
+
+**Example 2:**
+```
+Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+Output: 2
+Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself according to the LCA definition.
+```
+
+**Example 3:**
+```
+Input: root = [2,1], p = 2, q = 1
+Output: 2
+```
+
+### Constraints
+
+- The number of nodes in the tree is in the range $[2, 10^5]$
+- $-10^9 \le \text{Node.val} \le 10^9$
+- All Node.val are unique
+- $p \ne q$
+- p and q will exist in the BST
+
+### Solution - DFS with Ancestor Checking
+
+#### Walkthrough
+
+This is a general binary tree solution that works by recursively checking if nodes are ancestors:
+
+1. **Base case**: If root is null, p, or q, return root
+2. **Check if root is LCA**: Test if p and q are in opposite subtrees using `isAncestor()` helper
+   - If `p` is in left subtree and `q` is in right subtree → root is LCA
+   - If `p` is in right subtree and `q` is in left subtree → root is LCA
+3. **Recursive search**: If root is not the LCA, recursively search both subtrees
+4. **Return result**: Return the non-null result from either subtree
+
+**Note**: This solution works for any binary tree but does not leverage BST properties.
+
+#### Analysis
+
+- **Time Complexity**: O(n²) — For each of n nodes, `isAncestor()` may traverse the entire subtree (O(n)), resulting in quadratic time
+- **Space Complexity**: O(h) — Recursion stack depth where h is tree height
+
+#### Code - Java
+
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    return dfs(root, p, q);
+}
+
+// Return true if root is an ancestor of node
+private boolean isAncestor(TreeNode root, TreeNode node) {
+    if (root == null) {
+        return false;
+    }
+
+    if (root == node) {
+        return true;
+    }
+
+    return isAncestor(root.left, node) || isAncestor(root.right, node);
+}
+
+private TreeNode dfs(TreeNode root, TreeNode p, TreeNode q) {
+    if (root == null || root == p || root == q) {
+        return root;
+    }
+
+    if (isAncestor(root.left, p) && isAncestor(root.right, q)) {
+        return root;
+    }
+
+    if (isAncestor(root.right, p) && isAncestor(root.left, q)) {
+        return root;
+    }
+
+    TreeNode lLCA = dfs(root.left, p, q);
+    TreeNode rLCA = dfs(root.right, p, q);
+
+    return lLCA == null ? rLCA : lLCA;
+}
+```
+
+### Solution - BST Properties (Optimal)
+
+#### Walkthrough
+
+This solution leverages the BST property where all left subtree values are less than root and all right subtree values are greater than root:
+
+1. **Compare both nodes with root value**:
+   - If both `p.val` and `q.val` are **less than** `root.val` → LCA must be in the **left subtree**
+   - If both `p.val` and `q.val` are **greater than** `root.val` → LCA must be in the **right subtree**
+   - Otherwise → root is the **split point** (LCA)
+
+2. **Split point cases**:
+   - `p` and `q` are in different subtrees → root is their LCA
+   - One of the nodes equals root → root is the LCA (a node can be its own ancestor)
+
+3. **Recursive descent**: Follow the appropriate subtree until finding the split point
+
+**Key Insight**: No need to search both subtrees - the BST ordering tells us exactly which direction to go.
+
+#### Analysis
+
+- **Time Complexity**: O(h) where h is tree height — Visit at most h nodes along the path from root to LCA (O(log n) for balanced BST, O(n) for skewed tree)
+- **Space Complexity**: O(h) — Recursion stack depth
+
+#### Implementation Steps
+
+1. Compare both `p.val` and `q.val` with `root.val`
+2. If both are smaller, recurse left
+3. If both are larger, recurse right
+4. Otherwise, return root as the LCA
+
+#### Code - Java (Recursive)
+
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    // If both nodes are smaller, LCA is in left subtree
+    if (p.val < root.val && q.val < root.val) {
+        return lowestCommonAncestor(root.left, p, q);
+    }
+
+    // If both nodes are larger, LCA is in right subtree
+    if (p.val > root.val && q.val > root.val) {
+        return lowestCommonAncestor(root.right, p, q);
+    }
+
+    // Otherwise, root is the LCA (split point or one of the nodes)
+    return root;
+}
+```
+
+#### Code - Java (Iterative)
+
+For even better space complexity, use an iterative approach:
+
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    while (root != null) {
+        // Both nodes in left subtree
+        if (p.val < root.val && q.val < root.val) {
+            root = root.left;
+        }
+        // Both nodes in right subtree
+        else if (p.val > root.val && q.val > root.val) {
+            root = root.right;
+        }
+        // Found the split point
+        else {
+            return root;
+        }
+    }
+    return null;
+}
+```
+
+**Iterative Benefits**:
+- **Space Complexity**: O(1) — No recursion stack
+- **Time Complexity**: Still O(h)
+- Cleaner and more efficient for BST-specific problem
+
+
 ## Binary Tree Upside Down {#lc-upside-down}
 
 ### Problem Metadata
