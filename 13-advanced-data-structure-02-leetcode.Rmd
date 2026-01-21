@@ -588,6 +588,300 @@ class MyCalendarTreeMap {
 ```
 
 
+## Time Based Key-Value Store {#lc-time-based-kv-store}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 981
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/time-based-key-value-store/
+- **Tags**: NeetCode 150
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#glossary-hash-table), [Binary Search](#binary-search-strategy), Design
+
+### Description
+
+Design a time-based key-value data structure that can store multiple values for the same key at different timestamps and retrieve the key's value at a certain timestamp.
+
+Implement the `TimeMap` class:
+
+- `TimeMap()` Initializes the object of the data structure
+- `void set(String key, String value, int timestamp)` Stores the key `key` with the value `value` at the given time `timestamp`
+- `String get(String key, int timestamp)` Returns a value such that `set` was called previously, with `timestamp_prev <= timestamp`. If there are multiple such values, it returns the value associated with the largest `timestamp_prev`. If there are no values, it returns `""`
+
+**Note**: All the timestamps `timestamp` of `set` are strictly increasing.
+
+### Examples
+
+**Example 1:**
+
+```
+Input
+["TimeMap", "set", "get", "get", "set", "get", "get"]
+[[], ["foo", "bar", 1], ["foo", 1], ["foo", 3], ["foo", "bar2", 4], ["foo", 4], ["foo", 5]]
+
+Output
+[null, null, "bar", "bar", null, "bar2", "bar2"]
+
+Explanation
+TimeMap timeMap = new TimeMap();
+timeMap.set("foo", "bar", 1);  // store the key "foo" and value "bar" along with timestamp = 1
+timeMap.get("foo", 1);         // return "bar"
+timeMap.get("foo", 3);         // return "bar", since there is no value corresponding to foo at timestamp 3 and timestamp 2, then the only value is at timestamp 1 is "bar"
+timeMap.set("foo", "bar2", 4); // store the key "foo" and value "bar2" along with timestamp = 4
+timeMap.get("foo", 4);         // return "bar2"
+timeMap.get("foo", 5);         // return "bar2"
+```
+
+### Constraints
+
+- $1 \le$ `key.length`, `value.length` $\le 100$
+- `key` and `value` consist of lowercase English letters and digits
+- $1 \le$ `timestamp` $\le 10^7$
+- All the timestamps `timestamp` of `set` are strictly increasing
+- At most $2 \times 10^5$ calls will be made to `set` and `get`
+
+### Solution 1 - Hash Map with ArrayList + Binary Search
+
+#### Walkthrough
+
+Use a `HashMap<String, List<Entry>>` where each key maps to a list of `(timestamp, value)` entries. Since timestamps are strictly increasing per the problem constraint, the list remains sorted automatically as we append entries.
+
+**For `set(key, value, timestamp)`:**
+1. Retrieve or create the entry list for the key
+2. Append the new `(timestamp, value)` entry to the list
+3. No sorting needed - timestamps are guaranteed to be strictly increasing
+
+**For `get(key, timestamp)`:**
+1. Retrieve the entry list (return empty string if key doesn't exist)
+2. Use binary search to find the rightmost entry with `timestamp_prev <= timestamp`
+3. If found, return the value; otherwise return empty string
+
+The critical insight is using `Collections.binarySearch()` to efficiently find the correct timestamp. When the exact timestamp is not found, the return value is `-(insertion point) - 1`. We need the entry just before this insertion point.
+
+#### Analysis
+
+- **Time Complexity**:
+  - `set`: $O(1)$ - Simply append to the list (since timestamps are strictly increasing)
+  - `get`: $O(\log n)$ - Binary search where n is the number of entries for that key
+- **Space Complexity**: $O(N)$ where N is the total number of `set` operations
+
+**Key Insight**: The problem guarantees strictly increasing timestamps for `set` operations, which eliminates the need for sorting. This reduces `set` from $O(n \log n)$ to $O(1)$.
+
+#### Implementation Steps
+
+1. Define an `Entry` class holding `timestamp` and `value`
+2. Maintain `Map<String, List<Entry>>` to store entries per key
+3. For `set(key, value, timestamp)`: retrieve or create list, append entry (no sorting needed)
+4. For `get(key, timestamp)`: retrieve list, binary search for timestamp, handle exact match vs insertion point cases
+
+#### Code - Java
+
+```java
+class TimeMap {
+    private static class Entry {
+        int timestamp;
+        String value;
+
+        Entry(int timestamp, String value) {
+            this.timestamp = timestamp;
+            this.value = value;
+        }
+    }
+
+    private final Map<String, List<Entry>> map = new HashMap<>();
+
+    public TimeMap() {
+    }
+
+    public void set(String key, int timestamp, String value) {
+        map.putIfAbsent(key, new ArrayList<>());
+        List<Entry> entries = map.get(key);
+        Entry entry = new Entry(timestamp, value);
+        entries.add(entry);
+    }
+
+    public String get(String key, int timestamp) {
+        List<Entry> entries = map.get(key);
+        if (entries == null || entries.isEmpty()) {
+            return "";
+        }
+
+        int result = Collections.binarySearch(entries, new Entry(timestamp, ""),
+            new Comparator<Entry>() {
+                @Override
+                public int compare(Entry e1, Entry e2) {
+                    return Integer.compare(e1.timestamp, e2.timestamp);
+                }
+            });
+
+        if (result >= 0) {
+            // Exact match found
+            return entries.get(result).value;
+        } else {
+            // No exact match, convert to insertion point
+            int insertionPoint = -result - 1;
+            if (insertionPoint == 0) {
+                // No entry at or before the timestamp
+                return "";
+            }
+            // Return the entry just before the insertion point
+            return entries.get(insertionPoint - 1).value;
+        }
+    }
+}
+```
+
+### Solution 2 - Hash Map with TreeMap
+
+#### Walkthrough
+
+Use a `HashMap<String, TreeMap<Integer, String>>` where each key maps to a TreeMap with timestamps as keys and values as map values. TreeMap maintains sorted order automatically and provides `floorEntry()` to find the largest timestamp not exceeding the query.
+
+**For `set(key, timestamp, value)`:**
+- Simply `cache.get(key).put(timestamp, value)` - TreeMap handles ordering
+
+**For `get(key, timestamp)`:**
+- Use `floorEntry(timestamp)` to get the entry with the largest timestamp $\le$ query timestamp
+- Return the value from the entry, or empty string if null
+
+#### Analysis
+
+- **Time Complexity**:
+  - `set`: $O(\log n)$ - TreeMap insertion
+  - `get`: $O(\log n)$ - TreeMap floorEntry lookup
+- **Space Complexity**: $O(N)$ where N is the total number of `set` operations
+
+**Trade-offs vs Solution 1**:
+- **Pros**: Cleaner code using built-in TreeMap methods, more maintainable
+- **Cons**: Slightly slower constant factors compared to ArrayList
+- **Best for**: Production systems where code clarity and maintainability matter
+
+#### Implementation Steps
+
+1. Maintain `Map<String, TreeMap<Integer, String>>` to store entries per key
+2. For `set(key, timestamp, value)`: get or create TreeMap for key, put timestamp-value pair
+3. For `get(key, timestamp)`: use `floorEntry()` to find largest timestamp not exceeding query
+
+#### Code - Java
+
+```java
+class TimeMapTreeMap {
+    private final Map<String, TreeMap<Integer, String>> map = new HashMap<>();
+
+    public TimeMapTreeMap() {
+    }
+
+    public void set(String key, int timestamp, String value) {
+        map.putIfAbsent(key, new TreeMap<>());
+        map.get(key).put(timestamp, value);
+    }
+
+    public String get(String key, int timestamp) {
+        TreeMap<Integer, String> entries = map.get(key);
+        if (entries == null) {
+            return "";
+        }
+
+        Map.Entry<Integer, String> entry = entries.floorEntry(timestamp);
+        return entry == null ? "" : entry.getValue();
+    }
+}
+```
+
+### Solution 3 - ArrayList with Binary Insertion (For Non-Increasing Timestamps)
+
+**⚠️ CAVEAT**: This solution is **NOT needed** for LeetCode 981, which guarantees strictly increasing timestamps. However, if the problem were modified to allow out-of-order timestamps, this would be the approach to use.
+
+#### Walkthrough
+
+Instead of sorting the entire list on every insert (which would be O(n log n)), use binary search to find the correct insertion position and insert at that index, maintaining sorted order incrementally.
+
+**For `set(key, timestamp, value)` (without increasing guarantee):**
+1. Retrieve or create entry list for the key
+2. Binary search for the insertion point where the timestamp should go
+3. Insert at that position to maintain sorted order (O(n) due to array shifting)
+
+This reduces `set` from O(n log n) to O(n) while keeping the same query performance.
+
+#### Analysis
+
+- **Time Complexity**:
+  - `set`: $O(n)$ - binary search $O(\log n)$ + ArrayList insertion $O(n)$ due to shifting elements
+  - `get`: $O(\log n)$ - binary search
+- **Space Complexity**: $O(N)$ where N is the total number of `set` operations
+
+**Trade-offs**:
+- **Pros**: Better than full sorting (O(n) vs O(n log n)), uses familiar ArrayList
+- **Cons**: Still O(n) for insert due to array shifting, more complex than TreeMap, unnecessary for LeetCode 981
+- **Best for**: Interview variations where timestamps can arrive out of order but you want better performance than sorting
+
+#### Implementation Steps
+
+1. Define an `Entry` class holding `timestamp` and `value`
+2. Maintain `Map<String, List<Entry>>` to store entries per key
+3. For `set`: binary search for insertion point, insert at that position
+4. For `get`: binary search as in Solution 1
+
+#### Code - Java
+
+```java
+class TimeMapBinaryInsert {
+    private static class Entry {
+        int timestamp;
+        String value;
+
+        Entry(int timestamp, String value) {
+            this.timestamp = timestamp;
+            this.value = value;
+        }
+    }
+
+    private static final Comparator<Entry> COMPARATOR =
+        (e1, e2) -> Integer.compare(e1.timestamp, e2.timestamp);
+
+    private final Map<String, List<Entry>> map = new HashMap<>();
+
+    public TimeMapBinaryInsert() {
+    }
+
+    public void set(String key, int timestamp, String value) {
+        map.putIfAbsent(key, new ArrayList<>());
+        List<Entry> entries = map.get(key);
+
+        Entry entry = new Entry(timestamp, value);
+        // Find insertion point to maintain sorted order
+        int pos = Collections.binarySearch(entries, entry, COMPARATOR);
+
+        if (pos < 0) {
+            pos = -pos - 1;  // Convert to insertion point
+        }
+
+        entries.add(pos, entry);  // O(n) due to shifting
+    }
+
+    public String get(String key, int timestamp) {
+        List<Entry> entries = map.get(key);
+        if (entries == null || entries.isEmpty()) {
+            return "";
+        }
+
+        int result = Collections.binarySearch(entries, new Entry(timestamp, ""), COMPARATOR);
+
+        if (result >= 0) {
+            return entries.get(result).value;
+        } else {
+            int insertionPoint = -result - 1;
+            if (insertionPoint == 0) {
+                return "";
+            }
+            return entries.get(insertionPoint - 1).value;
+        }
+    }
+}
+```
+
+
 ## Simple Bank System {#lc-simple-bank-system}
 
 ### Problem Metadata
