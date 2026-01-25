@@ -624,38 +624,38 @@ if(has_company_tags) {
 
 When you add a new problem to the book:
 
-1. Open [problems_data.csv](problems_data.csv) in a spreadsheet or text editor
-2. Add a new row with: `title,platform,problem_id,difficulty,chapter,chapter_num,anchor,tags,techniques`
-3. Use comma-separated technique anchors in the `techniques` column and wrap the value in quotes when it contains commas (example: `dp-tabulation, backtracking-choose-explore-unchoose-pattern`)
+1. Open `problems_data.csv` in a spreadsheet or text editor
+2. Add a new row with the required fields: title, platform, problem_id, difficulty, chapter, chapter_num, anchor, tags, techniques
+3. Use comma-separated values in the tags and techniques columns, wrapping the entire value in quotes when it contains commas
 4. Rebuild the book with `sh build.sh`
-5. All lookup tables will automatically update!
+5. All lookup tables will automatically update
 
 ### Example CSV Entry
 
-```
+```csv
 Your New Problem,LeetCode,9999,Medium,Array,02,new-problem,"Google, Amazon, Top 100 Liked, Blind 75","dp-tabulation, hash-table"
 ```
 
 ### Tags Format
 
 The `tags` field supports comma-separated values for:
+
 - **Company names**: Google, Amazon, Meta, Microsoft, Apple, Bloomberg, Adobe, Uber, Netflix
-- **Study plans**: Top 100 Liked, Blind 75, NeetCode 150
+- **Study plans**: Top 100 Liked, Blind 75, NeetCode 150, Grind 75
 
 Use quotes around the tags value if it contains commas.
-
----
 
 ### Techniques Format
 
 The `techniques` field supports comma-separated technique anchor IDs for:
+
 - **Dynamic Programming**: `dp-memoization`, `dp-tabulation`, `dp-unbounded-knapsack`, `kadanes-algorithm`
 - **Backtracking**: `backtracking-choose-explore-unchoose-pattern`, `backtracking-pass-by-value-pattern`, `backtracking-mark-unmark-pattern`
 - **Two Pointer**: `two-pointer`, `sliding-window`
-- **Data Structures**: `stack`, `queue`, `heap` (see [Heap Implementation](#intro-heap)), `hash-table`, `bst`, `trie`, `linked-list`, `array`
-- **Searching**: `binary-search` (see [Binary Search](#binary-search-strategy))
-- **Matrix Traversal**: `matrix-traversal` (see [Matrix Traversal](#intro-matrix-traversal)), `dfs` (for matrices, see [Matrix DFS](#intro-matrix-dfs)), `bfs` (for matrices, see [Matrix BFS](#intro-matrix-bfs))
-- **Tree Traversal**: `dfs` (for trees, see [Tree DFS](#intro-tree-dfs)), `bfs` (for trees, see [Tree BFS](#intro-tree-bfs))
+- **Data Structures**: `stack`, `queue`, `heap`, `hash-table`, `bst`, `trie`, `linked-list`, `array`
+- **Searching**: `binary-search`
+- **Matrix Traversal**: `matrix-traversal`, `dfs` (for matrices), `bfs` (for matrices)
+- **Tree Traversal**: `dfs` (for trees), `bfs` (for trees)
 - **Graph Traversal**: `undirected-graph-dfs`, `undirected-graph-bfs`, `dag-dfs`, `dag-bfs`, `undirected-graph-cycle-detection`, `dag-cycle-detection`
 - **Sorting**: `sorting-bubble-sort`, `sorting-insertion-sort`, `sorting-merge-sort`, `sorting-quick-sort`, `sorting-topological-sort`
 - **Statistical Sampling**: `rejection-sampling`, `reservoir-sampling`
@@ -666,15 +666,10 @@ The `techniques` field supports comma-separated technique anchor IDs for:
 Use quotes around the techniques value if it contains commas.
 
 **Note**: When using `dfs` or `bfs` techniques, the problem will be categorized by chapter:
-- Tree chapter → [Tree DFS](#intro-tree-dfs) or [Tree BFS](#intro-tree-bfs)
-- Matrix chapter → [Matrix DFS](#intro-matrix-dfs) or [Matrix BFS](#intro-matrix-bfs)
-- Graph chapter → Graph-specific traversal patterns
 
-Cross-reference to technique explanations:
-- Detailed techniques: [Common Strategies](#common-strategies)
-- Matrix algorithms: [Matrix Introduction](#intro-matrix-traversal)
-- Tree algorithms: [Tree Introduction](#intro-tree-dfs)
-- Quick reference: [Glossary](#intro)
+- Tree chapter results in Tree DFS or Tree BFS categorization
+- Matrix chapter results in Matrix DFS or Matrix BFS categorization
+- Graph chapter results in Graph-specific traversal patterns
 
 ---
 
