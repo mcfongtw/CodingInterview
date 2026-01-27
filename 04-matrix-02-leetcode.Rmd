@@ -1940,3 +1940,252 @@ class Solution {
     }
 }
 ```
+
+
+## Rotting Oranges {#lc-rotting-oranges}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 994
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/rotting-oranges/
+- **Tags**: NeetCode 150
+- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation), [Simulation](glossary-of-algorithm.html#glossary-simulation)
+
+### Description
+
+You are given an `m x n` grid where each cell can have one of three values:
+
+- `0` representing an empty cell
+- `1` representing a fresh orange
+- `2` representing a rotten orange
+
+Every minute, any fresh orange that is 4-directionally adjacent (up, down, left, right) to a rotten orange becomes rotten.
+
+Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return `-1`.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+Output: 4
+Explanation:
+Minute 0: [[2,1,1],[1,1,0],[0,1,1]]
+Minute 1: [[2,2,1],[2,1,0],[0,1,1]]
+Minute 2: [[2,2,2],[2,2,0],[0,1,1]]
+Minute 3: [[2,2,2],[2,2,0],[0,2,1]]
+Minute 4: [[2,2,2],[2,2,0],[0,2,2]]
+```
+
+**Example 2:**
+
+```
+Input: grid = [[2,1,1],[0,1,1],[1,0,1]]
+Output: -1
+Explanation: The orange in the bottom left corner (row 2, column 0) is never rotten, because rotting only happens 4-directionally.
+```
+
+**Example 3:**
+
+```
+Input: grid = [[0,2]]
+Output: 0
+Explanation: Since there are already no fresh oranges at minute 0, the answer is 0.
+```
+
+### Constraints
+
+- `m == grid.length`
+- `n == grid[i].length`
+- `1 <= m, n <= 10`
+- `grid[i][j]` is `0`, `1`, or `2`
+
+### Solution - Multi-Source BFS
+
+#### Walkthrough
+
+This problem is a classic **multi-source BFS** where multiple rotten oranges spread simultaneously, similar to a "zombie infection" spreading outward level by level.
+
+**Key Insights:**
+
+1. **Multi-source initialization**: All initially rotten oranges (value `2`) start the BFS simultaneously. This ensures rotting spreads in parallel from multiple sources, not sequentially.
+
+2. **Level-order traversal for time tracking**: Use two queues (`currMinQ` and `nextMinQ`) to separate cells processed in the current minute from cells that will rot in the next minute. When `currMinQ` is exhausted, increment minutes and swap queues.
+
+3. **Fresh orange counting**: Track the count of fresh oranges. After BFS completes, if any fresh oranges remain (`fresh > 0`), they're unreachable, so return `-1`.
+
+4. **In-place marking**: Modify the grid directly by changing fresh oranges (`1`) to rotten (`2`) as they're visited, eliminating the need for a separate `visited` array.
+
+**Algorithm Flow:**
+
+1. **Initialization Phase**:
+   - Scan the entire grid to find all initially rotten oranges and add them to `startQ`
+   - Count all fresh oranges
+   - If no fresh oranges exist, return `0` immediately
+
+2. **BFS Phase**:
+   - Process all cells in `currMinQ` (current minute's rotten oranges)
+   - For each rotten orange, check all 4 adjacent cells
+   - If a neighbor is fresh (`grid[ni][nj] == 1`):
+     - Mark it as rotten (`grid[ni][nj] = 2`)
+     - Decrement fresh count
+     - Add to `nextMinQ` (will rot neighbors in next minute)
+   - When `currMinQ` is empty:
+     - If `nextMinQ` has oranges, increment minutes (a full minute has passed)
+     - Swap queues: `currMinQ = nextMinQ`, create new `nextMinQ`
+
+3. **Result**:
+   - If all fresh oranges were reached (`fresh == 0`), return total minutes
+   - Otherwise, return `-1` (some oranges unreachable)
+
+**Visual Example:**
+
+For `grid = [[2,1,1],[1,1,0],[0,1,1]]`:
+
+```
+Initial state (minute 0):
+2 1 1    currMinQ: [(0,0)]
+1 1 0    fresh: 6
+0 1 1
+
+Minute 1:
+2 2 1    currMinQ: [(0,1), (1,0)]
+2 1 0    fresh: 4
+0 1 1    Rotten at (0,0) spreads to (0,1) and (1,0)
+
+Minute 2:
+2 2 2    currMinQ: [(0,2), (1,1)]
+2 2 0    fresh: 2
+0 1 1    Rotting spreads from (0,1) and (1,0)
+
+Minute 3:
+2 2 2    currMinQ: [(1,2)]
+2 2 0    fresh: 1
+0 2 1    Rotting spreads from (1,1)
+
+Minute 4:
+2 2 2    currMinQ: [(2,2)]
+2 2 0    fresh: 0
+0 2 2    Final orange at (2,2) rots
+
+Result: 4 minutes
+```
+
+#### Analysis
+
+- **Time Complexity**: O(m × n) where m is the number of rows and n is the number of columns. Each cell is visited at most once during the BFS traversal.
+- **Space Complexity**: O(m × n) for the queue. In the worst case (all oranges rotten initially), the queue contains all cells in the grid.
+
+#### Implementation Steps
+
+1. **Multi-source initialization**:
+   - Iterate through the entire grid
+   - Add all initially rotten oranges (value `2`) to `startQ`
+   - Count all fresh oranges (value `1`)
+   - If no fresh oranges exist, return `0` immediately
+
+2. **BFS with level-order traversal**:
+   - Initialize two queues: `currMinQ` (current minute) and `nextMinQ` (next minute)
+   - Initialize `minutes = 0`
+   - While `currMinQ` is not empty:
+     - Poll a cell from `currMinQ`
+     - Check all 4 directions (up, down, left, right)
+     - For each valid neighbor that is fresh (`grid[ni][nj] == 1`):
+       - Mark it as rotten (`grid[ni][nj] = 2`)
+       - Decrement `fresh` counter
+       - Add to `nextMinQ`
+     - When `currMinQ` is empty:
+       - If `nextMinQ` has elements, increment `minutes`
+       - Swap queues: `currMinQ = nextMinQ`, create new `nextMinQ`
+
+3. **Return result**:
+   - If `fresh == 0`, return `minutes` (all oranges rotted)
+   - Otherwise, return `-1` (some oranges unreachable)
+
+#### Code - Java
+
+```java
+class Solution {
+    private static class Cell {
+        public int i = 0;
+        public int j = 0;
+
+        public Cell(int x, int y) {
+            i = x;
+            j = y;
+        }
+    }
+
+    public int orangesRotting(int[][] grid) {
+        int row = grid.length;
+        int col = grid[0].length;
+        Queue<Cell> startQ = new LinkedList<>();
+
+        int fresh = 0;
+
+        // Multi-source initialization: find all initially rotten oranges
+        // and count fresh oranges
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (grid[i][j] == 2) {
+                    startQ.offer(new Cell(i, j));
+                } else if (grid[i][j] == 1) {
+                    fresh++;
+                }
+            }
+        }
+
+        // If no fresh oranges exist, no time needed
+        if (fresh == 0)
+            return 0;
+
+        return bfs(grid, fresh, startQ);
+    }
+
+    private int bfs(int[][] grid, int fresh, Queue<Cell> startQ) {
+        Queue<Cell> currMinQ = startQ;
+        Queue<Cell> nextMinQ = new LinkedList<>();
+        int row = grid.length;
+        int col = grid[0].length;
+
+        int minutes = 0;
+        int[][] dirs = {{-1,0},{1,0},{0,-1},{0,1}};
+
+        while (!currMinQ.isEmpty()) {
+            Cell cell = currMinQ.poll();
+
+            // Check all 4 adjacent cells
+            for (int[] d : dirs) {
+                int ni = cell.i + d[0];
+                int nj = cell.j + d[1];
+
+                // Skip out-of-bounds cells
+                if (ni < 0 || ni >= row || nj < 0 || nj >= col)
+                    continue;
+
+                // If neighbor is fresh, rot it and add to next minute's queue
+                if (grid[ni][nj] == 1) {
+                    grid[ni][nj] = 2;  // Mark as rotten
+                    fresh--;
+                    nextMinQ.offer(new Cell(ni, nj));
+                }
+            }
+
+            // End of current minute: swap queues if next minute has work
+            if (currMinQ.isEmpty()) {
+                if (!nextMinQ.isEmpty()) {
+                    minutes++;
+                }
+                currMinQ = nextMinQ;
+                nextMinQ = new LinkedList<>();
+            }
+        }
+
+        // Return minutes if all fresh oranges rotted, otherwise -1
+        return fresh == 0 ? minutes : -1;
+    }
+}
+```

@@ -146,6 +146,165 @@ Find shortest paths or explore level-by-level in a matrix.
 
 **Time Complexity**: $O(m \cdot n)$ | **Space Complexity**: $O(m \cdot n)$ worst case (queue)
 
+##### Multi-Source BFS {#intro-matrix-multi-source-bfs}
+
+A powerful variation where BFS starts from **multiple sources simultaneously** rather than a single starting point. This technique is essential for problems involving simultaneous spreading, infection propagation, or finding distances from multiple origins.
+
+**Core Concept:**
+
+Instead of initializing the queue with one starting cell, add **all source cells** to the queue before starting the BFS traversal. All sources are treated as being at "distance 0" or "time 0", and they spread outward in parallel.
+
+**Key Characteristics:**
+
+1. **Simultaneous propagation**: All sources spread at the same rate, level by level
+2. **Natural time tracking**: Each BFS level represents one time unit (minute, hour, step)
+3. **Shortest distance guarantee**: First visit to a cell is always the shortest path from any source
+4. **In-place marking**: Can modify the matrix directly to track visited cells
+
+**Common Applications:**
+
+- **Infection/spreading problems**: Rotting oranges, zombie outbreak, fire spread
+- **Multi-facility distance**: Distance to nearest hospital, police station, or landmark
+- **Simultaneous flood fill**: Water flowing from multiple sources
+- **Game theory**: Multiple players moving simultaneously
+
+**Standard Implementation Pattern:**
+
+```java
+public int multiSourceBFS(int[][] grid) {
+    int rows = grid.length;
+    int cols = grid[0].length;
+    Queue<int[]> queue = new LinkedList<>();
+
+    // Phase 1: Multi-source initialization
+    // Add ALL source cells to the queue
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (grid[i][j] == SOURCE_VALUE) {
+                queue.offer(new int[]{i, j});
+            }
+        }
+    }
+
+    // Phase 2: Level-by-level BFS
+    int time = 0;
+    int[][] directions = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+
+    while (!queue.isEmpty()) {
+        int size = queue.size();  // Current level size
+
+        // Process all cells at current time/distance
+        for (int k = 0; k < size; k++) {
+            int[] cell = queue.poll();
+            int r = cell[0], c = cell[1];
+
+            // Explore 4 adjacent neighbors
+            for (int[] dir : directions) {
+                int nr = r + dir[0];
+                int nc = c + dir[1];
+
+                // Boundary check and validity check
+                if (nr < 0 || nr >= rows || nc < 0 || nc >= cols)
+                    continue;
+                if (grid[nr][nc] != TARGET_VALUE)
+                    continue;
+
+                // Mark as visited and add to next level
+                grid[nr][nc] = VISITED_VALUE;
+                queue.offer(new int[]{nr, nc});
+            }
+        }
+
+        // Increment time after processing entire level
+        if (!queue.isEmpty())
+            time++;
+    }
+
+    return time;
+}
+```
+
+**Two-Queue Approach for Time Tracking:**
+
+An alternative pattern uses two queues to explicitly separate current time step from next time step:
+
+```java
+Queue<Cell> currMinQ = new LinkedList<>();  // Current time step
+Queue<Cell> nextMinQ = new LinkedList<>();  // Next time step
+int minutes = 0;
+
+// Initialize currMinQ with all sources
+// ... initialization code ...
+
+while (!currMinQ.isEmpty()) {
+    Cell cell = currMinQ.poll();
+
+    // Process neighbors and add to nextMinQ
+    for (int[] dir : directions) {
+        // ... neighbor processing ...
+        if (valid) {
+            nextMinQ.offer(new Cell(ni, nj));
+        }
+    }
+
+    // When current level exhausted, move to next level
+    if (currMinQ.isEmpty() && !nextMinQ.isEmpty()) {
+        minutes++;
+        currMinQ = nextMinQ;
+        nextMinQ = new LinkedList<>();
+    }
+}
+```
+
+**Key Differences from Single-Source BFS:**
+
+| Aspect | Single-Source BFS | Multi-Source BFS |
+|--------|------------------|------------------|
+| **Initialization** | Queue starts with 1 cell | Queue starts with multiple cells |
+| **Distance/Time** | From one origin | From nearest of all origins |
+| **Use Case** | Shortest path from point A to B | Spread from multiple origins simultaneously |
+| **Example** | Maze solver | Rotting oranges, fire spread |
+
+**Time and Space Complexity:**
+
+- **Time**: $O(m \cdot n)$ - Each cell visited at most once
+- **Space**: $O(m \cdot n)$ - Queue can contain up to all cells in worst case
+- **Optimization**: In-place marking can avoid separate visited array
+
+**Common Pitfalls:**
+
+1. **Forgetting to initialize all sources**: Must add ALL sources before starting BFS
+2. **Incorrect time tracking**: Increment time only after processing complete level
+3. **Not handling edge cases**: Check for no sources, or already satisfied conditions
+4. **Revisiting cells**: Ensure cells are marked as visited when added to queue, not when polled
+
+**Example Problem Pattern (Rotting Oranges):**
+
+```
+Initial grid (minute 0):     After minute 1:         After minute 2:
+2 1 1                        2 2 1                   2 2 2
+1 1 0         BFS →          2 1 0        BFS →      2 2 0
+0 1 1                        0 1 1                   0 2 1
+
+All cells with '2' start simultaneously spreading to adjacent '1' cells.
+Time increments only when an entire level finishes processing.
+```
+
+**Comparison with Other Patterns:**
+
+- **vs DFS**: BFS guarantees shortest distance; DFS explores deeply first
+- **vs Dijkstra**: Multi-source BFS works when all edges have equal weight (1 step = 1 time unit)
+- **vs Floyd-Warshall**: Multi-source BFS is more efficient for sparse grids and specific source sets
+
+**Related Problems:**
+
+- [Rotting Oranges](\@ref(lc-rotting-oranges)) - Classic multi-source BFS with time tracking
+- 01 Matrix - Distance to nearest 0
+- Walls and Gates - Distance to nearest gate
+- As Far from Land as Possible - Maximum distance from all land cells
+
+**Time Complexity**: $O(m \cdot n)$ | **Space Complexity**: $O(m \cdot n)$ worst case (queue)
+
 #### Dynamic Programming on Matrices {#intro-matrix-dp}
 
 Solve optimization problems like minimum path sum, maximum rectangle, edit distance problems.
