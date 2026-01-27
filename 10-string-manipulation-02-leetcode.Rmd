@@ -1123,11 +1123,123 @@ Output: false
 - `1 <= wordDict.length <= 1000`
 - Words consist of lowercase letters
 
-### Solution 1 - Recursive Prefix Search
+### Solution 1 - Recursive Prefix Search (Top-Down DP with Memoization)
 
 #### Walkthrough
 
-Try every prefix; if it exists in the dictionary, recursively solve the remaining suffix. Use memoization to prune repeated states.
+This solution uses **recursive exploration with memoization** to determine if a string can be segmented into dictionary words. The approach starts from the beginning of the string and tries every possible prefix, recursively validating the remaining suffix.
+
+**Core Idea:**
+- At each position, try to match prefixes of increasing length against the dictionary
+- If a prefix matches, recursively check if the remaining suffix can be segmented
+- Cache results to avoid recomputing the same subproblems
+
+**Recursive State Definition:**
+- `dfs(start)` returns `true` if substring `s[start...n-1]` can be segmented into dictionary words
+
+**Base Case:**
+- If `start == n` (reached end of string), return `true` - successfully segmented the entire string
+
+**Recursive Exploration:**
+For each starting position `start`, iterate through all possible ending positions `end`:
+1. Extract substring `s[start:end]`
+2. Check if this substring exists in the dictionary
+3. If yes, recursively check if `dfs(end)` returns `true`
+4. If any combination works, return `true`
+5. If no valid segmentation found, return `false`
+
+**Memoization Strategy:**
+Use a `Boolean[]` array (not `boolean[]`) to cache results:
+- `memo[start] == null` → not computed yet
+- `memo[start] == true` → substring from `start` can be segmented
+- `memo[start] == false` → substring from `start` cannot be segmented
+
+**Why Boolean[] instead of boolean[]?**
+
+We use `Boolean[]` (object array) instead of `boolean[]` (primitive array) to distinguish between **three states**:
+
+| State | Meaning | Boolean[] | boolean[] |
+|-------|---------|-----------|-----------|
+| Not computed | Haven't explored this position yet | `null` | `false` (ambiguous!) |
+| Can segment | Valid segmentation exists | `true` | `true` |
+| Cannot segment | No valid segmentation | `false` | `false` (ambiguous!) |
+
+With `boolean[]`, we cannot differentiate between "not yet computed" and "computed to false". Both would be `false`, causing incorrect cache hits. The `Boolean[]` array allows us to check `if (memo[start] != null)` to distinguish cached results from uncomputed states.
+
+**Visual Example with `s = "catsandog"`, `wordDict = ["cats", "dog", "sand", "and", "cat"]`:**
+
+```
+Dictionary as Set: {cats, dog, sand, and, cat}
+
+Call dfs(0): "catsandog"
+  ├─ Try prefix "c" [0:1] → not in dict, skip
+  ├─ Try prefix "ca" [0:2] → not in dict, skip
+  ├─ Try prefix "cat" [0:3] → in dict ✓ → recurse dfs(3)
+  │   │
+  │   └─ dfs(3): "sandog"
+  │       ├─ Try prefix "s" [3:4] → not in dict, skip
+  │       ├─ Try prefix "sa" [3:5] → not in dict, skip
+  │       ├─ Try prefix "san" [3:6] → not in dict, skip
+  │       ├─ Try prefix "sand" [3:7] → in dict ✓ → recurse dfs(7)
+  │       │   │
+  │       │   └─ dfs(7): "og"
+  │       │       ├─ Try prefix "o" [7:8] → not in dict, skip
+  │       │       ├─ Try prefix "og" [7:9] → not in dict, skip
+  │       │       └─ No valid prefix → memo[7] = false, return false
+  │       │
+  │       ├─ Try prefix "sando" [3:8] → not in dict, skip
+  │       ├─ Try prefix "sandog" [3:9] → not in dict, skip
+  │       └─ No valid prefix → memo[3] = false, return false
+  │
+  ├─ Try prefix "cats" [0:4] → in dict ✓ → recurse dfs(4)
+  │   │
+  │   └─ dfs(4): "andog"
+  │       ├─ Try prefix "a" [4:5] → not in dict, skip
+  │       ├─ Try prefix "an" [4:6] → not in dict, skip
+  │       ├─ Try prefix "and" [4:7] → in dict ✓ → recurse dfs(7)
+  │       │   │
+  │       │   └─ dfs(7): "og" → memo[7] = false (cached!), return false
+  │       │
+  │       ├─ Try prefix "ando" [4:8] → not in dict, skip
+  │       ├─ Try prefix "andog" [4:9] → not in dict, skip
+  │       └─ No valid prefix → memo[4] = false, return false
+  │
+  ├─ Try prefixes "catsa", "catsan", ..., "catsandog" → none in dict
+  └─ No valid segmentation → memo[0] = false, return false
+
+Result: false (cannot segment "catsandog")
+```
+
+**Example with `s = "leetcode"`, `wordDict = ["leet", "code"]`:**
+
+```
+Dictionary as Set: {leet, code}
+
+Call dfs(0): "leetcode"
+  ├─ Try prefix "l" [0:1] → not in dict, skip
+  ├─ Try prefix "le" [0:2] → not in dict, skip
+  ├─ Try prefix "lee" [0:3] → not in dict, skip
+  ├─ Try prefix "leet" [0:4] → in dict ✓ → recurse dfs(4)
+  │   │
+  │   └─ dfs(4): "code"
+  │       ├─ Try prefix "c" [4:5] → not in dict, skip
+  │       ├─ Try prefix "co" [4:6] → not in dict, skip
+  │       ├─ Try prefix "cod" [4:7] → not in dict, skip
+  │       ├─ Try prefix "code" [4:8] → in dict ✓ → recurse dfs(8)
+  │       │   │
+  │       │   └─ dfs(8): base case (index == length) → return true ✓
+  │       │
+  │       └─ memo[4] = true, return true ✓
+  │
+  └─ memo[0] = true, return true ✓
+
+Result: true ("leet" + "code")
+```
+
+**Key Memoization Benefits:**
+- In the first example, when we reach `dfs(7)` from different paths, we use the cached `false` result
+- Without memoization, time complexity would be exponential O(2^n)
+- With memoization, each position is computed at most once → O(n^2)
 
 #### Analysis
 
@@ -1272,6 +1384,274 @@ public boolean wordBreakTrie(String s, List<String> wordDict) {
         }
     }
     return dp[s.length()];
+}
+```
+
+
+## Design Add and Search Words Data Structure {#lc-design-add-search-words}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 211
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/design-add-and-search-words-data-structure/
+- **Tags**: NeetCode 150
+- **Techniques**: [Trie](glossary-of-algorithm.html#glossary-trie), [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Backtracking](glossary-of-algorithm.html#glossary-backtracking), String, Design
+
+### Description
+
+Design a data structure that supports adding new words and finding if a string matches any previously added string.
+
+Implement the `WordDictionary` class:
+
+- `WordDictionary()` Initializes the object.
+- `void addWord(word)` Adds `word` to the data structure, it can be matched later.
+- `bool search(word)` Returns `true` if there is any string in the data structure that matches `word` or `false` otherwise. `word` may contain dots `'.'` where dots can be matched with any letter.
+
+### Examples
+
+**Example 1:**
+```
+Input:
+["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+[[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+
+Output:
+[null,null,null,null,false,true,true,true]
+
+Explanation:
+WordDictionary wordDictionary = new WordDictionary();
+wordDictionary.addWord("bad");
+wordDictionary.addWord("dad");
+wordDictionary.addWord("mad");
+wordDictionary.search("pad"); // return false
+wordDictionary.search("bad"); // return true
+wordDictionary.search(".ad"); // return true
+wordDictionary.search("b.."); // return true
+```
+
+### Constraints
+
+- $1 \le$ word.length $\le$ 25
+- `word` in `addWord` consists of lowercase English letters
+- `word` in `search` consists of `'.'` or lowercase English letters
+- There will be at most 2 dots in `word` for `search` queries
+- At most $10^4$ calls will be made to `addWord` and `search`
+
+### Solution - Trie with DFS
+
+#### Walkthrough
+
+This problem requires a data structure that efficiently stores words and supports pattern matching with wildcard characters. A **Trie (prefix tree)** combined with **DFS/backtracking** provides the optimal solution.
+
+**Core Data Structure - Trie:**
+- Each TrieNode contains a map of children (character → TrieNode) and a boolean flag marking word endings
+- Words share common prefixes, making storage and lookup efficient
+- The trie structure naturally supports prefix-based operations
+
+**Key Challenge - Wildcard Matching:**
+The wildcard character `'.'` can match any single letter, requiring us to explore multiple branches simultaneously. When we encounter a `'.'`:
+- We cannot follow a single deterministic path
+- We must try **all possible children** at that position using DFS
+- If any branch leads to a valid word, return `true`
+
+**Algorithm Approach:**
+
+1. **addWord(word)**: Standard trie insertion
+   - Start at root, traverse/create nodes for each character
+   - Mark the final node as end of word
+
+2. **search(word)**: Two cases at each position
+   - **Regular character**: Follow the single matching child (or fail if none exists)
+   - **Wildcard '.'**: Recursively try all children with the remaining substring
+
+**Visual Example with words = ["bad", "dad", "mad"]:**
+
+```
+Trie structure after adding all words:
+        root
+       /  |  \
+      b   d   m
+      |   |   |
+      a   a   a
+      |   |   |
+      d*  d*  d*
+
+(* marks end of word)
+
+Search "pad":
+  root → 'p' not found → return false
+
+Search "bad":
+  root → 'b' → 'a' → 'd'* → true
+
+Search ".ad":
+  root → '.' → try all children (b, d, m)
+    ├─ 'b' → search "ad" from node 'b'
+    │   └─ 'a' → 'd'* → true ✓ (found!)
+    └─ (no need to continue, already found match)
+
+Search "b..":
+  root → 'b' → '.' → try all children (only 'a')
+    └─ 'a' → search "." from node 'a'
+        └─ '.' → try all children (only 'd')
+            └─ 'd'* → true ✓
+```
+
+**Implementation Details:**
+
+The solution uses a helper method `searchWildCard()` to handle wildcard exploration:
+- When encountering `'.'`, extract the remaining substring
+- Try searching the remaining substring from **each child** of the current node
+- Return `true` if any recursive call succeeds (DFS short-circuit)
+
+**Example trace for search(".ad") with words ["bad", "dad", "mad"]:**
+
+```
+search(".ad", root):
+  i=0, ch='.'
+  → searchWildCard(".ad", 0, root)
+      subword = "ad"
+      children = {b, d, m}
+
+      Try child 'b':
+        search("ad", node_b)
+          i=0, ch='a' → node_b.children.get('a') = node_a
+          i=1, ch='d' → node_a.children.get('d') = node_d
+          node_d.isEndOfWord = true
+          → return true ✓
+
+      (short-circuit, no need to try 'd' and 'm')
+
+  Result: true
+```
+
+#### Analysis
+
+- **Time Complexity**:
+  - **addWord(word)**: O(m) where m is the length of the word
+    - Iterate through each character exactly once
+    - HashMap `putIfAbsent` and `get` operations are O(1) average case
+
+  - **search(word)**: Depends on number of wildcards
+    - **Best case (no wildcards)**: O(m) - deterministic path through trie
+    - **Worst case (all wildcards)**: O(26^m) - must explore all branches at each position
+    - **Average case**: O(26^k × m) where k is the number of wildcards (problem states at most 2)
+    - With constraint of at most 2 wildcards: O(26^2 × m) = O(676m), effectively O(m)
+
+- **Space Complexity**: O(N × M) where N is total number of words and M is average word length
+  - Trie storage: Each word adds at most M new nodes (shared prefixes reduce this)
+  - HashMap overhead: Each TrieNode uses a HashMap (more memory than array but sparse)
+  - Recursion stack for search: O(m) depth for DFS calls
+
+**Design Trade-offs:**
+
+| Aspect | HashMap Children | Array[26] Children |
+|--------|------------------|-------------------|
+| Memory per node | Higher (HashMap overhead) | Lower (fixed 26 slots) |
+| Memory efficiency | Better for sparse tries | Better for dense tries |
+| Access time | O(1) average, slightly slower | O(1) constant |
+| Code clarity | More intuitive | More performant |
+
+The HashMap approach is valid and provides good sparse memory usage when the trie has few branches per node.
+
+#### Implementation Steps
+
+1. **Define TrieNode inner class:**
+   - `Map<Character, TrieNode> children` to store child nodes
+   - `boolean isEndOfWord` flag to mark complete words
+   - Constructor initializes empty HashMap and sets flag to `false`
+
+2. **Initialize WordDictionary:**
+   - Create a root TrieNode in the constructor
+
+3. **Implement addWord(word):**
+   - Start at root node
+   - For each character in word:
+     - Use `putIfAbsent(ch, new TrieNode())` to create child if doesn't exist
+     - Move current pointer to child node
+   - Mark final node as `isEndOfWord = true`
+
+4. **Implement search(word):**
+   - Create public method that delegates to helper: `search(word, root)`
+   - Helper method iterates through word characters:
+     - If character is `'.'`: call `searchWildCard()` to explore all branches
+     - If regular character: follow single child path or return `false` if not found
+   - After processing all characters, return `current.isEndOfWord`
+
+5. **Implement searchWildCard(word, index, root):**
+   - Extract remaining substring: `subword = word.substring(index + 1)`
+   - Iterate through all children of current node
+   - For each child, recursively call `search(subword, child)`
+   - Return `true` if any recursive call succeeds (DFS short-circuit)
+   - Return `false` if all children fail
+
+#### Code - Java
+
+```java
+class WordDictionary {
+
+    private class TrieNode {
+        Map<Character, TrieNode> children;
+        boolean isEndOfWord;
+
+        TrieNode() {
+            children = new HashMap<>();
+            isEndOfWord = false;
+        }
+    }
+
+    private TrieNode root;
+
+    public WordDictionary() {
+        root = new TrieNode();
+    }
+
+    public void addWord(String word) {
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            current.children.putIfAbsent(ch, new TrieNode());
+            current = current.children.get(ch);
+        }
+        current.isEndOfWord = true;
+    }
+
+    public boolean search(String word) {
+        return search(word, root);
+    }
+
+    private boolean search(String word, TrieNode start) {
+        TrieNode current = start;
+        char[] chars = word.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char ch = chars[i];
+            if (ch == '.') {
+                // Wildcard: explore all possible branches
+                return searchWildCard(word, i, current);
+            } else {
+                current = current.children.get(ch);
+                if (current == null) {
+                    return false;
+                }
+            }
+        }
+        return current.isEndOfWord;
+    }
+
+    private boolean searchWildCard(String word, int index, TrieNode root) {
+        TrieNode current = root;
+        String subword = word.substring(index + 1);
+
+        // Try all possible children for the wildcard position
+        for (TrieNode child : current.children.values()) {
+            if (search(subword, child)) {
+                return true;  // Short-circuit on first match
+            }
+        }
+
+        return false;
+    }
 }
 ```
 

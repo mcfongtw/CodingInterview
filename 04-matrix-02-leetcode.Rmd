@@ -178,22 +178,27 @@ public List<Integer> spiralOrder(int[][] matrix) {
         return result;
     }
 
+    // Define top, bottom, left, right boundaries (border cells)
     int top = 0;
     int bottom = matrix.length - 1;
     int left = 0;
     int right = matrix[0].length - 1;
 
     while (top <= bottom && left <= right) {
+        // Traverse top-most row (left to right)
         for (int col = left; col <= right; col++) {
             result.add(matrix[top][col]);
         }
         top++;
 
+        // Traverse right-most column (top to bottom)
         for (int row = top; row <= bottom; row++) {
             result.add(matrix[row][right]);
         }
         right--;
 
+        // Traverse bottom-most row (right to left)
+        // Check to avoid duplicate row traversal
         if (top <= bottom) {
             for (int col = right; col >= left; col--) {
                 result.add(matrix[bottom][col]);
@@ -201,6 +206,8 @@ public List<Integer> spiralOrder(int[][] matrix) {
             bottom--;
         }
 
+        // Traverse left-most column (bottom to top)
+        // Check to avoid duplicate column traversal
         if (left <= right) {
             for (int row = bottom; row >= top; row--) {
                 result.add(matrix[row][left]);
@@ -212,63 +219,52 @@ public List<Integer> spiralOrder(int[][] matrix) {
     return result;
 }
 ```
-    int cols = matrix[0].length;
 
-    // position of left, right, top and buttom border
-    int left = 0;
-    int right = cols - 1;
-    int top = 0;
-    int bottom = rows - 1;
+#### Code - Golang
 
-    while( result.size() < (cols * rows) ) {
-        //traverse a circle
+```go
+func spiralOrder(matrix [][]int) []int {
+    result := make([]int, 0)
 
-        // avoid duplicated row
-        if(top > bottom) {
-            break;
+    // Define top, bottom, left, right boundaries (border cells)
+    t := 0
+    b := len(matrix) - 1
+    l := 0
+    r := len(matrix[0]) - 1
+
+    for t <= b && l <= r {
+        // Traverse top-most row (left to right)
+        for j := l; j <= r; j++ {
+            result = append(result, matrix[t][j])
+        }
+        t++
+
+        // Traverse right-most column (top to bottom)
+        for i := t; i <= b; i++ {
+            result = append(result, matrix[i][r])
+        }
+        r--
+
+        // Traverse bottom-most row (right to left)
+        // Check to avoid duplicate row traversal
+        if t <= b {
+            for j := r; j >= l; j-- {
+                result = append(result, matrix[b][j])
+            }
+            b--
         }
 
-        //going rightward
-        for(int i = left; i <= right; i++){
-            result.add(matrix[top][i]);
+        // Traverse left-most column (bottom to top)
+        // Check to avoid duplicate column traversal
+        if l <= r {
+            for i := b; i >= t; i-- {
+                result = append(result, matrix[i][l])
+            }
+            l++
         }
-        top++;
-
-        // avoid duplicated column
-        if(left > right) {
-            break;
-        }
-
-        //going downward
-        for(int i = top; i <= bottom; i++){
-            result.add(matrix[i][right]);
-        }
-        right--;
-
-        // avoid duplicated row
-        if(top > bottom) {
-            break;
-        }
-
-        // going leftward
-        for(int i = right; i >= left; i--){
-            result.add(matrix[bottom][i]);
-        }
-        bottom--;
-
-        // avoid duplicated column
-        if(left > right) {
-            break;
-        }
-
-        // going upward
-        for(int i = bottom; i >= top; i--){
-            result.add(matrix[i][left]);
-        }
-        left++;
     }
 
-    return result;
+    return result
 }
 ```
 
