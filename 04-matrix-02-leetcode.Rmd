@@ -404,6 +404,276 @@ public int minPathSum(int[][] grid) {
 ```
 
 
+## Set Matrix Zeroes {#lc-set-matrix-zeroes}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 73
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/set-matrix-zeroes/
+- **Tags**: Grind 75, Top 100 Liked
+- **Techniques**: [Matrix Manipulation](glossary-of-algorithm.html#glossary-matrix-manipulation), In-place
+
+### Description
+
+Given an `m x n` integer matrix `matrix`, if an element is `0`, set its entire row and column to `0`'s.
+
+You must do it **in place**.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: matrix = [[1,1,1],[1,0,1],[1,1,1]]
+Output: [[1,0,1],[0,0,0],[1,0,1]]
+```
+
+**Example 2:**
+
+```
+Input: matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+Output: [[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+```
+
+### Constraints
+
+- `m == matrix.length`
+- `n == matrix[0].length`
+- `1 <= m, n <= 200`
+- $-2^{31} \le$ `matrix[i][j]` $\le 2^{31} - 1$
+
+### Follow-up
+
+- A straightforward solution using O(m × n) space is probably a bad idea.
+- A simple improvement uses O(m + n) space, but still not the best solution.
+- Could you devise a constant space solution?
+
+### Solution - First Row/Column as Markers
+
+#### Walkthrough
+
+The optimal O(1) space solution uses the **first row and first column as marker arrays** to track which rows and columns need to be zeroed. The key challenge is that the first row and column serve dual purposes: they store both original data and marker information.
+
+**Key Insight:**
+
+Instead of using separate O(m + n) arrays to track which rows/columns to zero, we repurpose the existing first row and column:
+- `matrix[i][0]` marks whether row `i` should be zeroed
+- `matrix[0][j]` marks whether column `j` should be zeroed
+
+**Why we need special flags:**
+
+The cell `matrix[0][0]` is shared by both the first row and first column, creating ambiguity. We resolve this by using two boolean flags:
+- `firstRowHasZero`: Does the first row contain any original zeros?
+- `firstColHasZero`: Does the first column contain any original zeros?
+
+**Algorithm in 4 Phases:**
+
+**Phase 1: Scan and Mark (Lines 8-18)**
+
+Traverse the entire matrix. When finding a zero at `(i, j)`:
+1. If in first row (i = 0), set `firstRowHasZero = true`
+2. If in first column (j = 0), set `firstColHasZero = true`
+3. Mark row `i` by setting `matrix[i][0] = 0`
+4. Mark column `j` by setting `matrix[0][j] = 0`
+
+**Phase 2: Apply Markers (Lines 21-27)**
+
+Use the markers to zero out cells, but **skip the first row and column** (start from i=1, j=1):
+- If `matrix[i][0] == 0` OR `matrix[0][j] == 0`, set `matrix[i][j] = 0`
+
+**Phase 3: Zero First Row (Lines 29-33)**
+
+If `firstRowHasZero` is true, zero out the entire first row.
+
+**Phase 4: Zero First Column (Lines 35-39)**
+
+If `firstColHasZero` is true, zero out the entire first column.
+
+**Visual Example:**
+
+For `matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]`:
+
+```
+Initial State:
+[0, 1, 2, 0]
+[3, 4, 5, 2]
+[1, 3, 1, 5]
+
+Phase 1: Scan and Mark
+─────────────────────────────────────────────────────
+Cell (0,0) = 0:
+  - firstRowHasZero = true (i == 0)
+  - firstColHasZero = true (j == 0)
+  - matrix[0][0] = 0 (already 0)
+
+Cell (0,3) = 0:
+  - firstRowHasZero = true (already set)
+  - matrix[0][3] = 0 (already 0)
+  - matrix[0][0] remains 0 (marker for column 3)
+
+After Phase 1 (markers in first row/col):
+[0, 1, 2, 0]  ← First row has markers
+[0, 4, 5, 2]  ← matrix[1][0]=0 (won't happen, no zero in row 1)
+[0, 3, 1, 5]  ← matrix[2][0]=0 (won't happen, no zero in row 2)
+ ↑        ↑
+Col markers
+
+Actually, let me trace more carefully:
+- (0,0)=0: firstRowHasZero=true, firstColHasZero=true, matrix[0][0]=0, matrix[0][0]=0
+- (0,1)=1: skip
+- (0,2)=2: skip
+- (0,3)=0: firstRowHasZero=true (already), matrix[0][3]=0, matrix[0][0]=0 (wait, should be matrix[0][3]=0)
+
+Let me re-trace the algorithm:
+When we find matrix[i][j] == 0:
+  - Mark matrix[i][0] = 0
+  - Mark matrix[0][j] = 0
+
+Initial:
+[0, 1, 2, 0]
+[3, 4, 5, 2]
+[1, 3, 1, 5]
+
+Finding zeros:
+- (0,0)=0: i=0 → firstRowHasZero=true, j=0 → firstColHasZero=true
+           matrix[0][0]=0, matrix[0][0]=0
+- (0,3)=0: i=0 → firstRowHasZero=true, j=3 → nothing special
+           matrix[0][0]=0, matrix[0][3]=0
+
+After Phase 1:
+[0, 1, 2, 0]  ← First row now has markers at positions 0 and 3
+[3, 4, 5, 2]  ← No changes yet
+[1, 3, 1, 5]  ← No changes yet
+firstRowHasZero = true
+firstColHasZero = true
+
+Phase 2: Apply Markers (i=1 to rows-1, j=1 to cols-1)
+─────────────────────────────────────────────────────
+For each cell (i,j) where i≥1 and j≥1:
+  If matrix[i][0]==0 OR matrix[0][j]==0:
+    matrix[i][j] = 0
+
+Checking:
+- (1,1): matrix[1][0]=3≠0, matrix[0][1]=1≠0 → No change
+- (1,2): matrix[1][0]=3≠0, matrix[0][2]=2≠0 → No change
+- (1,3): matrix[1][0]=3≠0, matrix[0][3]=0 → matrix[1][3]=0 ✓
+- (2,1): matrix[2][0]=1≠0, matrix[0][1]=1≠0 → No change
+- (2,2): matrix[2][0]=1≠0, matrix[0][2]=2≠0 → No change
+- (2,3): matrix[2][0]=1≠0, matrix[0][3]=0 → matrix[2][3]=0 ✓
+
+After Phase 2:
+[0, 1, 2, 0]  ← First row unchanged
+[3, 4, 5, 0]  ← Column 3 zeroed
+[1, 3, 1, 0]  ← Column 3 zeroed
+
+Phase 3: Zero First Row (if firstRowHasZero)
+─────────────────────────────────────────────────────
+firstRowHasZero = true → Zero entire first row
+
+After Phase 3:
+[0, 0, 0, 0]  ← First row all zeros
+[3, 4, 5, 0]
+[1, 3, 1, 0]
+
+Phase 4: Zero First Column (if firstColHasZero)
+─────────────────────────────────────────────────────
+firstColHasZero = true → Zero entire first column
+
+Final Result:
+[0, 0, 0, 0]  ← First row zeroed
+[0, 4, 5, 0]  ← First column zeroed
+[0, 3, 1, 0]  ← First column zeroed
+
+Perfect! This matches the expected output.
+```
+
+#### Analysis
+
+- **Time Complexity**: O(m × n) where m is the number of rows and n is the number of columns. We make three passes through the matrix: one to mark, one to apply markers, and two to handle the first row/column (which together visit each cell once).
+- **Space Complexity**: O(1) - Only uses two boolean variables (`firstRowHasZero`, `firstColHasZero`). The first row and column are reused as marker storage, achieving true constant space.
+
+#### Implementation Steps
+
+1. **Initialize tracking flags**:
+   - `firstRowHasZero = false` - tracks if first row needs zeroing
+   - `firstColHasZero = false` - tracks if first column needs zeroing
+
+2. **Phase 1 - Scan and mark** (nested loops i=0 to rows-1, j=0 to cols-1):
+   - When finding `matrix[i][j] == 0`:
+     - If i equals 0, set `firstRowHasZero = true`
+     - If j equals 0, set `firstColHasZero = true`
+     - Set `matrix[i][0] = 0` (mark row i)
+     - Set `matrix[0][j] = 0` (mark column j)
+
+3. **Phase 2 - Apply markers** (nested loops i=1 to rows-1, j=1 to cols-1):
+   - For each cell, if `matrix[i][0] == 0` OR `matrix[0][j] == 0`:
+     - Set `matrix[i][j] = 0`
+   - **Critical**: Start from i=1, j=1 to avoid overwriting markers prematurely
+
+4. **Phase 3 - Handle first row** (if firstRowHasZero):
+   - Loop through j=0 to cols-1
+   - Set `matrix[0][j] = 0`
+
+5. **Phase 4 - Handle first column** (if firstColHasZero):
+   - Loop through i=0 to rows-1
+   - Set `matrix[i][0] = 0`
+
+#### Code - Java
+
+```java
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        boolean firstRowHasZero = false;
+        boolean firstColHasZero = false;
+
+        // Phase 1: Scan and mark using first row/column as markers
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (matrix[i][j] == 0) {
+                    // Track if first row/column originally had zeros
+                    if (i == 0)
+                        firstRowHasZero = true;
+                    if (j == 0)
+                        firstColHasZero = true;
+
+                    // Use first row/column as markers
+                    matrix[i][0] = 0; // Mark the first column
+                    matrix[0][j] = 0; // Mark the first row
+                }
+            }
+        }
+
+        // Phase 2: Apply markers to zero out cells (skip first row/column)
+        for (int i = 1; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        // Phase 3: Zero out first row if it originally had a zero
+        if (firstRowHasZero) {
+            for (int j = 0; j < cols; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+
+        // Phase 4: Zero out first column if it originally had a zero
+        if (firstColHasZero) {
+            for (int i = 0; i < rows; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+}
+```
+
+
 ## Search a 2D Matrix {#lc-search-matrix}
 
 ### Problem Metadata
