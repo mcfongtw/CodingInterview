@@ -4345,6 +4345,111 @@ public int[] topKFrequent(int[] nums, int k) {
 ```
 
 
+### Solution - Sorting with Stream API
+
+#### Walkthrough
+
+This solution uses **frequency counting followed by sorting** to find the k most frequent elements. While less optimal than the min-heap approach, it offers a simpler, more readable implementation using Java Streams.
+
+**Core Strategy:**
+
+1. **Count frequencies** using a HashMap: O(n)
+2. **Sort all unique elements** by frequency (descending)
+3. **Extract top k elements** using `limit(k)`
+
+**Key Difference from Min-Heap:**
+
+Unlike the min-heap approach that maintains only k elements at a time, this solution:
+- Sorts **all** unique elements by frequency
+- Uses stream operations to cleanly extract the top k
+- Trades efficiency for code simplicity
+
+**Step-by-step execution for `nums = [1,1,1,2,2,3], k = 2`:**
+
+```
+Step 1: Build frequency map
+  counts = {1→3, 2→2, 3→1}
+
+Step 2: Stream entries and sort by frequency (descending)
+  Entry stream: [(1,3), (2,2), (3,1)]
+  After sort:   [(1,3), (2,2), (3,1)]  (already sorted by frequency desc)
+
+Step 3: Limit to k=2 elements
+  After limit:  [(1,3), (2,2)]
+
+Step 4: Extract keys
+  Result: [1, 2]
+```
+
+**When to Use This Approach:**
+
+✅ **Good for:**
+- Code interviews where readability matters
+- Small datasets where performance difference is negligible
+- When you need to avoid PriorityQueue complexity
+
+❌ **Not ideal for:**
+- Large datasets with small k (min-heap is much better)
+- Performance-critical production code
+- When k << n (e.g., k=10, n=1,000,000)
+
+#### Analysis
+
+- **Time Complexity**: O(n + m log m)
+  - Build frequency map: O(n)
+  - Sort m unique elements: O(m log m) where m $\le$ n
+  - Stream operations (limit, map): O(k)
+  - **Worst case**: When all elements are unique (m = n), this becomes O(n log n)
+  - **Best case**: When few unique elements (m << n), approaches O(n + m log m)
+
+- **Space Complexity**: O(n)
+  - Frequency map: O(m) where m $\le$ n
+  - Stream intermediate operations: O(m) for sorting
+  - Result array: O(k)
+  - Total: O(n)
+
+**Comparison with Min-Heap:**
+
+| Metric | Sorting Approach | Min-Heap Approach |
+|--------|-----------------|-------------------|
+| Time Complexity | O(n log n) worst case | O(n log k) |
+| Code Simplicity | High (clean streams) | Medium (manual heap) |
+| Performance (k=10, n=100K) | ~1.7M operations | ~330K operations |
+| Best Use Case | Small datasets, interviews | Production, large n with small k |
+
+**Example Performance:**
+- n = 100,000 elements, k = 10
+- Sorting: 100,000 × log(100,000) ≈ 1,660,000 operations
+- Min-heap: 100,000 × log(10) ≈ 332,000 operations
+- **Min-heap is ~5x faster**
+
+#### Implementation Steps
+
+1. **Build frequency map**: Create `Map<Integer, Integer>` to count occurrences
+2. **Stream and sort**: Convert map entries to stream and sort by frequency descending
+3. **Limit to k**: Use `limit(k)` to take only top k elements
+4. **Extract keys**: Map entries to keys and collect as int array
+
+#### Code - Java
+
+```java
+public int[] topKFrequent(int[] nums, int k) {
+    // Build frequency map
+    Map<Integer, Integer> counts = new HashMap<>();
+    for (int num : nums) {
+        counts.put(num, counts.getOrDefault(num, 0) + 1);
+    }
+
+    // Sort by frequency (descending), limit to k, extract keys
+    return counts.entrySet().stream()
+        .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+        .limit(k)
+        .mapToInt(Map.Entry::getKey)
+        .toArray();
+}
+```
+
+
 ## Random Pick Index {#lc-random-pick-index}
 
 ### Problem Metadata
