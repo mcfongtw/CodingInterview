@@ -161,6 +161,8 @@ class LinkedQueue {
 
 Use two stacks `in` and `out`. Enqueue pushes onto `in`. Dequeue/peek pop from `out`, reloading it from `in` when empty by moving all elements to reverse order.
 
+**Note:** This approach is identical to [LeetCode 232: Implement Queue using Stacks](#lc-implement-queue-using-stacks), which provides a detailed walkthrough with visual examples and amortized complexity analysis.
+
 #### Analysis
 
 - **Time Complexity**: Amortized O(1)
@@ -177,8 +179,8 @@ Use two stacks `in` and `out`. Enqueue pushes onto `in`. Dequeue/peek pop from `
 
 ```java
 class QueueWithStacks {
-    private final Deque<Integer> in = new ArrayDeque<>();
-    private final Deque<Integer> out = new ArrayDeque<>();
+    private final Stack<Integer> in = new Stack<>();
+    private final Stack<Integer> out = new Stack<>();
 
     public void enqueue(int x) {
         in.push(x);
@@ -207,6 +209,10 @@ class QueueWithStacks {
     }
 }
 ```
+
+### Related Problems
+
+For a detailed walkthrough with visual examples and amortized complexity analysis of this two-stack approach, see [LeetCode 232: Implement Queue using Stacks](#lc-implement-queue-using-stacks) in the Stack and Queue chapter.
 
 ## Implement Stack Using Queues {#interview-design-stack}
 

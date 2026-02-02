@@ -203,6 +203,263 @@ func (this *MinStack) GetMin() int {
 ```
 
 
+## Implement Queue using Stacks {#lc-implement-queue-using-stacks}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 232
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/implement-queue-using-stacks/
+- **Tags**: Top 100 Liked
+- **Techniques**: [Stack](glossary-of-algorithm.html#glossary-stack), [Queue](glossary-of-algorithm.html#glossary-queue), [Design](glossary-of-algorithm.html#glossary-design)
+
+### Description
+
+Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (`push`, `peek`, `pop`, and `empty`).
+
+Implement the `MyQueue` class:
+
+- `void push(int x)` Pushes element x to the back of queue
+- `int pop()` Removes the element from in front of queue and returns that element
+- `int peek()` Returns the element at the front of queue
+- `boolean empty()` Returns `true` if the queue is empty, `false` otherwise
+
+**Notes:**
+
+- You must use only standard operations of a stack, which means only `push to top`, `peek/pop from top`, `size`, and `is empty` operations are valid
+- Depending on your language, the stack may not be supported natively. You may simulate a stack using a list or deque (double-ended queue) as long as you use only a stack's standard operations
+
+### Examples
+
+```
+Input:
+["MyQueue", "push", "push", "peek", "pop", "empty"]
+[[], [1], [2], [], [], []]
+
+Output:
+[null, null, null, 1, 1, false]
+
+Explanation:
+MyQueue myQueue = new MyQueue();
+myQueue.push(1); // queue is: [1]
+myQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)
+myQueue.peek();  // return 1
+myQueue.pop();   // return 1, queue is [2]
+myQueue.empty(); // return false
+```
+
+### Constraints
+
+- $1 \le x \le 9$
+- At most 100 calls will be made to `push`, `pop`, `peek`, and `empty`
+- All the calls to `pop` and `peek` are valid
+
+**Follow-up:** Can you implement the queue such that each operation is amortized O(1) time complexity?
+
+### Solution - Two Stacks with Lazy Transfer
+
+#### Walkthrough
+
+The fundamental challenge is converting LIFO (Last-In-First-Out) stack behavior into FIFO (First-In-First-Out) queue behavior. The key insight is to use **two stacks** to reverse the order of elements.
+
+**Understanding the Two-Stack Pattern:**
+
+Think of the two stacks as an "input" area and an "output" area:
+
+- **Input Stack (`inStack`)**: Receives all new elements via `push` operations
+- **Output Stack (`outStack`)**: Serves all `pop` and `peek` operations
+
+The magic happens when we transfer elements from `inStack` to `outStack` - this reversal transforms LIFO into FIFO order.
+
+**Visual Example: How Two Stacks Create Queue Behavior**
+
+```
+Initial state: both stacks empty
+
+Operation: push(1)
+  inStack: [1]        outStack: []
+  (1 sits at bottom of inStack)
+
+Operation: push(2)
+  inStack: [1, 2]     outStack: []
+  (2 is on top of 1)
+
+Operation: push(3)
+  inStack: [1, 2, 3]  outStack: []
+  (3 is on top of 2)
+
+Now inStack looks like:
+  Top → 3
+        2
+  Bot → 1
+
+Operation: peek() or pop()
+  - outStack is empty, so transfer all elements from inStack
+  - Pop from inStack and push to outStack:
+
+    Step 1: pop 3 from inStack, push to outStack
+      inStack: [1, 2]    outStack: [3]
+
+    Step 2: pop 2 from inStack, push to outStack
+      inStack: [1]       outStack: [3, 2]
+
+    Step 3: pop 1 from inStack, push to outStack
+      inStack: []        outStack: [3, 2, 1]
+
+  Now outStack looks like:
+    Top → 1  ← This is the front of our queue!
+          2
+    Bot → 3
+
+  - peek() returns 1 (top of outStack)
+  - pop() returns 1 and removes it from outStack
+
+Operation: push(4)
+  inStack: [4]        outStack: [2, 3]
+  (Just push to inStack, don't touch outStack)
+
+Operation: pop()
+  - outStack is NOT empty, so directly pop from it
+  - Returns 2 (the next element in queue order)
+
+  inStack: [4]        outStack: [3]
+```
+
+**Key Insights:**
+
+1. **Lazy Transfer Strategy**: Only move elements from `inStack` to `outStack` when `outStack` is empty and we need to access the front
+2. **Amortized O(1)**: Each element is moved exactly once from `inStack` to `outStack` over its lifetime
+3. **Order Preservation**: Once elements are in `outStack`, their queue order is maintained until they're all popped
+
+**Why This Works:**
+
+- Stack A holds newest elements (top = most recent)
+- When we transfer to Stack B, the oldest element ends up on top
+- Stack B now maintains FIFO order at its top
+- We only transfer when Stack B is empty, avoiding unnecessary work
+
+#### Analysis
+
+- **Time Complexity**:
+  - `push`: O(1) - simply push onto `inStack`
+  - `pop`: Amortized O(1) - each element is moved exactly once from `inStack` to `outStack`
+  - `peek`: Amortized O(1) - same reasoning as `pop`
+  - `empty`: O(1) - check if both stacks are empty
+  - **Worst-case single operation**: O(n) when `outStack` is empty and we need to transfer all n elements
+  - **Amortized analysis**: Over a sequence of n operations, each element moves at most once, so total cost is O(n), giving O(1) per operation
+- **Space Complexity**: O(n) where n is the number of elements in the queue
+
+#### Implementation Steps
+
+1. Declare two stacks: `inStack` (for push operations) and `outStack` (for pop/peek operations)
+2. **push(x)**: Simply push x onto `inStack`
+3. **Helper method transfer()**:
+   - Check if `outStack` is empty
+   - If empty, pop all elements from `inStack` and push them to `outStack`
+   - This reverses the order, making the oldest element accessible at the top of `outStack`
+4. **pop()**: Call transfer() to ensure `outStack` has elements, then pop from `outStack`
+5. **peek()**: Call transfer() to ensure `outStack` has elements, then peek at top of `outStack`
+6. **empty()**: Return true if both `inStack` and `outStack` are empty
+
+#### Code - Java
+
+```java
+class MyQueue {
+    private final Stack<Integer> in = new Stack<>();
+    private final Stack<Integer> out = new Stack<>();
+
+    public MyQueue() {
+
+    }
+
+    public void push(int x) {
+        in.push(x);
+    }
+
+    public int pop() {
+        shift();
+        return out.pop();
+    }
+
+    public int peek() {
+        shift();
+        return out.peek();
+    }
+
+    public boolean empty() {
+        return in.isEmpty() && out.isEmpty();
+    }
+
+    private void shift() {
+        if (out.isEmpty()) {
+            while (!in.isEmpty()) {
+                out.push(in.pop());
+            }
+        }
+    }
+}
+```
+
+#### Code - Golang
+
+```go
+type MyQueue struct {
+    In  []int
+    Out []int
+}
+
+func Constructor() MyQueue {
+    result := MyQueue{
+        In:  []int{},
+        Out: []int{},
+    }
+
+    return result
+}
+
+func (this *MyQueue) Push(x int) {
+    this.In = append(this.In, x)
+}
+
+func (this *MyQueue) Pop() int {
+    this.shift()
+    item := this.Out[len(this.Out)-1]
+    this.Out = this.Out[:len(this.Out)-1]
+
+    return item
+}
+
+func (this *MyQueue) Peek() int {
+    this.shift()
+    item := this.Out[len(this.Out)-1]
+
+    return item
+}
+
+func (this *MyQueue) Empty() bool {
+    return len(this.In) == 0 && len(this.Out) == 0
+}
+
+func (this *MyQueue) shift() {
+    if len(this.Out) == 0 {
+        for len(this.In) != 0 {
+            // Pop from In stack
+            item := this.In[len(this.In)-1]
+            this.In = this.In[:len(this.In)-1]
+
+            // Push to Out stack
+            this.Out = append(this.Out, item)
+        }
+    }
+}
+```
+
+### Related Problems
+
+This problem is conceptually identical to [Implement Queue](#interview-design-queue) (Solution 3 - Two Stacks) in the Advanced Data Structure chapter. For alternative queue implementations using circular arrays and linked lists, see Solutions 1 and 2 in that section.
+
+
 ## Task Scheduler {#lc-task-scheduler}
 
 ### Problem Metadata
