@@ -1859,6 +1859,366 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 - Cleaner and more efficient for BST-specific problem
 
 
+## Lowest Common Ancestor of a Binary Tree {#lc-lca-binary-tree}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 236
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
+- **Tags**: Grind 75, Blind 75, NeetCode 150
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree, Binary Tree
+
+### Description
+
+Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
+
+According to the definition of LCA on Wikipedia: "The lowest common ancestor is defined between two nodes `p` and `q` as the lowest node in `T` that has both `p` and `q` as descendants (where we allow **a node to be a descendant of itself**)."
+
+### Examples
+
+**Example 1:**
+```
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+       3
+      / \
+     5   1
+    / \ / \
+   6  2 0  8
+     / \
+    7   4
+
+Output: 3
+Explanation: The LCA of nodes 5 and 1 is 3.
+```
+
+**Example 2:**
+```
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+       3
+      / \
+     5   1
+    / \ / \
+   6  2 0  8
+     / \
+    7   4
+
+Output: 5
+Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of itself according to the LCA definition.
+```
+
+**Example 3:**
+```
+Input: root = [1,2], p = 1, q = 2
+  1
+ /
+2
+
+Output: 1
+```
+
+### Constraints
+
+- The number of nodes in the tree is in the range $[2, 10^5]$
+- $-10^9 \le \text{Node.val} \le 10^9$
+- All `Node.val` are **unique**
+- $p \ne q$
+- `p` and `q` will exist in the tree
+
+### Solution 1 - DFS with Ancestor Checking
+
+#### Walkthrough
+
+This solution uses **explicit ancestor checking** to determine the LCA. The approach is straightforward but involves redundant tree traversals.
+
+**Core Idea:**
+For each node, explicitly check if `p` and `q` are in opposite subtrees using a helper function `isAncestor()`. The first node where this condition holds is the LCA.
+
+**Algorithm Steps:**
+
+1. **Base case**: If root is null, `p`, or `q`, return root immediately
+2. **Check if root is LCA**: Use `isAncestor()` to test if `p` and `q` are in opposite subtrees:
+   - If `p` is in left subtree AND `q` is in right subtree → root is LCA
+   - If `p` is in right subtree AND `q` is in left subtree → root is LCA
+3. **Recursive search**: If root is not the LCA, recursively search both subtrees
+4. **Return result**: Return the non-null result from either subtree
+
+**Helper Function `isAncestor(root, node)`:**
+- Returns `true` if `node` exists in the subtree rooted at `root`
+- Performs a complete DFS traversal of the subtree
+- Checks both left and right children recursively
+
+**Visual Example with root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1:**
+
+```
+Tree structure:
+       3
+      / \
+     5   1
+    / \ / \
+   6  2 0  8
+     / \
+    7   4
+
+Step 1: dfs(3, 5, 1)
+  - Check: isAncestor(3.left=5, p=5) → true (5 is in left subtree)
+  - Check: isAncestor(3.right=1, q=1) → true (1 is in right subtree)
+  - Both in opposite subtrees → Return 3 ✓
+
+Result: 3 is the LCA
+```
+
+**Example with root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4:**
+
+```
+Step 1: dfs(3, 5, 4)
+  - Check: isAncestor(3.left=5, p=5) → true
+  - Check: isAncestor(3.right=1, q=4) → false (4 not in right subtree)
+  - Not in opposite subtrees, continue searching
+
+Step 2: dfs(3.left=5, 5, 4)
+  - Base case: root == p → Return 5 ✓
+
+Result: 5 is the LCA (node can be ancestor of itself)
+```
+
+**Why This Works (But Inefficiently):**
+- Guarantees correctness by explicitly checking ancestor relationships
+- However, `isAncestor()` traverses entire subtrees multiple times
+- For each node, we potentially traverse the tree multiple times
+
+#### Analysis
+
+- **Time Complexity**: O(n²)
+  - For each of n nodes in the tree, we may call `isAncestor()`
+  - Each `isAncestor()` call can traverse an entire subtree taking O(n) time
+  - In worst case (skewed tree), we visit O(n) nodes, each doing O(n) work
+  - Total: O(n × n) = O(n²)
+
+- **Space Complexity**: O(h)
+  - Recursion stack depth where h is tree height
+  - `dfs()` recursion: O(h)
+  - `isAncestor()` recursion nested within: O(h)
+  - Combined maximum depth: O(h)
+  - Best case (balanced tree): O(log n)
+  - Worst case (skewed tree): O(n)
+
+#### Implementation Steps
+
+1. Define `isAncestor(root, node)` helper function:
+   - Base case: if root is null, return `false`
+   - If root equals node, return `true`
+   - Recursively check if node exists in left OR right subtree
+
+2. Define `dfs(root, p, q)` main recursive function:
+   - Base case: if root is null, `p`, or `q`, return root
+   - Check if `p` in left subtree AND `q` in right subtree → return root
+   - Check if `p` in right subtree AND `q` in left subtree → return root
+   - Recursively search left subtree for LCA
+   - Recursively search right subtree for LCA
+   - Return non-null result (left LCA if exists, otherwise right LCA)
+
+3. Main function calls `dfs(root, p, q)` and returns result
+
+#### Code - Java
+
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    return dfs(root, p, q);
+}
+
+// Return true if root is an ancestor of node
+private boolean isAncestor(TreeNode root, TreeNode node) {
+    if (root == null) {
+        return false;
+    }
+
+    if (root == node) {
+        return true;
+    }
+
+    return isAncestor(root.left, node) || isAncestor(root.right, node);
+}
+
+private TreeNode dfs(TreeNode root, TreeNode p, TreeNode q) {
+    if (root == null || root == p || root == q) {
+        return root;
+    }
+
+    if (isAncestor(root.left, p) && isAncestor(root.right, q)) {
+        return root;
+    }
+
+    if (isAncestor(root.right, p) && isAncestor(root.left, q)) {
+        return root;
+    }
+
+    TreeNode lLCA = dfs(root.left, p, q);
+    TreeNode rLCA = dfs(root.right, p, q);
+
+    return lLCA == null ? rLCA : lLCA;
+}
+```
+
+### Solution 2 - Optimized Post-Order DFS
+
+#### Walkthrough
+
+This solution uses an **elegant recursive approach** that eliminates redundant tree traversals. The key insight is that we can determine the LCA in a single post-order traversal by leveraging the return values.
+
+**Core Optimization:**
+Instead of explicitly checking if nodes are ancestors, we use the recursive return values to implicitly communicate information about which nodes were found in each subtree.
+
+**Key Insight:**
+- When we find `p` or `q`, return it immediately
+- As we bubble up the recursion:
+  - If **both** left and right subtrees return non-null → current node is the LCA (split point)
+  - If **only one** subtree returns non-null → propagate that result upward (LCA is higher up)
+- This works because we're guaranteed `p` and `q` exist in the tree
+
+**Algorithm Flow:**
+
+1. **Base case**: If root is null OR root equals `p` OR root equals `q`, return root
+   - Null case: no nodes found in this path
+   - Match case: found one of the target nodes, return it
+
+2. **Recursive exploration**: Search both subtrees
+   - `left = lowestCommonAncestor(root.left, p, q)`
+   - `right = lowestCommonAncestor(root.right, p, q)`
+
+3. **Decision logic based on return values**:
+   - **Both non-null** (`left != null` AND `right != null`) → found `p` in one subtree and `q` in the other → **root is LCA**
+   - **Only left non-null** → both nodes are in left subtree, propagate left result upward
+   - **Only right non-null** → both nodes are in right subtree, propagate right result upward
+   - **Both null** → neither node found (shouldn't happen given constraints)
+
+**Why This Works:**
+
+The beauty of this solution lies in the **post-order traversal** nature:
+- We process children before the parent
+- Return values carry information: "Did I find p or q (or their LCA)?"
+- When both subtrees return non-null, we know we've found the split point
+
+**Visual Example with root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1:**
+
+```
+Post-order traversal with return values:
+
+                    3 → returns 3 (both left=5 and right=1 non-null)
+                   / \
+    returns 5 ← 5     1 → returns 1 (base case: root == q)
+               / \   / \
+              6   2 0   8
+                 / \
+                7   4
+
+Execution trace:
+1. Recurse left to node 5
+2. Node 5 matches p → return 5 (base case)
+3. Recurse right to node 1
+4. Node 1 matches q → return 1 (base case)
+5. Back at node 3: left=5 (non-null), right=1 (non-null)
+6. Both non-null → node 3 is LCA → return 3
+```
+
+**Example with root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4:**
+
+```
+                    3 → returns 5 (left=5, right=null)
+                   / \
+    returns 5 ← 5     1 → returns null
+               / \   / \
+              6   2 0   8
+                 / \
+    returns 4 ↑  7   4 ← base case returns 4
+
+Execution trace:
+1. Recurse left to node 5
+2. Node 5 matches p → return 5 (but also need to check subtrees for q)
+   - Wait, base case returns immediately! So return 5
+3. Because of base case, we return 5 before checking its children
+4. This works because the problem guarantees both nodes exist
+5. At node 3: left=5 (non-null), right=null
+6. Return left (which is 5) → 5 is the LCA
+```
+
+**Important Note on Base Case:**
+The base case `if (root == p || root == q) return root` works because:
+- We're guaranteed both `p` and `q` exist in the tree
+- If we find `p` first, we know `q` is either in `p`'s subtree (making `p` the LCA) or not in this path
+- The return value propagates upward, and the logic handles both cases correctly
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Each node is visited exactly once in a single DFS traversal
+  - No redundant tree traversals like in Solution 1
+  - Best case: O(log n) if we find LCA near root in balanced tree
+  - Worst case: O(n) if we must traverse entire tree
+  - Average case: O(n) - must visit all nodes to ensure correctness
+
+- **Space Complexity**: O(h)
+  - Recursion call stack depth equals tree height h
+  - Best case (balanced tree): O(log n)
+  - Worst case (skewed tree): O(n)
+  - No additional data structures needed
+
+**Comparison with Solution 1:**
+- Solution 1: O(n²) time due to repeated `isAncestor()` calls
+- Solution 2: O(n) time with single traversal
+- Both have O(h) space complexity
+- Solution 2 is significantly more efficient for large trees
+
+#### Implementation Steps
+
+1. **Handle base cases**:
+   - If root is null, return null (no nodes in empty tree)
+   - If root equals `p`, return root (found target node)
+   - If root equals `q`, return root (found target node)
+
+2. **Recursively search subtrees**:
+   - Call `lowestCommonAncestor(root.left, p, q)` and store in `left`
+   - Call `lowestCommonAncestor(root.right, p, q)` and store in `right`
+
+3. **Determine result based on recursive returns**:
+   - If both `left` and `right` are non-null → return root (split point found)
+   - If only `left` is non-null → return `left` (both nodes in left subtree)
+   - If only `right` is non-null → return `right` (both nodes in right subtree)
+   - Can be simplified to: `return left != null ? left : right`
+
+4. **Return the result** (either root, left, or right)
+
+#### Code - Java
+
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    // Base case: if root is null or matches either node, return root
+    if (root == null || root == p || root == q) {
+        return root;
+    }
+
+    // Recursively search in left and right subtrees
+    TreeNode left = lowestCommonAncestor(root.left, p, q);
+    TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+    // If both subtrees return non-null, root is the LCA (split point)
+    if (left != null && right != null) {
+        return root;
+    }
+
+    // Otherwise, return whichever subtree found a node (or null if neither)
+    return left != null ? left : right;
+}
+```
+
+**Code Simplification:**
+The last two conditions can be combined into a single ternary operator because:
+- If `left != null` and `right != null` → we already returned root
+- If we reach the final return, at most one of them is non-null
+- So we just return whichever is non-null (or null if both are null)
+
+
 ## Binary Tree Upside Down {#lc-upside-down}
 
 ### Problem Metadata
