@@ -203,6 +203,349 @@ func (this *MinStack) GetMin() int {
 ```
 
 
+## Task Scheduler {#lc-task-scheduler}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 621
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/task-scheduler/
+- **Tags**: Top 100 Liked
+- **Techniques**: [Greedy](glossary-of-algorithm.html#glossary-greedy), [Heap](glossary-of-algorithm.html#glossary-heap), [Hash Table](glossary-of-algorithm.html#glossary-hash-table)
+
+### Description
+
+You are given an array of CPU tasks, each labeled with a letter from A to Z, and a number `n`. Each CPU interval can be idle or allow the completion of one task. Tasks can be completed in any order, but there's a constraint: there has to be a gap of at least `n` intervals between two tasks with the same label.
+
+Return the minimum number of CPU intervals required to complete all tasks.
+
+### Examples
+
+```
+Input: tasks = ["A","A","A","B","B","B"], n = 2
+Output: 8
+
+Explanation:
+A possible sequence is: A -> B -> idle -> A -> B -> idle -> A -> B.
+After completing task A, you must wait two intervals before doing A again.
+The same applies to task B.
+In this case, there is a gap of 2 intervals between each task A and each task B.
+
+Input: tasks = ["A","C","A","B","D","B"], n = 1
+Output: 6
+
+Explanation:
+A possible sequence is: A -> B -> C -> D -> A -> B.
+With a cooling interval of 1, you can repeat a task after just one other task.
+
+Input: tasks = ["A","A","A","B","B","B"], n = 3
+Output: 10
+
+Explanation:
+A possible sequence is: A -> B -> idle -> idle -> A -> B -> idle -> idle -> A -> B.
+```
+
+### Constraints
+
+- $1 \le \text{tasks.length} \le 10^4$
+- `tasks[i]` is an uppercase English letter
+- $0 \le n \le 100$
+
+### Solution - Mathematical Formula
+
+#### Walkthrough
+
+The key insight is that the task with the **highest frequency** determines the minimum intervals needed. Instead of simulating the scheduling process, we can calculate the answer directly using a mathematical formula.
+
+**Core Intuition: The Most Frequent Task Creates a Frame Structure**
+
+Think of the most frequent task as creating a "skeleton" or "frame" that we fill with other tasks. The gaps between identical tasks must be at least `n` intervals apart.
+
+**Visual Example 1: Single Most Frequent Task**
+
+```
+Input: tasks = ["A","A","A","B","B","C"], n = 2
+
+Step 1: Identify the most frequent task
+- Task A appears 3 times (maxFreq = 3)
+- This creates the frame structure
+
+Step 2: Visualize the frame
+- Place A's with gaps of n=2 between them:
+
+  A _ _ A _ _ A
+  └─ n=2 ─┘
+
+  This creates (maxFreq - 1) = 2 frames
+  Each frame has size (n + 1) = 3 slots
+
+Step 3: Fill the frames with other tasks
+  A B C A B _ A
+  └─frame 1─┘└─frame 2─┘└last┘
+
+  Total intervals = (maxFreq - 1) * (n + 1) + 1
+                  = (3 - 1) * (2 + 1) + 1
+                  = 2 * 3 + 1 = 7
+
+But wait! We have 6 tasks total, and 7 > 6, so answer is 7.
+```
+
+**Visual Example 2: Multiple Tasks with Max Frequency**
+
+```
+Input: tasks = ["A","A","A","B","B","B"], n = 2
+
+Step 1: Identify max frequency tasks
+- Task A appears 3 times (maxFreq = 3)
+- Task B appears 3 times (maxFreq = 3)
+- countOfMaxFreq = 2
+
+Step 2: Visualize the frame with multiple max-freq tasks
+- Both A and B need to be placed in the last position:
+
+  A B _ A B _ A B
+  └─frame 1─┘└─frame 2─┘└last┘
+
+  The last "slot" now needs 2 positions (A and B)
+
+Step 3: Calculate
+  Total intervals = (maxFreq - 1) * (n + 1) + countOfMaxFreq
+                  = (3 - 1) * (2 + 1) + 2
+                  = 2 * 3 + 2 = 8
+
+We have 6 tasks total, and 8 > 6, so answer is 8.
+```
+
+**Visual Example 3: When Total Tasks Exceeds Frame Size**
+
+```
+Input: tasks = ["A","A","A","B","B","B","C","C","D","E"], n = 2
+
+Step 1: Identify max frequency
+- Task A and B appear 3 times (maxFreq = 3)
+- countOfMaxFreq = 2
+
+Step 2: Visualize the frame
+  A B C A B C A B
+  └─frame 1─┘└─frame 2─┘└last┘
+
+  But we still have D and E left!
+
+Step 3: We can insert D and E into the frames
+  A B C A B D A B
+  └─────┘ └─────┘
+  E can go anywhere since it's unique
+
+  Or simply: A B C D E A B C A B
+
+  Total = 10 tasks
+
+Step 4: Calculate
+  Formula gives: (3-1) * (2+1) + 2 = 8
+  But tasks.length = 10
+
+  Answer = max(10, 8) = 10
+
+Why? Because when we have enough variety of tasks, we never need idle time!
+```
+
+**The Mathematical Formula:**
+
+$$
+\text{result} = \max(\text{tasks.length}, (\text{maxFreq} - 1) \times (n + 1) + \text{countOfMaxFreq})
+$$
+
+**Breaking down the formula:**
+
+1. **`(maxFreq - 1)`**: Number of "frames" created by gaps between the most frequent task
+2. **`(n + 1)`**: Size of each frame (1 slot for the task + n slots for cooldown)
+3. **`+ countOfMaxFreq`**: Account for the last occurrence of all tasks with maximum frequency
+4. **`max(tasks.length, ...)`**: We can never use fewer intervals than the total number of tasks
+
+**Why `max(tasks.length, formula)`?**
+
+- If we have **high diversity** (many different tasks), we can always find something to fill the gaps, so no idle time is needed
+- If we have **low diversity** (few task types with high frequency), idle time is unavoidable, and the formula calculates the required intervals
+- The actual answer is whichever is larger
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the length of the tasks array. We make three passes: one to count frequencies, one to find max frequency, and one to count how many tasks have max frequency. Since there are at most 26 distinct tasks, the second and third passes are O(26) which is constant.
+- **Space Complexity**: O(1) since we use a fixed-size array of 26 elements to store task frequencies.
+
+#### Implementation Steps
+
+1. Create a frequency array of size 26 to count occurrences of each task (A-Z)
+2. Iterate through tasks and populate the frequency map
+3. Find the maximum frequency value in the frequency array
+4. Count how many tasks have this maximum frequency
+5. Apply the formula: `max(tasks.length, (maxFreq - 1) * (n + 1) + countOfMaxFreq)`
+6. Return the result
+
+#### Code - Java (Mathematical Formula)
+
+```java
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        // Step 1: Count frequency of each task
+        int[] freqMap = new int[26];
+        for(char task: tasks) {
+            freqMap[task - 'A']++;
+        }
+
+        // Step 2: Find the maximum frequency
+        int maxFreq = Integer.MIN_VALUE;
+        for(int i = 0; i < 26; i++) {
+            maxFreq = Math.max(maxFreq, freqMap[i]);
+        }
+
+        // Step 3: Count how many tasks have the maximum frequency
+        int countOfMaxFreq = 0;
+        for(int i = 0; i < 26; i++) {
+            if(freqMap[i] == maxFreq) {
+                countOfMaxFreq++;
+            }
+        }
+
+        // Step 4: Apply the formula
+        // (maxFreq - 1) * (n + 1) creates the frame structure
+        // + countOfMaxFreq accounts for the last occurrence of all max-freq tasks
+        // max with tasks.length ensures we don't return less than total tasks
+        int result = Math.max(tasks.length, (maxFreq - 1) * (n + 1) + countOfMaxFreq);
+
+        return result;
+    }
+}
+```
+
+### Solution 2 - Greedy Simulation with Max Heap
+
+#### Walkthrough
+
+While the mathematical formula is elegant, the **max heap simulation approach** provides a more intuitive understanding of the actual scheduling process. This approach directly simulates the greedy strategy: always schedule the most frequent remaining task first.
+
+**Core Strategy: Process Tasks in Cycles**
+
+The algorithm works in cycles of size `(n + 1)`. In each cycle:
+1. Pick up to `(n + 1)` most frequent tasks from the heap
+2. Execute them in this cycle (satisfying the cooldown constraint)
+3. Decrement their frequencies and put them back if they still have remaining executions
+4. Count the time intervals used
+
+**Visual Example: Simulation Process**
+
+```
+Input: tasks = ["A","A","A","B","B","B"], n = 2
+
+Initial frequencies: A:3, B:3
+Max heap: [3(A), 3(B)]
+
+Cycle 1 (time 0-2):
+  - Pop A (freq=3), B (freq=3)
+  - Need n+1=3 tasks, but only have 2
+  - Execute: A, B, idle
+  - Decrement: A:2, B:2
+  - Time used: 3 intervals (positions 0,1,2)
+  - Push back: [2(A), 2(B)]
+
+Cycle 2 (time 3-5):
+  - Pop A (freq=2), B (freq=2)
+  - Execute: A, B, idle
+  - Decrement: A:1, B:1
+  - Time used: 3 intervals (positions 3,4,5)
+  - Push back: [1(A), 1(B)]
+
+Cycle 3 (time 6-7):
+  - Pop A (freq=1), B (freq=1)
+  - Execute: A, B
+  - Decrement: A:0, B:0 (done, don't push back)
+  - Time used: 2 intervals (positions 6,7)
+  - No more tasks
+
+Total time: 3 + 3 + 2 = 8 intervals
+```
+
+**Why Process in Cycles of (n + 1)?**
+
+- If we execute a task at position `i`, it can execute again at position `i + n + 1`
+- In a cycle of size `(n + 1)`, we can execute `(n + 1)` different tasks without any cooldown violations
+- This greedy approach ensures we minimize idle time
+
+**Key Implementation Details:**
+
+1. **Max Heap**: Use a priority queue (max heap) to always get the most frequent task
+2. **Temporary Storage**: During each cycle, we can't immediately put tasks back in the heap (they need cooldown). Store them temporarily in a list.
+3. **Cycle Processing**: Each cycle processes at most `(n + 1)` tasks
+4. **Time Tracking**: If the heap becomes empty in the middle of a cycle and we still have tasks in the temporary list, we need to add idle time
+
+#### Analysis
+
+- **Time Complexity**: O(N log 26) where N is the total number of tasks. Each task is pushed/popped from the heap at most once, and each heap operation takes O(log 26) time. Since 26 is constant, this simplifies to O(N).
+- **Space Complexity**: O(26) = O(1) for the frequency map and heap, since there are at most 26 distinct tasks.
+
+#### Implementation Steps
+
+1. Count the frequency of each task using a frequency array
+2. Build a max heap from all non-zero frequencies
+3. While the heap is not empty:
+   - Start a new cycle
+   - Pop up to `(n + 1)` tasks from the heap
+   - Store them in a temporary list with decremented frequencies
+   - Count the time used in this cycle
+   - Push tasks with remaining frequency back to the heap
+4. Return the total time
+
+#### Code - Java (Max Heap Simulation)
+
+```java
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        // Count frequency of each task
+        int[] freqMap = new int[26];
+        for(char task : tasks) {
+            freqMap[task - 'A']++;
+        }
+
+        // Build max heap with task frequencies
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+        for(int freq : freqMap) {
+            if(freq > 0) {
+                maxHeap.offer(freq);
+            }
+        }
+
+        int time = 0;
+
+        // Process tasks in cycles of (n + 1)
+        while(!maxHeap.isEmpty()) {
+            List<Integer> temp = new ArrayList<>();
+            int cycleCount = 0;
+
+            // Try to fill a cycle with up to (n + 1) tasks
+            for(int i = 0; i < n + 1; i++) {
+                if(!maxHeap.isEmpty()) {
+                    int freq = maxHeap.poll();
+                    cycleCount++;
+                    if(freq > 1) {
+                        temp.add(freq - 1);
+                    }
+                }
+            }
+
+            // Put remaining tasks back
+            maxHeap.addAll(temp);
+
+            // Add time: full cycle if more tasks remain, else just the tasks we processed
+            time += maxHeap.isEmpty() ? cycleCount : (n + 1);
+        }
+
+        return time;
+    }
+}
+```
+
+
 ## Maximum Score From Removing Substrings {#lc-max-score-removing-substrings}
 
 ### Problem Metadata
