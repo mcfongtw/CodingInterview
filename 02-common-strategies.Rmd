@@ -2488,4 +2488,287 @@ Binary Search is one of the most important algorithms in computer science:
 - **Production Choice**: Iterative approach is preferred for efficiency
 - **Interview Strategy**: Know both approaches and their trade-offs
 
+
+### QuickSelect {#quickselect}
+
+**QuickSelect** is a selection algorithm for finding the k-th smallest (or largest) element in an unordered array. It's based on the QuickSort partitioning technique but only recurses into one partition, making it significantly faster than full sorting for selection problems.
+
+#### Core Concept
+
+QuickSelect uses the same partition logic as QuickSort but with a key optimization: after partitioning, we only need to recurse on the partition that contains the k-th element, discarding the other half. This gives us **O(n) average time** compared to O(n log n) for sorting.
+
+**Key Insight**: We don't need the entire array sorted - just the k smallest (or largest) elements separated from the rest.
+
+**How It Works**:
+1. Pick a pivot element (random or deterministic)
+2. Partition array around pivot: elements $\le$ pivot on left, elements $>$ pivot on right
+3. Pivot is now in its final sorted position
+4. If pivot position $=$ k: Done! Return pivot
+5. If pivot position $<$ k: Recurse on right partition (need larger elements)
+6. If pivot position $>$ k: Recurse on left partition (have too many elements)
+
+#### Time and Space Complexity
+
+- **Time Complexity**:
+  - **Average case**: O(n) - each partition reduces problem by ~half (geometric series: n + n/2 + n/4 + ... = 2n)
+  - **Worst case**: O(n²) - bad pivot choices (all elements on one side every time)
+  - **With randomization**: O(n) with high probability (worst case becomes extremely rare)
+
+- **Space Complexity**:
+  - **Iterative**: O(1) - in-place with no recursion
+  - **Recursive**: O(log n) average, O(n) worst case for call stack
+
+**Comparison with Sorting**:
+
+| Approach | Time (Avg) | Time (Worst) | Space | When to Use |
+|----------|------------|--------------|-------|-------------|
+| QuickSelect | O(n) | O(n²) | O(1)-O(log n) | Find k-th element only |
+| Full Sort | O(n log n) | O(n log n) | O(1)-O(n) | Need sorted array or multiple queries |
+| Min-Heap | O(n log k) | O(n log k) | O(k) | Small k, need stability |
+
+#### Standard Implementation
+
+**Lomuto Partition Scheme** (simpler, commonly used):
+
+```java
+public int quickSelect(int[] nums, int k) {
+    // Find k-th smallest (0-indexed: k-1)
+    return quickSelectHelper(nums, 0, nums.length - 1, k - 1);
+}
+
+private int quickSelectHelper(int[] nums, int left, int right, int k) {
+    if (left == right) {
+        return nums[left];  // Only one element
+    }
+
+    // Partition and get pivot's final position
+    int pivotIndex = partition(nums, left, right);
+
+    // Check if pivot is at k-th position
+    if (pivotIndex == k) {
+        return nums[k];  // Found k-th smallest
+    } else if (pivotIndex < k) {
+        // k-th element is in right partition
+        return quickSelectHelper(nums, pivotIndex + 1, right, k);
+    } else {
+        // k-th element is in left partition
+        return quickSelectHelper(nums, left, pivotIndex - 1, k);
+    }
+}
+
+private int partition(int[] nums, int left, int right) {
+    // Choose random pivot to avoid worst-case O(n²)
+    int randomIndex = left + new Random().nextInt(right - left + 1);
+    swap(nums, randomIndex, right);  // Move pivot to end
+
+    int pivot = nums[right];
+    int i = left;  // Write position for elements <= pivot
+
+    for (int j = left; j < right; j++) {
+        if (nums[j] <= pivot) {
+            swap(nums, i, j);
+            i++;
+        }
+    }
+
+    // Place pivot at its final sorted position
+    swap(nums, i, right);
+    return i;
+}
+
+private void swap(int[] nums, int i, int j) {
+    int temp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = temp;
+}
+```
+
+#### Iterative Implementation (Space-Optimized)
+
+To avoid recursion overhead and achieve O(1) space:
+
+```java
+public int quickSelectIterative(int[] nums, int k) {
+    int left = 0, right = nums.length - 1;
+    k = k - 1;  // Convert to 0-indexed
+
+    while (left <= right) {
+        int pivotIndex = partition(nums, left, right);
+
+        if (pivotIndex == k) {
+            return nums[k];
+        } else if (pivotIndex < k) {
+            left = pivotIndex + 1;  // Search right
+        } else {
+            right = pivotIndex - 1; // Search left
+        }
+    }
+
+    return -1;  // Should never reach here
+}
+```
+
+#### Why Randomization Matters
+
+**Without randomization** (deterministic pivot like last element):
+- **Sorted input**: O(n²) - pivot is always smallest/largest, no splitting
+- **Reverse sorted**: O(n²) - same issue
+- **Example**: `[1,2,3,4,5]` with last element as pivot always partitions into `[1,2,3,4]` and `[]`
+
+**With randomization**:
+- **Any input**: O(n) average with high probability
+- **Worst case**: Still O(n²) but probability is negligible (~1/n!)
+- **Practical performance**: Nearly always linear
+
+**Proof of O(n) Average Time**:
+```
+Expected partitions (random pivot):
+Level 1: n operations (partition entire array)
+Level 2: n/2 operations (recurse on ~half)
+Level 3: n/4 operations (recurse on ~quarter)
+...
+Total: n + n/2 + n/4 + n/8 + ... = 2n = O(n)
+```
+
+#### Finding k-th Largest vs k-th Smallest
+
+**k-th Smallest** (default above): Partition in ascending order, find element at index k-1
+
+**k-th Largest**: Two approaches:
+
+1. **Convert to smallest**: k-th largest = (n - k + 1)-th smallest
+   ```java
+   return quickSelect(nums, nums.length - k + 1);
+   ```
+
+2. **Reverse partition logic**: Partition in descending order
+   ```java
+   private int partitionDescending(int[] nums, int left, int right) {
+       int pivot = nums[right];
+       int i = left;
+       for (int j = left; j < right; j++) {
+           if (nums[j] >= pivot) {  // >= instead of <=
+               swap(nums, i, j);
+               i++;
+           }
+       }
+       swap(nums, i, right);
+       return i;
+   }
+   ```
+
+#### Common Use Cases
+
+**1. K-th Element Selection**
+- Find k-th smallest/largest element in unsorted array
+- Median finding (k = n/2)
+- Percentile calculation
+
+**2. Top K Elements**
+- Find k smallest/largest elements (not sorted among themselves)
+- After QuickSelect, first k elements are the k smallest (unordered)
+- [K Closest Points to Origin](#lc-k-closest-points-origin) (LeetCode 973)
+- [Top K Frequent Elements](#lc-top-k-frequent) (LeetCode 347)
+
+**3. Partitioning Problems**
+- Separate elements meeting a criteria without full sorting
+- Dutch National Flag problem (3-way partition)
+
+#### QuickSelect vs Alternatives
+
+**When to Use QuickSelect**:
+- ✅ Need **one k-th element** or **k smallest elements** (unordered)
+- ✅ Average O(n) performance is acceptable
+- ✅ Can modify array in-place
+- ✅ Large datasets where O(n) vs O(n log k) matters
+
+**When to Use Min-Heap**:
+- ✅ Need k **largest** elements (heap approach more intuitive)
+- ✅ Guaranteed O(n log k) is better than risky O(n²)
+- ✅ Small k (k << n)
+- ✅ Need **stable selection** (preserve order)
+- ✅ Cannot modify original array
+
+**When to Use Full Sort**:
+- ✅ Need **sorted** k elements (not just separated)
+- ✅ Multiple k-th queries on same data
+- ✅ k is close to n
+
+#### Visual Example
+
+Find 3rd smallest in `[7, 10, 4, 3, 20, 15]`:
+
+```
+Initial: [7, 10, 4, 3, 20, 15], k=3 (find element at index 2)
+
+Iteration 1: Choose pivot = 15 (random)
+  Partition: [7, 10, 4, 3] | 15 | [20]
+  Pivot at index 4, k=2 < 4 → Recurse left
+
+Iteration 2: Array [7, 10, 4, 3], choose pivot = 3
+  Partition: [] | 3 | [7, 10, 4]
+  Pivot at index 0, k=2 > 0 → Recurse right
+
+Iteration 3: Array [7, 10, 4], choose pivot = 4
+  Partition: [4] | 7 | [10]
+  Pivot at index 1 (global index 2), k=2 → Found!
+
+Result: 7 (the 3rd smallest element)
+```
+
+#### Common Pitfalls
+
+**1. Not Using Randomization**
+```java
+// ❌ WRONG: Deterministic pivot vulnerable to O(n²)
+int pivot = nums[right];
+
+// ✅ CORRECT: Randomized pivot
+int randomIndex = left + new Random().nextInt(right - left + 1);
+swap(nums, randomIndex, right);
+int pivot = nums[right];
+```
+
+**2. Off-by-One Errors in k**
+```java
+// k-th smallest is at index k-1 (0-indexed)
+quickSelectHelper(nums, 0, nums.length - 1, k - 1);  // ✅ Correct
+
+// k-th largest: convert to smallest
+quickSelect(nums, nums.length - k + 1);  // ✅ Correct
+```
+
+**3. Forgetting Base Case**
+```java
+// ❌ WRONG: No base case for single element
+private int quickSelectHelper(int[] nums, int left, int right, int k) {
+    int pivotIndex = partition(nums, left, right);
+    // ... missing left == right check
+
+// ✅ CORRECT: Handle single element
+if (left == right) {
+    return nums[left];
+}
+```
+
+#### Related Problems
+
+QuickSelect is the optimal approach for:
+- [K Closest Points to Origin](#lc-k-closest-points-origin) (LeetCode 973) - O(n) average
+- [Top K Frequent Elements](#lc-top-k-frequent) (LeetCode 347) - O(n) average
+- Kth Largest Element in an Array (LeetCode 215) - O(n) average
+- Find Median from Data Stream (LeetCode 295) - Use with two heaps
+
+#### Summary
+
+QuickSelect is a powerful selection algorithm:
+
+- **When to Use**: Finding k-th smallest/largest or top k elements (unordered)
+- **Key Insight**: Only recurse on the partition containing k-th element
+- **Performance**: O(n) average with randomization, much faster than sorting
+- **Critical Optimization**: Random pivot selection prevents O(n²) worst case
+- **Trade-off**: Slightly unpredictable (avg O(n) vs guaranteed O(n log k) for heap)
+- **Interview Gold**: Demonstrates deep understanding of QuickSort and optimization
+- **Production Use**: Ideal for large datasets where average-case linear time matters
+
 The power of binary search lies in reducing $O(n)$ linear search to $O(\log n)$ logarithmic search - a massive improvement for large datasets.
