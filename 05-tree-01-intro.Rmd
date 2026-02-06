@@ -182,7 +182,7 @@ public int findRoot(int[] parent, int node) {
 | **Adjacency List** | O(n + edges) | Map lookups | N-ary trees, graphs | Graph-based problems |
 | **Parent Array** | O(n) | Bottom-up only | Union-Find, LCA | DSU problems |
 
-#### Interview Strategy
+#### Traversal Strategy
 
 **Key Insight**: The representation is an implementation detail. The **core algorithm remains the same** across representations.
 
@@ -265,6 +265,181 @@ dfs \@ref(glossary-dfs)
 * Time Complexity: Depth-first search visits every vertex once and checks every edge in the graph once.
 Therefore, the runtime complexity is $O(|V| + |E|)$. In simplicity, O(n) since $|V| = n$
 * Auxiliary Space: In Depth First Traversals, stack (or function call stack) stores all ancestors of a node. Extra Space required is O(h) where h is maximum height of binary tree.
+
+### Pre-Order Traversal {#intro-tree-preorder}
+
+Pre-order traversal visits nodes in the order: **Root → Left → Right**.
+
+#### Characteristics
+
+- **Visit order**: Process the current node first, then recursively traverse left subtree, then right subtree
+- **Use cases**:
+  - Creating a copy of the tree
+  - Prefix expression evaluation
+  - Tree serialization (encoding tree structure)
+  - Directory listing (parent before children)
+
+#### Typical Implementation - Java (Recursive)
+
+```java
+public void preOrderTraversal(TreeNode root) {
+    if (root == null) return;
+
+    // Process current node
+    System.out.println(root.val);
+
+    // Traverse left subtree
+    preOrderTraversal(root.left);
+
+    // Traverse right subtree
+    preOrderTraversal(root.right);
+}
+```
+
+#### Typical Implementation - Java (Iterative)
+
+```java
+public void preOrderTraversal(TreeNode root) {
+    if (root == null) return;
+
+    Stack<TreeNode> stack = new Stack<>();
+    stack.push(root);
+
+    while (!stack.isEmpty()) {
+        TreeNode node = stack.pop();
+        System.out.println(node.val);
+
+        // Push right first so left is processed first
+        if (node.right != null) stack.push(node.right);
+        if (node.left != null) stack.push(node.left);
+    }
+}
+```
+
+#### Complexity Analysis
+
+* Time Complexity: O(n) - visits each node exactly once
+* Auxiliary Space: O(h) where h is the height of the tree (recursion stack or explicit stack)
+
+### In-Order Traversal {#intro-tree-inorder}
+
+In-order traversal visits nodes in the order: **Left → Root → Right**.
+
+#### Characteristics
+
+- **Visit order**: Recursively traverse left subtree, process current node, then recursively traverse right subtree
+- **Use cases**:
+  - Binary Search Tree (BST) traversal produces sorted output
+  - Expression tree evaluation (infix notation)
+  - Validating BST properties
+  - Finding kth smallest element in BST
+
+#### Typical Implementation - Java (Recursive)
+
+```java
+public void inOrderTraversal(TreeNode root) {
+    if (root == null) return;
+
+    // Traverse left subtree
+    inOrderTraversal(root.left);
+
+    // Process current node
+    System.out.println(root.val);
+
+    // Traverse right subtree
+    inOrderTraversal(root.right);
+}
+```
+
+#### Typical Implementation - Java (Iterative)
+
+```java
+public void inOrderTraversal(TreeNode root) {
+    Stack<TreeNode> stack = new Stack<>();
+    TreeNode current = root;
+
+    while (current != null || !stack.isEmpty()) {
+        // Reach the leftmost node
+        while (current != null) {
+            stack.push(current);
+            current = current.left;
+        }
+
+        // Process node
+        current = stack.pop();
+        System.out.println(current.val);
+
+        // Visit right subtree
+        current = current.right;
+    }
+}
+```
+
+#### Complexity Analysis
+
+* Time Complexity: O(n) - visits each node exactly once
+* Auxiliary Space: O(h) where h is the height of the tree (recursion stack or explicit stack)
+
+### Post-Order Traversal {#intro-tree-postorder}
+
+Post-order traversal visits nodes in the order: **Left → Right → Root**.
+
+#### Characteristics
+
+- **Visit order**: Recursively traverse left subtree, then right subtree, then process current node
+- **Use cases**:
+  - Deleting or freeing nodes (children before parent)
+  - Postfix expression evaluation
+  - Calculating directory sizes (children before parent)
+  - Bottom-up computations (height, tree diameter)
+
+#### Typical Implementation - Java (Recursive)
+
+```java
+public void postOrderTraversal(TreeNode root) {
+    if (root == null) return;
+
+    // Traverse left subtree
+    postOrderTraversal(root.left);
+
+    // Traverse right subtree
+    postOrderTraversal(root.right);
+
+    // Process current node
+    System.out.println(root.val);
+}
+```
+
+#### Typical Implementation - Java (Iterative)
+
+```java
+public void postOrderTraversal(TreeNode root) {
+    if (root == null) return;
+
+    Stack<TreeNode> stack1 = new Stack<>();
+    Stack<TreeNode> stack2 = new Stack<>();
+    stack1.push(root);
+
+    // Push nodes to stack2 in reverse post-order
+    while (!stack1.isEmpty()) {
+        TreeNode node = stack1.pop();
+        stack2.push(node);
+
+        if (node.left != null) stack1.push(node.left);
+        if (node.right != null) stack1.push(node.right);
+    }
+
+    // Pop from stack2 for correct post-order
+    while (!stack2.isEmpty()) {
+        System.out.println(stack2.pop().val);
+    }
+}
+```
+
+#### Complexity Analysis
+
+* Time Complexity: O(n) - visits each node exactly once
+* Auxiliary Space: O(h) where h is the height of the tree (recursion stack or two explicit stacks for iterative approach)
 
 ### Selection Strategy
 

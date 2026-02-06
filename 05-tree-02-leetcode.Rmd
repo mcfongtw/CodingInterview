@@ -7,7 +7,7 @@
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/binary-tree-inorder-traversal/
 - **Tags**:
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [In-Order Traversal](#intro-tree-inorder), [Stack](glossary-of-algorithm.html#glossary-stack), Tree
 
 ### Description
 
@@ -94,6 +94,16 @@ public List<Integer> inorderTraversal(TreeNode root) {
 
 Recursively traverse left subtree, visit the current node, then traverse right subtree. This mirrors the inorder definition and appends values in left-root-right order.
 
+The recursive approach is more intuitive and directly reflects the definition of in-order traversal:
+1. **Base case**: If node is null, return immediately
+2. **Recurse left**: Visit all nodes in the left subtree
+3. **Process current**: Add current node's value to result
+4. **Recurse right**: Visit all nodes in the right subtree
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Each node is visited exactly once
+- **Space Complexity**: O(h) - Recursion call stack depth where h is tree height (O(n) worst case for skewed tree)
 
 #### Code - Java
 
@@ -124,7 +134,7 @@ private void dfs(TreeNode node, List<Integer> list) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/validate-binary-search-tree/
 - **Tags**: Grind 75, Blind 75, NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree
 
 ### Description
 
@@ -232,7 +242,7 @@ func validate(node *TreeNode, low int, high int) bool {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
 - **Tags**:
-- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Tree
+- **Techniques**: [Breadth First Search](#intro-tree-bfs), Tree
 
 ### Description
 
@@ -317,7 +327,7 @@ public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/maximum-depth-of-binary-tree/
 - **Tags**: Grind 75, Blind 75, NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree
 
 ### Description
 
@@ -522,7 +532,7 @@ private TreeNode build(int[] preorder, int preL, int preR, int inL, int inR, Map
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/binary-tree-level-order-traversal-ii/
 - **Tags**:
-- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Tree
+- **Techniques**: [Breadth First Search](#intro-tree-bfs), Tree
 
 ### Description
 
@@ -698,7 +708,7 @@ private TreeNode build(int[] nums, int left, int right) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/lc-balanced-binary-tree/
 - **Tags**: Grind 75, NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree, Binary Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree, Binary Tree
 
 ### Description
 
@@ -873,7 +883,7 @@ func dfs(node *TreeNode) int {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/binary-tree-level-order-traversal/
 - **Tags**: Grind 75, Blind 75, NeetCode 150
-- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Tree
+- **Techniques**: [Breadth First Search](#intro-tree-bfs), Tree
 
 ### Description
 Given the root of a binary tree, return the level order traversal of its nodes' values (i.e., from left to right, level by level).
@@ -1066,7 +1076,7 @@ private void traverse(TreeNode root, int level, List<List<Integer>> ans) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/minimum-depth-of-binary-tree/
 - **Tags**:
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), DFS, Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), DFS, Tree
 
 ### Description
 
@@ -1109,7 +1119,7 @@ public int minDepth(TreeNode root) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/lc-path-sum/
 - **Tags**:
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), Tree
 
 ### Description
 
@@ -1222,7 +1232,7 @@ private void backtrack(TreeNode node, int remain, List<Integer> path, List<List<
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/populating-next-right-pointers-in-each-node/
 - **Tags**:
-- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), Tree
+- **Techniques**: [Breadth First Search](#intro-tree-bfs), Tree
 
 ### Description
 
@@ -1271,7 +1281,7 @@ public Node connect(Node root) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/binary-tree-preorder-traversal/
 - **Tags**:
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [Pre-Order Traversal](#intro-tree-preorder), [Stack](glossary-of-algorithm.html#glossary-stack), Tree
 
 ### Description
 
@@ -1289,7 +1299,7 @@ Push root to a stack. Pop, record value, then push right and left children (righ
 - **Space Complexity**: O(n)
 
 #### Code - Java
-```
+```java
 public List<Integer> preorderTraversal(TreeNode root) {
     List<Integer> result = new ArrayList<>();
     if (root == null) {
@@ -1315,7 +1325,26 @@ public List<Integer> preorderTraversal(TreeNode root) {
 
 ### Solution - Recursive
 
-```
+#### Walkthrough
+
+Recursively visit the current node first, then traverse left subtree, then right subtree. This mirrors the preorder definition and appends values in root-left-right order.
+
+The recursive approach directly reflects the definition of pre-order traversal:
+1. **Base case**: If node is null, return immediately
+2. **Process current**: Add current node's value to result
+3. **Recurse left**: Visit all nodes in the left subtree
+4. **Recurse right**: Visit all nodes in the right subtree
+
+This is the natural traversal order for creating tree copies or serializing trees, as you process the parent before the children.
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Each node is visited exactly once
+- **Space Complexity**: O(h) - Recursion call stack depth where h is tree height (O(n) worst case for skewed tree)
+
+#### Code - Java
+
+```java
 public List<Integer> preorderTraversalRecursive(TreeNode root) {
     List<Integer> result = new ArrayList<>();
     dfs(root, result);
@@ -1342,7 +1371,7 @@ private void dfs(TreeNode node, List<Integer> list) {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/binary-tree-postorder-traversal/
 - **Tags**:
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [Post-Order Traversal](#intro-tree-postorder), [Stack](glossary-of-algorithm.html#glossary-stack), Tree
 
 ### Description
 
@@ -1364,7 +1393,7 @@ Use a reversed-preorder trick to achieve postorder without two stacks:
 - **Time Complexity**: O(n)
 - **Space Complexity**: O(n) for stack + output list
 
-```
+```java
 public List<Integer> postorderTraversal(TreeNode root) {
     LinkedList<Integer> result = new LinkedList<>();
     if (root == null) {
@@ -1389,7 +1418,32 @@ public List<Integer> postorderTraversal(TreeNode root) {
 
 ### Solution - Recursive
 
-```
+#### Walkthrough
+
+Recursively traverse left subtree, then right subtree, then visit the current node. This mirrors the postorder definition and appends values in left-right-root order.
+
+The recursive approach directly reflects the definition of post-order traversal:
+1. **Base case**: If node is null, return immediately
+2. **Recurse left**: Visit all nodes in the left subtree
+3. **Recurse right**: Visit all nodes in the right subtree
+4. **Process current**: Add current node's value to result
+
+This is the natural traversal order for deleting trees or performing bottom-up calculations, as children are processed before their parent.
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Each node is visited exactly once
+- **Space Complexity**: O(h) - Recursion call stack depth where h is tree height (O(n) worst case for skewed tree)
+
+#### Code - Java
+
+```java
+public List<Integer> postorderTraversalRecursive(TreeNode root) {
+    List<Integer> result = new ArrayList<>();
+    dfs(root, result);
+    return result;
+}
+
 private void dfs(TreeNode node, List<Integer> list) {
     if (node == null) {
         return;
@@ -1681,7 +1735,7 @@ class Trie {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/kth-smallest-element-in-a-bst/
 - **Tags**: Top 100 Liked
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Binary Search Tree](glossary-of-algorithm.html#glossary-bst), In-Order Traversal
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [Binary Search Tree](glossary-of-algorithm.html#glossary-bst), [In-Order Traversal](#intro-tree-inorder)
 
 ### Description
 
@@ -1906,7 +1960,7 @@ class Solution {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
 - **Tags**:
-- **Techniques**: [Binary Search Tree](glossary-of-algorithm.html#glossary-bst), [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
+- **Techniques**: [Binary Search Tree](glossary-of-algorithm.html#glossary-bst), [Depth First Search](#intro-tree-dfs), Tree
 
 ### Description
 
@@ -2093,7 +2147,7 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
 - **Tags**: Grind 75, Blind 75, NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree, Binary Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree, Binary Tree
 
 ### Description
 
@@ -2495,7 +2549,7 @@ public TreeNode upsideDownBinaryTree(TreeNode root) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/count-univalue-subtrees/
 - **Tags**:
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree
 
 ### Description
 
@@ -2598,7 +2652,7 @@ public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/binary-tree-longest-consecutive-sequence/
 - **Tags**:
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), Tree
 
 ### Description
 
@@ -2646,7 +2700,7 @@ private int dfs(TreeNode node, TreeNode parent, int length) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/find-leaves-of-binary-tree/
 - **Tags**:
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree
 
 ### Description
 
@@ -2695,7 +2749,7 @@ private int height(TreeNode node, List<List<Integer>> result) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/lc-path-sum-iii/
 - **Tags**:
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree, Prefix Sum
+- **Techniques**: [Depth First Search](#intro-tree-dfs), Tree, Prefix Sum
 
 ### Description
 
@@ -2747,7 +2801,7 @@ private int dfs(TreeNode node, int current, int target, Map<Integer, Integer> pr
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/subtree-of-another-tree/
 - **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree, Binary Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), [Recursion](glossary-of-algorithm.html#glossary-recursion), Tree, Binary Tree
 
 ### Description
 
@@ -2920,7 +2974,7 @@ class Solution {
 - **Difficulty**: Easy
 - **URL**: https://leetcode.com/problems/diameter-of-binary-tree/
 - **Tags**: Grind 75, Blind 75, NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), Tree
+- **Techniques**: [Depth First Search](#intro-tree-dfs), Tree
 
 ### Description
 
