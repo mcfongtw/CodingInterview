@@ -7477,6 +7477,109 @@ class Solution {
 ```
 
 
+## Merge Triplets to Form Target Triplet {#lc-merge-triplets-target}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1899
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/merge-triplets-to-form-target-triplet/
+- **Tags**: NeetCode 150
+- **Techniques**: [Greedy](glossary-of-algorithm.html#glossary-greedy), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+A **triplet** is an array of three integers. You are given a 2D integer array `triplets`, where `triplets[i] = [ai, bi, ci]` describes the i-th triplet.
+
+You are also given an integer array `target = [x, y, z]` that describes the triplet you want to obtain.
+
+To obtain `target`, you may apply the following operation any number of times (possibly zero):
+
+- Choose two indices `i` and `j` (`i != j`) and update `triplets[j]` to become `[max(ai, aj), max(bi, bj), max(ci, cj)]`.
+
+Return `true` if it is possible to obtain the `target` triplet as an element of `triplets`, or `false` otherwise.
+
+### Examples
+
+**Example 1:**
+```
+Input: triplets = [[2,5,3],[1,8,4],[1,7,5]], target = [2,7,5]
+Output: true
+Explanation: Choose the first and last triplets [[2,5,3],[1,7,5]].
+Update the last: [max(2,1), max(5,7), max(3,5)] = [2,7,5]. Target found.
+```
+
+**Example 2:**
+```
+Input: triplets = [[2,5,3],[2,3,4],[1,2,5],[5,2,3]], target = [5,5,5]
+Output: true
+```
+
+**Example 3:**
+```
+Input: triplets = [[3,4,5],[4,5,6]], target = [3,2,5]
+Output: false
+Explanation: No triplet contains 2 in the second position.
+```
+
+### Constraints
+
+- `1 <= triplets.length <= 10^5`
+- `triplets[i].length == target.length == 3`
+- `1 <= ai, bi, ci, x, y, z <= 1000`
+
+### Solution - Greedy
+
+#### Walkthrough
+
+The key observation is: if any element of a triplet exceeds the corresponding target element, merging with that triplet would push some position above the target, making it impossible to achieve `target`. Therefore, we can safely **ignore** any triplet where `triplet[i] > target[i]` for any position.
+
+After filtering out invalid triplets, take the element-wise maximum of the remaining triplets. If the result equals `target`, return `true`.
+
+**Why this works:** We need to check whether the valid triplets collectively "cover" all three target values. A valid triplet (one with no element exceeding target) can only contribute values $\le$ target at each position. The element-wise max over valid triplets is the best we can achieve without exceeding target—if that equals target, we can construct it.
+
+#### Analysis
+
+- **Time Complexity**: O(n) - single pass through all triplets
+- **Space Complexity**: O(1) - only three tracking variables
+
+#### Implementation Steps
+
+1. Initialize `merged = [0, 0, 0]` to track element-wise max of valid triplets.
+2. For each triplet at index `i`:
+   - Skip if any element exceeds the corresponding target element (irrecoverable).
+   - Otherwise update `merged[j] = max(merged[j], triplets[i][j])` for each position `j`.
+   - If `merged` already equals `target`, return `true` early.
+3. Return `false` if no match found after all triplets.
+
+#### Code - Java
+
+```java
+public boolean mergeTriplets(int[][] triplets, int[] target) {
+    int len = triplets.length;
+    int[] merged = new int[3];
+
+    for (int i = 0; i < len; i++) {
+        // any element exceeding target is irrecoverable
+        if (triplets[i][0] > target[0] || triplets[i][1] > target[1] || triplets[i][2] > target[2]) {
+            continue;
+        }
+
+        merged[0] = Math.max(merged[0], triplets[i][0]);
+        merged[1] = Math.max(merged[1], triplets[i][1]);
+        merged[2] = Math.max(merged[2], triplets[i][2]);
+
+        if (Arrays.equals(merged, target)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+```
+
+
 ## Eliminate Maximum Number of Monsters {#lc-eliminate-max-monsters}
 
 
