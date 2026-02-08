@@ -645,6 +645,268 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 ```
 
 
+## Accounts Merge {#lc-accounts-merge}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 721
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/accounts-merge/
+- **Tags**:
+- **Techniques**: [Union Find](#union-find), [Depth First Search](#undirected-graph-dfs), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), Graph
+
+### Description
+
+Given a list of accounts where each element `accounts[i]` is a list of strings, where the first element `accounts[i][0]` is a name, and the rest of the elements are emails representing emails of the account.
+
+Now, we would like to merge these accounts. Two accounts definitely belong to the same person if there is some common email to both accounts. Note that even if two accounts have the same name, they may belong to different people as people could have the same name. A person can have any number of accounts initially, but all of their accounts definitely have the same name.
+
+After merging the accounts, return the accounts in the following format: the first element of each account is the name, and the rest of the elements are emails in sorted order. The accounts themselves can be returned in any order.
+
+### Examples
+
+**Example 1:**
+```
+Input: accounts = [["John","johnsmith@mail.com","john_newyork@mail.com"],["John","johnsmith@mail.com","john00@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
+Output: [["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
+Explanation:
+The first and second John's are the same person as they have the common email "johnsmith@mail.com".
+The third John and Mary are different people as none of their email addresses are used by other accounts.
+We could return these lists in any order, for example the answer [['Mary', 'mary@mail.com'], ['John', 'johnnybravo@mail.com'],
+['John', 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com']] would still be accepted.
+```
+
+**Example 2:**
+```
+Input: accounts = [["Gabe","Gabe0@m.co","Gabe3@m.co","Gabe1@m.co"],["Kevin","Kevin3@m.co","Kevin5@m.co","Kevin0@m.co"],["Ethan","Ethan5@m.co","Ethan4@m.co","Ethan0@m.co"],["Hanzo","Hanzo3@m.co","Hanzo1@m.co","Hanzo0@m.co"],["Fern","Fern5@m.co","Fern1@m.co","Fern0@m.co"]]
+Output: [["Ethan","Ethan0@m.co","Ethan4@m.co","Ethan5@m.co"],["Gabe","Gabe0@m.co","Gabe1@m.co","Gabe3@m.co"],["Hanzo","Hanzo0@m.co","Hanzo1@m.co","Hanzo3@m.co"],["Kevin","Kevin0@m.co","Kevin3@m.co","Kevin5@m.co"],["Fern","Fern0@m.co","Fern1@m.co","Fern5@m.co"]]
+```
+
+### Constraints
+
+- $1 \le \text{accounts.length} \le 1000$
+- $2 \le \text{accounts}[i].\text{length} \le 10$
+- $1 \le \text{accounts}[i][j].\text{length} \le 30$
+- `accounts[i][0]` consists of English letters
+- `accounts[i][j]` (for $j > 0$) is a valid email
+- All email addresses are unique across all accounts
+
+### Solution - Union Find
+
+#### Walkthrough
+
+Model each email as a node. Emails that appear in the same account are connected. Use Union-Find to merge connected emails into components, then collect each component's emails and attach the owner's name.
+
+**Phase 1 - Initialize:**
+
+For every email across all accounts:
+- Set `parent[email] = email` (each email is its own root)
+- Record `emailToName[email] = name`
+
+**Phase 2 - Union:**
+
+For each account, union the first email with every other email in that account. This connects all emails belonging to the same account into one component. Using the first email as the anchor ensures transitivity: if account A and account B share `email1`, unioning `email1` with all other emails in both accounts automatically links the two accounts.
+
+**Phase 3 - Group by root:**
+
+Iterate all emails. Call `find(email)` to get its root. Accumulate emails under `rootToEmails[root]`.
+
+**Phase 4 - Build result:**
+
+For each root, sort its emails, prepend the owner name (looked up from any email in the group), and add to result.
+
+**Example trace with `[["John","a@m","b@m"], ["John","b@m","c@m"], ["Mary","d@m"]]`:**
+
+```
+After init:
+  parent: {a→a, b→b, c→c, d→d}
+  emailToName: {a→John, b→John, c→John, d→Mary}
+
+After union (account 0: union a,b):
+  parent: {a→a, b→a, c→c, d→d}
+
+After union (account 1: union b,c — find(b)=a):
+  parent: {a→a, b→a, c→a, d→d}
+
+Group by root:
+  a → [a, b, c]
+  d → [d]
+
+Result:
+  ["John", "a@m", "b@m", "c@m"]
+  ["Mary", "d@m"]
+```
+
+#### Analysis
+
+- **Time Complexity**: O(N $\cdot$ K $\cdot$ $\alpha$(N $\cdot$ K)) where N is number of accounts and K is max emails per account. $\alpha$ is inverse Ackermann — effectively O(N $\cdot$ K) for initialization plus near-constant union/find operations. Sorting each component adds O(N $\cdot$ K $\cdot$ log(N $\cdot$ K)).
+- **Space Complexity**: O(N $\cdot$ K) for the parent map, emailToName map, and rootToEmails map.
+
+#### Implementation Steps
+
+1. Initialize `parent` map (email $\to$ email) and `emailToName` map (email $\to$ name) by iterating all accounts.
+2. For each account, union the first email with each remaining email using `union(first, emails[i])`.
+3. Iterate all emails; group them by `find(email)` into `rootToEmails` map.
+4. For each entry in `rootToEmails`, sort the email list, look up the name from any email, prepend it, and add to result.
+
+#### Code - Java
+
+```java
+public List<List<String>> accountsMerge(List<List<String>> accounts) {
+    Map<String, String> parent = new HashMap<>();
+    Map<String, String> emailToName = new HashMap<>();
+
+    // Phase 1: Initialize
+    for (List<String> account : accounts) {
+        String name = account.get(0);
+        for (int i = 1; i < account.size(); i++) {
+            String email = account.get(i);
+            parent.put(email, email);
+            emailToName.put(email, name);
+        }
+    }
+
+    // Phase 2: Union emails within each account
+    for (List<String> account : accounts) {
+        String first = account.get(1);
+        for (int i = 2; i < account.size(); i++) {
+            union(parent, first, account.get(i));
+        }
+    }
+
+    // Phase 3: Group emails by root
+    Map<String, List<String>> rootToEmails = new HashMap<>();
+    for (String email : parent.keySet()) {
+        String root = find(parent, email);
+        rootToEmails.computeIfAbsent(root, k -> new ArrayList<>()).add(email);
+    }
+
+    // Phase 4: Build result
+    List<List<String>> result = new ArrayList<>();
+    for (List<String> emails : rootToEmails.values()) {
+        Collections.sort(emails);
+        List<String> account = new ArrayList<>();
+        account.add(emailToName.get(emails.get(0)));
+        account.addAll(emails);
+        result.add(account);
+    }
+
+    return result;
+}
+
+private String find(Map<String, String> parent, String email) {
+    if (!parent.get(email).equals(email)) {
+        parent.put(email, find(parent, parent.get(email))); // path compression
+    }
+    return parent.get(email);
+}
+
+private void union(Map<String, String> parent, String a, String b) {
+    String rootA = find(parent, a);
+    String rootB = find(parent, b);
+    if (!rootA.equals(rootB)) {
+        parent.put(rootA, rootB);
+    }
+}
+```
+
+### Solution - DFS
+
+#### Walkthrough
+
+Build an email graph where emails in the same account are connected (adjacent). Then perform DFS from each unvisited email to collect all emails in its connected component.
+
+**Phase 1 - Build graph:**
+
+For each account, add edges between every pair of emails in that account. Also record `emailToName[email] = name`. Since any two emails in the same account are connected, connecting them all (even just as a star from the first email) suffices because the graph captures transitivity through DFS.
+
+**Phase 2 - DFS per component:**
+
+Iterate all emails. For each unvisited email, DFS to collect all reachable emails into one group.
+
+**Phase 3 - Build result:**
+
+Sort collected emails, prepend name, add to result.
+
+**Example with same input as above:**
+
+```
+Graph edges:
+  a -- b  (account 0)
+  b -- c  (account 1)
+
+DFS from a: visits a → b → c  (component: {a,b,c})
+DFS from d: visits d           (component: {d})
+```
+
+#### Analysis
+
+- **Time Complexity**: O(N $\cdot$ K $\cdot$ log(N $\cdot$ K)) — building the graph is O(N $\cdot$ K), DFS visits each email once O(N $\cdot$ K), sorting dominates.
+- **Space Complexity**: O(N $\cdot$ K) for the adjacency list, visited set, and recursion stack.
+
+#### Implementation Steps
+
+1. Build adjacency list `graph` (email $\to$ list of neighboring emails) and `emailToName` by iterating all accounts. For each account, connect `emails[1]` to all other emails bidirectionally.
+2. Use a `visited` set to track explored emails.
+3. For each email not yet visited, DFS to collect all connected emails into a list.
+4. Sort the list, prepend the name from `emailToName`, add to result.
+
+#### Code - Java
+
+```java
+public List<List<String>> accountsMerge(List<List<String>> accounts) {
+    Map<String, List<String>> graph = new HashMap<>();
+    Map<String, String> emailToName = new HashMap<>();
+
+    // Phase 1: Build graph
+    for (List<String> account : accounts) {
+        String name = account.get(0);
+        String first = account.get(1);
+        for (int i = 1; i < account.size(); i++) {
+            String email = account.get(i);
+            emailToName.put(email, name);
+            graph.computeIfAbsent(email, k -> new ArrayList<>());
+            if (i > 1) {
+                // Connect first email to all others (star topology)
+                graph.get(first).add(email);
+                graph.get(email).add(first);
+            }
+        }
+    }
+
+    // Phase 2 & 3: DFS per component
+    Set<String> visited = new HashSet<>();
+    List<List<String>> result = new ArrayList<>();
+
+    for (String email : graph.keySet()) {
+        if (!visited.contains(email)) {
+            List<String> component = new ArrayList<>();
+            dfs(email, graph, visited, component);
+            Collections.sort(component);
+            List<String> account = new ArrayList<>();
+            account.add(emailToName.get(component.get(0)));
+            account.addAll(component);
+            result.add(account);
+        }
+    }
+
+    return result;
+}
+
+private void dfs(String email, Map<String, List<String>> graph,
+                 Set<String> visited, List<String> component) {
+    visited.add(email);
+    component.add(email);
+    for (String neighbor : graph.get(email)) {
+        if (!visited.contains(neighbor)) {
+            dfs(neighbor, graph, visited, component);
+        }
+    }
+}
+```
+
+
 ## Number of Connected Components in an Undirected Graph {#lc-connected-components}
 
 ### Problem Metadata
@@ -654,7 +916,7 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 - **Tags**: NeetCode 150
-- **Techniques**: [Depth First Search](#undirected-graph-dfs), [Breadth First Search](#undirected-graph-bfs), [Union Find](glossary-of-algorithm.html#glossary-union-find), Graph
+- **Techniques**: [Depth First Search](#undirected-graph-dfs), [Breadth First Search](#undirected-graph-bfs), [Union Find](#union-find), Graph
 
 ### Description
 
@@ -866,6 +1128,102 @@ private void bfs(int start, List<List<Integer>> graph, boolean[] visited) {
             }
         }
     }
+}
+```
+
+### Solution - Union Find
+
+#### Walkthrough
+
+Initialize each node as its own component. Process every edge by unioning the two endpoints. Each successful union (where the two nodes were in different components) reduces the component count by one. The final count is the answer.
+
+**Key insight:** Start with `n` components (one per node). Each `union()` that merges two distinct components decrements the count. After processing all edges, the remaining count equals the number of connected components.
+
+**Example trace: $n = 5$, edges $= [[0,1],[1,2],[3,4]]$**
+
+```
+Initial: components = 5
+         parent = [0, 1, 2, 3, 4]
+
+Process [0,1]: find(0)=0, find(1)=1 → different → union, components = 4
+               parent = [1, 1, 2, 3, 4]
+
+Process [1,2]: find(1)=1, find(2)=2 → different → union, components = 3
+               parent = [1, 2, 2, 3, 4]
+
+Process [3,4]: find(3)=3, find(4)=4 → different → union, components = 2
+               parent = [1, 2, 2, 4, 4]
+
+Result: 2
+```
+
+#### Analysis
+
+- **Time Complexity**: O(E $\cdot$ $\alpha$(n)) $\approx$ O(E) — each edge triggers one union/find operation with near-constant cost due to path compression and union by rank
+- **Space Complexity**: O(n) — parent and rank arrays only; no adjacency list needed
+
+**Comparison with DFS/BFS:**
+
+| | Union-Find | DFS / BFS |
+|---|---|---|
+| Space | O(n) | O(n + E) — needs adjacency list |
+| Handles dynamic edges | Yes | No |
+| Conceptual model | Merge sets | Explore graph |
+
+Union-Find is more space-efficient here because it processes edges directly without building an adjacency list.
+
+#### Implementation Steps
+
+1. Initialize `parent[i] = i` and `rank[i] = 0` for all nodes. Set `components = n`.
+2. For each edge `[u, v]`:
+   - If `find(u) != find(v)`: call `union(u, v)` and decrement `components`.
+3. Return `components`.
+
+#### Code - Java
+
+```java
+public int countComponents(int n, int[][] edges) {
+    int[] parent = new int[n];
+    int[] rank = new int[n];
+
+    for (int i = 0; i < n; i++) {
+        parent[i] = i;
+    }
+
+    int components = n;
+
+    for (int[] edge : edges) {
+        if (union(parent, rank, edge[0], edge[1])) {
+            components--;
+        }
+    }
+
+    return components;
+}
+
+private int find(int[] parent, int x) {
+    if (parent[x] != x) {
+        parent[x] = find(parent, parent[x]); // path compression
+    }
+    return parent[x];
+}
+
+private boolean union(int[] parent, int[] rank, int a, int b) {
+    int rootA = find(parent, a);
+    int rootB = find(parent, b);
+
+    if (rootA == rootB) return false; // already in same component
+
+    if (rank[rootA] < rank[rootB]) {
+        parent[rootA] = rootB;
+    } else if (rank[rootB] < rank[rootA]) {
+        parent[rootB] = rootA;
+    } else {
+        parent[rootB] = rootA;
+        rank[rootA]++;
+    }
+
+    return true;
 }
 ```
 
