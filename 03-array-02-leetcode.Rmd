@@ -3726,6 +3726,168 @@ class Solution {
 ```
 
 
+## Meeting Rooms II {#lc-meeting-rooms-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 253
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/meeting-rooms-ii/
+- **Tags**: NeetCode 150
+- **Techniques**: [Sorting](glossary-of-algorithm.html#glossary-sorting), [Greedy](glossary-of-algorithm.html#glossary-greedy), [Heap](glossary-of-algorithm.html#glossary-heap), [Array](glossary-of-algorithm.html#glossary-array)
+
+
+### Description
+
+Given an array of meeting time intervals `intervals` where `intervals[i] = [start_i, end_i]`, return the minimum number of conference rooms required.
+
+### Examples
+
+**Example 1:**
+```
+Input: intervals = [[0,30],[5,10],[15,20]]
+Output: 2
+```
+
+**Example 2:**
+```
+Input: intervals = [[7,10],[2,4]]
+Output: 1
+```
+
+### Constraints
+
+- `0 <= intervals.length <= 10^4`
+- `0 <= start_i < end_i <= 10^9`
+
+
+### Solution - Two-Pointer Sweep
+
+
+#### Walkthrough
+
+Separate all start times and end times into two arrays and sort each independently. Use two pointers `i` (over starts) and `j` (over ends) to simulate a timeline sweep:
+
+- When the next event is a start (`starts[i] < ends[j]`): a new meeting begins, increment the room count.
+- When the next event is an end: a meeting finishes, a room is freed, increment `j`.
+
+Track the maximum room count seen during the sweep.
+
+**Key insight:** We don't care which meeting ends — only that *some* meeting ends, freeing a room. Sorting starts and ends independently lets us efficiently count peak overlap without tracking identity.
+
+**Example:** `intervals = [[0,30],[5,10],[15,20]]`
+
+```
+starts = [0, 5, 15]
+ends   = [10, 20, 30]
+
+i=0: starts[0]=0 < ends[0]=10 → rooms=1, maxRooms=1
+i=1: starts[1]=5 < ends[0]=10 → rooms=2, maxRooms=2
+i=2: starts[2]=15 >= ends[0]=10 → rooms=1, j=1
+     starts[2]=15 < ends[1]=20 → rooms=2, maxRooms=2 (no change)
+
+Result: 2
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n log n) — sorting dominates
+- **Space Complexity**: O(n) — two auxiliary arrays
+
+#### Implementation Steps
+
+
+1. Extract `starts[i] = intervals[i][0]` and `ends[i] = intervals[i][1]`.
+2. Sort both arrays independently.
+3. Initialize `rooms = 0`, `maxRooms = 0`, `j = 0`.
+4. For each `i` from 0 to `n - 1`:
+   - If `starts[i] < ends[j]`: increment `rooms`, update `maxRooms`.
+   - Else: decrement `rooms`, increment `j`.
+5. Return `maxRooms`.
+
+#### Code - Java
+
+```java
+public int minMeetingRooms(int[][] intervals) {
+    int n = intervals.length;
+    int[] starts = new int[n];
+    int[] ends = new int[n];
+
+    for (int i = 0; i < n; i++) {
+        starts[i] = intervals[i][0];
+        ends[i] = intervals[i][1];
+    }
+
+    Arrays.sort(starts);
+    Arrays.sort(ends);
+
+    int rooms = 0, maxRooms = 0;
+    int j = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (starts[i] < ends[j]) {
+            rooms++;
+            maxRooms = Math.max(maxRooms, rooms);
+        } else {
+            rooms--;
+            j++;
+        }
+    }
+
+    return maxRooms;
+}
+```
+
+
+### Solution - Min-Heap
+
+
+#### Walkthrough
+
+Sort intervals by start time. Use a min-heap to track the **end times** of meetings currently in progress. Each heap entry represents one room in use.
+
+For each meeting, check if the earliest-ending meeting (heap top) has already finished:
+
+- If `heap.peek() <= current.start`: that room is free — reuse it (`poll` then `offer`).
+- Otherwise: all rooms are occupied — allocate a new one (`offer`).
+
+At the end, `heap.size()` is the total rooms allocated.
+
+#### Analysis
+
+- **Time Complexity**: O(n log n) — sorting + heap operations
+- **Space Complexity**: O(n) — heap stores up to n end times
+
+#### Implementation Steps
+
+
+1. Sort `intervals` by start time.
+2. Initialize a min-heap.
+3. For each interval:
+   1. If heap is non-empty and `heap.peek() <= interval[0]`, poll (reuse room).
+   2. Push `interval[1]` onto the heap (new or reused room now holds this end time).
+4. Return `heap.size()`.
+
+#### Code - Java
+
+```java
+public int minMeetingRooms(int[][] intervals) {
+    Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+    PriorityQueue<Integer> heap = new PriorityQueue<>();
+
+    for (int[] interval : intervals) {
+        if (!heap.isEmpty() && heap.peek() <= interval[0]) {
+            heap.poll();
+        }
+        heap.offer(interval[1]);
+    }
+
+    return heap.size();
+}
+```
+
+
 ## Paint House {#lc-paint-house}
 
 ### Problem Metadata
