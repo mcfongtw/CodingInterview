@@ -6774,6 +6774,55 @@ class Solution {
 }
 ```
 
+#### Code - Golang
+
+```go
+import (
+    "math"
+)
+
+func minEatingSpeed(piles []int, h int) int {
+    l := 1
+    r := getMaxPile(piles)
+    result := r
+
+    for l <= r {
+        mid := l + (r - l) / 2
+
+        if canFinish(piles, mid, h) {
+            // Can Koko eat less?
+            result = mid
+            r = mid - 1
+        } else {
+            // Can Koko eat more?
+            l = mid + 1
+        }
+    }
+
+    return result
+}
+
+func getMaxPile(piles []int) int {
+    result := 0
+
+    for _, pile := range piles {
+        result = max(result, pile)
+    }
+
+    return result
+}
+
+func canFinish(piles []int, speed int, h int) bool {
+    sumHour := int64(0)  // Use int64 to prevent integer overflow
+
+    for _, pile := range piles {
+        sumHour += int64(math.Ceil(float64(pile) / float64(speed)))
+    }
+
+    return sumHour <= int64(h)
+}
+```
+
 
 ## Sort Array By Parity {#lc-sort-array-parity}
 
