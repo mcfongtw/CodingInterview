@@ -6549,6 +6549,232 @@ class Solution {
 ```
 
 
+## Koko Eating Bananas {#lc-koko-eating-bananas}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 875
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/koko-eating-bananas/
+- **Tags**: NeetCode 150
+- **Techniques**: [Binary Search](#binary-search-strategy), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Koko loves to eat bananas. There are `n` piles of bananas, where the `i-th` pile has `piles[i]` bananas. The guards have gone and will come back in `h` hours.
+
+Koko can decide her bananas-per-hour eating speed of `k`. Each hour, she chooses some pile of bananas and eats `k` bananas from that pile. If the pile has less than `k` bananas, she eats all of them instead and will not eat any more bananas during that hour.
+
+Koko likes to eat slowly but still wants to finish eating all the bananas before the guards return.
+
+Return the **minimum** integer `k` such that she can eat all the bananas within `h` hours.
+
+### Examples
+
+**Example 1:**
+```
+Input: piles = [3,6,7,11], h = 8
+Output: 4
+Explanation: Koko can eat at 4 bananas/hour.
+- Hour 1: Eat 3 bananas from pile 0 (now [0,6,7,11])
+- Hour 2: Eat 4 bananas from pile 1 (now [0,2,7,11])
+- Hour 3: Eat 2 bananas from pile 1 (now [0,0,7,11])
+- Hour 4: Eat 4 bananas from pile 2 (now [0,0,3,11])
+- Hour 5: Eat 3 bananas from pile 2 (now [0,0,0,11])
+- Hour 6: Eat 4 bananas from pile 3 (now [0,0,0,7])
+- Hour 7: Eat 4 bananas from pile 3 (now [0,0,0,3])
+- Hour 8: Eat 3 bananas from pile 3 (now [0,0,0,0])
+Total time: 1 + 2 + 2 + 3 = 8 hours.
+```
+
+**Example 2:**
+```
+Input: piles = [30,11,23,4,20], h = 5
+Output: 30
+Explanation: With k = 30, Koko finishes each pile in exactly 1 hour, totaling 5 hours.
+```
+
+**Example 3:**
+```
+Input: piles = [30,11,23,4,20], h = 6
+Output: 23
+```
+
+### Constraints
+
+- $1 \le \text{piles.length} \le 10^4$
+- $\text{piles.length} \le h \le 10^9$
+- $1 \le \text{piles}[i] \le 10^9$
+
+### Solution - Binary Search on Answer
+
+#### Walkthrough
+
+This is a classic **"Binary Search on Answer"** problem where we search for the minimum eating speed rather than searching within the array itself.
+
+**Core Strategy:**
+
+Instead of searching through the piles array, we perform binary search on the **range of possible eating speeds**:
+- **Minimum speed**: `k = 1` (eat 1 banana per hour)
+- **Maximum speed**: `k = max(piles)` (eat the largest pile in 1 hour)
+
+**Key Insight - Monotonic Property:**
+
+If Koko can finish all bananas at speed `k` within `h` hours, then she can also finish at any speed greater than `k`. This creates a monotonic pattern:
+
+```
+Speed:              1  2  3  4  5  6  7  8 ... max(piles)
+Can finish in h?    F  F  F  T  T  T  T  T ... T
+                           ^
+                           First valid speed (our answer)
+```
+
+We're looking for the **leftmost True** value - the minimum speed that works.
+
+**Step-by-step execution for `piles = [3,6,7,11], h = 8`:**
+
+```
+Initial search space: left = 1, right = 11
+
+Iteration 1: mid = 6
+- Pile 3: ⌈3/6⌉ = 1 hour
+- Pile 6: ⌈6/6⌉ = 1 hour
+- Pile 7: ⌈7/6⌉ = 2 hours
+- Pile 11: ⌈11/6⌉ = 2 hours
+- Total: 1+1+2+2 = 6 hours $\le$ 8 ✓
+- Speed 6 works! Try smaller: result = 6, right = 5
+
+Iteration 2: mid = 3
+- Pile 3: ⌈3/3⌉ = 1 hour
+- Pile 6: ⌈6/3⌉ = 2 hours
+- Pile 7: ⌈7/3⌉ = 3 hours
+- Pile 11: ⌈11/3⌉ = 4 hours
+- Total: 1+2+3+4 = 10 hours $>$ 8 ✗
+- Speed 3 too slow: left = 4
+
+Iteration 3: mid = 4
+- Pile 3: ⌈3/4⌉ = 1 hour
+- Pile 6: ⌈6/4⌉ = 2 hours
+- Pile 7: ⌈7/4⌉ = 2 hours
+- Pile 11: ⌈11/4⌉ = 3 hours
+- Total: 1+2+2+3 = 8 hours $\le$ 8 ✓
+- Speed 4 works! Try smaller: result = 4, right = 3
+
+Iteration 4: left = 4, right = 3 → left $>$ right, exit
+
+Result: 4
+```
+
+**Critical Implementation Details:**
+
+1. **Ceiling Division**: Time for each pile = $\lceil \frac{\text{pile}}{\text{speed}} \rceil$
+   - Use `Math.ceilDiv(pile, speed)` for exact ceiling division
+
+2. **Integer Overflow Prevention**:
+   - With constraints: up to $10^4$ piles, each up to $10^9$ bananas
+   - Worst case (speed=1): $10^9 \times 10^4 = 10^{13}$ hours exceeds `Integer.MAX_VALUE`
+   - **Solution**: Use `long` for hour accumulation
+
+3. **Binary Search Direction**:
+   - If speed works: search for smaller speeds (move right pointer left)
+   - If speed fails: need faster speed (move left pointer right)
+
+#### Analysis
+
+- **Time Complexity**: $O(n \log m)$
+  - Binary search iterations: $O(\log m)$ where $m = \max(\text{piles})$
+  - Each iteration calls `canFinish`: $O(n)$ to check all piles
+  - Total: $O(n \log m)$
+
+- **Space Complexity**: O(1)
+  - Only uses constant extra space for variables (left, right, result, sumHour)
+  - No additional data structures needed
+
+**Why This is Optimal:**
+- Cannot avoid checking all piles for each speed candidate: O(n) per check is required
+- Binary search is optimal for searching sorted space: $O(\log m)$ iterations
+- Combined complexity $O(n \log m)$ is the best achievable
+
+#### Implementation Steps
+
+**Phase 1: Setup Binary Search Range**
+1. Find maximum pile size to set upper bound: `right = max(piles)`
+2. Set lower bound: `left = 1` (minimum possible speed)
+3. Initialize `result = 0` to store the answer
+
+**Phase 2: Binary Search on Speed**
+4. While `left <= right`:
+   1. Calculate midpoint speed: `mid = left + (right - left) / 2`
+   2. Check if Koko can finish at speed `mid` within `h` hours using helper function
+   3. **If feasible** (can finish):
+      - Update `result = mid` (this speed works)
+      - Try smaller speed: `right = mid - 1` (search left half)
+   4. **If not feasible** (cannot finish):
+      - Need faster speed: `left = mid + 1` (search right half)
+
+**Phase 3: Helper Functions**
+
+5. **`getMaxPile(int[] piles)`**:
+   - Iterate through all piles
+   - Return maximum value (upper bound for binary search)
+
+6. **`canFinish(int[] piles, int speed, int h)`**:
+   - Initialize `long sumHour = 0` (**must be long to prevent overflow**)
+   - For each pile:
+     - Add $\lceil \frac{\text{pile}}{\text{speed}} \rceil$ to `sumHour` using `Math.ceilDiv()`
+   - Return `sumHour <= h`
+
+**Return:**
+7. Return `result` (minimum speed that allows finishing within h hours)
+
+#### Code - Java
+
+```java
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int l = 1, r = getMaxPile(piles);
+        int result = 0;
+
+        while(l <= r) {
+            int mid = l + (r - l) / 2;
+
+            if(canFinish(piles, mid, h)) {
+                result = mid;
+                // Koko can try to eat less
+                r = mid - 1;
+            } else {
+                // Koko needs to eat more
+                l = mid + 1;
+            }
+        }
+
+        return result;
+    }
+
+    private int getMaxPile(int[] piles) {
+        int max = Integer.MIN_VALUE;
+
+        for(int pile: piles) {
+            max = Math.max(max, pile);
+        }
+
+        return max;
+    }
+
+    private boolean canFinish(int[] piles, int speed, int h) {
+        long sumHour = 0;  // Use long to prevent integer overflow
+
+        for(int pile : piles) {
+            sumHour += Math.ceilDiv(pile, speed);
+        }
+
+        return sumHour <= h;
+    }
+}
+```
+
+
 ## Sort Array By Parity {#lc-sort-array-parity}
 
 ### Problem Metadata
