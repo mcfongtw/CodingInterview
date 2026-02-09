@@ -189,6 +189,222 @@ private double fastPow(double x, long n) {
 ```
 
 
+## Happy Number {#lc-happy-number}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 202
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/happy-number/
+- **Tags**: NeetCode 150
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#hash-table), [Two Pointer](glossary-of-algorithm.html#two-pointer), [Math](glossary-of-algorithm.html#math)
+
+### Description
+
+Write an algorithm to determine if a number `n` is happy.
+
+A **happy number** is a number defined by the following process:
+
+- Starting with any positive integer, replace the number by the sum of the squares of its digits.
+- Repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1.
+- Those numbers for which this process ends in 1 are happy.
+
+Return `true` if `n` is a happy number, and `false` if not.
+
+### Examples
+
+```
+Input: n = 19
+Output: true
+Explanation:
+1² + 9² = 82
+8² + 2² = 68
+6² + 8² = 100
+1² + 0² + 0² = 1
+
+Input: n = 2
+Output: false
+```
+
+### Constraints
+
+- $1 \le n \le 2^{31} - 1$
+
+### Solution 1 - Hash Set Cycle Detection
+
+#### Walkthrough
+
+The key insight is that repeatedly computing the sum of squares of digits will either reach 1 (happy number) or enter an infinite cycle (not happy). Use a hash set to track all numbers seen in the sequence. If we encounter a number we've seen before, we've detected a cycle and the number is not happy.
+
+The algorithm repeatedly transforms the number by computing the sum of squares of its digits. For example, 19 transforms as follows:
+- 19: $1^2 + 9^2 = 82$
+- 82: $8^2 + 2^2 = 68$
+- 68: $6^2 + 8^2 = 100$
+- 100: $1^2 + 0^2 + 0^2 = 1$ (happy!)
+
+For unhappy numbers like 2, the sequence eventually repeats: 2 → 4 → 16 → 37 → 58 → 89 → 145 → 42 → 20 → 4 (cycle detected).
+
+**Example: n = 19 (Happy)**
+```
+sum = 19, hasSeen = {}
+sum = 82, hasSeen = {19}
+sum = 68, hasSeen = {19, 82}
+sum = 100, hasSeen = {19, 82, 68}
+sum = 1, hasSeen = {19, 82, 68, 100}
+Return true
+```
+
+**Example: n = 2 (Unhappy)**
+```
+sum = 2, hasSeen = {}
+sum = 4, hasSeen = {2}
+sum = 16, hasSeen = {2, 4}
+sum = 37, hasSeen = {2, 4, 16}
+sum = 58, hasSeen = {2, 4, 16, 37}
+sum = 89, hasSeen = {2, 4, 16, 37, 58}
+sum = 145, hasSeen = {2, 4, 16, 37, 58, 89}
+sum = 42, hasSeen = {2, 4, 16, 37, 58, 89, 145}
+sum = 20, hasSeen = {2, 4, 16, 37, 58, 89, 145, 42}
+sum = 4, hasSeen contains 4 → cycle detected
+Return false
+```
+
+#### Analysis
+
+- **Time Complexity**: O(log n $\times$ k) where k is the cycle length. Each digit extraction is O(log n) and we may iterate through the cycle.
+- **Space Complexity**: O(k) for the hash set storing seen numbers in the cycle.
+
+#### Implementation Steps
+
+
+1. Initialize a hash set `hasSeen` to track visited numbers and `sum` to store the current number.
+2. Loop infinitely:
+   - Compute the sum of squares of digits using `sumOfSqrOfDigits()`.
+   - If sum equals 1, return true (happy number found).
+   - If `hasSeen` contains sum, we've detected a cycle, return false.
+   - Add sum to `hasSeen`.
+3. Helper function `sumOfSqrOfDigits(n)`:
+   - Extract each digit using modulo 10, square it, and add to result.
+   - Divide n by 10 to remove the last digit.
+   - Repeat until all digits are processed.
+
+#### Code - Java
+
+```java
+class Solution {
+    public boolean isHappy(int n) {
+        Set<Integer> hasSeen = new HashSet<>();
+        int sum = n;
+
+        while(true) {
+            sum = sumOfSqrOfDigits(sum);
+
+            if(sum == 1) {
+                return true;
+            }
+
+            //detect a cycle
+            if(hasSeen.contains(sum)) {
+                return false;
+            }
+
+            hasSeen.add(sum);
+        }
+    }
+
+    private int sumOfSqrOfDigits(int n) {
+        int result = 0;
+        while(n > 0) {
+            int dig = n % 10;
+            result += dig * dig;
+            n = n / 10;
+        }
+
+        return result;
+    }
+}
+```
+
+
+### Solution 2 - Floyd's Cycle Detection (Two Pointers)
+
+#### Walkthrough
+
+Use Floyd's "tortoise and hare" cycle detection algorithm to detect cycles with O(1) space complexity. Instead of storing all seen numbers in a hash set, maintain two pointers: `slow` moves one step at a time, and `fast` moves two steps at a time. If there's a cycle, the fast pointer will eventually catch up to the slow pointer.
+
+The algorithm works because:
+- If the sequence reaches 1, we detect it immediately and return true.
+- If the sequence enters a cycle, the fast pointer (moving 2 steps) will eventually meet the slow pointer (moving 1 step) inside the cycle, similar to how a faster runner laps a slower runner on a circular track.
+
+**Example: n = 19 (Happy)**
+```
+Iteration 1: slow = 82, fast = 68
+Iteration 2: slow = 68, fast = 1
+slow == 1, return true
+```
+
+**Example: n = 2 (Unhappy)**
+```
+Iteration 1: slow = 4, fast = 16
+Iteration 2: slow = 16, fast = 37
+Iteration 3: slow = 37, fast = 58
+...
+Eventually: slow = 4, fast = 4 (both in cycle)
+slow == fast and slow != 1, return false
+```
+
+#### Analysis
+
+- **Time Complexity**: O(log n $\times$ k) where k is the cycle length. Same as hash set approach.
+- **Space Complexity**: O(1) - only two pointer variables, no hash set needed.
+
+#### Implementation Steps
+
+
+1. Initialize two pointers `slow` and `fast` both starting at n.
+2. Loop infinitely:
+   - Move `slow` one step: `slow = sumOfSqrOfDigits(slow)`.
+   - Move `fast` two steps: `fast = sumOfSqrOfDigits(sumOfSqrOfDigits(fast))`.
+   - If slow equals 1, return true (happy number found).
+   - If slow equals fast, we've detected a cycle, return false.
+3. Helper function `sumOfSqrOfDigits(n)` remains the same as Solution 1.
+
+#### Code - Go
+
+```go
+func isHappy(n int) bool {
+    slow := n
+    fast := n
+
+    for {
+        slow = sumOfSqrOfDigits(slow)
+        fast = sumOfSqrOfDigits(sumOfSqrOfDigits(fast))
+
+        if slow == 1 {
+            return true
+        }
+
+        if slow == fast {
+            return false
+        }
+    }
+}
+
+func sumOfSqrOfDigits(n int) int {
+    result := 0
+
+    for n > 0 {
+        digit := n % 10
+        result += digit * digit
+        n = n / 10
+    }
+
+    return result
+}
+```
+
+
 ## Count Primes {#lc-count-primes}
 
 ### Problem Metadata
