@@ -225,6 +225,253 @@ class LRUCacheLinkedHashMap {
 ```
 
 
+## Design Twitter {#lc-design-twitter}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 355
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/design-twitter/
+- **Tags**: NeetCode 150
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#glossary-hash-table), [Heap](glossary-of-algorithm.html#glossary-heap), Design
+
+### Description
+
+Design a simplified version of Twitter where users can post tweets, follow/unfollow another user, and see the 10 most recent tweets in the user's news feed.
+
+Implement the `Twitter` class:
+
+- `Twitter()` Initializes your twitter object.
+- `void postTweet(int userId, int tweetId)` Composes a new tweet with ID `tweetId` by the user `userId`. Each call to this function will be made with a unique `tweetId`.
+- `List<Integer> getNewsFeed(int userId)` Retrieves the 10 most recent tweet IDs in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user themselves. Tweets must be ordered from most recent to least recent.
+- `void follow(int followerId, int followeeId)` The user with ID `followerId` starts following the user with ID `followeeId`.
+- `void unfollow(int followerId, int followeeId)` The user with ID `followerId` starts unfollowing the user with ID `followeeId`.
+
+### Examples
+
+```
+Input
+["Twitter", "postTweet", "getNewsFeed", "follow", "postTweet", "getNewsFeed", "unfollow", "getNewsFeed"]
+[[], [1, 5], [1], [1, 2], [2, 6], [1], [1, 2], [1]]
+
+Output
+[null, null, [5], null, null, [6, 5], null, [5]]
+
+Explanation
+Twitter twitter = new Twitter();
+twitter.postTweet(1, 5); // User 1 posts a new tweet (id = 5).
+twitter.getNewsFeed(1);  // User 1's news feed should return a list with 1 tweet id -> [5]. return [5]
+twitter.follow(1, 2);    // User 1 follows user 2.
+twitter.postTweet(2, 6); // User 2 posts a new tweet (id = 6).
+twitter.getNewsFeed(1);  // User 1's news feed should return a list with 2 tweet ids -> [6, 5]. return [6, 5]
+twitter.unfollow(1, 2);  // User 1 unfollows user 2.
+twitter.getNewsFeed(1);  // User 1's news feed should return a list with 1 tweet id -> [5]. return [5]
+```
+
+### Constraints
+
+- `1 <= userId, followerId, followeeId <= 500`
+- `0 <= tweetId <= 10^4`
+- All the tweets have unique IDs.
+- At most `3 * 10^4` calls will be made to `postTweet`, `getNewsFeed`, `follow`, and `unfollow`.
+
+### Solution 1 - Min-Heap of Size 10 (Per-User Bucket)
+
+#### Walkthrough
+
+Use a global counter as timestamp so tweet recency can be compared across users. Each user's tweets are stored newest-first (prepend on insert). For `getNewsFeed`, build the set of users to query (self + followees), then use a **min-heap capped at size 10** to find the global top-10 newest tweets.
+
+For each queried user, add up to 10 of their most recent tweets to the heap. Whenever the heap exceeds size 10, poll the minimum (oldest) tweet, which keeps only the 10 newest globally. After processing all users, the heap holds exactly the top-10 tweets but in ascending order — drain them with prepend (`add(0, ...)`) to reverse into newest-first.
+
+**Why min-heap + cap works:**
+
+A min-heap always exposes the **oldest** tweet at the root. When a new tweet is added and the heap exceeds 10, polling evicts the oldest tweet — preserving only the 10 most recent. This is the standard "k largest elements" pattern using a min-heap sentinel.
+
+#### Analysis
+
+- **Time Complexity**: O(U log 10) = O(U) for `getNewsFeed` where U is the number of followed users (each contributes at most 10 tweets to the heap); O(1) for `postTweet`, `follow`, `unfollow`
+- **Space Complexity**: O(T + F) where T is total tweets and F is total follow relationships
+
+#### Implementation Steps
+
+1. Maintain `Map<Integer, List<Tweet>> recentTweetMap` with tweets stored newest-first.
+2. Maintain `Map<Integer, Set<Integer>> followGraph` for follow relationships.
+3. `postTweet(userId, tweetId)`: create tweet with `timestamp++`, prepend to user's list.
+4. `follow` / `unfollow`: use `computeIfAbsent` to avoid the `getOrDefault` + `put` boilerplate.
+5. `getNewsFeed(userId)`:
+   - Build `userList` = self + all followees.
+   - For each user, offer up to 10 tweets into the min-heap; poll when `size > 10`.
+   - Drain the min-heap using `result.add(0, ...)` to reverse into newest-first order.
+
+#### Code - Java
+
+```java
+class Twitter {
+
+    private int timestamp = 0;
+
+    private static final int MAX_TWEET = 10;
+
+    private Map<Integer, Set<Integer>> followGraph = new HashMap<>();
+
+    private Map<Integer, List<Tweet>> recentTweetMap = new HashMap<>();
+
+    private static class Tweet {
+        public final int tweetId;
+        public final long timestamp;
+
+        public Tweet(int id, long time) {
+            this.tweetId = id;
+            this.timestamp = time;
+        }
+    }
+
+    public Twitter() {
+    }
+
+    public void postTweet(int userId, int tweetId) {
+        Tweet tweet = new Tweet(tweetId, timestamp++);
+        // prepend so index 0 is always the most recent tweet
+        recentTweetMap.computeIfAbsent(userId, k -> new ArrayList<>()).add(0, tweet);
+    }
+
+    public List<Integer> getNewsFeed(int userId) {
+        List<Integer> userList = new ArrayList<>();
+        userList.add(userId);
+        for (int followeeId : followGraph.getOrDefault(userId, new HashSet<>())) {
+            userList.add(followeeId);
+        }
+
+        // min-heap: oldest tweet at root
+        PriorityQueue<Tweet> consolidatedQ = new PriorityQueue<>(
+            Comparator.comparingLong((Tweet twt) -> twt.timestamp));
+
+        for (int queryUserId : userList) {
+            consolidateRecentTweetByUser(consolidatedQ, queryUserId);
+        }
+
+        // drain min-heap: prepend each poll to reverse into newest-first
+        List<Integer> result = new ArrayList<>();
+        while (!consolidatedQ.isEmpty()) {
+            result.add(0, consolidatedQ.poll().tweetId);
+        }
+        return result;
+    }
+
+    private void consolidateRecentTweetByUser(PriorityQueue<Tweet> queue, int userId) {
+        List<Tweet> userTweetList = recentTweetMap.getOrDefault(userId, new ArrayList<>());
+        for (int i = 0; i < MAX_TWEET && i < userTweetList.size(); i++) {
+            queue.offer(userTweetList.get(i));
+            if (queue.size() > MAX_TWEET) {
+                queue.poll();  // evict the oldest (min) to keep only 10 newest
+            }
+        }
+    }
+
+    public void follow(int followerId, int followeeId) {
+        followGraph.computeIfAbsent(followerId, k -> new HashSet<>()).add(followeeId);
+    }
+
+    public void unfollow(int followerId, int followeeId) {
+        Set<Integer> followees = followGraph.get(followerId);
+        if (followees != null) {
+            followees.remove(followeeId);
+        }
+    }
+}
+```
+
+### Solution 2 - k-way Merge (Max-Heap with Lazy Loading)
+
+#### Walkthrough
+
+Instead of loading up to 10 tweets per user eagerly, use a **k-way merge**: seed a max-heap with only the single most recent tweet from each followed user. On each pop, add the next older tweet from the same user to the heap. Stop after 10 pops.
+
+This is equivalent to merging k sorted streams — the heap always holds exactly one "frontier" tweet per user, and we lazily pull from each stream only as needed.
+
+**Comparison with Solution 1:**
+
+| | Solution 1 (Min-Heap Cap) | Solution 2 (k-way Merge) |
+|---|---|---|
+| Heap size | Fixed 10 | Up to k (number of followees) |
+| Tweets loaded per `getNewsFeed` | Up to 10 × k | Exactly 10 + k (seed + pops) |
+| Code complexity | Simpler | Slightly more bookkeeping |
+| Best for | Few followees, many tweets per user | Many followees, few tweets needed |
+
+#### Analysis
+
+- **Time Complexity**: O(k log k + 10 log k) = O(k log k) for `getNewsFeed` where k is the number of followed users; O(1) for all other operations
+- **Space Complexity**: O(T + F) where T is total tweets and F is total follow relationships
+
+#### Implementation Steps
+
+1. Store tweets **oldest-first** (append on insert) so the last index is the most recent.
+2. Seed the max-heap with `[timestamp, tweetId, userId, nextIndex]` for each followed user's most recent tweet.
+3. On each pop: record the tweet ID, then push the next older tweet (at `nextIndex - 1`) if it exists.
+4. Stop after 10 pops.
+
+#### Code - Java
+
+```java
+class TwitterKWayMerge {
+    private int timestamp = 0;
+    // userId -> list of [timestamp, tweetId], oldest-first (append order)
+    private final Map<Integer, List<int[]>> tweets = new HashMap<>();
+    private final Map<Integer, Set<Integer>> following = new HashMap<>();
+
+    public TwitterKWayMerge() {
+    }
+
+    public void postTweet(int userId, int tweetId) {
+        // append: index 0 = oldest, last index = most recent
+        tweets.computeIfAbsent(userId, k -> new ArrayList<>())
+              .add(new int[]{timestamp++, tweetId});
+    }
+
+    public List<Integer> getNewsFeed(int userId) {
+        // max-heap on timestamp: [timestamp, tweetId, userId, nextIndex]
+        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> b[0] - a[0]);
+
+        Set<Integer> followees = new HashSet<>(following.getOrDefault(userId, new HashSet<>()));
+        followees.add(userId);  // always include self
+
+        // seed: one entry per followed user pointing at their most recent tweet
+        for (int followee : followees) {
+            List<int[]> list = tweets.get(followee);
+            if (list != null && !list.isEmpty()) {
+                int idx = list.size() - 1;  // most recent is last
+                heap.offer(new int[]{list.get(idx)[0], list.get(idx)[1], followee, idx - 1});
+            }
+        }
+
+        List<Integer> feed = new ArrayList<>();
+        while (!heap.isEmpty() && feed.size() < 10) {
+            int[] top = heap.poll();
+            feed.add(top[1]);
+            // lazily push the next older tweet from the same user
+            if (top[3] >= 0) {
+                List<int[]> list = tweets.get(top[2]);
+                heap.offer(new int[]{list.get(top[3])[0], list.get(top[3])[1], top[2], top[3] - 1});
+            }
+        }
+        return feed;
+    }
+
+    public void follow(int followerId, int followeeId) {
+        following.computeIfAbsent(followerId, k -> new HashSet<>()).add(followeeId);
+    }
+
+    public void unfollow(int followerId, int followeeId) {
+        Set<Integer> followees = following.get(followerId);
+        if (followees != null) {
+            followees.remove(followeeId);
+        }
+    }
+}
+```
+
+
 ## Design HashSet {#lc-design-hashset}
 
 ### Problem Metadata
