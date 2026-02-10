@@ -1473,6 +1473,85 @@ class Solution {
 }
 ```
 
+#### Code - Golang
+
+```go
+func pacificAtlantic(heights [][]int) [][]int {
+    result := make([][]int, 0)
+    if heights == nil || len(heights) == 0 || len(heights[0]) == 0 {
+        return result
+    }
+
+    rows := len(heights)
+    cols := len(heights[0])
+
+    // Track which cells can reach each ocean
+    canReachPacific := make([][]bool, rows)
+    canReachAtlantic := make([][]bool, rows)
+
+    for i := range canReachPacific {
+        canReachPacific[i] = make([]bool, cols)
+        canReachAtlantic[i] = make([]bool, cols)
+    }
+
+    // DFS from Pacific Ocean borders (top row and left column)
+    for col := 0; col < cols; col++ {
+        dfs(0, col, heights, canReachPacific) // Top border
+    }
+    for row := 0; row < rows; row++ {
+        dfs(row, 0, heights, canReachPacific) // Left border
+    }
+
+    // DFS from Atlantic Ocean borders (bottom row and right column)
+    for col := 0; col < cols; col++ {
+        dfs(rows-1, col, heights, canReachAtlantic) // Bottom border
+    }
+    for row := 0; row < rows; row++ {
+        dfs(row, cols-1, heights, canReachAtlantic) // Right border
+    }
+
+    // Find cells that can reach BOTH oceans
+    for i := 0; i < rows; i++ {
+        for j := 0; j < cols; j++ {
+            if canReachPacific[i][j] && canReachAtlantic[i][j] {
+                result = append(result, []int{i, j})
+            }
+        }
+    }
+
+    return result
+}
+
+func dfs(row int, col int, heights [][]int, canReach [][]bool) {
+    // Mark current cell as reachable
+    canReach[row][col] = true
+
+    // Four directions: up, down, left, right
+    directions := [][]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
+
+    for _, dir := range directions {
+        newRow := row + dir[0]
+        newCol := col + dir[1]
+
+        // Check bounds
+        if newRow < 0 || newRow >= len(heights) || newCol < 0 || newCol >= len(heights[0]) {
+            continue
+        }
+
+        // Skip if already visited
+        if canReach[newRow][newCol] {
+            continue
+        }
+
+        // Water can flow from higher/equal cells TO current cell
+        // So we explore neighbors that are >= current height
+        if heights[newRow][newCol] >= heights[row][col] {
+            dfs(newRow, newCol, heights, canReach)
+        }
+    }
+}
+```
+
 
 ## Best Meeting Point {#lc-best-meeting-point}
 
