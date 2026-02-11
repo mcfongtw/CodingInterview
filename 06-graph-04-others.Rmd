@@ -107,3 +107,265 @@ public String serialize(Node node) {
     return sb.toString();
 }
 ```
+
+
+## Hardware Build Feasibility {#interview-hardware-build}
+
+### Problem Metadata
+
+- **Platform**: Interview
+- **Difficulty**: Medium
+- **Tags**:
+- **Techniques**: [Topological Sorting](glossary-of-algorithm.html#glossary-topological), [Breadth First Search](#dag-bfs), [Depth First Search](#dag-dfs), [Hash Table](#hash-table)
+
+### Description
+
+You are given:
+
+- `hardware`: a list of hardware names to produce (e.g. `["A", "B"]`)
+- `materials`: a 2D list where `materials[i]` is the list of components required to build `hardware[i]` (e.g. `[["a1","a2"], ["b1","b2"]]`)
+- `supplies`: a list of base components that are available in infinite quantity
+
+A component in `materials[i]` may itself be another hardware item, creating a dependency chain. Return a list of all hardware items that can be successfully built.
+
+**Rules:**
+
+1. A hardware item can be built only if **all** its required materials are either in `supplies` or are already-buildable hardware items.
+2. If a hardware item has a **circular dependency** (e.g. A requires B and B requires A), neither can be built.
+3. If any required material is not in `supplies` and is not a hardware item, that hardware cannot be built.
+
+### Examples
+
+**Example 1 — Base case (all supplies available):**
+```
+hardware  = ["A", "B"]
+materials = [["a1", "a2"], ["b1", "b2"]]
+supplies  = ["a1", "a2", "b1", "b2"]
+Output: ["A", "B"]
+```
+
+**Example 2 — Hardware depends on another hardware:**
+```
+hardware  = ["A", "B"]
+materials = [["a1", "B"], ["b1", "b2"]]
+supplies  = ["a1", "b1", "b2"]
+Output: ["A", "B"]   (B is built first, then A uses it)
+```
+
+**Example 3 — Circular dependency:**
+```
+hardware  = ["A", "B"]
+materials = [["a1", "B"], ["b1", "A"]]
+supplies  = ["a1", "b1"]
+Output: []  (A needs B, B needs A — deadlock)
+```
+
+**Example 4 — Missing supply:**
+```
+hardware  = ["A", "B"]
+materials = [["a1", "a2"], ["b1", "b2"]]
+supplies  = ["a1", "b1"]
+Output: []  (a2 and b2 are missing)
+```
+
+**Example 5 — Partial build:**
+```
+hardware  = ["A", "B"]
+materials = [["a1", "a2"], ["b1", "b2"]]
+supplies  = ["a1", "a2", "b1"]
+Output: ["A"]  (B cannot be built due to missing b2)
+```
+
+### Constraints
+
+- `1 <= hardware.length <= 100`
+- `1 <= materials[i].length <= 100`
+- All hardware names are unique
+- `supplies` may be empty
+
+### Solution - Topological Sort (Kahn's BFS)
+
+#### Walkthrough
+
+Model hardware items as nodes in a directed graph. For each hardware item, examine its materials:
+
+- If a material is **not** in `supplies` and **not** in the hardware set, the hardware is immediately unbuildable — skip it.
+- If a material **is** another hardware item, add a directed edge `dependency → current` and increment `current`'s in-degree.
+
+Run Kahn's BFS starting from all hardware with in-degree 0 (no hardware dependencies — only supply dependencies, all satisfied). When a hardware item is processed (built), decrement the in-degree of everything that depends on it. If its in-degree drops to 0, enqueue it.
+
+A hardware item is buildable if and only if it is eventually dequeued. Any node that never reaches in-degree 0 is part of a cycle or depends on an unbuildable item.
+
+#### Analysis
+
+- **Time Complexity**: O(H + E) where H is the number of hardware items and E is the total number of inter-hardware dependency edges
+- **Space Complexity**: O(H + E) for the adjacency list and in-degree map
+
+#### Implementation Steps
+
+1. Build a `Set<String> supplySet` from `supplies` and a `Set<String> hardwareSet` from `hardware`.
+2. For each hardware item, check all its materials. If any material is neither in `supplySet` nor `hardwareSet`, mark the hardware as unbuildable (skip it from the graph entirely).
+3. For remaining hardware, build adjacency list: for each material that is another hardware, add edge `material → current` and increment `inDegree[current]`.
+4. Enqueue all buildable hardware with `inDegree == 0`.
+5. BFS: poll a node, add to `built` list, decrement in-degrees of its dependents, enqueue those that reach 0.
+6. Return the `built` list.
+
+#### Code - Java
+
+```java
+public List<String> buildableHardware(String[] hardware, String[][] materials, String[] supplies) {
+    Set<String> supplySet = new HashSet<>(Arrays.asList(supplies));
+    Set<String> hardwareSet = new HashSet<>(Arrays.asList(hardware));
+
+    // adjacency: dependency -> list of hardware that need it
+    Map<String, List<String>> graph = new HashMap<>();
+    Map<String, Integer> inDegree = new HashMap<>();
+
+    for (String hw : hardware) {
+        graph.put(hw, new ArrayList<>());
+        inDegree.put(hw, 0);
+    }
+
+    Set<String> unbuildable = new HashSet<>();
+
+    for (int i = 0; i < hardware.length; i++) {
+        String hw = hardware[i];
+        for (String mat : materials[i]) {
+            if (!supplySet.contains(mat) && !hardwareSet.contains(mat)) {
+                // required material is unavailable
+                unbuildable.add(hw);
+                break;
+            }
+        }
+    }
+
+    // build dependency edges only for buildable hardware
+    for (int i = 0; i < hardware.length; i++) {
+        String hw = hardware[i];
+        if (unbuildable.contains(hw)) continue;
+        for (String mat : materials[i]) {
+            if (hardwareSet.contains(mat) && !unbuildable.contains(mat)) {
+                // hw depends on mat (another hardware)
+                graph.get(mat).add(hw);
+                inDegree.put(hw, inDegree.get(hw) + 1);
+            }
+        }
+    }
+
+    Queue<String> queue = new LinkedList<>();
+    for (String hw : hardware) {
+        if (!unbuildable.contains(hw) && inDegree.get(hw) == 0) {
+            queue.offer(hw);
+        }
+    }
+
+    List<String> built = new ArrayList<>();
+    while (!queue.isEmpty()) {
+        String curr = queue.poll();
+        built.add(curr);
+        for (String dependent : graph.get(curr)) {
+            int deg = inDegree.get(dependent) - 1;
+            inDegree.put(dependent, deg);
+            if (deg == 0) {
+                queue.offer(dependent);
+            }
+        }
+    }
+
+    return built;
+}
+```
+
+### Solution - DFS with State Tracking
+
+#### Walkthrough
+
+Use DFS with a `State` enum to detect cycles and resolve buildability in one pass. Each hardware node is in one of four states:
+
+- **UNVISITED**: not yet visited
+- **SEEN**: currently being explored (on the DFS call stack) — encountering this during recursion means a cycle
+- **DONE**: fully resolved — buildable
+- **MISSING**: unbuildable (missing supply, cycle detected, or failed dependency)
+
+For each hardware item, DFS recursively checks all its hardware dependencies. If a dependency is `SEEN`, a cycle is detected — mark `MISSING` and return false. If a dependency is `MISSING`, propagate failure. If a dependency resolves to `DONE`, it is known-buildable. When all dependencies are satisfied, mark the node `DONE`.
+
+#### Analysis
+
+- **Time Complexity**: O(H + E) where H is the number of hardware items and E is the total number of inter-hardware dependency edges
+- **Space Complexity**: O(H + E) for the adjacency list and recursion stack
+
+#### Implementation Steps
+
+1. Build `supplySet` and `hardwareSet`. Mark any hardware with unavailable non-hardware materials as `MISSING` in the state map.
+2. Initialize all remaining hardware with state `UNVISITED`.
+3. For each hardware still `UNVISITED`, call `dfs(hw)`.
+4. In `dfs(hw)`: set state to `SEEN`. For each material that is another hardware, recurse. If recursion returns false or encounters `SEEN`, set state to `MISSING` and return false.
+5. On success, set state to `DONE` and return true.
+6. Return the list of hardware names whose state is `DONE`.
+
+#### Code - Java
+
+```java
+enum State { UNVISITED, SEEN, DONE, MISSING }
+
+public List<String> buildableHardware(String[] hardware, String[][] materials, String[] supplies) {
+    Set<String> supplySet = new HashSet<>(Arrays.asList(supplies));
+    Set<String> hardwareSet = new HashSet<>(Arrays.asList(hardware));
+
+    // build adjacency: hw name -> list of hw names it depends on
+    Map<String, List<String>> deps = new HashMap<>();
+    for (String hw : hardware) {
+        deps.put(hw, new ArrayList<>());
+    }
+
+    Map<String, State> state = new HashMap<>();
+    for (String hw : hardware) {
+        state.put(hw, State.UNVISITED);
+    }
+
+    for (int i = 0; i < hardware.length; i++) {
+        String hw = hardware[i];
+        for (String mat : materials[i]) {
+            if (!supplySet.contains(mat) && !hardwareSet.contains(mat)) {
+                state.put(hw, State.MISSING);  // immediately unbuildable
+                break;
+            }
+            if (hardwareSet.contains(mat)) {
+                deps.get(hw).add(mat);
+            }
+        }
+    }
+
+    for (String hw : hardware) {
+        if (state.get(hw) == State.UNVISITED) {
+            dfs(hw, deps, state);
+        }
+    }
+
+    List<String> built = new ArrayList<>();
+    for (String hw : hardware) {
+        if (state.get(hw) == State.DONE) {
+            built.add(hw);
+        }
+    }
+    return built;
+}
+
+private boolean dfs(String node, Map<String, List<String>> deps, Map<String, State> state) {
+    if (state.get(node) == State.SEEN) return false;     // cycle detected
+    if (state.get(node) == State.DONE) return true;      // already resolved
+    if (state.get(node) == State.MISSING) return false;  // unbuildable
+
+    state.put(node, State.SEEN);
+
+    for (String dep : deps.get(node)) {
+        if (!dfs(dep, deps, state)) {
+            state.put(node, State.MISSING);  // propagate failure
+            return false;
+        }
+    }
+
+    state.put(node, State.DONE);
+    return true;
+}
+```
