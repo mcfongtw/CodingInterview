@@ -62,3 +62,82 @@ public int findKthLargest(int[] nums, int k) {
 }
 ```
 
+
+## Last Stone Weight {#lc-last-stone-weight}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1046
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/last-stone-weight/
+- **Tags**:
+- **Techniques**: [Heap](#intro-heap)
+
+### Description
+
+You are given an array of integers `stones` where `stones[i]` is the weight of the i-th stone.
+
+On each turn, we choose the two heaviest stones and smash them together. Suppose the heaviest two stones have weights `x` and `y` with $x \le y$. The result of this smash is:
+
+- If $x = y$, both stones are destroyed.
+- If $x \ne y$, the stone of weight `x` is destroyed, and the stone of weight `y` becomes weight `y - x`.
+
+At the end of the game, there is at most one stone left. Return the weight of the last remaining stone. If there are no stones left, return `0`.
+
+### Examples
+
+```
+Input: stones = [2,7,4,1,8,1]
+Output: 1
+Explanation:
+- Smash 7 and 8, result is 1, stones = [2,4,1,1,1]
+- Smash 2 and 4, result is 2, stones = [2,1,1,1]
+- Smash 2 and 1, result is 1, stones = [1,1,1]
+- Smash 1 and 1, result is 0, stones = [1]
+- Last remaining stone has weight 1
+```
+
+### Constraints
+
+- `1 <= stones.length <= 30`
+- `1 <= stones[i] <= 1000`
+
+### Solution - Max Heap
+
+#### Walkthrough
+
+Push all stones into a max heap. Repeatedly extract the two heaviest stones `y` (largest) and `x` (second largest). If they differ, push `y - x` back. Repeat until at most one stone remains.
+
+#### Analysis
+
+- **Time Complexity**: O(n log n) — each of the n stones is pushed once and each heap operation costs O(log n)
+- **Space Complexity**: O(n) for the heap
+
+#### Implementation Steps
+
+1. Push all stones into a max heap.
+2. While the heap has more than one element, poll the two heaviest stones `y` and `x`.
+3. If $x \ne y$, push `y - x` back into the heap.
+4. Return the remaining element, or `0` if the heap is empty.
+
+#### Code - Java
+
+```java
+public int lastStoneWeight(int[] stones) {
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+    for (int s : stones) {
+        maxHeap.offer(s);
+    }
+
+    while (maxHeap.size() > 1) {
+        int y = maxHeap.poll();
+        int x = maxHeap.poll();
+        if (x != y) {
+            maxHeap.offer(y - x);
+        }
+    }
+
+    return maxHeap.isEmpty() ? 0 : maxHeap.peek();
+}
+```

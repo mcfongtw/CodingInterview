@@ -118,10 +118,15 @@ Chapter 2: Arrays
   2. HackerRank problems (sorted by problem ID, ascending)
   3. Other platform problems (sorted by problem ID if available, otherwise by title)
   4. Problems without IDs appear at the end
-- **Categorize by Data Structure**: Place problems by primary data structure, not algorithm type:
-  - Linked list sorting → `06-linked-list.Rmd` (not search-and-sort)
-  - Heap-based → `08-heap.Rmd`
-  - Stack/Queue → `07-stack-and-queue.Rmd`
+- **Categorize by Data Structure**: Place problems by the data structure **central to the solution's correctness**, not the input type or algorithm label:
+  - The input format (e.g., `int[]`, `int[][]`) is not a categorization signal — it is just raw input.
+  - Ask: *"Would a reader studying this data structure expect to find this problem here?"*
+  - If the problem is trivially solvable without the data structure, it likely does not belong in that chapter.
+  - Examples:
+    - Last Stone Weight (`int[]` input, max heap solution) → `09-heap.Rmd` — heap is the core insight
+    - Course Schedule (`int[][]` input, topological sort solution) → `05-graph.Rmd` — graph traversal is the core insight
+    - Linked list sorting → `06-linked-list.Rmd` (not search-and-sort) — linked list manipulation is the core insight
+    - Stack/Queue → `07-stack-and-queue.Rmd`
 
 ### Two-Phase Workflow
 
