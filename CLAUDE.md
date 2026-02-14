@@ -59,9 +59,20 @@ For large chapters with 50+ problems, split by platform to improve maintainabili
 
 - **Intro file (`-01-intro.Rmd`):**
   - Contains `# Chapter Name` (level 1 header, **only once per chapter**)
-  - Uses `###` (level 3) for algorithm summaries and conceptual sections
-  - Results in numbering: X.0.1, X.0.2, X.0.3... (e.g., 2.0.1 Kadane's Algorithm, 2.0.2 Unbounded Knapsack)
+  - Uses `###` (level 3) for top-level conceptual sections — renders as X.0.1, X.0.2, X.0.3...
+  - Uses `####` (level 4) for subsections within a conceptual section
+  - Uses `#####` (level 5) for sub-subsections (e.g., variants, implementation details)
+  - **Never use `##`** inside intro files — that would create a new numbered problem section (X.1, X.2...)
   - Example content: Iterating Combinations, Kadane's Algorithm, Unbounded Knapsack, N Sum Family Comparison
+  - Example hierarchy:
+    ```
+    # Dynamic Programming and Backtracking       ← chapter title (level 1)
+    ### Dynamic Programming {#dynamic-programming}   ← 14.0.1 (level 3)
+    #### Memoization (Top-Down) {#dp-memoization}    ← subsection (level 4)
+    ##### Unbounded Knapsack Pattern               ← sub-subsection (level 5)
+    ### Backtracking Algorithms {#backtracking}   ← 14.0.2 (level 3)
+    #### Pattern 1: Choose-Explore-Unchoose        ← subsection (level 4)
+    ```
 
 - **Problem files (`-02-leetcode`, `-03-hackerrank`, `-04-others`):**
   - **NO level 1 headers** (`#`) - these would create new chapters

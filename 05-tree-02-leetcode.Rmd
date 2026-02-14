@@ -2138,6 +2138,108 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 - Cleaner and more efficient for BST-specific problem
 
 
+## Two Sum IV - Input is a BST {#lc-two-sum-iv-bst}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 653
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/two-sum-iv-input-is-a-bst/
+- **Tags**:
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), Tree, Binary Search Tree
+
+### Description
+
+Given the root of a Binary Search Tree and an integer `k`, return `true` if there exist **two distinct nodes** whose values sum to `k`. Otherwise, return `false`.
+
+### Examples
+
+```{r, echo=FALSE, engine='tikz', out.width='90%', fig.ext=if (knitr:::is_latex_output()) 'pdf' else 'png', fig.cap='BST used in the example.', engine.opts = list(template = "latex/tikz2pdf.tex")}
+\begin{tikzpicture}[
+level 1/.style={sibling distance=10em},
+level 2/.style={sibling distance=5em},
+level 3/.style={sibling distance=5em},
+level distance=2.5em,
+]
+\node {5}
+    child { node {3}
+        child {  node {2} }
+        child {  node {4} }
+    }
+    child { node {6}
+        child {  node {7} }
+    }
+;
+\end{tikzpicture}
+```
+```
+Input: root = [5,3,6,2,4,null,7], k = 9
+Output: true
+Explanation: 2 + 7 = 9.
+```
+
+### Constraints
+
+- `1 <= nodes <= 10^4`
+- `-10^4 <= Node.val <= 10^4`
+- BST property holds for the entire tree
+
+### Solution - DFS + HashSet
+
+#### Walkthrough
+
+Traverse the tree with DFS while maintaining a set of seen node values. For each node:
+
+1. Compute `needed = k - node.val`.
+2. If `needed` is already in the set, return `true`.
+3. Otherwise, insert `node.val` and continue exploring the left and right subtrees.
+
+Because every value is checked exactly once, the traversal stays linear.
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Visit each node exactly once
+- **Space Complexity**: O(n) - HashSet stores up to n values + O(h) recursion stack where h is tree height
+
+**Why Not Use BST Property?** While we could use in-order traversal to get sorted values and then apply two pointers, the DFS + HashSet approach is simpler and has the same O(n) time complexity.
+
+**BST-Specific Optimization**: Could implement bidirectional BST iterator (one forward, one backward) for O(h) space instead of O(n), but added complexity rarely justifies the space savings.
+
+**Trade-off**: We sacrifice O(n) space for code simplicity. The BST property doesn't provide significant advantage over treating it as a general binary tree for this problem.
+
+#### Implementation Steps
+
+1. Initialize an empty `HashSet<Integer>`.
+2. Perform DFS:
+   1. If the node is `null`, return `false`.
+   2. If `set` contains `k - node.val`, return `true`.
+   3. Add `node.val` to the set.
+   4. Recurse into left or right subtrees; return `true` if either side finds a match.
+3. Return `false` if no pair exists.
+
+#### Code - Java
+
+```java
+public boolean findTarget(TreeNode root, int k) {
+    return dfs(root, k, new HashSet<>());
+}
+
+private boolean dfs(TreeNode node, int target, Set<Integer> seen) {
+    if (node == null) {
+        return false;
+    }
+
+    int needed = target - node.val;
+    if (seen.contains(needed)) {
+        return true;
+    }
+
+    seen.add(node.val);
+    return dfs(node.left, target, seen) || dfs(node.right, target, seen);
+}
+```
+
 ## Lowest Common Ancestor of a Binary Tree {#lc-lca-binary-tree}
 
 ### Problem Metadata

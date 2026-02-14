@@ -63,6 +63,1087 @@ public int findKthLargest(int[] nums, int k) {
 ```
 
 
+## Meeting Rooms II {#lc-meeting-rooms-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 253
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/meeting-rooms-ii/
+- **Tags**: NeetCode 150
+- **Techniques**: [Sorting](glossary-of-algorithm.html#glossary-sorting), [Greedy](glossary-of-algorithm.html#glossary-greedy), [Heap](glossary-of-algorithm.html#glossary-heap), [Array](glossary-of-algorithm.html#glossary-array)
+
+
+### Description
+
+Given an array of meeting time intervals `intervals` where `intervals[i] = [start_i, end_i]`, return the minimum number of conference rooms required.
+
+### Examples
+
+**Example 1:**
+```
+Input: intervals = [[0,30],[5,10],[15,20]]
+Output: 2
+```
+
+**Example 2:**
+```
+Input: intervals = [[7,10],[2,4]]
+Output: 1
+```
+
+### Constraints
+
+- `0 <= intervals.length <= 10^4`
+- `0 <= start_i < end_i <= 10^9`
+
+
+### Solution - Two-Pointer Sweep
+
+
+#### Walkthrough
+
+Separate all start times and end times into two arrays and sort each independently. Use two pointers `i` (over starts) and `j` (over ends) to simulate a timeline sweep:
+
+- When the next event is a start (`starts[i] < ends[j]`): a new meeting begins, increment the room count.
+- When the next event is an end: a meeting finishes, a room is freed, increment `j`.
+
+Track the maximum room count seen during the sweep.
+
+**Key insight:** We don't care which meeting ends — only that *some* meeting ends, freeing a room. Sorting starts and ends independently lets us efficiently count peak overlap without tracking identity.
+
+**Example:** `intervals = [[0,30],[5,10],[15,20]]`
+
+```
+starts = [0, 5, 15]
+ends   = [10, 20, 30]
+
+i=0: starts[0]=0 < ends[0]=10 → rooms=1, maxRooms=1
+i=1: starts[1]=5 < ends[0]=10 → rooms=2, maxRooms=2
+i=2: starts[2]=15 >= ends[0]=10 → rooms=1, j=1
+     starts[2]=15 < ends[1]=20 → rooms=2, maxRooms=2 (no change)
+
+Result: 2
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n log n) — sorting dominates
+- **Space Complexity**: O(n) — two auxiliary arrays
+
+#### Implementation Steps
+
+
+1. Extract `starts[i] = intervals[i][0]` and `ends[i] = intervals[i][1]`.
+2. Sort both arrays independently.
+3. Initialize `rooms = 0`, `maxRooms = 0`, `j = 0`.
+4. For each `i` from 0 to `n - 1`:
+   - If `starts[i] < ends[j]`: increment `rooms`, update `maxRooms`.
+   - Else: decrement `rooms`, increment `j`.
+5. Return `maxRooms`.
+
+#### Code - Java
+
+```java
+public int minMeetingRooms(int[][] intervals) {
+    int n = intervals.length;
+    int[] starts = new int[n];
+    int[] ends = new int[n];
+
+    for (int i = 0; i < n; i++) {
+        starts[i] = intervals[i][0];
+        ends[i] = intervals[i][1];
+    }
+
+    Arrays.sort(starts);
+    Arrays.sort(ends);
+
+    int rooms = 0, maxRooms = 0;
+    int j = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (starts[i] < ends[j]) {
+            rooms++;
+            maxRooms = Math.max(maxRooms, rooms);
+        } else {
+            rooms--;
+            j++;
+        }
+    }
+
+    return maxRooms;
+}
+```
+
+
+### Solution - Min-Heap
+
+
+#### Walkthrough
+
+Sort intervals by start time. Use a min-heap to track the **end times** of meetings currently in progress. Each heap entry represents one room in use.
+
+For each meeting, check if the earliest-ending meeting (heap top) has already finished:
+
+- If `heap.peek() <= current.start`: that room is free — reuse it (`poll` then `offer`).
+- Otherwise: all rooms are occupied — allocate a new one (`offer`).
+
+At the end, `heap.size()` is the total rooms allocated.
+
+#### Analysis
+
+- **Time Complexity**: O(n log n) — sorting + heap operations
+- **Space Complexity**: O(n) — heap stores up to n end times
+
+#### Implementation Steps
+
+
+1. Sort `intervals` by start time.
+2. Initialize a min-heap.
+3. For each interval:
+   1. If heap is non-empty and `heap.peek() <= interval[0]`, poll (reuse room).
+   2. Push `interval[1]` onto the heap (new or reused room now holds this end time).
+4. Return `heap.size()`.
+
+#### Code - Java
+
+```java
+public int minMeetingRooms(int[][] intervals) {
+    Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+    PriorityQueue<Integer> heap = new PriorityQueue<>();
+
+    for (int[] interval : intervals) {
+        if (!heap.isEmpty() && heap.peek() <= interval[0]) {
+            heap.poll();
+        }
+        heap.offer(interval[1]);
+    }
+
+    return heap.size();
+}
+```
+
+
+## Top K Frequent Elements {#lc-top-k-frequent}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 347
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lc-top-k-frequent-elements/
+- **Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#glossary-hash-table), [Heap](glossary-of-algorithm.html#glossary-heap), [QuickSelect](#quickselect), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Given a non-empty integer array, return the `k` most frequent elements. `k` is guaranteed to be valid.
+
+### Examples
+
+```
+Input: nums = [1,1,1,2,2,3], k = 2
+Output: [1,2]
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10^5`
+- `k <= number of unique values`
+
+### Solution - Min-Heap Approach
+
+#### Walkthrough
+
+This solution uses a **min-heap of size k** to efficiently find the k most frequent elements without sorting all elements.
+
+**Core Strategy:**
+
+1. **Count frequencies** using a HashMap: O(n)
+2. **Maintain a min-heap of size k** storing `{frequency, value}` pairs
+3. **Heap strategy**:
+   - For each unique element, push `{frequency, value}` onto the heap
+   - If heap size exceeds k, **pop the minimum** (element with smallest frequency)
+   - The heap automatically maintains the k elements with **largest** frequencies
+4. **Extract results** from heap: O(k log k)
+
+**Why Min-Heap Works:**
+
+The counterintuitive part: we use a **min-heap** to find the **k largest** frequencies.
+
+- **Min-heap property**: The smallest element is always at the root
+- **Size constraint**: We keep the heap size $\le k$
+- **Eviction logic**: When heap size exceeds k, we remove the **minimum** (least frequent element)
+- **Result**: After processing all elements, the heap contains exactly the k most frequent elements
+
+**Example Walkthrough:**
+
+For `nums = [1,1,1,2,2,3], k = 2`:
+
+```
+Frequencies: 1→3, 2→2, 3→1
+
+Process each unique element:
+1. Add {3, 1} → heap = [{3,1}]                    size=1
+2. Add {2, 2} → heap = [{2,2}, {3,1}]             size=2
+3. Add {1, 3} → heap = [{1,3}, {2,2}, {3,1}]      size=3 > k!
+              → poll() removes {1,3} (minimum frequency)
+              → heap = [{2,2}, {3,1}]              size=2 ✓
+
+Extract results: [1, 2]
+```
+
+**Key Insight:** No ordering requirement - LeetCode 347 accepts results in any order when frequencies are equal.
+
+#### Analysis
+
+- **Time Complexity**: O(n log k)
+  - Build frequency map: O(n)
+  - Process m unique elements with heap operations: O(m log k) where m $\le$ n
+  - Extract k results: O(k log k)
+  - Overall: O(n log k) (since m $\le$ n and k $\le$ m)
+  - **Advantage over sorting**: Full sort would be O(n log n). When k is small, O(n log k) is significantly faster.
+
+- **Space Complexity**: O(n)
+  - Frequency map: O(m) where m $\le$ n (number of unique elements)
+  - Min-heap: O(k)
+  - Total: O(n)
+
+**Why This Approach is Efficient:**
+
+- **Better than full sort** when k << n
+- **Heap optimization**: We only maintain k elements, not all n
+- **Optimal for small k**: The smaller k is relative to n, the more efficient this becomes
+
+#### Implementation Steps
+
+
+1. **Build frequency map**: Create `Map<Integer, Integer>` to count occurrences of each element in nums
+2. **Initialize min-heap**: Create `PriorityQueue<int[]>` with comparator that orders by frequency (first element of array)
+3. **Process each unique element**:
+   - For each entry in the frequency map:
+     - Push `{frequency, value}` pair onto heap
+     - If heap size exceeds k, poll() to remove the element with smallest frequency
+4. **Extract results**:
+   - Create result array of size k
+   - Poll all remaining heap entries (in reverse order to maintain heap structure)
+   - Extract the value (second element) from each heap entry
+
+#### Code - Java
+```java
+public int[] topKFrequent(int[] nums, int k) {
+    Map<Integer, Integer> counts = new HashMap<>();
+    for (int num : nums) {
+        counts.put(num, counts.getOrDefault(num, 0) + 1);
+    }
+
+    PriorityQueue<int[]> heap = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+
+    for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
+        heap.offer(new int[]{entry.getValue(), entry.getKey()});
+        if (heap.size() > k) {
+            heap.poll();
+        }
+    }
+
+    int[] result = new int[k];
+    for (int i = k - 1; i >= 0; i--) {
+        result[i] = heap.poll()[1];
+    }
+    return result;
+}
+```
+
+
+### Solution - Sorting with Stream API
+
+#### Walkthrough
+
+This solution uses **frequency counting followed by sorting** to find the k most frequent elements. While less optimal than the min-heap approach, it offers a simpler, more readable implementation using Java Streams.
+
+**Core Strategy:**
+
+1. **Count frequencies** using a HashMap: O(n)
+2. **Sort all unique elements** by frequency (descending)
+3. **Extract top k elements** using `limit(k)`
+
+**Key Difference from Min-Heap:**
+
+Unlike the min-heap approach that maintains only k elements at a time, this solution:
+- Sorts **all** unique elements by frequency
+- Uses stream operations to cleanly extract the top k
+- Trades efficiency for code simplicity
+
+**Step-by-step execution for `nums = [1,1,1,2,2,3], k = 2`:**
+
+```
+Step 1: Build frequency map
+  counts = {1→3, 2→2, 3→1}
+
+Step 2: Stream entries and sort by frequency (descending)
+  Entry stream: [(1,3), (2,2), (3,1)]
+  After sort:   [(1,3), (2,2), (3,1)]  (already sorted by frequency desc)
+
+Step 3: Limit to k=2 elements
+  After limit:  [(1,3), (2,2)]
+
+Step 4: Extract keys
+  Result: [1, 2]
+```
+
+**When to Use This Approach:**
+
+✅ **Good for:**
+- Code interviews where readability matters
+- Small datasets where performance difference is negligible
+- When you need to avoid PriorityQueue complexity
+
+❌ **Not ideal for:**
+- Large datasets with small k (min-heap is much better)
+- Performance-critical production code
+- When k << n (e.g., k=10, n=1,000,000)
+
+#### Analysis
+
+- **Time Complexity**: O(n + m log m)
+  - Build frequency map: O(n)
+  - Sort m unique elements: O(m log m) where m $\le$ n
+  - Stream operations (limit, map): O(k)
+  - **Worst case**: When all elements are unique (m = n), this becomes O(n log n)
+  - **Best case**: When few unique elements (m << n), approaches O(n + m log m)
+
+- **Space Complexity**: O(n)
+  - Frequency map: O(m) where m $\le$ n
+  - Stream intermediate operations: O(m) for sorting
+  - Result array: O(k)
+  - Total: O(n)
+
+**Comparison with Min-Heap:**
+
+| Metric | Sorting Approach | Min-Heap Approach |
+|--------|-----------------|-------------------|
+| Time Complexity | O(n log n) worst case | O(n log k) |
+| Code Simplicity | High (clean streams) | Medium (manual heap) |
+| Performance (k=10, n=100K) | ~1.7M operations | ~330K operations |
+| Best Use Case | Small datasets, interviews | Production, large n with small k |
+
+**Example Performance:**
+- n = 100,000 elements, k = 10
+- Sorting: 100,000 × log(100,000) ≈ 1,660,000 operations
+- Min-heap: 100,000 × log(10) ≈ 332,000 operations
+- **Min-heap is ~5x faster**
+
+#### Implementation Steps
+
+1. **Build frequency map**: Create `Map<Integer, Integer>` to count occurrences
+2. **Stream and sort**: Convert map entries to stream and sort by frequency descending
+3. **Limit to k**: Use `limit(k)` to take only top k elements
+4. **Extract keys**: Map entries to keys and collect as int array
+
+#### Code - Java
+
+```java
+public int[] topKFrequent(int[] nums, int k) {
+    // Build frequency map
+    Map<Integer, Integer> counts = new HashMap<>();
+    for (int num : nums) {
+        counts.put(num, counts.getOrDefault(num, 0) + 1);
+    }
+
+    // Sort by frequency (descending), limit to k, extract keys
+    return counts.entrySet().stream()
+        .sorted(Map.Entry.<Integer, Integer>comparingByValue().reversed())
+        .limit(k)
+        .mapToInt(Map.Entry::getKey)
+        .toArray();
+}
+```
+
+
+### Solution - QuickSelect (Optimal)
+
+#### Walkthrough
+
+This solution uses **QuickSelect** to achieve O(n) average time - the optimal solution for this problem. QuickSelect is a partition-based selection algorithm that finds the k-th largest/smallest elements without fully sorting.
+
+**Core Strategy:**
+
+Instead of sorting all unique elements by frequency, we:
+1. **Build frequency map**: Count occurrences → O(n)
+2. **Create array of unique elements**: Store as `[value, frequency]` pairs
+3. **Run QuickSelect**: Partition array by frequency until k elements are separated
+4. **Return first k elements**: They're guaranteed to be the k most frequent
+
+**Key Insight: Partitioning by Frequency**
+
+QuickSelect partitions around a pivot frequency:
+- **Left side**: All elements with frequency $\ge$ pivot frequency
+- **Right side**: All elements with frequency $<$ pivot frequency
+- After partitioning at position k-1, the first k elements are the k most frequent
+
+**Visual Example for `nums = [1,1,1,2,2,3,4,4,4,4], k = 2`:**
+
+```
+Step 1: Build frequency map
+  counts = {1→3, 2→2, 3→1, 4→4}
+
+Step 2: Create array of [value, frequency] pairs
+  unique = [[1,3], [2,2], [3,1], [4,4]]
+
+Step 3: QuickSelect to partition by frequency
+  Pick pivot (say index 2, freq=1)
+  Partition by frequency (descending):
+    [[4,4], [1,3], [3,1], [2,2]]
+           pivot at index 2
+
+  k=2, pivot=2: Need elements at positions 0 and 1
+  Recurse on left: [0...1]
+
+  Pick pivot (index 0, freq=4)
+  Already partitioned: [[4,4], [1,3]]
+
+  k=2, pivot=1: Done! First 2 elements are [4,1]
+
+Result: [4, 1] (order doesn't matter per problem constraints)
+```
+
+**Why QuickSelect is Optimal:**
+
+- **No unnecessary sorting**: Unlike full sort O(n log n), we only partition until k elements are separated
+- **Average O(n) time**: Each partition reduces problem size by ~half (geometric series: n + n/2 + n/4 + ... = 2n)
+- **In-place**: Can modify the array in place (though we create a new array for [value, freq] pairs)
+
+#### Analysis
+
+- **Time Complexity**:
+  - **Average case**: O(n) - geometric series of partition operations
+    - Build frequency map: O(n)
+    - Create unique array: O(m) where m = number of unique elements
+    - QuickSelect: O(m) average, since we partition m unique elements
+    - Total: O(n + m) = O(n) since m $\le$ n
+  - **Worst case**: O(n + m²) - bad pivot choices (rare with randomization)
+  - **Best case**: O(n) - optimal pivot every time
+
+- **Space Complexity**: O(n)
+  - Frequency map: O(m) where m $\le$ n
+  - Unique elements array: O(m)
+  - Result array: O(k)
+  - Total: O(n)
+
+**Comparison with Other Solutions:**
+
+| Solution | Time (Avg) | Time (Worst) | Space | Best For |
+|----------|------------|--------------|-------|----------|
+| QuickSelect | O(n) | O(n²) | O(n) | **Optimal average performance** |
+| Min-Heap | O(n log k) | O(n log k) | O(n) | Guaranteed performance, small k |
+| Full Sort | O(n log n) | O(n log n) | O(n) | Code simplicity |
+
+**When to Use QuickSelect:**
+- Production code where average O(n) performance matters
+- Technical interviews to demonstrate advanced algorithm knowledge
+- Large datasets where the difference between O(n) and O(n log k) is significant
+
+#### Implementation Steps
+
+**Helper Function: `partition(unique, left, right)`**
+1. Choose random pivot index in `[left, right]`
+2. Swap pivot to end position
+3. Use two-pointer technique to partition by frequency (descending):
+   - `i` = write position for elements with frequency $\ge$ pivot
+   - `j` = read position scanning all elements
+4. For each element from left to right-1:
+   - If frequency $\ge$ pivot frequency: swap to position `i`, increment `i`
+5. Swap pivot back to position `i` (its final position)
+6. Return `i` (pivot's final index)
+
+**Main Function: `quickSelect(unique, left, right, k)`**
+7. If left $\ge$ right: return (base case)
+8. Partition array and get pivot index
+9. If pivot index $=$ k-1: Done! First k elements are answer
+10. If pivot index $<$ k-1: Recurse on right: `quickSelect(unique, pivotIndex+1, right, k)`
+11. If pivot index $>$ k-1: Recurse on left: `quickSelect(unique, left, pivotIndex-1, k)`
+
+**Build Result:**
+12. Extract first k elements (values only, discard frequencies)
+
+#### Code - Java
+
+```java
+class Solution {
+    private Random rand = new Random();
+
+    public int[] topKFrequent(int[] nums, int k) {
+        // Step 1: Build frequency map
+        Map<Integer, Integer> counts = new HashMap<>();
+        for (int num : nums) {
+            counts.put(num, counts.getOrDefault(num, 0) + 1);
+        }
+
+        // Step 2: Create array of [value, frequency] pairs
+        int[][] unique = new int[counts.size()][2];
+        int idx = 0;
+        for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
+            unique[idx][0] = entry.getKey();      // value
+            unique[idx][1] = entry.getValue();    // frequency
+            idx++;
+        }
+
+        // Step 3: QuickSelect to partition k most frequent elements
+        quickSelect(unique, 0, unique.length - 1, k);
+
+        // Step 4: Extract first k values
+        int[] result = new int[k];
+        for (int i = 0; i < k; i++) {
+            result[i] = unique[i][0];
+        }
+        return result;
+    }
+
+    private void quickSelect(int[][] unique, int left, int right, int k) {
+        if (left >= right) {
+            return;
+        }
+
+        // Partition and get pivot's final position
+        int pivotIndex = partition(unique, left, right);
+
+        // Check if we've found exactly k elements on the left
+        if (pivotIndex == k - 1) {
+            return; // Perfect! First k elements are the k most frequent
+        } else if (pivotIndex < k - 1) {
+            // Need more elements, recurse right
+            quickSelect(unique, pivotIndex + 1, right, k);
+        } else {
+            // Have too many elements, recurse left
+            quickSelect(unique, left, pivotIndex - 1, k);
+        }
+    }
+
+    private int partition(int[][] unique, int left, int right) {
+        // Randomized pivot to avoid worst-case O(n²)
+        int randomPivot = left + rand.nextInt(right - left + 1);
+        swap(unique, randomPivot, right); // Move pivot to end
+
+        int pivotFreq = unique[right][1];
+        int i = left; // Write position for elements >= pivot frequency
+
+        // Partition: move all more/equal frequent elements to the left
+        for (int j = left; j < right; j++) {
+            if (unique[j][1] >= pivotFreq) { // Descending order by frequency
+                swap(unique, i, j);
+                i++;
+            }
+        }
+
+        // Move pivot to its final position
+        swap(unique, i, right);
+        return i;
+    }
+
+    private void swap(int[][] unique, int i, int j) {
+        int[] temp = unique[i];
+        unique[i] = unique[j];
+        unique[j] = temp;
+    }
+}
+```
+
+
+## K Closest Points to Origin {#lc-k-closest-points-origin}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 973
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/k-closest-points-to-origin/
+- **Tags**:
+- **Techniques**: [Heap](glossary-of-algorithm.html#glossary-heap), [QuickSelect](#quickselect), [Sorting](glossary-of-algorithm.html#glossary-sorting), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Given an array of `points` where `points[i] = [xi, yi]` represents a point on the **X-Y plane** and an integer `k`, return the `k` closest points to the origin `(0, 0)`.
+
+The distance between two points on the **X-Y plane** is the Euclidean distance (i.e., $\sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}$).
+
+You may return the answer in **any order**. The answer is **guaranteed** to be **unique** (except for the order that it is in).
+
+### Examples
+
+**Example 1:**
+```
+Input: points = [[1,3],[-2,2]], k = 1
+Output: [[-2,2]]
+Explanation:
+The distance between (1, 3) and the origin is sqrt(10).
+The distance between (-2, 2) and the origin is sqrt(8).
+Since sqrt(8) < sqrt(10), (-2, 2) is closer to the origin.
+We only want the closest k = 1 points from the origin, so the answer is just [[-2,2]].
+```
+
+**Example 2:**
+```
+Input: points = [[3,3],[5,-1],[-2,4]], k = 2
+Output: [[3,3],[-2,4]]
+Explanation: The answer [[-2,4],[3,3]] would also be accepted.
+```
+
+### Constraints
+
+- $1 \le k \le \text{points.length} \le 10^4$
+- $-10^4 \le x_i, y_i \le 10^4$
+
+### Solution - Max Heap
+
+#### Walkthrough
+
+This solution uses a **max heap** to efficiently find the k closest points without fully sorting the array.
+
+**Core Strategy:**
+
+Instead of sorting all n points, maintain a max heap of size k that always contains the k closest points seen so far. The heap is ordered by distance (max at top), allowing us to quickly discard farther points.
+
+**Key Insight: Why Max Heap, Not Min Heap?**
+
+- **Max heap** keeps the **farthest** of the k closest points at the top
+- When we encounter a new point:
+  - If heap size $<$ k: add it (we need more points)
+  - If heap size $=$ k and new point is closer than heap top: remove top (farthest), add new point
+  - Otherwise: skip it (all k current points are closer)
+- This maintains exactly k closest points with O(log k) operations per point
+
+**Distance Optimization:**
+
+Since we only need to compare distances (not compute actual values), we use **squared distance** to avoid expensive `sqrt()` operations:
+- Distance: $\sqrt{x^2 + y^2}$
+- Squared distance: $x^2 + y^2$ (sufficient for comparisons since sqrt is monotonic)
+
+**Step-by-step execution for `points = [[1,3],[-2,2],[2,2]], k = 2`:**
+
+```
+Distances (squared):
+- (1,3):   1² + 3² = 10
+- (-2,2):  4 + 4 = 8
+- (2,2):   4 + 4 = 8
+
+Processing:
+1. Add (1,3) dist=10:   Heap = [(1,3):10]                    size=1
+2. Add (-2,2) dist=8:   Heap = [(1,3):10, (-2,2):8]          size=2 (reached k)
+3. Process (2,2) dist=8:
+   - Heap top = (1,3):10 > 8
+   - Remove (1,3):10
+   - Add (2,2):8
+   - Heap = [(-2,2):8, (2,2):8]                              size=2
+
+Result: [[-2,2], [2,2]] or [[2,2], [-2,2]] (order doesn't matter)
+```
+
+**Why This Works:**
+
+- After processing all points, the heap contains exactly the k smallest distances
+- Max heap property ensures we can always access and remove the farthest point in O(log k)
+- Total operations: n insertions × O(log k) = O(n log k)
+
+#### Analysis
+
+- **Time Complexity**: O(n log k)
+  - Process each of n points: O(n)
+  - Each point may trigger heap insert/remove: O(log k)
+  - Building result array: O(k)
+  - Total: O(n log k) - much better than O(n log n) when k << n
+  - Example: If n=10,000 and k=10, this is ~133,000 operations vs ~133,000,000 for full sort
+
+- **Space Complexity**: O(k)
+  - Max heap stores at most k points
+  - Result array: O(k) (required output)
+  - This is optimal - we only need to remember k points
+
+**Comparison with Full Sort:**
+- **When k is small** (k << n): Max heap wins significantly
+  - k=1, n=10,000: O(10,000 × 1) vs O(10,000 × 13) = 13× faster
+- **When k $\approx$ n**: Both approaches similar (O(n log n))
+- **Space**: Heap uses O(k) vs O(n) for sorting
+
+#### Implementation Steps
+
+**Setup:**
+1. Create helper class `XYPoint` to store:
+   - Original coordinates (x, y)
+   - Precomputed squared distance: `distSq = x² + y²`
+2. Create max heap ordered by `distSq` (descending)
+
+**Main Algorithm:**
+3. For each point in input array:
+   1. Wrap point as `XYPoint` object
+   2. Add to max heap
+   3. If heap size exceeds k:
+      - Remove heap top (the farthest point)
+      - This maintains exactly k closest points
+
+**Build Result:**
+4. Extract all k points from heap into result array
+   - Poll heap k times
+   - Convert each `XYPoint` back to `[x, y]` format
+5. Return result array
+
+**Note:** Order doesn't matter per problem constraints, so heap extraction order is acceptable.
+
+#### Code - Java
+
+```java
+class Solution {
+    private static class XYPoint {
+        public final int x;
+        public final int y;
+        public final int distSq;
+
+        public XYPoint(int xi, int yi) {
+            this.x = xi;
+            this.y = yi;
+            // Use squared distance to avoid expensive sqrt()
+            this.distSq = x * x + y * y;
+        }
+    }
+
+    public int[][] kClosest(int[][] points, int k) {
+        // Max heap ordered by distance (largest distance at top)
+        PriorityQueue<XYPoint> maxHeap = new PriorityQueue<>(
+            Comparator.comparingInt((XYPoint point) -> point.distSq).reversed()
+        );
+
+        // Process each point
+        for (int[] point : points) {
+            maxHeap.add(new XYPoint(point[0], point[1]));
+
+            // Keep only k closest points
+            if (maxHeap.size() > k) {
+                maxHeap.poll(); // Remove farthest point
+            }
+        }
+
+        // Build result array from heap
+        int[][] result = new int[k][2];
+        for (int i = 0; i < k; i++) {
+            XYPoint myPoint = maxHeap.poll();
+            result[i][0] = myPoint.x;
+            result[i][1] = myPoint.y;
+        }
+
+        return result;
+    }
+}
+```
+
+
+### Solution - Sort + Stream API
+
+#### Walkthrough
+
+This solution uses Java's Stream API to sort all points by distance and select the first k.
+
+**Approach:**
+1. Convert all points to `XYPoint` objects with precomputed squared distances
+2. Stream the list and sort by `distSq` (ascending)
+3. Limit to first k elements
+4. Collect and convert back to 2D array
+
+**Trade-offs:**
+- Simpler, more readable code
+- Less efficient: sorts all n points even when k is small
+- Good for interviews if code clarity is prioritized over optimal complexity
+
+#### Analysis
+
+- **Time Complexity**: O(n log n)
+  - Creating list: O(n)
+  - Sorting all points: O(n log n)
+  - Taking first k: O(k)
+  - Total dominated by sorting: O(n log n)
+
+- **Space Complexity**: O(n)
+  - List stores all n points
+  - Stream intermediate operations: O(n)
+  - Result array: O(k)
+
+**When to Use This:**
+- Code readability is prioritized
+- k is close to n (no benefit from heap optimization)
+- Quick prototyping or interviews with relaxed time constraints
+
+#### Code - Java
+
+```java
+class Solution {
+    private static class XYPoint {
+        public final int x;
+        public final int y;
+        public final int distSq;
+
+        public XYPoint(int xi, int yi) {
+            this.x = xi;
+            this.y = yi;
+            this.distSq = x * x + y * y;
+        }
+    }
+
+    public int[][] kClosest(int[][] points, int k) {
+        List<XYPoint> myPoints = new ArrayList<>();
+
+        // Convert to XYPoint objects
+        for (int[] point : points) {
+            myPoints.add(new XYPoint(point[0], point[1]));
+        }
+
+        // Sort by distance and take first k
+        List<XYPoint> topK = myPoints.stream()
+            .sorted(Comparator.comparingInt((XYPoint point) -> point.distSq))
+            .limit(k)
+            .collect(Collectors.toList());
+
+        // Convert back to 2D array
+        int[][] result = new int[k][2];
+        for (int i = 0; i < k; i++) {
+            XYPoint myPoint = topK.get(i);
+            result[i][0] = myPoint.x;
+            result[i][1] = myPoint.y;
+        }
+
+        return result;
+    }
+}
+```
+
+
+### Solution - QuickSelect 
+
+#### Walkthrough
+
+This solution uses **QuickSelect**, a partition-based algorithm that achieves O(n) average time with O(1) space - the optimal solution for this problem.
+
+**Core Strategy:**
+
+QuickSelect is similar to QuickSort but only recurses on one side. Instead of fully sorting, we partition the array around a pivot until exactly k elements are on the left (closest) side.
+
+**Algorithm Steps:**
+
+1. **Pick a pivot** (random or deterministic)
+2. **Partition**: Rearrange array so:
+   - All points closer than pivot are on the left
+   - All points farther than pivot are on the right
+   - Pivot is at its final sorted position
+3. **Check partition result:**
+   - If pivot index $=$ k: Done! First k elements are our answer
+   - If pivot index $<$ k: Recurse on right side (need more points)
+   - If pivot index $>$ k: Recurse on left side (have too many)
+
+**Key Insight: Why This Works**
+
+We don't need the first k elements to be sorted among themselves - we just need them to be the k smallest. QuickSelect guarantees that after partitioning at index k-1:
+- Elements `[0...k-1]` are all closer than elements `[k...n-1]`
+- The order within `[0...k-1]` doesn't matter (problem allows any order)
+
+**Visual Example for `points = [[1,3],[-2,2],[2,2],[5,5]], k = 2`:**
+
+```
+Squared distances: [(1,3):10, (-2,2):8, (2,2):8, (5,5):50]
+
+Iteration 1: Pick pivot index 2, value 8
+  Partition: [(2,2):8, (-2,2):8, (1,3):10, (5,5):50]
+  Pivot now at index 1 (0-indexed)
+  k=2, pivot=1: pivot < k, recurse right
+
+Iteration 2: Partition on right half starting at index 2
+  Pick pivot index 2, value 10
+  Already partitioned: [(2,2):8, (-2,2):8, (1,3):10, (5,5):50]
+  Pivot at index 2
+  k=2, pivot=2: Done!
+
+Result: First 2 elements [(2,2), (-2,2)] (order doesn't matter)
+```
+
+**Optimization: Randomized Pivot**
+
+Using a random pivot avoids worst-case O(n²) on sorted/reverse-sorted inputs:
+- **Without randomization**: O(n²) on sorted input
+- **With randomization**: O(n) average case with high probability
+
+#### Analysis
+
+- **Time Complexity**:
+  - **Average case**: O(n) - each partition reduces problem size by ~half
+    - First partition: n operations
+    - Second partition: n/2 operations
+    - Third partition: n/4 operations
+    - Sum: n + n/2 + n/4 + ... = 2n = O(n)
+  - **Worst case**: O(n²) - bad pivot choices every time (rare with randomization)
+  - **Best case**: O(n) - optimal pivot every time
+
+- **Space Complexity**: O(1)
+  - In-place partitioning
+  - No extra arrays, heaps, or lists
+  - Only uses a few variables for indices and swapping
+  - **This is optimal** - cannot do better than O(1) space
+
+**Comparison with Other Solutions:**
+
+| Solution | Time (Avg) | Time (Worst) | Space | When to Use |
+|----------|------------|--------------|-------|-------------|
+| QuickSelect | O(n) | O(n²) | O(1) | **Best overall** - optimal time & space |
+| Max Heap | O(n log k) | O(n log k) | O(k) | Small k, need stability |
+| Full Sort | O(n log n) | O(n log n) | O(n) | Code simplicity, k ≈ n |
+
+**When to Use QuickSelect:**
+- Optimal performance needed (technical interviews, production code)
+- Large datasets where O(1) space matters
+- k varies widely (works well for all k values)
+
+#### Implementation Steps
+
+**Helper Function: `partition(points, left, right)`**
+1. Choose random pivot index in `[left, right]`
+2. Swap pivot to end position
+3. Use two-pointer technique:
+   - `i` = write position for elements $<$ pivot
+   - `j` = read position scanning all elements
+4. For each element from left to right-1:
+   - If distance $\le$ pivot distance: swap to position `i`, increment `i`
+5. Swap pivot back to position `i` (its final position)
+6. Return `i` (pivot's final index)
+
+**Main Function: `quickSelect(points, left, right, k)`**
+7. If left $\ge$ right: return (base case)
+8. Partition array and get pivot index
+9. If pivot index $=$ k-1: Done! First k elements are answer
+10. If pivot index $<$ k-1: Recurse on right: `quickSelect(points, pivotIndex+1, right, k)`
+11. If pivot index $>$ k-1: Recurse on left: `quickSelect(points, left, pivotIndex-1, k)`
+
+**Build Result:**
+12. Extract first k points from the partially partitioned array
+
+#### Code - Java
+
+```java
+class Solution {
+    private Random rand = new Random();
+
+    public int[][] kClosest(int[][] points, int k) {
+        quickSelect(points, 0, points.length - 1, k);
+
+        // First k elements are now the k closest (not sorted, but that's okay)
+        return Arrays.copyOfRange(points, 0, k);
+    }
+
+    private void quickSelect(int[][] points, int left, int right, int k) {
+        if (left >= right) {
+            return;
+        }
+
+        // Partition and get pivot's final position
+        int pivotIndex = partition(points, left, right);
+
+        // Check if we've found exactly k elements on the left
+        if (pivotIndex == k - 1) {
+            return; // Perfect! First k elements are the answer
+        } else if (pivotIndex < k - 1) {
+            // Need more elements, recurse right
+            quickSelect(points, pivotIndex + 1, right, k);
+        } else {
+            // Have too many elements, recurse left
+            quickSelect(points, left, pivotIndex - 1, k);
+        }
+    }
+
+    private int partition(int[][] points, int left, int right) {
+        // Randomized pivot to avoid worst-case O(n²)
+        int randomPivot = left + rand.nextInt(right - left + 1);
+        swap(points, randomPivot, right); // Move pivot to end
+
+        int pivotDist = distance(points[right]);
+        int i = left; // Write position for elements < pivot
+
+        // Partition: move all closer points to the left
+        for (int j = left; j < right; j++) {
+            if (distance(points[j]) <= pivotDist) {
+                swap(points, i, j);
+                i++;
+            }
+        }
+
+        // Move pivot to its final position
+        swap(points, i, right);
+        return i;
+    }
+
+    private int distance(int[] point) {
+        return point[0] * point[0] + point[1] * point[1];
+    }
+
+    private void swap(int[][] points, int i, int j) {
+        int[] temp = points[i];
+        points[i] = points[j];
+        points[j] = temp;
+    }
+}
+```
+
+#### Code - Golang
+
+```go
+func kClosest(points [][]int, k int) [][]int {
+    quickSelect(points, 0, len(points)-1, k)
+
+    // First k elements are now the k closest (not sorted, but that's okay)
+    return points[:k]
+}
+
+func quickSelect(points [][]int, left, right, k int) {
+    if left >= right {
+        return
+    }
+
+    // Partition and get pivot's final position
+    pivotIndex := partition(points, left, right)
+
+    // Check if we've found exactly k elements on the left
+    if pivotIndex == k-1 {
+        return // Perfect! First k elements are the answer
+    } else if pivotIndex < k-1 {
+        // Need more elements, recurse right
+        quickSelect(points, pivotIndex+1, right, k)
+    } else {
+        // Have too many elements, recurse left
+        quickSelect(points, left, pivotIndex-1, k)
+    }
+}
+
+func partition(points [][]int, left, right int) int {
+    // Randomized pivot to avoid worst-case O(n²)
+    randomPivot := left + rand.Intn(right-left+1)
+    points[randomPivot], points[right] = points[right], points[randomPivot]
+
+    pivotDist := distance(points[right])
+    i := left // Write position for elements < pivot
+
+    // Partition: move all closer points to the left
+    for j := left; j < right; j++ {
+        if distance(points[j]) <= pivotDist {
+            points[i], points[j] = points[j], points[i]
+            i++
+        }
+    }
+
+    // Move pivot to its final position
+    points[i], points[right] = points[right], points[i]
+    return i
+}
+
+func distance(point []int) int {
+    return point[0]*point[0] + point[1]*point[1]
+}
+```
+
+
 ## Last Stone Weight {#lc-last-stone-weight}
 
 ### Problem Metadata

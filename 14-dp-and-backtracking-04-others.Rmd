@@ -1,0 +1,366 @@
+<!-- Other DP and Backtracking problems (Firecode, Interview, etc.) -->
+
+## Fibonacci Sequence {#fc-fibonacci}
+
+### Problem Metadata
+
+- **Platform**: Firecode.io / Classic
+- **Problem ID**: Fibonacci
+- **Difficulty**: Level 2
+- **URL**: https://www.firecode.io/
+- **Tags**:
+- **Techniques**: [Recursion](glossary-of-algorithm.html#glossary-recursion), [Dynamic Programming](#dynamic-programming), [Memoization](#dp-memoization), [Tabulation](#dp-tabulation)
+
+### Description
+
+Compute the `n`-th Fibonacci number where `F(0) = 0`, `F(1) = 1`, and `F(n) = F(n-1) + F(n-2)`.
+
+### Examples
+
+```
+Input: n = 5
+Output: 5
+```
+
+### Constraints
+
+- `0 <= n <= 45`
+
+### Solution 1 - Top-Down Recursion (Naïve)
+
+#### Walkthrough
+
+Directly apply the recurrence `F(n) = F(n-1) + F(n-2)` with base cases `0` and `1`.
+
+#### Analysis
+
+- **Time Complexity**: O(2^n)
+- **Space Complexity**: O(n) recursion depth
+
+#### Code - Java
+
+```java
+public int fibRecursive(int n) {
+    if (n <= 1) {
+        return n;
+    }
+    return fibRecursive(n - 1) + fibRecursive(n - 2);
+}
+```
+
+### Solution 2 - Tail Recursion
+
+#### Walkthrough
+
+Carry two consecutive Fibonacci values forward so each call decrements `n` until reaching zero. Although still recursive, it avoids repeated subproblems.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) recursion depth (unless optimized by compiler)
+
+#### Code - Java
+
+```java
+public int fibTail(int n) {
+    return fibTailHelper(n, 0, 1);
+}
+
+private int fibTailHelper(int n, int a, int b) {
+    if (n == 0) {
+        return a;
+    }
+    if (n == 1) {
+        return b;
+    }
+    return fibTailHelper(n - 1, b, a + b);
+}
+```
+
+### Solution 3 - Bottom-Up DP
+
+#### Walkthrough
+
+Iteratively build Fibonacci numbers from `0` to `n`, maintaining two running values.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Code - Java
+
+```java
+public int fibIterative(int n) {
+    if (n <= 1) {
+        return n;
+    }
+    int prev = 0;
+    int curr = 1;
+    for (int i = 2; i <= n; i++) {
+        int next = prev + curr;
+        prev = curr;
+        curr = next;
+    }
+    return curr;
+}
+```
+
+### Solution 4 - Memoized Recursion
+
+#### Walkthrough
+
+Use a memo array to cache computed Fibonacci numbers, preventing redundant recursion.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n)
+
+#### Code - Java
+
+```java
+public int fibMemo(int n) {
+    int[] memo = new int[n + 1];
+    Arrays.fill(memo, -1);
+    return fibMemoHelper(n, memo);
+}
+
+private int fibMemoHelper(int n, int[] memo) {
+    if (n <= 1) {
+        return n;
+    }
+    if (memo[n] != -1) {
+        return memo[n];
+    }
+    memo[n] = fibMemoHelper(n - 1, memo) + fibMemoHelper(n - 2, memo);
+    return memo[n];
+}
+```
+
+## Longest Common Substring {#interview-longest-common-substring}
+
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: LCS Substring
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**:
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), String
+
+### Description
+
+Given two strings `s1` and `s2`, return the length of their longest common substring (contiguous sequence).
+
+### Examples
+
+```
+Input: s1 = "abcdxyz", s2 = "xyzabcd"
+Output: 4  // "abcd"
+```
+
+### Constraints
+
+- `1 <= len(s1), len(s2) <= 10^3`
+- Strings contain lowercase letters
+
+### Solution - 2D DP Table
+
+#### Walkthrough
+
+Let `dp[i][j]` represent the length of the longest common substring ending at `s1[i]` and `s2[j]`. Initialize first row/column by comparing individual characters. For each match extend from `dp[i-1][j-1] + 1`; otherwise reset to zero. Track the maximum length seen.
+
+#### Analysis
+
+- **Time Complexity**: O(n * m)
+- **Space Complexity**: O(n * m)
+
+#### Implementation Steps
+
+1. Create `dp[len1][len2]`, initialize first row/column.
+2. For each `i > 0` and `j > 0`, if `s1[i] == s2[j]` set `dp[i][j] = dp[i-1][j-1] + 1`, else `0`.
+3. Maintain `maxLen`.
+4. Return `maxLen`.
+
+#### Code - Java
+
+```java
+public int longestCommonSubstring(String s1, String s2) {
+    int n = s1.length();
+    int m = s2.length();
+    int[][] dp = new int[n][m];
+    int max = 0;
+
+    for (int i = 0; i < n; i++) {
+        dp[i][0] = (s1.charAt(i) == s2.charAt(0)) ? 1 : 0;
+        max = Math.max(max, dp[i][0]);
+    }
+    for (int j = 0; j < m; j++) {
+        dp[0][j] = (s1.charAt(0) == s2.charAt(j)) ? 1 : 0;
+        max = Math.max(max, dp[0][j]);
+    }
+    for (int i = 1; i < n; i++) {
+        for (int j = 1; j < m; j++) {
+            if (s1.charAt(i) == s2.charAt(j)) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+                max = Math.max(max, dp[i][j]);
+            } else {
+                dp[i][j] = 0;
+            }
+        }
+    }
+    return max;
+}
+```
+
+## Minimum Operations to One {#interview-min-ops-to-one}
+
+### Problem Metadata
+
+- **Platform**: Interview
+- **Problem ID**: NA
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**:
+- **Techniques**: [Recursion](glossary-of-algorithm.html#glossary-recursion), [Dynamic Programming](#dynamic-programming), [Memoization](#dp-memoization)
+
+### Description
+
+Given an integer `n`, you may perform operations: `n = n - 1`, `n = n / 2` (if even), or `n = n / 3` (if divisible by 3). Return the minimum number of operations needed to reduce `n` to 1.
+
+### Examples
+
+```
+Input: 9
+Output: 2  // 9 -> 3 -> 1
+
+Input: 8
+Output: 3  // 8 -> 4 -> 2 -> 1
+```
+
+### Constraints
+
+- `1 <= n <= 10^6`
+
+### Solution - Memoized Recursion
+
+#### Walkthrough
+
+Define `dp[n]` as the minimal operations to reach `1`. Recursively compute each option and cache results to avoid recomputation.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(n) for memoization
+
+#### Implementation Steps
+
+1. Base case: `dp[1] = 0`.
+2. For other `n`, evaluate `1 + dp[n-1]`.
+3. If divisible by `2` or `3`, also consider `1 + dp[n/2]`, `1 + dp[n/3]`.
+4. Store the minimum in memo.
+
+#### Code - Java
+
+```java
+public int minStepsToOne(int n) {
+    int[] memo = new int[n + 1];
+    Arrays.fill(memo, -1);
+    return dfs(n, memo);
+}
+
+private int dfs(int n, int[] memo) {
+    if (n == 1) {
+        return 0;
+    }
+    if (memo[n] != -1) {
+        return memo[n];
+    }
+    int best = 1 + dfs(n - 1, memo);
+    if (n % 2 == 0) {
+        best = Math.min(best, 1 + dfs(n / 2, memo));
+    }
+    if (n % 3 == 0) {
+        best = Math.min(best, 1 + dfs(n / 3, memo));
+    }
+    return memo[n] = best;
+}
+```
+
+## Retrieve Optimal Computation {#fc-optimal-computation}
+
+### Problem Metadata
+
+- **Platform**: Firecode
+- **Difficulty**: Medium
+- **URL**: N/A
+- **Tags**:
+- **Techniques**: [Recursion](glossary-of-algorithm.html#glossary-recursion), [Memoization](glossary-of-algorithm.html#glossary-memoization), [Array](glossary-of-algorithm.html#glossary-array), [Dynamic Programming](glossary-of-algorithm.html#glossary-dynamic-programming)
+
+### Description
+
+You are given an array `taste` where each entry represents how tasty a chocolate bar is if eaten on day 1. Eating a bar on day `d` multiplies its taste by `d`. Each day you may eat exactly one bar from either end of the array. Compute the maximum total taste.
+
+### Examples
+
+```
+Input: taste = [1,2,3,4]
+Output: 30
+Explanation: Eat 1,2,3,4 from left to right for 1*1 + 2*2 + 3*3 + 4*4.
+```
+
+### Constraints
+
+- `1 <= taste.length <= 200`
+- `1 <= taste[i] <= 10^3`
+
+### Solution - Memoized Recursion
+
+#### Walkthrough
+
+When only the subarray `taste[i..j]` remains, the current day is `day = n - (j - i)` (since `n - (remaining length - 1)`). We may take either the left or right value. The optimal result is therefore:
+
+```
+max(day * taste[i] + solve(i+1, j, day+1),
+    day * taste[j] + solve(i, j-1, day+1))
+```
+
+Caching the `(i, j)` results avoids recomputation and yields O(n?) states.
+
+#### Analysis
+
+- **Time Complexity**: O(n?)
+- **Space Complexity**: O(n?) for memoization
+
+#### Implementation Steps
+
+1. Define `dfs(i, j)` returning the best score for subarray `[i, j]`.
+2. The current day equals `n - (j - i)`.
+3. Recursively compute both choices (left/right), memoize the maximum, and return it.
+4. Start with `dfs(0, n-1)`.
+
+#### Code - Java
+```java
+public int maxTaste(int[] taste) {
+    int n = taste.length;
+    Integer[][] memo = new Integer[n][n];
+    return dfs(taste, 0, n - 1, memo);
+}
+
+private int dfs(int[] taste, int left, int right, Integer[][] memo) {
+    if (memo[left][right] != null) {
+        return memo[left][right];
+    }
+
+    int day = taste.length - (right - left);
+    if (left == right) {
+        return day * taste[left];
+    }
+
+    int pickLeft = day * taste[left] + dfs(taste, left + 1, right, memo);
+    int pickRight = day * taste[right] + dfs(taste, left, right - 1, memo);
+    return memo[left][right] = Math.max(pickLeft, pickRight);
+}
+
+```

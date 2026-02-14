@@ -1,1 +1,263 @@
-<!-- No HackerRank problems for this chapter. -->
+## Top K Frequent Events with Order Preservation (HackerRank) {#hr-top-k-frequent-events}
+
+### Problem Metadata
+
+- **Platform**: HackerRank
+- **Problem ID**: top-k-frequent-events-with-order-preservation
+- **Difficulty**: Medium
+- **URL**: https://www.hackerrank.com/contests/software-engineer-prep-kit/challenges/lc-top-k-frequent-events-with-order-preservation
+- **Tags**:
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#glossary-hash-table), [Heap](#intro-heap), [Sorting](glossary-of-algorithm.html#glossary-sorting), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Given an array of integers and an integer `k`, return an array of the `k` most frequent elements. If two elements have the same frequency, prioritize the one that appears first in the original array.
+
+**Relationship to [Top K Frequent Elements](#lc-top-k-frequent) (LeetCode 347)**:
+This problem is similar to LeetCode 347 but adds an **order preservation constraint**. When elements have the same frequency, LeetCode 347 allows returning them in any order, while this problem requires breaking ties by **first occurrence index** in the original array.
+
+**Key Requirements**:
+- Find the k most frequent elements
+- When frequencies tie, use the element's **first occurrence index** as the tiebreaker
+- Preserve order based on frequency (descending) and first occurrence (ascending for ties)
+
+### Examples
+
+**Example 1:**
+```
+Input: events = [1, 2, 1, 3, 2, 1], k = 2
+Output: [1, 2]
+Explanation:
+- Frequency count: 1→3, 2→2, 3→1
+- Top two frequencies are for IDs 1 and 2
+- Result: [1, 2]
+```
+
+**Example 2:**
+```
+Input: events = [4, 4, 1, 2, 2, 3, 1, 3, 2], k = 3
+Output: [2, 4, 1]
+Explanation:
+- Frequencies: 2→3, 4→2, 1→2, 3→2
+- Highest frequency is 2 (count=3)
+- For the next two slots, 4, 1, and 3 all tie with count=2
+- First occurrences: 4 at index 0, 1 at index 2, 3 at index 5
+- Pick 4 then 1 (smaller indices)
+- Final order: [2, 4, 1]
+```
+
+**Example 3:**
+```
+Input: events = [], k = 0
+Output: []
+Explanation: Empty array returns empty result
+```
+
+**Example 4:**
+```
+Input: events = [1], k = 1
+Output: [1]
+Explanation: Single element with k=1 returns that element
+```
+
+### Input Format
+
+A lc-list of input cases. Each case is a pair `(events, k)` where:
+- `events` is an array of integers
+- `k` is the number of top frequent elements to return
+
+### Output Format
+
+For each input case, return an array of length `k` containing the IDs of the `k` most frequent events. Ties in frequency are broken by the smaller first occurrence index in the original events array.
+
+### Constraints
+
+- $0 \le$ events.length $\le 100000$
+- $0 \le$ events[i] $\le 10^9$ for all $0 \le i <$ events.length
+- $0 \le k \le$ events.length
+- If events.length $> 0$ then $1 \le k \le D$, where $D$ is the number of distinct values in events
+- If events.length $= 0$ then $k = 0$
+
+### Solution
+
+#### Walkthrough
+
+This problem extends [Top K Frequent Elements](#lc-top-k-frequent) (LeetCode 347) by adding an **order preservation constraint** when frequencies tie. The solution uses a **full sort with custom comparator** approach.
+
+**Key Insight**: We need to track **three pieces of information** for each unique event:
+1. The event value itself
+2. Its frequency (how many times it appears)
+3. Its **first occurrence index** in the original array (for tiebreaking)
+
+**Algorithm Strategy**:
+
+1. **Build Frequency Map with First Occurrence Tracking**:
+   - Use `HashMap<Integer, EventInfo>` where `EventInfo` stores `(value, frequency, firstIndex)`
+   - When encountering a new event at index `i`, initialize `EventInfo(event, 0, i)`
+   - For subsequent occurrences, increment frequency but **preserve the original first index**
+
+2. **Two-Level Sorting with Custom Comparator**:
+   ```java
+   Comparator<EventInfo> comparator = (a, b) -> {
+       if (a.frequency != b.frequency) {
+           return b.frequency - a.frequency;  // Primary: Higher frequency first
+       }
+       return a.index - b.index;              // Tiebreaker: Earlier index first
+   };
+   ```
+   - **Primary criterion**: Frequency (descending) - more frequent events come first
+   - **Secondary criterion**: First occurrence index (ascending) - events appearing earlier win ties
+
+3. **Sort All Candidates**:
+   - Extract all `EventInfo` objects from the map into a lc-list
+   - Sort using the custom comparator
+   - This gives us the complete ranking: highest frequency first, ties broken by appearance order
+
+4. **Extract Top K**:
+   - Take the first `min(k, candidates.size())` elements from the sorted lc-list
+   - Return only the event values (not the entire `EventInfo` objects)
+
+**Why Full Sort Over Min-Heap?**
+
+For this problem, a full sort $O(m \log m)$ is preferred over min-heap $O(n \log k)$ because:
+- The number of distinct events `m` is typically much smaller than total events `n`
+- Custom comparator with two-level sorting is simpler to implement with `Collections.sort()`
+- Min-heap would require complex tie-breaking logic in the heap's comparator
+- Performance difference is negligible when $m \ll n$ (e.g., $m = 100$ distinct events in $n = 100000$ total events)
+
+#### Analysis
+
+**Time Complexity**: $O(n + m \log m)$ where $n$ is the length of the events array and $m$ is the number of distinct events.
+
+Breaking down the operations:
+1. **Building frequency map**: $O(n)$ - single pass through all events
+   - Each `getOrDefault()` and `put()` operation is $O(1)$ on average
+   - Total: $n$ iterations $\times O(1) = O(n)$
+
+2. **Sorting candidates**: $O(m \log m)$ - sorting the lc-list of distinct events
+   - We have at most $m$ distinct events (where $m \le n$)
+   - Java's `Collections.sort()` uses TimSort with $O(m \log m)$ complexity
+
+3. **Extracting top k**: $O(k)$ - copying k values to the result lc-list
+   - Since $k \le m \le n$, this is dominated by the previous steps
+
+**Total**: $O(n) + O(m \log m) + O(k) = O(n + m \log m)$
+
+**Important Note**: In practice, $m \ll n$ (distinct events are much fewer than total events), so the sorting step $O(m \log m)$ is often faster than the initial scan $O(n)$.
+
+**Space Complexity**: $O(m)$ for auxiliary storage.
+
+1. **Frequency map**: $O(m)$ - stores one `EventInfo` object per distinct event
+2. **Candidates lc-list**: $O(m)$ - temporary lc-list for sorting
+3. **Result lc-list**: $O(k)$ - output array
+
+**Total**: $O(m) + O(m) + O(k) = O(m)$ since $k \le m$
+
+#### Implementation Steps
+
+**Step 1: Define EventInfo Class**
+```java
+static class EventInfo {
+    int value;        // The event ID/value
+    int frequency;    // How many times it appears
+    int index;        // First occurrence index in original array
+
+    public EventInfo(int v, int f, int i) {
+        value = v;
+        frequency = f;
+        index = i;
+    }
+}
+```
+
+**Step 2: Handle Edge Cases**
+- Return empty lc-list if `events` is null, empty, or `k == 0`
+- This prevents unnecessary computation for invalid inputs
+
+**Step 3: Build Frequency Map with First Occurrence Tracking**
+- Initialize `HashMap<Integer, EventInfo>` to store event metadata
+- Iterate through the events array with index `i`:
+  - Use `getOrDefault(event, new EventInfo(event, 0, i))` to get or create entry
+  - **Critical**: Initialize new entries with frequency 0 (not 1) to avoid double-counting
+  - Increment `frequency++` for both new and existing entries
+  - The first occurrence index `i` is automatically preserved from the initial creation
+
+**Step 4: Create Two-Level Custom Comparator**
+```java
+Comparator<EventInfo> comparator = (a, b) -> {
+    if (a.frequency != b.frequency) {
+        return b.frequency - a.frequency;  // Primary: descending frequency
+    }
+    return a.index - b.index;              // Tiebreaker: ascending first index
+};
+```
+
+**Step 5: Sort All Candidates**
+- Extract all `EventInfo` values from the map into a lc-list
+- Sort using the custom comparator
+- This produces the final ranking with frequency-first, index-second ordering
+
+**Step 6: Extract Top K Values**
+- Iterate through the first `min(k, candidates.size())` elements
+- Add only the `value` field (not the entire `EventInfo` object) to the result lc-list
+- Return the result
+
+#### Code - Java
+
+```java
+    /*
+     * Complete the 'getTopKFrequentEvents' function below.
+     *
+     * The function is expected to return an INTEGER_ARRAY.
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY events
+     *  2. INTEGER k
+     */
+     
+    static class EventInfo {
+        int value;
+        int frequency;
+        int index;  
+        
+        public EventInfo(int v, int f , int i) {
+            value = v;
+            frequency = f;
+            index = i;
+        }
+    }   
+
+    public static List<Integer> getTopKFrequentEvents(List<Integer> events, int k) {
+        if (events == null || events.isEmpty() || k == 0) {
+            return new ArrayList<>();
+        }
+
+        // Step 1: Build frequency map while tracking first occurrence
+        Map<Integer, EventInfo> freqMap = new HashMap<>();
+        for (int i = 0; i < events.size(); i++) {
+            int event = events.get(i);
+            EventInfo eventInfo = freqMap.getOrDefault(event, new EventInfo(event, 0, i));
+            eventInfo.frequency++;
+            freqMap.put(event, eventInfo);
+        }
+
+        // Step 2: Create comparator with two-level sorting
+        Comparator<EventInfo> comparator = (a, b) -> {
+            if (a.frequency != b.frequency) {
+                return b.frequency - a.frequency;  // Higher frequency first
+            }
+            return a.index - b.index;    // Earlier index first
+        };
+
+        // Step 3: Collect all EventInfo objects and sort
+        List<EventInfo> candidates = new ArrayList<>(freqMap.values());
+        candidates.sort(comparator);
+
+        // Step 4: Extract top k values
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < Math.min(k, candidates.size()); i++) {
+            result.add(candidates.get(i).value);
+        }
+
+        return result;
+    }
+```

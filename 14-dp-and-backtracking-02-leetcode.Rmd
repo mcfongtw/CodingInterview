@@ -1,0 +1,4260 @@
+<!-- LeetCode DP and Backtracking problems -->
+
+## Longest Palindromic Substring {#lc-longest-palindromic-substring}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 5
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lc-longest-palindromic-substring/
+- **Tags**: Grind 75, Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), String
+
+### Description
+
+Return the longest palindromic substring contained in `s`.
+
+### Examples
+
+```
+Input: "babad"
+Output: "bab"   // "aba" also valid
+
+Input: "cbbd"
+Output: "bb"
+```
+
+### Constraints
+
+- `1 <= s.length <= 1000`
+- `s` consists of digits and Englc-lish letters
+
+### Solution - DP via Reversed String
+
+#### Walkthrough
+
+Compute the longest common substring between `s` and its reverse. Matches correspond to palindromic substrings only when their indices line up (i.e., the substring reads the same forward and backward). Track the candidate with the greatest length that satisfies the index alignment rule.
+
+#### Analysis
+
+- **Time Complexity**: O(n^2)
+- **Space Complexity**: O(n^2)
+
+#### Implementation Steps
+
+1. Let `rev = reverse(s)`; create `dp[n][n]`.
+2. For each pair `(i, j)` update `dp[i][j]` similar to LCS-substring.
+3. When `dp[i][j] > currentMax`, ensure the substring indices align (`n - 1 - j + dp[i][j] - 1 == i`).
+4. Update best boundaries accordingly.
+
+#### Code - Java
+
+```java
+public String longestPalindrome(String s) {
+    int n = s.length();
+    String rev = new StringBuilder(s).reverse().toString();
+    int[][] dp = new int[n][n];
+    int maxLen = 0;
+    int end = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (s.charAt(i) == rev.charAt(j)) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }
+                int beforeRev = n - 1 - j;
+                if (dp[i][j] > maxLen && beforeRev + dp[i][j] - 1 == i) {
+                    maxLen = dp[i][j];
+                    end = i;
+                }
+            } else {
+                dp[i][j] = 0;
+            }
+        }
+    }
+
+    return s.substring(end - maxLen + 1, end + 1);
+}
+```
+
+## Letter Combinations of a Phone Number {#lc-letter-combinations-phone}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 17
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+- **Tags**: Grind 75, NeetCode 150
+- **Techniques**: [Backtracking](glossary-of-algorithm.html#glossary-backtracking), [Recursion](glossary-of-algorithm.html#glossary-recursion), String, [Hash Table](glossary-of-algorithm.html#glossary-hash-table)
+
+### Description
+
+Given a string containing digits from `2-9` inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
+
+A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
+
+**Digit-to-letter mapping:**
+- 2: "abc"
+- 3: "def"
+- 4: "ghi"
+- 5: "jkl"
+- 6: "mno"
+- 7: "pqrs"
+- 8: "tuv"
+- 9: "wxyz"
+
+### Examples
+
+```
+Input: digits = "23"
+Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+
+Input: digits = ""
+Output: []
+
+Input: digits = "2"
+Output: ["a","b","c"]
+```
+
+### Constraints
+
+- `0 <= digits.length <= 4`
+- `digits[i]` is a digit in the range `['2', '9']`
+
+### Solution - Backtracking
+
+#### Walkthrough
+
+This problem uses the **2-dimensional traversal mental model** of backtracking (see [Pattern 1: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)):
+
+- **Outer dimension** (recursion parameter): `index` / position in the phone number - controls which digit we're processing (depth 0 to n-1)
+- **Inner dimension** (for-loop): Iterates through the 3-4 letter options available for the current digit
+
+The backtracking explores a conceptual 2D grid where:
+- **Rows** represent digit positions (0 to n-1, where n is the number of digits)
+- **Columns** represent letter choices at each position (e.g., for digit 2: columns are 'a', 'b', 'c')
+- **Grid size**: n rows × (3 or 4) columns per row
+
+**Visual 2D Grid for `digits = "23"`:**
+```
+Position 0 (digit '2'):  [a, b, c]
+Position 1 (digit '3'):  [d, e, f]
+
+Grid traversal paths:
+(0,a) → (1,d) = "ad"
+(0,a) → (1,e) = "ae"
+(0,a) → (1,f) = "af"
+(0,b) → (1,d) = "bd"
+(0,b) → (1,e) = "be"
+(0,b) → (1,f) = "bf"
+(0,c) → (1,d) = "cd"
+(0,c) → (1,e) = "ce"
+(0,c) → (1,f) = "cf"
+
+Total combinations: 3 × 3 = 9
+```
+
+This 2D traversal systematically generates all possible combinations by visiting every cell in each row before moving to the next row.
+
+**Key insight**: For a phone number with n digits, we need to make n sequential choices. Backtracking explores all combinations by:
+1. **Choose**: Select a letter for the current digit
+2. **Explore**: Recursively process the next digit
+3. **Unchoose**: Remove the letter and try the next option
+
+**Step-by-step approach:**
+
+1. **Preprocess input**: Convert the digit string into a 2D array where each row contains the letter choices for that digit position
+2. **Backtrack recursively**: For each digit position, iterate through all available letters, append each letter to the current combination, recurse to the next digit, then remove the letter (backtrack)
+3. **Base case**: When the combination length equals the number of digits, we've formed a complete combination
+
+**Visual example with `digits = "23"`:**
+
+```
+Start: current = "", index = 0
+Choices: [['a','b','c'], ['d','e','f']]
+
+├─ Choose 'a' → current = "a", index = 1
+│  ├─ Choose 'd' → current = "ad", index = 2 ✓ Add "ad"
+│  │  └─ Backtrack → current = "a"
+│  ├─ Choose 'e' → current = "ae", index = 2 ✓ Add "ae"
+│  │  └─ Backtrack → current = "a"
+│  └─ Choose 'f' → current = "af", index = 2 ✓ Add "af"
+│     └─ Backtrack → current = "a"
+│  └─ Backtrack → current = ""
+│
+├─ Choose 'b' → current = "b", index = 1
+│  ├─ Choose 'd' → current = "bd", index = 2 ✓ Add "bd"
+│  │  └─ Backtrack → current = "b"
+│  ├─ Choose 'e' → current = "be", index = 2 ✓ Add "be"
+│  │  └─ Backtrack → current = "b"
+│  └─ Choose 'f' → current = "bf", index = 2 ✓ Add "bf"
+│     └─ Backtrack → current = "b"
+│  └─ Backtrack → current = ""
+│
+└─ Choose 'c' → current = "c", index = 1
+   ├─ Choose 'd' → current = "cd", index = 2 ✓ Add "cd"
+   │  └─ Backtrack → current = "c"
+   ├─ Choose 'e' → current = "ce", index = 2 ✓ Add "ce"
+   │  └─ Backtrack → current = "c"
+   └─ Choose 'f' → current = "cf", index = 2 ✓ Add "cf"
+      └─ Backtrack → current = "c"
+   └─ Backtrack → current = ""
+
+Result: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+```
+
+**Edge case handling**: Return empty list for empty input to avoid adding an empty string to the result.
+
+#### Analysis
+
+- **Time Complexity**: $O(4^n 	imes n)$ where n is the length of the input digits
+  - In the worst case (digits 7 and 9), each digit maps to 4 letters
+  - We generate up to $4^n$ combinations
+  - Each combination requires $O(n)$ time to build the string with StringBuilder
+  - Total: $O(4^n 	imes n)$
+
+- **Space Complexity**: $O(n)$ not counting output space
+  - Recursion call stack depth: $O(n)$ for n digits
+  - StringBuilder for current combination: $O(n)$
+  - Choices array: $O(n)$ rows with constant-size letter arrays
+  - Output space (not counted): $O(4^n 	imes n)$ to store all combinations
+
+#### Implementation Steps
+
+1. **Handle edge case**: Return empty list if input is null or empty
+2. **Create digit-to-letter mapping**: Use a 2D char array indexed by digit minus 2 (since digits start at 2)
+3. **Build choices array**: For each digit in the input, store the corresponding letter array
+4. **Invoke backtracking**: Start with empty StringBuilder, choices array, and index 0
+5. **Backtracking logic**:
+   - **Base case**: If current combination length equals number of digits, add to result
+   - **Recursive case**: For each letter at current digit position:
+     - Append letter to current combination
+     - Recurse to next digit (index + 1)
+     - Remove last character (backtrack)
+6. Return the result list containing all combinations
+
+#### Code - Java
+
+```java
+class Solution {
+    final char[][] map = new char[][] {
+        new char[]{'a', 'b', 'c'},      // 2
+        new char[]{'d', 'e', 'f'},      // 3
+        new char[]{'g', 'h', 'i'},      // 4
+        new char[]{'j', 'k', 'l'},      // 5
+        new char[]{'m', 'n', 'o'},      // 6
+        new char[]{'p', 'q', 'r', 's'}, // 7
+        new char[]{'t', 'u', 'v'},      // 8
+        new char[]{'w', 'x', 'y', 'z'}  // 9
+    };
+
+    public List<String> letterCombinations(String digits) {
+        List<String> result = new ArrayList<>();
+
+        // Handle edge case: empty input
+        if (digits == null || digits.length() == 0) {
+            return result;
+        }
+
+        char[][] choices = new char[digits.length()][];
+
+        for (int i = 0; i < digits.length(); i++) {
+            char digit = digits.charAt(i);
+            choices[i] = map[(digit - '2')];
+        }
+
+        backtrack(new StringBuilder(), choices, 0, result);
+
+        return result;
+    }
+
+    private void backtrack(StringBuilder current, char[][] choices, int index, List<String> result) {
+        // Base case - valid: we've processed all digits
+        if (current.length() == choices.length) {
+            result.add(current.toString());
+            return;
+        }
+
+        // Iterate through all letter choices for current digit
+        char[] letters = choices[index];
+        for (int i = 0; i < letters.length; i++) {
+            // Choose: add current letter
+            current.append(letters[i]);
+
+            // Explore: recurse to next digit
+            backtrack(current, choices, index + 1, result);
+
+            // Unchoose: remove current letter (backtrack)
+            current.deleteCharAt(current.length() - 1);
+        }
+    }
+}
+```
+
+## Combination Sum {#lc-combination-sum}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 39
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/combination-sum/
+- **Tags**: Grind 75, Blind 75, NeetCode 150
+- **Techniques**: [Backtracking: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern), [Array](glossary-of-algorithm.html#glossary-array), [Backtracking](glossary-of-algorithm.html#glossary-backtracking)
+
+### Description
+
+Given an array of **distinct** integers `candidates` and a target integer `target`, return a list of all **unique combinations** of `candidates` where the chosen numbers sum to `target`. You may return the combinations in any order.
+
+The **same** number may be chosen from `candidates` an **unlimited number of times**. Two combinations are unique if the frequency of at least one of the chosen numbers is different.
+
+The test cases are generated such that the number of unique combinations that sum up to `target` is less than 150 combinations for the given input.
+
+### Examples
+
+**Example 1:**
+```
+Input: candidates = [2,3,6,7], target = 7
+Output: [[2,2,3],[7]]
+Explanation:
+2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
+7 is a candidate, and 7 = 7.
+These are the only two combinations.
+```
+
+**Example 2:**
+```
+Input: candidates = [2,3,5], target = 8
+Output: [[2,2,2,2],[2,3,3],[3,5]]
+```
+
+**Example 3:**
+```
+Input: candidates = [2], target = 1
+Output: []
+```
+
+### Constraints
+
+- $1 \le \text{candidates.length} \le 30$
+- $2 \le \text{candidates}[i] \le 40$
+- All elements of `candidates` are **distinct**
+- $1 \le \text{target} \le 40$
+
+### Solution - Dynamic Programming (Unbounded Knapsack)
+
+#### Walkthrough
+
+This problem is a classic **Unbounded Knapsack** variant where each candidate can be used unlimited times to reach the target sum.
+
+**Core Strategy:**
+
+Build up solutions from smaller sums to the target. Use a DP table where `dp[i]` stores all combinations that sum to `i`. For each amount from 1 to target, try adding each candidate and extend the combinations from `dp[amount - candidate]`.
+
+**Key Insight - Avoiding Duplicates:**
+
+To prevent duplicate combinations like `[2,3]` and `[3,2]`, only add a candidate if it maintains **non-decreasing order**. Check if the candidate is greater than or equal to the last element in the existing combination.
+
+**Step-by-step execution for `candidates = [2,3,6,7], target = 7`:**
+
+```
+dp[0] = [[]]           (empty combination sums to 0)
+dp[1] = []             (no candidates $\le$ 1)
+dp[2] = [[2]]          (from dp[0] + 2)
+dp[3] = [[3]]          (from dp[0] + 3)
+dp[4] = [[2,2]]        (from dp[2] + 2, since 2 $\ge$ 2)
+dp[5] = [[2,3]]        (from dp[2] + 3, since 3 $\ge$ 2)
+dp[6] = [[2,2,2], [6]] (from dp[4] + 2 and dp[0] + 6)
+dp[7] = [[2,2,3], [7]] (from dp[4] + 3 and dp[0] + 7)
+```
+
+The answer is `dp[7] = [[2,2,3], [7]]`.
+
+**Why Non-Decreasing Order Works:**
+
+- Forces a canonical ordering: `[2,2,3]` exists but `[2,3,2]` and `[3,2,2]` are never generated
+- Only extends a combination if new candidate $\ge$ last element
+- Guarantees uniqueness without needing a Set or post-processing
+
+#### Analysis
+
+- **Time Complexity**: O(target × n × k)
+  - Outer loop: O(target) iterations for each amount
+  - Middle loop: O(n) candidates to try
+  - Inner loop: O(k) where k is the average number of combinations per amount
+  - In worst case, k can be exponential, but bounded by problem constraint (< 150 combinations)
+
+- **Space Complexity**: O(target × k)
+  - DP array has (target + 1) entries
+  - Each entry stores up to k combinations
+  - Each combination stores up to (target / min_candidate) elements
+
+#### Implementation Steps
+
+**Initialization:**
+1. Create array `dp` of size (target + 1) where each entry is a list of combinations
+2. Initialize `dp[0] = [[]]` (base case: empty combination sums to 0)
+
+**DP Table Construction:**
+3. For each amount from 1 to target:
+   1. For each candidate in candidates array:
+      - Skip if candidate $>$ amount (cannot use it)
+      - Calculate `remaining = amount - candidate`
+      - For each combination in `dp[remaining]`:
+        - Check if we can add candidate (maintains non-decreasing order)
+        - If combination is empty OR candidate $\ge$ last element in combination:
+          - Create new combination by copying existing and appending candidate
+          - Add to `dp[amount]`
+
+**Return Result:**
+4. Return `dp[target]` (all combinations that sum to target)
+
+#### Code - Java
+
+```java
+public List<List<Integer>> combinationSum(int[] candidates, int target) {
+    // dp[i] = list of all combinations that sum to i
+    List<List<Integer>>[] dp = new ArrayList[target + 1];
+
+    // Initialize
+    for (int i = 0; i <= target; i++) {
+        dp[i] = new ArrayList<>();
+    }
+
+    // Base case
+    dp[0].add(new ArrayList<>());
+    
+    for (int i = 1; i <= target; i++) {
+        //for each candidate c
+        for (int c : candidates) {
+            // skip if candidate is too big, c > i
+            if (c <= i) {
+                //for each combination in dp[remaining]
+                for (List<Integer> combo : dp[i - c]) {
+                    if (combo.isEmpty() || c >= combo.get(combo.size() - 1)) {
+                        //create new combination by 1. cloning 2. appending candidate in increasing order
+                        List<Integer> newCombo = new ArrayList<>(combo);
+                        newCombo.add(c);
+                        dp[i].add(newCombo);
+                    }
+                }
+            }
+        }
+    }
+
+    return dp[target];
+}
+```
+
+
+#### Code - Golang
+```go
+func combinationSum(candidates []int, target int) [][]int {
+    // dp[i] = list of all combinations that sum to i
+    dp := make([][][]int, target + 1);
+
+    for i := 0; i <= target; i++ {
+        dp[i] = make([][]int, 0)
+    }
+
+    dp[0] = append(dp[0], make([]int, 0))
+
+    for i := 1; i<= target; i++ {
+        //for each candidate c
+        for _, c := range(candidates) {
+            // skip if candidate is too big, c > i
+            if c <= i { 
+                //for each combination in dp[remaining]
+                for _, combo := range(dp[i-c]) {
+                    if len(combo) == 0 || c >= combo[len(combo) - 1] {
+                        //create new combination by 1. cloning 2. appending candidate in increasing order
+                        newCombo := append([]int{}, combo...)                    
+                        newCombo = append(newCombo, c)
+                        dp[i] = append(dp[i], newCombo)
+                    }
+                }
+            }
+        }
+    }
+
+    return dp[target];
+}
+```
+
+## Permutations {#lc-permutations}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 46
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lc-permutations/
+- **Tags**: Grind 75, NeetCode 150
+- **Techniques**: [Backtracking: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern), [Array](glossary-of-algorithm.html#glossary-array), [Backtracking](glossary-of-algorithm.html#glossary-backtracking)
+
+### Description
+
+Given an array of distinct integers, return all possible lc-permutations.
+
+### Examples
+
+```
+Input: nums = [1,2,3]
+Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+```
+
+### Constraints
+
+- `1 <= nums.length <= 8`
+- All values are distinct
+
+### Solution - Backtracking with Choose-Explore-Unchoose Pattern
+
+#### Walkthrough
+
+This problem uses the **2-dimensional traversal mental model** of backtracking (see [Pattern 1: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)):
+
+- **Outer dimension** (recursion parameter): `path.size()` - controls how many elements we've chosen (depth 0 to n)
+- **Inner dimension** (for-loop): Iterates through all array indices from 0 to `nums.length - 1`
+
+The backtracking explores a conceptual grid where each row represents depth (number of elements chosen) and each column represents a choice among all n elements. At each depth, we try choosing each element that hasn't been used yet (checked via `path.contains()`), recurse to the next depth, then remove it to try other options.
+
+**Key mechanism**: Build permutations incrementally in a `path` list. Skip elements already in the path using `path.contains(nums[i])`. When path size equals array length, we've built a complete permutation - add a copy to results and backtrack. This approach eliminates the need for a separate visited array by leveraging the path itself for duplicate detection.
+
+#### Analysis
+
+- **Time Complexity**: O(n² × n!) - generating n! permutations, each taking O(n) to copy, plus O(n) for `contains()` check at each step
+- **Space Complexity**: O(n) for recursion stack and path list (no separate visited array needed)
+
+#### Implementation Steps
+
+1. Initialize `result` list to store all permutations.
+2. Define `backtrack(path, nums, result)`:
+   1. **Base case**: If `path.size() == nums.length`, add a copy of `path` to `result`.
+   2. **Recursive case**: For each index `i` from 0 to `nums.length - 1`:
+      - Skip if `path.contains(nums[i])` (already used)
+      - Add `nums[i]` to `path` (choose)
+      - Recursively call `backtrack(path, nums, result)` (explore)
+      - Remove last element from `path` (unchoose)
+3. Call `backtrack(new ArrayList<>(), nums, result)` to start with empty path, then return `result`.
+
+#### Code - Java
+```java
+public List<List<Integer>> permute(int[] nums) {
+    List<List<Integer>> result = new ArrayList<>();
+    backtrack(new ArrayList<>(), nums, result);
+    return result;
+}
+
+private void backtrack(List<Integer> path, int[] nums, List<List<Integer>> result) {
+    // Base case: found a complete permutation
+    if (path.size() == nums.length) {
+        result.add(new ArrayList<>(path));
+        return;
+    }
+
+    // Try each element that hasn't been used yet
+    for (int i = 0; i < nums.length; i++) {
+        // Skip if already in current path
+        if (path.contains(nums[i])) {
+            continue;
+        }
+
+        // Choose: add element to path
+        path.add(nums[i]);
+
+        // Explore: recurse to next level
+        backtrack(path, nums, result);
+
+        // Unchoose: remove element for next iteration
+        path.remove(path.size() - 1);
+    }
+}
+```
+
+### Solution - Backtracking with Visited Array
+
+#### Walkthrough
+
+Build lc-permutations by exploring each number once per path. Maintain a `visited` array so each value appears once per permutation. When the path length equals `nums.length`, add a copy to the results and backtrack.
+
+#### Analysis
+
+- **Time Complexity**: O(n ? n!)
+- **Space Complexity**: O(n) recursion + visited state
+
+#### Implementation Steps
+
+
+1. Initialize `result` and `visited` array.
+2. Define `backtrack(path)`:
+   1. If `path.size() == nums.length`, append copy to `result`.
+   2. Otherwise iterate indices:
+      - Skip if visited.
+      - Mark visited, append value, recurse, then undo.
+3. Call `backtrack(new ArrayList<>())` and return `result`.
+
+#### Code - Java
+```java
+List<List<Integer>> result = new ArrayList<>();
+
+public List<List<Integer>> permute(int[] nums) {
+    boolean[] visited = new boolean[nums.length];
+    backtrack(new ArrayList<>(), nums, visited);
+    return result;
+}
+
+private void backtrack(List<Integer> path, int[] nums, boolean[] visited) {
+    if (path.size() == nums.length) {
+        result.add(new ArrayList<>(path));
+        return;
+    }
+
+    for (int i = 0; i < nums.length; i++) {
+        if (visited[i]) {
+            continue;
+        }
+        visited[i] = true;
+        path.add(nums[i]);
+        backtrack(path, nums, visited);
+        path.remove(path.size() - 1);
+        visited[i] = false;
+    }
+}
+```
+
+## Permutations II {#lc-permutations-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 47
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/permutations-ii/
+- **Tags**: NeetCode 150
+- **Techniques**: [Backtracking: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern), [Array](glossary-of-algorithm.html#glossary-array), [Backtracking](glossary-of-algorithm.html#glossary-backtracking)
+
+### Description
+
+Given an array of integers that may contain duplicates, return all unique lc-permutations.
+
+### Examples
+
+```
+Input: nums = [1,1,2]
+Output: [[1,1,2],[1,2,1],[2,1,1]]
+```
+
+### Constraints
+
+- `1 <= nums.length <= 8`
+- `-10 <= nums[i] <= 10`
+
+### Solution - Backtracking with Choose-Explore-Unchoose Pattern
+
+#### Walkthrough
+
+This problem uses the **2-dimensional traversal mental model** of backtracking (see [Pattern 1: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)):
+
+- **Outer dimension** (recursion parameter): `path.size()` - controls how many elements we've chosen (depth 0 to n)
+- **Inner dimension** (for-loop): Iterates through unique values in the frequency map
+
+The backtracking explores a conceptual grid where each row represents depth (number of elements chosen) and each column represents a choice among available unique values. At each depth, we try choosing each value that still has remaining count, recurse to the next depth, then restore the count to try other options.
+
+**Key mechanism**: Use a frequency map to track available counts of each unique value. For each recursion level, iterate through the map entries and try using each value if its count is greater than 0. Decrement the count before recursing (choose), then increment it back after returning (unchoose). This naturally prevents duplicate permutations since we process each unique value once per level, and the frequency map tracks exactly how many times each value can still be used.
+
+#### Analysis
+
+- **Time Complexity**: O(n × n!) - generating up to n! unique permutations, each taking O(n) to build
+- **Space Complexity**: O(n) for recursion stack, path list, and frequency map
+
+#### Implementation Steps
+
+1. Build frequency map counting occurrences of each unique value in `nums`.
+2. Initialize empty `result` list to store all permutations.
+3. Define `backtrack(path, freqMap, result, targetSize)`:
+   1. **Base case**: If `path.size() == targetSize`, add a copy of `path` to `result`.
+   2. **Recursive case**: For each unique value `num` in the frequency map:
+      - Skip if `freqMap.get(num) == 0` (no more instances available)
+      - Decrement `freqMap.get(num)` by 1 (choose)
+      - Add `num` to `path` (choose)
+      - Recursively call `backtrack(path, freqMap, result, targetSize)` (explore)
+      - Remove last element from `path` (unchoose)
+      - Increment `freqMap.get(num)` by 1 (unchoose)
+4. Call `backtrack(new ArrayList<>(), freqMap, result, nums.length)` to start, then return `result`.
+
+#### Code - Java
+```java
+public List<List<Integer>> permuteUnique(int[] nums) {
+    // Build frequency map
+    Map<Integer, Integer> freqMap = new HashMap<>();
+    for (int num : nums) {
+        freqMap.put(num, freqMap.getOrDefault(num, 0) + 1);
+    }
+
+    List<List<Integer>> result = new ArrayList<>();
+    backtrack(new ArrayList<>(), freqMap, result, nums.length);
+    return result;
+}
+
+private void backtrack(List<Integer> path, Map<Integer, Integer> freqMap,
+                       List<List<Integer>> result, int targetSize) {
+    // Base case: found a complete permutation
+    if (path.size() == targetSize) {
+        result.add(new ArrayList<>(path));
+        return;
+    }
+
+    // Try each unique value that has remaining count
+    for (Integer num : freqMap.keySet()) {
+        if (freqMap.get(num) == 0) {
+            continue; // No more instances of this value available
+        }
+
+        // Choose: use one instance of this value
+        freqMap.put(num, freqMap.get(num) - 1);
+        path.add(num);
+
+        // Explore: recurse to next level
+        backtrack(path, freqMap, result, targetSize);
+
+        // Unchoose: restore for next iteration
+        path.remove(path.size() - 1);
+        freqMap.put(num, freqMap.get(num) + 1);
+    }
+}
+```
+
+### Solution - Backtracking with Visited Array
+
+
+#### Walkthrough
+
+Sort the input so duplicates are adjacent. During backtracking, skip an index `i` if it equals `nums[i-1]` and the previous instance has not been used in the current path. This ensures each value positions once per depth.
+
+#### Analysis
+
+- **Time Complexity**: O(n ? n!) in worst case
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+
+1. Sort `nums`, initialize `visited` boolean array and result lc-list.
+2. `backtrack(path)`:
+   1. If `path.size() == nums.length`, append copy.
+   2. For each index `i`:
+      - Skip if `visited[i]`.
+      - Skip if `i > 0 && nums[i] == nums[i-1] && !visited[i-1]` (avoid duplicates).
+      - Mark visited, append, recurse, then undo.
+3. Return result.
+
+#### Code - Java
+```java
+List<List<Integer>> result = new ArrayList<>();
+
+public List<List<Integer>> permuteUnique(int[] nums) {
+    Arrays.sort(nums);
+    boolean[] visited = new boolean[nums.length];
+    backtrack(new ArrayList<>(), nums, visited);
+    return result;
+}
+
+private void backtrack(List<Integer> path, int[] nums, boolean[] visited) {
+    if (path.size() == nums.length) {
+        result.add(new ArrayList<>(path));
+        return;
+    }
+
+    for (int i = 0; i < nums.length; i++) {
+        if (visited[i]) {
+            continue;
+        }
+        if (i > 0 && nums[i] == nums[i - 1] && !visited[i - 1]) {
+            continue;
+        }
+        visited[i] = true;
+        path.add(nums[i]);
+        backtrack(path, nums, visited);
+        path.remove(path.size() - 1);
+        visited[i] = false;
+    }
+}
+```
+
+## Unique Paths {#lc-unique-paths}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 62
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lc-unique-paths/
+- **Tags**: Grind 75, Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation)
+
+### Description
+
+A robot can move only right or down on an `m x n` grid from the top-left to the bottom-right. Count the number of unique paths.
+
+### Examples
+
+```
+Input: m = 3, n = 7
+Output: 28
+```
+
+### Constraints
+
+- `1 <= m, n <= 100`
+
+### Solution - DP Grid
+
+#### Walkthrough
+
+Paths to `(i, j)` equal the sum of paths to `(i-1, j)` and `(i, j-1)` since those are the only ways to enter. Initialize the first row and column to 1 because there is only one way to reach those cells.
+
+#### Analysis
+
+- **Time Complexity**: O(m * n)
+- **Space Complexity**: O(m * n) (or O(n) with rolling arrays)
+
+#### Implementation Steps
+
+1. Fill a DP matrix with `dp[0][*] = dp[*][0] = 1`.
+2. For each cell from `(1,1)` to `(m-1,n-1)` compute `dp[i][j] = dp[i-1][j] + dp[i][j-1]`.
+3. Return `dp[m-1][n-1]`.
+
+#### Code - Java
+
+```java
+public int uniquePaths(int m, int n) {
+    int[][] dp = new int[m][n];
+    for (int i = 0; i < m; i++) {
+        dp[i][0] = 1;
+    }
+    for (int j = 0; j < n; j++) {
+        dp[0][j] = 1;
+    }
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+```
+
+## Minimum Path Sum {#lc-min-path-sum}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 64
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/minimum-lc-path-sum/
+- **Tags**:
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation)
+
+### Description
+
+Given a grid of non-negative numbers, move only right or down from the top-left cell to the bottom-right, minimizing the sum of values along the path.
+
+### Examples
+
+```
+Input: [[1,3,1],[1,5,1],[4,2,1]]
+Output: 7
+```
+
+### Constraints
+
+- `1 <= m, n <= 200`
+
+### Solution - DP Table
+
+#### Walkthrough
+
+Set `dp[i][j]` to the minimum sum needed to reach `(i, j)`. Initialize the first row and column with cumulative sums. For each other cell, add the current value to the minimum of the top or left neighbor.
+
+#### Analysis
+
+- **Time Complexity**: O(m * n)
+- **Space Complexity**: O(m * n) (can be optimized to O(n))
+
+#### Implementation Steps
+
+1. Initialize `dp[0][0] = grid[0][0]`.
+2. Fill the first row/column cumulatively.
+3. For `i > 0`, `j > 0`, set `dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])`.
+4. Return `dp[m-1][n-1]`.
+
+#### Code - Java
+
+```java
+public int minPathSum(int[][] grid) {
+    int rows = grid.length;
+    int cols = grid[0].length;
+    int[][] dp = new int[rows][cols];
+
+    dp[0][0] = grid[0][0];
+    for (int c = 1; c < cols; c++) {
+        dp[0][c] = dp[0][c - 1] + grid[0][c];
+    }
+    for (int r = 1; r < rows; r++) {
+        dp[r][0] = dp[r - 1][0] + grid[r][0];
+    }
+
+    for (int r = 1; r < rows; r++) {
+        for (int c = 1; c < cols; c++) {
+            dp[r][c] = grid[r][c] + Math.min(dp[r - 1][c], dp[r][c - 1]);
+        }
+    }
+
+    return dp[rows - 1][cols - 1];
+}
+```
+
+## Climbing Stairs {#lc-climbing-stairs}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 70
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/lc-climbing-stairs/
+- **Tags**: Grind 75, Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Memoization](#dp-memoization), [Math](glossary-of-algorithm.html#math)
+
+### Description
+
+You are climbing a staircase with `n` steps. Each time you may climb 1 or 2 steps. Return the number of distinct ways to reach the top.
+
+### Examples
+
+```
+Input: n = 3
+Output: 3
+Explanation: (1+1+1), (1+2), (2+1)
+```
+
+### Constraints
+
+- `1 <= n <= 45`
+
+### Solution - DP Tabulation
+
+#### Walkthrough
+
+Let `dp[i]` be the number of ways to reach step `i`. You can arrive at `i` from `i-1` (taking a single step) or from `i-2` (taking two steps). Thus `dp[i] = dp[i-1] + dp[i-2]`. Initialize `dp[0] = 1`, `dp[1] = 1` and iterate upward.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1) using rolling variables
+
+#### Implementation Steps
+
+
+1. Handle base cases `n <= 2`.
+2. Maintain two variables for `dp[i-1]` and `dp[i-2]`.
+3. Iterate from 3 to `n`, computing the sum and shifting the variables.
+4. Return the last computed value.
+
+#### Code - Java
+```java
+public int climbStairs(int n) {
+    if (n <= 2) {
+        return n;
+    }
+
+    int prev2 = 1; // ways to reach step i-2
+    int prev1 = 2; // ways to reach step i-1
+
+    for (int i = 3; i <= n; i++) {
+        int current = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = current;
+    }
+
+    return prev1;
+}
+
+
+```
+
+
+### Solution - DP Memoization
+
+#### Walkthrough
+
+This solution uses a **top-down recursive approach with memoization**. Instead of building up from the base cases, we recursively compute the number of ways to reach step `n` starting from step `i`.
+
+**Core Strategy:**
+
+From any step `i`, we have two choices:
+1. Take 1 step to reach `i + 1`
+2. Take 2 steps to reach `i + 2`
+
+The total ways from step `i` is the sum of ways from both choices: `ways(i) = ways(i + 1) + ways(i + 2)`.
+
+**Base Cases:**
+- If `i > n`: We've overshot the target → return 0
+- If `i == n`: We've reached exactly the target → return 1
+
+**Memoization:** Cache results in a `memory` array to avoid recomputing the same subproblem multiple times.
+
+**Recursion Tree Example for n = 3:**
+
+```
+ways(0)
+├─ ways(1)
+│  ├─ ways(2)
+│  │  ├─ ways(3) → 1 ✓
+│  │  └─ ways(4) → 0
+│  └─ ways(3) → 1 ✓ (cached)
+└─ ways(2) (cached from above)
+   ├─ ways(3) → 1 ✓
+   └─ ways(4) → 0
+
+Result: ways(0) = ways(1) + ways(2) = 2 + 1 = 3
+```
+
+Without memoization, `ways(2)` and `ways(3)` would be computed multiple times. The cache eliminates redundant calculations.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Each subproblem (step 0 to n) is computed exactly once and cached
+  - Subsequent calls return the cached result in O(1)
+  - Total: n subproblems × O(1) per lookup = O(n)
+
+- **Space Complexity**: O(n)
+  - Memoization array: O(n) space for caching results
+  - Recursion stack: O(n) depth in worst case
+  - Total: O(n) + O(n) = O(n)
+
+**Comparison with Fibonacci DP:**
+- **Fibonacci DP (iterative)**: O(1) space with rolling variables, bottom-up approach
+- **This solution (recursive)**: O(n) space for recursion + memoization, top-down approach
+- Both have O(n) time complexity, but iterative approach is more space-efficient
+
+#### Implementation Steps
+
+1. Create memoization array `memory` of size `n + 1` to cache results for steps 0 to n.
+2. Call helper function `recursion(0, n, memory)` starting from step 0.
+3. In `recursion(i, n, memory)`:
+   1. **Base case 1**: If `i > n`, return 0 (overshot target).
+   2. **Base case 2**: If `i == n`, return 1 (reached target exactly).
+   3. **Check cache**: If `memory[i] > 0`, return cached result.
+   4. **Recursive case**: Compute `memory[i] = recursion(i + 1, n, memory) + recursion(i + 2, n, memory)`.
+   5. Return `memory[i]`.
+4. Return the result from step 2.
+
+#### Code - Java
+
+```java
+public int climbStairs(int n) {
+    int memory[] = new int[n + 1];
+    return recursion(0, n, memory);
+}
+
+private int recursion(int i, int n, int[] memory) {
+    if (i > n) {
+        return 0;
+    }
+
+    if (i == n) {
+        return 1;
+    }
+
+    if (memory[i] > 0) {
+        return memory[i];
+    }
+
+    memory[i] = recursion(i + 1, n, memory) + recursion(i + 2, n, memory);
+    return memory[i];
+}
+```
+
+## Subsets {#lc-subsets}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 78
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/subsets/
+- **Tags**: Grind 75, Blind 75, NeetCode 150
+- **Techniques**: [Backtracking: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern), [Array](glossary-of-algorithm.html#glossary-array), [Backtracking](glossary-of-algorithm.html#glossary-backtracking)
+
+### Description
+
+Given an integer array `nums` of **unique** elements, return all possible subsets (the power set).
+
+The solution set **must not** contain duplicate subsets. Return the solution in **any order**.
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [1,2,3]
+Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+```
+
+**Example 2:**
+```
+Input: nums = [0]
+Output: [[],[0]]
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10`
+- `-10 <= nums[i] <= 10`
+- All the numbers of `nums` are **unique**
+
+### Solution - Backtracking
+
+#### Walkthrough
+
+This problem uses the **2-dimensional traversal mental model** of backtracking (see [Pattern 1: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)):
+
+- **Outer dimension** (recursion parameter): `index` / depth in the decision tree - controls which subset of elements we're considering
+- **Inner dimension** (for-loop): Iterates through available indices `i` from `index` to `nums.length - 1` at each depth
+
+The backtracking explores a conceptual grid where each row represents a depth level and each column represents a choice of including or excluding an element. At each node, we append the current path (representing one subset) to results.
+
+**Key Insight:** Unlike Permutations, we don't need to track "visited" elements because subsets are order-independent. We use the `index` parameter to ensure we only consider elements at or after the current position, preventing duplicates like `[1,2]` and `[2,1]`.
+
+**Step-by-step execution for `nums = [1,2,3]`:**
+
+```
+Initial call: backtrack(nums, 0, [], result)
+├─ Add [] to result
+├─ i=0: Choose 1
+│  ├─ backtrack(nums, 1, [1], result)
+│  │  ├─ Add [1] to result
+│  │  ├─ i=1: Choose 2
+│  │  │  ├─ backtrack(nums, 2, [1,2], result)
+│  │  │  │  ├─ Add [1,2] to result
+│  │  │  │  ├─ i=2: Choose 3
+│  │  │  │  │  ├─ backtrack(nums, 3, [1,2,3], result)
+│  │  │  │  │  │  └─ Add [1,2,3] to result
+│  │  │  │  │  └─ Unchoose 3
+│  │  │  │  └─ Loop ends
+│  │  │  └─ Unchoose 2
+│  │  ├─ i=2: Choose 3
+│  │  │  ├─ backtrack(nums, 3, [1,3], result)
+│  │  │  │  └─ Add [1,3] to result
+│  │  │  └─ Unchoose 3
+│  │  └─ Loop ends
+│  └─ Unchoose 1
+├─ i=1: Choose 2
+│  ├─ backtrack(nums, 2, [2], result)
+│  │  ├─ Add [2] to result
+│  │  ├─ i=2: Choose 3
+│  │  │  ├─ backtrack(nums, 3, [2,3], result)
+│  │  │  │  └─ Add [2,3] to result
+│  │  │  └─ Unchoose 3
+│  │  └─ Loop ends
+│  └─ Unchoose 2
+├─ i=2: Choose 3
+│  ├─ backtrack(nums, 3, [3], result)
+│  │  ├─ Add [3] to result
+│  │  └─ Loop ends (no more elements)
+│  └─ Unchoose 3
+└─ Loop ends
+
+Result: [[], [1], [1,2], [1,2,3], [1,3], [2], [2,3], [3]]
+```
+
+**Why This Works:**
+- We generate all $2^n$ possible subsets by exploring every combination
+- The `index` parameter ensures we never revisit earlier elements, preventing duplicate subsets
+- Every recursive call adds its current path to results, capturing subsets of all sizes (0 to n)
+
+#### Analysis
+
+- **Time Complexity**: O($n \times 2^n$)
+  - There are $2^n$ possible subsets (each element can be included or excluded)
+  - Each subset takes O(n) time to copy into the result list
+  - Total: O($n \times 2^n$)
+
+- **Space Complexity**: O(n)
+  - Recursion stack depth: O(n) in the worst case
+  - Path list: O(n) maximum size
+  - Result storage not counted as auxiliary space (it's the required output)
+  - Note: The output itself requires O($n \times 2^n$) space
+
+#### Implementation Steps
+
+**Initialization:**
+1. Initialize empty `result` list to store all subsets.
+
+**Backtracking Function** `backtrack(nums, index, path, result)`:
+
+2. **Add current subset to results:**
+   - Add a copy of `path` to `result` (every path represents a valid subset)
+   - This happens at every node in the decision tree, not just at leaves
+
+3. **Recursive case** - For each index `i` from `index` to `nums.length - 1`:
+   1. **Choose:** Add `nums[i]` to `path`
+   2. **Explore:** Recursively call `backtrack(nums, i + 1, path, result)`
+      - Note: `i + 1` ensures we only consider elements after current position
+      - This prevents generating duplicate subsets like `[1,2]` and `[2,1]`
+   3. **Unchoose:** Remove last element from `path` to try next option
+
+**Return:**
+4. Call `backtrack(nums, 0, new ArrayList<>(), result)` to start with empty path, then return `result`.
+
+#### Code - Java
+
+```java
+public List<List<Integer>> subsets(int[] nums) {
+    List<List<Integer>> result = new ArrayList<>();
+    backtrack(nums, 0, new ArrayList<>(), result);
+    return result;
+}
+
+private void backtrack(int[] nums, int index, List<Integer> path, List<List<Integer>> result) {
+    // Add current subset to results (every path is a valid subset)
+    result.add(new ArrayList<>(path));
+
+    // Try adding each remaining element
+    for (int i = index; i < nums.length; i++) {
+        // Choose: add current element
+        path.add(nums[i]);
+
+        // Explore: recurse with next start index
+        backtrack(nums, i + 1, path, result);
+
+        // Unchoose: remove element for next iteration
+        path.remove(path.size() - 1);
+    }
+}
+```
+
+## Word Search {#lc-word-search}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 79
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lc-word-search/
+- **Tags**: Grind 75, Blind 75, NeetCode 150
+- **Techniques**: [Backtracking: Mark-Unmark](#backtracking-mark-unmark-pattern), [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation), [Backtracking](glossary-of-algorithm.html#glossary-backtracking)
+
+### Description
+
+Given a board of characters and a target word, check if the word can be constructed from sequentially adjacent cells (horizontal or vertical). Each cell can be used at most once.
+
+### Examples
+
+```
+Input:
+[["A","B","C","E"],
+ ["S","F","C","S"],
+ ["A","D","E","E"]], word = "ABCCED"
+Output: true
+```
+
+### Constraints
+
+- `1 <= board.length, board[0].length <= 6`
+- `1 <= word.length <= 15`
+
+### Solution - DFS Backtracking
+
+#### Walkthrough
+
+Try every cell as a starting point by iterating through the entire board. For each starting position, create a fresh `visited` array to track which cells are used in the current path. Use DFS to recursively match characters by exploring all four directions (up, down, left, right).
+
+**Key Backtracking Steps:**
+1. **Mark**: Mark the current cell as visited before exploring neighbors
+2. **Explore**: Recursively try all four directions with the next character
+3. **Unmark**: Restore the cell to unvisited before returning (critical for backtracking!)
+
+This mark-unmark pattern ensures cells can be reused when trying different starting positions or different paths. If we successfully match all characters (reach the end of the word), return true. Otherwise, backtrack and try other paths.
+
+#### Analysis
+
+- **Time Complexity**: O(m × n × 4^L) where `L` is the word length. For each of `m × n` starting positions, DFS explores up to 4^L paths (4 directions at each of L steps, though pruned by visited checks)
+- **Space Complexity**: O(m × n + L) where O(m × n) is for the visited array and O(L) is the recursion stack depth
+
+#### Implementation Steps
+
+1. Loop over all cells `(i, j)` in the board as potential starting positions
+2. For each starting position, create a fresh `visited[m][n]` boolean array
+3. Call `dfs(board, visited, i, j, word, 0)` to attempt matching from that position
+4. **DFS Base Cases:**
+   - If `index >= word.length()`, return true (found complete word)
+   - If out of bounds, return false
+   - If already visited OR character doesn't match, return false
+5. **DFS Recursive Case:**
+   - Mark `visited[i][j] = true`
+   - Recursively explore all 4 directions with `index + 1`
+   - **Backtrack**: Set `visited[i][j] = false` before returning
+6. Return true if any starting position succeeds
+
+#### Code - Java
+
+```java
+public boolean exist(char[][] board, String word) {
+    for (int i = 0; i < board.length; i++) {
+        for (int j = 0; j < board[i].length; j++) {
+            boolean[][] visited = new boolean[board.length][board[0].length];
+
+            boolean result = dfs(board, visited, i, j, word, 0);
+
+            if (result) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+private boolean dfs(char[][] board, boolean[][] visited, int i, int j, String word, int index) {
+    // End of word reached - success
+    if (index >= word.length()) {
+        return true;
+    }
+
+    // Out of bounds check
+    if (i < 0 || i >= board.length || j < 0 || j >= board[0].length) {
+        return false;
+    }
+
+    // Already visited OR character doesn't match
+    if (visited[i][j] || word.charAt(index) != board[i][j]) {
+        return false;
+    }
+
+    // Mark current cell as visited
+    visited[i][j] = true;
+
+    // Explore all four directions
+    boolean found =
+        dfs(board, visited, i + 1, j, word, index + 1) || // down
+        dfs(board, visited, i - 1, j, word, index + 1) || // up
+        dfs(board, visited, i, j + 1, word, index + 1) || // right
+        dfs(board, visited, i, j - 1, word, index + 1);   // left
+
+    // BACKTRACK: Unmark visited cell before returning
+    visited[i][j] = false;
+
+    return found;
+}
+```
+
+## Subsets II {#lc-subsets-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 90
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lc-subsets-ii/
+- **Tags**: NeetCode 150
+- **Techniques**: [Backtracking: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern), [Array](glossary-of-algorithm.html#glossary-array), [Backtracking](glossary-of-algorithm.html#glossary-backtracking)
+
+### Description
+
+Given an integer array that may contain duplicates, return all possible subsets (the power set) without duplicates.
+
+### Examples
+
+```
+Input: nums = [1,2,2]
+Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10`
+- `-10 <= nums[i] <= 10`
+
+### Solution - Backtracking with Skip Logic
+
+#### Walkthrough
+
+This problem uses the **2-dimensional traversal mental model** of backtracking (see [Pattern 1: Choose-Explore-Unchoose](#backtracking-choose-explore-unchoose-pattern)):
+
+- **Outer dimension** (recursion parameter): `start` / depth in the decision tree - controls which subset of elements we're considering
+- **Inner dimension** (for-loop): Iterates through available indices `i` from `start` to `nums.length - 1` at each depth
+
+The backtracking explores a conceptual grid where each row represents a depth level and each column represents a choice of including or excluding an element. At each node, we append the current path (representing one subset) to results.
+
+**Key mechanism**: Sort `nums` so duplicates are adjacent. During recursion, skip elements equal to the previous when at the same depth (`i > start && nums[i] == nums[i-1]`) to avoid generating duplicate subsets.
+
+#### Analysis
+
+- **Time Complexity**: O(2^n)
+- **Space Complexity**: O(n) recursion stack
+
+#### Implementation Steps
+
+1. Sort `nums` to group duplicates together.
+2. Initialize empty `result` list to store all subsets.
+3. Define `backtrack(nums, start, path, result)`:
+   1. Add a copy of `path` to `result` (every path represents a valid subset).
+   2. For each index `i` from `start` to `nums.length - 1`:
+      - Skip if `i > start` and `nums[i] == nums[i - 1]` (avoid duplicate subsets)
+      - Add `nums[i]` to `path` (choose)
+      - Recursively call `backtrack(nums, i + 1, path, result)` (explore)
+      - Remove last element from `path` (unchoose)
+4. Call `backtrack(nums, 0, new ArrayList<>(), result)` to start, then return `result`.
+
+#### Code - Java
+```java
+public List<List<Integer>> subsetsWithDup(int[] nums) {
+    Arrays.sort(nums);
+    List<List<Integer>> result = new ArrayList<>();
+    backtrack(nums, 0, new ArrayList<>(), result);
+    return result;
+}
+
+private void backtrack(int[] nums, int start, List<Integer> path,
+                       List<List<Integer>> result) {
+    // Add current subset to results (every path is a valid subset)
+    result.add(new ArrayList<>(path));
+
+    // Try adding each remaining element
+    for (int i = start; i < nums.length; i++) {
+        // Skip duplicates: only use first occurrence at each recursion level
+        if (i > start && nums[i] == nums[i - 1]) {
+            continue;
+        }
+
+        // Choose: add current element
+        path.add(nums[i]);
+
+        // Explore: recurse with next start index
+        backtrack(nums, i + 1, path, result);
+
+        // Unchoose: remove element for next iteration
+        path.remove(path.size() - 1);
+    }
+}
+```
+
+## Decode Ways {#lc-decode-ways}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 91
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/decode-ways/
+- **Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#glossary-dynamic-programming), [Memoization](#dp-memoization), [Tabulation](#dp-tabulation), String
+
+### Description
+
+A message containing letters from `A-Z` can be encoded into numbers using the following mapping:
+
+```
+'A' -> "1"
+'B' -> "2"
+...
+'Z' -> "26"
+```
+
+To decode an encoded message, all the digits must be grouped then mapped back into letters using the reverse of the mapping above (there may be multiple ways). For example, `"11106"` can be mapped into:
+
+- `"AAJF"` with the grouping `(1 1 10 6)`
+- `"KJF"` with the grouping `(11 10 6)`
+
+Note that the grouping `(1 11 06)` is invalid because `"06"` cannot be mapped into `'F'` since `"6"` is different from `"06"`.
+
+Given a string `s` containing only digits, return the number of ways to decode it.
+
+The test cases are generated so that the answer fits in a **32-bit** integer.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "12"
+Output: 2
+Explanation: "12" could be decoded as "AB" (1 2) or "L" (12).
+```
+
+**Example 2:**
+```
+Input: s = "226"
+Output: 3
+Explanation: "226" could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
+```
+
+**Example 3:**
+```
+Input: s = "06"
+Output: 0
+Explanation: "06" cannot be mapped to "F" because of the leading zero ("6" is different from "06").
+```
+
+### Constraints
+
+- `1 <= s.length <= 100`
+- `s` contains only digits and may contain leading zero(s)
+
+### Solution - Bottom-Up Dynamic Programming (Tabulation)
+
+#### Walkthrough
+
+This problem is a classic DP problem where we need to count the number of ways to decode a digit string. The key insight is that at each position, we can decode either:
+1. **One digit** (if it's '1'-'9')
+2. **Two digits** (if they form '10'-'26')
+
+We build a DP table where `dp[i]` represents the number of ways to decode the first `i` characters of the string.
+
+**DP State Definition:**
+- `dp[i]` = number of ways to decode substring `s[0...i-1]` (first `i` characters)
+
+**Base Case:**
+- `dp[0] = 1` - empty string has one way to decode (do nothing)
+
+**Transition:**
+For each position `i` from 1 to n:
+- Check if we can decode **1 digit** at position `i-1`:
+  - If `s[i-1]` is '1'-'9', add `dp[i-1]` to `dp[i]`
+- Check if we can decode **2 digits** at positions `i-2` and `i-1`:
+  - If `s[i-2:i]` forms '10'-'26', add `dp[i-2]` to `dp[i]`
+
+**Visual Example with `s = "226"`:**
+
+```
+String: "226"
+Index:   0   1   2   3
+Chars:  ""  "2" "22" "226"
+dp:     [1,  ?,  ?,  ?]
+
+Step 1: i=1, processing s[0]='2'
+  One digit: '2' (valid, 1 $\le$ 2 $\le$ 9)
+    dp[1] += dp[0] = 0 + 1 = 1
+  Two digits: N/A (i < 2)
+  dp = [1, 1, 0, 0]
+
+Step 2: i=2, processing s[0:2]="22"
+  One digit: '2' at s[1] (valid, 1 $\le$ 2 $\le$ 9)
+    dp[2] += dp[1] = 0 + 1 = 1
+  Two digits: "22" (valid, 10 $\le$ 22 $\le$ 26)
+    dp[2] += dp[0] = 1 + 1 = 2
+  dp = [1, 1, 2, 0]
+
+  Decodings so far: "BB" (2,2) and "V" (22)
+
+Step 3: i=3, processing s[0:3]="226"
+  One digit: '6' at s[2] (valid, 1 $\le$ 6 $\le$ 9)
+    dp[3] += dp[2] = 0 + 2 = 2
+    This adds: "BBF" (2,2,6) and "VF" (22,6)
+  Two digits: "26" (valid, 10 $\le$ 26 $\le$ 26)
+    dp[3] += dp[1] = 2 + 1 = 3
+    This adds: "BZ" (2,26)
+  dp = [1, 1, 2, 3]
+
+Final result: dp[3] = 3
+Three ways: "BZ" (2,26), "VF" (22,6), "BBF" (2,2,6)
+```
+
+**Handling Edge Cases:**
+
+1. **Leading zeros**: "06" → dp[1] = 0 because '0' is not in range [1,9]
+2. **Zeros in middle**: "10" → Only valid as two-digit "10" → 'J'
+3. **Invalid two-digit**: "27" → Only one-digit decode possible
+
+**Example with `s = "10"`:**
+```
+Step 1: i=1, s[0]='1'
+  One digit: '1' (valid) → dp[1] = 1
+  dp = [1, 1, 0]
+
+Step 2: i=2, s[1]='0'
+  One digit: '0' (invalid, not in [1,9]) → skip
+  Two digits: "10" (valid, 10 $\le$ 10 $\le$ 26) → dp[2] += dp[0] = 1
+  dp = [1, 1, 1]
+
+Result: 1 way ("10" → 'J')
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Single pass through the string with constant-time operations at each position
+  - Each character is processed exactly once
+
+- **Space Complexity**: O(n)
+  - DP array of size n+1 to store results for all positions
+  - Can be optimized to O(1) by using only two variables (similar to Fibonacci)
+
+#### Implementation Steps
+
+1. Create a DP array `dp` of size `n+1` where n is the length of the string
+2. Initialize base case: `dp[0] = 1` (empty string has one way to decode)
+3. For each position `i` from 1 to n:
+   - Extract the digit at position `i-1` using helper method `decode()`
+   - **Check one-digit decode**: If digit is in range [1, 9], add `dp[i-1]` to `dp[i]`
+   - **Check two-digit decode** (if `i >= 2`):
+     - Compute two-digit number from positions `i-2` and `i-1`
+     - If in range [10, 26], add `dp[i-2]` to `dp[i]`
+4. Return `dp[n]` as the final answer
+5. Helper method `decode(char c)` converts character digit to integer: `c - '0'`
+
+#### Code - Java
+
+```java
+public int numDecodings(String s) {
+    int[] dp = new int[s.length() + 1]; // ways to decode first i-th chars
+
+    dp[0] = 1; // only one way
+
+    for(int i = 1; i <= s.length(); i++) {
+        int prev = decode(s.charAt(i - 1));
+
+        if(prev >= 1 && prev <= 9) {
+            dp[i] += dp[i-1];
+        }
+
+        if(i >= 2) {
+            int prev2 = decode(s.charAt(i - 2)) * 10 + decode(s.charAt(i - 1));
+            if(prev2 >= 10 && prev2 <= 26) {
+                dp[i] += dp[i-2];
+            }
+        }
+
+    }
+
+    return dp[s.length()];
+}
+
+private int decode(char c) {
+    return c - '0';
+}
+```
+
+#### Code - Golang
+
+```go
+func numDecodings(s string) int {
+    dp := make([]int, len(s)+1)
+    dp[0] = 1 // only one way
+
+    for i := 1; i <= len(s); i++ {
+        prev := decode(s[i-1])
+
+        if prev >= 1 && prev <= 9 {
+            dp[i] += dp[i-1]
+        }
+
+        if i >= 2 {
+            prev2 := decode(s[i-2])*10 + decode(s[i-1])
+            if prev2 >= 10 && prev2 <= 26 {
+                dp[i] += dp[i-2]
+            }
+        }
+    }
+
+    return dp[len(s)]
+}
+
+func decode(c byte) int {
+    return int(c - '0')
+}
+```
+
+### Solution 2 - Top-Down Dynamic Programming (Memoization)
+
+#### Walkthrough
+
+The memoization approach uses **recursive thinking** to solve the problem by breaking it down into subproblems. We start from index 0 and recursively explore all valid decoding paths, caching results to avoid redundant computation.
+
+**Recursive State Definition:**
+- `dfs(index)` = number of ways to decode substring `s[index...n-1]`
+
+**Base Cases:**
+- If `index == n`, we've successfully decoded the entire string → return 1
+- If `s[index] == '0'`, this is an invalid starting digit → return 0
+
+**Recursive Choices:**
+At each position `index`, we can:
+1. **Take one digit** (if valid: '1'-'9')
+   - Recurse to `dfs(index + 1)`
+2. **Take two digits** (if valid: '10'-'26')
+   - Recurse to `dfs(index + 2)`
+
+The total ways = sum of ways from both choices.
+
+**Recurrence Relation:**
+```
+dfs(index) = 0                                    if s[index] == '0'
+           = dfs(index+1)                         if only 1-digit valid
+           + dfs(index+2)                         if 2-digit also valid
+```
+
+**Visual Example with `s = "226"`:**
+
+```
+                        dfs(0)
+                        ↓
+                s[0]='2', choices: '2' or '22'
+                    /              \
+              dfs(1)                dfs(2)
+          s[1]='2'                  s[2]='6'
+      '2' or '26'                   '6' only
+        /      \                       |
+    dfs(2)    dfs(3)               dfs(3)
+    s[2]='6'   [base:1]             [base:1]
+    '6' only
+       |
+    dfs(3)
+    [base:1]
+
+Paths (bottom-up):
+1. dfs(0) → '2' → dfs(1) → '2' → dfs(2) → '6' → dfs(3) = 1  ["2","2","6"]
+2. dfs(0) → '2' → dfs(1) → '26' → dfs(3) = 1                ["2","26"]
+3. dfs(0) → '22' → dfs(2) → '6' → dfs(3) = 1                ["22","6"]
+
+Total: 3 ways
+```
+
+**Memoization Optimization:**
+Without memoization, we would recompute `dfs(2)` and `dfs(3)` multiple times. By caching results in a `memo` array, each subproblem is solved exactly once.
+
+**Example with `s = "12"`:**
+```
+dfs(0): s[0]='1'
+  - One digit '1': ways1 = dfs(1)
+    dfs(1): s[1]='2'
+      - One digit '2': ways1 = dfs(2) = 1 (base case)
+      - Two digits: index+1 >= n, skip
+      - memo[1] = 1
+  - Two digits '12': ways2 = dfs(2)
+    dfs(2): base case, return 1
+    memo[2] = 1
+  - memo[0] = ways1 + ways2 = 1 + 1 = 2
+
+Result: 2 ways ("1","2") and ("12")
+```
+
+**Handling Edge Cases:**
+
+1. **Starting with '0'**: Immediately return 0 from that recursive call
+2. **Out of bounds two-digit**: Check `index + 1 < n` before forming two-digit number
+3. **Invalid two-digit**: If $\gt$ 26, only count one-digit decode
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Each index from 0 to n is computed at most once due to memoization
+  - Each computation involves O(1) work
+  - Total: O(n)
+
+- **Space Complexity**: O(n)
+  - Memoization array: O(n)
+  - Recursion call stack depth: O(n) in worst case
+  - Total: O(n)
+
+#### Implementation Steps
+
+1. Create a memoization array `memo` of size n, initialized to `-1` (uncomputed state)
+2. Define recursive helper method `dfs(s, index, memo)`:
+   - **Base case 1**: If `index == n`, return 1 (successful decode)
+   - **Base case 2**: If `s[index] == '0'`, return 0 (invalid)
+   - **Memoization check**: If `memo[index] != -1`, return cached result
+   - **Recursive computation**:
+     - Initialize `ways = 0`
+     - **One-digit choice**: If `s[index]` is '1'-'9', add `dfs(index + 1)`
+     - **Two-digit choice**: If `index + 1 < n` and `s[index:index+2]` forms '10'-'26', add `dfs(index + 2)`
+   - Store result in `memo[index]` and return
+3. Call `dfs(s, 0, memo)` to start recursion from beginning
+4. Return the result
+
+#### Code - Java
+
+```java
+public int numDecodings(String s) {
+    int[] memo = new int[s.length()];
+    Arrays.fill(memo, -1);
+    return dfs(s, 0, memo);
+}
+
+private int dfs(String s, int index, int[] memo) {
+    // Base case: reached end of string
+    if (index == s.length()) {
+        return 1;
+    }
+
+    // Invalid: string starting with '0'
+    if (s.charAt(index) == '0') {
+        return 0;
+    }
+
+    // Return cached result if already computed
+    if (memo[index] != -1) {
+        return memo[index];
+    }
+
+    int ways = 0;
+
+    // Choice 1: Decode one digit
+    ways += dfs(s, index + 1, memo);
+
+    // Choice 2: Decode two digits (if valid)
+    if (index + 1 < s.length()) {
+        int twoDigit = (s.charAt(index) - '0') * 10 + (s.charAt(index + 1) - '0');
+        if (twoDigit >= 10 && twoDigit <= 26) {
+            ways += dfs(s, index + 2, memo);
+        }
+    }
+
+    // Cache and return result
+    memo[index] = ways;
+    return ways;
+}
+```
+
+## Pascal's Triangle {#lc-pascals-triangle}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 118
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/lc-pascals-triangle/
+- **Tags**:
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Given a non-negative integer `numRows`, generate the first `numRows` rows of Pascal's triangle. Each number is the sum of the two numbers directly above it.
+
+### Examples
+
+```
+Input: numRows = 5
+Output:
+[
+ [1],
+ [1,1],
+ [1,2,1],
+ [1,3,3,1],
+ [1,4,6,4,1]
+]
+```
+
+### Constraints
+
+- `0 <= numRows <= 30`
+
+### Solution - Dynamic Programming (Tabulation)
+
+#### Walkthrough
+
+This solution uses **bottom-up dynamic programming** (see [Tabulation](#dp-tabulation)) to construct Pascal's Triangle iteratively. Each row depends only on the previous row, making it a classic example of tabulation DP.
+
+**Core Strategy:**
+
+Pascal's Triangle exhibits **optimal substructure**: each element is computed from elements in the previous row:
+```
+triangle[i][j] = triangle[i-1][j-1] + triangle[i-1][j]
+```
+
+**Base case**: Row 0 contains a single element `[1]`.
+
+**Recurrence relation**:
+- First and last elements of each row are always `1`
+- Interior elements: `row[j] = prevRow[j-1] + prevRow[j]`
+
+**Why This is Dynamic Programming:**
+
+- **Optimal Substructure**: Each row is built from the previous row's values
+- **Overlapping Subproblems**: Each element uses values computed in the previous row
+- **Tabulation Approach**: Build the triangle bottom-up, storing each row as we go
+- **Memoization**: The triangle itself stores all computed values for later use
+
+**Step-by-step execution for `numRows = 5`:**
+
+```
+Row 0: [1]                           (base case)
+
+Row 1: [1, 1]                        (edges are 1)
+
+Row 2: [1, 2, 1]
+       Interior: prevRow[0] + prevRow[1] = 1 + 1 = 2
+
+Row 3: [1, 3, 3, 1]
+       Interior[0]: prevRow[0] + prevRow[1] = 1 + 2 = 3
+       Interior[1]: prevRow[1] + prevRow[2] = 2 + 1 = 3
+
+Row 4: [1, 4, 6, 4, 1]
+       Interior[0]: prevRow[0] + prevRow[1] = 1 + 3 = 4
+       Interior[1]: prevRow[1] + prevRow[2] = 3 + 3 = 6
+       Interior[2]: prevRow[2] + prevRow[3] = 3 + 1 = 4
+```
+
+**Key Insight:** This is tabulation DP because we solve smaller subproblems (earlier rows) first and build up to the final result, storing all intermediate results.
+
+#### Analysis
+
+- **Time Complexity**: $O(n^2)$
+  - Outer loop: $n$ rows
+  - Inner loop: Row $i$ has $i$ elements
+  - Total elements: $1 + 2 + 3 + ... + n = \frac{n(n+1)}{2} = O(n^2)$
+  - Each element is computed in constant time (one addition)
+  - This is optimal since the output size itself is $O(n^2)$
+
+- **Space Complexity**: $O(n^2)$ for the output triangle
+  - Row $i$ contains $i+1$ elements
+  - Total space: $\sum_{i=0}^{n-1}(i+1) = \frac{n(n+1)}{2} = O(n^2)$
+  - This is inherent to the problem—we must store all values
+  - Auxiliary space: $O(1)$ (only loop variables and temporary references)
+
+**Why This Approach is Optimal:**
+
+- We must generate all $O(n^2)$ elements—no way to avoid this
+- Each element requires at most 2 additions from the previous row
+- We cannot do better than $O(n^2)$ time and space for this problem
+
+#### Implementation Steps
+
+**Initialization:**
+1. Create empty result list `triangle`
+2. Handle base case: if `numRows == 0`, return empty triangle
+3. Add first row: `[1]` (base case of DP)
+
+**DP Table Construction (Bottom-Up):**
+4. For each row index `row` from 1 to `numRows - 1`:
+   1. Retrieve previous row: `prevRow = triangle.get(row - 1)`
+   2. Create new row list: `current = new ArrayList<>()`
+   3. Add first element: `current.add(1)` (boundary condition)
+   4. **DP Transition**: For each interior position `j` from 1 to `row - 1`:
+      - Compute from previous row: `current.add(prevRow.get(j-1) + prevRow.get(j))`
+      - This is the DP recurrence relation in action
+   5. Add last element: `current.add(1)` (boundary condition)
+   6. Store computed row: `triangle.add(current)` (memoization)
+
+**Return Result:**
+5. Return `triangle` (contains all $n$ rows)
+
+#### Code - Java
+
+```java
+public List<List<Integer>> generate(int numRows) {
+    List<List<Integer>> triangle = new ArrayList<>();
+
+    if (numRows == 0) {
+        return triangle;
+    }
+
+    // Base case: first row is [1]
+    triangle.add(Collections.singletonList(1));
+
+    // Build each subsequent row from the previous row (tabulation DP)
+    for (int row = 1; row < numRows; row++) {
+        List<Integer> prevRow = triangle.get(row - 1);
+        List<Integer> current = new ArrayList<>();
+
+        // First element is always 1
+        current.add(1);
+
+        // DP recurrence: interior elements are sum of two elements above
+        for (int j = 1; j < row; j++) {
+            current.add(prevRow.get(j - 1) + prevRow.get(j));
+        }
+
+        // Last element is always 1
+        current.add(1);
+
+        // Store computed row (memoization)
+        triangle.add(current);
+    }
+
+    return triangle;
+}
+```
+
+**DP Pattern Identification:**
+- **State**: `triangle[i]` represents the $i$-th row of Pascal's Triangle
+- **Base Case**: `triangle[0] = [1]`
+- **Transition**: `triangle[i][j] = triangle[i-1][j-1] + triangle[i-1][j]`
+- **Order**: Bottom-up (compute row 0, then 1, then 2, etc.)
+- **Type**: Tabulation (iterative, not recursive)
+
+This is a classic example of **tabulation DP** where each subproblem (row) depends only on the immediately previous subproblem (previous row), resulting in a clean iterative solution with optimal complexity.
+
+## Word Break {#lc-word-break}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 139
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lc-word-break/
+- **Tags**: Grind 75, Blind 75, NeetCode 150
+- **Techniques**: [Recursion](glossary-of-algorithm.html#glossary-recursion), [Dynamic Programming](#dynamic-programming), [Memoization](#dp-memoization), [Trie](glossary-of-algorithm.html#glossary-trie)
+
+### Description
+
+Given a string `s` and a dictionary `wordDict`, determine whether `s` can be segmented into a space-separated sequence of dictionary words.
+
+### Examples
+
+```
+Input: s = "leetcode", wordDict = ["leet","code"]
+Output: true
+
+Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+Output: false
+```
+
+### Constraints
+
+- `1 <= s.length <= 300`
+- `1 <= wordDict.length <= 1000`
+- Words consist of lowercase letters
+
+### Solution 1 - Recursive Prefix Search (Top-Down DP with Memoization)
+
+#### Walkthrough
+
+This solution uses **recursive exploration with memoization** to determine if a string can be segmented into dictionary words. The approach starts from the beginning of the string and tries every possible prefix, recursively validating the remaining suffix.
+
+**Core Idea:**
+- At each position, try to match prefixes of increasing length against the dictionary
+- If a prefix matches, recursively check if the remaining suffix can be segmented
+- Cache results to avoid recomputing the same subproblems
+
+**Recursive State Definition:**
+- `dfs(start)` returns `true` if substring `s[start...n-1]` can be segmented into dictionary words
+
+**Base Case:**
+- If `start == n` (reached end of string), return `true` - successfully segmented the entire string
+
+**Recursive Exploration:**
+For each starting position `start`, iterate through all possible ending positions `end`:
+1. Extract substring `s[start:end]`
+2. Check if this substring exists in the dictionary
+3. If yes, recursively check if `dfs(end)` returns `true`
+4. If any combination works, return `true`
+5. If no valid segmentation found, return `false`
+
+**Memoization Strategy:**
+Use a `Boolean[]` array (not `boolean[]`) to cache results:
+- `memo[start] == null` → not computed yet
+- `memo[start] == true` → substring from `start` can be segmented
+- `memo[start] == false` → substring from `start` cannot be segmented
+
+**Why Boolean[] instead of boolean[]?**
+
+We use `Boolean[]` (object array) instead of `boolean[]` (primitive array) to distinguish between **three states**:
+
+| State | Meaning | Boolean[] | boolean[] |
+|-------|---------|-----------|-----------|
+| Not computed | Haven't explored this position yet | `null` | `false` (ambiguous!) |
+| Can segment | Valid segmentation exists | `true` | `true` |
+| Cannot segment | No valid segmentation | `false` | `false` (ambiguous!) |
+
+With `boolean[]`, we cannot differentiate between "not yet computed" and "computed to false". Both would be `false`, causing incorrect cache hits. The `Boolean[]` array allows us to check `if (memo[start] != null)` to distinguish cached results from uncomputed states.
+
+**Visual Example with `s = "catsandog"`, `wordDict = ["cats", "dog", "sand", "and", "cat"]`:**
+
+```
+Dictionary as Set: {cats, dog, sand, and, cat}
+
+Call dfs(0): "catsandog"
+  ├─ Try prefix "c" [0:1] → not in dict, skip
+  ├─ Try prefix "ca" [0:2] → not in dict, skip
+  ├─ Try prefix "cat" [0:3] → in dict ✓ → recurse dfs(3)
+  │   │
+  │   └─ dfs(3): "sandog"
+  │       ├─ Try prefix "s" [3:4] → not in dict, skip
+  │       ├─ Try prefix "sa" [3:5] → not in dict, skip
+  │       ├─ Try prefix "san" [3:6] → not in dict, skip
+  │       ├─ Try prefix "sand" [3:7] → in dict ✓ → recurse dfs(7)
+  │       │   │
+  │       │   └─ dfs(7): "og"
+  │       │       ├─ Try prefix "o" [7:8] → not in dict, skip
+  │       │       ├─ Try prefix "og" [7:9] → not in dict, skip
+  │       │       └─ No valid prefix → memo[7] = false, return false
+  │       │
+  │       ├─ Try prefix "sando" [3:8] → not in dict, skip
+  │       ├─ Try prefix "sandog" [3:9] → not in dict, skip
+  │       └─ No valid prefix → memo[3] = false, return false
+  │
+  ├─ Try prefix "cats" [0:4] → in dict ✓ → recurse dfs(4)
+  │   │
+  │   └─ dfs(4): "andog"
+  │       ├─ Try prefix "a" [4:5] → not in dict, skip
+  │       ├─ Try prefix "an" [4:6] → not in dict, skip
+  │       ├─ Try prefix "and" [4:7] → in dict ✓ → recurse dfs(7)
+  │       │   │
+  │       │   └─ dfs(7): "og" → memo[7] = false (cached!), return false
+  │       │
+  │       ├─ Try prefix "ando" [4:8] → not in dict, skip
+  │       ├─ Try prefix "andog" [4:9] → not in dict, skip
+  │       └─ No valid prefix → memo[4] = false, return false
+  │
+  ├─ Try prefixes "catsa", "catsan", ..., "catsandog" → none in dict
+  └─ No valid segmentation → memo[0] = false, return false
+
+Result: false (cannot segment "catsandog")
+```
+
+**Example with `s = "leetcode"`, `wordDict = ["leet", "code"]`:**
+
+```
+Dictionary as Set: {leet, code}
+
+Call dfs(0): "leetcode"
+  ├─ Try prefix "l" [0:1] → not in dict, skip
+  ├─ Try prefix "le" [0:2] → not in dict, skip
+  ├─ Try prefix "lee" [0:3] → not in dict, skip
+  ├─ Try prefix "leet" [0:4] → in dict ✓ → recurse dfs(4)
+  │   │
+  │   └─ dfs(4): "code"
+  │       ├─ Try prefix "c" [4:5] → not in dict, skip
+  │       ├─ Try prefix "co" [4:6] → not in dict, skip
+  │       ├─ Try prefix "cod" [4:7] → not in dict, skip
+  │       ├─ Try prefix "code" [4:8] → in dict ✓ → recurse dfs(8)
+  │       │   │
+  │       │   └─ dfs(8): base case (index == length) → return true ✓
+  │       │
+  │       └─ memo[4] = true, return true ✓
+  │
+  └─ memo[0] = true, return true ✓
+
+Result: true ("leet" + "code")
+```
+
+**Key Memoization Benefits:**
+- In the first example, when we reach `dfs(7)` from different paths, we use the cached `false` result
+- Without memoization, time complexity would be exponential O(2^n)
+- With memoization, each position is computed at most once → O(n^2)
+
+#### Analysis
+
+- **Time Complexity**: Exponential without memoization; with memo, O(n^2) substring checks
+- **Space Complexity**: O(n) recursion depth
+
+#### Implementation Steps
+
+1. Define `dfs(start)` returning `true` if substring from `start` can be segmented.
+2. Iterate `end` from `start+1` to `n`, check whether `s[start:end]` is in the dictionary and `dfs(end)` is true.
+3. Memoize failed indices to avoid recomputation.
+
+#### Code - Java
+
+```java
+public boolean wordBreakRecursive(String s, List<String> wordDict) {
+    Set<String> dict = new HashSet<>(wordDict);
+    Boolean[] memo = new Boolean[s.length()];
+    return dfs(s, 0, dict, memo);
+}
+
+private boolean dfs(String s, int start, Set<String> dict, Boolean[] memo) {
+    if (start == s.length()) {
+        return true;
+    }
+    if (memo[start] != null) {
+        return memo[start];
+    }
+    for (int end = start + 1; end <= s.length(); end++) {
+        if (dict.contains(s.substring(start, end)) && dfs(s, end, dict, memo)) {
+            return memo[start] = true;
+        }
+    }
+    return memo[start] = false;
+}
+```
+
+### Solution 2 - Bottom-Up Dynamic Programming
+
+#### Walkthrough
+
+Let `dp[i]` denote whether prefix `s[0:i)` can be segmented. For each ending index `i`, check dictionary words that could end at `i` and see if the preceding prefix was valid.
+
+#### Analysis
+
+- **Time Complexity**: O(n * m), where `m` is dictionary size
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+1. Initialize `dp[0] = true`.
+2. For `end` from `1` to `n`, iterate dictionary words.
+3. If `word` fits at the end and `dp[end - word.length()]` is true, set `dp[end] = true`.
+4. Return `dp[n]`.
+
+#### Code - Java
+
+```java
+public boolean wordBreakDP(String s, List<String> wordDict) {
+    boolean[] dp = new boolean[s.length() + 1];
+    dp[0] = true;
+
+    for (int end = 1; end <= s.length(); end++) {
+        for (String word : wordDict) {
+            int len = word.length();
+            if (len <= end && dp[end - len] && s.substring(end - len, end).equals(word)) {
+                dp[end] = true;
+                break;
+            }
+        }
+    }
+    return dp[s.length()];
+}
+```
+
+### Solution 3 - Trie-Assisted DP
+
+#### Walkthrough
+
+Insert dictionary words into a trie. While scanning the string, whenever `dp[i]` is true, walk the trie starting at `i` to mark reachable `dp[j]`. This prunes dictionary iterations when many words share prefixes.
+
+#### Analysis
+
+- **Time Complexity**: O(n * L) where `L` is average word length encountered
+- **Space Complexity**: O(total dictionary characters)
+
+#### Implementation Steps
+
+1. Build a trie with `isEnd` flags.
+2. Initialize `dp[0] = true`.
+3. For each index `i`, if `dp[i]` is true, traverse trie edges following `s[i...]`.
+4. Whenever a trie node is terminal at index `j`, set `dp[j] = true`.
+
+#### Code - Java
+
+```java
+class TrieNode {
+    boolean isEnd;
+    TrieNode[] next = new TrieNode[26];
+}
+
+class Trie {
+    TrieNode root = new TrieNode();
+
+    void insert(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+            if (node.next[idx] == null) {
+                node.next[idx] = new TrieNode();
+            }
+            node = node.next[idx];
+        }
+        node.isEnd = true;
+    }
+
+    void advance(String s, int start, boolean[] dp) {
+        TrieNode node = root;
+        for (int i = start; i < s.length(); i++) {
+            int idx = s.charAt(i) - 'a';
+            if (node.next[idx] == null) {
+                return;
+            }
+            node = node.next[idx];
+            if (node.isEnd) {
+                dp[i + 1] = true;
+            }
+        }
+    }
+}
+
+public boolean wordBreakTrie(String s, List<String> wordDict) {
+    Trie trie = new Trie();
+    for (String word : wordDict) {
+        trie.insert(word);
+    }
+    boolean[] dp = new boolean[s.length() + 1];
+    dp[0] = true;
+    for (int i = 0; i < s.length(); i++) {
+        if (dp[i]) {
+            trie.advance(s, i, dp);
+        }
+    }
+    return dp[s.length()];
+}
+```
+
+## House Robber {#lc-house-robber}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 198
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/lc-house-robber/
+- **Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Given a lc-list of non-negative integers representing the amount of money in each house along a street, determine the maximum amount you can rob without robbing two adjacent houses.
+
+### Examples
+
+```
+Input: [1,2,3,1]
+Output: 4
+```
+
+### Constraints
+
+- `1 <= nums.length <= 100`
+- `0 <= nums[i] <= 400`
+
+### Solution - Linear DP
+
+#### Walkthrough
+
+Let `dp[i]` be the best we can do up to house `i`. For each house, we either rob it plus `dp[i-2]` or skip it and take `dp[i-1]`. Initialize the first two values and iterate.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1) using rolling variables
+
+#### Implementation Steps
+
+
+1. Handle `n == 1`.
+2. Maintain `prev2` (dp[i-2]) and `prev1` (dp[i-1]).
+3. For each house value `num`, compute `current = Math.max(prev1, prev2 + num)`.
+4. Shift `prev2 = prev1`, `prev1 = current`.
+5. Return `prev1`.
+
+#### Code - Java
+```java
+public int rob(int[] nums) {
+    if (nums.length == 1) {
+        return nums[0];
+    }
+
+    int prev2 = 0;
+    int prev1 = 0;
+
+    for (int value : nums) {
+        int current = Math.max(prev1, prev2 + value);
+        prev2 = prev1;
+        prev1 = current;
+    }
+
+    return prev1;
+}
+
+
+```
+
+## Maximal Square {#lc-maximal-square}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 221
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lc-maximal-square/
+- **Tags**:
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation)
+
+### Description
+
+Given an `m x n` binary matrix filled with `0`'s and `1`'s, find the largest square containing only `1`'s and return its area.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: matrix = [["1","0","1","0","0"],
+                 ["1","0","1","1","1"],
+                 ["1","1","1","1","1"],
+                 ["1","0","0","1","0"]]
+Output: 4
+Explanation: The largest square has side length 2, so area = 2 * 2 = 4
+```
+
+**Example 2:**
+
+```
+Input: matrix = [["0","1"],
+                 ["1","0"]]
+Output: 1
+```
+
+**Example 3:**
+
+```
+Input: matrix = [["0"]]
+Output: 0
+```
+
+### Constraints
+
+- `m == matrix.length`
+- `n == matrix[i].length`
+- `1 <= m, n <= 300`
+- `matrix[i][j]` is `'0'` or `'1'`
+
+### Solution - Dynamic Programming
+
+#### Walkthrough
+
+The key insight is that for any cell `(r, c)` containing `'1'`, the maximum square with that cell as the bottom-right corner depends on the minimum of three neighboring squares:
+
+1. The square ending at `(r-1, c)` (cell above)
+2. The square ending at `(r, c-1)` (cell to the left)
+3. The square ending at `(r-1, c-1)` (diagonal cell)
+
+If all three neighbors can form squares of side length `k`, then the current cell can form a square of side length `k+1`. This is because:
+- The top neighbor ensures we have `k` rows of `1`'s above
+- The left neighbor ensures we have `k` columns of `1`'s to the left
+- The diagonal neighbor ensures the `k x k` square is filled with `1`'s
+
+We use a DP table where `dp[r][c]` represents the side length of the largest square whose bottom-right corner is at `(r, c)`.
+
+**Example Walkthrough:**
+
+For the matrix:
+```
+["1","0","1","0","0"]
+["1","0","1","1","1"]
+["1","1","1","1","1"]
+["1","0","0","1","0"]
+```
+
+The DP table builds as:
+```
+[1, 0, 1, 0, 0]
+[1, 0, 1, 1, 1]
+[1, 1, 1, 2, 2]  ← dp[2][3] = min(1,1,1) + 1 = 2
+[1, 0, 0, 1, 0]
+```
+
+The maximum side length is 2, so the area is 2 × 2 = 4.
+
+#### Analysis
+
+- **Time Complexity**: O(m × n) - Single pass through the matrix
+- **Space Complexity**: O(m × n) - DP table storage (can be optimized to O(n) using rolling arrays)
+
+#### Implementation Steps
+
+
+1. Initialize a DP table `dp[rows][cols]` and `max_side = 0`
+2. For each cell `(r, c)`:
+   - If `matrix[r][c] == '1'`:
+     - If it's in the first row or first column, `dp[r][c] = 1` (can only form 1×1 square)
+     - Otherwise, `dp[r][c] = min(dp[r-1][c], dp[r][c-1], dp[r-1][c-1]) + 1`
+     - Update `max_side` with the maximum side length seen
+   - If `matrix[r][c] == '0'`, set `dp[r][c] = 0`
+3. Return `max_side × max_side` (area = side²)
+
+#### Code - Java
+
+```java
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int[][] dp = new int[rows][cols];
+        int max_side = 0;
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                // Only process cells containing '1'
+                if (matrix[r][c] == '1') {
+                    // Base case: first row or first column
+                    // Can only form a 1x1 square
+                    if (r == 0 || c == 0) {
+                        dp[r][c] = 1;
+                    } else {
+                        // DP transition: current square size is limited by
+                        // the minimum of the three neighbors + 1
+                        int min = Math.min(dp[r - 1][c], dp[r][c - 1]);
+                        min = Math.min(min, dp[r - 1][c - 1]);
+                        dp[r][c] = min + 1;
+                    }
+
+                    // Track the maximum side length encountered
+                    max_side = Math.max(max_side, dp[r][c]);
+                } else {
+                    // Cell contains '0', cannot form a square
+                    dp[r][c] = 0;
+                }
+            }
+        }
+
+        // Return area (side length squared)
+        return max_side * max_side;
+    }
+}
+```
+
+## Paint House {#lc-paint-house}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 256
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/lc-paint-house/
+- **Tags**:
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+You are given an `n x 3` matrix `costs` where `costs[i][j]` denotes the cost of painting house `i` with color `j`. Adjacent houses must not share a color. Return the minimum total cost to paint all houses.
+
+### Examples
+
+```
+Input: costs = [[17,2,17],[16,16,5],[14,3,19]]
+Output: 10
+```
+
+### Constraints
+
+- `1 <= n <= 100`
+- `0 <= costs[i][j] <= 10^4`
+
+### Solution - Rolling DP
+
+#### Walkthrough
+
+Keep three running totals for the cost of painting up to the current house when the current house ends in red, green, or blue. For house `i`, the red cost equals `costs[i][0] + min(previousGreen, previousBlue)`, and similarly for the other colors. Update the running totals and take the minimum at the end.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+
+1. Initialize `red = green = blue = 0`.
+2. For each house:
+   1. Compute new totals for each color by adding its cost to the minimum of the other two previous totals.
+   2. Update `red`, `green`, `blue` to these new totals.
+3. Return `min(red, green, blue)`.
+
+#### Code - Java
+```java
+public int minCost(int[][] costs) {
+    int red = 0, green = 0, blue = 0;
+
+    for (int[] cost : costs) {
+        int newRed = cost[0] + Math.min(green, blue);
+        int newGreen = cost[1] + Math.min(red, blue);
+        int newBlue = cost[2] + Math.min(red, green);
+        red = newRed;
+        green = newGreen;
+        blue = newBlue;
+    }
+
+    return Math.min(red, Math.min(green, blue));
+}
+
+
+```
+
+## Longest Increasing Subsequence {#lc-lis}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 300
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/longest-increasing-subsequence/
+- **Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Binary Search](#binary-search-strategy), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Given an integer array, find the length of the longest strictly increasing subsequence.
+
+### Examples
+
+```
+Input: [10,9,2,5,3,7,101,18]
+Output: 4  (the LIS is [2,3,7,101])
+```
+
+### Constraints
+
+- `1 <= nums.length <= 2500`
+- `-10^4 <= nums[i] <= 10^4`
+
+### Solution - Binary Search (Patience Sorting)
+
+#### Walkthrough
+
+This solution uses a **Binary Search with Patience Sorting** approach to find the length of the longest increasing subsequence in O(n log n) time.
+
+**Core Strategy:**
+
+Maintain a `tails` array where `tails[i]` represents the **smallest possible tail element** for all increasing subsequences of length `i + 1`. This invariant allows us to efficiently determine where to place new elements.
+
+**Key Insight: Why Track Smallest Tails?**
+
+By keeping the smallest possible tail for each length, we maximize opportunities for future elements to extend subsequences. Consider two subsequences of length 3:
+- `[2, 5, 9]` with tail 9
+- `[2, 3, 7]` with tail 7
+
+The second subsequence with tail 7 has more potential to be extended by future elements (any element $>$ 7 works, whereas only elements $>$ 9 work for the first).
+
+**Algorithm Steps:**
+
+For each element `num` in the array:
+
+1. **Binary search** in `tails` to find the leftmost position where `tails[i] >= num`
+2. **Two cases:**
+   - **Found position `i`**: Replace `tails[i] = num` (update to smaller tail for this length)
+   - **Not found** (num is larger than all tails): Append `num` to extend the LIS length
+
+**Why Binary Search Works:**
+
+The `tails` array maintains a sorted order by construction:
+- If `tails[i] < tails[j]` for `i < j`, it's because we found an increasing subsequence of length `j + 1` with a tail value greater than the tail of length `i + 1`
+- This monotonic property allows binary search to find the insertion point in O(log n)
+
+**Visual Example Walkthrough:**
+
+Using `nums = [10, 9, 2, 5, 3, 7, 101, 18]`:
+
+```
+Step 1: num=10
+  tails = [10]
+  Binary search: position 0 (empty array), append 10
+  LIS length = 1
+
+Step 2: num=9
+  tails = [9]
+  Binary search: position 0 (9 $<$ 10), replace tails[0] = 9
+  LIS length = 1
+  (9 is a better tail for length-1 subsequences than 10)
+
+Step 3: num=2
+  tails = [2]
+  Binary search: position 0 (2 $<$ 9), replace tails[0] = 2
+  LIS length = 1
+  (2 is an even better tail for length-1 subsequences)
+
+Step 4: num=5
+  tails = [2, 5]
+  Binary search: position 1 (5 $>$ 2), append 5
+  LIS length = 2
+  (Found subsequence [2, 5] of length 2)
+
+Step 5: num=3
+  tails = [2, 3]
+  Binary search: position 1 (3 $>$ 2 but 3 $<$ 5), replace tails[1] = 3
+  LIS length = 2
+  (3 is a better tail for length-2 subsequences than 5)
+
+Step 6: num=7
+  tails = [2, 3, 7]
+  Binary search: position 2 (7 $>$ 3), append 7
+  LIS length = 3
+  (Found subsequence [2, 3, 7] of length 3)
+
+Step 7: num=101
+  tails = [2, 3, 7, 101]
+  Binary search: position 3 (101 $>$ 7), append 101
+  LIS length = 4
+  (Found subsequence [2, 3, 7, 101] of length 4)
+
+Step 8: num=18
+  tails = [2, 3, 7, 18]
+  Binary search: position 3 (18 $>$ 7 but 18 $<$ 101), replace tails[3] = 18
+  LIS length = 4
+  (18 is a better tail for length-4 subsequences)
+
+Result: 4 (the LIS could be [2, 3, 7, 101] or [2, 3, 7, 18])
+```
+
+**Important Note:** The `tails` array tracks the **length** of the LIS, not the actual LIS itself. To reconstruct the actual subsequence, additional bookkeeping (parent pointers) would be needed.
+
+**Why This Approach is Optimal:**
+
+- Each element is processed once: O(n) iterations
+- Each iteration performs binary search: O(log n)
+- Total: O(n log n), which is the best known time complexity for LIS
+- Space: O(n) for the `tails` array
+
+#### Analysis
+
+- **Time Complexity**: O(n log n)
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+1. Initialize empty list `tails`.
+2. For each number `x`:
+   - Binary search `tails` to find the leftmost index `i` with `tails[i] >= x`.
+   - If such index exists set `tails[i] = x`, else append `x`.
+3. Return `tails.size()`.
+
+#### Code - Java
+```java
+public int lengthOfLIS(int[] nums) {
+    int[] tails = new int[nums.length];
+    int size = 0;
+
+    for (int num : nums) {
+        int left = 0;
+        int right = size;
+
+        // Binary search: find leftmost position where tails[i] >= num
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (tails[mid] < num) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        // Update or append
+        tails[left] = num;
+
+        // Extend LIS length if we appended
+        if (left == size) {
+            size++;
+        }
+    }
+
+    return size;
+}
+```
+
+
+### Solution - Dynamic Programming
+
+#### Walkthrough
+
+This solution uses a **classic tabulation DP approach** to find the LIS length. While slower than the binary search method, it's more intuitive and easier to extend for related problems (like reconstructing the actual subsequence).
+
+**Core Strategy:**
+
+Build up solutions from smaller subarrays. Let `dp[i]` represent the length of the longest increasing subsequence **ending at index i**. For each position, look back at all previous elements and extend their subsequences if possible.
+
+**Recurrence Relation:**
+
+For each index `i`:
+```
+dp[i] = 1 + max(dp[j]) for all j < i where nums[j] < nums[i]
+```
+
+If no such `j` exists (no smaller element before `i`), then `dp[i] = 1` (subsequence of just `nums[i]`).
+
+**Key Insight:**
+
+Unlike Kadane's algorithm (which works for contiguous subarrays), LIS deals with **subsequences** (non-contiguous). We cannot use a greedy approach because skipping an element might lead to a longer subsequence later.
+
+Example: `[1, 10, 2, 3]`
+- Greedy approach taking 10 gives length 2: `[1, 10]`
+- Optimal approach skipping 10 gives length 3: `[1, 2, 3]`
+
+This is why we need DP to track all possible subsequence endings.
+
+**Visual Example Walkthrough:**
+
+Using `nums = [10, 9, 2, 5, 3, 7, 101, 18]`:
+
+```
+i=0: nums[0]=10
+  dp[0] = 1 (no previous elements)
+  Subsequences ending at 0: [10]
+
+i=1: nums[1]=9
+  Check j=0: 10 $>$ 9, cannot extend
+  dp[1] = 1
+  Subsequences ending at 1: [9]
+
+i=2: nums[2]=2
+  Check j=0: 10 $>$ 2, cannot extend
+  Check j=1: 9 $>$ 2, cannot extend
+  dp[2] = 1
+  Subsequences ending at 2: [2]
+
+i=3: nums[3]=5
+  Check j=0: 10 $>$ 5, cannot extend
+  Check j=1: 9 $>$ 5, cannot extend
+  Check j=2: 2 $<$ 5, can extend! dp[3] = 1 + dp[2] = 2
+  Subsequences ending at 3: [2, 5]
+
+i=4: nums[4]=3
+  Check j=0,1: cannot extend
+  Check j=2: 2 $<$ 3, can extend! dp[4] = 1 + dp[2] = 2
+  Check j=3: 5 $>$ 3, cannot extend
+  dp[4] = 2
+  Subsequences ending at 4: [2, 3]
+
+i=5: nums[5]=7
+  Check j=0,1: cannot extend
+  Check j=2: 2 $<$ 7, dp[5] = max(dp[5], 1 + dp[2]) = 2
+  Check j=3: 5 $<$ 7, dp[5] = max(dp[5], 1 + dp[3]) = 3 ✓
+  Check j=4: 3 $<$ 7, dp[5] = max(dp[5], 1 + dp[4]) = 3
+  dp[5] = 3
+  Subsequences ending at 5: [2, 5, 7] or [2, 3, 7]
+
+i=6: nums[6]=101
+  All previous elements $<$ 101
+  Best: dp[6] = 1 + dp[5] = 4
+  Subsequences ending at 6: [2, 5, 7, 101] or [2, 3, 7, 101]
+
+i=7: nums[7]=18
+  Check all j $<$ 7 where nums[j] $<$ 18:
+  Best: dp[7] = 1 + dp[5] = 4
+  Subsequences ending at 7: [2, 5, 7, 18] or [2, 3, 7, 18]
+
+dp = [1, 1, 1, 2, 2, 3, 4, 4]
+Result: max(dp) = 4
+```
+
+**Why Two Nested Loops:**
+- **Outer loop** (i): Process each element as a potential end of a subsequence
+- **Inner loop** (j): Check all previous elements that could extend to position i
+- This ensures we consider all possible subsequences ending at each position
+
+#### Analysis
+
+- **Time Complexity**: O(n²)
+  - Outer loop: O(n) iterations (one per element)
+  - Inner loop: O(n) iterations per outer iteration (check all previous elements)
+  - Each iteration performs constant-time comparison and update
+  - Total: O(n) × O(n) = O(n²)
+
+- **Space Complexity**: O(n)
+  - DP array stores one value per input element
+  - No recursion stack needed (iterative approach)
+  - This is optimal for the DP approach
+
+**Comparison with Binary Search:**
+- **DP**: O(n²) time, easier to understand, easier to reconstruct actual LIS
+- **Binary Search**: O(n log n) time, more efficient for large inputs, trickier to implement
+
+#### Implementation Steps
+
+**Initialization:**
+1. Create `dp` array of size n, initialized to 1 (each element forms a subsequence of length 1)
+2. Initialize `maxLength = 1` to track the global maximum
+
+**DP Table Construction:**
+3. For each index `i` from 0 to n-1 (outer loop - potential end position):
+   1. For each index `j` from 0 to i-1 (inner loop - check all previous elements):
+      - If `nums[j] < nums[i]` (can extend subsequence ending at j):
+        - Update `dp[i] = max(dp[i], dp[j] + 1)`
+   2. Update global maximum: `maxLength = max(maxLength, dp[i])`
+
+**Return Result:**
+4. Return `maxLength` (the maximum value in the dp array)
+
+#### Code - Java
+```java
+public int lengthOfLIS(int[] nums) {
+    int n = nums.length;
+    int[] dp = new int[n];
+    Arrays.fill(dp, 1); // Base case: each element is a subsequence of length 1
+
+    int maxLength = 1;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (nums[j] < nums[i]) {
+                dp[i] = Math.max(dp[i], dp[j] + 1);
+            }
+        }
+        maxLength = Math.max(maxLength, dp[i]);
+    }
+
+    return maxLength;
+}
+```
+
+#### Code - Golang
+```go
+func lengthOfLIS(nums []int) int {
+    n := len(nums)
+    if n == 0 {
+        return 0
+    }
+
+    dp := make([]int, n)
+    for i := range dp {
+        dp[i] = 1 // Each element forms a subsequence of length 1
+    }
+
+    maxLength := 1
+
+    for i := 0; i < n; i++ {
+        for j := 0; j < i; j++ {
+            if nums[j] < nums[i] {
+                dp[i] = max(dp[i], dp[j] + 1)
+            }
+        }
+        maxLength = max(maxLength, dp[i])
+    }
+
+    return maxLength
+}
+```
+
+## Best Time to Buy and Sell Stock with Cooldown {#lc-stock-cooldown}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 309
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+- **Tags**: NeetCode 150
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+You may complete multiple transactions, but after selling a stock you must wait one day (cooldown) before buying again. Return the maximum profit.
+
+### Examples
+
+```
+Input: [1,2,3,0,2]
+Output: 3
+```
+
+### Constraints
+
+- `1 <= prices.length <= 5000`
+
+### Solution - State Machine DP
+
+#### Walkthrough
+
+This solution uses a **state machine dynamic programming approach** to handle the cooldown constraint.
+
+**Core Strategy:**
+
+Unlike Stock II (unlimited transactions, no cooldown), the cooldown rule creates dependencies between transactions. We cannot use the greedy approach because selling today affects when we can buy next.
+
+The key insight is to model this as a **finite state machine** with three states:
+
+1. **`hold`**: Currently holding a stock (profit if we're in this state)
+2. **`sold`**: Just sold a stock today (profit from selling)
+3. **`rest`**: Resting or in cooldown (profit while not holding)
+
+**State Transitions:**
+
+```
+     buy
+rest ───→ hold
+ ↑         │
+ │   sell │
+ └─────────┘
+   (cooldown)
+```
+
+At each day, we can transition between states:
+- **To reach `hold`**: Either keep holding, OR buy from `rest` (can't buy from `sold` due to cooldown)
+- **To reach `sold`**: Sell from `hold`
+- **To reach `rest`**: Either keep resting, OR enter cooldown from `sold`
+
+**Recurrence Relations:**
+
+For each day `i`:
+```
+hold[i] = max(hold[i-1], rest[i-1] - price[i])
+          ↑              ↑
+          keep holding   buy today from rest state
+
+sold[i] = hold[i-1] + price[i]
+          ↑
+          sell from hold state
+
+rest[i] = max(rest[i-1], sold[i-1])
+          ↑              ↑
+          keep resting   enter cooldown after selling
+```
+
+**Why This is Dynamic Programming:**
+- **Overlapping subproblems**: Each day's optimal state depends on previous day's states
+- **Optimal substructure**: Optimal profit at day `i` builds on optimal profits from day `i-1`
+- **State dependencies**: Cannot make greedy local choices due to cooldown constraint
+
+**Visual Example Walkthrough:**
+
+Using `prices = [1, 2, 3, 0, 2]`:
+
+```
+Day 0: price=1
+  hold = -1  (buy at 1)
+  sold = 0   (can't sell on first day)
+  rest = 0   (start in rest state)
+
+Day 1: price=2
+  hold = max(-1, 0-2) = -1  (keep holding from day 0)
+  sold = -1 + 2 = 1         (sell, profit = 1)
+  rest = max(0, 0) = 0      (no sold state yet to enter cooldown)
+
+Day 2: price=3
+  hold = max(-1, 0-3) = -1  (keep holding)
+  sold = -1 + 3 = 2         (sell from hold, profit = 2)
+  rest = max(0, 1) = 1      (enter cooldown after day 1 sell)
+
+Day 3: price=0
+  hold = max(-1, 1-0) = 1   (buy at 0 from rest, profit = 1) ✓
+  sold = -1 + 0 = -1        (selling at 0 is bad)
+  rest = max(1, 2) = 2      (enter cooldown after day 2 sell)
+
+Day 4: price=2
+  hold = max(1, 2-2) = 1    (keep holding from day 3)
+  sold = 1 + 2 = 3          (sell at 2, total profit = 3) ✓
+  rest = max(2, -1) = 2     (cooldown or rest)
+
+Result: max(sold, rest) = max(3, 2) = 3
+Optimal strategy: Buy@1, Sell@2, Cooldown, Buy@0, Sell@2
+```
+
+**Key Insight: Why Greedy Fails Here**
+
+Unlike Stock II, we cannot greedily capture every price increase:
+- `1→2→3` sequence: Greedy would sell at 2 and buy at 2, but cooldown prevents this
+- Must consider future opportunities when deciding to sell today
+- DP tracks all possible states to find the optimal sequence of transactions
+
+**Space Optimization:**
+
+Notice we only need the previous day's states, so we use three variables instead of arrays (O(1) space).
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+1. Initialize `hold = -prices[0]`, `sold = 0`, `rest = 0`.
+2. For each subsequent price:
+   - `int prevSold = sold;`
+   - `sold = hold + price;`
+   - `hold = Math.max(hold, rest - price);`
+   - `rest = Math.max(rest, prevSold);`
+3. Return `Math.max(sold, rest)`.
+
+#### Code - Java
+```java
+public int maxProfit(int[] prices) {
+    int hold = -prices[0];
+    int sold = 0;
+    int rest = 0;
+
+    for (int i = 1; i < prices.length; i++) {
+        int prevSold = sold;
+        sold = hold + prices[i];
+        hold = Math.max(hold, rest - prices[i]);
+        rest = Math.max(rest, prevSold);
+    }
+
+    return Math.max(sold, rest);
+}
+
+
+```
+
+## Coin Change {#lc-coin-change}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 322
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lc-coin-change/
+- **Tags**: Grind 75, Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Unbounded Knapsack](#dp-unbounded-knapsack), [Array](glossary-of-algorithm.html#glossary-array), Breadth-First Search
+
+### Description
+
+You are given an integer array `coins` representing coins of different denominations and an integer `amount` representing a total amount of money.
+
+Return the **fewest number of coins** that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return `-1`.
+
+You may assume that you have an **infinite number of each kind of coin**.
+
+### Examples
+
+**Example 1:**
+```
+Input: coins = [1,2,5], amount = 11
+Output: 3
+Explanation: 11 = 5 + 5 + 1
+```
+
+**Example 2:**
+```
+Input: coins = [2], amount = 3
+Output: -1
+Explanation: The amount of 3 cannot be made up with coins of 2.
+```
+
+**Example 3:**
+```
+Input: coins = [1], amount = 0
+Output: 0
+Explanation: No coins are needed to make amount 0.
+```
+
+### Constraints
+
+- `1 <= coins.length <= 12`
+- `1 <= coins[i] <= 2^31 - 1`
+- `0 <= amount <= 10^4`
+
+### Solution - Dynamic Programming (Unbounded Knapsack)
+
+#### Walkthrough
+
+This problem is a classic **Unbounded Knapsack** variant where instead of **counting combinations** (like [Coin Change II](#lc-coin-change-ii)), we need to find the **minimum number of items** needed to reach the target amount.
+
+**Key Difference from Coin Change II:**
+
+| Aspect | Coin Change (322) | Coin Change II (518) |
+|--------|-------------------|----------------------|
+| **Goal** | Minimize coin count | Count combinations |
+| **DP meaning** | `dp[i]` = min coins to make amount `i` | `dp[i]` = number of ways to make amount `i` |
+| **Recurrence** | `dp[i] = min(dp[i], dp[i-coin] + 1)` | `dp[i] += dp[i-coin]` |
+| **Base case** | `dp[0] = 0` (0 coins for amount 0) | `dp[0] = 1` (1 way for amount 0) |
+| **Initialization** | `dp[i] = ∞` (impossible initially) | `dp[i] = 0` (no ways initially) |
+| **Impossible case** | Return `-1` if `dp[amount] == ∞` | Return `0` (no ways) |
+
+**Core DP Strategy:**
+
+We use a 1D DP array where `dp[i]` represents the **minimum number of coins** needed to make amount `i`.
+
+**Recurrence Relation:**
+
+For each coin and each amount `i >= coin`:
+```
+dp[i] = min(dp[i], dp[i - coin] + 1)
+```
+
+This means:
+- `dp[i]`: Current minimum coins needed for amount `i`
+- `dp[i - coin]`: Minimum coins for the remaining amount after using one `coin`
+- `+ 1`: We're using one additional coin
+- `min()`: Keep the better option (use or don't use this coin)
+
+**Base Case:**
+```
+dp[0] = 0
+```
+We need **zero coins** to make amount 0.
+
+**Initialization:**
+```
+dp[i] = amount + 1  (or Integer.MAX_VALUE)
+```
+Initialize all amounts as "impossible" (requires more coins than could ever be needed). We use `amount + 1` because the maximum possible coins needed is `amount` (using all 1-denomination coins).
+
+**Visual Example: `coins = [1, 2, 5], amount = 11`**
+
+**Initial State:**
+```
+dp = [0, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞, ∞]
+      ↑
+   amount 0 = 0 coins
+```
+
+**Iteration 1: Process coin = 1**
+
+For each amount `i` from 1 to 11, update `dp[i] = min(dp[i], dp[i-1] + 1)`:
+
+```
+i=1:  dp[1] = min(∞, dp[0]+1) = min(∞, 1) = 1
+i=2:  dp[2] = min(∞, dp[1]+1) = min(∞, 2) = 2
+i=3:  dp[3] = min(∞, dp[2]+1) = min(∞, 3) = 3
+...
+i=11: dp[11] = min(∞, dp[10]+1) = min(∞, 11) = 11
+
+dp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+```
+
+After processing coin=1:
+- All amounts 1-11 can be made with 1-coins only
+- E.g., amount 11 = eleven 1-coins
+
+**Iteration 2: Process coin = 2**
+
+For each amount `i` from 2 to 11, update `dp[i] = min(dp[i], dp[i-2] + 1)`:
+
+```
+i=2:  dp[2] = min(2, dp[0]+1) = min(2, 1) = 1  → {2}
+i=3:  dp[3] = min(3, dp[1]+1) = min(3, 2) = 2  → {2,1}
+i=4:  dp[4] = min(4, dp[2]+1) = min(4, 2) = 2  → {2,2}
+i=5:  dp[5] = min(5, dp[3]+1) = min(5, 3) = 3  → {2,2,1}
+i=6:  dp[6] = min(6, dp[4]+1) = min(6, 3) = 3  → {2,2,2}
+i=7:  dp[7] = min(7, dp[5]+1) = min(7, 4) = 4  → {2,2,2,1}
+i=8:  dp[8] = min(8, dp[6]+1) = min(8, 4) = 4  → {2,2,2,2}
+i=9:  dp[9] = min(9, dp[7]+1) = min(9, 5) = 5  → {2,2,2,2,1}
+i=10: dp[10] = min(10, dp[8]+1) = min(10, 5) = 5  → {2,2,2,2,2}
+i=11: dp[11] = min(11, dp[9]+1) = min(11, 6) = 6  → {2,2,2,2,2,1}
+
+dp = [0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6]
+```
+
+**Iteration 3: Process coin = 5**
+
+For each amount `i` from 5 to 11, update `dp[i] = min(dp[i], dp[i-5] + 1)`:
+
+```
+i=5:  dp[5] = min(3, dp[0]+1) = min(3, 1) = 1   → {5}
+i=6:  dp[6] = min(3, dp[1]+1) = min(3, 2) = 2   → {5,1}
+i=7:  dp[7] = min(4, dp[2]+1) = min(4, 2) = 2   → {5,2}
+i=8:  dp[8] = min(4, dp[3]+1) = min(4, 3) = 3   → {5,2,1}
+i=9:  dp[9] = min(5, dp[4]+1) = min(5, 3) = 3   → {5,2,2}
+i=10: dp[10] = min(5, dp[5]+1) = min(5, 2) = 2  → {5,5}
+i=11: dp[11] = min(6, dp[6]+1) = min(6, 3) = 3  → {5,5,1}
+
+dp = [0, 1, 1, 2, 2, 1, 2, 2, 3, 3, 2, 3]
+      ↑                             ↑
+   base                          answer
+```
+
+**Final Result: `dp[11] = 3`**
+
+The minimum is 3 coins: `{5, 5, 1}`
+
+**Why Loop Order Doesn't Matter for Minimization:**
+
+Unlike Coin Change II (where coins-outer prevents permutation counting), **for minimization problems the loop order doesn't affect correctness**:
+
+- **Coins outer** (used in solution): Process all amounts for each coin
+- **Amounts outer**: Process all coins for each amount
+
+Both give the same answer because we're taking the `min()` of all possibilities. Order doesn't matter when optimizing—we consider all combinations anyway.
+
+**Counter-example (Why ∞ Initialization is Critical):**
+
+If we initialize with 0 instead of ∞:
+```java
+// WRONG
+int[] dp = new int[amount + 1]; // All zeros
+```
+
+Then `dp[i] = min(dp[i], dp[i-coin] + 1)` would always pick 0, giving incorrect results.
+
+**Key Insights:**
+
+1. **Minimization vs Counting**: Use `min()` instead of `+=`
+2. **∞ Initialization**: Represents "impossible" state initially
+3. **+1 in recurrence**: Each coin usage adds 1 to the count
+4. **Loop order flexible**: Unlike combination counting, order doesn't matter for optimization
+5. **Check final value**: If `dp[amount]` still equals ∞, return -1 (impossible)
+
+#### Analysis
+
+- **Time Complexity**: O(n × m)
+  - `n = amount` (inner loop runs from `coin` to `amount`)
+  - `m = coins.length` (outer loop processes each coin)
+  - For each of the `m` coins, we update up to `n` DP states
+  - Total operations: O(n × m)
+
+- **Space Complexity**: O(n)
+  - DP array of size `amount + 1`
+  - No additional data structures needed
+  - **Space-optimized**: Uses 1D array (cannot be further optimized since we need all previous states)
+
+**Why 1D Array Works:**
+
+Unlike some DP problems that need 2D arrays to avoid overwriting, Coin Change works with 1D because:
+- We only need values `dp[0]` through `dp[i-1]` to compute `dp[i]`
+- Processing left-to-right naturally preserves this dependency
+- The `min()` operation safely handles updates from the current iteration
+
+#### Implementation Steps
+
+1. **Handle base case**:
+   - If `amount == 0`, return `0` immediately (no coins needed)
+
+2. **Initialize DP array**:
+   - Create `dp[amount + 1]`
+   - Set `dp[0] = 0` (base case: zero coins for amount 0)
+   - Set all other `dp[i] = amount + 1` (represents "impossible" / infinity)
+   - **Why `amount + 1`?** It's larger than any valid answer (max coins = `amount` using all 1-denominations)
+
+3. **Outer loop - Iterate through coins**:
+   - For each `coin` in `coins[]`
+   - Order doesn't matter for minimization (unlike combination counting)
+
+4. **Inner loop - Iterate through amounts**:
+   - For each amount `i` from `coin` to `amount` (inclusive)
+   - Start from `coin` because we can't use this coin for amounts smaller than it
+   - **Update rule**: `dp[i] = min(dp[i], dp[i - coin] + 1)`
+     - `dp[i]`: Current minimum (using previously processed coins)
+     - `dp[i - coin] + 1`: Use one `coin` + minimum for remaining amount
+     - **Take minimum** because we want the fewest coins
+
+5. **Return result**:
+   - If `dp[amount] > amount`, no solution exists → return `-1`
+   - Otherwise, return `dp[amount]`
+   - **Why check `> amount`?** If still equals our "impossible" sentinel value
+
+**Alternative: Check with exact sentinel**
+```java
+if (dp[amount] == amount + 1) return -1;  // Still impossible
+```
+
+#### Code - Java
+```java
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        // dp[i] = minimum number of coins to make amount i
+        int[] dp = new int[amount + 1];
+
+        // Initialize: 0 for base case, impossible (amount+1) for rest
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            dp[i] = Integer.MAX_VALUE;  // Represents infinity (impossible)
+        }
+
+        // Outer loop: iterate through coins
+        for (int coin : coins) {
+            // Inner loop: update all amounts that can use this coin
+            for (int i = coin; i <= amount; i++) {
+                // Take minimum: don't use coin vs use coin
+                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+            }
+        }
+
+        // If still impossible, return -1; otherwise return minimum coins
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+}
+```
+
+#### Code - Golang
+```go
+import "math"
+
+func coinChange(coins []int, amount int) int {
+    // dp[i] = minimum number of coins to make amount i
+    dp := make([]int, amount + 1);
+
+    // Initialize: 0 for base case, impossible (amount+1) for rest
+    dp[0] = 0;
+    for i := 1; i <= amount; i++ {
+        dp[i] = math.MaxInt16  
+    }
+
+    // Outer loop: iterate through coins
+    for _, coin := range coins {
+        // Inner loop: update all amounts that can use this coin
+        for i := coin; i <= amount; i++ {
+            // Take minimum: don't use coin vs use coin
+            dp[i] = min(dp[i], dp[i - coin] + 1);
+        }
+    }
+
+    // If still impossible, return -1; otherwise return minimum coins
+    if dp[amount] > amount {
+        return -1 
+    } else {
+        return dp[amount];
+    }
+}
+```
+
+## Coin Change II {#lc-coin-change-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 518
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/coin-change-ii/
+- **Tags**: NeetCode 150
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Unbounded Knapsack](#dp-unbounded-knapsack), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+You are given an integer array `coins` representing coins of different denominations and an integer `amount` representing a total amount of money.
+
+Return the **number of combinations** that make up that amount. If that amount of money cannot be made up by any combination of the coins, return `0`.
+
+You may assume that you have an **infinite number** of each kind of coin.
+
+The answer is **guaranteed** to fit into a signed 32-bit integer.
+
+### Examples
+
+**Example 1:**
+```
+Input: amount = 5, coins = [1,2,5]
+Output: 4
+Explanation: There are four ways to make up the amount:
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+```
+
+**Example 2:**
+```
+Input: amount = 3, coins = [2]
+Output: 0
+Explanation: The amount of 3 cannot be made up just with coins of 2.
+```
+
+**Example 3:**
+```
+Input: amount = 10, coins = [10]
+Output: 1
+```
+
+### Constraints
+
+- `1 <= coins.length <= 300`
+- `1 <= coins[i] <= 5000`
+- All the values of `coins` are **unique**
+- `0 <= amount <= 5000`
+
+### Solution - Dynamic Programming (Unbounded Knapsack)
+
+#### Walkthrough
+
+This problem is a classic **Unbounded Knapsack** variant where we need to count the number of **combinations** (not lc-permutations) to make up a target amount using an unlimited supply of coins.
+
+**Key Distinction - Combinations vs Permutations:**
+
+The problem asks for **combinations**, meaning `[1,2]` and `[2,1]` are considered the **same** way to make amount 3. This is crucial because:
+- **Combinations**: Order doesn't matter → `{1,2}` is same as `{2,1}`
+- **Permutations**: Order matters → `[1,2]` is different from `[2,1]`
+
+To ensure we count combinations (not lc-permutations), we **iterate coins in the outer loop** and amounts in the inner loop. This prevents counting the same combination multiple times with different orderings.
+
+**Core DP Strategy:**
+
+We use a 1D DP array where `dp[i]` represents the **number of combinations** to make amount `i`.
+
+**Recurrence Relation:**
+
+For each coin and each amount `i >= coin`:
+```
+dp[i] = dp[i] + dp[i - coin]
+```
+
+This means:
+- `dp[i]`: Current count of combinations for amount `i` (using previously processed coins)
+- `dp[i - coin]`: Count of combinations for the remaining amount after using one `coin`
+- We **add** these together because using the current coin gives us additional combinations
+
+**Base Case:**
+```
+dp[0] = 1
+```
+There's exactly **one way** to make amount 0: use no coins at all.
+
+**Visual Example: `amount = 5, coins = [1, 2, 5]`**
+
+Let's trace through the algorithm step by step:
+
+**Initial State:**
+```
+dp = [1, 0, 0, 0, 0, 0]
+      ↑
+   amount 0 = 1 way (use no coins)
+```
+
+**Iteration 1: Process coin = 1**
+
+For each amount `i` from 1 to 5, update `dp[i] += dp[i - 1]`:
+
+```
+i=1: dp[1] += dp[0] → dp[1] = 0 + 1 = 1  (one 1)
+i=2: dp[2] += dp[1] → dp[2] = 0 + 1 = 1  (two 1s)
+i=3: dp[3] += dp[2] → dp[3] = 0 + 1 = 1  (three 1s)
+i=4: dp[4] += dp[3] → dp[4] = 0 + 1 = 1  (four 1s)
+i=5: dp[5] += dp[4] → dp[5] = 0 + 1 = 1  (five 1s)
+
+dp = [1, 1, 1, 1, 1, 1]
+```
+
+After processing coin=1, we can make:
+- Amount 1: `{1}` → 1 way
+- Amount 2: `{1,1}` → 1 way
+- Amount 3: `{1,1,1}` → 1 way
+- Amount 4: `{1,1,1,1}` → 1 way
+- Amount 5: `{1,1,1,1,1}` → 1 way
+
+**Iteration 2: Process coin = 2**
+
+For each amount `i` from 2 to 5, update `dp[i] += dp[i - 2]`:
+
+```
+i=2: dp[2] += dp[0] → dp[2] = 1 + 1 = 2  (added {2})
+i=3: dp[3] += dp[1] → dp[3] = 1 + 1 = 2  (added {2,1})
+i=4: dp[4] += dp[2] → dp[4] = 1 + 2 = 3  (added {2,2} and {2,1,1})
+i=5: dp[5] += dp[3] → dp[5] = 1 + 2 = 3  (added {2,2,1} and {2,1,1,1})
+
+dp = [1, 1, 2, 2, 3, 3]
+```
+
+After processing coin=2, we can make:
+- Amount 2: `{1,1}`, `{2}` → 2 ways
+- Amount 3: `{1,1,1}`, `{2,1}` → 2 ways
+- Amount 4: `{1,1,1,1}`, `{2,1,1}`, `{2,2}` → 3 ways
+- Amount 5: `{1,1,1,1,1}`, `{2,1,1,1}`, `{2,2,1}` → 3 ways
+
+**Iteration 3: Process coin = 5**
+
+For each amount `i` from 5 to 5, update `dp[i] += dp[i - 5]`:
+
+```
+i=5: dp[5] += dp[0] → dp[5] = 3 + 1 = 4  (added {5})
+
+dp = [1, 1, 2, 2, 3, 4]
+      ↑              ↑
+   base case    answer
+```
+
+**Final Result: `dp[5] = 4`**
+
+The 4 combinations are:
+1. `{5}` (one 5-coin)
+2. `{2, 2, 1}` (two 2-coins, one 1-coin)
+3. `{2, 1, 1, 1}` (one 2-coin, three 1-coins)
+4. `{1, 1, 1, 1, 1}` (five 1-coins)
+
+**Why This Avoids Permutations:**
+
+By iterating **coins in outer loop**, we ensure each coin is considered in a fixed order. For example:
+- When processing coin=2, we only add combinations where 2 comes **after** all previously processed coins (coin=1)
+- This prevents counting `{1,2}` and `{2,1}` as different combinations
+
+**Counter-example (Wrong Approach):**
+
+If we swap loops (amounts outer, coins inner), we'd count **lc-permutations** instead:
+```java
+// WRONG - counts lc-permutations
+for (int i = 1; i <= amount; i++) {
+    for (int coin : coins) {
+        if (i >= coin) {
+            dp[i] += dp[i - coin];
+        }
+    }
+}
+```
+This would count `[1,2]` and `[2,1]` as different ways, giving incorrect results.
+
+**Key Insights:**
+
+1. **Outer loop = coins** ensures combinations (not lc-permutations)
+2. **Inner loop = amounts** builds up solutions incrementally
+3. **dp[i - coin]** represents "what we can build if we use one more `coin`"
+4. **Addition** accumulates all ways to reach each amount
+5. **Base case dp[0] = 1** enables the recurrence to work (identity element)
+
+#### Analysis
+
+- **Time Complexity**: O(n × m)
+  - `n = amount` (inner loop runs from `coin` to `amount`)
+  - `m = coins.length` (outer loop processes each coin)
+  - For each of the `m` coins, we update up to `n` DP states
+  - Total operations: O(n × m)
+
+- **Space Complexity**: O(n)
+  - DP array of size `amount + 1`
+  - No additional data structures needed
+  - **Space-optimized**: Uses 1D array instead of 2D (saves O(m × n) → O(n))
+
+**Why 1D Array Works:**
+
+The classic 2D formulation would be:
+```
+dp[coin_index][amount] = dp[coin_index-1][amount] + dp[coin_index][amount-coin]
+```
+
+But notice we only need the **previous coin row** and **current coin row**. By iterating coins in outer loop and processing amounts left-to-right, the 1D array automatically reuses previous results correctly.
+
+#### Implementation Steps
+
+1. **Initialize DP array**:
+   - Create `dp[amount + 1]` initialized to 0
+   - Set `dp[0] = 1` (base case: one way to make amount 0)
+
+2. **Outer loop - Iterate through coins**:
+   - For each `coin` in `coins[]`
+   - This ensures we count **combinations** (not lc-permutations)
+
+3. **Inner loop - Iterate through amounts**:
+   - For each amount `i` from `coin` to `amount` (inclusive)
+   - Start from `coin` because we can't use this coin for amounts smaller than it
+   - **Update rule**: `dp[i] += dp[i - coin]`
+     - `dp[i]`: Current count (using previously processed coins)
+     - `dp[i - coin]`: Ways to make the remaining amount after using one `coin`
+     - **Add** because using current coin gives additional combinations
+
+4. **Return**: `dp[amount]` contains the total number of combinations
+
+**Why the loops are ordered this way:**
+- **Outer loop (coins)**: Ensures we consider coins in a fixed order
+- **Inner loop (amounts)**: Builds up solutions for increasing amounts
+- **Left-to-right inner loop**: Allows reusing the same coin multiple times (unbounded)
+
+#### Code - Java
+
+```java
+class Solution {
+    public int change(int amount, int[] coins) {
+        // dp[i] = number of combinations to make amount i
+        int[] dp = new int[amount + 1];
+
+        // Base case: one way to make amount 0 (use no coins)
+        dp[0] = 1;
+
+        // Outer loop: iterate through coins (ensures combinations, not lc-permutations)
+        for (int coin : coins) {
+            // Inner loop: update all amounts that can use this coin
+            for (int i = coin; i <= amount; i++) {
+                // Add combinations from using this coin
+                dp[i] += dp[i - coin];
+            }
+        }
+
+        return dp[amount];
+    }
+}
+```
+
+## Palindromic Substrings {#lc-palindromic-substrings}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 647
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/palindromic-substrings/
+- **Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Dynamic Programming](glossary-of-algorithm.html#glossary-dynamic-programming), [Tabulation](#dp-tabulation), [Expand Around Center](glossary-of-algorithm.html#expand-around-center), String
+
+### Description
+
+Given a string `s`, return the number of palindromic substrings in it.
+
+A string is a palindrome when it reads the same backward as forward.
+
+A substring is a contiguous sequence of characters within the string.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "abc"
+Output: 3
+Explanation: Three palindromic strings: "a", "b", "c".
+```
+
+**Example 2:**
+```
+Input: s = "aaa"
+Output: 6
+Explanation: Six palindromic strings: "a", "a", "a", "aa", "aa", "aaa".
+```
+
+### Constraints
+
+- $1 \le$ s.length $\le$ 1000
+- `s` consists of lowercase English letters
+
+### Solution 1 - Expand Around Center
+
+#### Walkthrough
+
+The solution leverages the property that **every palindrome has a center point**. By treating each position (and each pair of adjacent positions) as a potential center, we can expand outward and count all palindromic substrings.
+
+**Key insight:** For a string of length n, there are **2n-1 possible centers**:
+- **n single-character centers** for odd-length palindromes (e.g., "aba" centered at 'b')
+- **n-1 two-character centers** for even-length palindromes (e.g., "abba" centered between the two 'b's)
+
+**Algorithm approach:**
+1. Iterate through each position i in the string
+2. For each position, expand around two types of centers:
+   - **Odd-length palindromes**: center at (i, i) - single character
+   - **Even-length palindromes**: center at (i, i+1) - between two adjacent characters
+3. For each center, expand outward (`l--`, `r++`) while characters match
+4. Count each valid palindrome discovered during expansion
+
+**Visual example with `s = "aaaa"`:**
+
+```
+Iteration i=0:
+  Odd center (0,0):   "a" → count = 1
+  Even center (0,1):  "aa" → count = 1
+
+Iteration i=1:
+  Odd center (1,1):   "a", then expand to "aaa" → count = 2
+  Even center (1,2):  "aa", then expand to "aaaa" → count = 2
+
+Iteration i=2:
+  Odd center (2,2):   "a", then expand to "aaa" → count = 2
+  Even center (2,3):  "aa" → count = 1
+
+Iteration i=3:
+  Odd center (3,3):   "a" → count = 1
+  Even center (3,4):  out of bounds → count = 0
+
+Total: 1 + 1 + 2 + 2 + 2 + 1 + 1 = 10 palindromes
+```
+
+**Detailed expansion trace for i=1, odd center (1,1):**
+```
+String: a  a  a  a
+Index:  0  1  2  3
+
+Step 1: l=1, r=1
+  s[1]='a' == s[1]='a' ✓ → "a" (count=1)
+  Expand: l=0, r=2
+
+Step 2: l=0, r=2
+  s[0]='a' == s[2]='a' ✓ → "aaa" (count=2)
+  Expand: l=-1, r=3 → out of bounds, stop
+
+Returns 2
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n²)
+  - Outer loop iterates through n positions
+  - For each position, we check 2 centers (odd and even)
+  - Each expansion can go up to n/2 steps in worst case
+  - Total: O(n × 2 × n/2) = O(n²)
+  - Example: "aaaa" has worst-case expansion for every center
+
+- **Space Complexity**: O(1)
+  - Only uses a constant number of variables (count, l, r)
+  - No additional data structures needed
+  - In-place character comparisons
+
+#### Implementation Steps
+
+1. Initialize result counter to 0
+2. For each index i from 0 to n-1:
+   - Call `expandAroundCenter(s, i, i)` for odd-length palindromes
+   - Call `expandAroundCenter(s, i, i+1)` for even-length palindromes
+   - Add both counts to result
+3. In `expandAroundCenter(s, l, r)`:
+   - Initialize local count to 0
+   - While l $\ge$ 0 AND r $\lt$ length AND s[l] == s[r]:
+     - Increment count (found a palindrome)
+     - Expand outward: decrement l, increment r
+   - Return count
+4. Return total result
+
+#### Code - Java
+
+```java
+public int countSubstrings(String s) {
+    int result = 0;
+
+    for (int i = 0; i < s.length(); i++) {
+        // Odd-length palindromes (center at single character)
+        result += expandAroundCenter(s, i, i);
+
+        // Even-length palindromes (center between two characters)
+        result += expandAroundCenter(s, i, i + 1);
+    }
+
+    return result;
+}
+
+private int expandAroundCenter(String s, int l, int r) {
+    int count = 0;
+    int len = s.length();
+
+    // Expand outward while characters match and in bounds
+    while (l >= 0 && r < len && s.charAt(l) == s.charAt(r)) {
+        count++;  // Found a palindrome
+        l--;      // Expand left
+        r++;      // Expand right
+    }
+
+    return count;
+}
+```
+
+### Solution 2 - Dynamic Programming (Tabulation)
+
+#### Walkthrough
+
+The DP solution builds a 2D boolean table where `dp[i][j]` indicates whether the substring from index `i` to index `j` is a palindrome. We fill this table systematically by considering substrings of increasing length, building upon previously computed results.
+
+**Key insight:** A substring `s[i...j]` is a palindrome if:
+1. The characters at both ends match: `s[i] == s[j]`, AND
+2. Either:
+   - The substring has length $\le$ 2 (base case: single char "a" or two chars "aa")
+   - The inner substring `s[i+1...j-1]` is also a palindrome: `dp[i+1][j-1] == true`
+
+**DP Recurrence Relation:**
+```
+dp[i][j] = true if:
+  - s[i] == s[j] AND
+  - (j - i <= 1 OR dp[i+1][j-1] == true)
+```
+
+**Algorithm approach:**
+1. Create a 2D boolean table `dp[n][n]` initialized to false
+2. Fill the table by increasing substring length (from 1 to n)
+3. For each length, iterate through all possible starting positions
+4. Count each `dp[i][j]` that becomes true
+
+**Visual example with `s = "aba"` (n=3):**
+
+```
+Initial DP table (all false):
+      j=0  j=1  j=2
+i=0 [ F    F    F  ]
+i=1 [ -    F    F  ]
+i=2 [ -    -    F  ]
+
+Length 1 (single characters):
+  i=0, j=0: s[0]='a' → dp[0][0] = true, count = 1
+  i=1, j=1: s[1]='b' → dp[1][1] = true, count = 2
+  i=2, j=2: s[2]='a' → dp[2][2] = true, count = 3
+
+After length 1:
+      j=0  j=1  j=2
+i=0 [ T    F    F  ]
+i=1 [ -    T    F  ]
+i=2 [ -    -    T  ]
+
+Length 2 (two adjacent characters):
+  i=0, j=1: s[0]='a' != s[1]='b' → dp[0][1] = false
+  i=1, j=2: s[1]='b' != s[2]='a' → dp[1][2] = false
+
+After length 2:
+      j=0  j=1  j=2
+i=0 [ T    F    F  ]
+i=1 [ -    T    F  ]
+i=2 [ -    -    T  ]
+
+Length 3:
+  i=0, j=2: s[0]='a' == s[2]='a' ✓ AND dp[1][1]=true ✓
+            → dp[0][2] = true, count = 4
+
+Final DP table:
+      j=0  j=1  j=2
+i=0 [ T    F    T  ]  → "a" at [0,0], "aba" at [0,2]
+i=1 [ -    T    F  ]  → "b" at [1,1]
+i=2 [ -    -    T  ]  → "a" at [2,2]
+
+Total: 4 palindromes ("a", "b", "a", "aba")
+```
+
+**Detailed trace for `s = "aaaa"` (n=4):**
+
+```
+Length 1: dp[0][0]=T, dp[1][1]=T, dp[2][2]=T, dp[3][3]=T → count = 4
+
+Length 2:
+  i=0, j=1: s[0]='a' == s[1]='a', length=2 → dp[0][1]=T, count = 5
+  i=1, j=2: s[1]='a' == s[2]='a', length=2 → dp[1][2]=T, count = 6
+  i=2, j=3: s[2]='a' == s[3]='a', length=2 → dp[2][3]=T, count = 7
+
+Length 3:
+  i=0, j=2: s[0]='a' == s[2]='a' AND dp[1][1]=T → dp[0][2]=T, count = 8
+  i=1, j=3: s[1]='a' == s[3]='a' AND dp[2][2]=T → dp[1][3]=T, count = 9
+
+Length 4:
+  i=0, j=3: s[0]='a' == s[3]='a' AND dp[1][2]=T → dp[0][3]=T, count = 10
+
+Final table:
+      j=0  j=1  j=2  j=3
+i=0 [ T    T    T    T  ]  → "a", "aa", "aaa", "aaaa"
+i=1 [ -    T    T    T  ]  → "a", "aa", "aaa"
+i=2 [ -    -    T    T  ]  → "a", "aa"
+i=3 [ -    -    -    T  ]  → "a"
+
+Total: 10 palindromes
+```
+
+**Why fill by length (bottom-up)?**
+- When checking `dp[i][j]`, we need `dp[i+1][j-1]` (inner substring) to already be computed
+- By processing shorter substrings first, we guarantee all dependencies are ready
+- This is the essence of bottom-up DP (tabulation)
+
+#### Analysis
+
+- **Time Complexity**: O(n²)
+  - Two nested loops: outer loop for length (1 to n), inner loop for starting position
+  - Each cell is computed in O(1) time using lookup
+  - Total cells filled: n + (n-1) + (n-2) + ... + 1 = n(n+1)/2 = O(n²)
+
+- **Space Complexity**: O(n²)
+  - 2D DP table of size n × n
+  - Each cell stores a boolean value
+  - Total space: n² cells
+
+#### Implementation Steps
+
+1. Initialize `boolean[][] dp = new boolean[n][n]` and `count = 0`
+2. Outer loop: iterate `length` from 1 to n (substring lengths)
+3. Inner loop: iterate `i` from 0 to `n - length` (starting positions)
+   - Calculate ending position: `j = i + length - 1`
+4. Check palindrome condition:
+   - If `s[i] == s[j]`:
+     - If `length <= 2`: mark `dp[i][j] = true`, increment count
+     - Else if `dp[i+1][j-1] == true`: mark `dp[i][j] = true`, increment count
+5. Return `count`
+
+#### Code - Java
+
+```java
+public int countSubstrings(String s) {
+    int n = s.length();
+    boolean[][] dp = new boolean[n][n];
+    int count = 0;
+
+    // Fill DP table by increasing substring length
+    for (int length = 1; length <= n; length++) {
+        for (int i = 0; i <= n - length; i++) {
+            int j = i + length - 1;  // Ending index
+
+            // Check if s[i...j] is a palindrome
+            if (s.charAt(i) == s.charAt(j)) {
+                // Base case: single character or two adjacent characters
+                if (length <= 2) {
+                    dp[i][j] = true;
+                    count++;
+                }
+                // Recursive case: check inner substring
+                else if (dp[i + 1][j - 1]) {
+                    dp[i][j] = true;
+                    count++;
+                }
+            }
+        }
+    }
+
+    return count;
+}
+```
+
+**Alternative Implementation (filling diagonally):**
+
+```java
+public int countSubstringsDP(String s) {
+    int n = s.length();
+    boolean[][] dp = new boolean[n][n];
+    int count = 0;
+
+    // Diagonal 0: single characters
+    for (int i = 0; i < n; i++) {
+        dp[i][i] = true;
+        count++;
+    }
+
+    // Diagonal 1: two adjacent characters
+    for (int i = 0; i < n - 1; i++) {
+        if (s.charAt(i) == s.charAt(i + 1)) {
+            dp[i][i + 1] = true;
+            count++;
+        }
+    }
+
+    // Diagonals 2 to n-1: longer substrings
+    for (int len = 3; len <= n; len++) {
+        for (int i = 0; i <= n - len; i++) {
+            int j = i + len - 1;
+            if (s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1]) {
+                dp[i][j] = true;
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+```
+
+## Minimum Swaps to Make Sequences Increasing {#lc-min-swaps-increasing}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 801
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/minimum-swaps-to-make-sequences-increasing/
+- **Tags**:
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Given two equal-length arrays `A` and `B` that are strictly increasing individually, you may swap elements at the same index. Return the minimum swaps needed to make both arrays strictly increasing.
+
+### Examples
+
+```
+Input: A = [1,3,5,4], B = [1,2,3,7]
+Output: 1
+```
+
+### Constraints
+
+- `1 <= n <= 10^5`
+- `0 <= A[i], B[i] <= 2 * 10^5`
+
+### Solution - DP with Keep/Swap States
+
+#### Walkthrough
+
+Let `keep[i]` be the minimum swaps to keep index `i` un-swapped, and `swap[i]` when we swap at `i`. Initialize `keep[0] = 0`, `swap[0] = 1`. For each `i > 0`, consider whether the sequences remain increasing without swap, with swap, or both, and update the states accordingly.
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+1. Initialize `keep = 0`, `swap = 1`.
+2. For each index `i` from 1 to `n-1`:
+   - Set `nextKeep = nextSwap = Integer.MAX_VALUE`.
+   - If `A[i] > A[i-1] && B[i] > B[i-1]`, update `nextKeep = min(nextKeep, keep)` and `nextSwap = min(nextSwap, swap + 1)`.
+   - If `A[i] > B[i-1] && B[i] > A[i-1]`, update `nextKeep = min(nextKeep, swap)` and `nextSwap = min(nextSwap, keep + 1)`.
+   - Assign `keep = nextKeep`, `swap = nextSwap`.
+3. Return `min(keep, swap)`.
+
+#### Code - Java
+```java
+public int minSwap(int[] A, int[] B) {
+    int keep = 0;
+    int swap = 1;
+
+    for (int i = 1; i < A.length; i++) {
+        int nextKeep = Integer.MAX_VALUE;
+        int nextSwap = Integer.MAX_VALUE;
+
+        boolean noSwapNeeded = A[i] > A[i - 1] && B[i] > B[i - 1];
+        boolean crossSwap = A[i] > B[i - 1] && B[i] > A[i - 1];
+
+        if (noSwapNeeded) {
+            nextKeep = Math.min(nextKeep, keep);
+            nextSwap = Math.min(nextSwap, swap + 1);
+        }
+        if (crossSwap) {
+            nextKeep = Math.min(nextKeep, swap);
+            nextSwap = Math.min(nextSwap, keep + 1);
+        }
+
+        keep = nextKeep;
+        swap = nextSwap;
+    }
+
+    return Math.min(keep, swap);
+}
+
+
+```
+
+## Count Square Submatrices with All Ones {#lc-count-square-submatrices}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1277
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/lc-count-square-submatrices-with-all-ones/
+- **Tags**:
+- **Techniques**: [Dynamic Programming](#dynamic-programming), [Tabulation](#dp-tabulation), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation)
+
+### Description
+
+Given a `m x n` matrix of ones and zeros, return how many **square** submatrices have all ones.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: matrix =
+[
+  [0,1,1,1],
+  [1,1,1,1],
+  [0,1,1,1]
+]
+Output: 15
+Explanation:
+There are 10 squares of side 1.
+There are 4 squares of side 2.
+There is 1 square of side 3.
+Total number of squares = 10 + 4 + 1 = 15.
+```
+
+**Example 2:**
+
+```
+Input: matrix =
+[
+  [1,0,1],
+  [1,1,0],
+  [1,1,0]
+]
+Output: 7
+Explanation:
+There are 6 squares of side 1.
+There is 1 square of side 2.
+Total number of squares = 6 + 1 = 7.
+```
+
+### Constraints
+
+- `1 <= arr.length <= 300`
+- `1 <= arr[0].length <= 300`
+- `0 <= arr[i][j] <= 1`
+
+### Solution - Dynamic Programming (In-Place)
+
+#### Walkthrough
+
+This problem is closely related to **Maximal Square (LeetCode 221)**, but instead of finding the largest square, we need to **count all squares**. The key insight is:
+
+**For each cell `(r, c)` containing `1`, `dp[r][c]` represents the side length of the largest square with `(r, c)` as the bottom-right corner. This value also tells us HOW MANY squares end at this position.**
+
+For example:
+- If `dp[r][c] = 3`, it means there are **3 squares** ending at `(r, c)`:
+  - One 1×1 square
+  - One 2×2 square
+  - One 3×3 square
+
+The DP recurrence is the same as Maximal Square:
+```
+dp[r][c] = min(dp[r-1][c], dp[r][c-1], dp[r-1][c-1]) + 1
+```
+
+The total count is the **sum of all `dp[r][c]` values**.
+
+#### Visual Example
+
+For the input matrix:
+```
+[0, 1, 1, 1]
+[1, 1, 1, 1]
+[0, 1, 1, 1]
+```
+
+**Processing order (row by row, left to right):**
+
+```
+Step 1: (0,0)=0, skip
+Step 2: (0,1)=1, result=1, matrix: [0, 1, 1, 1]
+                                     [1, 1, 1, 1]
+                                     [0, 1, 1, 1]
+
+Step 3: (0,2)=1, result=2, matrix: [0, 1, 1, 1]
+                                     [1, 1, 1, 1]
+                                     [0, 1, 1, 1]
+
+Step 4: (0,3)=1, result=3, matrix: [0, 1, 1, 1]
+                                     [1, 1, 1, 1]
+                                     [0, 1, 1, 1]
+
+Step 5: (1,0)=1, result=4, matrix: [0, 1, 1, 1]
+                                     [1, 1, 1, 1]
+                                     [0, 1, 1, 1]
+
+Step 6: (1,1)=1, result=5, matrix: [0, 1, 1, 1]
+                    min(1,1,0)+1=1  [1, 1, 1, 1]
+                    no change       [0, 1, 1, 1]
+
+Step 7: (1,2)=1, result=6, matrix: [0, 1, 1, 1]
+                    min(1,1,1)+1=2  [1, 1, 2, 1]
+                    result += 1 = 7 [0, 1, 1, 1]
+
+Step 8: (1,3)=1, result=8, matrix: [0, 1, 1, 1]
+                    min(1,2,1)+1=2  [1, 1, 2, 2]
+                    result += 1 = 9 [0, 1, 1, 1]
+
+Step 9: (2,0)=0, skip
+
+Step 10: (2,1)=1, result=10, matrix: [0, 1, 1, 1]
+                                      [1, 1, 2, 2]
+                                      [0, 1, 1, 1]
+
+Step 11: (2,2)=1, result=11, matrix: [0, 1, 1, 1]
+                     min(2,1,1)+1=2   [1, 1, 2, 2]
+                     result += 1 = 12 [0, 1, 2, 1]
+
+Step 12: (2,3)=1, result=13, matrix: [0, 1, 1, 1]
+                     min(2,2,2)+1=3   [1, 1, 2, 2]
+                     result += 2 = 15 [0, 1, 2, 3]
+```
+
+**Final result: 15**
+
+#### Key Insight
+
+The elegant part of this solution is that **the DP value at each cell directly tells us the count of squares ending at that position**. This is why we can simply sum all DP values to get the total count.
+
+#### Analysis
+
+- **Time Complexity**: O(m × n) - Single pass through the matrix
+- **Space Complexity**: O(1) - Modifies matrix in-place (or O(m × n) if using separate DP table)
+
+#### Implementation Steps
+
+
+1. Initialize `result = 0` to track total count
+2. For each cell `(r, c)`:
+   - If `matrix[r][c] == 1`:
+     - Add `1` to result (every `1` forms at least a 1×1 square)
+     - If not in first row or column:
+       - Calculate `matrix[r][c] = min(top, left, diagonal) + 1`
+       - Add `matrix[r][c] - 1` to result (additional squares of size 2×2, 3×3, etc.)
+3. Return `result`
+
+#### Code - Java
+
+```java
+class Solution {
+    public int countSquares(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int result = 0;
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                // Only process cells containing 1
+                if (matrix[r][c] == 1) {
+                    // Each 1 can form at least a 1x1 square
+                    result++;
+
+                    // For cells not in first row/column, apply DP transition
+                    if (r != 0 && c != 0) {
+                        // DP transition: current square size is limited by
+                        // the minimum of the three neighbors + 1
+                        int min = Math.min(matrix[r - 1][c], matrix[r][c - 1]);
+                        min = Math.min(min, matrix[r - 1][c - 1]);
+                        matrix[r][c] = min + 1;
+
+                        // Add additional squares (2x2, 3x3, ..., NxN)
+                        // If matrix[r][c] = 3, we already counted the 1x1,
+                        // so add 2 more for the 2x2 and 3x3 squares
+                        result += matrix[r][c] - 1;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+}
+```
