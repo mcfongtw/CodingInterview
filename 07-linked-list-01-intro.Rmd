@@ -1,3 +1,458 @@
 # Linked List
-Linked lc-lists test pointer manipulation, in-place transformations, and slow/fast traversal techniques. This chapter walks through the canonical set of linked lc-list questions and patterns.
+
+Linked lists test pointer manipulation, in-place transformations, and slow/fast traversal techniques. This chapter walks through the canonical set of linked list questions and patterns.
+
+### Fast and Slow Pointer Technique {#intro-linked-list-fast-slow}
+
+The **fast and slow pointer** (also known as **Floyd's Tortoise and Hare**) technique uses two pointers traversing the list at different speeds to detect cycles, find the middle, or identify specific positions.
+
+**Key Characteristics:**
+- Slow pointer advances 1 step per iteration
+- Fast pointer advances 2 steps per iteration
+- They meet if there's a cycle
+- When fast reaches end, slow is at middle
+
+**Common Use Cases:**
+
+1. **Cycle Detection** - If there's a cycle, fast and slow will eventually meet
+2. **Finding Middle** - When fast reaches end, slow is at middle
+3. **Finding k-th from End** - Advance fast k steps, then move both until fast reaches end
+4. **Palindrome Check** - Find middle, reverse second half, compare
+
+**Template for Cycle Detection:**
+```java
+public boolean hasCycle(ListNode head) {
+    if (head == null || head.next == null) return false;
+
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while (fast != null && fast.next != null) {
+        slow = slow.next;           // Move 1 step
+        fast = fast.next.next;      // Move 2 steps
+
+        if (slow == fast) {
+            return true;            // Cycle detected
+        }
+    }
+
+    return false;                   // No cycle
+}
+```
+
+**Template for Finding Middle:**
+```java
+public ListNode findMiddle(ListNode head) {
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+
+    return slow;  // Middle node
+}
+```
+
+**Floyd's Cycle Detection Algorithm (Finding Cycle Start):**
+
+If a cycle exists, to find where it starts:
+1. Detect cycle using fast/slow pointers (they meet at some node)
+2. Reset one pointer to head
+3. Move both pointers 1 step at a time
+4. They will meet at the cycle start
+
+```java
+public ListNode detectCycle(ListNode head) {
+    ListNode slow = head, fast = head;
+
+    // Phase 1: Detect if cycle exists
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (slow == fast) break;
+    }
+
+    if (fast == null || fast.next == null) return null;
+
+    // Phase 2: Find cycle start
+    slow = head;
+    while (slow != fast) {
+        slow = slow.next;
+        fast = fast.next;
+    }
+
+    return slow;  // Cycle start
+}
+```
+
+**Related Problems:**
+- [Linked List Cycle](#lc-linked-list-cycle) - Basic cycle detection
+- [Linked List Cycle II](#lc-linked-list-cycle-ii) - Find cycle start
+- [Palindrome Linked List](#lc-palindrome-list) - Find middle then reverse
+- [Remove Nth Node From End](#lc-remove-nth-node) - Two-pointer with gap
+- [Reorder List](#lc-reorder-list) - Find middle, reverse, merge
+
+**Time Complexity:** $O(n)$ - Single pass through list
+**Space Complexity:** $O(1)$ - Only two pointers
+
+### Reversal Techniques {#intro-linked-list-reversal}
+
+Reversing a linked list (or part of it) is a fundamental operation that appears in many problems. There are two main approaches: **iterative** and **recursive**.
+
+#### Iterative Reversal {#intro-linked-list-reversal-iterative}
+
+The iterative approach uses three pointers to reverse links in-place.
+
+**Key Concept:**
+- Maintain `prev`, `current`, and `next` pointers
+- Reverse the link: `current.next = prev`
+- Advance all three pointers
+
+**Template:**
+```java
+public ListNode reverseList(ListNode head) {
+    ListNode prev = null;
+    ListNode current = head;
+
+    while (current != null) {
+        ListNode next = current.next;  // Save next node
+        current.next = prev;           // Reverse the link
+        prev = current;                // Move prev forward
+        current = next;                // Move current forward
+    }
+
+    return prev;  // New head
+}
+```
+
+**Visual Example:**
+```
+Initial:  null <- 1 -> 2 -> 3 -> 4 -> null
+          prev  curr  next
+
+Step 1:   null <- 1    2 -> 3 -> 4 -> null
+                 prev  curr next
+
+Step 2:   null <- 1 <- 2    3 -> 4 -> null
+                       prev curr next
+
+Final:    null <- 1 <- 2 <- 3 <- 4
+                                 prev (new head)
+```
+
+**Time Complexity:** $O(n)$
+**Space Complexity:** $O(1)$
+
+#### Recursive Reversal {#intro-linked-list-reversal-recursive}
+
+The recursive approach reverses the list from the end backwards.
+
+**Template:**
+```java
+public ListNode reverseList(ListNode head) {
+    // Base case: empty list or single node
+    if (head == null || head.next == null) {
+        return head;
+    }
+
+    // Recursively reverse the rest
+    ListNode newHead = reverseList(head.next);
+
+    // Reverse current node's link
+    head.next.next = head;
+    head.next = null;
+
+    return newHead;
+}
+```
+
+**How it works:**
+1. Recursively reaches the last node (becomes new head)
+2. On the way back, reverses each link
+3. `head.next.next = head` reverses the link
+4. `head.next = null` prevents cycles
+
+**Time Complexity:** $O(n)$
+**Space Complexity:** $O(n)$ - Recursion stack
+
+#### Partial Reversal (Reverse Between Positions)
+
+Reversing only a portion of the list requires:
+1. Navigate to the start position
+2. Reverse the segment
+3. Reconnect the reversed segment
+
+**Key Pointers:**
+- `beforeStart` - Node before reversal starts
+- `start` - First node to reverse
+- `end` - Last node to reverse
+- `afterEnd` - Node after reversal ends
+
+**Related Problems:**
+- [Reverse Linked List](#lc-reverse-linked-list) - Basic reversal
+- [Reverse Linked List II](#lc-reverse-linked-list-ii) - Reverse between positions
+- [Reverse Nodes in k-Group](#lc-reverse-k-group) - Reverse every k nodes
+- [Palindrome Linked List](#lc-palindrome-list) - Reverse second half
+- [Reorder List](#lc-reorder-list) - Reverse second half then merge
+
+### Dummy Head Pattern {#intro-linked-list-dummy-head}
+
+A **dummy head** (also called sentinel node) is a placeholder node placed before the actual head to simplify edge cases.
+
+**Why Use a Dummy Head?**
+
+Without dummy head, you need special handling when:
+- Removing the head node
+- Inserting before the head
+- Merging lists
+- Building a new list
+
+With dummy head, all nodes (including original head) are treated uniformly.
+
+**Template:**
+```java
+public ListNode processListWithDummy(ListNode head) {
+    ListNode dummy = new ListNode(0);
+    dummy.next = head;
+
+    ListNode current = dummy;
+
+    while (current.next != null) {
+        // Process nodes
+        // Can safely modify current.next (even if it's the original head)
+        current = current.next;
+    }
+
+    return dummy.next;  // Return actual head
+}
+```
+
+**Common Scenarios:**
+
+1. **Merging Two Lists:**
+```java
+ListNode dummy = new ListNode(0);
+ListNode tail = dummy;
+
+while (l1 != null && l2 != null) {
+    if (l1.val < l2.val) {
+        tail.next = l1;
+        l1 = l1.next;
+    } else {
+        tail.next = l2;
+        l2 = l2.next;
+    }
+    tail = tail.next;
+}
+
+tail.next = (l1 != null) ? l1 : l2;
+return dummy.next;
+```
+
+2. **Removing Nodes:**
+```java
+ListNode dummy = new ListNode(0);
+dummy.next = head;
+ListNode current = dummy;
+
+while (current.next != null) {
+    if (shouldRemove(current.next)) {
+        current.next = current.next.next;  // Remove
+    } else {
+        current = current.next;
+    }
+}
+
+return dummy.next;
+```
+
+**Benefits:**
+- Eliminates null checks for head modifications
+- Simplifies code logic
+- Prevents edge case bugs
+
+**Related Problems:**
+- [Merge Two Sorted Lists](#lc-merge-two-sorted) - Build merged list with dummy
+- [Merge k Sorted Lists](#lc-merge-k-sorted) - Merge multiple lists
+- [Remove Duplicates from Sorted List](#lc-remove-duplicates) - Remove nodes
+- [Add Two Numbers](#lc-add-two-numbers) - Build result list
+- [Merge In Between Linked Lists](#lc-merge-in-between) - Insert segment
+
+**Time Complexity:** $O(n)$ - No overhead
+**Space Complexity:** $O(1)$ - One extra node
+
+### Two-Pointer Technique {#intro-linked-list-two-pointer}
+
+Beyond fast/slow pointers, linked lists often use **two pointers with a fixed gap** or **two independent pointers** for various operations.
+
+#### Two Pointers with Gap (Remove Nth from End)
+
+To remove the n-th node from the end without knowing list length:
+
+**Approach:**
+1. Advance first pointer n steps
+2. Move both pointers together until first reaches end
+3. Second pointer is now at (n+1)-th from end
+4. Remove n-th node
+
+**Template:**
+```java
+public ListNode removeNthFromEnd(ListNode head, int n) {
+    ListNode dummy = new ListNode(0);
+    dummy.next = head;
+
+    ListNode first = dummy;
+    ListNode second = dummy;
+
+    // Advance first pointer n+1 steps
+    for (int i = 0; i <= n; i++) {
+        first = first.next;
+    }
+
+    // Move both until first reaches end
+    while (first != null) {
+        first = first.next;
+        second = second.next;
+    }
+
+    // Remove nth node
+    second.next = second.next.next;
+
+    return dummy.next;
+}
+```
+
+#### Two Pointers for Intersection
+
+To find where two lists intersect:
+
+**Approach:**
+1. Use two pointers, one for each list
+2. When a pointer reaches end, redirect to other list's head
+3. They will meet at intersection (or both reach null)
+
+**Why it works:** Both traverse the same total distance: $L_1 + L_2$
+
+**Related Problems:**
+- [Remove Nth Node From End](#lc-remove-nth-node) - Gap technique
+- [Intersection of Two Linked Lists](#lc-intersection-linked-lists) - Redirect technique
+
+### Merge Techniques {#intro-linked-list-merge}
+
+Merging sorted linked lists is a common pattern that appears in multiple forms.
+
+#### Merge Two Sorted Lists
+
+**Approach:**
+1. Use dummy head to build result
+2. Compare heads of both lists
+3. Append smaller node to result
+4. Advance pointer of chosen list
+
+**Time Complexity:** $O(m + n)$
+**Space Complexity:** $O(1)$ - In-place pointer manipulation
+
+#### Merge k Sorted Lists
+
+**Approach 1: Divide and Conquer**
+- Recursively merge pairs of lists
+- Similar to merge sort's merge phase
+- **Time:** $O(N \log k)$ where $N$ is total nodes, $k$ is number of lists
+- **Space:** $O(\log k)$ - Recursion stack
+
+**Approach 2: Min Heap**
+- Use priority queue to track smallest heads
+- Extract minimum and add next node from that list
+- **Time:** $O(N \log k)$
+- **Space:** $O(k)$ - Heap size
+
+**Related Problems:**
+- [Merge Two Sorted Lists](#lc-merge-two-sorted) - Basic merge
+- [Merge k Sorted Lists](#lc-merge-k-sorted) - Multiple lists
+- [Sort List](#lc-sort-list) - Uses merge sort pattern
+
+### In-Place Transformation {#intro-linked-list-in-place}
+
+Many linked list problems require modifying the structure without using extra space for a new list.
+
+**Key Techniques:**
+- Pointer manipulation (reversing links)
+- Rearranging connections
+- Splitting and merging
+
+**Common Patterns:**
+
+1. **Split List:**
+```java
+// Find middle and split
+ListNode slow = head, fast = head, prev = null;
+while (fast != null && fast.next != null) {
+    prev = slow;
+    slow = slow.next;
+    fast = fast.next.next;
+}
+prev.next = null;  // Split into two lists
+```
+
+2. **Weave Two Lists (Odd/Even, Reorder):**
+```java
+// Alternate nodes from two lists
+while (l1 != null && l2 != null) {
+    ListNode next1 = l1.next;
+    ListNode next2 = l2.next;
+
+    l1.next = l2;
+    l2.next = next1;
+
+    l1 = next1;
+    l2 = next2;
+}
+```
+
+**Related Problems:**
+- [Reorder List](#lc-reorder-list) - Split, reverse, merge
+- [Odd Even Linked List](#lc-odd-even-list) - Rearrange odd/even positions
+- [Reverse Nodes in k-Group](#lc-reverse-k-group) - In-place k-group reversal
+
+### Common Patterns Summary
+
+| Pattern | Use Case | Time | Space | Example Problems |
+|---------|----------|------|-------|------------------|
+| **Fast/Slow Pointers** | Cycle detection, find middle | $O(n)$ | $O(1)$ | Cycle, Palindrome, Remove Nth |
+| **Iterative Reversal** | Reverse all or part of list | $O(n)$ | $O(1)$ | Reverse, Reverse II, Reverse k-Group |
+| **Recursive Reversal** | Reverse with recursion | $O(n)$ | $O(n)$ | Reverse |
+| **Dummy Head** | Simplify head modifications | $O(n)$ | $O(1)$ | Merge, Remove Duplicates |
+| **Two-Pointer Gap** | Find nth from end | $O(n)$ | $O(1)$ | Remove Nth From End |
+| **Merge** | Combine sorted lists | $O(n)$ | $O(1)$ or $O(\log k)$ | Merge Two/k Lists |
+| **In-Place Transform** | Rearrange structure | $O(n)$ | $O(1)$ | Reorder, Odd Even |
+
+### Problem-Solving Checklist
+
+When approaching linked list problems:
+
+1. ✅ **Consider edge cases:**
+   - Empty list (`head == null`)
+   - Single node (`head.next == null`)
+   - Two nodes
+   - List length equal to operation parameter
+
+2. ✅ **Choose the right technique:**
+   - Need to find middle or detect cycle? → Fast/Slow pointers
+   - Need to reverse? → Iterative or recursive reversal
+   - Modifying head? → Consider dummy head
+   - Finding nth from end? → Two-pointer with gap
+   - Merging lists? → Dummy head + comparison
+
+3. ✅ **Watch for common mistakes:**
+   - Losing reference to nodes (save `next` before modifying)
+   - Not handling null pointers (`fast.next` before `fast.next.next`)
+   - Creating cycles (set tail's `next` to `null`)
+   - Off-by-one errors in loop conditions
+
+4. ✅ **Optimize space:**
+   - Prefer iterative over recursive when possible
+   - Reuse existing nodes instead of creating new ones
+   - Use dummy head instead of copying the list
 

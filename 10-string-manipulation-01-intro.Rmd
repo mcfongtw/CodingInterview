@@ -1,3 +1,532 @@
 # String Manipulation
+
 Strings enable hashing, sliding-window, two-pointer, and frequency techniques. Use this chapter as a guide to the most representative LeetCode string/substring problems.
+
+### Sliding Window Pattern {#intro-string-sliding-window}
+
+The **sliding window** technique efficiently processes subarrays or substrings by maintaining a "window" that expands and contracts based on certain conditions. This reduces brute-force $O(n^2)$ or $O(n^3)$ solutions to $O(n)$.
+
+#### Fixed-Size Sliding Window {#intro-string-sliding-window-fixed}
+
+When the window size is **fixed** (e.g., find all substrings of length k):
+
+**Template:**
+```java
+public List<String> fixedSlidingWindow(String s, int k) {
+    List<String> result = new ArrayList<>();
+
+    for (int i = 0; i <= s.length() - k; i++) {
+        String window = s.substring(i, i + k);
+        // Process window
+        result.add(window);
+    }
+
+    return result;
+}
+```
+
+**Optimized with Character Frequency:**
+```java
+public void fixedSlidingWindowOptimized(String s, int k) {
+    Map<Character, Integer> freq = new HashMap<>();
+
+    // Initialize first window
+    for (int i = 0; i < k; i++) {
+        freq.put(s.charAt(i), freq.getOrDefault(s.charAt(i), 0) + 1);
+    }
+
+    // Process first window
+    processWindow(freq);
+
+    // Slide window
+    for (int i = k; i < s.length(); i++) {
+        // Remove left character
+        char leftChar = s.charAt(i - k);
+        freq.put(leftChar, freq.get(leftChar) - 1);
+        if (freq.get(leftChar) == 0) freq.remove(leftChar);
+
+        // Add right character
+        char rightChar = s.charAt(i);
+        freq.put(rightChar, freq.getOrDefault(rightChar, 0) + 1);
+
+        // Process current window
+        processWindow(freq);
+    }
+}
+```
+
+**Time Complexity:** $O(n)$ - Each character added and removed once
+**Space Complexity:** $O(k)$ - Window state
+
+#### Variable-Size Sliding Window {#intro-string-sliding-window-variable}
+
+When the window size is **dynamic** based on conditions (e.g., longest substring with at most k distinct characters):
+
+**Pattern: Expand-Shrink**
+1. **Expand** right pointer to grow window
+2. **Shrink** left pointer when condition violated
+3. Track optimal window during process
+
+**Template:**
+```java
+public int variableSlidingWindow(String s) {
+    Map<Character, Integer> freq = new HashMap<>();
+    int left = 0;
+    int maxLength = 0;
+
+    for (int right = 0; right < s.length(); right++) {
+        // Expand: Add right character
+        char rightChar = s.charAt(right);
+        freq.put(rightChar, freq.getOrDefault(rightChar, 0) + 1);
+
+        // Shrink: While condition violated
+        while (conditionViolated(freq)) {
+            char leftChar = s.charAt(left);
+            freq.put(leftChar, freq.get(leftChar) - 1);
+            if (freq.get(leftChar) == 0) freq.remove(leftChar);
+            left++;
+        }
+
+        // Update result
+        maxLength = Math.max(maxLength, right - left + 1);
+    }
+
+    return maxLength;
+}
+```
+
+**Example: Longest Substring Without Repeating Characters**
+```java
+public int lengthOfLongestSubstring(String s) {
+    Map<Character, Integer> freq = new HashMap<>();
+    int left = 0, maxLength = 0;
+
+    for (int right = 0; right < s.length(); right++) {
+        char c = s.charAt(right);
+        freq.put(c, freq.getOrDefault(c, 0) + 1);
+
+        // Shrink while duplicate exists
+        while (freq.get(c) > 1) {
+            char leftChar = s.charAt(left);
+            freq.put(leftChar, freq.get(leftChar) - 1);
+            left++;
+        }
+
+        maxLength = Math.max(maxLength, right - left + 1);
+    }
+
+    return maxLength;
+}
+```
+
+**Example: Longest Substring with At Most K Distinct Characters**
+```java
+public int lengthOfLongestSubstringKDistinct(String s, int k) {
+    Map<Character, Integer> freq = new HashMap<>();
+    int left = 0, maxLength = 0;
+
+    for (int right = 0; right < s.length(); right++) {
+        char c = s.charAt(right);
+        freq.put(c, freq.getOrDefault(c, 0) + 1);
+
+        // Shrink while too many distinct characters
+        while (freq.size() > k) {
+            char leftChar = s.charAt(left);
+            freq.put(leftChar, freq.get(leftChar) - 1);
+            if (freq.get(leftChar) == 0) freq.remove(leftChar);
+            left++;
+        }
+
+        maxLength = Math.max(maxLength, right - left + 1);
+    }
+
+    return maxLength;
+}
+```
+
+**Related Problems:**
+- [Longest Substring Without Repeating Characters](#lc-longest-substring-unique) - Variable window, no duplicates
+- [Find All Anagrams in a String](#lc-find-all-anagrams) - Fixed window with frequency matching
+- [Number of Substrings Containing All Three Characters](#lc-substrings-all-three) - Variable window counting
+
+**Time Complexity:** $O(n)$ - Each character visited at most twice (once by right, once by left)
+**Space Complexity:** $O(k)$ - Where k is the character set size or window constraint
+
+### Two-Pointer Technique {#intro-string-two-pointer}
+
+The **two-pointer** technique uses two indices moving through the string to solve problems efficiently.
+
+#### Pattern 1: Opposite Direction (Palindrome Check)
+
+Pointers start at both ends and move toward center.
+
+**Template:**
+```java
+public boolean isPalindrome(String s) {
+    int left = 0;
+    int right = s.length() - 1;
+
+    while (left < right) {
+        if (s.charAt(left) != s.charAt(right)) {
+            return false;
+        }
+        left++;
+        right--;
+    }
+
+    return true;
+}
+```
+
+**Applications:**
+- Palindrome validation
+- Reverse string in-place
+- Two-sum in sorted array
+
+#### Pattern 2: Same Direction (Fast/Slow)
+
+Both pointers move forward at different speeds (similar to linked list pattern).
+
+**Template for Removing Duplicates:**
+```java
+public int removeDuplicates(char[] chars) {
+    int slow = 0;  // Write position
+
+    for (int fast = 0; fast < chars.length; fast++) {
+        if (chars[fast] != chars[slow]) {
+            slow++;
+            chars[slow] = chars[fast];
+        }
+    }
+
+    return slow + 1;
+}
+```
+
+**Applications:**
+- Remove duplicates in-place
+- Partition arrays
+- String compression
+
+**Time Complexity:** $O(n)$
+**Space Complexity:** $O(1)$ - In-place modification
+
+### Character Frequency with HashMap {#intro-string-frequency}
+
+Many string problems require tracking **character frequencies** or **character counts**.
+
+#### Pattern: Frequency Counter
+
+**Template:**
+```java
+public Map<Character, Integer> getFrequency(String s) {
+    Map<Character, Integer> freq = new HashMap<>();
+
+    for (char c : s.toCharArray()) {
+        freq.put(c, freq.getOrDefault(c, 0) + 1);
+    }
+
+    return freq;
+}
+```
+
+#### Pattern: Character Array for Fixed Alphabet
+
+For **lowercase English letters only**, use array instead of HashMap for better performance.
+
+**Template:**
+```java
+public int[] getFrequency(String s) {
+    int[] freq = new int[26];
+
+    for (char c : s.toCharArray()) {
+        freq[c - 'a']++;
+    }
+
+    return freq;
+}
+```
+
+**Comparison:**
+
+| Approach | Space | Access Time | Use Case |
+|----------|-------|-------------|----------|
+| **HashMap** | $O(k)$ where $k$ is distinct chars | $O(1)$ average | Unicode, mixed characters |
+| **Array [26]** | $O(1)$ constant | $O(1)$ | Lowercase letters only |
+| **Array [128]** | $O(1)$ constant | $O(1)$ | ASCII characters |
+| **Array [256]** | $O(1)$ constant | $O(1)$ | Extended ASCII |
+
+#### Pattern: Frequency Matching (Anagrams)
+
+**Template:**
+```java
+public boolean areAnagrams(String s, String t) {
+    if (s.length() != t.length()) return false;
+
+    int[] freq = new int[26];
+
+    for (int i = 0; i < s.length(); i++) {
+        freq[s.charAt(i) - 'a']++;
+        freq[t.charAt(i) - 'a']--;
+    }
+
+    for (int count : freq) {
+        if (count != 0) return false;
+    }
+
+    return true;
+}
+```
+
+**Related Problems:**
+- [Group Anagrams](#lc-group-anagrams) - Frequency as key
+- [Find All Anagrams in a String](#lc-find-all-anagrams) - Sliding window + frequency
+- [Minimum Steps to Make Anagram](#lc-min-steps-anagram) - Frequency difference
+- [Ransom Note](#lc-ransom-note) - Frequency validation
+- [Sort Characters By Frequency](#lc-sort-characters-by-frequency) - Sort by count
+
+**Time Complexity:** $O(n)$ - Single pass
+**Space Complexity:** $O(1)$ for fixed alphabet, $O(k)$ for HashMap
+
+### Anagram Detection Techniques {#intro-string-anagram}
+
+**Anagrams** are strings with the same characters in different orders (e.g., "listen" and "silent").
+
+#### Technique 1: Sort and Compare
+
+**Approach:** Sort both strings and check equality.
+
+```java
+public boolean isAnagram(String s, String t) {
+    if (s.length() != t.length()) return false;
+
+    char[] sChars = s.toCharArray();
+    char[] tChars = t.toCharArray();
+
+    Arrays.sort(sChars);
+    Arrays.sort(tChars);
+
+    return Arrays.equals(sChars, tChars);
+}
+```
+
+**Time Complexity:** $O(n \log n)$ - Sorting
+**Space Complexity:** $O(n)$ - Character arrays
+
+#### Technique 2: Frequency Count
+
+**Approach:** Compare character frequencies.
+
+```java
+public boolean isAnagram(String s, String t) {
+    if (s.length() != t.length()) return false;
+
+    int[] freq = new int[26];
+
+    for (int i = 0; i < s.length(); i++) {
+        freq[s.charAt(i) - 'a']++;
+        freq[t.charAt(i) - 'a']--;
+    }
+
+    for (int count : freq) {
+        if (count != 0) return false;
+    }
+
+    return true;
+}
+```
+
+**Time Complexity:** $O(n)$ - More efficient
+**Space Complexity:** $O(1)$ - Fixed size array
+
+#### Technique 3: Frequency Signature (for Grouping)
+
+**Approach:** Use sorted string or frequency pattern as hash key for grouping anagrams.
+
+**Using Sorted String as Key:**
+```java
+public List<List<String>> groupAnagrams(String[] strs) {
+    Map<String, List<String>> groups = new HashMap<>();
+
+    for (String s : strs) {
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars);
+        String key = new String(chars);
+
+        groups.putIfAbsent(key, new ArrayList<>());
+        groups.get(key).add(s);
+    }
+
+    return new ArrayList<>(groups.values());
+}
+```
+
+**Using Frequency Pattern as Key:**
+```java
+public List<List<String>> groupAnagrams(String[] strs) {
+    Map<String, List<String>> groups = new HashMap<>();
+
+    for (String s : strs) {
+        int[] freq = new int[26];
+        for (char c : s.toCharArray()) {
+            freq[c - 'a']++;
+        }
+
+        String key = Arrays.toString(freq);
+        groups.putIfAbsent(key, new ArrayList<>());
+        groups.get(key).add(s);
+    }
+
+    return new ArrayList<>(groups.values());
+}
+```
+
+**Comparison:**
+
+| Technique | Time | Space | Best For |
+|-----------|------|-------|----------|
+| **Sort and Compare** | $O(n \log n)$ | $O(n)$ | Single pair comparison |
+| **Frequency Count** | $O(n)$ | $O(1)$ | Single pair comparison |
+| **Frequency Signature** | $O(n)$ | $O(k)$ | Grouping multiple strings |
+
+**Related Problems:**
+- [Group Anagrams](#lc-group-anagrams) - Group by signature
+- [Find All Anagrams in a String](#lc-find-all-anagrams) - Sliding window
+- [Minimum Steps to Make Anagram](#lc-min-steps-anagram) - Frequency difference
+
+### String Building and Concatenation {#intro-string-building}
+
+In Java, strings are **immutable**. Repeated concatenation creates multiple intermediate objects.
+
+#### StringBuilder for Efficient Building
+
+**Bad - Repeated Concatenation:**
+```java
+String result = "";
+for (int i = 0; i < n; i++) {
+    result += s;  // Creates new String object each time - O(n²)
+}
+```
+
+**Good - StringBuilder:**
+```java
+StringBuilder sb = new StringBuilder();
+for (int i = 0; i < n; i++) {
+    sb.append(s);  // Amortized O(1) per append
+}
+String result = sb.toString();  // O(n) final conversion
+```
+
+**Operations:**
+```java
+StringBuilder sb = new StringBuilder();
+sb.append("hello");          // Add string
+sb.append('c');              // Add character
+sb.insert(0, "start");       // Insert at position
+sb.delete(0, 5);             // Delete range
+sb.reverse();                // Reverse in-place
+sb.setCharAt(0, 'X');        // Modify character
+String result = sb.toString();  // Convert to String
+```
+
+**Time Complexity:**
+- `append()`: Amortized $O(1)$
+- `insert()`: $O(n)$
+- `delete()`: $O(n)$
+- `reverse()`: $O(n)$
+- `toString()`: $O(n)$
+
+**Space Complexity:** $O(n)$ - Total character storage
+
+### String Hashing {#intro-string-hashing}
+
+**String hashing** converts strings to numeric values for fast comparison and lookup.
+
+#### Rolling Hash (Rabin-Karp)
+
+For substring searching, use **rolling hash** to compute hash incrementally.
+
+**Formula:**
+$$
+\text{hash}(s) = s[0] \times p^{n-1} + s[1] \times p^{n-2} + \ldots + s[n-1] \times p^0 \mod m
+$$
+
+Where:
+- $p$ is a prime base (e.g., 31 for lowercase letters)
+- $m$ is a large prime modulus (e.g., $10^9 + 7$)
+
+**Rolling Update:**
+When sliding from $s[i \ldots i+k-1]$ to $s[i+1 \ldots i+k]$:
+1. Remove leftmost character: `hash = hash - s[i] * pow(p, k-1)`
+2. Shift left: `hash = hash * p`
+3. Add rightmost character: `hash = hash + s[i+k]`
+
+**Template:**
+```java
+public long rollingHash(String s, int start, int length, int p, int m) {
+    long hash = 0;
+    long pow = 1;
+
+    for (int i = 0; i < length; i++) {
+        hash = (hash + (s.charAt(start + i) - 'a' + 1) * pow) % m;
+        pow = (pow * p) % m;
+    }
+
+    return hash;
+}
+```
+
+**Applications:**
+- Substring search (Rabin-Karp algorithm)
+- Detecting duplicate substrings
+- String matching
+
+**Time Complexity:** $O(n)$ - Linear with rolling updates
+**Space Complexity:** $O(1)$
+
+### Common String Patterns Summary
+
+| Pattern | Technique | Use Case | Time | Space |
+|---------|-----------|----------|------|-------|
+| **Sliding Window (Fixed)** | Window of size k | All k-length substrings | $O(n)$ | $O(k)$ |
+| **Sliding Window (Variable)** | Expand-shrink | Longest/shortest substring with condition | $O(n)$ | $O(k)$ |
+| **Two Pointer (Opposite)** | left/right from ends | Palindrome, reverse | $O(n)$ | $O(1)$ |
+| **Two Pointer (Same)** | Fast/slow | Remove duplicates, partition | $O(n)$ | $O(1)$ |
+| **Frequency HashMap** | Character counting | Anagrams, character operations | $O(n)$ | $O(k)$ |
+| **Frequency Array** | Fixed alphabet counting | Lowercase letter operations | $O(n)$ | $O(1)$ |
+| **Anagram (Sort)** | Sort and compare | Single pair check | $O(n \log n)$ | $O(n)$ |
+| **Anagram (Frequency)** | Count comparison | Single pair check | $O(n)$ | $O(1)$ |
+| **Anagram (Signature)** | Frequency as key | Grouping multiple strings | $O(n)$ | $O(k)$ |
+| **StringBuilder** | Efficient building | String construction | $O(n)$ | $O(n)$ |
+| **Rolling Hash** | Incremental hash | Substring search | $O(n)$ | $O(1)$ |
+
+### Problem-Solving Checklist
+
+When approaching string problems:
+
+1. ✅ **Identify the pattern:**
+   - Substring with condition? → Sliding window
+   - Palindrome or reverse? → Two pointers (opposite)
+   - Character frequency? → HashMap or array
+   - Anagram detection? → Sort or frequency
+   - Building new string? → StringBuilder
+   - Substring search? → Rolling hash or KMP
+
+2. ✅ **Choose data structure:**
+   - Lowercase letters only? → `int[26]` array
+   - Mixed characters? → HashMap
+   - Need efficient building? → StringBuilder
+   - Need fast lookup? → HashSet or HashMap
+
+3. ✅ **Optimize:**
+   - Sliding window reduces $O(n^2)$ to $O(n)$
+   - Array frequency beats HashMap for fixed alphabets
+   - StringBuilder beats string concatenation
+   - Frequency count beats sorting for anagrams
+
+4. ✅ **Handle edge cases:**
+   - Empty string
+   - Single character
+   - All same characters
+   - No valid solution exists
 
