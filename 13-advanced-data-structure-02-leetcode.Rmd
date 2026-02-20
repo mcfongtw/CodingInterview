@@ -121,17 +121,16 @@ class LRUCache {
     }
 
     private final Map<Integer, Node> cache = new HashMap<>();
-    //dummy pointers for head and tail. 
-    //Real head is head.next
-    private final Node head = new Node(0, 0);
-    //Real tail is tail.prev
-    private final Node tail = new Node(0, 0);
+    // dummy head; real head is dummyHead.next
+    private final Node dummyHead = new Node(0, 0);
+    // dummy tail; real tail is dummyTail.prev
+    private final Node dummyTail = new Node(0, 0);
     private final int capacity;
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        head.next = tail;
-        tail.prev = head;
+        dummyHead.next = dummyTail;
+        dummyTail.prev = dummyHead;
     }
 
     public int get(int key) {
@@ -154,7 +153,7 @@ class LRUCache {
         cache.put(key, fresh);
         addAfterHead(fresh);
         if (cache.size() > capacity) {
-            Node lru = tail.prev;
+            Node lru = dummyTail.prev;
             remove(lru);
             cache.remove(lru.key);
         }
@@ -166,16 +165,87 @@ class LRUCache {
     }
 
     private void addAfterHead(Node node) {
-        node.next = head.next;
-        node.prev = head;
-        head.next.prev = node;
-        head.next = node;
+        node.next = dummyHead.next;
+        node.prev = dummyHead;
+        dummyHead.next.prev = node;
+        dummyHead.next = node;
     }
 
     private void remove(Node node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
     }
+}
+```
+
+#### Code - Go
+
+```go
+type node struct {
+    key, value int
+    prev, next *node
+}
+
+type LRUCache struct {
+    capacity  int
+    cache     map[int]*node
+    dummyHead *node // dummy head; real head is dummyHead.next
+    dummyTail *node // dummy tail; real tail is dummyTail.prev
+}
+
+func Constructor(capacity int) LRUCache {
+    head := &node{}
+    tail := &node{}
+    head.next = tail
+    tail.prev = head
+    return LRUCache{
+        capacity:  capacity,
+        cache:     make(map[int]*node),
+        dummyHead: head,
+        dummyTail: tail,
+    }
+}
+
+func (this *LRUCache) Get(key int) int {
+    if n, ok := this.cache[key]; ok {
+        this.moveToHead(n)
+        return n.value
+    }
+    return -1
+}
+
+func (this *LRUCache) Put(key int, value int) {
+    if n, ok := this.cache[key]; ok {
+        n.value = value
+        this.moveToHead(n)
+        return
+    }
+
+    n := &node{key: key, value: value}
+    this.cache[key] = n
+    this.addAfterHead(n)
+    if len(this.cache) > this.capacity {
+        lru := this.dummyTail.prev
+        this.remove(lru)
+        delete(this.cache, lru.key)
+    }
+}
+
+func (this *LRUCache) moveToHead(n *node) {
+    this.remove(n)
+    this.addAfterHead(n)
+}
+
+func (this *LRUCache) addAfterHead(n *node) {
+    n.next = this.dummyHead.next
+    n.prev = this.dummyHead
+    this.dummyHead.next.prev = n
+    this.dummyHead.next = n
+}
+
+func (this *LRUCache) remove(n *node) {
+    n.prev.next = n.next
+    n.next.prev = n.prev
 }
 ```
 
