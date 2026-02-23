@@ -850,6 +850,266 @@ func canConstruct(ransomNote string, magazine string) bool {
 ```
 
 
+## Longest Repeating Character Replacement {#lc-longest-repeating-character-replacement}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 424
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/longest-repeating-character-replacement/
+- **Tags**: NeetCode 150
+- **Techniques**: [Sliding Window](glossary-of-algorithm.html#glossary-sliding-window), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), String
+
+### Description
+
+You are given a string `s` and an integer `k`. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most `k` times.
+
+Return the length of the longest substring containing the same letter you can get after performing the above operations.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "ABAB", k = 2
+Output: 4
+Explanation: Replace the two 'A's with two 'B's or vice versa.
+```
+
+**Example 2:**
+```
+Input: s = "AABABBA", k = 1
+Output: 4
+Explanation: Replace the one 'A' in the middle with 'B' and form "AABBBBA".
+The substring "BBBB" has the longest repeating letters, which is 4.
+There may exists other ways to achieve this answer too.
+```
+
+### Constraints
+
+- $1 \le$ s.length $\le$ $10^5$
+- `s` consists of only uppercase English letters
+- $0 \le$ k $\le$ s.length
+
+### Solution - Sliding Window
+
+#### Walkthrough
+
+This problem uses a **sliding window technique** combined with **frequency counting** to find the longest valid substring. The key insight is understanding what makes a window valid:
+
+**Core Concept - Window Validity:**
+- In a window of length `L` with the most frequent character appearing `maxFreq` times
+- We need to replace `L - maxFreq` characters to make all characters identical
+- The window is valid when `L - maxFreq <= k` (we have enough replacements)
+
+**Algorithm Approach:**
+
+1. **Maintain a sliding window** `[left, right]` using two pointers
+2. **Track character frequencies** in the current window using an array
+3. **Track maxFreq**: the highest frequency of any single character in the window
+4. **Expand the window**: Move `right` pointer and add characters
+5. **Validate the window**: Check if `windowLength - maxFreq <= k`
+6. **Shrink when invalid**: Move `left` pointer forward when too many replacements are needed
+7. **Record maximum**: Track the largest valid window size encountered
+
+**Key Optimization - Why We Don't Decrement maxFreq:**
+
+When shrinking the window, we deliberately don't recalculate `maxFreq` to find the new maximum. Why?
+
+- We only care about finding windows **larger** than what we've already found
+- If `maxFreq` was `X` previously, we've already recorded that window size
+- Future windows can only beat this if they achieve `maxFreq > X`
+- Keeping the old (possibly stale) `maxFreq` is safe—it just means we won't shrink more than necessary
+- This maintains O(n) time complexity by avoiding O(26) frequency array scans
+
+**Visual Example with `s = "AABABBA"`, `k = 1`:**
+
+```
+Initial: left = 0, right = 0, freq = {}, maxFreq = 0, result = 0
+
+Step 1: right = 0, char = 'A'
+  Window: [A]
+  freq = {A:1}, maxFreq = 1
+  windowLen = 1, replacements = 1 - 1 = 0 <= 1 ✓
+  result = 1
+
+Step 2: right = 1, char = 'A'
+  Window: [AA]
+  freq = {A:2}, maxFreq = 2
+  windowLen = 2, replacements = 2 - 2 = 0 <= 1 ✓
+  result = 2
+
+Step 3: right = 2, char = 'B'
+  Window: [AAB]
+  freq = {A:2, B:1}, maxFreq = 2
+  windowLen = 3, replacements = 3 - 2 = 1 <= 1 ✓
+  result = 3
+
+Step 4: right = 3, char = 'A'
+  Window: [AABA]
+  freq = {A:3, B:1}, maxFreq = 3
+  windowLen = 4, replacements = 4 - 3 = 1 <= 1 ✓
+  result = 4
+
+Step 5: right = 4, char = 'B'
+  Window: [AABAB]
+  freq = {A:3, B:2}, maxFreq = 3
+  windowLen = 5, replacements = 5 - 3 = 2 > 1 ✗ (invalid!)
+  Shrink: remove freq[A]--, left = 1
+  New window: [ABAB], windowLen = 4
+  result = 4
+
+Step 6: right = 5, char = 'B'
+  Window: [ABABB]
+  freq = {A:2, B:3}, maxFreq = 3
+  windowLen = 5, replacements = 5 - 3 = 2 > 1 ✗ (invalid!)
+  Shrink: remove freq[A]--, left = 2
+  New window: [BABB], windowLen = 4
+  result = 4
+
+Step 7: right = 6, char = 'A'
+  Window: [BABBA]
+  freq = {A:2, B:3}, maxFreq = 3
+  windowLen = 5, replacements = 5 - 3 = 2 > 1 ✗ (invalid!)
+  Shrink: remove freq[B]--, left = 3
+  New window: [ABBA], windowLen = 4
+  result = 4
+
+Final result: 4
+```
+
+**Why This Works:**
+- The window always maintains the invariant that it needs at most `k` replacements
+- By tracking `maxFreq`, we efficiently determine how many replacements are needed
+- The sliding window ensures we explore all possible valid substrings
+- We never miss the optimal answer because we check every possible right boundary
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the length of string `s`
+  - Single pass through the string with the right pointer: O(n)
+  - Each character is added to the window once: O(n)
+  - Each character is removed from the window at most once: O(n)
+  - Frequency updates are O(1) operations
+  - We never recalculate maxFreq by scanning the frequency array
+  - Total: O(n)
+
+- **Space Complexity**: O(1)
+  - Frequency array of size 26 (uppercase English letters only): O(26) = O(1)
+  - A few integer variables: O(1)
+  - No additional data structures that scale with input size
+  - Total: O(1)
+
+#### Implementation Steps
+
+1. **Initialize data structures:**
+   - Create frequency array `freq[26]` to track character counts in current window
+   - Initialize `maxFreq = 0` to track the highest frequency in the window
+   - Initialize `result = 0` to store the maximum valid window length
+   - Initialize `left = 0` as the left pointer
+
+2. **Iterate with right pointer** from 0 to `s.length() - 1`:
+   - This pointer expands the window to the right
+
+3. **Add character to window:**
+   - Get character at position `right`: `s.charAt(right)`
+   - Increment its frequency: `freq[s.charAt(right) - 'A']++`
+
+4. **Update maxFreq:**
+   - Compare current character's frequency with `maxFreq`
+   - Update: `maxFreq = Math.max(maxFreq, freq[s.charAt(right) - 'A'])`
+
+5. **Check window validity:**
+   - Calculate current window length: `windowLen = right - left + 1`
+   - Calculate replacements needed: `replacementsNeeded = windowLen - maxFreq`
+   - If `replacementsNeeded > k`, the window is invalid
+
+6. **Shrink window if invalid:**
+   - Get character at position `left`: `s.charAt(left)`
+   - Decrement its frequency: `freq[s.charAt(left) - 'A']--`
+   - Move left pointer forward: `left++`
+   - **Important:** Do NOT recalculate `maxFreq` (optimization explained in walkthrough)
+
+7. **Update result:**
+   - After ensuring window is valid, update result: `result = Math.max(result, right - left + 1)`
+
+8. **Return result** after completing the loop
+
+#### Code - Java
+
+```java
+public int characterReplacement(String s, int k) {
+    int[] freq = new int[26];  // Maintain frequency map throughout
+    int maxFreq = 0;           // Track max frequency in current window
+    int result = 0;            // Result
+    int l = 0;
+
+    for (int r = 0; r < s.length(); r++) {
+        // 1. Expand window: add character at right pointer
+        int rChar = s.charAt(r);
+        freq[rChar - 'A']++;
+
+        // 2. Update maxFreq (most frequent character in current window)
+        maxFreq = Math.max(maxFreq, freq[rChar - 'A']);
+
+        // 3. Check if window is valid
+        int windowLen = r - l + 1;
+        int replacementsNeeded = windowLen - maxFreq;
+
+        // 4. If invalid (need too many replacements), shrink from left
+        if (replacementsNeeded > k) {
+            char leftChar = s.charAt(l);
+            freq[leftChar - 'A']--;
+            l++;
+            // Note: We don't need to recalculate maxFreq here (see Hint 5)
+        }
+
+        // 5. Update result (current window is valid)
+        result = Math.max(result, r - l + 1);
+    }
+
+    return result;
+}
+```
+
+#### Code - Go
+
+```go
+func characterReplacement(s string, k int) int {
+    freq := make([]int, 26)
+    maxFreq := 0
+    result := 0
+    l := 0
+
+    for r := 0; r < len(s); r++ {
+        // 1. Expand window: add character at right pointer
+        rChar := s[r]
+        freq[rChar - 'A']++
+
+        // 2. Update maxFreq (most frequent character in current window)
+        maxFreq = max(maxFreq, freq[rChar - 'A'])
+
+        // 3. Check if window is valid
+        windowLen := r - l + 1
+        replacementsNeeded := windowLen - maxFreq
+
+        // 4. If invalid (need too many replacements), shrink from left
+        if replacementsNeeded > k {
+            lChar := s[l]
+            freq[lChar - 'A']--
+            l++
+            // Note: We don't need to recalculate maxFreq here (see Hint 5)
+        }
+
+        // 5. Update result (current window is valid)
+        result = max(result, r - l + 1)
+    }
+
+    return result
+}
+```
+
+
 ## Find All Anagrams in a String {#lc-find-all-anagrams}
 
 ### Problem Metadata
