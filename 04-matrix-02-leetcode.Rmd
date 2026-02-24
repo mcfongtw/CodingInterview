@@ -970,6 +970,252 @@ public boolean searchMatrix(int[][] matrix, int target) {
 ```
 
 
+## Walls and Gates {#lc-walls-and-gates}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 286
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/walls-and-gates/
+- **Tags**: NeetCode 150
+- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation), Multi-Source BFS
+
+### Description
+
+You are given an `m x n` grid `rooms` initialized with these three possible values:
+
+- `-1` represents a wall or an obstacle
+- `0` represents a gate
+- `INF` (2147483647, the maximum integer value) represents an empty room
+
+Fill each empty room with the distance to its nearest gate. If it is impossible to reach a gate, leave the room with the value `INF`.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: rooms = [[2147483647,-1,0,2147483647],
+                [2147483647,2147483647,2147483647,-1],
+                [2147483647,-1,2147483647,-1],
+                [0,-1,2147483647,2147483647]]
+
+Output: [[3,-1,0,1],
+         [2,2,1,-1],
+         [1,-1,2,-1],
+         [0,-1,3,4]]
+```
+
+**Example 2:**
+
+```
+Input: rooms = [[-1]]
+Output: [[-1]]
+```
+
+### Constraints
+
+- `m == rooms.length`
+- `n == rooms[i].length`
+- `1 <= m, n <= 250`
+- `rooms[i][j]` is `-1`, `0`, or `2147483647`
+
+### Solution - Multi-Source BFS
+
+#### Walkthrough
+
+This problem is a classic **multi-source BFS** where multiple gates spread their distances simultaneously to all reachable empty rooms. The key insight is to start BFS from **all gates at once**, rather than from each gate individually.
+
+**Key Insights:**
+
+1. **Multi-source initialization**: All gates (value `0`) start the BFS simultaneously at distance 0. This ensures distances propagate in parallel from multiple sources, guaranteeing the shortest path to each room.
+
+2. **Level-order traversal for distance tracking**: Use two queues (`currLvlQ` and `nextLvlQ`) to separate cells processed at the current distance from cells that will be processed at the next distance level. When `currLvlQ` is exhausted, increment distance and swap queues.
+
+3. **In-place distance marking**: Modify the grid directly by updating empty rooms (`INF`) with their distance values as they're visited. This eliminates the need for a separate `visited` array.
+
+4. **Boundary and validity checks**: Skip cells that are:
+   - Out of bounds
+   - Walls (`-1`)
+   - Already gates (`0`)
+   - Already visited (distance $\lt$ `INF`)
+
+**Algorithm Flow:**
+
+1. **Initialization Phase**:
+   - Scan the entire grid to find all gates (value `0`)
+   - Add all gates to `currLvlQ` with initial distance `0`
+   - Gates will propagate their distances outward simultaneously
+
+2. **BFS Phase**:
+   - Initialize `dist = 0`
+   - Process all cells in `currLvlQ` (current distance level)
+   - For each cell at current distance, check all 4 adjacent neighbors
+   - If a neighbor is an unvisited empty room (`rooms[nr][nc] == INF`):
+     - Assign distance: `rooms[nr][nc] = dist + 1`
+     - Add to `nextLvlQ` (will process in next distance level)
+   - When `currLvlQ` is empty:
+     - If `nextLvlQ` has cells, increment `dist`
+     - Swap queues: `currLvlQ = nextLvlQ`, create new `nextLvlQ`
+
+3. **Result**:
+   - All reachable empty rooms now contain their shortest distance to nearest gate
+   - Unreachable rooms remain `INF`
+
+**Visual Example:**
+
+For the input grid:
+```
+Initial state (dist = 0):
+INF  -1   0  INF    currLvlQ: [(0,2), (3,0)] (both gates)
+INF INF INF  -1
+INF  -1  INF  -1
+ 0   -1  INF INF
+
+Distance 1:
+INF  -1   0   1     currLvlQ: [(0,3), (1,2), (2,0)]
+INF INF   1  -1     Gates spread to adjacent empty rooms
+ 1   -1  INF  -1
+ 0   -1  INF INF
+
+Distance 2:
+INF  -1   0   1     currLvlQ: [(1,0), (1,1), (2,2)]
+ 2   2    1  -1     Distance propagates further
+ 1   -1   2  -1
+ 0   -1  INF INF
+
+Distance 3:
+ 3   -1   0   1     currLvlQ: [(0,0), (2,3)]
+ 2   2    1  -1     Reaches farther rooms
+ 1   -1   2  -1
+ 0   -1   3  INF
+
+Distance 4:
+ 3   -1   0   1     currLvlQ: [(3,3)]
+ 2   2    1  -1     Final room reached
+ 1   -1   2  -1
+ 0   -1   3   4
+
+Result: All reachable rooms have shortest distances
+```
+
+**Why Multi-Source BFS?**
+
+- **Correctness**: Starting from all gates simultaneously ensures each room gets the distance from its **nearest** gate, not just any gate.
+- **Efficiency**: Single BFS pass visits each cell at most once, avoiding redundant traversals from individual gates.
+
+**Comparison to Single-Source BFS:**
+
+- Single-source (BFS from each gate separately): O(k × m × n) where k is the number of gates
+- Multi-source (this approach): O(m × n) - visits each cell once
+
+#### Analysis
+
+- **Time Complexity**: O(m × n) where m is the number of rows and n is the number of columns. Each cell is visited at most once during the BFS traversal.
+- **Space Complexity**: O(m × n) for the queue. In the worst case (all cells are gates initially), the queue contains all cells in the grid.
+
+#### Implementation Steps
+
+1. **Multi-source initialization**:
+   - Define constants: `UNVISITED = 2147483647` (INF), `GATE = 0`
+   - Iterate through the entire grid
+   - Add all gates (value `0`) to `currLvlQ`
+
+2. **BFS with level-order traversal**:
+   - Initialize two queues: `currLvlQ` (current distance level) and `nextLvlQ` (next distance level)
+   - Initialize `dist = 0`
+   - Define 4 directions: up, down, left, right
+   - While `currLvlQ` is not empty:
+     - Poll a cell from `currLvlQ`
+     - Check all 4 directions
+     - For each valid neighbor:
+       - Skip if out of bounds
+       - Skip if wall (`rooms[nr][nc] == -1`)
+       - Skip if gate (`rooms[nr][nc] == GATE`)
+       - Skip if already visited (`rooms[nr][nc] < UNVISITED`)
+       - Assign distance: `rooms[nr][nc] = dist + 1`
+       - Add to `nextLvlQ`
+     - When `currLvlQ` is empty:
+       - If `nextLvlQ` has elements, increment `dist`
+       - Swap queues: `currLvlQ = nextLvlQ`, create new `nextLvlQ`
+
+3. **In-place modification**:
+   - Grid is modified directly, no return value needed
+
+#### Code - Java
+
+```java
+class Solution {
+    private static final int UNVISITED = 2147483647;
+    private static final int GATE = 0;
+
+    public void wallsAndGates(int[][] rooms) {
+        int rows = rooms.length;
+        int cols = rooms[0].length;
+        Queue<int[]> currLvlQ = new LinkedList<>();
+        Queue<int[]> nextLvlQ = new LinkedList<>();
+
+        // Phase 1: Multi-source initialization
+        // Add ALL gate cells to the queue
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (rooms[i][j] == GATE) {
+                    currLvlQ.offer(new int[]{i, j});
+                }
+            }
+        }
+
+        // Phase 2: Level-by-level BFS
+        int dist = 0;
+        int[][] directions = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+
+        while (!currLvlQ.isEmpty()) {
+            // Process all cells at current distance
+            int[] cell = currLvlQ.poll();
+            int r = cell[0], c = cell[1];
+
+            // Explore 4 adjacent neighbors
+            for (int[] dir : directions) {
+                int nr = r + dir[0];
+                int nc = c + dir[1];
+
+                // Boundary check
+                if (nr < 0 || nr >= rows || nc < 0 || nc >= cols)
+                    continue;
+
+                // Skip wall/obstacle
+                if (rooms[nr][nc] == -1)
+                    continue;
+
+                // Skip gate cells
+                if (rooms[nr][nc] == GATE)
+                    continue;
+
+                // Skip already visited cells (distance already assigned)
+                if (rooms[nr][nc] < UNVISITED)
+                    continue;
+
+                // Mark the distance to this unvisited room
+                rooms[nr][nc] = dist + 1;
+                nextLvlQ.offer(new int[]{nr, nc});
+            }
+
+            // Increment distance after processing entire level
+            if (currLvlQ.isEmpty()) {
+                // Next level has work
+                if (!nextLvlQ.isEmpty()) {
+                    dist++;
+                }
+                currLvlQ = nextLvlQ;
+                nextLvlQ = new LinkedList<>();
+            }
+        }
+    }
+}
+```
+
+
 ## Pacific Atlantic Water Flow {#lc-pacific-atlantic-water-flow}
 
 ### Problem Metadata

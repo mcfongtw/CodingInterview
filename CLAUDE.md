@@ -174,7 +174,13 @@ After user implements the solution:
 
 - Solutions in Java, verified on online platforms (LeetCode, HackerRank, etc.)
 - Include time/space complexity analysis
-- Use `\@ref(id)` for glossary references (e.g., `\@ref(dfs)`)
+- **Cross-referencing**: Use markdown link syntax with anchors, NOT `\@ref()`:
+  - ✅ **CORRECT**: `[Problem Title](#anchor-id)` or `[Concept](#glossary-anchor)`
+  - ❌ **WRONG**: `[Problem Title](\@ref(anchor-id))`
+  - Examples:
+    - Reference a problem: `[Walls and Gates](#lc-walls-and-gates)`
+    - Reference a glossary term: `[Hash Table](#glossary-hash-table)`
+    - Reference an intro section: `[Kadane's Algorithm](#intro-kadanes-algorithm)`
 - Follow established problem template structure
 
 ### R Markdown Gotchas
