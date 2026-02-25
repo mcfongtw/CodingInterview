@@ -139,9 +139,9 @@ Chapter 2: Arrays
     - Linked list sorting → `06-linked-list.Rmd` (not search-and-sort) — linked list manipulation is the core insight
     - Stack/Queue → `07-stack-and-queue.Rmd`
 
-### Two-Phase Workflow
+### Three-Phase Workflow (Interview-Style Learning Process)
 
-**Phase 1: Structure Creation (Claude)**
+**Phase 1: Problem Setup & Structure Creation (Claude)**
 
 When adding a new problem, Claude will:
 
@@ -150,25 +150,54 @@ When adding a new problem, Claude will:
 3. **Create problem section** in appropriate chapter with:
    - Metadata: Platform, ID, Difficulty, URL, Tags, Techniques
    - **Tags**: Company names (`Google`, `Amazon`, `Meta`) and study plans (`Top 100 Liked`, `Blind 75`, `NeetCode 150`)
-   - **Techniques**: Use cross-references (e.g., `[Hash Table](\@ref(hash-table))`)
+   - **Techniques**: Use cross-references (e.g., `[Hash Table](#glossary-hash-table)`)
    - Complete description, examples, and constraints
    - Empty solution structure (Walkthrough, Analysis, Implementation Steps, Java Code placeholders)
-4. **Assign unique anchor ID** (e.g., `{#min-steps-anagram}`)
+4. **Assign unique anchor ID** (e.g., `{#lc-min-steps-anagram}`)
 5. **Update problems_data.csv** simultaneously with matching anchor and metadata:
    ```csv
-   title,platform,problem_id,difficulty,chapter,chapter_num,anchor,tags
-   Problem Name,LeetCode,1347,Medium,String Manipulation,09,anchor-id,"Google, Top 100 Liked"
-   Problem Name,HackerRank,unique-paths,Easy,Array,02,hr-unique-paths,""
+   title,platform,problem_id,difficulty,chapter,chapter_num,anchor,tags,techniques
+   Problem Name,LeetCode,1347,Medium,String Manipulation,09,lc-min-steps-anagram,"Google, Top 100 Liked",hash-table
+   Problem Name,HackerRank,unique-paths,Easy,Array,02,hr-unique-paths,"",dp-tabulation
    ```
    **Supported platforms**: `LeetCode`, `HackerRank`, `Other`, `Firecode`, `Interview`
-6. **Do NOT implement the solution** - User will fill in placeholders
 
-**Phase 2: Review & Optimization (User + Claude)**
+**Phase 2: Guided Problem-Solving (Interview-Style Collaboration)**
 
-After user implements the solution:
-- User verifies solution on the platform
-- User requests review
-- Claude reviews correctness, efficiency, complexity analysis, and suggests optimizations
+This phase mimics a real technical interview where the interviewer guides without giving away the solution:
+
+**User can ask for:**
+- **Hints**: "Can you give me a hint for approach?"
+  - Claude provides progressive hints (e.g., "Consider what data structure tracks frequencies efficiently")
+- **Clarifying questions**: "What's the expected time complexity?" or "Can the input be empty?"
+  - Claude answers constraints and edge cases
+- **Pattern recognition**: "What pattern does this problem follow?"
+  - Claude identifies relevant techniques (e.g., "This looks like a sliding window problem")
+- **Validation**: "Does my approach make sense?" or "Am I on the right track?"
+  - Claude validates high-level approach without revealing implementation details
+- **Similar problems**: "What similar problems should I review?"
+  - Claude references related problems in the book
+- **Stuck points**: "I'm stuck on handling edge case X"
+  - Claude provides targeted guidance on specific blockers
+
+**Claude's role during Phase 2:**
+- **DO**: Ask probing questions to guide user's thinking
+- **DO**: Provide hints that nudge toward the solution pattern
+- **DO**: Validate correct approaches and gently redirect incorrect ones
+- **DO**: Reference relevant sections in the book (e.g., "Review the Two Pointer technique in the glossary")
+- **DON'T**: Give complete solution code unless explicitly requested
+- **DON'T**: Implement the solution without user attempting first
+- **DON'T**: Skip the learning process by jumping straight to the answer
+
+**Phase 3: Review & Optimization (After User Implementation)**
+
+Once user has implemented a solution:
+- User provides their solution code
+- User requests review and analysis
+- Claude reviews correctness, efficiency, complexity analysis
+- Claude suggests optimizations and alternative approaches
+- Iterative discussion to refine the solution explanation and walkthrough
+- Claude analyzes and documents the solution in the book
 
 ### Content Requirements
 
