@@ -2894,6 +2894,348 @@ private int dfs(TreeNode node, int current, int target, Map<Integer, Integer> pr
 ```
 
 
+## Count Good Nodes in Binary Tree {#lc-count-good-nodes}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 1448
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/count-good-nodes-in-binary-tree/
+- **Tags**: NeetCode 150
+- **Techniques**: [Depth First Search](#intro-tree-dfs), Tree
+
+### Description
+
+Given a binary tree `root`, a node X in the tree is named **good** if in the path from root to X there are no nodes with a value greater than X.
+
+Return the number of good nodes in the binary tree.
+
+### Examples
+
+**Example 1:**
+```
+Input: root = [3,1,4,null,3,null,1,null,null,null,5]
+Tree:
+       3
+      / \
+     1   4
+      \   \
+       3   5
+          /
+         1
+Output: 4
+Explanation:
+- Root Node (3) is always a good node.
+- Node 4 → (3,4) is the maximum value in the path starting from the root.
+- Node 5 → (3,4,5) is the maximum value in the path.
+- Node 3 → (3,1,3) is the maximum value in the path.
+```
+
+**Example 2:**
+```
+Input: root = [3,3,null,4,2]
+Tree:
+    3
+   /
+  3
+ / \
+4   2
+Output: 3
+Explanation: Node 2 → (3, 3, 2) is not good, because "3" is higher than it.
+```
+
+**Example 3:**
+```
+Input: root = [1]
+Output: 1
+Explanation: Root is considered as good.
+```
+
+### Constraints
+
+- The number of nodes in the binary tree is in the range $[1, 10^5]$
+- Each node's value is between $[-10^4, 10^4]$
+
+### Solution - DFS with Path Maximum
+
+#### Walkthrough
+
+The key insight is to track the **maximum value seen along the path** from root to the current node. A node is "good" if its value is greater than or equal to this path maximum.
+
+**Algorithm:**
+
+1. **Initialize count**: Use a mutable counter (array or object reference) to accumulate good nodes across recursive calls
+2. **Start DFS from root**: Begin with path maximum set to `Integer.MIN_VALUE` to handle negative node values
+3. **At each node**:
+   - If node value $\ge$ current path maximum, increment count (this is a good node)
+   - Update path maximum to the current node's value for descendant paths
+   - Recursively visit left and right children with the updated path maximum
+4. **Base case**: Return immediately if node is null
+
+**Why this works:**
+
+- The root is always good (no ancestors to compare against)
+- For any node, we only need to know the maximum value from root to its parent
+- By passing down the path maximum, each node can independently determine if it's "good"
+- DFS ensures we process parent nodes before their children, maintaining the path maximum correctly
+
+**Example walkthrough (Example 1):**
+```
+Tree:       3 (max=MIN → 3 is good, new max=3)
+           / \
+          1   4 (max=3 → 4≥3, good, new max=4)
+           \   \
+            3   5 (max=4 → 5≥4, good)
+               /
+              1 (max=4 → 1<4, not good)
+
+Path to node 3 (left child of 1): 3→1→3, max was 3, so 3≥3 → good
+Result: 4 good nodes (3, 4, 5, 3)
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) — visit each node exactly once
+- **Space Complexity**: O(h) — recursion stack depth where h is tree height (O(log n) for balanced, O(n) for skewed tree)
+
+#### Implementation Steps
+
+1. Initialize a mutable counter (use array in Java, pointer in Go)
+2. Call DFS helper with root, initial max value, and counter
+3. In DFS helper:
+   - Handle null base case
+   - Check if current node is good (value $\ge$ path max)
+   - If good, increment counter and update path max
+   - Recurse on left and right children with updated max
+4. Return the final count
+
+#### Code - Java
+
+```java
+class Solution {
+    public int goodNodes(TreeNode root) {
+        int[] count = new int[1];
+        dfs(root, Integer.MIN_VALUE, count);
+        return count[0];
+    }
+
+    private void dfs(TreeNode node, int max, int[] count) {
+        if (node == null) {
+            return;
+        }
+
+        // Check if current node is "good"
+        if (node.val >= max) {
+            count[0]++;
+            max = node.val;  // Update path maximum
+        }
+
+        // Recurse on children with updated max
+        dfs(node.left, max, count);
+        dfs(node.right, max, count);
+    }
+}
+```
+
+#### Code - Golang
+
+```go
+import "math"
+
+func goodNodes(root *TreeNode) int {
+    count := new(int)
+    dfs(root, math.MinInt32, count)
+    return *count
+}
+
+func dfs(node *TreeNode, maxSoFar int, count *int) {
+    if node == nil {
+        return
+    }
+
+    // Check if current node is "good"
+    if node.Val >= maxSoFar {
+        *count++
+        maxSoFar = node.Val  // Update path maximum
+    }
+
+    // Recurse on children with updated max
+    dfs(node.Left, maxSoFar, count)
+    dfs(node.Right, maxSoFar, count)
+}
+```
+
+### Solution - BFS with Node-Max Wrapper
+
+#### Walkthrough
+
+The BFS approach faces a unique challenge: unlike DFS which naturally maintains path information through the call stack, BFS visits nodes **level by level**, mixing nodes from different paths. The solution is to **pair each node with its path maximum** using a wrapper class.
+
+**Key Challenge:**
+
+```
+Tree:     3
+         / \
+        1   4
+         \   \
+          3   5
+
+BFS visits: Level 0: [3]
+            Level 1: [1, 4]    ← Both at same level but different path maxes!
+            Level 2: [3, 5]    ← Node 3 has max=3, Node 5 has max=4
+```
+
+When processing Level 1, node 1 and node 4 are both at the same level but have traversed different paths from the root. We need to track each node's individual path maximum.
+
+**Solution: Wrapper Class**
+
+Create a `MaxTreeNode` class that bundles:
+- The actual `TreeNode`
+- The maximum value in the path from root to this node's **parent**
+
+**Algorithm:**
+
+1. **Create wrapper class**: Store both TreeNode and its path maximum
+2. **Initialize queue**: Enqueue root with `maxSoFar = Integer.MIN_VALUE`
+3. **Process each node**:
+   - Dequeue node with its path maximum
+   - Check if `node.val >= pathMax` (if yes, it's a good node)
+   - Calculate new maximum: `newMax = max(pathMax, node.val)`
+   - Enqueue left and right children with `newMax`
+4. **Return count** of good nodes
+
+**Why the wrapper works:**
+
+Each node "remembers" its path's history by carrying the path maximum. This decouples path information from traversal order, allowing BFS to work correctly.
+
+#### Analysis
+
+- **Time Complexity**: O(n) — visit each node exactly once
+- **Space Complexity**: O(w) — queue size where w is maximum tree width
+  - Balanced tree: O(n/2) ≈ O(n) (last level has ~n/2 nodes)
+  - Skewed tree: O(1) (only one node per level)
+
+#### Implementation Steps
+
+1. Define `MaxTreeNode` wrapper class with:
+   - `TreeNode node` field
+   - `int maxSoFar` field (max in path from root to parent)
+   - Constructor and getters
+2. Initialize queue and enqueue root with `Integer.MIN_VALUE`
+3. While queue not empty:
+   - Dequeue node and check if it's good
+   - Calculate new max for children
+   - Enqueue non-null children with updated max
+4. Return count
+
+#### Code - Java
+
+```java
+class Solution {
+    private static class MaxTreeNode {
+        // Maximum value in the path from root to this node's parent
+        private final int maxSoFar;
+        private final TreeNode node;
+
+        public MaxTreeNode(TreeNode node, int max) {
+            this.node = node;
+            this.maxSoFar = max;
+        }
+
+        public int getMax() {
+            return this.maxSoFar;
+        }
+
+        public TreeNode getNode() {
+            return this.node;
+        }
+    }
+
+    public int goodNodes(TreeNode root) {
+        Queue<MaxTreeNode> queue = new LinkedList<>();
+        int count = 0;
+
+        // Start with root, path max = MIN_VALUE
+        queue.offer(new MaxTreeNode(root, Integer.MIN_VALUE));
+
+        while (!queue.isEmpty()) {
+            MaxTreeNode wrapper = queue.poll();
+            TreeNode node = wrapper.getNode();
+            int pathMax = wrapper.getMax();
+
+            // Check if current node is "good"
+            if (node.val >= pathMax) {
+                count++;
+            }
+
+            // Update max for children's paths
+            int newMax = Math.max(pathMax, node.val);
+
+            // Enqueue children with updated path max
+            if (node.left != null) {
+                queue.offer(new MaxTreeNode(node.left, newMax));
+            }
+            if (node.right != null) {
+                queue.offer(new MaxTreeNode(node.right, newMax));
+            }
+        }
+
+        return count;
+    }
+}
+```
+
+### BFS vs DFS Comparison
+
+#### Space Complexity Trade-offs
+
+The choice between BFS and DFS significantly impacts space complexity depending on tree shape:
+
+| Tree Shape | DFS Space | BFS Space | Winner |
+|------------|-----------|-----------|--------|
+| **Balanced** (height h, width ~n/2) | O(log n) | O(n) | **DFS** |
+| **Skewed** (height n, width 1) | O(n) | O(1) | **BFS** |
+| **Complete** (height log n, width n/2) | O(log n) | O(n) | **DFS** |
+
+**Key Insight:** For most practical binary trees (balanced or nearly balanced), **DFS is more space-efficient** because tree width grows exponentially with depth (last level has ~half of all nodes).
+
+#### When to Use Each Approach
+
+**Prefer DFS when:**
+- ✅ Tree is balanced or complete (most common case)
+- ✅ Problem naturally tracks path information (ancestors → descendants)
+- ✅ Space efficiency matters
+- ✅ Simpler code (no wrapper class needed)
+
+**Prefer BFS when:**
+- ✅ Tree is heavily skewed (linked-list-like)
+- ✅ Need to process nodes level-by-level
+- ✅ Early termination by level is beneficial
+- ✅ Problem requires breadth-first traversal semantics
+
+#### Code Complexity Comparison
+
+**DFS Advantages:**
+- Simpler implementation (no wrapper class)
+- Natural recursion mirrors problem structure
+- Path information flows through call stack
+
+**BFS Advantages:**
+- Iterative (no stack overflow risk for deep trees)
+- Explicit queue makes traversal order visible
+- Can easily add level-based logic
+
+#### Performance Notes
+
+Both approaches have O(n) time complexity, but in practice:
+- **DFS** has better cache locality (depth-first memory access)
+- **BFS** may have more object allocation overhead (wrapper class)
+- **DFS** recursion has function call overhead vs BFS iteration
+
+**For this problem, DFS is the recommended approach** due to simpler code and better space complexity for typical binary trees.
+
+
 ## Subtree of Another Tree {#lc-subtree-of-another-tree}
 
 ### Problem Metadata
