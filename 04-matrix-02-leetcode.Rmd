@@ -1,3 +1,288 @@
+## Valid Sudoku {#lc-valid-sudoku}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 36
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/valid-sudoku/
+- **Tags**: NeetCode 150
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#glossary-hash-table), [Matrix Traversal](glossary-of-algorithm.html#glossary-matrix-traversal)
+
+### Description
+
+Determine if a `9 x 9` Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+
+1. Each row must contain the digits `1-9` without repetition.
+2. Each column must contain the digits `1-9` without repetition.
+3. Each of the nine `3 x 3` sub-boxes of the grid must contain the digits `1-9` without repetition.
+
+**Note:**
+
+- A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+- Only the filled cells need to be validated according to the mentioned rules.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: board =
+[["5","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+
+Output: true
+```
+
+**Example 2:**
+
+```
+Input: board =
+[["8","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+
+Output: false
+
+Explanation: Same as Example 1, except with the 5 in the top left corner being modified to 8. Since there are two 8's in the top-left 3x3 sub-box, it is invalid.
+```
+
+### Constraints
+
+- `board.length == 9`
+- `board[i].length == 9`
+- `board[i][j]` is a digit `1-9` or `'.'`
+
+### Solution 1 - Three Separate Passes (Brute Force)
+
+#### Walkthrough
+
+The straightforward approach is to validate the three Sudoku rules independently using three separate validation methods:
+
+1. **Validate all rows**: For each row, check that digits 1-9 appear at most once
+2. **Validate all columns**: For each column, check that digits 1-9 appear at most once
+3. **Validate all 3×3 sub-boxes**: For each of the 9 sub-boxes, check that digits 1-9 appear at most once
+
+For each validation, use a HashSet to track seen digits. Empty cells (`'.'`) are skipped.
+
+**Sub-box indexing**: Number the 9 sub-boxes from 0 to 8:
+```
+0 1 2
+3 4 5
+6 7 8
+```
+
+Given a sub-box number `matrixNum`:
+- Starting row: `matrixNum / 3 * 3` (maps 0-2 → 0, 3-5 → 3, 6-8 → 6)
+- Starting column: `matrixNum % 3 * 3` (maps 0,3,6 → 0; 1,4,7 → 3; 2,5,8 → 6)
+
+#### Analysis
+
+- **Time Complexity**: O(1) - Three passes through the 9×9 board (3 × 81 = 243 cell visits), but since the board size is fixed, it's constant time
+- **Space Complexity**: O(1) - Each HashSet holds at most 9 digits, constant space
+
+#### Implementation Steps
+
+1. **Validate rows**: For each row index 0-8, create a HashSet and check for duplicate digits
+2. **Validate columns**: For each column index 0-8, create a HashSet and check for duplicate digits
+3. **Validate sub-boxes**: For each sub-box index 0-8:
+   - Calculate starting row and column using the formulas above
+   - Iterate through the 3×3 region and check for duplicates
+4. Return true only if all three validations pass
+
+#### Code - Java
+
+```java
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        int rows = board.length;
+        int cols = board[0].length;
+
+        // Validate all rows
+        for (int row = 0; row < rows; row++) {
+            if (!isValidByRow(row, board)) {
+                return false;
+            }
+        }
+
+        // Validate all columns
+        for (int col = 0; col < cols; col++) {
+            if (!isValidByCol(col, board)) {
+                return false;
+            }
+        }
+
+        // Validate all 3x3 sub-boxes
+        for (int i = 0; i < 9; i++) {
+            if (!isValidBySubMatrix(i, board)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isValidByRow(int row, char[][] board) {
+        int cols = board[0].length;
+        Set<Integer> set = new HashSet<>();
+
+        for (int j = 0; j < cols; j++) {
+            char c = board[row][j];
+            if (!Character.isDigit(c)) {
+                continue;
+            }
+
+            int num = c - '0';
+            if(!set.add(num)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isValidByCol(int col, char[][] board) {
+        int rows = board.length;
+        Set<Integer> set = new HashSet<>();
+
+        for (int i = 0; i < rows; i++) {
+            char c = board[i][col];
+            if (!Character.isDigit(c)) {
+                continue;
+            }
+
+            int num = c - '0';
+            if(!set.add(num)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // matrixNum = 0...8
+    private boolean isValidBySubMatrix(int matrixNum, char[][] board) {
+        // Calculate starting position of 3x3 sub-box
+        // matrixNum: 0,1,2 -> startRow = 0
+        //            3,4,5 -> startRow = 3
+        //            6,7,8 -> startRow = 6
+        int startRow = matrixNum / 3 * 3;
+
+        // matrixNum: 0,3,6 -> startCol = 0
+        //            1,4,7 -> startCol = 3
+        //            2,5,8 -> startCol = 6
+        int startCol = matrixNum % 3 * 3;
+
+        Set<Integer> set = new HashSet<>();
+
+        for (int i = startRow; i < startRow + 3; i++) {
+            for (int j = startCol; j < startCol + 3; j++) {
+                char c = board[i][j];
+                if (!Character.isDigit(c)) {
+                    continue;
+                }
+
+                int num = c - '0';
+
+                if (!set.add(num)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+}
+```
+
+### Solution 2 - Single Pass with String Keys (Optimized)
+
+#### Walkthrough
+
+Instead of making three separate passes through the board, we can validate all three constraints (row, column, sub-box) in a **single traversal** using one HashSet with unique string keys.
+
+**Key Insight**: For each digit at position `(i, j)`, create three unique string identifiers:
+- Row key: `"digit in row i"` (e.g., `"5 in row 0"`)
+- Column key: `"digit in col j"` (e.g., `"5 in col 2"`)
+- Box key: `"digit in box r-c"` (e.g., `"5 in box 0-0"`)
+
+The box indices `r` and `c` are calculated as `i / 3` and `j / 3`, mapping each cell to its 3×3 sub-box.
+
+**How it works**:
+1. Traverse the board once
+2. For each non-empty cell, generate three keys
+3. Use `Set.add()` which returns `false` if the element already exists
+4. If any key fails to add (duplicate found), return false immediately
+
+#### Analysis
+
+- **Time Complexity**: O(1) - Single pass through the 9×9 board (81 cell visits), constant time
+- **Space Complexity**: O(1) - HashSet stores at most 9 rows × 9 digits + 9 cols × 9 digits + 9 boxes × 9 digits = 243 strings, constant space
+
+**Comparison to Solution 1**:
+- **3× fewer iterations** (1 pass vs 3 passes)
+- Same asymptotic complexity, but **~3× faster in practice**
+- Slightly more memory for string keys, but still O(1)
+
+#### Implementation Steps
+
+1. Create a single HashSet to track all seen digits across rows, columns, and boxes
+2. Traverse the board with nested loops (i from 0-8, j from 0-8)
+3. For each non-empty cell:
+   - Generate three unique string keys (row, column, box)
+   - Attempt to add all three keys to the set
+   - If any `add()` returns false (duplicate), return false
+4. If all cells pass validation, return true
+
+#### Code - Java
+
+```java
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        // Track seen numbers for each row, column, and 3x3 sub-box
+        Set<String> seen = new HashSet<>();
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                char c = board[i][j];
+
+                // Skip empty cells
+                if (c == '.') {
+                    continue;
+                }
+
+                // Create unique keys for row, column, and sub-box
+                String rowKey = c + " in row " + i;
+                String colKey = c + " in col " + j;
+                String boxKey = c + " in box " + (i / 3) + "-" + (j / 3);
+
+                // Check if this number was already seen in row, col, or box
+                // Set.add() returns false if element already exists
+                if (!seen.add(rowKey) || !seen.add(colKey) || !seen.add(boxKey)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+}
+```
+
+
 ## Rotate Image {#lc-rotate-image}
 
 ### Problem Metadata
