@@ -463,77 +463,236 @@ Output: [3,2,1,4,5]
 
 #### Walkthrough
 
-This solution processes the list in groups of k nodes, reversing each group in-place.
+This solution processes the list in groups of k nodes, reversing each group in-place using a **four-pointer technique**: `preStart`, `start`, `end`, and `postEnd`.
 
 **Core Strategy:**
 
 1. Use a dummy node to simplify edge cases
-2. For each group: find the k-th node, then reverse the group
-3. Reconnect the reversed group to the rest of the list
-4. Move to the next group and repeat
+2. For each group: identify the four key positions (preStart, start, end, postEnd)
+3. Reverse the segment from `start` to `end` (inclusive)
+4. Reconnect the reversed segment to the rest of the list
+5. Move `preStart` to the new tail (which was the old `start`) and repeat
 
-**Key Insight:** Track `groupPrev` (node before current group) and `groupNext` (node after current group) to properly reconnect after reversal.
+**Key Insight:** The reversal loop uses `while(current != postEnd)` to ensure all k nodes (including `end`) get reversed. After reversal, `start` becomes the new tail of the reversed segment.
 
-**Example**: Reverse `[1,2,3,4,5]` with k=2:
+**Detailed Visual Example**: Reverse `[1,2,3,4,5]` with k=2
+
+**Initial State:**
 ```
-Initial: dummy → 1 → 2 → 3 → 4 → 5
-Group 1: Reverse [1,2] → dummy → 2 → 1 → 3 → 4 → 5
-Group 2: Reverse [3,4] → dummy → 2 → 1 → 4 → 3 → 5
-Group 3: Only 1 node, skip
-Result: [2,1,4,3,5]
+dummy → 1 → 2 → 3 → 4 → 5 → null
+^preStart
 ```
+
+**Group 1: Reverse [1,2]**
+
+Step 1: Identify positions
+```
+dummy → 1 → 2 → 3 → 4 → 5 → null
+^       ^   ^   ^
+preStart start end postEnd
+```
+
+Step 2: Reverse from start to end (loop while current != postEnd)
+```
+Iteration 1: current=1
+  next = 2
+  1.next = dummy
+  prev = 1, current = 2
+
+Iteration 2: current=2
+  next = 3 (postEnd)
+  2.next = 1
+  prev = 2, current = 3
+
+current == postEnd → STOP
+```
+
+Step 3: Reconnect
+```
+preStart.next = end (which is 2)
+start.next = postEnd (1.next = 3)
+
+Result: dummy → 2 → 1 → 3 → 4 → 5 → null
+                    ^preStart (for next iteration)
+```
+
+**Group 2: Reverse [3,4]**
+
+Step 1: Identify positions
+```
+dummy → 2 → 1 → 3 → 4 → 5 → null
+            ^   ^   ^   ^
+            preStart start end postEnd
+```
+
+Step 2: Reverse from start to end
+```
+Iteration 1: current=3
+  next = 4
+  3.next = 1
+  prev = 3, current = 4
+
+Iteration 2: current=4
+  next = 5 (postEnd)
+  4.next = 3
+  prev = 4, current = 5
+
+current == postEnd → STOP
+```
+
+Step 3: Reconnect
+```
+preStart.next = end (which is 4)
+start.next = postEnd (3.next = 5)
+
+Result: dummy → 2 → 1 → 4 → 3 → 5 → null
+                            ^preStart (for next iteration)
+```
+
+**Group 3: Check remaining nodes**
+```
+getKthEnd(preStart=3, k=2) traverses:
+  3 → 5 → null (only 2 nodes, but k=2 requires 2 nodes after preStart)
+  Returns null → break
+
+Final: [2,1,4,3,5] ✓
+```
+
+**Why `while(current != postEnd)` is critical:**
+
+- It ensures the `end` node itself gets reversed
+- If you used `while(current != end)`, you would stop before reversing `end`, breaking the reversal
+- After the loop, `prev` points to `end` (the new head of the reversed segment)
 
 #### Analysis
 
-- **Time Complexity**: O(n) - Each node is visited at most twice (once to count, once to reverse)
+- **Time Complexity**: O(n) - Each node is visited exactly twice (once to find position, once to reverse)
 - **Space Complexity**: O(1) - Only pointer variables used
 
 #### Implementation Steps
 
-1. Create dummy node, track `groupPrev` as the node before each group.
-2. Find the k-th node from `groupPrev`. If null, break (remaining nodes stay as-is).
-3. Reverse nodes from `groupPrev.next` to `kth`.
-4. Reconnect: `groupPrev.next` points to `kth`, move `groupPrev` to old first node.
-5. Repeat until no complete group remains.
+1. Create dummy node pointing to head, initialize `preStart = dummy`.
+2. Find the k-th node from `preStart` using `getKthEnd`. If null, break (remaining nodes stay as-is).
+3. Identify `start = preStart.next`, `end` (returned from getKthEnd), `postEnd = end.next`.
+4. Reverse the segment from `start` to `end` using `while(current != postEnd)`.
+5. Reconnect: `preStart.next = end` (new head), `start.next = postEnd` (new tail).
+6. Update `preStart = start` (the new tail becomes preStart for next iteration).
+7. Repeat until no complete group remains.
 
 #### Code - Java
 
 ```java
-public ListNode reverseKGroup(ListNode head, int k) {
-    if (head == null || k <= 1) {
-        return head;
-    }
-    ListNode dummy = new ListNode(0, head);
-    ListNode groupPrev = dummy;
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || k <= 1) {
+            return head;
+        }
+        ListNode dummyHead = new ListNode(-1, head);
+        ListNode preStart = dummyHead;
 
-    while (true) {
-        ListNode kth = getKth(groupPrev, k);
-        if (kth == null) {
-            break;
+        while (true) {
+            ListNode end = getKthEnd(preStart, k);
+            if (end == null) {
+                break;
+            }
+            ListNode postEnd = end.next;
+            ListNode start = preStart.next;
+            preStart = reverse(preStart, start, end, postEnd);
         }
-        ListNode groupNext = kth.next;
-        ListNode prev = groupNext;
-        ListNode curr = groupPrev.next;
-        while (curr != groupNext) {
-            ListNode next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
-        }
-        ListNode tmp = groupPrev.next;
-        groupPrev.next = kth;
-        groupPrev = tmp;
+
+        return dummyHead.next;
     }
 
-    return dummy.next;
+    private ListNode reverse(ListNode preStart, ListNode start, ListNode end, ListNode postEnd) {
+        ListNode current = start, prev = preStart;
+
+        while(current != postEnd) {
+            ListNode next = current.next;
+            //reverse link: current -> prev
+            current.next = prev;
+
+            //next
+            prev = current;
+            current = next;
+        }
+
+        if(preStart != null) {
+            //preStart -> new start
+            preStart.next = end;
+        }
+        //new end->postEnd
+        start.next = postEnd;
+
+        return start;
+    }
+
+    private ListNode getKthEnd(ListNode preStart, int k) {
+        ListNode current = preStart;
+        while (current != null && k > 0) {
+            current = current.next;
+            k--;
+        }
+        return current;
+    }
+}
+```
+
+#### Code - Golang
+
+```go
+func reverseKGroup(head *ListNode, k int) *ListNode {
+    if head == nil || k <= 1 {
+        return head
+    }
+
+    dummyHead := &ListNode{Val: -1, Next: head}
+    preStart := dummyHead
+
+    for true {
+        end := getKthEnd(preStart, k)
+        if end == nil {
+            break
+        }
+        postEnd := end.Next
+        start := preStart.Next
+        preStart = reverse(preStart, start, end, postEnd)
+    }
+    return dummyHead.Next
 }
 
-private ListNode getKth(ListNode start, int k) {
-    while (start != null && k > 0) {
-        start = start.next;
-        k--;
+func reverse(preStart *ListNode, start *ListNode, end *ListNode, postEnd *ListNode) *ListNode {
+    curr := start
+    prev := preStart
+
+    for curr != postEnd {
+        next := curr.Next
+        //reverse link: current -> prev
+        curr.Next = prev
+
+        //next
+        prev = curr
+        curr = next
     }
-    return start;
+
+    if preStart != nil {
+        //preStart -> new start
+        preStart.Next = end
+    }
+    //new end->postEnd
+    start.Next = postEnd
+
+    return start
+}
+
+func getKthEnd(preStart *ListNode, k int) *ListNode {
+    current := preStart
+
+    for current != nil && k > 0 {
+        current = current.Next
+        k--
+    }
+
+    return current
 }
 ```
 
