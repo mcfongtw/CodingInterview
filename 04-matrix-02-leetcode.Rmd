@@ -2569,3 +2569,247 @@ class Solution {
     }
 }
 ```
+
+
+## Detect Squares {#lc-detect-squares}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 2013
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/detect-squares/
+- **Tags**: NeetCode 150
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#glossary-hash-table), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation)
+
+### Description
+
+You are given a stream of points on the X-Y plane. Design an algorithm that:
+
+1. Adds new points from the stream into a data structure
+2. Counts the number of ways to choose three points from the data structure such that the three points and a given query point form an **axis-aligned square** with positive area
+
+**Note:**
+- Duplicate points are allowed and should be treated as different points
+- An axis-aligned square is a square whose edges are all the same length and are either parallel or perpendicular to the x-axis and y-axis
+
+**Implement the `DetectSquares` class:**
+
+- `DetectSquares()` - Initializes the object with an empty data structure
+- `void add(int[] point)` - Adds a new point `point = [x, y]` to the data structure
+- `int count(int[] point)` - Counts the number of ways to form axis-aligned squares with point `point = [x, y]` as one of the four corners
+
+### Examples
+
+**Example 1:**
+
+```
+Input:
+["DetectSquares", "add", "add", "add", "count", "count", "add", "count"]
+[[], [[3, 10]], [[11, 2]], [[3, 2]], [[11, 10]], [[14, 8]], [[11, 2]], [[11, 10]]]
+
+Output:
+[null, null, null, null, 1, 0, null, 2]
+
+Explanation:
+DetectSquares detectSquares = new DetectSquares();
+detectSquares.add([3, 10]);
+detectSquares.add([11, 2]);
+detectSquares.add([3, 2]);
+detectSquares.count([11, 10]); // return 1. Forms square with points (3,10), (11,2), (3,2), (11,10)
+detectSquares.count([14, 8]);  // return 0. No squares can be formed
+detectSquares.add([11, 2]);    // Adding duplicate point
+detectSquares.count([11, 10]); // return 2. Now (11,2) appears twice, so 2 distinct squares
+```
+
+### Constraints
+
+- `point.length == 2`
+- `0 <= x, y <= 1000`
+- At most `5000` calls in total will be made to `add` and `count`
+
+### Solution - Hash Map with Frequency Counting
+
+#### Walkthrough
+
+The brute force approach of generating all 3-point combinations and checking if they form a square with the query point is too slow (O(n³)). The key insight is to **avoid enumerating combinations** by exploiting the geometric properties of axis-aligned squares.
+
+**Core Insight: Fix the Diagonal, Derive the Other Corners**
+
+For an axis-aligned square, if you know **one corner** (the query point) and its **diagonal corner**, the other two corners are **completely determined**. This allows us to iterate through potential diagonal corners instead of generating all triplets.
+
+**Algorithm Strategy:**
+
+1. **Store points with frequencies**: Use a nested HashMap to track point coordinates and their occurrence counts (duplicates matter!)
+2. **Iterate diagonal candidates**: For each stored point, check if it can be the diagonal corner to the query point
+3. **Validate diagonal**: Check three conditions:
+   - Different x-coordinates (`px ≠ qx`)
+   - Different y-coordinates (`py ≠ qy`)
+   - Equal horizontal/vertical distances (ensures it's a square, not rectangle)
+4. **Compute required corners**: The other two corners must be at `(qx, py)` and `(px, qy)`
+5. **Count combinations**: Multiply the frequencies of all three required points (diagonal + two corners)
+
+**Visual Example:**
+
+For query point `Q = (11, 10)`:
+
+```
+Step 1: Try stored point P = (3, 2) as diagonal
+
+Check diagonal validity:
+- px ≠ qx? → 3 ≠ 11 ✓
+- py ≠ qy? → 2 ≠ 10 ✓
+- |px - qx| == |py - qy|? → |3-11| == |2-10| → 8 == 8 ✓
+
+P is valid diagonal!
+
+Step 2: Compute required corners
+
+Square structure:
+(qx, py) ---- (qx, qy)
+   |             |
+   |             |  (side length = 8)
+(px, py) ---- (px, qy)
+
+Required corners:
+- Corner 1: (qx, py) = (11, 2)
+- Corner 2: (px, qy) = (3, 10)
+
+Step 3: Look up frequencies and count
+
+If freq(3,10) = 1, freq(11,2) = 2, freq(3,2) = 1:
+  count += 1 × 2 × 1 = 2 squares
+```
+
+**Why Multiply Frequencies?**
+
+If `(3, 10)` appears once, `(11, 2)` appears twice, and `(3, 2)` appears once, you can form **2 distinct squares** by choosing different instances of `(11, 2)`. The multiplication principle counts all combinations: 1 × 2 × 1 = 2.
+
+**Key Data Structure: Nested HashMap**
+
+```
+Map<Integer, Map<Integer, Integer>>
+     ↑            ↑          ↑
+   x-coord     y-coord   frequency
+
+Example: points (3,10), (11,2), (11,2)
+{
+  3:  {10: 1},
+  11: {2: 2}
+}
+```
+
+This provides:
+- **O(1) point lookup**: Check if `(x, y)` exists
+- **O(1) frequency access**: Get occurrence count for duplicates
+- **O(n) iteration**: Enumerate all stored points as diagonal candidates
+
+#### Analysis
+
+- **Time Complexity**:
+  - `add(point)`: O(1) - HashMap insert/update operations
+  - `count(point)`: O(n) where n is the total number of unique points stored. We iterate through all stored points once to check diagonal validity.
+
+- **Space Complexity**: O(n) where n is the total number of unique points. The nested HashMap stores each unique coordinate pair once with its frequency count.
+
+**Comparison to Brute Force:**
+- Brute force: O(n³) time - generates C(n,3) combinations
+- Optimized: O(n) time - iterates each point once as diagonal candidate
+- Significant speedup for large n (e.g., n=1000: 10⁹ vs 10³ operations)
+
+#### Implementation Steps
+
+1. **Data structure setup** (`DetectSquares` constructor):
+   - Initialize nested HashMap: `Map<Integer, Map<Integer, Integer>>`
+   - Outer map: x-coordinate → inner map
+   - Inner map: y-coordinate → frequency count
+
+2. **Add point** (`add` method):
+   - Extract x and y coordinates from input
+   - Get or create inner map for x-coordinate
+   - Increment frequency for y-coordinate
+   - Update nested HashMap
+
+3. **Count squares** (`count` method):
+   - Extract query point coordinates `(qx, qy)`
+   - Initialize count to 0
+   - **Iterate through all stored points**:
+     - For each outer entry: get diagonal x-coordinate `dx`
+     - For each inner entry: get diagonal y-coordinate `dy` and frequency
+     - **Check diagonal validity**:
+       - `if (dx != qx && dy != qy && Math.abs(dx - qx) == Math.abs(dy - qy))`
+     - **Compute required corners**:
+       - Corner 1: `(qx, dy)`
+       - Corner 2: `(dx, qy)`
+     - **Look up frequencies**:
+       - `freqCorner1 = pointFreq.getOrDefault(qx, {}).getOrDefault(dy, 0)`
+       - `freqCorner2 = pointFreq.getOrDefault(dx, {}).getOrDefault(qy, 0)`
+     - **Count combinations**:
+       - `count += freqCorner1 * freqCorner2 * freqDiagonal`
+   - Return total count
+
+#### Code - Java
+
+```java
+class DetectSquares {
+    // Nested HashMap: x-coordinate -> (y-coordinate -> frequency)
+    private Map<Integer, Map<Integer, Integer>> pointFreq;
+
+    public DetectSquares() {
+        pointFreq = new HashMap<>();
+    }
+
+    public void add(int[] point) {
+        int x = point[0];
+        int y = point[1];
+
+        // Get or create inner map for this x-coordinate
+        Map<Integer, Integer> innerMap = pointFreq.getOrDefault(x, new HashMap<>());
+
+        // Increment frequency for this (x, y) point
+        int freq = innerMap.getOrDefault(y, 0);
+        innerMap.put(y, freq + 1);
+
+        // Update outer map
+        pointFreq.put(x, innerMap);
+    }
+
+    public int count(int[] qp) {
+        int qx = qp[0], qy = qp[1];
+        int count = 0;
+
+        // Iterate through each stored point as potential diagonal corner
+        for (Map.Entry<Integer, Map<Integer, Integer>> entry1 : pointFreq.entrySet()) {
+            int dx = entry1.getKey();  // Diagonal x-coordinate
+            Map<Integer, Integer> innerMap = entry1.getValue();
+
+            for (Map.Entry<Integer, Integer> entry2 : innerMap.entrySet()) {
+                int dy = entry2.getKey();          // Diagonal y-coordinate
+                int freqDiagonal = entry2.getValue(); // Frequency of diagonal point
+
+                // Check if (dx, dy) is a valid diagonal to query point (qx, qy)
+                // Conditions: different x, different y, equal distances (square not rectangle)
+                if (dx != qx && dy != qy && Math.abs(dx - qx) == Math.abs(dy - qy)) {
+                    // Compute the other two required corners
+                    // For axis-aligned square: one corner shares qx, other shares dx
+                    int c1x = qx, c1y = dy;  // Corner 1: (qx, dy)
+                    int c2x = dx, c2y = qy;  // Corner 2: (dx, qy)
+
+                    // Look up frequencies of required corners
+                    int freqCorner1 = pointFreq.getOrDefault(c1x, new HashMap<>())
+                                               .getOrDefault(c1y, 0);
+                    int freqCorner2 = pointFreq.getOrDefault(c2x, new HashMap<>())
+                                               .getOrDefault(c2y, 0);
+
+                    // Count all combinations (multiply frequencies)
+                    // Why multiply? If corner1 appears m times, corner2 appears n times,
+                    // and diagonal appears k times, we can form m*n*k distinct squares
+                    count += freqCorner1 * freqCorner2 * freqDiagonal;
+                }
+            }
+        }
+
+        return count;
+    }
+}
+```
