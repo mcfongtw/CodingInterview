@@ -502,24 +502,71 @@ The key insight is that **the first element of preorder is always the root**. On
 
 ```java
 public TreeNode buildTree(int[] preorder, int[] inorder) {
-    Map<Integer, Integer> indexMap = new HashMap<>();
+    // inorder:  L -> Node -> R
+    // preorder: Node -> L -> R
+
+    // Map of inorder {val : index}
+    Map<Integer, Integer> inIdxMap = new HashMap<>();
     for (int i = 0; i < inorder.length; i++) {
-        indexMap.put(inorder[i], i);
+        inIdxMap.put(inorder[i], i);
     }
-    return build(preorder, 0, preorder.length - 1, 0, inorder.length - 1, indexMap);
+    return dfs(preorder, 0, preorder.length - 1, inIdxMap, 0);
 }
 
-private TreeNode build(int[] preorder, int preL, int preR, int inL, int inR, Map<Integer, Integer> indexMap) {
-    if (preL > preR) {
+private TreeNode dfs(int[] preorder, int preNode, int preR, Map<Integer, Integer> inIdxMap, int inL) {
+    if (preNode > preR) {
         return null;
     }
-    int rootVal = preorder[preL];
-    TreeNode root = new TreeNode(rootVal);
-    int inorderRootIndex = indexMap.get(rootVal);
-    int leftSize = inorderRootIndex - inL;
-    root.left = build(preorder, preL + 1, preL + leftSize, inL, inorderRootIndex - 1, indexMap);
-    root.right = build(preorder, preL + leftSize + 1, preR, inorderRootIndex + 1, inR, indexMap);
-    return root;
+
+    int nodeVal = preorder[preNode];
+    TreeNode node = new TreeNode(nodeVal);
+    int inNodeIdx = inIdxMap.get(nodeVal);
+
+    // Left subtree from current node
+    // inorder[] = [left subtree elements] [node] [right subtree elements]
+    int lLength = inNodeIdx - inL;
+    node.left = dfs(preorder, preNode + 1, preNode + lLength, inIdxMap, inL);
+    node.right = dfs(preorder, preNode + lLength + 1, preR, inIdxMap, inNodeIdx + 1);
+
+    return node;
+}
+```
+
+#### Code - Golang
+
+```go
+func buildTree(preorder []int, inorder []int) *TreeNode {
+    // inorder:  L -> Node -> R
+    // preorder: Node -> L -> R
+
+    // Map of inorder {val : index}
+    inIdxMap := make(map[int]int)
+
+    for i, val := range inorder {
+        inIdxMap[val] = i
+    }
+
+    root := dfs(preorder, 0, len(preorder) - 1, inIdxMap, 0)
+
+    return root
+}
+
+func dfs(preorder []int, preNode int, preR int, inIdxMap map[int]int, inL int) *TreeNode {
+    if preNode > preR {
+        return nil
+    }
+
+    nodeVal := preorder[preNode]
+    node := &TreeNode{Val: nodeVal}
+    inNodeIdx := inIdxMap[nodeVal]
+
+    // Left subtree from current node
+    // inorder[] = [left subtree elements] [node] [right subtree elements]
+    lLength := inNodeIdx - inL
+    node.Left = dfs(preorder, preNode + 1, preNode + lLength, inIdxMap, inL)
+    node.Right = dfs(preorder, preNode + lLength + 1, preR, inIdxMap, inNodeIdx + 1)
+
+    return node
 }
 ```
 
