@@ -1009,7 +1009,7 @@ func searchMatrix(matrix [][]int, target int) bool {
 - **Difficulty**: Medium
 - **URL**: https://leetcode.com/problems/lc-surrounded-regions/
 - **Tags**: NeetCode 150
-- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation)
+- **Techniques**: [Depth First Search](glossary-of-algorithm.html#glossary-dfs), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation)
 
 ### Description
 
@@ -1092,6 +1092,148 @@ private void dfs(char[][] board, int r, int c) {
     dfs(board, r + 1, c);
     dfs(board, r, c - 1);
     dfs(board, r, c + 1);
+}
+```
+
+### Solution 2 - BFS Approach
+
+#### Walkthrough
+
+The BFS approach uses the same "mark border regions" strategy as the DFS solution, but explores connected regions level-by-level using a queue instead of recursion.
+
+**Key Insight:**
+
+This problem is analogous to the **capture rule in the game of Go (围棋/囲碁)**:
+- A group of stones (cells) is captured when it has no "liberties" (connections to the border)
+- In Go, a group survives if **any stone in the group** touches the edge of the board
+- Similarly, an 'O' region survives if **any cell in the region** connects to the border
+
+**Algorithm:**
+
+1. **Pass 1: Mark safe regions**
+   - Start BFS from all border 'O' cells
+   - Mark all cells reachable from border as "safe" using a visited array
+   - Any 'O' region connected to a border 'O' is safe from capture
+
+2. **Pass 2: Capture enclosed regions**
+   - Scan the entire board
+   - Flip any 'O' cell that was NOT marked as safe to 'X'
+
+**Why BFS works:**
+
+- Starting from border cells ensures we find all regions with "liberties" (border connections)
+- Queue-based traversal explores all connected cells systematically
+- Using a `visited` array prevents revisiting cells and ensures O(rows × cols) time
+
+#### Analysis
+
+- **Time Complexity**: O(rows × cols) - Each cell is visited at most once during BFS traversal
+- **Space Complexity**: O(rows × cols) - For the queue (worst case when all cells are 'O' and connected) plus the visited and isSafe boolean arrays
+
+**Comparison to DFS:**
+- **BFS**: Iterative with explicit queue, better for large boards (no stack overflow risk)
+- **DFS**: Recursive, simpler code but uses call stack (potential stack overflow on large inputs)
+- Both have the same time/space complexity asymptotically
+
+#### Implementation Steps
+
+1. Initialize `visited[][]` and `isSafe[][]` boolean arrays
+2. **Pass 1 - BFS from border:**
+   - Scan all border cells (first/last row, first/last column)
+   - For each border cell with 'O', start BFS:
+     - Add to queue and mark as visited
+     - For each cell in queue:
+       - Mark as safe
+       - Check all 4 neighbors (up, down, left, right)
+       - If neighbor is unvisited 'O', mark visited and add to queue
+3. **Pass 2 - Flip captured cells:**
+   - Scan entire board
+   - If cell is 'O' and NOT in isSafe, flip to 'X'
+
+#### Code - Java
+
+```java
+class Solution {
+    public void solve(char[][] board) {
+        if (board.length < 1) {
+            return;
+        }
+
+        int rows = board.length;
+        int cols = board[0].length;
+
+        boolean[][] visited = new boolean[rows][cols];
+        boolean[][] isSafe = new boolean[rows][cols];
+
+        // Pass 1: BFS from all border 'O' cells
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (isBorder(board, i, j) && board[i][j] == 'O') {
+                    bfs(board, i, j, visited, isSafe);
+                }
+            }
+        }
+
+        // Pass 2: Flip captured cells
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (board[i][j] == 'O' && !isSafe[i][j]) {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+
+    private void bfs(char[][] board, int startRow, int startCol,
+                     boolean[][] visited, boolean[][] isSafe) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{startRow, startCol});
+        visited[startRow][startCol] = true;
+
+        int rows = board.length;
+        int cols = board[0].length;
+        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+        while (!queue.isEmpty()) {
+            int[] cell = queue.poll();
+            int r = cell[0];
+            int c = cell[1];
+
+            // Skip if not 'O' (shouldn't happen with proper checks)
+            if (board[r][c] != 'O') {
+                continue;
+            }
+
+            // Mark current cell as safe
+            isSafe[r][c] = true;
+
+            // Explore all 4 neighbors
+            for (int[] dir : directions) {
+                int newRow = r + dir[0];
+                int newCol = c + dir[1];
+
+                // Boundary check
+                if (newRow < 0 || newRow >= rows || newCol < 0 || newCol >= cols) {
+                    continue;
+                }
+
+                // Skip if already visited or not 'O'
+                if (visited[newRow][newCol] || board[newRow][newCol] != 'O') {
+                    continue;
+                }
+
+                // Mark as visited and add to queue
+                visited[newRow][newCol] = true;
+                queue.offer(new int[]{newRow, newCol});
+            }
+        }
+    }
+
+    private boolean isBorder(char[][] board, int i, int j) {
+        int rows = board.length;
+        int cols = board[0].length;
+        return i == 0 || i == (rows - 1) || j == 0 || j == (cols - 1);
+    }
 }
 ```
 
