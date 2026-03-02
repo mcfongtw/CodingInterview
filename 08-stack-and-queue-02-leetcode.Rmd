@@ -874,6 +874,253 @@ class Solution {
 ```
 
 
+## Daily Temperatures {#lc-daily-temperatures}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 739
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/daily-temperatures/
+- **Tags**: NeetCode 150
+- **Techniques**: [Stack](glossary-of-algorithm.html#glossary-stack), Monotonic Stack
+
+### Description
+
+Given an array of integers `temperatures` representing the daily temperatures, return an array `answer` such that `answer[i]` is the number of days you have to wait after the i-th day to get a warmer temperature. If there is no future day for which this is possible, keep `answer[i] == 0` instead.
+
+### Examples
+
+**Example 1:**
+```
+Input: temperatures = [73,74,75,71,69,72,76,73]
+Output: [1,1,4,2,1,1,0,0]
+Explanation:
+Given the temperatures [73,74,75,71,69,72,76,73]:
+- For index 0 (73°): Next warmer day is index 1 (74°) → wait 1 day
+- For index 1 (74°): Next warmer day is index 2 (75°) → wait 1 day
+- For index 2 (75°): Next warmer day is index 6 (76°) → wait 4 days
+- For index 3 (71°): Next warmer day is index 5 (72°) → wait 2 days
+- For index 4 (69°): Next warmer day is index 5 (72°) → wait 1 day
+- For index 5 (72°): Next warmer day is index 6 (76°) → wait 1 day
+- For index 6 (76°): No future warmer day → 0
+- For index 7 (73°): No future warmer day → 0
+```
+
+**Example 2:**
+```
+Input: temperatures = [30,40,50,60]
+Output: [1,1,1,0]
+```
+
+**Example 3:**
+```
+Input: temperatures = [30,60,90]
+Output: [1,1,0]
+```
+
+### Constraints
+
+- $1 \le \text{temperatures.length} \le 10^5$
+- $30 \le \text{temperatures}[i] \le 100$
+
+### Solution - Monotonic Decreasing Stack
+
+#### Walkthrough
+
+This is a classic **monotonic stack** problem. The key insight is to use a stack to efficiently track indices of days waiting for a warmer temperature, maintaining a **monotonically decreasing order** (by temperature value).
+
+**Core Strategy:**
+
+Instead of using a nested loop to search forward from each day (O(n²) brute force), we use a stack to process each temperature exactly once while resolving multiple previous days in a single pass.
+
+**What is a Monotonic Decreasing Stack?**
+
+A monotonic stack maintains elements in a specific order. In this problem:
+- We store **indices** in the stack
+- The **temperatures** at those indices are in **decreasing order** from bottom to top
+- When we encounter a warmer temperature, it "breaks" the monotonic property and we pop elements
+
+**Why This Works:**
+
+1. **Forward-looking**: As we scan left to right, each temperature can potentially answer multiple previous days
+2. **LIFO access**: When we find a warmer day, we need to check backwards from the most recent unresolved day (stack top)
+3. **Cascading resolution**: One warm day can resolve multiple previous cooler days at once
+4. **Efficient pruning**: Once a day finds its answer, we never need to check it again
+
+**Visual Example Walkthrough:**
+
+Using `temperatures = [73, 74, 75, 71, 69, 72, 76, 73]`:
+
+```
+Initial: stack = [], result = [0,0,0,0,0,0,0,0]
+
+i=0, temp=73:
+  Stack empty, just push
+  stack = [0]
+
+i=1, temp=74:
+  74 > 73 (temperatures[stack.peek()=0])
+    → Pop index 0, set result[0] = 1 - 0 = 1 ✓
+  stack = []
+  Push 1
+  stack = [1]
+  result = [1,0,0,0,0,0,0,0]
+
+i=2, temp=75:
+  75 > 74 (temperatures[stack.peek()=1])
+    → Pop index 1, set result[1] = 2 - 1 = 1 ✓
+  stack = []
+  Push 2
+  stack = [2]
+  result = [1,1,0,0,0,0,0,0]
+
+i=3, temp=71:
+  71 < 75 (temperatures[stack.peek()=2])
+    → No pop, just push
+  stack = [2, 3]
+  (temperatures: [75°, 71°] - decreasing order ✓)
+
+i=4, temp=69:
+  69 < 71 (temperatures[stack.peek()=3])
+    → No pop, just push
+  stack = [2, 3, 4]
+  (temperatures: [75°, 71°, 69°] - still decreasing ✓)
+
+i=5, temp=72:
+  72 > 69 (temperatures[stack.peek()=4])
+    → Pop index 4, set result[4] = 5 - 4 = 1 ✓
+  stack = [2, 3]
+
+  72 > 71 (temperatures[stack.peek()=3])
+    → Pop index 3, set result[3] = 5 - 3 = 2 ✓
+  stack = [2]
+
+  72 < 75 (temperatures[stack.peek()=2])
+    → Stop popping, push 5
+  stack = [2, 5]
+  (temperatures: [75°, 72°] - decreasing order ✓)
+  result = [1,1,0,2,1,0,0,0]
+
+i=6, temp=76:
+  76 > 72 (temperatures[stack.peek()=5])
+    → Pop index 5, set result[5] = 6 - 5 = 1 ✓
+  stack = [2]
+
+  76 > 75 (temperatures[stack.peek()=2])
+    → Pop index 2, set result[2] = 6 - 2 = 4 ✓
+  stack = []
+
+  Push 6
+  stack = [6]
+  result = [1,1,4,2,1,1,0,0]
+
+i=7, temp=73:
+  73 < 76 (temperatures[stack.peek()=6])
+    → No pop, just push
+  stack = [6, 7]
+
+Loop ends, remaining indices in stack have no answer (already 0)
+Final result = [1,1,4,2,1,1,0,0] ✓
+```
+
+**Key Observations:**
+
+1. **Each index is pushed exactly once** and **popped at most once** → O(n) time
+2. **When temp[i] is warmer**, it resolves all previous cooler days in one sweep
+3. **Indices left in stack** at the end have no future warmer day → result stays 0
+4. **Stack stores indices**, not temperatures, so we can calculate the distance
+
+**Why "Monotonic Decreasing"?**
+
+Looking at the temperatures corresponding to stack indices, they form a decreasing sequence:
+- `stack = [2, 3, 4]` → temperatures `[75, 71, 69]` (decreasing)
+- When we see 72, it's warmer than both 69 and 71, breaking the decreasing property
+- We pop until the decreasing property is restored: `[75, 72]` (decreasing again)
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the length of the temperatures array
+  - Each element is pushed onto the stack exactly once
+  - Each element is popped from the stack at most once
+  - Total operations: at most 2n (n pushes + n pops) = O(n)
+  - This is optimal since we must examine every element at least once
+
+- **Space Complexity**: O(n) in the worst case
+  - Stack can hold all n indices when temperatures are strictly decreasing
+  - Example: `[100, 90, 80, 70, 60]` → stack grows to `[0,1,2,3,4]`
+  - Result array also takes O(n) space
+  - Overall: O(n) auxiliary space
+
+#### Implementation Steps
+
+1. Initialize an empty stack to store **indices** (not temperatures)
+2. Initialize a result array of size n, filled with zeros (default: no warmer day)
+3. Iterate through the temperatures array with index `i`:
+   - **While loop**: While stack is not empty AND current temperature is warmer than the temperature at the index stored at stack top:
+     - Pop the previous index from stack
+     - Calculate the distance: `result[prevIndex] = i - prevIndex`
+   - Push current index `i` onto the stack
+4. After the loop, any indices remaining in the stack have no warmer future day (result already 0)
+5. Return the result array
+
+**Critical Points:**
+
+- **Store indices, not temperatures**: We need to calculate distance `i - prevIndex`
+- **While loop for cascading pops**: One warm day can resolve multiple previous days
+- **Comparison uses indices**: `temperatures[i] > temperatures[stack.peek()]`
+- **Result is distance, not temperature**: `i - prevIndex`, not the temperature value
+
+#### Code - Java
+
+```java
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        Stack<Integer> stack = new Stack<>();
+        int[] result = new int[temperatures.length];
+
+        for (int i = 0; i < temperatures.length; i++) {
+            int currentTemp = temperatures[i];
+
+            // While current temp is warmer than the top of stack
+            while (!stack.isEmpty() && currentTemp > temperatures[stack.peek()]) {
+                int prevIndex = stack.pop();
+                result[prevIndex] = i - prevIndex;
+            }
+
+            stack.push(i);
+        }
+
+        return result;
+    }
+}
+```
+
+#### Code - Go
+
+```go
+func dailyTemperatures(temperatures []int) []int {
+    result := make([]int, len(temperatures))
+    stack := make([]int, 0)
+
+    for i := 0; i < len(temperatures); i++ {
+        currentTemp := temperatures[i]
+
+        // While current temp is warmer than top of stack
+        for len(stack) > 0 && currentTemp > temperatures[stack[len(stack)-1]] {
+            prevIndex := stack[len(stack)-1]
+            stack = stack[:len(stack)-1]
+            result[prevIndex] = i - prevIndex
+        }
+
+        stack = append(stack, i)
+    }
+
+    return result
+}
+```
+
+
 ## Car Fleet {#lc-car-fleet}
 
 ### Problem Metadata
