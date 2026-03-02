@@ -81,3 +81,66 @@ for(int i = 0, j = 0; i < A.length; j < B.length;) {
 - Increasing N generally adds one outer loop and preserves two-pointer or hashing on the innermost search.
 - Sorting + pointer sweeping dominates when the input is a single array; hash-based pair-sum caching dominates multi-array counts (e.g., 4Sum II).
 - Deduping steps grow in importance as N grows to avoid exponential blow-up in output size.
+
+### Greedy Array Patterns {#intro-greedy-array-patterns}
+
+Greedy algorithms make locally optimal choices at each step, hoping to find a global optimum. In array problems, greedy strategies often involve:
+
+1. **Making the best immediate choice** based on current information
+2. **Never reconsidering** previous decisions
+3. **Proving correctness** through exchange arguments or contradiction
+
+Common greedy array patterns include:
+
+#### Interval Scheduling (Non-overlapping Intervals)
+
+When dealing with intervals, sort by end time and greedily select non-overlapping intervals:
+
+- **Key insight**: Always pick the interval that ends earliest among remaining choices
+- **Why it works**: Leaving maximum room for future intervals
+- **Examples**: [Non-overlapping Intervals](#lc-non-overlapping-intervals), scheduling meetings
+
+#### Sequential Grouping (Hand of Straights)
+
+When grouping elements into consecutive sequences:
+
+- **Key insight**: Process smallest elements first, form groups greedily
+- **Why it works**: Smallest element must start a new group; build from there
+- **Examples**: [Hand of Straights](#lc-hand-of-straights)
+
+#### Accumulation with Reset (Gas Station, Maximum Subarray)
+
+When finding optimal starting points or subarrays:
+
+- **Key insight**: Track running sum; reset when it becomes negative/invalid
+- **Why it works**: Negative prefix can only hurt future solutions
+- **Examples**: [Gas Station](#lc-gas-station), [Maximum Subarray](#lc-maximum-subarray)
+
+#### Capture All Gains (Stock Trading)
+
+When maximizing profit from transactions:
+
+- **Key insight**: Capture every positive price difference
+- **Why it works**: Unlimited transactions means sum of all upward slopes
+- **Examples**: [Best Time to Buy and Sell Stock II](#lc-stock-122)
+
+#### Urgency-Based Processing (Eliminate Maximum Monsters)
+
+When deadlines or time constraints matter:
+
+- **Key insight**: Process most urgent items first (earliest deadline, fastest arrival)
+- **Why it works**: Delays compound; handle urgent cases before they expire
+- **Examples**: [Eliminate Maximum Monsters](#lc-eliminate-max-monsters), [Max Gain](#fc-max-gain)
+
+**When to Use Greedy**:
+
+- Problem exhibits **optimal substructure** (optimal solution contains optimal sub-solutions)
+- **Greedy choice property** holds (local optimum leads to global optimum)
+- Often involves sorting as preprocessing step
+- Common in scheduling, interval, and optimization problems
+
+**When NOT to Use Greedy**:
+
+- Need to explore multiple paths (use [Dynamic Programming](#intro-dynamic-programming) or [Backtracking](#intro-backtracking))
+- Local optimum does not guarantee global optimum
+- Must prove correctness rigorously (greedy solutions are easy to implement but hard to verify)

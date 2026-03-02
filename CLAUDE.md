@@ -198,6 +198,10 @@ Once user has implemented a solution:
 - Claude suggests optimizations and alternative approaches
 - Iterative discussion to refine the solution explanation and walkthrough
 - Claude analyzes and documents the solution in the book
+- **Check if cross-references needed**: Determine if the newly added/updated problem should be referenced as an example in:
+  - `02-common-strategies.Rmd` (for Two Pointer, Binary Search, QuickSelect, Sorting, Greedy vs DP vs Backtracking)
+  - `{chapter}-01-intro.Rmd` (for chapter-specific patterns like N Sum Family, Kadane's Algorithm, Greedy Array Patterns, etc.)
+  - Add cross-references using markdown link syntax: `[Problem Title](#anchor-id)`
 
 ### Content Requirements
 
