@@ -2792,6 +2792,452 @@ public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
 ```
 
 
+## Serialize and Deserialize Binary Tree {#lc-serialize-deserialize}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 297
+- **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+- **Tags**:
+- **Techniques**: [Breadth First Search](#intro-tree-bfs), [Depth First Search](#intro-tree-dfs), Tree, Design, String
+
+### Description
+
+**Serialization** is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+
+Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+
+### Examples
+
+**Example 1:**
+```
+Input: root = [1,2,3,null,null,4,5]
+Output: [1,2,3,null,null,4,5]
+Explanation:
+    1
+   / \
+  2   3
+     / \
+    4   5
+The tree is serialized to a string representation and can be deserialized back to the same tree structure.
+```
+
+**Example 2:**
+```
+Input: root = []
+Output: []
+Explanation: Empty tree serializes to empty string and deserializes back to empty tree.
+```
+
+### Constraints
+
+- The number of nodes in the tree is in the range $[0, 10^4]$
+- $-1000 \le \text{Node.val} \le 1000$
+
+### Solution - DFS Preorder Traversal
+
+#### Walkthrough
+
+The DFS preorder approach uses **recursive preorder traversal** (Root → Left → Right) for both serialization and deserialization. This creates a beautiful symmetry where both operations mirror each other.
+
+**Key Insight:**
+- Preorder traversal processes nodes in a specific order: root first, then left subtree, then right subtree
+- During deserialization, we can rebuild the tree by consuming the serialized values in the **exact same order**
+- Using "null" markers allows us to know when to stop recursing down a branch
+
+**Serialization Process:**
+
+For the tree:
+```
+    1
+   / \
+  2   3
+     / \
+    4   5
+```
+
+Preorder traversal (Root → Left → Right):
+```
+Step 1: Visit 1          → add "1"
+Step 2: Visit 1.left=2   → add "2"
+Step 3: Visit 2.left=null → add "null"
+Step 4: Visit 2.right=null → add "null"
+Step 5: Visit 1.right=3  → add "3"
+Step 6: Visit 3.left=4   → add "4"
+Step 7: Visit 4.left=null → add "null"
+Step 8: Visit 4.right=null → add "null"
+Step 9: Visit 3.right=5  → add "5"
+Step 10: Visit 5.left=null → add "null"
+Step 11: Visit 5.right=null → add "null"
+
+Result: "1,2,null,null,3,4,null,null,5,null,null"
+```
+
+**Deserialization Process:**
+
+Given string: `"1,2,null,null,3,4,null,null,5,null,null"`
+
+We process values in order using an index pointer:
+```
+index=0: Read "1"    → Create node(1), recurse for left and right
+index=1: Read "2"    → Create node(2), recurse for left and right
+index=2: Read "null" → Return null (base case)
+index=3: Read "null" → Return null (base case)
+  → node(2) complete with left=null, right=null
+index=4: Read "3"    → Create node(3), recurse for left and right
+index=5: Read "4"    → Create node(4), recurse for left and right
+index=6: Read "null" → Return null
+index=7: Read "null" → Return null
+  → node(4) complete
+index=8: Read "5"    → Create node(5), recurse for left and right
+index=9: Read "null" → Return null
+index=10: Read "null" → Return null
+  → node(5) complete
+  → node(3) complete with left=4, right=5
+→ node(1) complete with left=2, right=3
+```
+
+**Why Index Array?**
+- Java passes primitives by value, so `int index` won't update across recursive calls
+- Using `int[] index` allows all recursive calls to share and update the same index
+- Each recursive call increments `index[0]` to consume the next value
+
+**Handling Edge Cases:**
+- **Empty tree**: Serializes to "null", deserializes by returning null immediately
+- **Single node**: Serializes to "val,null,null"
+- **Skewed tree**: Works naturally due to preorder traversal visiting all nodes
+
+#### Analysis
+
+- **Time Complexity**:
+  - Serialization: O(n) — visit each node exactly once in preorder
+  - Deserialization: O(n) — process each value in the string exactly once
+  - Overall: O(n)
+
+- **Space Complexity**:
+  - Serialization: O(h) recursion stack where h is tree height + O(n) for output list
+  - Deserialization: O(h) recursion stack + O(n) for string array
+  - Overall: O(n) considering the output storage
+
+#### Implementation Steps
+
+**Serialization:**
+1. Handle base case: if node is null, add "null" to list and return
+2. Add current node's value to list
+3. Recursively serialize left subtree
+4. Recursively serialize right subtree
+5. Join all values with commas
+
+**Deserialization:**
+1. Split serialized string by comma delimiter into array
+2. Create index tracker using `int[] index = {0}` (array to share across recursion)
+3. Call recursive helper with string array and index tracker
+4. In helper:
+   - If current value is "null", increment index and return null
+   - Create new node with current value
+   - Increment index
+   - Recursively build left subtree
+   - Recursively build right subtree
+   - Return the constructed node
+
+#### Code - Java
+
+```java
+public class Codec {
+    private static final String DELIM = ",";
+    private static final String NULL_MARKER = "null";
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        List<String> list = new ArrayList<>();
+        serializeDFS(root, list);
+        return String.join(DELIM, list);
+    }
+
+    // Preorder traversal: Root → Left → Right
+    private void serializeDFS(TreeNode node, List<String> list) {
+        if (node == null) {
+            list.add(NULL_MARKER);
+            return;
+        }
+
+        // Add current node value
+        list.add(String.valueOf(node.val));
+
+        // Recurse left and right
+        serializeDFS(node.left, list);
+        serializeDFS(node.right, list);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] nodeStrings = data.split(DELIM);
+        // Use array to share index across recursive calls
+        return deserializeDFS(nodeStrings, new int[]{0});
+    }
+
+    // Preorder reconstruction: consume values in same order as serialization
+    private TreeNode deserializeDFS(String[] nodeStrings, int[] index) {
+        // Base case: if current value is null marker
+        if (nodeStrings[index[0]].equals(NULL_MARKER)) {
+            index[0]++;
+            return null;
+        }
+
+        // Create root node with current value
+        TreeNode root = new TreeNode(Integer.parseInt(nodeStrings[index[0]]));
+        index[0]++;
+
+        // Recursively build left and right subtrees
+        // The index automatically advances through the array
+        root.left = deserializeDFS(nodeStrings, index);
+        root.right = deserializeDFS(nodeStrings, index);
+
+        return root;
+    }
+}
+```
+
+**Key Implementation Notes:**
+- **String.join()**: Efficiently concatenates list elements with delimiter
+- **int[] index**: Shared reference allows index updates across recursive calls
+- **Symmetry**: Serialization and deserialization use identical traversal order
+- **No extra checks needed**: Preorder guarantees we process values in correct order
+
+
+### Solution - BFS Level-Order Traversal
+
+#### Walkthrough
+
+The BFS approach uses **level-order traversal** to serialize the tree level by level, from left to right. This matches how binary trees are typically visualized and represented in array format.
+
+**Key Insight:**
+- Process nodes level by level using two queues (current level and next level)
+- When we encounter a null node, we add "null" to output but **don't enqueue its children** (it has none)
+- During deserialization, we use a single queue and process children in pairs
+
+**Serialization Process:**
+
+For the tree:
+```
+    1
+   / \
+  2   3
+     / \
+    4   5
+```
+
+Level-by-level traversal:
+```
+Level 0: currLvlQueue = [1]
+  - Poll 1, append "1", enqueue children 2, 3
+  - currLvlQueue empty → switch queues
+
+Level 1: currLvlQueue = [2, 3]
+  - Poll 2, append ",2", enqueue children null, null (don't actually enqueue nulls)
+  - Poll 3, append ",3", enqueue children 4, 5
+  - currLvlQueue empty → switch queues
+
+Level 2: currLvlQueue = [4, 5]
+  - Poll 4, append ",4", enqueue children null, null
+  - Poll 5, append ",5", enqueue children null, null
+  - currLvlQueue empty → switch queues
+
+Level 3: currLvlQueue = [] (empty)
+  - Exit loop
+
+Result: "1,2,3,4,5"
+```
+
+**Wait, what about the nulls?**
+
+Actually, for proper deserialization, we need to track null children:
+```
+Level 0: [1]           → output "1"
+Level 1: [2, 3]        → output "2,3"
+                       → 2's children: null, null (enqueued)
+                       → 3's children: 4, 5 (enqueued)
+Level 2: [null, null, 4, 5]  → output "null,null,4,5"
+
+Result: "1,2,3,null,null,4,5"
+```
+
+**Deserialization Process:**
+
+Given string: `"1,2,3,null,null,4,5"`
+Split into array: `["1", "2", "3", "null", "null", "4", "5"]`
+
+Process with queue:
+```
+i=0: Create root=1, add to queue
+     queue = [1]
+
+Process node 1:
+  i=1: "2" → create node(2), set as 1.left, enqueue
+  i=2: "3" → create node(3), set as 1.right, enqueue
+  queue = [2, 3]
+
+Process node 2:
+  i=3: "null" → 2.left = null
+  i=4: "null" → 2.right = null
+  queue = [3]
+
+Process node 3:
+  i=5: "4" → create node(4), set as 3.left, enqueue
+  i=6: "5" → create node(5), set as 3.right, enqueue
+  queue = [4, 5]
+
+Process node 4:
+  (no more values, stop)
+
+Result: Tree reconstructed!
+```
+
+**Why This Works:**
+- BFS guarantees we process parents before children
+- For each non-null node, we know exactly where its two children are in the array (next two positions)
+- We process children in pairs: left child at `i`, right child at `i+1`
+
+#### Analysis
+
+- **Time Complexity**:
+  - Serialization: O(n) — visit each node once via BFS
+  - Deserialization: O(n) — process each value in array once
+  - Overall: O(n)
+
+- **Space Complexity**:
+  - Serialization: O(w) for queue where w is maximum width of tree + O(n) for output
+  - Deserialization: O(w) for queue + O(n) for string array
+  - Overall: O(n) — in worst case (complete binary tree), last level has n/2 nodes
+
+#### Implementation Steps
+
+**Serialization:**
+1. Initialize two queues: `currLvlQueue` and `nextLvlQueue`
+2. Enqueue root to `currLvlQueue`
+3. While `currLvlQueue` is not empty:
+   - Poll node from current queue
+   - Append node value (or "null") to result
+   - If node is not null, enqueue its left and right children to next level queue
+   - If current queue is empty, swap queues and add comma separator
+4. Return the serialized string
+
+**Deserialization:**
+1. Split string by delimiter into array
+2. Handle edge case: if array is just `["null"]`, return null
+3. Create root from first element and add to queue
+4. Initialize index `i = 1` to track position in array
+5. While queue is not empty:
+   - Poll a node
+   - Process left child: if `array[i]` is not "null", create node and enqueue
+   - Increment `i`
+   - Process right child: if `array[i]` is not "null", create node and enqueue
+   - Increment `i`
+6. Return root
+
+#### Code - Java
+
+```java
+public class Codec {
+    private static final String DELIM = ",";
+    private static final String NULL_MARKER = "null";
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        return serializeBFS(root);
+    }
+
+    // Level-order traversal using two queues
+    private String serializeBFS(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        Queue<TreeNode> currLvlQueue = new LinkedList<>();
+        Queue<TreeNode> nextLvlQueue = new LinkedList<>();
+        currLvlQueue.offer(root);
+
+        while (!currLvlQueue.isEmpty()) {
+            TreeNode node = currLvlQueue.poll();
+
+            // Append node value or null marker
+            if (node == null) {
+                sb.append(NULL_MARKER);
+            } else {
+                sb.append(node.val);
+            }
+
+            // Add comma if more nodes in current level
+            if (!currLvlQueue.isEmpty()) {
+                sb.append(DELIM);
+            }
+
+            // Enqueue children for next level
+            if (node != null) {
+                nextLvlQueue.offer(node.left);
+                nextLvlQueue.offer(node.right);
+            }
+
+            // Switch to next level when current level is done
+            if (currLvlQueue.isEmpty()) {
+                currLvlQueue = nextLvlQueue;
+                nextLvlQueue = new LinkedList<>();
+
+                // Add comma separator between levels
+                if (!currLvlQueue.isEmpty()) {
+                    sb.append(DELIM);
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] nodeStrings = data.split(DELIM);
+        return deserializeBFS(nodeStrings);
+    }
+
+    private TreeNode deserializeBFS(String[] nodeStrings) {
+        // Edge case: empty tree
+        if (nodeStrings.length == 1 && nodeStrings[0].equals(NULL_MARKER)) {
+            return null;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode root = new TreeNode(Integer.parseInt(nodeStrings[0]));
+        queue.add(root);
+
+        int i = 1;
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+
+            // Process left child
+            if (!nodeStrings[i].equals(NULL_MARKER)) {
+                node.left = new TreeNode(Integer.parseInt(nodeStrings[i]));
+                queue.add(node.left);
+            }
+            i++;
+
+            // Process right child
+            if (!nodeStrings[i].equals(NULL_MARKER)) {
+                node.right = new TreeNode(Integer.parseInt(nodeStrings[i]));
+                queue.add(node.right);
+            }
+            i++;
+        }
+
+        return root;
+    }
+}
+```
+
+**Key Implementation Notes:**
+- **StringBuilder**: More efficient than string concatenation for building result
+- **Two-queue approach**: Clearly separates current level from next level
+- **Comma placement**: Carefully managed to avoid trailing commas
+- **Children in pairs**: During deserialization, we always process left then right child together
+
+
 ## Binary Tree Longest Consecutive Sequence {#lc-bst-longest-consecutive}
 
 ### Problem Metadata
