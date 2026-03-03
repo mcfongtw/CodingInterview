@@ -685,6 +685,252 @@ class WordDictionary {
 ```
 
 
+## Encode and Decode Strings {#lc-encode-decode-strings}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 271
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/encode-and-decode-strings/
+- **Tags**: Blind 75, NeetCode 150
+- **Techniques**: String, Array, Design
+
+### Description
+
+Design an algorithm to encode a list of strings to a single string. The encoded string is then decoded back to the original list of strings.
+
+Please implement:
+- `String encode(List<String> strs)` - Encodes a list of strings to a single string
+- `List<String> decode(String s)` - Decodes a single string to a list of strings
+
+### Examples
+
+**Example 1:**
+```
+Input: strs = ["lint","code","love","you"]
+Output: ["lint","code","love","you"]
+Explanation: One possible encode method is: "4#lint4#code4#love3#you"
+```
+
+**Example 2:**
+```
+Input: strs = ["we", "say", ":", "yes"]
+Output: ["we", "say", ":", "yes"]
+Explanation: Strings can contain any characters including delimiters.
+```
+
+**Example 3:**
+```
+Input: strs = [""]
+Output: [""]
+Explanation: Empty strings must be handled correctly.
+```
+
+### Constraints
+
+- $0 \le$ strs.length $\le$ 200
+- $0 \le$ strs[i].length $\le$ 200
+- `strs[i]` contains any possible characters including UTF-8 characters
+- The encoded string can contain any characters
+
+### Solution - Length Prefix Encoding
+
+#### Walkthrough
+
+This problem requires designing a robust encoding scheme that handles strings containing **any possible characters**, including potential delimiter characters. The key challenge is avoiding ambiguity when encoding and decoding.
+
+**Why Simple Delimiters Fail:**
+
+Common naive approaches fail because strings can contain the delimiter itself:
+- Using `,` as delimiter: `["a,b", "c"]` → `"a,b,c"` → ambiguous decode
+- Using `:` as delimiter: `["a:b", "c"]` → `"a:b:c"` → ambiguous decode
+- Using special characters: strings can contain ANY character
+
+**Solution: Length Prefix Encoding**
+
+The robust approach is to prefix each string with its length, followed by a delimiter that won't appear in length representations:
+
+**Format**: `length#content`
+
+For a list of strings `["lint", "code", "love", "you"]`:
+- `"lint"` has length 4 → encode as `"4#lint"`
+- `"code"` has length 4 → encode as `"4#code"`
+- `"love"` has length 4 → encode as `"4#love"`
+- `"you"` has length 3 → encode as `"3#you"`
+- **Encoded result**: `"4#lint4#code4#love3#you"`
+
+**Why This Works:**
+
+1. **Unambiguous parsing**: When decoding, we first read the length number, then skip the `#`, then read exactly that many characters
+2. **Content independence**: The actual string content can contain any characters including `#`, because we know exactly how many characters to read
+3. **No escaping needed**: Unlike delimiter-based approaches, we don't need to escape special characters
+
+**Detailed Decoding Process:**
+
+When decoding `"4#lint4#code4#love3#you"`:
+
+```
+Step 1: Read characters until '#' → "4"
+        Parse length = 4
+        Read next 4 characters → "lint"
+        Result: ["lint"]
+
+Step 2: Read characters until '#' → "4"
+        Parse length = 4
+        Read next 4 characters → "code"
+        Result: ["lint", "code"]
+
+Step 3: Read characters until '#' → "4"
+        Parse length = 4
+        Read next 4 characters → "love"
+        Result: ["lint", "code", "love"]
+
+Step 4: Read characters until '#' → "3"
+        Parse length = 3
+        Read next 3 characters → "you"
+        Result: ["lint", "code", "love", "you"]
+```
+
+**Edge Cases Handled:**
+
+1. **Empty strings**: `[""]` → `"0#"` → `[""]`
+2. **Strings containing delimiter**: `["a#b"]` → `"3#a#b"` → we read exactly 3 chars, so we get `"a#b"` correctly
+3. **Strings containing numbers**: `["123"]` → `"3#123"` → length prefix is separate from content
+4. **Multiple consecutive delimiters**: `["##"]` → `"2###"` → read 2 chars after first `#`
+
+**Example with tricky input `["we", "say", ":", "yes", "#"]`:**
+
+```
+Encoding:
+  "we"  → length 2 → "2#we"
+  "say" → length 3 → "3#say"
+  ":"   → length 1 → "1#:"
+  "yes" → length 3 → "3#yes"
+  "#"   → length 1 → "1##"
+
+Encoded: "2#we3#say1#:3#yes1##"
+
+Decoding:
+  "2#we3#say1#:3#yes1##"
+  ↑
+  Read until '#' → "2", read 2 chars → "we"
+
+  "2#we3#say1#:3#yes1##"
+       ↑
+  Read until '#' → "3", read 3 chars → "say"
+
+  "2#we3#say1#:3#yes1##"
+            ↑
+  Read until '#' → "1", read 1 char → ":"
+
+  "2#we3#say1#:3#yes1##"
+               ↑
+  Read until '#' → "3", read 3 chars → "yes"
+
+  "2#we3#say1#:3#yes1##"
+                     ↑
+  Read until '#' → "1", read 1 char → "#"
+
+Result: ["we", "say", ":", "yes", "#"] ✓
+```
+
+#### Analysis
+
+- **Time Complexity**:
+  - **Encode**: O(n) where n is the total number of characters across all strings
+    - We iterate through each string once and append characters
+    - String concatenation using StringBuilder is O(1) amortized
+  - **Decode**: O(n) where n is the length of the encoded string
+    - Single pass through the encoded string
+    - Substring extraction is O(length of substring) but total work is O(n)
+  - Total: O(n)
+
+- **Space Complexity**: O(n)
+  - Encode: StringBuilder storage proportional to output size
+  - Decode: Result list storage proportional to total string length
+  - Both are O(n) where n is total characters
+
+#### Implementation Steps
+
+**Encode Algorithm:**
+
+1. Create a `StringBuilder` to build the encoded string
+2. For each string in the input list:
+   - Append the string's length
+   - Append the delimiter `'#'`
+   - Append the string content
+3. Return the final encoded string
+
+**Decode Algorithm:**
+
+1. Initialize an empty result list
+2. Initialize pointer `i = 0` to track position in encoded string
+3. While `i < s.length()`:
+   - Find the position of next `'#'` delimiter starting from `i`
+   - Extract substring from `i` to `'#'` position and parse as integer (this is the length)
+   - Move pointer past the `'#'`: `i = delimiter_position + 1`
+   - Extract substring of exactly `length` characters starting from `i`
+   - Add the extracted string to result list
+   - Move pointer forward by `length`: `i += length`
+4. Return the result list
+
+#### Code - Java
+
+```java
+public class Codec {
+
+    private static final char DELIM = '#';
+
+    // Encodes a list of strings to a single string.
+    public String encode(List<String> strs) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < strs.size(); i++) {
+            String str = strs.get(i);
+
+            // CRITICAL: MUST NOT use sb.append(str.length() + DELIM + str)
+            // That causes operator precedence issues - Java will treat int + char as arithmetic!
+            sb.append(str.length()).append(DELIM).append(str);
+        }
+
+        return sb.toString();
+    }
+
+    // Decodes a single string to a list of strings.
+    public List<String> decode(String s) {
+        List<String> result = new ArrayList<>();
+        int i = 0;
+
+        while (i < s.length()) {
+            // Read length digits until we hit DELIM
+            // Example: "3#abc" where i=0, j will stop at position 1
+            int j = i;
+            while (s.charAt(j) != DELIM) {
+                j++;
+            }
+
+            // Parse the length
+            int length = Integer.parseInt(s.substring(i, j));
+
+            // Skip the DELIM character
+            j++;
+
+            // Extract exactly 'length' characters
+            int k = j + length;
+            String str = s.substring(j, k);
+            result.add(str);
+
+            // Move to the next encoded string
+            i = k;
+        }
+
+        return result;
+    }
+}
+```
+
+
 ## Ransom Note {#lc-ransom-note}
 
 ### Problem Metadata
