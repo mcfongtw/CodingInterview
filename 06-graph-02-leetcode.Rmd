@@ -645,589 +645,6 @@ public int[] findOrder(int numCourses, int[][] prerequisites) {
 ```
 
 
-## Accounts Merge {#lc-accounts-merge}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 721
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/accounts-merge/
-- **Tags**: Grind 75
-- **Techniques**: [Union Find](#union-find), [Depth First Search](#undirected-graph-dfs), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), Graph
-
-### Description
-
-Given a list of accounts where each element `accounts[i]` is a list of strings, where the first element `accounts[i][0]` is a name, and the rest of the elements are emails representing emails of the account.
-
-Now, we would like to merge these accounts. Two accounts definitely belong to the same person if there is some common email to both accounts. Note that even if two accounts have the same name, they may belong to different people as people could have the same name. A person can have any number of accounts initially, but all of their accounts definitely have the same name.
-
-After merging the accounts, return the accounts in the following format: the first element of each account is the name, and the rest of the elements are emails in sorted order. The accounts themselves can be returned in any order.
-
-### Examples
-
-**Example 1:**
-```
-Input: accounts = [["John","johnsmith@mail.com","john_newyork@mail.com"],["John","johnsmith@mail.com","john00@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
-Output: [["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
-Explanation:
-The first and second John's are the same person as they have the common email "johnsmith@mail.com".
-The third John and Mary are different people as none of their email addresses are used by other accounts.
-We could return these lists in any order, for example the answer [['Mary', 'mary@mail.com'], ['John', 'johnnybravo@mail.com'],
-['John', 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com']] would still be accepted.
-```
-
-**Example 2:**
-```
-Input: accounts = [["Gabe","Gabe0@m.co","Gabe3@m.co","Gabe1@m.co"],["Kevin","Kevin3@m.co","Kevin5@m.co","Kevin0@m.co"],["Ethan","Ethan5@m.co","Ethan4@m.co","Ethan0@m.co"],["Hanzo","Hanzo3@m.co","Hanzo1@m.co","Hanzo0@m.co"],["Fern","Fern5@m.co","Fern1@m.co","Fern0@m.co"]]
-Output: [["Ethan","Ethan0@m.co","Ethan4@m.co","Ethan5@m.co"],["Gabe","Gabe0@m.co","Gabe1@m.co","Gabe3@m.co"],["Hanzo","Hanzo0@m.co","Hanzo1@m.co","Hanzo3@m.co"],["Kevin","Kevin0@m.co","Kevin3@m.co","Kevin5@m.co"],["Fern","Fern0@m.co","Fern1@m.co","Fern5@m.co"]]
-```
-
-### Constraints
-
-- $1 \le \text{accounts.length} \le 1000$
-- $2 \le \text{accounts}[i].\text{length} \le 10$
-- $1 \le \text{accounts}[i][j].\text{length} \le 30$
-- `accounts[i][0]` consists of English letters
-- `accounts[i][j]` (for $j > 0$) is a valid email
-- All email addresses are unique across all accounts
-
-### Solution - Union Find
-
-#### Walkthrough
-
-Model each email as a node. Emails that appear in the same account are connected. Use Union-Find to merge connected emails into components, then collect each component's emails and attach the owner's name.
-
-**Phase 1 - Initialize:**
-
-For every email across all accounts:
-- Set `parent[email] = email` (each email is its own root)
-- Record `emailToName[email] = name`
-
-**Phase 2 - Union:**
-
-For each account, union the first email with every other email in that account. This connects all emails belonging to the same account into one component. Using the first email as the anchor ensures transitivity: if account A and account B share `email1`, unioning `email1` with all other emails in both accounts automatically links the two accounts.
-
-**Phase 3 - Group by root:**
-
-Iterate all emails. Call `find(email)` to get its root. Accumulate emails under `rootToEmails[root]`.
-
-**Phase 4 - Build result:**
-
-For each root, sort its emails, prepend the owner name (looked up from any email in the group), and add to result.
-
-**Example trace with `[["John","a@m","b@m"], ["John","b@m","c@m"], ["Mary","d@m"]]`:**
-
-```
-After init:
-  parent: {a→a, b→b, c→c, d→d}
-  emailToName: {a→John, b→John, c→John, d→Mary}
-
-After union (account 0: union a,b):
-  parent: {a→a, b→a, c→c, d→d}
-
-After union (account 1: union b,c — find(b)=a):
-  parent: {a→a, b→a, c→a, d→d}
-
-Group by root:
-  a → [a, b, c]
-  d → [d]
-
-Result:
-  ["John", "a@m", "b@m", "c@m"]
-  ["Mary", "d@m"]
-```
-
-#### Analysis
-
-- **Time Complexity**: O(N $\cdot$ K $\cdot$ $\alpha$(N $\cdot$ K)) where N is number of accounts and K is max emails per account. $\alpha$ is inverse Ackermann — effectively O(N $\cdot$ K) for initialization plus near-constant union/find operations. Sorting each component adds O(N $\cdot$ K $\cdot$ log(N $\cdot$ K)).
-- **Space Complexity**: O(N $\cdot$ K) for the parent map, emailToName map, and rootToEmails map.
-
-#### Implementation Steps
-
-1. Initialize `parent` map (email $\to$ email) and `emailToName` map (email $\to$ name) by iterating all accounts.
-2. For each account, union the first email with each remaining email using `union(first, emails[i])`.
-3. Iterate all emails; group them by `find(email)` into `rootToEmails` map.
-4. For each entry in `rootToEmails`, sort the email list, look up the name from any email, prepend it, and add to result.
-
-#### Code - Java
-
-```java
-public List<List<String>> accountsMerge(List<List<String>> accounts) {
-    Map<String, String> parent = new HashMap<>();
-    Map<String, String> emailToName = new HashMap<>();
-
-    // Phase 1: Initialize
-    for (List<String> account : accounts) {
-        String name = account.get(0);
-        for (int i = 1; i < account.size(); i++) {
-            String email = account.get(i);
-            parent.put(email, email);
-            emailToName.put(email, name);
-        }
-    }
-
-    // Phase 2: Union emails within each account
-    for (List<String> account : accounts) {
-        String first = account.get(1);
-        for (int i = 2; i < account.size(); i++) {
-            union(parent, first, account.get(i));
-        }
-    }
-
-    // Phase 3: Group emails by root
-    Map<String, List<String>> rootToEmails = new HashMap<>();
-    for (String email : parent.keySet()) {
-        String root = find(parent, email);
-        rootToEmails.computeIfAbsent(root, k -> new ArrayList<>()).add(email);
-    }
-
-    // Phase 4: Build result
-    List<List<String>> result = new ArrayList<>();
-    for (List<String> emails : rootToEmails.values()) {
-        Collections.sort(emails);
-        List<String> account = new ArrayList<>();
-        account.add(emailToName.get(emails.get(0)));
-        account.addAll(emails);
-        result.add(account);
-    }
-
-    return result;
-}
-
-private String find(Map<String, String> parent, String email) {
-    if (!parent.get(email).equals(email)) {
-        parent.put(email, find(parent, parent.get(email))); // path compression
-    }
-    return parent.get(email);
-}
-
-private void union(Map<String, String> parent, String a, String b) {
-    String rootA = find(parent, a);
-    String rootB = find(parent, b);
-    if (!rootA.equals(rootB)) {
-        parent.put(rootA, rootB);
-    }
-}
-```
-
-### Solution - DFS
-
-#### Walkthrough
-
-Build an email graph where emails in the same account are connected (adjacent). Then perform DFS from each unvisited email to collect all emails in its connected component.
-
-**Phase 1 - Build graph:**
-
-For each account, add edges between every pair of emails in that account. Also record `emailToName[email] = name`. Since any two emails in the same account are connected, connecting them all (even just as a star from the first email) suffices because the graph captures transitivity through DFS.
-
-**Phase 2 - DFS per component:**
-
-Iterate all emails. For each unvisited email, DFS to collect all reachable emails into one group.
-
-**Phase 3 - Build result:**
-
-Sort collected emails, prepend name, add to result.
-
-**Example with same input as above:**
-
-```
-Graph edges:
-  a -- b  (account 0)
-  b -- c  (account 1)
-
-DFS from a: visits a → b → c  (component: {a,b,c})
-DFS from d: visits d           (component: {d})
-```
-
-#### Analysis
-
-- **Time Complexity**: O(N $\cdot$ K $\cdot$ log(N $\cdot$ K)) — building the graph is O(N $\cdot$ K), DFS visits each email once O(N $\cdot$ K), sorting dominates.
-- **Space Complexity**: O(N $\cdot$ K) for the adjacency list, visited set, and recursion stack.
-
-#### Implementation Steps
-
-1. Build adjacency list `graph` (email $\to$ list of neighboring emails) and `emailToName` by iterating all accounts. For each account, connect `emails[1]` to all other emails bidirectionally.
-2. Use a `visited` set to track explored emails.
-3. For each email not yet visited, DFS to collect all connected emails into a list.
-4. Sort the list, prepend the name from `emailToName`, add to result.
-
-#### Code - Java
-
-```java
-public List<List<String>> accountsMerge(List<List<String>> accounts) {
-    Map<String, List<String>> graph = new HashMap<>();
-    Map<String, String> emailToName = new HashMap<>();
-
-    // Phase 1: Build graph
-    for (List<String> account : accounts) {
-        String name = account.get(0);
-        String first = account.get(1);
-        for (int i = 1; i < account.size(); i++) {
-            String email = account.get(i);
-            emailToName.put(email, name);
-            graph.computeIfAbsent(email, k -> new ArrayList<>());
-            if (i > 1) {
-                // Connect first email to all others (star topology)
-                graph.get(first).add(email);
-                graph.get(email).add(first);
-            }
-        }
-    }
-
-    // Phase 2 & 3: DFS per component
-    Set<String> visited = new HashSet<>();
-    List<List<String>> result = new ArrayList<>();
-
-    for (String email : graph.keySet()) {
-        if (!visited.contains(email)) {
-            List<String> component = new ArrayList<>();
-            dfs(email, graph, visited, component);
-            Collections.sort(component);
-            List<String> account = new ArrayList<>();
-            account.add(emailToName.get(component.get(0)));
-            account.addAll(component);
-            result.add(account);
-        }
-    }
-
-    return result;
-}
-
-private void dfs(String email, Map<String, List<String>> graph,
-                 Set<String> visited, List<String> component) {
-    visited.add(email);
-    component.add(email);
-    for (String neighbor : graph.get(email)) {
-        if (!visited.contains(neighbor)) {
-            dfs(neighbor, graph, visited, component);
-        }
-    }
-}
-```
-
-
-## Number of Connected Components in an Undirected Graph {#lc-connected-components}
-
-### Problem Metadata
-
-- **Platform**: LeetCode
-- **Problem ID**: 323
-- **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
-- **Tags**: Blind 75, NeetCode 150
-- **Techniques**: [Depth First Search](#undirected-graph-dfs), [Breadth First Search](#undirected-graph-bfs), [Union Find](#union-find), Graph
-
-### Description
-
-Given `n` nodes labeled `0..n-1` and a list of undirected edges, return the number of connected components in the graph.
-
-### Examples
-
-**Example 1: Two Components**
-```
-Input: n = 5, edges = [[0,1],[1,2],[3,4]]
-Output: 2
-Explanation: Component 1: [0,1,2], Component 2: [3,4]
-```
-
-**Example 2: Single Component**
-```
-Input: n = 5, edges = [[0,1],[0,2],[0,3],[1,4]]
-Output: 1
-Explanation: All nodes are connected in a single component
-```
-
-**Example 3: All Isolated Nodes**
-```
-Input: n = 5, edges = []
-Output: 5
-Explanation: No edges, so 5 isolated components
-```
-
-### Constraints
-
-- `1 ≤ n ≤ 10^5`
-- `0 ≤ edges.length ≤ 10^5`
-- Each edge is `[u, v]` where `0 ≤ u, v < n`
-- No self-loops and no duplicate edges
-- Graph is undirected
-
-### Solution - DFS Traversal
-
-#### Walkthrough
-
-Build an adjacency list upfront, then use DFS to explore each component. Each time DFS returns, we've discovered a new connected component.
-
-**Step 1: Build Adjacency List**
-
-Pre-build the graph structure so we can efficiently query neighbors without rescanning edges. Since the graph is undirected, add edges in both directions: when we see edge `[u, v]`, add `v` to `u`'s neighbor list and `u` to `v`'s neighbor list.
-
-**Step 2: Iterate Through All Nodes**
-
-For each node $i$ from 0 to $n-1$, check if it's been visited:
-- If **already visited**, skip it (already counted as part of a previous component)
-- If **unvisited**, start a DFS from that node and increment component count
-
-**Step 3: DFS Traversal**
-
-When DFS starts from an unvisited node, it recursively explores all reachable neighbors, marking each as visited. Once DFS returns, all nodes in that component have been marked visited, ensuring we count each component exactly once.
-
-**Example Trace: $n = 5$, edges $= [[0,1],[1,2],[3,4]]$**
-
-After building the graph:
-```
-0 → [1]
-1 → [0, 2]
-2 → [1]
-3 → [4]
-4 → [3]
-```
-
-Iteration:
-- $i = 0$ (unvisited): Call `dfs(0)` → marks 0, 1, 2 as visited → `result = 1`
-- $i = 1$ (visited): Skip
-- $i = 2$ (visited): Skip
-- $i = 3$ (unvisited): Call `dfs(3)` → marks 3, 4 as visited → `result = 2`
-- $i = 4$ (visited): Skip
-
-Return 2 ✓
-
-#### Analysis
-
-- **Time Complexity**: O(V $+$ E) — Each node is visited once and each edge is traversed once during DFS
-- **Space Complexity**: O(V $+$ E) — Adjacency list uses O(V $+$ E) space; recursion stack uses at most O(V) in worst case (linear chain)
-
-#### Code - Java
-
-```
-public int countComponents(int n, int[][] edges) {
-    List<List<Integer>> graph = new ArrayList<>();
-    boolean[] visited = new boolean[n];
-    int result = 0;
-
-    // Pre-build adjacency list
-    for(int i = 0; i < n; i++) {
-        graph.add(new ArrayList<>());
-    }
-
-    // Build edges in graph (undirected)
-    for(int[] edge: edges) {
-        graph.get(edge[0]).add(edge[1]);
-        graph.get(edge[1]).add(edge[0]);
-    }
-
-    // Count components: each unvisited node starts a new component
-    for(int i = 0; i < n; i++) {
-        if(!visited[i]) {
-            dfs(i, graph, visited);
-            result++;
-        }
-    }
-
-    return result;
-}
-
-private void dfs(int node, List<List<Integer>> graph, boolean[] visited) {
-    List<Integer> neighbors = graph.get(node);
-    visited[node] = true;
-
-    // Traverse all unvisited neighbors
-    for(int neighbor: neighbors) {
-        if(!visited[neighbor]) {
-            dfs(neighbor, graph, visited);
-        }
-    }
-}
-```
-
-### Solution - BFS Traversal
-
-#### Walkthrough
-
-Use BFS with a queue to explore each component level-by-level. The algorithm is similar to DFS but uses an explicit queue instead of recursion.
-
-**Step 1: Build Adjacency List**
-
-Same as DFS—pre-build the graph with both directions for undirected edges.
-
-**Step 2: Iterate Through All Nodes**
-
-For each unvisited node, start a BFS and increment the component count. This ensures each component is counted exactly once.
-
-**Step 3: BFS Exploration**
-
-Enqueue the starting node and mark it visited. While the queue is not empty:
-- Dequeue a node
-- For each unvisited neighbor, mark it visited and enqueue it
-- Continue until queue is empty (entire component explored)
-
-**Example Trace: $n = 5$, edges $= [[0,1],[1,2],[3,4]]$**
-
-**Component 1:**
-- Start BFS at node 0: enqueue 0, mark visited
-- Dequeue 0: neighbors are [1] → mark 1, enqueue 1
-- Dequeue 1: neighbors are [0, 2] → 0 visited, mark 2, enqueue 2
-- Dequeue 2: neighbors are [1] → 1 visited
-- Queue empty → `result = 1`
-
-**Component 2:**
-- Start BFS at node 3: enqueue 3, mark visited
-- Dequeue 3: neighbors are [4] → mark 4, enqueue 4
-- Dequeue 4: neighbors are [3] → 3 visited
-- Queue empty → `result = 2`
-
-Return 2 ✓
-
-#### Analysis
-
-- **Time Complexity**: O(V $+$ E) — Each node is visited once and each edge is traversed once
-- **Space Complexity**: O(V $+$ E) — Adjacency list uses O(V $+$ E) space; queue uses at most O(V) in worst case
-
-#### Code - Java
-
-```
-public int countComponents(int n, int[][] edges) {
-    List<List<Integer>> graph = new ArrayList<>();
-    boolean[] visited = new boolean[n];
-    int result = 0;
-
-    // Pre-build adjacency list
-    for(int i = 0; i < n; i++) {
-        graph.add(new ArrayList<>());
-    }
-
-    // Build edges in graph (undirected)
-    for(int[] edge: edges) {
-        graph.get(edge[0]).add(edge[1]);
-        graph.get(edge[1]).add(edge[0]);
-    }
-
-    // Count components: each unvisited node starts a new component
-    for(int i = 0; i < n; i++) {
-        if(!visited[i]) {
-            bfs(i, graph, visited);
-            result++;
-        }
-    }
-
-    return result;
-}
-
-private void bfs(int start, List<List<Integer>> graph, boolean[] visited) {
-    Queue<Integer> queue = new LinkedList<>();
-    queue.offer(start);
-    visited[start] = true;
-
-    while(!queue.isEmpty()) {
-        int node = queue.poll();
-        for(int neighbor: graph.get(node)) {
-            if(!visited[neighbor]) {
-                visited[neighbor] = true;
-                queue.offer(neighbor);
-            }
-        }
-    }
-}
-```
-
-### Solution - Union Find
-
-#### Walkthrough
-
-Initialize each node as its own component. Process every edge by unioning the two endpoints. Each successful union (where the two nodes were in different components) reduces the component count by one. The final count is the answer.
-
-**Key insight:** Start with `n` components (one per node). Each `union()` that merges two distinct components decrements the count. After processing all edges, the remaining count equals the number of connected components.
-
-**Example trace: $n = 5$, edges $= [[0,1],[1,2],[3,4]]$**
-
-```
-Initial: components = 5
-         parent = [0, 1, 2, 3, 4]
-
-Process [0,1]: find(0)=0, find(1)=1 → different → union, components = 4
-               parent = [1, 1, 2, 3, 4]
-
-Process [1,2]: find(1)=1, find(2)=2 → different → union, components = 3
-               parent = [1, 2, 2, 3, 4]
-
-Process [3,4]: find(3)=3, find(4)=4 → different → union, components = 2
-               parent = [1, 2, 2, 4, 4]
-
-Result: 2
-```
-
-#### Analysis
-
-- **Time Complexity**: O(E $\cdot$ $\alpha$(n)) $\approx$ O(E) — each edge triggers one union/find operation with near-constant cost due to path compression and union by rank
-- **Space Complexity**: O(n) — parent and rank arrays only; no adjacency list needed
-
-**Comparison with DFS/BFS:**
-
-| | Union-Find | DFS / BFS |
-|---|---|---|
-| Space | O(n) | O(n + E) — needs adjacency list |
-| Handles dynamic edges | Yes | No |
-| Conceptual model | Merge sets | Explore graph |
-
-Union-Find is more space-efficient here because it processes edges directly without building an adjacency list.
-
-#### Implementation Steps
-
-1. Initialize `parent[i] = i` and `rank[i] = 0` for all nodes. Set `components = n`.
-2. For each edge `[u, v]`:
-   - If `find(u) != find(v)`: call `union(u, v)` and decrement `components`.
-3. Return `components`.
-
-#### Code - Java
-
-```java
-public int countComponents(int n, int[][] edges) {
-    int[] parent = new int[n];
-    int[] rank = new int[n];
-
-    for (int i = 0; i < n; i++) {
-        parent[i] = i;
-    }
-
-    int components = n;
-
-    for (int[] edge : edges) {
-        if (union(parent, rank, edge[0], edge[1])) {
-            components--;
-        }
-    }
-
-    return components;
-}
-
-private int find(int[] parent, int x) {
-    if (parent[x] != x) {
-        parent[x] = find(parent, parent[x]); // path compression
-    }
-    return parent[x];
-}
-
-private boolean union(int[] parent, int[] rank, int a, int b) {
-    int rootA = find(parent, a);
-    int rootB = find(parent, b);
-
-    if (rootA == rootB) return false; // already in same component
-
-    if (rank[rootA] < rank[rootB]) {
-        parent[rootA] = rootB;
-    } else if (rank[rootB] < rank[rootA]) {
-        parent[rootB] = rootA;
-    } else {
-        parent[rootB] = rootA;
-        rank[rootA]++;
-    }
-
-    return true;
-}
-```
-
-
 ## Graph Validate Tree {#lc-graph-valid-tree}
 
 ### Problem Metadata
@@ -1689,3 +1106,866 @@ public boolean validTree(int n, int[][] edges) {
     return true;
 }
 ```
+
+## Alien Dictionary {#lc-alien-dict-order}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 269
+- **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/alien-dictionary/
+- **Tags**: NeetCode 150, Blind 75
+- **Techniques**: [Topological Sort](glossary-of-algorithm.html#glossary-topological-sort), [Directed Acyclic Graph](glossary-of-algorithm.html#glossary-dag), [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), Graph
+
+### Description
+
+There is a new alien language that uses the English alphabet. However, the order of the letters is unknown to you.
+
+You are given a list of strings `words` from the alien language's dictionary, where the strings in `words` are **sorted lexicographically** by the rules of this new language.
+
+Return a string of the unique letters in the new alien language sorted in **lexicographically increasing order** by the new language's rules. If there is no solution, return `""`. If there are multiple solutions, return **any of them**.
+
+### Examples
+
+**Example 1:**
+```
+Input: words = ["wrt","wrf","er","ett","rftt"]
+Output: "wertf"
+Explanation:
+From "wrt" and "wrf", we can get 't' < 'f'
+From "wrt" and "er", we can get 'w' < 'e'
+From "er" and "ett", we can get 'r' < 't'
+From "ett" and "rftt", we can get 'e' < 'r'
+So the order is "wertf"
+```
+
+**Example 2:**
+```
+Input: words = ["z","x"]
+Output: "zx"
+Explanation: From "z" and "x", we can get 'z' < 'x'
+So the order is "zx"
+```
+
+**Example 3:**
+```
+Input: words = ["z","x","z"]
+Output: ""
+Explanation: The order is invalid, so return ""
+```
+
+### Constraints
+
+- $1 \le$ words.length $\le$ 100
+- $1 \le$ words[i].length $\le$ 100
+- `words[i]` consists of only lowercase English letters
+- The input is guaranteed to be from a valid alien language dictionary
+
+### Solution - Topological Sort with DFS
+
+#### Walkthrough
+
+This problem requires deriving a character ordering from a sorted dictionary. The key insight is modeling this as a **directed graph** where each character is a node, and an edge `A → B` means "A comes before B in the alien alphabet." Once we build this graph, we apply **topological sort** to find a valid ordering.
+
+**Core Algorithm:**
+
+1. **Build the dependency graph** by comparing adjacent words
+2. **Detect invalid inputs** (prefix violations and cycles)
+3. **Apply DFS-based topological sort** to find the ordering
+
+**Step 1: Graph Construction**
+
+Compare each pair of adjacent words in the input array. The **first position where they differ** tells us a character ordering constraint.
+
+**Example:** Given `"wrt"` and `"wrf"`:
+```
+Position 0: 'w' == 'w' → Continue
+Position 1: 'r' == 'r' → Continue
+Position 2: 't' != 'f' → Found difference!
+```
+
+This tells us `t` must come before `f` in the alien alphabet → Add edge `t → f`.
+
+**Critical Edge Cases:**
+
+1. **Prefix Violation:** If a longer word appears before its prefix (e.g., `["abc", "ab"]`), the input is invalid → return `""`.
+
+2. **Cycle Detection:** If the derived graph contains a cycle (e.g., `a → b → c → a`), no valid ordering exists → return `""`.
+
+**Step 2: Three-State DFS with Cycle Detection**
+
+Use DFS-based topological sort with three states to detect cycles:
+
+- **WHITE (0):** Node not yet visited
+- **GRAY (1):** Node currently in the recursion stack (being explored)
+- **BLACK (2):** Node completely processed (all descendants explored)
+
+**Cycle Detection Rule:** If we encounter a **GRAY** node during DFS, we've found a back edge (cycle).
+
+**Step 3: Build Result from Stack**
+
+DFS processes nodes in **post-order** (children before parents). By pushing nodes onto a stack after processing all their children, popping the stack gives us the topological order.
+
+**Visual Example with `words = ["wrt", "wrf", "er", "ett", "rftt"]`:**
+
+```
+Step 1: Build Graph
+Compare "wrt" vs "wrf" → t → f
+Compare "wrf" vs "er"  → w → e
+Compare "er" vs "ett"  → r → t
+Compare "ett" vs "rftt" → e → r
+
+Graph: w → e → r → t → f
+
+Step 2: DFS Topological Sort
+Start from 'w':
+  Visit w (GRAY)
+    Visit e (GRAY)
+      Visit r (GRAY)
+        Visit t (GRAY)
+          Visit f (GRAY)
+          f complete (BLACK), push to stack: [f]
+        t complete (BLACK), push to stack: [f, t]
+      r complete (BLACK), push to stack: [f, t, r]
+    e complete (BLACK), push to stack: [f, t, r, e]
+  w complete (BLACK), push to stack: [f, t, r, e, w]
+
+Step 3: Build Result
+Pop stack: "wertf" ✓
+```
+
+**Example with Cycle `words = ["z", "x", "z"]`:**
+
+```
+Graph Construction:
+Compare "z" vs "x" → z → x
+Compare "x" vs "z" → x → z
+
+Graph: z ⟷ x (cycle!)
+
+DFS from 'z':
+  state[z] = GRAY
+  Visit neighbor 'x':
+    state[x] = GRAY
+    Visit neighbor 'z':
+      state[z] == GRAY → CYCLE DETECTED! ✓
+      return false
+
+Result: "" (invalid)
+```
+
+#### Analysis
+
+- **Time Complexity**: O(C + E)
+  - C is the total number of characters across all words
+  - E is the number of edges in the graph (at most 26 edges for lowercase alphabet)
+  - Building the graph: O(C) to iterate through all words
+  - DFS traversal: O(V + E) where V $\le$ 26 (constant alphabet size)
+  - Overall: O(C) since the graph size is bounded by the constant alphabet
+
+- **Space Complexity**: O(1)
+  - Graph adjacency list: O(26) for at most 26 characters
+  - State array: O(26)
+  - Recursion stack: O(26) in worst case
+  - All bounded by constant alphabet size, so O(1)
+
+#### Implementation Steps
+
+1. **Initialize graph with all unique characters:**
+   - Create a `HashMap<Character, Set<Character>>` for the adjacency list
+   - Iterate through all words and add each character as a node (even if it has no edges)
+
+2. **Build edges by comparing adjacent words:**
+   - For each pair of consecutive words `(word1, word2)`:
+     - Check for prefix violation: if `word1.length() > word2.length()` and `word1.startsWith(word2)`, return `""`
+     - Find the first position where characters differ
+     - Add edge `word1[pos] → word2[pos]`
+     - Break after finding the first difference (only the first difference matters)
+
+3. **Perform DFS with cycle detection:**
+   - Use an `int[] state` array with three states: WHITE (0), GRAY (1), BLACK (2)
+   - For each unvisited character (WHITE), start DFS
+   - In DFS:
+     - Mark node as GRAY (currently exploring)
+     - For each neighbor:
+       - If neighbor is GRAY → cycle detected, return false
+       - If neighbor is WHITE → recursively visit it
+     - Mark node as BLACK (finished)
+     - Push node to stack (post-order)
+
+4. **Build result from stack:**
+   - Pop all characters from the stack to build the final ordering
+   - If cycle was detected, return `""`
+
+#### Code - Java
+
+```java
+class Solution {
+    private static final int WHITE = 0;  // Not visited
+    private static final int GRAY = 1;   // Currently exploring (in recursion stack)
+    private static final int BLACK = 2;  // Finished exploring
+
+    public String alienOrder(String[] words) {
+        // Step 1: Initialize graph with all characters
+        Map<Character, Set<Character>> graph = new HashMap<>();
+
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
+                graph.putIfAbsent(c, new HashSet<>());
+            }
+        }
+
+        // Step 2: Build edges by comparing adjacent words
+        for (int i = 0; i < words.length - 1; i++) {
+            String word1 = words[i];
+            String word2 = words[i + 1];
+            int minLen = Math.min(word1.length(), word2.length());
+
+            // Check for prefix violation
+            if (word1.length() > word2.length() && word1.startsWith(word2)) {
+                return "";  // Invalid: longer word before its prefix
+            }
+
+            // Find first differing character
+            for (int j = 0; j < minLen; j++) {
+                char c1 = word1.charAt(j);
+                char c2 = word2.charAt(j);
+
+                if (c1 != c2) {
+                    // c1 comes before c2 in alien alphabet
+                    graph.get(c1).add(c2);
+                    break;  // Only need first difference
+                }
+            }
+        }
+
+        // Step 3: DFS with cycle detection
+        int[] state = new int[26];
+        Stack<Character> stack = new Stack<>();
+
+        for (char c : graph.keySet()) {
+            if (state[c - 'a'] == WHITE) {
+                if (!dfs(c, state, stack, graph)) {
+                    return "";  // Cycle detected
+                }
+            }
+        }
+
+        // Step 4: Build result from stack (reverse topological order)
+        StringBuilder result = new StringBuilder();
+        while (!stack.isEmpty()) {
+            result.append(stack.pop());
+        }
+
+        return result.toString();
+    }
+
+    private boolean dfs(char node, int[] state, Stack<Character> stack,
+                        Map<Character, Set<Character>> graph) {
+        state[node - 'a'] = GRAY;  // Mark as currently exploring
+
+        // Visit all neighbors
+        for (char neighbor : graph.get(node)) {
+            if (state[neighbor - 'a'] == GRAY) {
+                return false;  // Cycle detected! (back edge to gray node)
+            }
+
+            if (state[neighbor - 'a'] == WHITE) {
+                if (!dfs(neighbor, state, stack, graph)) {
+                    return false;  // Cycle found in subtree
+                }
+            }
+            // If BLACK, skip (already processed)
+        }
+
+        state[node - 'a'] = BLACK;  // Mark as finished
+        stack.push(node);  // Post-order: push after visiting all children
+        return true;  // No cycle found
+    }
+}
+```
+
+## Number of Connected Components in an Undirected Graph {#lc-connected-components}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 323
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
+- **Tags**: Blind 75, NeetCode 150
+- **Techniques**: [Depth First Search](#undirected-graph-dfs), [Breadth First Search](#undirected-graph-bfs), [Union Find](#union-find), Graph
+
+### Description
+
+Given `n` nodes labeled `0..n-1` and a list of undirected edges, return the number of connected components in the graph.
+
+### Examples
+
+**Example 1: Two Components**
+```
+Input: n = 5, edges = [[0,1],[1,2],[3,4]]
+Output: 2
+Explanation: Component 1: [0,1,2], Component 2: [3,4]
+```
+
+**Example 2: Single Component**
+```
+Input: n = 5, edges = [[0,1],[0,2],[0,3],[1,4]]
+Output: 1
+Explanation: All nodes are connected in a single component
+```
+
+**Example 3: All Isolated Nodes**
+```
+Input: n = 5, edges = []
+Output: 5
+Explanation: No edges, so 5 isolated components
+```
+
+### Constraints
+
+- `1 ≤ n ≤ 10^5`
+- `0 ≤ edges.length ≤ 10^5`
+- Each edge is `[u, v]` where `0 ≤ u, v < n`
+- No self-loops and no duplicate edges
+- Graph is undirected
+
+### Solution - DFS Traversal
+
+#### Walkthrough
+
+Build an adjacency list upfront, then use DFS to explore each component. Each time DFS returns, we've discovered a new connected component.
+
+**Step 1: Build Adjacency List**
+
+Pre-build the graph structure so we can efficiently query neighbors without rescanning edges. Since the graph is undirected, add edges in both directions: when we see edge `[u, v]`, add `v` to `u`'s neighbor list and `u` to `v`'s neighbor list.
+
+**Step 2: Iterate Through All Nodes**
+
+For each node $i$ from 0 to $n-1$, check if it's been visited:
+- If **already visited**, skip it (already counted as part of a previous component)
+- If **unvisited**, start a DFS from that node and increment component count
+
+**Step 3: DFS Traversal**
+
+When DFS starts from an unvisited node, it recursively explores all reachable neighbors, marking each as visited. Once DFS returns, all nodes in that component have been marked visited, ensuring we count each component exactly once.
+
+**Example Trace: $n = 5$, edges $= [[0,1],[1,2],[3,4]]$**
+
+After building the graph:
+```
+0 → [1]
+1 → [0, 2]
+2 → [1]
+3 → [4]
+4 → [3]
+```
+
+Iteration:
+- $i = 0$ (unvisited): Call `dfs(0)` → marks 0, 1, 2 as visited → `result = 1`
+- $i = 1$ (visited): Skip
+- $i = 2$ (visited): Skip
+- $i = 3$ (unvisited): Call `dfs(3)` → marks 3, 4 as visited → `result = 2`
+- $i = 4$ (visited): Skip
+
+Return 2 ✓
+
+#### Analysis
+
+- **Time Complexity**: O(V $+$ E) — Each node is visited once and each edge is traversed once during DFS
+- **Space Complexity**: O(V $+$ E) — Adjacency list uses O(V $+$ E) space; recursion stack uses at most O(V) in worst case (linear chain)
+
+#### Code - Java
+
+```
+public int countComponents(int n, int[][] edges) {
+    List<List<Integer>> graph = new ArrayList<>();
+    boolean[] visited = new boolean[n];
+    int result = 0;
+
+    // Pre-build adjacency list
+    for(int i = 0; i < n; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    // Build edges in graph (undirected)
+    for(int[] edge: edges) {
+        graph.get(edge[0]).add(edge[1]);
+        graph.get(edge[1]).add(edge[0]);
+    }
+
+    // Count components: each unvisited node starts a new component
+    for(int i = 0; i < n; i++) {
+        if(!visited[i]) {
+            dfs(i, graph, visited);
+            result++;
+        }
+    }
+
+    return result;
+}
+
+private void dfs(int node, List<List<Integer>> graph, boolean[] visited) {
+    List<Integer> neighbors = graph.get(node);
+    visited[node] = true;
+
+    // Traverse all unvisited neighbors
+    for(int neighbor: neighbors) {
+        if(!visited[neighbor]) {
+            dfs(neighbor, graph, visited);
+        }
+    }
+}
+```
+
+### Solution - BFS Traversal
+
+#### Walkthrough
+
+Use BFS with a queue to explore each component level-by-level. The algorithm is similar to DFS but uses an explicit queue instead of recursion.
+
+**Step 1: Build Adjacency List**
+
+Same as DFS—pre-build the graph with both directions for undirected edges.
+
+**Step 2: Iterate Through All Nodes**
+
+For each unvisited node, start a BFS and increment the component count. This ensures each component is counted exactly once.
+
+**Step 3: BFS Exploration**
+
+Enqueue the starting node and mark it visited. While the queue is not empty:
+- Dequeue a node
+- For each unvisited neighbor, mark it visited and enqueue it
+- Continue until queue is empty (entire component explored)
+
+**Example Trace: $n = 5$, edges $= [[0,1],[1,2],[3,4]]$**
+
+**Component 1:**
+- Start BFS at node 0: enqueue 0, mark visited
+- Dequeue 0: neighbors are [1] → mark 1, enqueue 1
+- Dequeue 1: neighbors are [0, 2] → 0 visited, mark 2, enqueue 2
+- Dequeue 2: neighbors are [1] → 1 visited
+- Queue empty → `result = 1`
+
+**Component 2:**
+- Start BFS at node 3: enqueue 3, mark visited
+- Dequeue 3: neighbors are [4] → mark 4, enqueue 4
+- Dequeue 4: neighbors are [3] → 3 visited
+- Queue empty → `result = 2`
+
+Return 2 ✓
+
+#### Analysis
+
+- **Time Complexity**: O(V $+$ E) — Each node is visited once and each edge is traversed once
+- **Space Complexity**: O(V $+$ E) — Adjacency list uses O(V $+$ E) space; queue uses at most O(V) in worst case
+
+#### Code - Java
+
+```
+public int countComponents(int n, int[][] edges) {
+    List<List<Integer>> graph = new ArrayList<>();
+    boolean[] visited = new boolean[n];
+    int result = 0;
+
+    // Pre-build adjacency list
+    for(int i = 0; i < n; i++) {
+        graph.add(new ArrayList<>());
+    }
+
+    // Build edges in graph (undirected)
+    for(int[] edge: edges) {
+        graph.get(edge[0]).add(edge[1]);
+        graph.get(edge[1]).add(edge[0]);
+    }
+
+    // Count components: each unvisited node starts a new component
+    for(int i = 0; i < n; i++) {
+        if(!visited[i]) {
+            bfs(i, graph, visited);
+            result++;
+        }
+    }
+
+    return result;
+}
+
+private void bfs(int start, List<List<Integer>> graph, boolean[] visited) {
+    Queue<Integer> queue = new LinkedList<>();
+    queue.offer(start);
+    visited[start] = true;
+
+    while(!queue.isEmpty()) {
+        int node = queue.poll();
+        for(int neighbor: graph.get(node)) {
+            if(!visited[neighbor]) {
+                visited[neighbor] = true;
+                queue.offer(neighbor);
+            }
+        }
+    }
+}
+```
+
+### Solution - Union Find
+
+#### Walkthrough
+
+Initialize each node as its own component. Process every edge by unioning the two endpoints. Each successful union (where the two nodes were in different components) reduces the component count by one. The final count is the answer.
+
+**Key insight:** Start with `n` components (one per node). Each `union()` that merges two distinct components decrements the count. After processing all edges, the remaining count equals the number of connected components.
+
+**Example trace: $n = 5$, edges $= [[0,1],[1,2],[3,4]]$**
+
+```
+Initial: components = 5
+         parent = [0, 1, 2, 3, 4]
+
+Process [0,1]: find(0)=0, find(1)=1 → different → union, components = 4
+               parent = [1, 1, 2, 3, 4]
+
+Process [1,2]: find(1)=1, find(2)=2 → different → union, components = 3
+               parent = [1, 2, 2, 3, 4]
+
+Process [3,4]: find(3)=3, find(4)=4 → different → union, components = 2
+               parent = [1, 2, 2, 4, 4]
+
+Result: 2
+```
+
+#### Analysis
+
+- **Time Complexity**: O(E $\cdot$ $\alpha$(n)) $\approx$ O(E) — each edge triggers one union/find operation with near-constant cost due to path compression and union by rank
+- **Space Complexity**: O(n) — parent and rank arrays only; no adjacency list needed
+
+**Comparison with DFS/BFS:**
+
+| | Union-Find | DFS / BFS |
+|---|---|---|
+| Space | O(n) | O(n + E) — needs adjacency list |
+| Handles dynamic edges | Yes | No |
+| Conceptual model | Merge sets | Explore graph |
+
+Union-Find is more space-efficient here because it processes edges directly without building an adjacency list.
+
+#### Implementation Steps
+
+1. Initialize `parent[i] = i` and `rank[i] = 0` for all nodes. Set `components = n`.
+2. For each edge `[u, v]`:
+   - If `find(u) != find(v)`: call `union(u, v)` and decrement `components`.
+3. Return `components`.
+
+#### Code - Java
+
+```java
+public int countComponents(int n, int[][] edges) {
+    int[] parent = new int[n];
+    int[] rank = new int[n];
+
+    for (int i = 0; i < n; i++) {
+        parent[i] = i;
+    }
+
+    int components = n;
+
+    for (int[] edge : edges) {
+        if (union(parent, rank, edge[0], edge[1])) {
+            components--;
+        }
+    }
+
+    return components;
+}
+
+private int find(int[] parent, int x) {
+    if (parent[x] != x) {
+        parent[x] = find(parent, parent[x]); // path compression
+    }
+    return parent[x];
+}
+
+private boolean union(int[] parent, int[] rank, int a, int b) {
+    int rootA = find(parent, a);
+    int rootB = find(parent, b);
+
+    if (rootA == rootB) return false; // already in same component
+
+    if (rank[rootA] < rank[rootB]) {
+        parent[rootA] = rootB;
+    } else if (rank[rootB] < rank[rootA]) {
+        parent[rootB] = rootA;
+    } else {
+        parent[rootB] = rootA;
+        rank[rootA]++;
+    }
+
+    return true;
+}
+```
+
+
+## Accounts Merge {#lc-accounts-merge}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 721
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/accounts-merge/
+- **Tags**: Grind 75
+- **Techniques**: [Union Find](#union-find), [Depth First Search](#undirected-graph-dfs), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), Graph
+
+### Description
+
+Given a list of accounts where each element `accounts[i]` is a list of strings, where the first element `accounts[i][0]` is a name, and the rest of the elements are emails representing emails of the account.
+
+Now, we would like to merge these accounts. Two accounts definitely belong to the same person if there is some common email to both accounts. Note that even if two accounts have the same name, they may belong to different people as people could have the same name. A person can have any number of accounts initially, but all of their accounts definitely have the same name.
+
+After merging the accounts, return the accounts in the following format: the first element of each account is the name, and the rest of the elements are emails in sorted order. The accounts themselves can be returned in any order.
+
+### Examples
+
+**Example 1:**
+```
+Input: accounts = [["John","johnsmith@mail.com","john_newyork@mail.com"],["John","johnsmith@mail.com","john00@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
+Output: [["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
+Explanation:
+The first and second John's are the same person as they have the common email "johnsmith@mail.com".
+The third John and Mary are different people as none of their email addresses are used by other accounts.
+We could return these lists in any order, for example the answer [['Mary', 'mary@mail.com'], ['John', 'johnnybravo@mail.com'],
+['John', 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com']] would still be accepted.
+```
+
+**Example 2:**
+```
+Input: accounts = [["Gabe","Gabe0@m.co","Gabe3@m.co","Gabe1@m.co"],["Kevin","Kevin3@m.co","Kevin5@m.co","Kevin0@m.co"],["Ethan","Ethan5@m.co","Ethan4@m.co","Ethan0@m.co"],["Hanzo","Hanzo3@m.co","Hanzo1@m.co","Hanzo0@m.co"],["Fern","Fern5@m.co","Fern1@m.co","Fern0@m.co"]]
+Output: [["Ethan","Ethan0@m.co","Ethan4@m.co","Ethan5@m.co"],["Gabe","Gabe0@m.co","Gabe1@m.co","Gabe3@m.co"],["Hanzo","Hanzo0@m.co","Hanzo1@m.co","Hanzo3@m.co"],["Kevin","Kevin0@m.co","Kevin3@m.co","Kevin5@m.co"],["Fern","Fern0@m.co","Fern1@m.co","Fern5@m.co"]]
+```
+
+### Constraints
+
+- $1 \le \text{accounts.length} \le 1000$
+- $2 \le \text{accounts}[i].\text{length} \le 10$
+- $1 \le \text{accounts}[i][j].\text{length} \le 30$
+- `accounts[i][0]` consists of English letters
+- `accounts[i][j]` (for $j > 0$) is a valid email
+- All email addresses are unique across all accounts
+
+### Solution - Union Find
+
+#### Walkthrough
+
+Model each email as a node. Emails that appear in the same account are connected. Use Union-Find to merge connected emails into components, then collect each component's emails and attach the owner's name.
+
+**Phase 1 - Initialize:**
+
+For every email across all accounts:
+- Set `parent[email] = email` (each email is its own root)
+- Record `emailToName[email] = name`
+
+**Phase 2 - Union:**
+
+For each account, union the first email with every other email in that account. This connects all emails belonging to the same account into one component. Using the first email as the anchor ensures transitivity: if account A and account B share `email1`, unioning `email1` with all other emails in both accounts automatically links the two accounts.
+
+**Phase 3 - Group by root:**
+
+Iterate all emails. Call `find(email)` to get its root. Accumulate emails under `rootToEmails[root]`.
+
+**Phase 4 - Build result:**
+
+For each root, sort its emails, prepend the owner name (looked up from any email in the group), and add to result.
+
+**Example trace with `[["John","a@m","b@m"], ["John","b@m","c@m"], ["Mary","d@m"]]`:**
+
+```
+After init:
+  parent: {a→a, b→b, c→c, d→d}
+  emailToName: {a→John, b→John, c→John, d→Mary}
+
+After union (account 0: union a,b):
+  parent: {a→a, b→a, c→c, d→d}
+
+After union (account 1: union b,c — find(b)=a):
+  parent: {a→a, b→a, c→a, d→d}
+
+Group by root:
+  a → [a, b, c]
+  d → [d]
+
+Result:
+  ["John", "a@m", "b@m", "c@m"]
+  ["Mary", "d@m"]
+```
+
+#### Analysis
+
+- **Time Complexity**: O(N $\cdot$ K $\cdot$ $\alpha$(N $\cdot$ K)) where N is number of accounts and K is max emails per account. $\alpha$ is inverse Ackermann — effectively O(N $\cdot$ K) for initialization plus near-constant union/find operations. Sorting each component adds O(N $\cdot$ K $\cdot$ log(N $\cdot$ K)).
+- **Space Complexity**: O(N $\cdot$ K) for the parent map, emailToName map, and rootToEmails map.
+
+#### Implementation Steps
+
+1. Initialize `parent` map (email $\to$ email) and `emailToName` map (email $\to$ name) by iterating all accounts.
+2. For each account, union the first email with each remaining email using `union(first, emails[i])`.
+3. Iterate all emails; group them by `find(email)` into `rootToEmails` map.
+4. For each entry in `rootToEmails`, sort the email list, look up the name from any email, prepend it, and add to result.
+
+#### Code - Java
+
+```java
+public List<List<String>> accountsMerge(List<List<String>> accounts) {
+    Map<String, String> parent = new HashMap<>();
+    Map<String, String> emailToName = new HashMap<>();
+
+    // Phase 1: Initialize
+    for (List<String> account : accounts) {
+        String name = account.get(0);
+        for (int i = 1; i < account.size(); i++) {
+            String email = account.get(i);
+            parent.put(email, email);
+            emailToName.put(email, name);
+        }
+    }
+
+    // Phase 2: Union emails within each account
+    for (List<String> account : accounts) {
+        String first = account.get(1);
+        for (int i = 2; i < account.size(); i++) {
+            union(parent, first, account.get(i));
+        }
+    }
+
+    // Phase 3: Group emails by root
+    Map<String, List<String>> rootToEmails = new HashMap<>();
+    for (String email : parent.keySet()) {
+        String root = find(parent, email);
+        rootToEmails.computeIfAbsent(root, k -> new ArrayList<>()).add(email);
+    }
+
+    // Phase 4: Build result
+    List<List<String>> result = new ArrayList<>();
+    for (List<String> emails : rootToEmails.values()) {
+        Collections.sort(emails);
+        List<String> account = new ArrayList<>();
+        account.add(emailToName.get(emails.get(0)));
+        account.addAll(emails);
+        result.add(account);
+    }
+
+    return result;
+}
+
+private String find(Map<String, String> parent, String email) {
+    if (!parent.get(email).equals(email)) {
+        parent.put(email, find(parent, parent.get(email))); // path compression
+    }
+    return parent.get(email);
+}
+
+private void union(Map<String, String> parent, String a, String b) {
+    String rootA = find(parent, a);
+    String rootB = find(parent, b);
+    if (!rootA.equals(rootB)) {
+        parent.put(rootA, rootB);
+    }
+}
+```
+
+### Solution - DFS
+
+#### Walkthrough
+
+Build an email graph where emails in the same account are connected (adjacent). Then perform DFS from each unvisited email to collect all emails in its connected component.
+
+**Phase 1 - Build graph:**
+
+For each account, add edges between every pair of emails in that account. Also record `emailToName[email] = name`. Since any two emails in the same account are connected, connecting them all (even just as a star from the first email) suffices because the graph captures transitivity through DFS.
+
+**Phase 2 - DFS per component:**
+
+Iterate all emails. For each unvisited email, DFS to collect all reachable emails into one group.
+
+**Phase 3 - Build result:**
+
+Sort collected emails, prepend name, add to result.
+
+**Example with same input as above:**
+
+```
+Graph edges:
+  a -- b  (account 0)
+  b -- c  (account 1)
+
+DFS from a: visits a → b → c  (component: {a,b,c})
+DFS from d: visits d           (component: {d})
+```
+
+#### Analysis
+
+- **Time Complexity**: O(N $\cdot$ K $\cdot$ log(N $\cdot$ K)) — building the graph is O(N $\cdot$ K), DFS visits each email once O(N $\cdot$ K), sorting dominates.
+- **Space Complexity**: O(N $\cdot$ K) for the adjacency list, visited set, and recursion stack.
+
+#### Implementation Steps
+
+1. Build adjacency list `graph` (email $\to$ list of neighboring emails) and `emailToName` by iterating all accounts. For each account, connect `emails[1]` to all other emails bidirectionally.
+2. Use a `visited` set to track explored emails.
+3. For each email not yet visited, DFS to collect all connected emails into a list.
+4. Sort the list, prepend the name from `emailToName`, add to result.
+
+#### Code - Java
+
+```java
+public List<List<String>> accountsMerge(List<List<String>> accounts) {
+    Map<String, List<String>> graph = new HashMap<>();
+    Map<String, String> emailToName = new HashMap<>();
+
+    // Phase 1: Build graph
+    for (List<String> account : accounts) {
+        String name = account.get(0);
+        String first = account.get(1);
+        for (int i = 1; i < account.size(); i++) {
+            String email = account.get(i);
+            emailToName.put(email, name);
+            graph.computeIfAbsent(email, k -> new ArrayList<>());
+            if (i > 1) {
+                // Connect first email to all others (star topology)
+                graph.get(first).add(email);
+                graph.get(email).add(first);
+            }
+        }
+    }
+
+    // Phase 2 & 3: DFS per component
+    Set<String> visited = new HashSet<>();
+    List<List<String>> result = new ArrayList<>();
+
+    for (String email : graph.keySet()) {
+        if (!visited.contains(email)) {
+            List<String> component = new ArrayList<>();
+            dfs(email, graph, visited, component);
+            Collections.sort(component);
+            List<String> account = new ArrayList<>();
+            account.add(emailToName.get(component.get(0)));
+            account.addAll(component);
+            result.add(account);
+        }
+    }
+
+    return result;
+}
+
+private void dfs(String email, Map<String, List<String>> graph,
+                 Set<String> visited, List<String> component) {
+    visited.add(email);
+    component.add(email);
+    for (String neighbor : graph.get(email)) {
+        if (!visited.contains(neighbor)) {
+            dfs(neighbor, graph, visited, component);
+        }
+    }
+}
+```
+
+
