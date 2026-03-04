@@ -1,1 +1,139 @@
+## Lock-Free Stack Using Linked List (CAS) {#interview-lockfree-stack-linked-list}
 
+### Problem Metadata
+
+- **Platform**: Interview Prep
+- **Problem ID**: Stack via Linked List
+- **Difficulty**: Easy
+- **URL**: N/A
+- **Tags**:
+- **Techniques**: [Stack](glossary-of-algorithm.html#glossary-stack), [Linked List](glossary-of-algorithm.html#glossary-linked-list), Lock-Free (CAS)
+
+### Description
+
+Design a lock-free, thread-safe stack using a singly linked list and a CAS-based `AtomicReference` head. Support `push`, `pop`, `top`, and `empty` in constant time. If the stack is empty, `pop` and `top` return `-1`.
+
+Assume the following helper classes are available:
+
+```java
+//Given
+staic class Node {
+    public int val;
+
+    putlic Node next;
+
+    public Node(int v) {
+        this.val = v;
+    }
+}
+
+//Given
+static class AtomicReference<T> {
+    private T ref;
+
+    public T get() {
+        return ref;
+    }   
+
+    public set(T newRef) {
+        this.ref = newRef;
+    }
+
+    public boolean compareAndSet(T expected, E newRef) {
+        if(ref == expected) {
+            ref = newRef;
+            return true;
+        } 
+
+        return false;
+    }
+
+}
+```
+
+### Examples
+
+```
+MyStack stack = new MyStack();
+stack.push(1);
+stack.push(2);
+stack.top(); // 2
+stack.pop(); // 2
+stack.empty(); // false
+```
+
+### Constraints
+
+- Use a linked list node structure with value and next pointers
+- All operations must run in O(1) time
+- If the stack is empty, `pop` and `top` return `-1`
+- Use a lock-free approach with `AtomicReference<T>` for thread safety
+
+### Solution - Linked List Head as Top
+
+#### Walkthrough
+
+Use the list head as the stack top, stored in an `AtomicReference`. `push` and `pop` update the head with a compare-and-set (CAS) loop so that multiple threads can operate without locks. Peeking reads the current head without modifying it. Empty is a null head check. When the stack is empty, `pop` and `top` return `-1` by definition.
+
+#### Analysis
+
+- **Time Complexity**: O(1) for all operations
+- **Space Complexity**: O(n) for n stored nodes
+
+#### Implementation Steps
+
+1. Store a `head` `AtomicReference<Node>` for the top of the stack.
+2. `push(x)`: create a new node and CAS it as the new head, retrying if the head changes.
+3. `pop()`: read head; if null return `-1`, otherwise CAS head to next and return the old value.
+4. `top()`: read head; if null return `-1`, otherwise return head value.
+5. `empty()`: return whether head is null.
+
+#### Code - Java
+
+```java
+class MyStack {
+    private final AtomicReference<Node> head = new AtomicReference<>();
+
+    public void push(int val) {
+        Node newNode = new Node(val);
+        while (true) {
+            Node current = head.get();
+            newNode.next = current;
+            if (head.compareAndSet(current, newNode)) {
+                return;
+            }
+        }
+    }
+
+    public int pop() {
+        while (true) {
+            Node current = head.get();
+            if (current == null) {
+                return -1;
+            }
+            Node next = current.next;
+            if (head.compareAndSet(current, next)) {
+                return current.val;
+            }
+        }
+    }
+
+    public int top() {
+        Node current = head.get();
+        return current == null ? -1 : current.val;
+    }
+
+    public boolean empty() {
+        return head.get() == null;
+    }
+
+    private static class Node {
+        int val;
+        Node next;
+
+        Node(int val) {
+            this.val = val;
+        }
+    }
+}
+```
