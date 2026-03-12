@@ -197,6 +197,327 @@ public int lengthOfLongestSubstring(String s) {
 ```
 
 
+## String to Integer (atoi) {#lc-string-to-integer-atoi}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 8
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/string-to-integer-atoi/
+- **Tags**:
+- **Techniques**: [String Manipulation](glossary-of-algorithm.html#glossary-string), [Simulation](glossary-of-algorithm.html#glossary-simulation)
+
+### Description
+
+Implement the `myAtoi(string s)` function, which converts a string to a 32-bit signed integer (similar to C/C++'s `atoi` function).
+
+The algorithm for `myAtoi(string s)` is as follows:
+
+1. **Read in and ignore any leading whitespace.**
+2. **Check if the next character (if not already at the end of the string) is '-' or '+'**. Read this character in if it is either. This determines if the final result is negative or positive respectively. Assume the result is positive if neither is present.
+3. **Read in next the characters until the next non-digit character or the end of the input is reached**. The rest of the string is ignored.
+4. **Convert these digits into an integer** (i.e., `"123"` → 123, `"0032"` → 32). If no digits were read, then the integer is 0. Change the sign as necessary (from step 2).
+5. **If the integer is out of the 32-bit signed integer range** $[-2^{31}, 2^{31} - 1]$, then clamp the integer so that it remains in the range. Specifically, integers less than $-2^{31}$ should be clamped to $-2^{31}$, and integers greater than $2^{31} - 1$ should be clamped to $2^{31} - 1$.
+6. **Return the integer as the final result.**
+
+**Note:**
+- Only the space character `' '` is considered a whitespace character.
+- **Do not ignore** any characters other than the leading whitespace or the rest of the string after the digits.
+
+### Examples
+
+```
+Input: s = "42"
+Output: 42
+Explanation: The underlined characters are what is read in, the caret is the current reader position.
+Step 1: "42" (no characters read because there is no leading whitespace)
+Step 2: "42" (no characters read because there is neither a '-' nor '+')
+Step 3: "42" ("42" is read in)
+The parsed integer is 42.
+Since 42 is in the range [-2^31, 2^31 - 1], the final result is 42.
+
+Input: s = "   -42"
+Output: -42
+Explanation:
+Step 1: "   -42" (leading whitespace is read and ignored)
+Step 2: "   -42" ('-' is read, so the result should be negative)
+Step 3: "   -42" ("42" is read in)
+The parsed integer is -42.
+Since -42 is in the range [-2^31, 2^31 - 1], the final result is -42.
+
+Input: s = "4193 with words"
+Output: 4193
+Explanation:
+Step 1: "4193 with words" (no characters read because there is no leading whitespace)
+Step 2: "4193 with words" (no characters read because there is neither a '-' nor '+')
+Step 3: "4193 with words" ("4193" is read in; reading stops because the next character is a non-digit)
+The parsed integer is 4193.
+Since 4193 is in the range [-2^31, 2^31 - 1], the final result is 4193.
+
+Input: s = "words and 987"
+Output: 0
+Explanation:
+Step 1: "words and 987" (no characters read because there is no leading whitespace)
+Step 2: "words and 987" (no characters read because there is neither a '-' nor '+')
+Step 3: "words and 987" (reading stops immediately because there is a non-digit 'w')
+The parsed integer is 0 because no digits were read.
+Since 0 is in the range [-2^31, 2^31 - 1], the final result is 0.
+
+Input: s = "-91283472332"
+Output: -2147483648
+Explanation:
+Step 1: "-91283472332" (no characters read because there is no leading whitespace)
+Step 2: "-91283472332" ('-' is read, so the result should be negative)
+Step 3: "-91283472332" ("91283472332" is read in)
+The parsed integer is -91283472332.
+Since -91283472332 is less than the lower bound of the range [-2^31, 2^31 - 1], the final result is clamped to -2^31 = -2147483648.
+```
+
+### Constraints
+
+- $0 \le$ s.length $\le$ 200
+- `s` consists of English letters (lower-case and upper-case), digits (0-9), `' '`, `'+'`, `'-'`, and `'.'`
+
+### Solution - Character-by-Character Parsing
+
+#### Walkthrough
+
+This solution implements a straightforward character-by-character parsing approach to convert a string to an integer following the `atoi` specification. The algorithm uses a **state machine-like pattern** with boolean flags to track the parsing state.
+
+**Core Strategy:**
+
+The solution handles the conversion in a single pass through the trimmed string, maintaining two critical pieces of state:
+- `isStart`: Whether we've begun reading the number (either by seeing a sign or a digit)
+- `isNegative`: Whether the number should be negative
+
+**Key Design Decisions:**
+
+1. **Use `long` for overflow detection**: By using `long result`, we can safely build the number and detect when it exceeds `Integer.MAX_VALUE` before clamping
+2. **Trim first**: Calling `s.trim()` eliminates all leading and trailing whitespace in one operation
+3. **Conditional logic flow**: The series of if-else blocks creates a priority-based state machine
+
+**Step-by-Step Algorithm:**
+
+After trimming, for each character we check (in priority order):
+
+1. **Is it a digit?** → Build the result, set `isStart = true`
+2. **Is it a '-' sign?** → Only valid if `!isStart`, sets `isNegative = true` and `isStart = true`
+3. **Is it a '+' sign?** → Only valid if `!isStart`, sets `isNegative = false` and `isStart = true`
+4. **Is it a space or dot?** → Immediately break (stops parsing)
+5. **Is `isStart` already true?** → Non-digit after digits, break
+6. **Otherwise** → Invalid leading character (like 'w' in "words and 987"), break
+
+**Why This Works:**
+
+The key insight is that after `trim()`, the string has NO leading/trailing spaces. So:
+- Any space encountered during iteration is a **mid-string space** that should stop parsing
+- The sign checks prevent multiple signs like `"+-12"` or signs after digits like `"12-3"`
+- The final `else` block catches invalid leading characters before any digits are read
+
+**Visual Example: `s = "4193 with words"`**
+
+```
+After trim: "4193 with words"
+
+Iteration 1: c='4'
+  isDigit? YES → result = 0*10 + 4 = 4, isStart = true
+
+Iteration 2: c='1'
+  isDigit? YES → result = 4*10 + 1 = 41
+
+Iteration 3: c='9'
+  isDigit? YES → result = 41*10 + 9 = 419
+
+Iteration 4: c='3'
+  isDigit? YES → result = 419*10 + 3 = 4193
+
+Iteration 5: c=' '
+  isDigit? NO
+  c=='-'? NO
+  c=='+'? NO
+  c==' ' || c=='.'? YES → break
+
+Final: result = 4193, isNegative = false
+Return: 4193 ✓
+```
+
+**Visual Example: `s = "words and 987"`**
+
+```
+After trim: "words and 987"
+
+Iteration 1: c='w'
+  isDigit? NO
+  c=='-'? NO
+  c=='+'? NO
+  c==' ' || c=='.'? NO
+  isStart? NO (still false)
+  else → break (invalid leading character)
+
+Final: result = 0, isNegative = false
+Return: 0 ✓
+```
+
+**Visual Example: `s = "   -42"`**
+
+```
+After trim: "-42"
+
+Iteration 1: c='-'
+  isDigit? NO
+  c=='-'? YES
+    isStart? NO → isNegative = true, isStart = true
+
+Iteration 2: c='4'
+  isDigit? YES → result = 0*10 + 4 = 4, isStart = true
+
+Iteration 3: c='2'
+  isDigit? YES → result = 4*10 + 2 = 42
+
+Final: result = 42, isNegative = true
+Return: 42 * -1 = -42 ✓
+```
+
+**Visual Example: `s = "-91283472332"` (Overflow)**
+
+```
+After trim: "-91283472332"
+
+Iteration 1: c='-'
+  c=='-'? YES → isNegative = true, isStart = true
+
+Iterations 2-12: Build result digit by digit
+  result = 9 → 91 → 912 → 9128 → 91283 → 912834 → 9128347 → 91283472 → 912834723 → 9128347233 → 91283472332
+
+  After iteration 12: result = 91283472332 > Integer.MAX_VALUE (2147483647)
+
+Final overflow check:
+  result > Integer.MAX_VALUE? YES
+  isNegative? YES → return Integer.MIN_VALUE = -2147483648 ✓
+```
+
+**Edge Cases Handled:**
+
+1. **Leading whitespace**: `"   42"` → trim removes spaces → `"42"` → 42 ✓
+2. **Sign only**: `"-"` → sign sets `isStart=true`, no digits read → result=0 → 0 ✓
+3. **Multiple signs**: `"+-12"` → '+' sets `isStart=true`, '-' sees `isStart=true` → breaks → result=0 → 0 ✓
+4. **Dot character**: `"3.14"` → reads '3', encounters '.' → breaks → 3 ✓
+5. **Sign after digits**: `"12-3"` → reads "12", encounters '-' with `isStart=true` → breaks → 12 ✓
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the length of the string
+  - `trim()`: O(n) to scan for leading/trailing whitespace
+  - Single pass through characters: O(n)
+  - Each character is processed once with O(1) operations
+  - Total: O(n)
+
+- **Space Complexity**: O(n) for the trimmed string, or O(1) if we don't count the trimmed string
+  - `s.trim()` creates a new string: O(n)
+  - All other variables (result, flags): O(1)
+  - If we avoid `trim()` and handle whitespace in the loop, space becomes O(1)
+
+#### Implementation Steps
+
+1. **Initialize state variables:**
+   - `long result = 0` to safely detect overflow
+   - `boolean isStart = false` to track if we've begun reading the number
+   - `boolean isNegative = false` to track sign
+
+2. **Trim the input string** using `s.trim()` to remove leading/trailing whitespace
+
+3. **Iterate through each character** in the trimmed string:
+   - **If digit**:
+     - Check for overflow before updating (early exit optimization)
+     - Set `isStart = true`
+     - Update `result = result * 10 + (c - '0')`
+   - **Else if '-' sign**:
+     - If `isStart` is already true, break (sign after digits/sign)
+     - Otherwise, set `isNegative = true` and `isStart = true`
+   - **Else if '+' sign**:
+     - If `isStart` is already true, break (sign after digits/sign)
+     - Otherwise, set `isNegative = false` and `isStart = true`
+   - **Else if space or dot**:
+     - Break immediately (stops parsing)
+   - **Else if `isStart` is true**:
+     - Non-digit character after reading digits, break
+   - **Else**:
+     - Invalid leading character before any digits, break
+
+4. **Handle overflow after the loop:**
+   - If `result > Integer.MAX_VALUE`:
+     - Return `Integer.MIN_VALUE` if negative
+     - Return `Integer.MAX_VALUE` if positive
+
+5. **Apply sign and return:**
+   - If `isNegative`, return `(int) result * -1`
+   - Otherwise, return `(int) result`
+
+#### Code - Java
+
+```java
+public int myAtoi(String s) {
+    long result = 0;
+    boolean isStart = false;
+    boolean isNegative = false;
+
+    // Trim the leading and trailing whitespace
+    s = s.trim();
+
+    for (char c : s.toCharArray()) {
+        if (Character.isDigit(c)) {
+            // Check for overflow before multiplication
+            if (result > Integer.MAX_VALUE) {
+                break;
+            }
+
+            isStart = true;
+            result = result * 10 + (c - '0');
+        } else if (c == '-') {
+            if (isStart) {
+                break;  // Sign after digits or another sign
+            } else {
+                isNegative = true;
+                isStart = true;
+            }
+        } else if (c == '+') {
+            if (isStart) {
+                break;  // Sign after digits or another sign
+            } else {
+                isNegative = false;
+                isStart = true;
+            }
+        } else if (c == ' ' || c == '.') {
+            // Break once it reads a non-leading whitespace or dot
+            break;
+        } else if (isStart) {
+            // Reading ends after some digits were read
+            break;
+        } else {
+            // Invalid leading character (e.g., 'w' in "words and 987")
+            break;
+        }
+    }
+
+    // Clamp to 32-bit signed integer range
+    if (result > Integer.MAX_VALUE) {
+        if (isNegative) {
+            return Integer.MIN_VALUE;
+        } else {
+            return Integer.MAX_VALUE;
+        }
+    }
+
+    if (isNegative) {
+        return (int) result * -1;
+    } else {
+        return (int) result;
+    }
+}
+```
+
+
 ## Longest Common Prefix {#lc-longest-common-prefix}
 
 ### Problem Metadata
