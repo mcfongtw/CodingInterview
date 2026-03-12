@@ -115,6 +115,164 @@ public int reverse(int x) {
 ```
 
 
+## Number of 1 Bits {#lc-number-of-1-bits}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 191
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/number-of-1-bits/
+- **Tags**: NeetCode 150
+- **Techniques**: [Bit Manipulation](glossary-of-algorithm.html#glossary-bit-manipulation)
+
+### Description
+
+Write a function that takes the binary representation of a positive integer and returns the number of set bits it has (also known as the Hamming weight).
+
+A set bit refers to a bit in the binary representation of a number that has a value of 1.
+
+**Note**: In some languages, such as Java, there is no unsigned integer type. In such cases, the input will be given as a signed integer type. It should not affect your implementation, as the integer's internal binary representation is the same, whether it is signed or unsigned.
+
+### Examples
+
+```
+Input: n = 11
+Output: 3
+Explanation: The binary representation of 11 is 00000000000000000000000000001011, which has three set bits.
+
+Input: n = 128
+Output: 1
+Explanation: The binary representation of 128 is 00000000000000000000000010000000, which has one set bit.
+
+Input: n = 2147483645
+Output: 30
+Explanation: The binary representation of 2147483645 is 01111111111111111111111111111101, which has thirty set bits.
+```
+
+### Constraints
+
+- $1 \le n \le 2^{31} - 1$
+
+### Solution 1 - Digit Extraction with Modulo
+
+#### Walkthrough
+
+Extract each bit from right to left using modulo 2 and division. The modulo operation `n % 2` gives us the rightmost bit (either 0 or 1), and dividing by 2 (`n / 2`) effectively shifts the bits right, removing the processed bit. Count each time we encounter a 1.
+
+This approach treats the binary number like a base-2 decimal number, extracting "digits" one at a time.
+
+**Example: n = 11 (binary: 1011)**
+```
+n = 11, result = 0
+Iteration 1: residue = 1, n = 5, result = 1
+Iteration 2: residue = 1, n = 2, result = 2
+Iteration 3: residue = 0, n = 1, result = 2
+Iteration 4: residue = 1, n = 0, result = 3
+Output: 3
+```
+
+**Example: n = 128 (binary: 10000000)**
+```
+n = 128, result = 0
+Iteration 1: residue = 0, n = 64, result = 0
+Iteration 2: residue = 0, n = 32, result = 0
+Iteration 3: residue = 0, n = 16, result = 0
+Iteration 4: residue = 0, n = 8, result = 0
+Iteration 5: residue = 0, n = 4, result = 0
+Iteration 6: residue = 0, n = 2, result = 0
+Iteration 7: residue = 0, n = 1, result = 0
+Iteration 8: residue = 1, n = 0, result = 1
+Output: 1
+```
+
+#### Analysis
+
+- **Time Complexity**: O(log n) or O(32) for 32-bit integers - we process each bit position once
+- **Space Complexity**: O(1) - only use constant extra space
+
+#### Implementation Steps
+
+1. Initialize `result = 0` to count set bits.
+2. While n is greater than 0:
+   - Extract the rightmost bit using `n % 2`.
+   - If the bit is 1, increment `result`.
+   - Remove the rightmost bit by dividing n by 2 (integer division).
+3. Return `result`.
+
+#### Code - Java
+
+```java
+public int hammingWeight(int n) {
+    int result = 0;
+    int residue = 0;
+
+    while(n > 0) {
+        residue = n % 2;
+        n = n / 2;
+
+        if(residue == 1)
+            result++;
+    }
+
+    return result;
+}
+```
+
+
+### Solution 2 - Brian Kernighan's Algorithm
+
+#### Walkthrough
+
+Use the bit manipulation trick `n & (n - 1)` which removes the rightmost set bit in each iteration. This is more efficient because we only iterate as many times as there are set bits, rather than processing all bit positions.
+
+**How `n & (n - 1)` works:**
+- Subtracting 1 from n flips all bits after the rightmost 1 (including the 1 itself)
+- ANDing with the original n clears the rightmost 1
+
+**Example: n = 11 (binary: 1011)**
+```
+n = 1011, result = 0
+Iteration 1: n & (n-1) = 1011 & 1010 = 1010, result = 1
+Iteration 2: n & (n-1) = 1010 & 1001 = 1000, result = 2
+Iteration 3: n & (n-1) = 1000 & 0111 = 0000, result = 3
+Output: 3
+```
+
+**Example: n = 128 (binary: 10000000)**
+```
+n = 10000000, result = 0
+Iteration 1: n & (n-1) = 10000000 & 01111111 = 00000000, result = 1
+Output: 1
+```
+
+#### Analysis
+
+- **Time Complexity**: O(k) where k is the number of set bits - best case O(1) for sparse numbers, worst case O(32) for numbers with many 1s
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+1. Initialize `result = 0`.
+2. While n is not zero:
+   - Apply `n &= (n - 1)` to remove the rightmost set bit.
+   - Increment `result`.
+3. Return `result`.
+
+#### Code - Java
+
+```java
+public int hammingWeight(int n) {
+    int result = 0;
+    while(n != 0) {
+        n &= (n - 1);  // Remove the rightmost 1 bit
+        result++;
+    }
+    return result;
+}
+```
+
+
 ## Pow(x, n) {#lc-pow-x-n}
 
 ### Problem Metadata
@@ -185,6 +343,280 @@ private double fastPow(double x, long n) {
         return half * half;
     }
     return half * half * x;
+}
+```
+
+
+## Reverse Bits {#lc-reverse-bits}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 190
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/reverse-bits/
+- **Tags**: Grind 75, Blind 75, NeetCode 150
+- **Techniques**: [Bit Manipulation](glossary-of-algorithm.html#glossary-bit-manipulation)
+
+### Description
+
+Reverse bits of a given 32-bit unsigned integer.
+
+**Note**: In some languages, such as Java, there is no unsigned integer type. In this case, both input and output will be given as a signed integer type. This should not affect your implementation, as the integer's internal binary representation is the same, whether it is signed or unsigned.
+
+### Examples
+
+```
+Input: n = 43261596 (00000010100101000001111010011100)
+Output: 964176192 (00111001011110000010100101000000)
+Explanation: The input binary string 00000010100101000001111010011100 represents the unsigned integer 43261596, so return 964176192 which its binary representation is 00111001011110000010100101000000.
+
+Input: n = 4294967293 (11111111111111111111111111111101)
+Output: 3221225471 (10111111111111111111111111111111)
+Explanation: The input binary string 11111111111111111111111111111101 represents the unsigned integer 4294967293, so return 3221225471 which its binary representation is 10111111111111111111111111111111.
+```
+
+### Constraints
+
+- The input must be a binary string of length 32
+
+### Follow-up
+
+If this function is called many times, how would you optimize it?
+
+### Solution 1 - String Reversal
+
+#### Walkthrough
+
+Convert the integer to its binary string representation, pad it to 32 bits with leading zeros, reverse the string character by character, and parse it back to an integer. This approach is straightforward but less efficient due to string operations.
+
+The key steps are:
+1. Convert to binary string (Java's `Integer.toBinaryString()` omits leading zeros)
+2. Pad with leading zeros to ensure 32-bit length
+3. Reverse the string by prepending each character
+4. Parse the reversed binary string back to an integer
+
+**Example: n = 43261596**
+```
+Binary: "10100101000001111010011100" (26 bits)
+After padding: "00000010100101000001111010011100" (32 bits)
+After reversal: "00111001011110000010100101000000"
+Result: 964176192
+```
+
+#### Analysis
+
+- **Time Complexity**: O(1) - always processes exactly 32 characters
+- **Space Complexity**: O(1) - stores a 32-character string
+
+#### Implementation Steps
+
+1. Convert the integer `n` to binary string using `Integer.toBinaryString(n)`.
+2. Calculate padding length needed: `32 - original string length`.
+3. Prepend zeros to make the string exactly 32 bits long.
+4. Reverse the string by iterating through each character and prepending to a new string.
+5. Parse the reversed binary string to integer using `Integer.parseInt(reversed, 2)`.
+6. Return the result.
+
+#### Code - Java
+
+```java
+public int reverseBits(int n) {
+    int result = 0;
+
+    String orig = Integer.toBinaryString(n);
+    int padLen = 32 - orig.length();
+
+    // Pad leading 0s
+    for(int i = 0; i < padLen; i++) {
+        orig = "0" + orig;
+    }
+
+    String reversed = "";
+
+    for(char c : orig.toCharArray()) {
+        reversed = c + reversed;
+    }
+
+    result = Integer.parseInt(reversed, 2);
+
+    return result;
+}
+```
+
+
+### Solution 2 - Bit-by-Bit Reversal (Optimal)
+
+#### Walkthrough
+
+Process each of the 32 bits from right to left in the input number, building the result by placing each bit in the reversed position. Use bitwise operations to extract bits from the input and insert them into the result.
+
+The algorithm works as follows:
+- Extract the least significant bit (LSB) from `n` using `n & 1`
+- Shift `result` left by 1 to make room for the new bit
+- Insert the extracted bit into `result` using OR operation
+- Shift `n` right by 1 to process the next bit
+- Repeat 32 times
+
+**Visual Example 1: n = 43261596**
+
+Input:  `00000010100101000001111010011100` (43261596)
+Output: `00111001011110000010100101000000` (964176192)
+
+Let's trace key iterations to see how bits are reversed:
+
+```
+Initial state:
+n      = 00000010100101000001111010011100 (43261596)
+result = 00000000000000000000000000000000 (0)
+
+Iteration 1: Extract rightmost bit (0)
+  n & 1        = 0
+  result << 1  = 00000000000000000000000000000000
+  result | bit = 00000000000000000000000000000000
+  n >> 1       = 00000001010010100000111101001110
+  → result = 0
+
+Iteration 2: Extract bit (0)
+  n & 1        = 0
+  result << 1  = 00000000000000000000000000000000
+  result | bit = 00000000000000000000000000000000
+  n >> 1       = 00000000101001010000011110100111
+  → result = 00
+
+Iteration 3: Extract bit (1)
+  n & 1        = 1
+  result << 1  = 00000000000000000000000000000000
+  result | bit = 00000000000000000000000000000001
+  n >> 1       = 00000000010100101000001111010011
+  → result = 001
+
+Iteration 4: Extract bit (1)
+  n & 1        = 1
+  result << 1  = 00000000000000000000000000000010
+  result | bit = 00000000000000000000000000000011
+  n >> 1       = 00000000001010010100000111101001
+  → result = 0011
+
+Iteration 5: Extract bit (1)
+  n & 1        = 1
+  result << 1  = 00000000000000000000000000000110
+  result | bit = 00000000000000000000000000000111
+  n >> 1       = 00000000000101001010000011110100
+  → result = 00111
+
+... (iterations 6-30 continue building the reversed pattern) ...
+
+Iteration 31: Extract bit (0)
+  n & 1        = 0
+  result << 1  = 01110010111100000101001010000000
+  result | bit = 01110010111100000101001010000000
+  n >> 1       = 00000000000000000000000000000000
+  → result = 01110010111100000101001010000000
+
+Iteration 32: Extract bit (0) - leftmost bit of original
+  n & 1        = 0
+  result << 1  = 11100101111000001010010100000000
+  result | bit = 00111001011110000010100101000000
+  n >> 1       = 00000000000000000000000000000000
+  → result = 00111001011110000010100101000000
+
+Final state:
+n      = 00000000000000000000000000000000 (0)
+result = 00111001011110000010100101000000 (964176192)
+```
+
+**Visual Example 2: n = 2147483644**
+
+Input:  `01111111111111111111111111111100` (2147483644)
+Output: `00111111111111111111111111111110` (1073741822)
+
+This example shows a pattern with mostly 1s being reversed:
+
+```
+Initial state:
+n      = 01111111111111111111111111111100 (2147483644)
+result = 00000000000000000000000000000000 (0)
+
+Iteration 1: Extract rightmost bit (0)
+  n & 1        = 0
+  result << 1  = 00000000000000000000000000000000
+  result | bit = 00000000000000000000000000000000
+  n >> 1       = 00111111111111111111111111111110
+  → result = 0
+
+Iteration 2: Extract bit (0)
+  n & 1        = 0
+  result << 1  = 00000000000000000000000000000000
+  result | bit = 00000000000000000000000000000000
+  n >> 1       = 00011111111111111111111111111111
+  → result = 00
+
+Iteration 3: Extract bit (1)
+  n & 1        = 1
+  result << 1  = 00000000000000000000000000000000
+  result | bit = 00000000000000000000000000000001
+  n >> 1       = 00001111111111111111111111111111
+  → result = 001
+
+Iterations 4-31: All extract bit (1)
+  Each iteration shifts result left and ORs with 1
+  → result builds up: 0011, 00111, 001111, ..., 0011111111111111111111111111111
+
+Iteration 32: Extract bit (0) - leftmost bit of original
+  n & 1        = 0
+  result << 1  = 01111111111111111111111111111110
+  result | bit = 00111111111111111111111111111110
+  n >> 1       = 00000000000000000000000000000000
+  → result = 00111111111111111111111111111110
+
+Final state:
+n      = 00000000000000000000000000000000 (0)
+result = 00111111111111111111111111111110 (1073741822)
+
+Pattern observation:
+Original: 01111111111111111111111111111100
+          └─┬─┘└──────────┬────────────┘└┬┘
+            0    (30 ones)               00
+Reversed: 00111111111111111111111111111110
+          └┬┘└──────────┬────────────┘└─┬─┘
+           00   (30 ones)                0
+```
+
+**Key Insight**: Each bit from the right side of `n` gets placed on the left side of `result`. The rightmost bit of `n` becomes the leftmost bit of `result`, the second-rightmost becomes the second-leftmost, and so on. The algorithm processes bits in reverse order naturally by extracting from the right and building from the left.
+
+#### Analysis
+
+- **Time Complexity**: O(1) - always performs exactly 32 iterations
+- **Space Complexity**: O(1) - uses only constant extra variables
+
+#### Implementation Steps
+
+1. Initialize `result = 0` to store the reversed bits.
+2. Loop 32 times (once for each bit position):
+   - Shift `result` left by 1 bit to make room for the next bit.
+   - Extract the least significant bit from `n` using `n & 1`.
+   - Insert the extracted bit into `result` using `result | bit`.
+   - Shift `n` right by 1 bit to process the next bit.
+3. Return `result`.
+
+#### Code - Java
+
+```java
+public int reverseBits(int n) {
+    int result = 0;
+
+    for(int i = 0; i < 32; i++) {
+        result = result << 1;
+
+        int bit = n & 0b01;
+        result = result | bit;
+
+        // Shift the input number to the right to process the next bit
+        n = n >> 1;
+    }
+
+    return result;
 }
 ```
 
