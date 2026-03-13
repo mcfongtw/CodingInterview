@@ -69,6 +69,296 @@ public int longestValidParentheses(String s) {
 }
 ```
 
+
+## Evaluate Reverse Polish Notation {#lc-evaluate-reverse-polish-notation}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 150
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/evaluate-reverse-polish-notation/
+- **Tags**: Grind 75
+- **Techniques**: [Stack](glossary-of-algorithm.html#glossary-stack), String, Math
+
+### Description
+
+You are given an array of strings `tokens` that represents an arithmetic expression in **Reverse Polish Notation** (RPN).
+
+Evaluate the expression and return an integer that represents the value of the expression.
+
+**Note that:**
+
+- The valid operators are `'+'`, `'-'`, `'*'`, and `'/'`.
+- Each operand may be an integer or another expression.
+- The division between two integers always **truncates toward zero**.
+- There will not be any division by zero.
+- The input represents a valid arithmetic expression in reverse polish notation.
+- The answer and all intermediate calculations can be represented in a **32-bit integer**.
+
+### Examples
+
+**Example 1:**
+```
+Input: tokens = ["2","1","+","3","*"]
+Output: 9
+Explanation: ((2 + 1) * 3) = 9
+```
+
+**Example 2:**
+```
+Input: tokens = ["4","13","5","/","+"]
+Output: 6
+Explanation: (4 + (13 / 5)) = 6
+```
+
+**Example 3:**
+```
+Input: tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+Output: 22
+Explanation: ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
+= ((10 * (6 / (12 * -11))) + 17) + 5
+= ((10 * (6 / -132)) + 17) + 5
+= ((10 * 0) + 17) + 5
+= (0 + 17) + 5
+= 22
+```
+
+### Constraints
+
+- $1 \le$ tokens.length $\le$ $10^4$
+- `tokens[i]` is either an operator: `"+"`, `"-"`, `"*"`, or `"/"`, or an integer in the range `[-200, 200]`
+
+### Solution - Stack
+
+#### Walkthrough
+
+This problem is a classic application of **stack-based expression evaluation**. The key insight is that Reverse Polish Notation (RPN) is designed to be evaluated efficiently using a stack without needing parentheses or operator precedence rules.
+
+**What is Reverse Polish Notation?**
+
+RPN (also called postfix notation) places operators **after** their operands, unlike the familiar infix notation where operators appear between operands:
+
+- **Infix**: `(2 + 1) * 3`
+- **RPN (Postfix)**: `2 1 + 3 *`
+
+**Why RPN is Perfect for Stacks:**
+
+1. **No ambiguity**: Every operator immediately follows its operands
+2. **No precedence rules needed**: Evaluation order is explicit in the token sequence
+3. **Natural LIFO processing**: When we encounter an operator, its operands are the most recent values (top of stack)
+
+**Core Algorithm:**
+
+The evaluation strategy is simple:
+- **Operand**: Push it onto the stack
+- **Operator**: Pop two operands, apply the operation, push the result back
+
+**Critical Detail - Operand Order Matters:**
+
+When popping operands for non-commutative operations (subtraction, division), **order is crucial**:
+```java
+num2 = stack.pop();  // Second operand (most recent)
+num1 = stack.pop();  // First operand (earlier)
+result = num1 - num2; // Correct: first - second
+```
+
+**Why?** In RPN `5 3 -`, we push 5, then 3. Stack looks like `[5, 3]` with 3 on top. When we pop:
+- First pop gives 3 (second operand)
+- Second pop gives 5 (first operand)
+- Correct: `5 - 3 = 2`, not `3 - 5 = -2`
+
+**Visual Example: `["2","1","+","3","*"]` → `((2 + 1) * 3) = 9`**
+
+```
+Token   Action                Stack State       Explanation
+--------------------------------------------------------------------
+"2"     Push 2                [2]               Operand, push it
+"1"     Push 1                [2, 1]            Operand, push it
+"+"     Pop 1, pop 2          []                Operator detected
+        Compute 2 + 1 = 3
+        Push 3                [3]               Push result back
+"3"     Push 3                [3, 3]            Operand, push it
+"*"     Pop 3, pop 3          []                Operator detected
+        Compute 3 * 3 = 9
+        Push 9                [9]               Push result back
+
+Final result: 9 ✓
+```
+
+**Visual Example: `["4","13","5","/","+"]` → `(4 + (13 / 5)) = 6`**
+
+```
+Token   Action                Stack State       Explanation
+--------------------------------------------------------------------
+"4"     Push 4                [4]               Operand, push it
+"13"    Push 13               [4, 13]           Operand, push it
+"5"     Push 5                [4, 13, 5]        Operand, push it
+"/"     Pop 5, pop 13         [4]               Division: 13 / 5
+        Compute 13 / 5 = 2                      Integer division truncates
+        Push 2                [4, 2]            Push result back
+"+"     Pop 2, pop 4          []                Addition: 4 + 2
+        Compute 4 + 2 = 6
+        Push 6                [6]               Push result back
+
+Final result: 6 ✓
+```
+
+**Edge Case Handling:**
+
+1. **Negative numbers**: Token `"-11"` has length > 1, so it's parsed as an operand, not the minus operator
+2. **Single operand**: If input is `["42"]`, we never hit an operator, just return the single stack element
+3. **Division truncation**: Java's `/` operator automatically truncates toward zero for integers
+
+**Helper Method Strategy:**
+
+The `isOperator()` method uses a clever trick:
+```java
+token.length() == 1 && token.equals("+/-/*/÷")
+```
+
+This distinguishes:
+- `"-"` (length 1) → operator
+- `"-11"` (length 3) → negative number operand
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the number of tokens
+  - Single pass through all tokens
+  - Each stack operation (push/pop) is O(1)
+  - Total: O(n)
+
+- **Space Complexity**: O(n) worst case
+  - Stack can hold up to n/2 operands when all operands appear before operators
+  - Example: `["1","2","3","4","+","+","+"]` builds stack to `[1,2,3,4]` before any operations
+  - Total: O(n)
+
+#### Implementation Steps
+
+1. **Initialize a stack** to store integer operands and intermediate results
+
+2. **Iterate through each token** in the input array:
+   - **If token is an operand** (checked by `isOperator()` returning false):
+     - Parse the string to an integer using `Integer.parseInt()`
+     - Push the integer onto the stack
+   - **If token is an operator** (`+`, `-`, `*`, `/`):
+     - Pop the top element as `num2` (second operand)
+     - Pop the next element as `num1` (first operand)
+     - Apply the operation: `num1 operator num2`
+     - Push the result back onto the stack
+
+3. **Helper method `isOperator()`**:
+   - Return true if token has length 1 and matches one of the four operators
+   - This correctly distinguishes operators from negative numbers
+
+4. **Return the final result**: After processing all tokens, the stack contains exactly one element—the final answer
+
+#### Code - Java
+
+```java
+class Solution {
+    public int evalRPN(String[] tokens) {
+        Stack<Integer> stack = new Stack<>();
+
+        for (String token : tokens) {
+            if (isOperator(token)) {
+                // CRITICAL: Pop order matters for non-commutative operations
+                int num2 = stack.pop();  // Second operand (top of stack)
+                int num1 = stack.pop();  // First operand (below top)
+
+                // Use switch expression for cleaner operator handling
+                int result = switch(token) {
+                    case "+" -> num1 + num2;
+                    case "-" -> num1 - num2;
+                    case "*" -> num1 * num2;
+                    case "/" -> num1 / num2;  // Integer division truncates toward zero
+                    default -> throw new IllegalArgumentException("Invalid operator: " + token);
+                };
+
+                stack.push(result);
+            } else {
+                // Parse operand (handles negative numbers correctly)
+                stack.push(Integer.parseInt(token));
+            }
+        }
+
+        return stack.pop();
+    }
+
+    private boolean isOperator(String token) {
+        // Length check distinguishes "-" (operator) from "-11" (negative number)
+        return token.length() == 1 && (
+            token.equals("+") ||
+            token.equals("-") ||
+            token.equals("*") ||
+            token.equals("/")
+        );
+    }
+}
+```
+
+#### Code - Go
+
+```go
+import (
+    "strconv"
+)
+
+func evalRPN(tokens []string) int {
+    stack := []int{}
+
+    for _, token := range tokens {
+        // Check if token is an operator
+        if len(token) == 1 && (token == "+" || token == "-" || token == "*" || token == "/") {
+            // Pop two operands (order matters for - and /)
+            num2 := pop(&stack)  // Second operand (top of stack)
+            num1 := pop(&stack)  // First operand (below top)
+
+            // Apply operation and push result
+            var result int
+            switch token {
+            case "+":
+                result = num1 + num2
+            case "-":
+                result = num1 - num2
+            case "*":
+                result = num1 * num2
+            case "/":
+                result = num1 / num2  // Integer division truncates toward zero
+            }
+            push(&stack, result)
+        } else {
+            // Parse operand (handles negative numbers like "-11")
+            num, _ := strconv.Atoi(token)
+            push(&stack, num)
+        }
+    }
+
+    return pop(&stack)
+}
+
+// Helper: push element onto stack
+func push(stack *[]int, num int) {
+    *stack = append(*stack, num)
+}
+
+// Helper: pop element from stack
+func pop(stack *[]int) int {
+    length := len(*stack)
+    num := (*stack)[length-1]
+    *stack = (*stack)[:length-1]
+    return num
+}
+```
+
+**Go-Specific Notes:**
+
+- **Slice Pointers**: Must pass `*[]int` to modify the original stack. Go slices are reference types, but the slice header is passed by value, so modifications inside functions won't affect the caller unless you use a pointer.
+- **No Break Needed**: Unlike C/Java, Go switch cases don't fall through by default.
+- **Integer Division**: Go's `/` operator truncates toward zero, same as Java.
+- **Error Handling**: For LeetCode, we skip error checks since input is guaranteed valid. In production, add bounds checking in `pop()`.
+
+
 ## Min Stack {#lc-min-stack}
 
 ### Problem Metadata
