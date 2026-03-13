@@ -2318,6 +2318,394 @@ class Solution {
 }
 ```
 
+
+## 01 Matrix {#lc-01-matrix}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 542
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/01-matrix/
+- **Tags**:
+- **Techniques**: [Breadth First Search](glossary-of-algorithm.html#glossary-bfs), [Matrix](glossary-of-algorithm.html#glossary-matrix-manipulation), Multi-Source BFS
+
+### Description
+
+Given an `m x n` binary matrix `mat`, return the distance of the nearest `0` for each cell.
+
+The distance between two adjacent cells is `1`.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: mat = [[0,0,0],
+              [0,1,0],
+              [0,0,0]]
+Output: [[0,0,0],
+         [0,1,0],
+         [0,0,0]]
+```
+
+**Example 2:**
+
+```
+Input: mat = [[0,0,0],
+              [0,1,0],
+              [1,1,1]]
+Output: [[0,0,0],
+         [0,1,0],
+         [1,2,1]]
+```
+
+### Constraints
+
+- `m == mat.length`
+- `n == mat[i].length`
+- `1 <= m, n <= 10^4`
+- `1 <= m * n <= 10^4`
+- `mat[i][j]` is either `0` or `1`
+- There is at least one `0` in `mat`
+
+### Solution 1 - Multi-Source BFS (Matrix Modification)
+
+#### Walkthrough
+
+This problem is nearly identical to [Walls and Gates](#lc-walls-and-gates) - both use **multi-source BFS** to find shortest distances from multiple starting points simultaneously.
+
+**Key Insight:**
+
+Instead of starting from each cell with `1` and searching for the nearest `0` (which would require running BFS for every `1` cell), we **reverse the problem**: start from all `0` cells simultaneously and propagate distances outward.
+
+**Why this works:**
+
+- Every cell with `0` already has distance = 0 (distance to itself)
+- These are our **multiple sources** for BFS
+- As we spread outward level-by-level, each `1` cell is first reached by its nearest `0`
+- BFS guarantees shortest path, so the first time we reach a cell is optimal
+
+**Algorithm Flow:**
+
+1. **Initialization**: Add all cells with `0` to the queue (these are our sources)
+2. **BFS Propagation**: Process cells level-by-level
+   - Distance 1: All cells adjacent to any `0`
+   - Distance 2: All cells 2 steps from nearest `0`
+   - Continue until all `1` cells are reached
+3. **State Tracking**: Modify the matrix itself to track visited cells (change `1` to `0`)
+
+**How matrix modification works:**
+
+- A cell can propagate to neighbors only if `matrix[currX][currY] == 0`
+- When we visit a `1` cell, we change it to `0`: `matrix[nextX][nextY] = 0`
+- This serves dual purpose:
+  1. Marks the cell as visited (prevents revisiting)
+  2. Enables that cell to propagate in the next round (now it's a `0`)
+
+**Visual Example:**
+
+For `mat = [[0,0,0],[0,1,0],[1,1,1]]`:
+
+```
+Initial state:
+Matrix: [[0, 0, 0],     Queue: [(0,0), (0,1), (0,2), (1,0), (1,2)]
+         [0, 1, 0],     Distance: 1
+         [1, 1, 1]]
+
+Round 1: Process all original 0s
+  (0,1) → neighbor (1,1) is 1
+    Change matrix[1][1] = 0, assign dist[1][1] = 1
+  (1,0) → neighbor (2,0) is 1
+    Change matrix[2][0] = 0, assign dist[2][0] = 1
+  (1,2) → neighbor (2,2) is 1
+    Change matrix[2][2] = 0, assign dist[2][2] = 1
+
+After Round 1:
+Matrix: [[0, 0, 0],     Queue: [(1,1), (2,0), (2,2)]
+         [0, 0, 0],     Distance: 2
+         [0, 1, 0]]
+
+Round 2: Process newly-changed 0s
+  (1,1) → neighbor (2,1) is 1
+    Change matrix[2][1] = 0, assign dist[2][1] = 2
+  (2,0) → no unvisited 1 neighbors
+  (2,2) → no unvisited 1 neighbors
+
+Final Result:
+Distance: [[0, 0, 0],
+           [0, 1, 0],
+           [1, 2, 1]]  ✓
+```
+
+#### Analysis
+
+- **Time Complexity**: O(m × n) where m is the number of rows and n is the number of columns. Each cell is visited at most once during the BFS traversal.
+- **Space Complexity**: O(m × n) for the queue. In the worst case, all cells are in the queue at once.
+
+**Trade-offs:**
+- ✓ **Space efficient**: No separate visited array needed
+- ✓ **Simple logic**: Single condition to check neighbors
+- ⚠️ **Modifies input**: Changes the original matrix (may not be acceptable in some contexts)
+- ⚠️ **Less conventional**: Most BFS implementations keep input immutable
+
+#### Implementation Steps
+
+1. **Initialize multi-source queue**:
+   - Scan the entire matrix
+   - Add all cells with value `0` to the queue (these are the sources)
+
+2. **BFS level-by-level traversal**:
+   - Use two queues: `currLvlQ` (current distance level) and `nextLvlQ` (next distance level)
+   - Initialize `dist = 1` (first non-zero distance)
+   - While `currLvlQ` is not empty:
+     - Poll a cell from current level queue
+     - Check all 4 neighbors (up, down, left, right)
+     - For each neighbor:
+       - Skip if out of bounds
+       - Skip if already `0` (visited or original source)
+       - If current cell is `0` AND neighbor is `1`:
+         - Change neighbor to `0` (mark as visited)
+         - Assign distance to result matrix
+         - Add neighbor to next level queue
+     - When current level exhausted, swap queues and increment distance
+
+3. **Return result matrix**
+
+#### Code - Java
+
+```java
+class Solution {
+    private static class Cell {
+        public final int x;
+        public final int y;
+
+        public Cell(int myX, int myY) {
+            this.x = myX;
+            this.y = myY;
+        }
+    }
+
+    public int[][] updateMatrix(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        int[][] result = new int[rows][cols];
+        Queue<Cell> queue = new LinkedList<>();
+
+        // Phase 1: Add all cells with 0 as multi-source starting points
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                if(matrix[i][j] == 0) {
+                    queue.offer(new Cell(i, j));
+                    // Note: result[i][j] = 0 by default initialization
+                }
+            }
+        }
+
+        bfs(matrix, result, queue);
+
+        return result;
+    }
+
+    private void bfs(int[][] matrix, int[][] zeroDist, Queue<Cell> srcQ) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        Queue<Cell> currLvlQ = srcQ;
+        Queue<Cell> nextLvlQ = new LinkedList<>();
+
+        int dist = 1;
+        int[][] dirs = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+        while(!currLvlQ.isEmpty()) {
+            Cell cell = currLvlQ.poll();
+            int currX = cell.x;
+            int currY = cell.y;
+
+            // Explore 4 neighbors (up, down, left, right)
+            for(int[] dir : dirs) {
+                int nextX = currX + dir[0];
+                int nextY = currY + dir[1];
+
+                // Skip if invalid coordinates
+                if(nextX < 0 || nextX >= rows || nextY < 0 || nextY >= cols) {
+                    continue;
+                }
+
+                // Skip if already visited (already 0)
+                // This includes both original 0s and cells we've already processed
+                if(matrix[nextX][nextY] == 0) {
+                    continue;
+                }
+
+                // Process unvisited neighbor:
+                // Only cells with value 0 can propagate (original 0s or previously processed)
+                if(matrix[currX][currY] == 0 && matrix[nextX][nextY] == 1) {
+                    // Change 1 to 0 to mark as visited AND enable next round propagation
+                    matrix[nextX][nextY] = 0;
+                    // Assign distance from nearest 0
+                    zeroDist[nextX][nextY] = dist;
+                    // Add to next level for further propagation
+                    nextLvlQ.offer(new Cell(nextX, nextY));
+                }
+            }
+
+            // Level transition: move to next distance level
+            if(currLvlQ.isEmpty()) {
+                if(!nextLvlQ.isEmpty()) {
+                    currLvlQ = nextLvlQ;
+                    nextLvlQ = new LinkedList<>();
+                    dist++;
+                }
+            }
+        }
+    }
+}
+```
+
+
+### Solution 2 - Multi-Source BFS (Visited Array - Standard)
+
+#### Walkthrough
+
+This is the **standard BFS approach** that uses a separate `visited` array to track processed cells, keeping the original matrix unchanged. The algorithm is identical to Solution 1, but with cleaner separation of concerns.
+
+**Key Differences from Solution 1:**
+
+1. **Initialization**: Mark all `0` cells as visited and set their distance to 0
+2. **State tracking**: Use `visited[i][j]` instead of modifying the matrix
+3. **Neighbor check**: Simply check `!visited[nextX][nextY]` - no matrix value checks needed
+4. **Input preservation**: Original matrix remains unchanged
+
+**Algorithm is simpler:**
+
+- No need to check `matrix[currX][currY] == 0` - every cell in queue is already valid
+- No need to check `matrix[nextX][nextY] == 1` - just check if unvisited
+- The condition reduces from `if(matrix[currX][currY] == 0 && matrix[nextX][nextY] == 1)` to just checking visited status
+
+#### Analysis
+
+- **Time Complexity**: O(m × n) - Same as Solution 1
+- **Space Complexity**: O(m × n) - Queue + visited array (same total as Solution 1)
+
+**Trade-offs vs Solution 1:**
+
+- ✓ **Preserves input**: Matrix unchanged (better practice)
+- ✓ **More readable**: `visited[i][j]` is explicit and conventional
+- ✓ **Cleaner logic**: No matrix value checks during BFS
+- ⚠️ **Extra array**: Uses additional O(m × n) space for visited (though total space is same)
+
+#### Implementation Steps
+
+1. **Initialize with multi-source setup**:
+   - Scan the entire matrix
+   - For each cell with value `0`:
+     - Add to queue
+     - Mark as visited: `visited[i][j] = true`
+     - Set distance to 0: `result[i][j] = 0`
+
+2. **BFS level-by-level traversal**:
+   - Use two queues for level tracking
+   - For each cell in current level:
+     - Check all 4 neighbors
+     - If neighbor is unvisited:
+       - Mark as visited
+       - Assign distance
+       - Add to next level queue
+   - When level exhausted, swap queues and increment distance
+
+3. **Return result matrix**
+
+#### Code - Java
+
+```java
+class Solution {
+    private static class Cell {
+        public final int x;
+        public final int y;
+
+        public Cell(int myX, int myY) {
+            this.x = myX;
+            this.y = myY;
+        }
+    }
+
+    public int[][] updateMatrix(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        int[][] result = new int[rows][cols];
+        boolean[][] visited = new boolean[rows][cols];
+        Queue<Cell> queue = new LinkedList<>();
+
+        // Phase 1: Initialize with all 0s as multi-source starting points
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                if(matrix[i][j] == 0) {
+                    queue.offer(new Cell(i, j));
+                    visited[i][j] = true;  // Mark initial 0s as visited
+                    result[i][j] = 0;      // Distance to itself is 0
+                }
+            }
+        }
+
+        bfs(visited, result, queue);
+
+        return result;
+    }
+
+    private void bfs(boolean[][] visited, int[][] zeroDist, Queue<Cell> srcQ) {
+        int rows = visited.length;
+        int cols = visited[0].length;
+
+        Queue<Cell> currLvlQ = srcQ;
+        Queue<Cell> nextLvlQ = new LinkedList<>();
+
+        int dist = 1;
+        int[][] dirs = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+        while(!currLvlQ.isEmpty()) {
+            Cell cell = currLvlQ.poll();
+            int currX = cell.x;
+            int currY = cell.y;
+
+            // Explore 4 neighbors (up, down, left, right)
+            for(int[] dir : dirs) {
+                int nextX = currX + dir[0];
+                int nextY = currY + dir[1];
+
+                // Skip if invalid coordinates
+                if(nextX < 0 || nextX >= rows || nextY < 0 || nextY >= cols) {
+                    continue;
+                }
+
+                // Skip if already visited
+                if(visited[nextX][nextY]) {
+                    continue;
+                }
+
+                // Mark neighbor as visited and assign distance
+                // No need to check matrix values - visited tracking is sufficient
+                visited[nextX][nextY] = true;
+                zeroDist[nextX][nextY] = dist;
+                nextLvlQ.offer(new Cell(nextX, nextY));
+            }
+
+            // Level transition: move to next distance level
+            if(currLvlQ.isEmpty()) {
+                if(!nextLvlQ.isEmpty()) {
+                    currLvlQ = nextLvlQ;
+                    nextLvlQ = new LinkedList<>();
+                    dist++;
+                }
+            }
+        }
+    }
+}
+```
+
+
 ## Brick Wall {#lc-brick-wall}
 
 ### Problem Metadata
