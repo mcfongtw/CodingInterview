@@ -347,6 +347,284 @@ private double fastPow(double x, long n) {
 ```
 
 
+## Single Number {#lc-single-number}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 136
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/single-number/
+- **Tags**: Grind 75, NeetCode 150
+- **Techniques**: [Bit Manipulation](glossary-of-algorithm.html#glossary-bit-manipulation)
+
+### Description
+
+Given a non-empty array of integers `nums`, every element appears twice except for one. Find that single one.
+
+**You must implement a solution with a linear runtime complexity and use only constant extra space.**
+
+### Examples
+
+```
+Input: nums = [2,2,1]
+Output: 1
+
+Input: nums = [4,1,2,1,2]
+Output: 4
+
+Input: nums = [1]
+Output: 1
+```
+
+### Constraints
+
+- $1 \le \text{nums.length} \le 3 \times 10^4$
+- $-3 \times 10^4 \le \text{nums}[i] \le 3 \times 10^4$
+- Each element in the array appears twice except for one element which appears only once.
+
+### Solution 1 - HashSet
+
+#### Walkthrough
+
+This solution uses a **HashSet to track and eliminate duplicates**.
+
+**Core Strategy:**
+
+The key insight is that every number appears exactly twice except for one. We can use a set to:
+1. **Add numbers we haven't seen** to the set
+2. **Remove numbers we've seen before** from the set (they appear twice, so we eliminate both occurrences)
+3. **The remaining number** in the set is the single one
+
+**How it works:**
+- When we encounter a number for the **first time**, `set.add(num)` returns `true` → add it to the set
+- When we encounter a number for the **second time**, `set.add(num)` returns `false` → remove it from the set
+- After processing all numbers, only the single number remains in the set
+
+**Visual Example Walkthrough:**
+
+Using `nums = [4, 1, 2, 1, 2]`:
+
+```
+Initial: set = {}
+
+i=0, num=4:
+  set.add(4) returns true → 4 added
+  set = {4}
+
+i=1, num=1:
+  set.add(1) returns true → 1 added
+  set = {4, 1}
+
+i=2, num=2:
+  set.add(2) returns true → 2 added
+  set = {4, 1, 2}
+
+i=3, num=1:
+  set.add(1) returns false → 1 is duplicate, remove it
+  set = {4, 2}
+
+i=4, num=2:
+  set.add(2) returns false → 2 is duplicate, remove it
+  set = {4}
+
+Result: 4 (the only element left in the set)
+```
+
+**Why This Works:**
+- Every duplicate pair cancels out (add first occurrence, remove second occurrence)
+- The single number has no pair, so it remains in the set
+- Simple and intuitive approach
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Single pass through the array
+  - Each `add()` and `remove()` operation on HashSet is O(1) average case
+  - Total: O(n) × O(1) = O(n)
+
+- **Space Complexity**: O(n)
+  - In the worst case, the HashSet stores up to n/2 + 1 unique elements
+  - For example, `[1, 2, 3, ..., n/2, n]` would store nearly half the elements before duplicates are encountered
+  - **This does not meet the O(1) space requirement** specified in the problem
+
+#### Implementation Steps
+
+1. Create an empty `HashSet<Integer>` to track numbers.
+2. For each number in `nums`:
+   - Try to add it to the set using `set.add(num)`
+   - If `add()` returns `false` (number already exists), remove it from the set
+3. The set now contains only one element - the single number.
+4. Convert the set to a list and return the first element.
+
+#### Code - Java
+
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+
+        for(int num : nums) {
+            if(!set.add(num)) {
+                // duplicate, remove it
+                set.remove(num);
+            }
+        }
+
+        List<Integer> result = new ArrayList<>();
+        result.addAll(set);
+
+        return result.getFirst();
+    }
+}
+```
+
+
+### Solution 2 - XOR Bit Manipulation (Optimal)
+
+#### Walkthrough
+
+This solution uses the **XOR bitwise operation** to elegantly find the single number with O(1) space.
+
+**Core Strategy:**
+
+The XOR operation has three magical properties that make this problem trivial:
+
+1. **Identity**: `a ^ 0 = a` (XORing with 0 keeps the value unchanged)
+2. **Self-inverse**: `a ^ a = 0` (XORing a number with itself gives 0)
+3. **Commutative & Associative**: Order doesn't matter
+
+**Key Insight:**
+
+Since every number appears twice except one, if we XOR all numbers together:
+- All duplicate pairs cancel out to 0 (property 2)
+- The single number XORed with 0 remains itself (property 1)
+
+```
+nums = [4, 1, 2, 1, 2]
+result = 4 ^ 1 ^ 2 ^ 1 ^ 2
+       = 4 ^ (1 ^ 1) ^ (2 ^ 2)    // reorder using commutativity
+       = 4 ^ 0 ^ 0                 // pairs cancel (a ^ a = 0)
+       = 4                         // 4 ^ 0 = 4 (identity)
+```
+
+**Visual Example Walkthrough (Binary Level):**
+
+Using `nums = [4, 1, 2, 1, 2]`:
+
+```
+Binary representations:
+4 = 100₂
+1 = 001₂
+2 = 010₂
+
+XOR step by step:
+result = 0 (000₂)
+
+result ^ 4:
+  000
+^ 100
+-----
+  100  (result = 4)
+
+result ^ 1:
+  100
+^ 001
+-----
+  101  (result = 5)
+
+result ^ 2:
+  101
+^ 010
+-----
+  111  (result = 7)
+
+result ^ 1:
+  111
+^ 001
+-----
+  110  (result = 6)
+
+result ^ 2:
+  110
+^ 010
+-----
+  100  (result = 4) ✓
+
+Final result: 4
+```
+
+**Another Example:** `nums = [2, 2, 1]`
+
+```
+result = 2 ^ 2 ^ 1
+       = (2 ^ 2) ^ 1
+       = 0 ^ 1
+       = 1 ✓
+```
+
+**Why XOR is Perfect for This Problem:**
+
+- **Self-canceling**: Every duplicate pair `(a, a)` becomes `a ^ a = 0`
+- **Order-independent**: `a ^ b ^ c = c ^ a ^ b` (we don't need to sort or track order)
+- **No extra space**: Just accumulate XOR result in a single variable
+- **Works for any integers**: Handles negative numbers, zero, and all edge cases
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Single pass through the array
+  - Each XOR operation is O(1)
+  - Total: O(n) × O(1) = O(n)
+  - **Same as HashSet solution**
+
+- **Space Complexity**: O(1)
+  - Only uses one variable (`result`) to accumulate XOR
+  - No additional data structures needed
+  - **Optimal - meets the problem's O(1) space requirement**
+
+**Comparison with Solution 1:**
+- ✅ **Same time complexity** (O(n))
+- ✅ **Better space complexity** (O(1) vs O(n))
+- ✅ **Meets the problem constraint** ("must use constant extra space")
+- ✅ **More elegant and mathematical**
+
+#### Implementation Steps
+
+1. Initialize `result = 0` (XOR identity element).
+2. For each number `num` in the array:
+   - XOR it with the current result: `result ^= num`
+3. After processing all numbers, `result` contains the single number.
+4. Return `result`.
+
+**Why start with 0?**
+- `0` is the identity element for XOR (`a ^ 0 = a`)
+- Starting with 0 doesn't affect the final result
+
+#### Code - Java
+
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        int result = 0;
+
+        for (int num : nums) {
+            result ^= num;
+        }
+
+        return result;
+    }
+}
+```
+
+**Alternative one-liner using streams:**
+```java
+public int singleNumber(int[] nums) {
+    return Arrays.stream(nums).reduce(0, (a, b) -> a ^ b);
+}
+```
+
+
 ## Reverse Bits {#lc-reverse-bits}
 
 ### Problem Metadata
