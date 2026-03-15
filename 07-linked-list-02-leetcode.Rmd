@@ -912,7 +912,154 @@ Output: [[1,1],[2,1]]
 - `-10^4 <= Node.val <= 10^4`
 - `Node.random` is null or pointing to some node in the list
 
-### Solution - Interleaving Nodes
+### Solution - HashMap (Two-Pass)
+
+#### Walkthrough
+
+This solution uses a **HashMap to store the mapping** between original nodes and their cloned counterparts, enabling easy lookup when setting random pointers.
+
+**Two-Pass Strategy:**
+
+1. **Pass 1 - Clone nodes and build next pointers:**
+   - Traverse the original list
+   - For each node, create a clone with the same value
+   - Build the next pointer chain for the cloned list
+   - Store the mapping: `original → clone` in a HashMap
+
+2. **Pass 2 - Set random pointers:**
+   - Traverse the original list again
+   - For each node, use the HashMap to find its clone and the clone of its random target
+   - Set `clonedNode.random = HashMap.get(originalNode.random)`
+
+**Why This Works:** The HashMap allows O(1) lookup of any cloned node when we need to set random pointers. By separating the process into two passes, we ensure all nodes exist before we start connecting random pointers.
+
+**Example**: Copy `A → B → C` where A.random → C, B.random → A:
+```
+Pass 1: Create nodes and next pointers
+        Original: A → B → C
+        Clone:    A' → B' → C'
+        HashMap:  {A: A', B: B', C: C'}
+
+Pass 2: Set random pointers using HashMap
+        A.random = C  →  A'.random = HashMap.get(C) = C'
+        B.random = A  →  B'.random = HashMap.get(A) = A'
+
+Result: A' → B' → C' with correct random pointers
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n) - Two passes through the list
+- **Space Complexity**: O(n) - HashMap stores n node mappings
+- **Trade-off**: Uses extra space but more intuitive and easier to implement
+
+#### Implementation Steps
+
+1. Handle edge case: if head is null, return null.
+2. **First pass:**
+   - Create cloned nodes one by one
+   - Build the next pointer chain
+   - Store mapping in HashMap
+3. **Second pass:**
+   - For each original node, get its clone from HashMap
+   - Get the clone's random target from HashMap
+   - Set the clone's random pointer
+4. Return the cloned list's head.
+
+#### Code - Java
+
+```java
+public Node copyRandomList(Node head) {
+    if (head == null) {
+        return head;
+    }
+
+    // Mapping of original nodes to clone nodes
+    Map<Node, Node> nodeMap = new HashMap<>();
+
+    Node curr = head;
+    Node cloneHead = null;
+    Node clonePrev = null;
+
+    // Create cloned linked list nodes without random pointer
+    while (curr != null) {
+        Node cloneCurr = new Node(curr.val);
+        nodeMap.putIfAbsent(curr, cloneCurr);
+
+        if (clonePrev == null) {
+            cloneHead = cloneCurr;
+        } else {
+            clonePrev.next = cloneCurr;
+        }
+        clonePrev = cloneCurr;
+
+        curr = curr.next;
+    }
+
+    // Traverse again to set random pointer to cloned linked list
+    curr = head;
+    while (curr != null) {
+        Node origRand = curr.random;
+        Node cloneCurr = nodeMap.get(curr);
+        Node cloneRand = nodeMap.get(origRand);
+        cloneCurr.random = cloneRand;
+
+        curr = curr.next;
+    }
+
+    return cloneHead;
+}
+```
+
+#### Code - Golang
+
+```go
+func copyRandomList(head *Node) *Node {
+    if head == nil {
+        return head
+    }
+
+    // Mapping of original nodes to clone nodes
+    nodeMap := make(map[*Node]*Node)
+
+    curr := head
+    var cloneHead *Node
+    var clonePrev *Node
+    var cloneCurr *Node
+
+    // Create cloned linked list nodes without random pointer
+    for curr != nil {
+        cloneCurr = &Node{Val: curr.Val}
+        nodeMap[curr] = cloneCurr
+
+        if clonePrev == nil {
+            cloneHead = cloneCurr
+        } else {
+            clonePrev.Next = cloneCurr
+        }
+
+        clonePrev = cloneCurr
+        curr = curr.Next
+    }
+
+    var cloneRand *Node
+    curr = head
+    // Traverse again to set random pointer to cloned linked list
+    for curr != nil {
+        origRand := curr.Random
+        cloneCurr = nodeMap[curr]
+        cloneRand = nodeMap[origRand]
+        cloneCurr.Random = cloneRand
+
+        curr = curr.Next
+    }
+
+    return cloneHead
+}
+```
+
+
+### Solution - Interleaving Nodes (Space Optimized)
 
 #### Walkthrough
 
