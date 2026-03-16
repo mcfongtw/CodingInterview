@@ -620,27 +620,51 @@ Use the same Kahn BFS as Course Schedule I, but record dequeue order as the topo
 
 #### Code - Java
 
-```
+```java
 public int[] findOrder(int numCourses, int[][] prerequisites) {
+    // Build graph: (prereq, course)
     List<List<Integer>> graph = new ArrayList<>();
     int[] indegree = new int[numCourses];
-    for (int i = 0; i < numCourses; i++) graph.add(new ArrayList<>());
-    for (int[] edge : prerequisites) {
-        graph.get(edge[1]).add(edge[0]);
-        indegree[edge[0]]++;
+
+    for (int i = 0; i < numCourses; i++) {
+        graph.add(new ArrayList<>());
     }
+
+    // Compute the indegree of all the vertices in the graph
+    // For edge (course, prereq), indegree[course]++
+    for (int[] edge : prerequisites) {
+        int course = edge[0];
+        int prereq = edge[1];
+        graph.get(prereq).add(course);
+        indegree[course]++;
+    }
+
     Queue<Integer> queue = new LinkedList<>();
-    for (int i = 0; i < numCourses; i++) if (indegree[i] == 0) queue.offer(i);
-    int[] order = new int[numCourses];
-    int idx = 0;
-    while (!queue.isEmpty()) {
-        int course = queue.poll();
-        order[idx++] = course;
-        for (int next : graph.get(course)) {
-            if (--indegree[next] == 0) queue.offer(next);
+
+    // Initialize the queue with all vertices with no inbound edges
+    for (int i = 0; i < numCourses; i++) {
+        if (indegree[i] == 0) {
+            queue.offer(i);
         }
     }
-    return idx == numCourses ? order : new int[0];
+
+    List<Integer> result = new ArrayList<>();
+
+    while (!queue.isEmpty()) {
+        int course = queue.poll();
+        result.add(course);
+
+        // Disconnect vertex from the graph
+        // Decrease the indegree of the other end of the edge by 1
+        for (int adj : graph.get(course)) {
+            if (--indegree[adj] == 0) {
+                queue.offer(adj);
+            }
+        }
+    }
+
+    // Check if the graph had a cycle/loop
+    return result.size() == numCourses ? result.stream().mapToInt(i -> i).toArray() : new int[0];
 }
 ```
 
