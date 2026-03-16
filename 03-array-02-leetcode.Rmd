@@ -190,7 +190,7 @@ func twoSum(nums []int, target int) []int {
 - **Difficulty**: Hard
 - **URL**: https://leetcode.com/problems/median-of-two-sorted-arrays/
 - **Tags**: NeetCode 150
-- **Techniques**: [Divide and Conquer](glossary-of-algorithm.html#glossary-dnc), [Recursion](glossary-of-algorithm.html#glossary-recursion), [Array](glossary-of-algorithm.html#glossary-array), [Binary Search](#binary-search-strategy)
+- **Techniques**: [Binary Search](glossary-of-algorithm.html#glossary-binary-search), [Divide and Conquer](glossary-of-algorithm.html#glossary-dnc), [Heap](glossary-of-algorithm.html#glossary-heap), [Array](glossary-of-algorithm.html#glossary-array)
 
 ### Description
 
@@ -212,24 +212,185 @@ Output: 2.5
 - `m + n >= 1`
 - `-10^6 <= nums[i] <= 10^6`
 
-### Solution - Recursive Kth Element
+### Solution - Binary Elimination (Optimal)
 
 #### Walkthrough
 
-The median can be expressed using the `k`-th smallest element where `k = (m + n + 1) / 2` (and `k + 1` when `m + n` is even). Use a helper `findKth` that discards `k/2` elements from one array at each recursion, always operating on the shorter array to keep indices valid.
+This solution achieves O(log(m+n)) time by treating the median problem as finding the **k-th smallest element** in the merged arrays, then using **binary elimination** to discard half of the remaining elements in each recursion.
+
+**Core Insight:**
+
+Instead of merging arrays (O(m+n)), we can find the k-th element by:
+1. Looking at the k/2-th element in each array
+2. Comparing them to eliminate k/2 elements
+3. Recursing on the remaining elements
+4. This reduces the problem size by half each time → O(log k) = O(log(m+n))
+
+**Why This Works:**
+
+If we want the k-th smallest element overall:
+- Look at position k/2 in both arrays
+- Whichever array has a **smaller** value at k/2, we know:
+  - All elements before it (k/2 elements) are **too small** to be the k-th
+  - We can safely discard them
+- This eliminates k/2 elements per iteration
+
+**Visual Example: `nums1 = [1,3,5,7], nums2 = [2,4,6,8], k = 5`**
+
+```
+Goal: Find 5th smallest element
+
+Iteration 1: k=5, k/2=2
+  nums1: [1, 3, 5, 7]     ← nums1[k/2-1] = nums1[1] = 3
+           ↑
+  nums2: [2, 4, 6, 8]     ← nums2[k/2-1] = nums2[1] = 4
+           ↑
+
+  Compare: 3 < 4
+  → All elements before index 1 in nums1 ([1,3]) are too small
+  → Discard [1,3], search for (5-2)=3rd element in remaining
+
+Iteration 2: k=3, k/2=1
+  nums1: [5, 7]           ← nums1[k/2-1] = nums1[0] = 5
+          ↑
+  nums2: [2, 4, 6, 8]     ← nums2[k/2-1] = nums2[0] = 2
+          ↑
+
+  Compare: 5 > 2
+  → Discard [2], search for (3-1)=2nd element in remaining
+
+Iteration 3: k=2, k/2=1
+  nums1: [5, 7]           ← nums1[k/2-1] = 5
+          ↑
+  nums2: [4, 6, 8]        ← nums2[k/2-1] = 4
+          ↑
+
+  Compare: 5 > 4
+  → Discard [4], search for (2-1)=1st element in remaining
+
+Iteration 4: k=1 (base case)
+  nums1: [5, 7]
+  nums2: [6, 8]
+
+  Return min(5, 6) = 5 ✓
+```
+
+**Step-by-step for Example 1: `nums1 = [1,3], nums2 = [2]`**
+
+```
+Total = 3 (odd), median = 2nd element (k=2)
+
+findKth(nums1=[1,3], nums2=[2], k=2):
+  k/2 = 1
+  nums1[0] = 1
+  nums2[0] = 2
+
+  Compare: 1 < 2
+  → Discard nums1[0], recurse with k=2-1=1
+
+findKth(nums1=[3], nums2=[2], k=1):
+  Base case: k=1
+  Return min(3, 2) = 2.0 ✓
+```
+
+**Step-by-step for Example 2: `nums1 = [1,2], nums2 = [3,4]`**
+
+```
+Total = 4 (even), median = average of 2nd and 3rd elements
+
+Find k=2 (2nd element):
+  findKth(nums1=[1,2], nums2=[3,4], k=2):
+    k/2 = 1
+    nums1[0] = 1
+    nums2[0] = 3
+
+    Compare: 1 < 3
+    → Discard nums1[0], recurse with k=1
+
+  findKth(nums1=[2], nums2=[3,4], k=1):
+    Base case: k=1
+    Return min(2, 3) = 2
+
+Find k=3 (3rd element):
+  findKth(nums1=[1,2], nums2=[3,4], k=3):
+    k/2 = 1
+    nums1[0] = 1
+    nums2[0] = 3
+
+    Compare: 1 < 3
+    → Discard nums1[0], recurse with k=2
+
+  findKth(nums1=[2], nums2=[3,4], k=2):
+    k/2 = 1
+    nums2[0] = 3
+
+    Compare: 2 < 3
+    → Discard nums1[0], recurse with k=1
+
+  findKth(nums1=[], nums2=[3,4], k=1):
+    Base case: nums1 empty
+    Return nums2[0] = 3
+
+Median = (2 + 3) / 2 = 2.5 ✓
+```
+
+**Key Optimizations in Implementation:**
+
+1. **Always operate on shorter array first** - prevents index out of bounds
+2. **Handle edge cases early**: empty array, k=1
+3. **Use `Math.min(len, k/2)`** - prevents taking more than available elements
 
 #### Analysis
 
 - **Time Complexity**: O(log(m + n))
-- **Space Complexity**: O(1) excluding recursion stack
+  - Each recursion eliminates k/2 elements
+  - Total recursions: $\log_2(m+n)$
+  - Each recursion does O(1) work
+  - **This meets the problem's strict requirement**
+
+- **Space Complexity**: O(log(m + n))
+  - Recursion stack depth = $\log(m+n)$
+  - Can be optimized to O(1) with iteration, but recursion is clearer
+
+**Why This is Optimal:**
+
+- You cannot do better than O(log(m+n)) for this problem
+- Any solution must at least "look at" log(m+n) elements to partition correctly
+- Binary elimination achieves this theoretical lower bound
 
 #### Implementation Steps
 
+**Main function:**
 
-1. Let `total = m + n`.
-2. If `total` is odd, return `findKth(nums1, 0, len1 - 1, nums2, 0, len2 - 1, (total + 1) / 2)`.
-3. Otherwise compute `left = findKth(..., total / 2)` and `right = findKth(..., total / 2 + 1)` and return `(left + right) / 2`.
-4. In `findKth`, handle base cases when one array is exhausted or `k == 1`; otherwise compare the `k/2`-th elements and discard the smaller block.
+1. Calculate total length: `total = m + n`
+2. If total is odd:
+   - Find the middle element: `k = (total + 1) / 2`
+   - Return `findKth(nums1, 0, len1-1, nums2, 0, len2-1, k)`
+3. If total is even:
+   - Find both middle elements: `k = total / 2` and `k+1`
+   - Return average: `(findKth(..., k) + findKth(..., k+1)) / 2`
+
+**Helper function `findKth(nums1, start1, end1, nums2, start2, end2, k)`:**
+
+4. Calculate current lengths: `len1 = end1 - start1 + 1`, `len2 = end2 - start2 + 1`
+
+5. **Base case 1 - Array exhausted:**
+   - If `len1 == 0`: return `nums2[start2 + k - 1]`
+   - If `len2 == 0`: return `nums1[start1 + k - 1]`
+
+6. **Base case 2 - Found element:**
+   - If `k == 1`: return `min(nums1[start1], nums2[start2])`
+
+7. **Optimization - Operate on shorter array:**
+   - If `len1 > len2`: swap arrays (ensures we never exceed bounds)
+
+8. **Binary elimination:**
+   - Calculate positions:
+     - `i = start1 + min(len1, k/2) - 1`
+     - `j = start2 + min(len2, k/2) - 1`
+   - Compare `nums1[i]` vs `nums2[j]`:
+     - If `nums1[i] <= nums2[j]`: discard nums1[start1...i], recurse with `k - (i-start1+1)`
+     - Otherwise: discard nums2[start2...j], recurse with `k - (j-start2+1)`
 
 #### Code - Java
 ```java
@@ -277,6 +438,190 @@ private double findKth(int[] nums1, int start1, int end1,
     } else {
         return findKth(nums1, start1, end1, nums2, j + 1, end2,
                        k - (j - start2 + 1));
+    }
+}
+```
+
+
+### Solution - Two Heaps (Simpler but Suboptimal)
+
+#### Walkthrough
+
+This solution adapts the **dual-heap pattern** from [Find Median from Data Stream](#lc-find-median-data-stream) to solve this problem. While it doesn't meet the O(log(m+n)) time requirement, it demonstrates excellent **pattern reuse** and is much simpler to understand.
+
+**Core Strategy:**
+
+Use the same two-heap approach:
+- **Max heap** (`maxHeap1`): Stores smaller half of all elements (largest at root)
+- **Min heap** (`minHeap2`): Stores larger half of all elements (smallest at root)
+- Maintain the same invariants: ordering and balancing
+- Median is at the heap roots
+
+**Key Difference from Problem 295:**
+
+Instead of dynamically adding elements one-by-one with user queries, we:
+1. **Merge both sorted arrays** into the heaps in one pass
+2. **Extract median once** after all elements are inserted
+
+**Visual Example: `nums1 = [1,3], nums2 = [2]`**
+
+```
+Process nums1:
+  addNum(1): maxHeap1=[], minHeap2=[1]
+  addNum(3): maxHeap1=[1], minHeap2=[3]
+
+Process nums2:
+  addNum(2): maxHeap1=[1], minHeap2=[2,3] (2 on top)
+             Rebalance: minHeap2.size()=2 > maxHeap1.size()+1? NO
+
+Final state:
+  maxHeap1 = [1]      (max heap: 1 at root)
+  minHeap2 = [2, 3]   (min heap: 2 at root)
+
+Median (odd total):
+  minHeap2.size()=2 != maxHeap1.size()=1
+  return minHeap2.peek() = 2.0 ✓
+```
+
+**Visual Example: `nums1 = [1,2], nums2 = [3,4]`**
+
+```
+Process nums1:
+  addNum(1): maxHeap1=[], minHeap2=[1]
+  addNum(2): maxHeap1=[1], minHeap2=[2]
+
+Process nums2:
+  addNum(3): maxHeap1=[1], minHeap2=[2,3]
+             Rebalance: move 2 back
+             Result: maxHeap1=[2,1], minHeap2=[3]
+  addNum(4): maxHeap1=[2,1], minHeap2=[3,4]
+             Rebalance: move 3 back
+             Result: maxHeap1=[3,2,1], minHeap2=[4]
+             Wait, this doesn't look right...
+
+Let me retrace:
+  addNum(3):
+    maxHeap1.offer(3) → [3,1]
+    minHeap2.offer(maxHeap1.poll()) → maxHeap1=[1], minHeap2=[2,3]
+    No rebalance needed
+  addNum(4):
+    maxHeap1.offer(4) → [4,1]
+    minHeap2.offer(maxHeap1.poll()) → maxHeap1=[1], minHeap2=[2,3,4]
+    Rebalance: minHeap2.size()=3 > maxHeap1.size()+1? YES
+    maxHeap1.offer(minHeap2.poll()) → maxHeap1=[2,1], minHeap2=[3,4]
+
+Final state:
+  maxHeap1 = [2, 1]   (max heap: 2 at root)
+  minHeap2 = [3, 4]   (min heap: 3 at root)
+
+Median (even total):
+  maxHeap1.size()=2 == minHeap2.size()=2
+  return (2 + 3) / 2.0 = 2.5 ✓
+```
+
+**Why This Pattern Works:**
+
+The exact same invariants from problem 295 apply:
+1. **Ordering**: All elements in `maxHeap1` $\le$ all elements in `minHeap2`
+2. **Balancing**: `|maxHeap1.size() - minHeap2.size()| $\le$ 1`
+3. **Median access**: Roots of heaps give us the median in O(1)
+
+The only difference is we're not answering multiple queries - we build the heaps once and query once.
+
+#### Analysis
+
+- **Time Complexity**: O((m+n) log(m+n))
+  - Each `addNum()` call: O(log(m+n)) - heap operations on total size
+  - Called (m+n) times total
+  - **Does NOT meet the O(log(m+n)) requirement** ⚠️
+
+- **Space Complexity**: O(m+n)
+  - Two heaps store all m+n elements
+
+**Comparison with Binary Elimination:**
+
+| Aspect | Two Heaps | Binary Elimination |
+|--------|-----------|-------------------|
+| **Time Complexity** | O((m+n) log(m+n)) | O(log(m+n)) ✓ |
+| **Space Complexity** | O(m+n) | O(log(m+n)) (stack) |
+| **Meets Requirement** | ❌ No | ✅ Yes |
+| **Code Complexity** | ✅ Simple (pattern reuse) | ⚠️ Complex (careful indexing) |
+| **Pattern Reuse** | ✅ Excellent (from 295) | - |
+| **LeetCode Acceptance** | ✅ Usually accepted | ✅ Accepted |
+
+**When to Use This Approach:**
+
+- ✅ **Learning/Interviews**: Demonstrates pattern recognition
+- ✅ **Time constraints**: Faster to code correctly
+- ✅ **Follow-up to 295**: Shows understanding of dual-heap pattern
+- ❌ **Strict O(log(m+n))**: Use binary elimination instead
+- ❌ **Production code**: Not optimal for this specific problem
+
+#### Implementation Steps
+
+**Setup:**
+
+1. Create two heaps:
+   - `maxHeap1`: Max heap (stores smaller half)
+   - `minHeap2`: Min heap (stores larger half)
+
+**Build heaps:**
+
+2. For each element in `nums1`: call `addNum(element)`
+3. For each element in `nums2`: call `addNum(element)`
+
+**Helper `addNum(num)`:**
+
+4. Insert `num` into `maxHeap1`
+5. Move `maxHeap1`'s largest to `minHeap2` (maintains ordering)
+6. Rebalance if `minHeap2` gets too large (maintains balance)
+
+**Extract median:**
+
+7. If heaps are equal size: return average of both roots
+8. Otherwise: return root of larger heap (`minHeap2` in this implementation)
+
+#### Code - Java
+
+```java
+class Solution {
+    // Max heap: stores smaller half (largest of small half at root)
+    private PriorityQueue<Integer> maxHeap1 = new PriorityQueue<>(Collections.reverseOrder());
+    // Min heap: stores larger half (smallest of large half at root)
+    private PriorityQueue<Integer> minHeap2 = new PriorityQueue<>();
+
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        // Build heaps by adding all elements
+        for (int num : nums1) {
+            addNum(num);
+        }
+
+        for (int num : nums2) {
+            addNum(num);
+        }
+
+        // Extract median from heap roots
+        if (maxHeap1.size() == minHeap2.size()) {
+            // Equal sizes: median is average of both roots
+            return (maxHeap1.peek() + minHeap2.peek()) / 2.0;
+        } else {
+            // minHeap2 has 1 extra element, its root is the median
+            return minHeap2.peek();
+        }
+    }
+
+    private void addNum(int num) {
+        // Always add to maxHeap1 first
+        maxHeap1.offer(num);
+
+        // Move largest element from maxHeap1 to minHeap2
+        // This maintains ordering: all maxHeap1 <= all minHeap2
+        minHeap2.offer(maxHeap1.poll());
+
+        // Rebalance: if minHeap2 gets too large, move smallest back
+        if (minHeap2.size() > maxHeap1.size() + 1) {
+            maxHeap1.offer(minHeap2.poll());
+        }
     }
 }
 ```
