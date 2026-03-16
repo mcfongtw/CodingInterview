@@ -32,12 +32,14 @@ This property ensures that the extreme element (min or max) is always at the roo
 ### Core Operations
 
 **1. Insert (Push)** - O(log n)
+
 - Add element at the end of the array
 - "Bubble up" (heapify-up) to restore heap property
 - **Min heap**: Compare with parent, swap if **smaller**, repeat until root or no swap needed
 - **Max heap**: Compare with parent, swap if **larger**, repeat until root or no swap needed
 
 **2. Extract (Pop)** - O(log n)
+
 - Remove root (extreme element: minimum for min heap, maximum for max heap)
 - Move last element to root
 - "Bubble down" (heapify-down) to restore heap property
@@ -45,11 +47,13 @@ This property ensures that the extreme element (min or max) is always at the roo
 - **Max heap**: Compare with children, swap with **larger** child, repeat until leaf or no swap needed
 
 **3. Peek** - O(1)
+
 - Return root element without removing it
 - **Min heap**: Returns minimum element
 - **Max heap**: Returns maximum element
 
 **4. Heapify** - O(n)
+
 - Build heap from unsorted array
 - Start from last non-leaf node, heapify-down each node
 - Works for both min and max heaps (depends on comparison function)
@@ -71,11 +75,13 @@ This property ensures that the extreme element (min or max) is always at the roo
 **Important:** Go's `container/heap` package provides the **heap algorithms** (heapify-up, heapify-down), but requires you to implement `heap.Interface` to define **how your data structure works**.
 
 **What `container/heap` Provides:**
+
 - `heap.Init(h)` - Builds heap from unsorted data (O(n))
 - `heap.Push(h, x)` - Inserts element with heapify-up (O(log n))
 - `heap.Pop(h)` - Extracts root with heapify-down (O(log n))
 
 **What You Implement (5 required methods):**
+
 - `Len()` - Return size
 - `Less(i, j)` - **Comparison logic** (determines min vs max heap)
 - `Swap(i, j)` - Swap two elements
@@ -193,12 +199,14 @@ func exampleHeaps() {
 ```
 
 **Critical Usage Rules:**
+
 1. ✅ **Always use** `heap.Push()` from `container/heap` package
 2. ✅ **Always use** `heap.Pop()` from `container/heap` package
 3. ❌ **Never call** your struct's `Push()` or `Pop()` methods directly
 4. **Peek** by accessing `(*h)[0]` (container/heap has no Peek function)
 
 **Key Difference Between Min/Max:**
+
 - Only the `Less` method implementation differs
 - **Min heap**: `h[i] < h[j]` (smaller values closer to root)
 - **Max heap**: `h[i] > h[j]` (larger values closer to root)
@@ -270,11 +278,55 @@ PriorityQueue<ListNode> maxHeapNodes2 = new PriorityQueue<>(
 ```
 
 **Key Operations:**
+
 - `offer(e)` / `add(e)` - Insert element (O(log n))
 - `poll()` - Remove and return min/max (O(log n))
 - `peek()` - View min/max without removing (O(1))
 - `size()` - Get number of elements (O(1))
 - `isEmpty()` - Check if empty (O(1))
+
+**Detailed Complexity Explanation:**
+
+**Why `offer()` and `poll()` are O(log n):**
+
+A heap is a **complete binary tree** with height = $\lceil \log_2(n+1) \rceil - 1$ ≈ log n.
+
+- **`offer(e)` - Insertion (O(log n))**:
+
+  1. Add element at the end of the array (next available position)
+  2. "Bubble up" (heapify-up): Compare with parent, swap if needed
+  3. Repeat until reaching root or heap property is satisfied
+  4. Maximum swaps = tree height = **O(log n)**
+
+- **`poll()` - Extraction (O(log n))**:
+
+  1. Save root element (to return later)
+  2. Move last element to root position
+  3. "Bubble down" (heapify-down): Compare with children, swap with smaller/larger child
+  4. Repeat until reaching leaf or heap property is satisfied
+  5. Maximum swaps = tree height = **O(log n)**
+
+**Common Misconception - Heap Sort vs Single Operation:**
+
+- **Single operation**: `offer()` or `poll()` is **O(log n)**
+- **Heap sort** (n operations): **O(n log n)** total
+  - Sorting requires n insertions OR n extractions
+  - Total: n × O(log n) = O(n log n)
+
+**Example:**
+```java
+// Single operation: O(log n)
+heap.offer(42);  // Just one insertion
+
+// Heap sort: O(n log n)
+for (int i = 0; i < n; i++) {
+    heap.offer(nums[i]);  // n insertions × O(log n) each
+}
+```
+
+**Building a heap from array:**
+- **Using n insertions**: O(n log n) - insert each element individually
+- **Using heapify**: O(n) - more efficient bulk construction (not available in Java PriorityQueue constructor, but used internally when constructed from a Collection)
 
 #### Array Representation
 

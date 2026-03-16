@@ -239,6 +239,30 @@ R Markdown has issues with comparison operators (`=`, `<=`, `>=`, `==`) in regul
 2. When documenting variable initialization, avoid backticks around assignments
 3. Remove backticks from expressions containing comparison operators
 
+**CRITICAL: Blank Line Before Lists/Tables**
+
+R Markdown requires a **blank line** between bold text (or any block element) and bullet lists/tables. Without it, the list/table will not render and text will scramble together.
+
+❌ **WRONG** - List will not render:
+```markdown
+**Key Operations:**
+- `offer(e)` - Insert element
+- `poll()` - Remove element
+```
+
+✅ **CORRECT** - Blank line separates bold text from list:
+```markdown
+**Key Operations:**
+
+- `offer(e)` - Insert element
+- `poll()` - Remove element
+```
+
+**Rules**:
+1. Always insert a blank line after bold text (`**...**`) before starting a list
+2. Always insert a blank line after any block element (headings, paragraphs) before tables
+3. This applies to both bullet lists (`-`) and numbered lists (`1.`)
+
 ## Deployment
 
 Changes merged to master trigger GitHub Actions to deploy `docs/` to GitHub Pages. Run `build.sh` locally before committing to ensure the static site is up to date.
