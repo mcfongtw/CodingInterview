@@ -19,8 +19,10 @@ boolean empty = stack.isEmpty();
 ```
 
 **When to Use Stacks:**
+
 - Problems involving **nested structures** (parentheses, brackets)
 - **Backtracking** and **undo operations**
+
 - **Depth-first** exploration patterns
 - Processing data with **most recent first** priority
 
@@ -33,6 +35,7 @@ A **monotonic stack** maintains elements in either strictly increasing or decrea
 A stack where elements are in **descending order** from bottom to top helps find the **next greater element** to the right.
 
 **Core Concept:**
+
 - When a new element is **larger** than stack top, we've found the "next greater" for all smaller elements
 - Pop smaller elements and record their next greater
 - Push current element
@@ -111,6 +114,7 @@ public int[] nextSmallerElements(int[] nums) {
 | **Previous Smaller** | Process right-to-left | Previous Smaller | Same as next smaller, reversed |
 
 **Applications:**
+
 - **Next Greater Element** problems
 - [Daily Temperatures](#lc-daily-temperatures) - Classic monotonic decreasing stack
 - **Largest Rectangle in Histogram** (next smaller on both sides)
@@ -160,12 +164,14 @@ public boolean isValid(String s) {
 For finding the **longest valid substring**, use stack to track **indices** instead of characters.
 
 **Approach:**
+
 - Push index when encountering `(`
 - Pop when encountering `)`
 - If stack becomes empty, push current index as new base
 - Otherwise, calculate length: `current index - stack.peek()`
 
 **Related Problems:**
+
 - [Longest Valid Parentheses](#lc-longest-valid-parentheses) - Find longest valid substring
 - Valid Parentheses (LeetCode 20) - Basic validation
 - [Maximum Score From Removing Substrings](#lc-max-score-removing-substrings) - Greedy with stack
@@ -231,6 +237,7 @@ class MinStack {
 ```
 
 **Related Problems:**
+
 - [Min Stack](#lc-min-stack) - Track minimum in $O(1)$
 - Max Stack - Same pattern for maximum
 
@@ -254,9 +261,11 @@ boolean empty = queue.isEmpty();
 ```
 
 **When to Use Queues:**
+
 - **Breadth-first** exploration patterns (BFS)
 - **Level-order processing** (trees, graphs)
 - **Task scheduling** and **time-based simulations**
+
 - Processing data with **first-come-first-served** order
 
 ### Implementing Queue Using Stacks {#intro-queue-using-stacks}
@@ -310,15 +319,19 @@ class MyQueue {
 ```
 
 **Why Amortized O(1)?**
+
 - Each element is moved from `inStack` to `outStack` **exactly once**
+
 - Over $n$ operations, total moves $\le n$
 - Average per operation: $O(1)$
 
 **Related Problems:**
+
 - [Implement Queue using Stacks](#lc-implement-queue-using-stacks) - Two-stack approach
 - Implement Stack using Queues - Reverse pattern
 
 **Time Complexity:**
+
 - Push: $O(1)$
 - Pop/Peek: Amortized $O(1)$, worst-case $O(n)$
 **Space Complexity:** $O(n)$
@@ -333,8 +346,11 @@ Queues naturally model **time-based simulations** and **task scheduling** proble
 3. Simulate time progression step-by-step
 
 **Common Applications:**
+
 - **Task scheduling with cooldowns**
+
 - **Time-based resource allocation**
+
 - **Process simulation**
 
 **Example Pattern - Task Scheduling with Cooldown:**
@@ -377,6 +393,7 @@ public int taskScheduling(char[] tasks, int cooldown) {
 ```
 
 **Related Problems:**
+
 - [Task Scheduler](#lc-task-scheduler) - CPU scheduling with cooldown
 - Simulation problems requiring time-based processing
 

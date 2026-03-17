@@ -13,6 +13,7 @@ There are two main approaches to implementing DP solutions:
 **Memoization** is a top-down recursive approach with caching. It solves the problem by recursively breaking it down into smaller subproblems and storing (caching) the results to avoid redundant calculations.
 
 **Key Characteristics:**
+
 - Starts from the original problem and recursively breaks it down
 - Uses a cache (typically a HashMap or array) to store computed results
 - Only computes subproblems that are actually needed
@@ -63,11 +64,13 @@ public long fibonacci(int n) {
 ```
 
 **Pros:**
+
 - Intuitive - mirrors the recursive problem definition
 - Only computes necessary subproblems (lazy evaluation)
 - Easy to convert from naive recursion (just add caching)
 
 **Cons:**
+
 - Recursion overhead (stack space and function calls)
 - Risk of stack overflow for deep recursion
 - Slightly slower due to cache lookups and recursion
@@ -80,6 +83,7 @@ public long fibonacci(int n) {
 **Tabulation** is a bottom-up iterative approach that builds a table (array) by solving smaller subproblems first and using their results to solve larger ones.
 
 **Key Characteristics:**
+
 - Starts from base cases and builds up to the final solution
 - Uses an array/table to store results iteratively
 - Computes all subproblems (even if not needed for final answer)
@@ -121,12 +125,14 @@ public long fibonacci(int n) {
 ```
 
 **Pros:**
+
 - No recursion overhead (no stack space, faster)
 - Easier to optimize space (often can reduce from O(n) to O(1))
 - More efficient for problems where most subproblems are needed
 - No risk of stack overflow
 
 **Cons:**
+
 - Less intuitive than memoization for some problems
 - Computes all subproblems (even unnecessary ones)
 - Requires determining the correct iteration order
@@ -253,12 +259,14 @@ public int unboundedKnapsack(int target, int[] items) {
 | **Risk** | Stack overflow | None |
 
 **When to use Memoization:**
+
 - Problem naturally expressed recursively
 - Only a subset of subproblems needed
 - Quick conversion from naive recursion
 - Tree-based or non-sequential dependencies
 
 **When to use Tabulation:**
+
 - Most/all subproblems needed for solution
 - Want to avoid recursion overhead
 - Need space optimization ($O(1)$ possible)
@@ -395,6 +403,7 @@ This demonstrates DP's power: reducing exponential/polynomial time to linear tim
 
 Use Kadane's algorithm when the problem asks:
 - **"Find the maximum/minimum sum/product of a contiguous subarray"**
+
 - **"Best profit from a sequence of transactions"** (with state tracking)
 - **Linear optimization** over a contiguous subsequence
 
@@ -662,6 +671,7 @@ private void backtrack(int[] weights, List<Integer> current,
 Instead of modifying and reverting state, create a **new copy** of the state for each recursive call. No unchoose step needed because each branch gets its own independent state.
 
 **2D Traversal Structure:**
+
 - **Outer dimension**: Still controlled by recursion parameter (`index`, `depth`)
 - **Inner dimension**: Still controlled by for-loop over choices
 - **Key difference**: State immutability replaces the unchoose step

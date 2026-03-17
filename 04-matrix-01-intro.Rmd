@@ -7,6 +7,7 @@
 A **matrix** (plural: matrices) is a two-dimensional array of elements arranged in rows and columns. In coding interviews, matrices are typically represented as 2D arrays.
 
 **Key Properties:**
+
 - **Dimensions**: An $m \times n$ matrix has $m$ rows and $n$ columns
 - **Indexing**: Elements are accessed via row and column indices (0-indexed or 1-indexed depending on the context)
 - **Square Matrix**: A matrix where the number of rows equals the number of columns ($m = n$)
@@ -14,6 +15,7 @@ A **matrix** (plural: matrices) is a two-dimensional array of elements arranged 
 - **Dense Matrix**: A matrix with mostly non-zero elements
 
 **Common Matrix Types:**
+
 - **Identity Matrix**: Square matrix with 1s on the diagonal and 0s elsewhere
 - **Diagonal Matrix**: Non-zero elements only on the main diagonal
 - **Symmetric Matrix**: A square matrix that equals its transpose ($A = A^T$)
@@ -54,6 +56,7 @@ for (int j = 0; j < n; j++) {
 Visit elements in a clockwise spiral pattern starting from the outside and moving inward. Commonly tested in interviews.
 
 **Key technique:**
+
 - Maintain four boundaries: top, bottom, left, right
 - Traverse right along top boundary, then collapse top
 - Traverse down along right boundary, then collapse right
@@ -77,6 +80,7 @@ Visit elements along diagonals (top-left to bottom-right or other directions). U
 Process matrices layer by layer from the outside inward (like peeling an onion).
 
 **Key technique:**
+
 - Use similar boundary tracking as spiral traversal
 - Process one complete layer (top row, right column, bottom row, left column)
 - Shrink boundaries inward after each layer
@@ -117,9 +121,11 @@ for (int i = 0; i < n; i++) {
 #### Matrix Flip/Reflection {#intro-matrix-flip}
 
 **Horizontal flip (left-right):**
+
 - Reverse each row independently
 
 **Vertical flip (top-bottom):**
+
 - Reverse the order of rows
 
 **Time Complexity**: $O(m \cdot n)$ | **Space Complexity**: $O(1)$ for in-place operations
@@ -131,6 +137,7 @@ for (int i = 0; i < n; i++) {
 Explore connected components or paths in a matrix (e.g., finding islands, paths through cells).
 
 **Key considerations:**
+
 - Track visited cells to avoid cycles
 - Use 4-directional neighbors (up, down, left, right) or 8-directional (including diagonals)
 - Base cases: out of bounds, already visited, or invalid cell
@@ -145,6 +152,7 @@ Explore connected components or paths in a matrix (e.g., finding islands, paths 
 Find shortest paths or explore level-by-level in a matrix.
 
 **Key considerations:**
+
 - Use a queue for level-by-level traversal
 - Track visited cells to avoid reprocessing
 - Useful for finding shortest distance/path
@@ -318,6 +326,7 @@ Time increments only when an entire level finishes processing.
 Solve optimization problems like minimum path sum, maximum rectangle, edit distance problems.
 
 **Common DP approaches:**
+
 - **Top-down (memoization):** Recursively compute with caching
 - **Bottom-up (tabulation):** Build solution table from smaller subproblems
 - **Space optimization:** Use rolling arrays to reduce space from $O(m \cdot n)$ to $O(n)$ or $O(m)$
@@ -329,6 +338,7 @@ Solve optimization problems like minimum path sum, maximum rectangle, edit dista
 Apply linear techniques to matrix rows/columns or use pointers for searching.
 
 **Common patterns:**
+
 - Binary search on 2D sorted matrix (search rows or use space-filling curves)
 - Two pointers starting from opposite corners (e.g., top-right and bottom-left)
 - Sliding window on matrix rows for contiguous sub-matrix problems
@@ -336,14 +346,17 @@ Apply linear techniques to matrix rows/columns or use pointers for searching.
 #### Important Variations {#intro-matrix-variations}
 
 **Sorted Matrix Search:**
+
 - If rows are sorted and columns are sorted, start from top-right corner
 - Move left if target is smaller, move down if target is larger
 
 **Rotated Matrix Search:**
+
 - Identify which quadrant contains the target
 - Apply binary search on the identified section
 
 **Matrix Prefix Sum:**
+
 - Precompute cumulative sums for fast range query
 - 2D prefix sum: $\text{prefix}[i][j] = \text{prefix}[i-1][j] + \text{prefix}[i][j-1] - \text{prefix}[i-1][j-1] + \text{matrix}[i][j]$
 
