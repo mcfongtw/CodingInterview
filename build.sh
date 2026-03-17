@@ -17,6 +17,8 @@
 #   --preview         - Fast preview of git-changed .Rmd chapters only
 #                       (cross-references to other chapters will not resolve)
 #
+# Note: Build time is displayed at the end of each build
+#
 # Examples:
 #   sh build.sh                    # Full gitbook build with validation
 #   sh build.sh pdf                # Build PDF with validation
@@ -26,6 +28,9 @@
 #
 
 set -e
+
+# Start timer
+START_TIME=$(date +%s)
 
 # ── Preview mode: render only git-changed .Rmd files ──────────────────────────
 if [ "$1" = "--preview" ]; then
@@ -129,6 +134,20 @@ PYEOF
     echo "Preview complete. Output in _preview/"
     echo "Note: cross-references to other chapters will not resolve in preview mode."
     echo "Run 'sh build.sh' for a full build."
+    echo ""
+
+    # Calculate and display elapsed time
+    END_TIME=$(date +%s)
+    ELAPSED=$((END_TIME - START_TIME))
+    MINUTES=$((ELAPSED / 60))
+    SECONDS=$((ELAPSED % 60))
+    echo "========================================="
+    if [ $MINUTES -gt 0 ]; then
+        echo "⏱  Build time: ${MINUTES}m ${SECONDS}s"
+    else
+        echo "⏱  Build time: ${SECONDS}s"
+    fi
+    echo "========================================="
     exit 0
 fi
 
@@ -210,3 +229,18 @@ case "$FORMAT" in
     echo "All formats created in docs/"
     ;;
 esac
+
+echo ""
+
+# Calculate and display elapsed time
+END_TIME=$(date +%s)
+ELAPSED=$((END_TIME - START_TIME))
+MINUTES=$((ELAPSED / 60))
+SECONDS=$((ELAPSED % 60))
+echo "========================================="
+if [ $MINUTES -gt 0 ]; then
+    echo "⏱  Build time: ${MINUTES}m ${SECONDS}s"
+else
+    echo "⏱  Build time: ${SECONDS}s"
+fi
+echo "========================================="
