@@ -312,10 +312,12 @@ $$
 where $\text{dp}[i]$ represents the maximum sum of a subarray **ending at index i**.
 
 **State Definition**:
+
 - `current`: Maximum sum ending at the current position
 - `maxSoFar`: Global maximum across all positions
 
 **Why It's Dynamic Programming**:
+
 - **Optimal Substructure**: The best subarray ending at position $i$ depends on the best subarray ending at position $i-1$
 - **Overlapping Subproblems**: We reuse the previous state (`current`) to compute the next state
 - **Memoization**: We only need to track one previous state (space-optimized DP)
@@ -328,6 +330,7 @@ where $\text{dp}[i]$ represents the maximum sum of a subarray **ending at index 
 - `current + nums[i]`: Extend the previous best subarray (build on previous state)
 
 **Decision Logic**:
+
 - If the previous sum `current` is **negative**, starting fresh from `nums[i]` gives a better result
 - If the previous sum is **positive**, extending it by adding `nums[i]` is better
 
@@ -353,6 +356,7 @@ public int maxSubArray(int[] nums) {
 ```
 
 **This is $O(1)$ space-optimized tabulation DP**:
+
 - Instead of storing `dp[i]` for all $i$, we only track `current` (latest state)
 - Original 1D DP table: `int[] dp = new int[n]`
 - Optimized: Two variables `current` and `maxSoFar`
@@ -394,6 +398,7 @@ Many stock problems are variants of Kadane's algorithm with state tracking:
 - **Space**: $O(1)$ - Only uses constant variables (space-optimized DP)
 
 **Comparison to Naive Approach**:
+
 - Naive: Try all $O(n^2)$ subarrays → $O(n^2)$ time
 - Kadane's DP: Reuse previous state → $O(n)$ time
 
@@ -408,6 +413,7 @@ Use Kadane's algorithm when the problem asks:
 - **Linear optimization** over a contiguous subsequence
 
 **Red flags that it's NOT Kadane's**:
+
 - Need to find **all** subarrays (enumeration) → Backtracking or brute force
 - Non-contiguous elements allowed → Different DP pattern (e.g., Longest Increasing Subsequence)
 
@@ -582,6 +588,7 @@ for (int i = startIndex; i < choices.length; i++) {
 ```
 
 **When to pass `i` vs `i+1`**:
+
 - Pass `i`: Allow reusing the same choice (unbounded problems)
 - Pass `i+1`: Each choice can only be used once (0/1 problems)
 
@@ -655,6 +662,7 @@ private void backtrack(int[] weights, List<Integer> current,
 ```
 
 **Key observations**:
+
 - Passing `i` (not `i+1`) allows reusing the same index
 - Loop starts from `index` to maintain non-decreasing order
 - Copying `current` is essential when storing in `result`
@@ -735,16 +743,19 @@ private void backtrack(int[] nums, List<Integer> current, List<List<Integer>> re
 ```
 
 **Pros**:
+
 - Simpler logic - no manual undo step
 - No risk of forgetting to unchoose
 - Easier to reason about (functional style)
 
 **Cons**:
+
 - Higher memory usage - creates new objects for each recursive call
 - Slower for large state objects due to copying overhead
 - Time: $O(n)$ per call for copying state of size $n$
 
 **When to use**:
+
 - State is small (primitives, small strings, shallow copies)
 - Code clarity is more important than memory efficiency
 - Debugging backtracking issues (easier to trace)
@@ -830,6 +841,7 @@ private boolean backtrack(char[][] board, String word, int index, int row, int c
 ```
 
 **Key Points**:
+
 - Use a **sentinel value** (like `#` or `*`) to mark visited cells
 - Must **restore original value** to allow reuse in other paths
 - Often combined with directional arrays: `int[][] dirs = {{0,1}, {1,0}, {0,-1}, {-1,0}}`
@@ -850,6 +862,7 @@ visited[row][col] = false;
 ```
 
 **When to use**:
+
 - 2D grid traversal (Word Search, Number of Islands with paths)
 - Graph cycle detection in DFS
 - Problems requiring path tracking (not just reachability)

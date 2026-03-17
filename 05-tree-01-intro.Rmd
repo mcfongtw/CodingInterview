@@ -23,6 +23,7 @@ class TreeNode {
 ```
 
 **Characteristics**:
+
 - **Navigation**: Direct pointer access via `node.left` and `node.right`
 - **Memory**: Each node stores explicit references to children
 - **Use Cases**: Most tree algorithm problems, binary trees, BSTs
@@ -45,12 +46,14 @@ public int maxDepth(TreeNode root) {
 Represents the tree using parallel arrays where indices define parent-child relationships.
 
 **Format**:
+
 - `values[i]`: Value stored in node `i`
 - `leftChild[i]`: Index of left child of node `i`, or `-1` if none
 - `rightChild[i]`: Index of right child of node `i`, or `-1` if none
 - Root is typically at index `0`
 
 **Characteristics**:
+
 - **Navigation**: Array lookups via `leftChild[idx]` and `rightChild[idx]`
 - **Memory**: More space-efficient, no object overhead
 - **Use Cases**: Large trees, competitive programming, serialization
@@ -86,6 +89,7 @@ Uses a single array where parent-child relationships are defined by index arithm
 - `null` nodes represented as special values (e.g., `null`, `-1`, `Integer.MIN_VALUE`)
 
 **Characteristics**:
+
 - **Navigation**: Computed indices via arithmetic
 - **Memory**: Wastes space for sparse trees (unbalanced)
 - **Use Cases**: Heaps, complete binary trees, certain tree serialization formats
@@ -129,6 +133,7 @@ Map<Integer, List<Integer>> adjList = new HashMap<>();
 ```
 
 **Characteristics**:
+
 - **Navigation**: Loop through `adjList.get(node)` to visit children
 - **Memory**: Flexible, efficient for n-ary trees
 - **Use Cases**: N-ary trees, tree construction from edges, graph problems
@@ -153,9 +158,11 @@ public void dfs(int node, Map<Integer, List<Integer>> adjList) {
 Represents trees by storing each node's parent (reverse of typical representation).
 
 **Format**:
+
 - `parent[i]`: Index of parent of node `i`, or `-1`/`i` if root
 
 **Characteristics**:
+
 - **Navigation**: Bottom-up traversal (child to parent)
 - **Memory**: Single array
 - **Use Cases**: Union-Find, LCA (Lowest Common Ancestor), path compression
@@ -206,6 +213,7 @@ int maxDepth(int idx, List<Integer> left, List<Integer> right) {
 **Notice**: Only the navigation changed (`root.left` → `left.get(idx)`). The recursive structure is identical.
 
 **Interview Tips**:
+
 1. **Clarify input format** before coding
 2. **Translate the representation** mentally to your preferred style
 3. **Write helper methods** for navigation if the format is complex
