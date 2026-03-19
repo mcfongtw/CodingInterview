@@ -1,3 +1,752 @@
 # Math
-These math problems emphasize bit hacks, exponentiation, DP-on-numbers, and number theory tricks that show up in interviews.
 
+Math problems emphasize bit manipulation, digit extraction, exponentiation, and number theory techniques that frequently appear in technical interviews. This chapter covers fundamental mathematical algorithms and bit-level operations that optimize performance and elegantly solve problems that seem complex at first glance.
+
+### Bit Manipulation {#intro-bit-manipulation}
+
+Bit manipulation involves directly operating on the binary representation of numbers using bitwise operators. These techniques often provide O(1) space solutions and optimal time complexity for problems involving powers of two, counting bits, or performing arithmetic without standard operators.
+
+#### Basic Bitwise Operators
+
+The fundamental bitwise operations in most programming languages:
+
+| Operator | Name | Example | Result | Description |
+|----------|------|---------|--------|-------------|
+| `&` | AND | `5 & 3` | `1` | Sets each bit to 1 if both bits are 1 |
+| `\|` | OR | `5 \| 3` | `7` | Sets each bit to 1 if either bit is 1 |
+| `^` | XOR | `5 ^ 3` | `6` | Sets each bit to 1 if bits are different |
+| `~` | NOT | `~5` | `-6` | Inverts all bits |
+| `<<` | Left shift | `5 << 1` | `10` | Shifts bits left, filling with 0s |
+| `>>` | Right shift | `5 >> 1` | `2` | Shifts bits right (arithmetic shift) |
+| `>>>` | Unsigned right shift | `5 >>> 1` | `2` | Shifts bits right (logical shift, fills with 0s) |
+
+**Binary examples:**
+```
+5 = 101₂
+3 = 011₂
+
+5 & 3  = 101 & 011 = 001 = 1
+5 | 3  = 101 | 011 = 111 = 7
+5 ^ 3  = 101 ^ 011 = 110 = 6
+~5     = ~0...00101 = 1...11010 = -6 (two's complement)
+5 << 1 = 0101 << 1 = 1010 = 10
+5 >> 1 = 0101 >> 1 = 0010 = 2
+```
+
+#### Common Bit Manipulation Tricks
+
+**1. Check if n is even or odd**
+```java
+boolean isEven = (n & 1) == 0;  // Last bit is 0 for even numbers
+```
+
+**2. Check if n is a power of 2**
+```java
+boolean isPowerOfTwo = n > 0 && (n & (n - 1)) == 0;
+```
+- Powers of 2 have exactly one bit set: `8 = 1000₂`, `16 = 10000₂`
+- Subtracting 1 flips all bits after the set bit: `8 - 1 = 0111₂`
+- ANDing clears the single set bit: `1000 & 0111 = 0000`
+- See [Power of Two](#fc-power-of-two) for implementation
+
+**3. Clear the rightmost set bit**
+```java
+n &= (n - 1);  // Removes the lowest 1 bit
+```
+- Example: `12 = 1100₂`, `12 - 1 = 1011₂`, `1100 & 1011 = 1000₂ = 8`
+- Used in Brian Kernighan's algorithm (see below)
+
+**4. Get the rightmost set bit**
+```java
+int rightmostBit = n & (-n);
+```
+- Uses two's complement property: `-n = ~n + 1`
+- Example: `12 = 1100₂`, `-12 = 0100₂`, `1100 & 0100 = 0100 = 4`
+
+**5. Toggle the i-th bit**
+```java
+n ^= (1 << i);  // Flips bit at position i
+```
+
+**6. Set the i-th bit to 1**
+```java
+n |= (1 << i);
+```
+
+**7. Clear the i-th bit**
+```java
+n &= ~(1 << i);
+```
+
+**8. Check if the i-th bit is set**
+```java
+boolean isSet = (n & (1 << i)) != 0;
+```
+
+#### Brian Kernighan's Algorithm {#intro-brian-kernighan}
+
+An efficient technique for counting the number of set bits (1s) in a number. Instead of checking all bit positions, it iterates only as many times as there are set bits.
+
+**Core Insight**: The operation `n & (n - 1)` clears the rightmost set bit.
+
+**Algorithm:**
+```java
+int countSetBits(int n) {
+    int count = 0;
+    while (n != 0) {
+        n &= (n - 1);  // Remove rightmost 1 bit
+        count++;
+    }
+    return count;
+}
+```
+
+**Example: n = 11 (binary: 1011)**
+```
+Iteration 1: 1011 & 1010 = 1010, count = 1
+Iteration 2: 1010 & 1001 = 1000, count = 2
+Iteration 3: 1000 & 0111 = 0000, count = 3
+Result: 3 set bits
+```
+
+**Time Complexity**: O(k) where k is the number of set bits
+- Best case: O(1) for sparse numbers (e.g., 128 = `10000000` has only 1 bit)
+- Worst case: O(32) for 32-bit integers with many 1s
+
+See [Number of 1 Bits](#lc-number-of-1-bits) for detailed implementation.
+
+#### XOR Properties and Applications {#intro-xor-properties}
+
+XOR (exclusive OR) has unique mathematical properties that make it invaluable for certain problems:
+
+**Properties:**
+1. **Identity**: `a ^ 0 = a`
+2. **Self-inverse**: `a ^ a = 0`
+3. **Commutative**: `a ^ b = b ^ a`
+4. **Associative**: `(a ^ b) ^ c = a ^ (b ^ c)`
+
+**Key Applications:**
+
+**1. Finding the single unique element**
+
+When every element appears twice except one, XOR all elements together. Duplicate pairs cancel out, leaving the unique element.
+
+```java
+int findSingle(int[] nums) {
+    int result = 0;
+    for (int num : nums) {
+        result ^= num;  // Pairs cancel to 0, single remains
+    }
+    return result;
+}
+```
+
+**Example:** `[4, 1, 2, 1, 2]`
+```
+4 ^ 1 ^ 2 ^ 1 ^ 2 = 4 ^ (1 ^ 1) ^ (2 ^ 2) = 4 ^ 0 ^ 0 = 4
+```
+
+See [Single Number](#lc-single-number) for detailed solution.
+
+**2. Swapping two variables without a temporary**
+
+```java
+a ^= b;  // a = a ^ b
+b ^= a;  // b = b ^ (a ^ b) = a
+a ^= b;  // a = (a ^ b) ^ a = b
+```
+
+**3. Detecting differences**
+
+`a ^ b` produces 1 bits where `a` and `b` differ. Useful for comparing binary representations.
+
+#### Bitwise Arithmetic Without Operators {#intro-bitwise-arithmetic}
+
+You can perform addition using only bitwise operations:
+
+**Addition without + operator:**
+```java
+int add(int a, int b) {
+    while (b != 0) {
+        int carry = (a & b) << 1;  // Carry bits shifted left
+        a = a ^ b;                 // Sum without carry
+        b = carry;                 // Next iteration handles carry
+    }
+    return a;
+}
+```
+
+**How it works:**
+- `a ^ b` gives the sum without considering carry
+- `(a & b) << 1` gives the carry bits (shifted left)
+- Iterate until there's no carry
+
+**Example: 5 + 3**
+```
+Iteration 1:
+  a = 5 (101), b = 3 (011)
+  carry = (101 & 011) << 1 = 001 << 1 = 010 (2)
+  a = 101 ^ 011 = 110 (6)
+  b = 010 (2)
+
+Iteration 2:
+  a = 6 (110), b = 2 (010)
+  carry = (110 & 010) << 1 = 010 << 1 = 100 (4)
+  a = 110 ^ 010 = 100 (4)
+  b = 100 (4)
+
+Iteration 3:
+  a = 4 (100), b = 4 (100)
+  carry = (100 & 100) << 1 = 100 << 1 = 1000 (8)
+  a = 100 ^ 100 = 000 (0)
+  b = 1000 (8)
+
+Iteration 4:
+  a = 0 (000), b = 8 (1000)
+  carry = (000 & 1000) << 1 = 000 << 1 = 0
+  a = 000 ^ 1000 = 1000 (8)
+  b = 0
+
+Result: 8
+```
+
+See [Sum of Two Integers](#lc-sum-two-integers) for implementation.
+
+### Digit Extraction and Manipulation {#intro-digit-extraction}
+
+Many math problems require extracting and processing individual digits from integers. The standard approach uses modulo and integer division operations.
+
+#### Basic Digit Extraction Pattern
+
+**Extract digits from right to left:**
+```java
+while (n > 0) {
+    int digit = n % 10;  // Extract rightmost digit
+    // Process digit...
+    n = n / 10;          // Remove rightmost digit
+}
+```
+
+**How it works:**
+- `n % 10` gives the last digit (ones place)
+- `n / 10` removes the last digit by integer division
+- Repeat until n becomes 0
+
+**Example: n = 1234**
+```
+Iteration 1: digit = 4, n = 123
+Iteration 2: digit = 3, n = 12
+Iteration 3: digit = 2, n = 1
+Iteration 4: digit = 1, n = 0
+```
+
+#### Building Numbers from Digits
+
+**Construct a number by accumulating digits:**
+```java
+int result = 0;
+while (hasMoreDigits) {
+    int digit = getNextDigit();
+    result = result * 10 + digit;  // Shift left and add new digit
+}
+```
+
+**Example: Build 4321 from digits [4, 3, 2, 1]**
+```
+Start: result = 0
+Add 4: result = 0 * 10 + 4 = 4
+Add 3: result = 4 * 10 + 3 = 43
+Add 2: result = 43 * 10 + 2 = 432
+Add 1: result = 432 * 10 + 1 = 4321
+```
+
+#### Reversing an Integer {#intro-reverse-integer}
+
+Combine digit extraction and building to reverse an integer:
+
+```java
+int reverse(int x) {
+    int result = 0;
+    while (x != 0) {
+        int digit = x % 10;
+        result = result * 10 + digit;
+        x = x / 10;
+    }
+    return result;
+}
+```
+
+**Example: x = 123**
+```
+Iteration 1: digit = 3, result = 3, x = 12
+Iteration 2: digit = 2, result = 32, x = 1
+Iteration 3: digit = 1, result = 321, x = 0
+```
+
+**Important**: This basic version doesn't handle overflow. See [Reverse Integer](#lc-reverse-integer) for the complete solution with overflow detection.
+
+#### Overflow Detection Without 64-bit Integers {#intro-overflow-detection}
+
+When building numbers digit by digit, you must check for overflow **before** it happens:
+
+```java
+// Before: result = result * 10 + digit
+// Check overflow:
+if (result > Integer.MAX_VALUE / 10) {
+    return 0;  // Would overflow on multiplication
+}
+if (result == Integer.MAX_VALUE / 10 && digit > 7) {
+    return 0;  // Would overflow on addition (MAX_VALUE ends in 7)
+}
+result = result * 10 + digit;
+```
+
+**Why this works:**
+- `Integer.MAX_VALUE = 2147483647` (ends in 7)
+- `Integer.MAX_VALUE / 10 = 214748364`
+- If `result > 214748364`, then `result * 10` exceeds the limit
+- If `result == 214748364` and `digit > 7`, then `result * 10 + digit > 2147483647`
+
+**Negative numbers:**
+- `Integer.MIN_VALUE = -2147483648` (ends in 8)
+- `Integer.MIN_VALUE / 10 = -214748364`
+- Similar check: if `result < -214748364` or `(result == -214748364 && digit < -8)`
+
+#### Digit Transformation Problems
+
+**Sum of squares of digits:**
+```java
+int sumOfSquares(int n) {
+    int sum = 0;
+    while (n > 0) {
+        int digit = n % 10;
+        sum += digit * digit;
+        n /= 10;
+    }
+    return sum;
+}
+```
+
+Used in [Happy Number](#lc-happy-number) to detect cycles in the transformation sequence.
+
+**Digital root (repeated digit sum until single digit):**
+```java
+int digitalRoot(int n) {
+    while (n >= 10) {
+        int sum = 0;
+        while (n > 0) {
+            sum += n % 10;
+            n /= 10;
+        }
+        n = sum;
+    }
+    return n;
+}
+```
+
+### Fast Exponentiation {#intro-fast-exponentiation}
+
+Fast exponentiation (also called binary exponentiation or exponentiation by squaring) computes $x^n$ in O(log n) time instead of O(n). This technique is essential for large exponents and forms the basis of modular exponentiation used in cryptography.
+
+#### Core Idea
+
+The key insight is based on the recursive property:
+
+$$
+x^n =
+\begin{cases}
+1 & \text{if } n = 0 \\
+x & \text{if } n = 1 \\
+(x^{n/2})^2 & \text{if } n \text{ is even} \\
+x \cdot (x^{(n-1)/2})^2 & \text{if } n \text{ is odd}
+\end{cases}
+$$
+
+Instead of multiplying `x` by itself `n` times, we:
+1. Compute $x^{n/2}$ recursively (halving the problem)
+2. Square the result
+3. Multiply by `x` one more time if `n` is odd
+
+**Example: Compute $2^{10}$**
+
+Traditional approach (O(n)):
+```
+2^10 = 2 × 2 × 2 × 2 × 2 × 2 × 2 × 2 × 2 × 2  (10 multiplications)
+```
+
+Fast exponentiation (O(log n)):
+```
+2^10 = (2^5)^2
+2^5  = 2 × (2^2)^2
+2^2  = (2^1)^2
+2^1  = 2
+
+Working backwards:
+2^1  = 2
+2^2  = 4
+2^5  = 2 × 16 = 32
+2^10 = 1024
+
+Only 4 multiplications instead of 10!
+```
+
+#### Recursive Implementation
+
+```java
+double fastPow(double x, long n) {
+    // Base cases
+    if (n == 0) return 1.0;
+    if (n == 1) return x;
+
+    // Recursive case: compute x^(n/2)
+    double half = fastPow(x, n / 2);
+
+    // Even exponent: (x^(n/2))^2
+    if (n % 2 == 0) {
+        return half * half;
+    }
+    // Odd exponent: x * (x^(n/2))^2
+    return x * half * half;
+}
+```
+
+**Time Complexity**: O(log n) - each recursive call halves the exponent
+**Space Complexity**: O(log n) - recursion stack depth
+
+#### Iterative Implementation
+
+The iterative version uses the binary representation of the exponent:
+
+```java
+double fastPowIterative(double x, long n) {
+    double result = 1.0;
+    double base = x;
+
+    while (n > 0) {
+        // If current bit is 1, multiply result by current base
+        if (n % 2 == 1) {
+            result *= base;
+        }
+        // Square the base for next bit position
+        base *= base;
+        // Process next bit
+        n /= 2;
+    }
+
+    return result;
+}
+```
+
+**How it works**: Process each bit of the exponent from right to left. For each bit position $i$, `base` represents $x^{2^i}$.
+
+**Example: $3^{13}$ where $13 = 1101_2$**
+```
+Binary: 13 = 1101₂ = 8 + 4 + 1
+So: 3^13 = 3^8 × 3^4 × 3^1
+
+Iteration 1: bit=1, result = 3^1 = 3,      base = 3^2 = 9,   n = 6 (110₂)
+Iteration 2: bit=0, result = 3,            base = 9^2 = 81,  n = 3 (11₂)
+Iteration 3: bit=1, result = 3 × 81 = 243, base = 81^2,      n = 1 (1₂)
+Iteration 4: bit=1, result = 243 × 81^2,   base = ...,       n = 0
+```
+
+**Time Complexity**: O(log n)
+**Space Complexity**: O(1) - no recursion
+
+#### Handling Negative Exponents
+
+For negative exponents, use the property: $x^{-n} = \frac{1}{x^n}$
+
+```java
+double myPow(double x, int n) {
+    long exp = n;  // Use long to avoid overflow when negating Integer.MIN_VALUE
+
+    if (exp < 0) {
+        x = 1 / x;  // Invert base
+        exp = -exp; // Make exponent positive
+    }
+
+    return fastPow(x, exp);
+}
+```
+
+**Edge case**: `n = Integer.MIN_VALUE = -2147483648`
+- Negating gives overflow in int range (MAX_VALUE = 2147483647)
+- Solution: Use `long` for the exponent
+
+#### Applications
+
+**1. Modular Exponentiation**
+
+Compute $(x^n) \mod m$ efficiently for cryptography:
+
+```java
+long modPow(long x, long n, long m) {
+    long result = 1;
+    x %= m;  // Handle x >= m
+
+    while (n > 0) {
+        if (n % 2 == 1) {
+            result = (result * x) % m;
+        }
+        x = (x * x) % m;
+        n /= 2;
+    }
+
+    return result;
+}
+```
+
+**2. Matrix Exponentiation**
+
+Compute Fibonacci numbers in O(log n) time using matrix exponentiation:
+
+$$
+\begin{bmatrix} F_{n+1} \\ F_n \end{bmatrix} =
+\begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}^n
+\begin{bmatrix} 1 \\ 0 \end{bmatrix}
+$$
+
+See [Pow(x, n)](#lc-pow-x-n) for detailed implementation.
+
+### Number Theory {#intro-number-theory}
+
+Number theory deals with properties and relationships of integers. Interview problems often focus on prime numbers, divisibility, greatest common divisors, and modular arithmetic.
+
+#### Prime Numbers
+
+A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.
+
+**Primality Test (Naive):**
+```java
+boolean isPrime(int n) {
+    if (n <= 1) return false;
+    if (n <= 3) return true;
+    if (n % 2 == 0 || n % 3 == 0) return false;
+
+    // Check divisors up to √n
+    for (int i = 5; i * i <= n; i += 6) {
+        if (n % i == 0 || n % (i + 2) == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+
+**Time Complexity**: $O(\sqrt{n})$
+
+**Why check only up to $\sqrt{n}$?**
+- If `n = a × b` and both `a > √n` and `b > √n`, then `a × b > n` (contradiction)
+- So at least one factor must be $\le \sqrt{n}$
+
+#### Sieve of Eratosthenes {#intro-sieve-eratosthenes}
+
+An ancient algorithm to find all prime numbers up to a given limit `n`. Instead of testing each number individually, it systematically marks composite (non-prime) numbers.
+
+**Algorithm:**
+1. Create a boolean array `isComposite[n]` initialized to `false`
+2. For each number `i` from 2 to $\sqrt{n}$:
+   - If `isComposite[i]` is `false`, then `i` is prime
+   - Mark all multiples of `i` starting from $i^2$ as composite
+3. Count remaining `false` entries (these are primes)
+
+**Why start marking from $i^2$?**
+- All smaller multiples of `i` (like $2i, 3i, ..., (i-1)i$) have already been marked by smaller primes
+- Example: When `i = 5`, multiples $10, 15, 20$ were already marked by 2, 3, 4
+
+**Implementation:**
+```java
+int countPrimes(int n) {
+    if (n < 2) return 0;
+
+    boolean[] isComposite = new boolean[n];
+
+    // Mark composites
+    for (int i = 2; i * i < n; i++) {
+        if (!isComposite[i]) {
+            // Mark multiples of i starting from i²
+            for (int j = i * i; j < n; j += i) {
+                isComposite[j] = true;
+            }
+        }
+    }
+
+    // Count primes
+    int count = 0;
+    for (int i = 2; i < n; i++) {
+        if (!isComposite[i]) {
+            count++;
+        }
+    }
+
+    return count;
+}
+```
+
+**Time Complexity**: $O(n \log \log n)$
+- The nested loop runs: $n/2 + n/3 + n/5 + ... = n \cdot (1/2 + 1/3 + 1/5 + ...)$
+- Sum of reciprocals of primes up to n is $\log \log n$
+
+**Space Complexity**: O(n) for the boolean array
+
+**Example: Find primes less than 30**
+```
+Initial:  [F F F F F F F F F F F F F F F F F F F F F F F F F F F F F F]
+           0 1 2 3 4 5 6 7 8 9 ...                                  29
+
+After i=2: Mark 4,6,8,10,12,14,16,18,20,22,24,26,28
+After i=3: Mark 9,15,21,27 (6,12,18,24 already marked)
+After i=5: Mark 25 (10,15,20 already marked)
+
+Primes: 2,3,5,7,11,13,17,19,23,29 (count = 10)
+```
+
+See [Count Primes](#lc-count-primes) for detailed implementation.
+
+#### Greatest Common Divisor (GCD)
+
+The largest positive integer that divides both numbers without remainder.
+
+**Euclidean Algorithm:**
+```java
+int gcd(int a, int b) {
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+```
+
+**How it works**: Based on the property: `gcd(a, b) = gcd(b, a % b)`
+
+**Example: gcd(48, 18)**
+```
+gcd(48, 18) = gcd(18, 48 % 18) = gcd(18, 12)
+            = gcd(12, 18 % 12) = gcd(12, 6)
+            = gcd(6, 12 % 6)   = gcd(6, 0)
+            = 6
+```
+
+**Time Complexity**: O(log min(a, b))
+
+**Least Common Multiple (LCM):**
+```java
+int lcm(int a, int b) {
+    return (a * b) / gcd(a, b);
+}
+```
+
+**Important**: Compute `gcd` first to avoid overflow: `(a / gcd) * b` is safer than `(a * b) / gcd`.
+
+#### Modular Arithmetic
+
+Properties of arithmetic modulo a number `m`:
+
+**Basic properties:**
+- $(a + b) \mod m = ((a \mod m) + (b \mod m)) \mod m$
+- $(a - b) \mod m = ((a \mod m) - (b \mod m) + m) \mod m$
+- $(a \times b) \mod m = ((a \mod m) \times (b \mod m)) \mod m$
+
+**Modular exponentiation** (covered in Fast Exponentiation section):
+- Compute $(x^n) \mod m$ without overflow
+
+**Modular inverse:**
+- Find $x$ such that $(a \times x) \mod m = 1$
+- When $m$ is prime: $a^{-1} \equiv a^{m-2} \pmod{m}$ (Fermat's Little Theorem)
+
+### Probability and Rejection Sampling {#intro-rejection-sampling}
+
+Rejection sampling is a technique to generate samples from a target distribution by sampling from a simpler distribution and rejecting samples that don't meet certain criteria.
+
+#### Core Concept
+
+When you can't directly sample from a target distribution but can:
+1. Sample from a larger, simpler distribution
+2. Determine if a sample belongs to the target distribution
+
+Then you can use rejection sampling:
+1. Generate a sample from the larger distribution
+2. If the sample is in the target distribution, accept it
+3. Otherwise, reject and retry
+
+#### Mapping Random Ranges
+
+**Problem**: Generate uniform `rand(N)` using `rand(M)` where $N > M$
+
+**Solution**: Create a larger uniform range, then reject out-of-range values.
+
+**Example: Implement rand10() using rand7()**
+
+We need 10 equally likely outcomes but only have 7.
+
+**Step 1: Create larger range**
+- Call `rand7()` twice to get 49 equally likely outcomes: `(rand7() - 1) * 7 + rand7()` produces `[1, 49]`
+
+**Step 2: Map to target range**
+- Use first 40 values (divisible by 10) and map to `[1, 10]`
+- Each output value gets exactly 4 inputs: `1→{1,2,3,4}`, `2→{5,6,7,8}`, ..., `10→{37,38,39,40}`
+- Mapping function: `(rand49 - 1) / 4 + 1`
+
+**Step 3: Reject out-of-range**
+- Reject values in `[41, 49]` and retry
+- Acceptance probability: 40/49 ≈ 81.6%
+
+**Implementation:**
+```java
+int rand10() {
+    while (true) {
+        int rand49 = (rand7() - 1) * 7 + rand7();  // [1, 49]
+
+        if (rand49 <= 40) {
+            return (rand49 - 1) / 4 + 1;  // [1, 10]
+        }
+        // Implicit rejection: loop continues
+    }
+}
+```
+
+**Expected number of calls:**
+- Geometric distribution with success probability $p = 40/49$
+- Expected iterations: $1/p = 49/40 \approx 1.225$
+- Expected `rand7()` calls: $2 \times 1.225 \approx 2.45$
+
+See [Implement Rand10() Using Rand7()](#lc-rand10-using-rand7) for detailed solution.
+
+#### Why Rejection is Necessary
+
+**Without rejection (incorrect):**
+If we tried to directly map `[1, 49] → [1, 10]` using modulo:
+```java
+return (rand49 % 10) + 1;  // WRONG!
+```
+
+This would be biased:
+- Values 1-9 appear 5 times each (e.g., 1 appears at: 1, 11, 21, 31, 41)
+- Value 10 appears only 4 times (10, 20, 30, 40)
+- Not uniform!
+
+**With rejection (correct):**
+- Each output value appears exactly 4 times in `[1, 40]`
+- Rejected values `[41, 49]` don't affect distribution
+- Result is perfectly uniform
+
+#### Applications
+
+**1. Reservoir Sampling**
+
+Select `k` random items from a stream of unknown length with uniform probability.
+
+**2. Monte Carlo Methods**
+
+Estimate areas, integrals, or probabilities by random sampling.
+
+**3. Random Permutations**
+
+Generate random shuffles using Fisher-Yates algorithm.
+
+**4. Load Balancing**
+
+Randomly distribute requests with weighted probabilities (rejection sampling for non-uniform weights).
