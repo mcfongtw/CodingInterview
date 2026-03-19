@@ -1417,6 +1417,237 @@ func canConstruct(ransomNote string, magazine string) bool {
 ```
 
 
+## Longest Palindrome {#lc-longest-palindrome}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 409
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/longest-palindrome/
+- **Tags**: Amazon, Google, Intuit
+- **Techniques**: [Hash Table](glossary-of-algorithm.html#glossary-hash-table), Greedy, String, Counting
+
+### Description
+
+Given a string `s` which consists of lowercase or uppercase letters, return the length of the longest palindrome that can be built with those letters.
+
+Letters are case sensitive, for example, "Aa" is not considered a palindrome.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "abccccdd"
+Output: 7
+Explanation: One longest palindrome that can be built is "dccaccd", whose length is 7.
+```
+
+**Example 2:**
+```
+Input: s = "a"
+Output: 1
+Explanation: The longest palindrome that can be built is "a", whose length is 1.
+```
+
+### Constraints
+
+- $1 \le$ s.length $\le$ 2000
+- `s` consists of lowercase and/or uppercase English letters only
+
+### Solution - Greedy Frequency Counting
+
+#### Walkthrough
+
+This problem asks for the **length** of the longest palindrome that can be built from given letters, not the palindrome itself. The key insight is understanding the structure of palindromes:
+
+**Core Concept - Palindrome Character Frequency:**
+- A palindrome reads the same forwards and backwards
+- Characters must appear in **pairs** on both sides of the center
+- **At most ONE** character can have an odd count (placed in the center)
+- Example: "racecar" has pairs (r,r), (a,a), (c,c) and center 'e'
+
+**Greedy Strategy:**
+
+The optimal approach is to maximize the palindrome length by:
+1. **Count character frequencies** using a hash map
+2. **For even frequencies**: Use all characters (they form perfect pairs)
+3. **For odd frequencies**: Use (freq - 1) characters to form pairs, save 1 for potential center
+4. **Add one center character** if any odd frequency exists
+
+**Why This Works:**
+- We greedily take as many pairs as possible from each character
+- We don't waste any characters that can form pairs
+- We optimally use exactly one odd character as the center if available
+
+**Visual Example with s = "abccccdd":**
+
+```
+Step 1: Build frequency map
+  s = "abccccdd"
+  freqMap = {a: 1, b: 1, c: 4, d: 2}
+
+Step 2: Process each character frequency
+  Character 'a': freq = 1 (odd)
+    → Use 0 characters (1 - 1 = 0 pairs)
+    → result = 0, hasOddFreq = true
+
+  Character 'b': freq = 1 (odd)
+    → Use 0 characters (1 - 1 = 0 pairs)
+    → result = 0, hasOddFreq = true (already)
+
+  Character 'c': freq = 4 (even)
+    → Use all 4 characters (2 pairs: cc...cc)
+    → result = 0 + 4 = 4
+
+  Character 'd': freq = 2 (even)
+    → Use all 2 characters (1 pair: d...d)
+    → result = 4 + 2 = 6
+
+Step 3: Add center character
+  hasOddFreq = true
+  → result += 1 (place one 'a' or 'b' in center)
+  → result = 7
+
+Final result: 7
+
+One possible palindrome: "dccaccd"
+  Structure: dd + cc + a + cc + dd
+             ↑pairs↑  center  ↑pairs↑
+```
+
+**Visual Example with s = "a":**
+
+```
+Step 1: Build frequency map
+  freqMap = {a: 1}
+
+Step 2: Process each character
+  Character 'a': freq = 1 (odd)
+    → result = 0 (1 - 1), hasOddFreq = true
+
+Step 3: Add center character
+  hasOddFreq = true
+  → result = 0 + 1 = 1
+
+Result: 1 (palindrome is "a")
+```
+
+**Edge Cases Handled:**
+
+1. **All even frequencies**: e.g., "aabbcc" → 6 (no center needed)
+2. **All odd frequencies**: e.g., "abc" → 3 (take 0 from each, add 1 center)
+3. **Single character**: e.g., "a" → 1
+4. **Case sensitivity**: 'A' and 'a' are different characters
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the length of string `s`
+  - Building frequency map: O(n) - single pass through string
+  - Iterating through frequency map: O(k) where k is number of unique characters
+  - k is at most 52 (26 lowercase + 26 uppercase letters)
+  - Total: O(n) + O(52) = O(n)
+
+- **Space Complexity**: O(k) where k is number of unique characters
+  - HashMap stores at most 52 entries (26 lowercase + 26 uppercase)
+  - In practice: O(1) since alphabet size is constant
+  - Total: O(1)
+
+#### Implementation Steps
+
+1. **Initialize frequency map**: Create a `HashMap<Character, Integer>` to count character occurrences
+
+2. **Build frequency map**: Iterate through string and count each character
+   - For each character, get current count (default 0) and increment by 1
+   - Use `getOrDefault(c, 0)` for clean initialization
+
+3. **Process frequencies greedily**:
+   - Initialize `result = 0` and `hasOddFreq = false`
+   - For each entry in the frequency map:
+     - If frequency is **even**: add entire frequency to result
+     - If frequency is **odd**: add (freq - 1) to result, set `hasOddFreq = true`
+
+4. **Add center character**: If `hasOddFreq` is true, add 1 to result
+   - This represents placing one odd-count character in the center
+
+5. **Return result**: The maximum palindrome length
+
+#### Code - Java
+
+```java
+class Solution {
+    public int longestPalindrome(String s) {
+        Map<Character, Integer> freqMap = new HashMap<>();
+
+        // Build frequency map
+        for (char c : s.toCharArray()) {
+            int freq = freqMap.getOrDefault(c, 0) + 1;
+            freqMap.put(c, freq);
+        }
+
+        int result = 0;
+        boolean hasOddFreq = false;
+
+        // Process each character frequency
+        for (Map.Entry<Character, Integer> entry : freqMap.entrySet()) {
+            int freq = entry.getValue();
+
+            if (freq % 2 == 0) {
+                // Even frequency: use all characters
+                result += freq;
+            } else {
+                // Odd frequency: use (freq - 1) for pairs
+                result += freq - 1;
+                hasOddFreq = true;
+            }
+        }
+
+        // Add one center character if any odd frequency exists
+        if (hasOddFreq) {
+            result += 1;
+        }
+
+        return result;
+    }
+}
+```
+
+#### Code - Go
+
+```go
+func longestPalindrome(s string) int {
+    freqMap := make(map[rune]int)
+    result := 0
+
+    // Build frequency map
+    for _, c := range s {
+        freqMap[c]++
+    }
+
+    hasOdd := false
+
+    // Process each character frequency
+    for _, freq := range freqMap {
+        if freq%2 == 0 {
+            // Even frequency: use all characters
+            result += freq
+        } else {
+            // Odd frequency: use (freq - 1) for pairs
+            result += freq - 1
+            hasOdd = true
+        }
+    }
+
+    // Add one center character if any odd frequency exists
+    if hasOdd {
+        result++
+    }
+
+    return result
+}
+```
+
+
 ## Longest Repeating Character Replacement {#lc-longest-repeating-character-replacement}
 
 ### Problem Metadata
