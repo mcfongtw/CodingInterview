@@ -888,3 +888,636 @@ All three approaches have O(V + E) time complexity and are equally correct. Choo
 - **3-State DFS**: Most memory-efficient (single array)
 - **RecStack DFS**: Most intuitive for understanding recursion paths
 - **Kahn's BFS**: Produces topological order as a bonus
+
+### Weighted Graphs {#weighted-graphs}
+
+A **weighted graph** is a graph where each edge has an associated numerical value (weight/cost). Weights can represent:
+- Distance between cities
+- Cost of travel
+- Time required for a task
+- Network bandwidth or latency
+
+Weighted graphs can be either **directed** or **undirected**. Most weighted graph algorithms work on both types (an undirected edge is simply two directed edges with the same weight in opposite directions).
+
+**Representation:**
+
+```
+Adjacency List with weights:
+| 0 | -- (1,4) -- (2,1)
+| 1 | -- (0,4) -- (2,2) -- (3,5)
+| 2 | -- (0,1) -- (1,2) -- (3,8)
+| 3 | -- (1,5) -- (2,8)
+
+Adjacency Matrix with weights:
+     0   1   2   3
+0 [  0   4   1   ∞ ]
+1 [  4   0   2   5 ]
+2 [  1   2   0   8 ]
+3 [  ∞   5   8   0 ]
+```
+
+**Common Java Representation:**
+
+```java
+// Edge class for weighted graphs
+class Edge {
+    int to;      // destination vertex
+    int weight;  // edge weight
+
+    Edge(int to, int weight) {
+        this.to = to;
+        this.weight = weight;
+    }
+}
+
+// Graph as adjacency list
+List<Edge>[] graph = new ArrayList[n];
+for (int i = 0; i < n; i++) {
+    graph[i] = new ArrayList<>();
+}
+
+// Add directed edge from u to v with weight
+graph[u].add(new Edge(v, weight));
+
+// For undirected graphs, add both directions:
+graph[u].add(new Edge(v, weight));
+graph[v].add(new Edge(u, weight));
+```
+
+#### Shortest Path Algorithms {#shortest-path-algorithms}
+
+Shortest path algorithms find the path with minimum total weight between vertices. Unlike unweighted BFS (which finds shortest path by edge count), weighted graphs require specialized algorithms.
+
+##### Dijkstra's Algorithm {#dijkstra-algorithm}
+
+**Purpose:** Find shortest path from a **single source** to all other vertices in graphs with **non-negative** edge weights.
+
+**Key Insight:**
+
+Greedily select the unvisited node with the smallest known distance, then update distances to its neighbors. This works because:
+- We always process nodes in order of increasing distance from source
+- Once a node is processed, we've found its shortest path (no negative weights means no future path can be shorter)
+
+**Algorithm:**
+
+1. Initialize distances: `dist[source] = 0`, all others = $\infty$
+2. Use a min-heap (priority queue) to track (distance, node) pairs
+3. Start with source node in the heap
+4. While heap not empty:
+   - Extract node with minimum distance
+   - If already visited, skip (optimization)
+   - Mark as visited
+   - For each neighbor:
+     - Calculate new distance: `dist[node] + edge_weight`
+     - If new distance < current distance to neighbor:
+       - Update distance
+       - Add neighbor to heap
+
+**Example:**
+
+Find shortest paths from source vertex 0:
+
+```
+Graph (edge weights shown in parentheses):
+
+        1 ------(5)------ 3
+       /|                 |
+     (4)|                 |
+     /  |                 |
+    0   |(2)             (8)
+     \  |                 |
+     (1)|                 |
+       \|                 |
+        2 ------(8)------ 4
+
+Edges with weights:
+0→1 (4)    1→2 (2)    2→4 (8)
+0→2 (1)    1→3 (5)    3→4 (8)
+
+Step-by-step execution:
+
+Initial: dist = [0, ∞, ∞, ∞, ∞]
+         heap = [(0, vertex:0)]
+
+Extract (0, vertex:0):
+  - Visit neighbors: 1 with weight (4), 2 with weight (1)
+  - Update: dist[1] = 0+4 = 4, dist[2] = 0+1 = 1
+  - dist = [0, 4, 1, ∞, ∞]
+  - heap = [(1, vertex:2), (4, vertex:1)]
+
+Extract (1, vertex:2):
+  - Visit neighbors: 1 with weight (2), 4 with weight (8)
+  - Update: dist[1] = min(4, 1+2) = 3, dist[4] = 1+8 = 9
+  - dist = [0, 3, 1, ∞, 9]
+  - heap = [(3, vertex:1), (4, vertex:1), (9, vertex:4)]
+
+Extract (3, vertex:1):
+  - Visit neighbors: 3 with weight (5)
+  - Update: dist[3] = 3+5 = 8
+  - dist = [0, 3, 1, 8, 9]
+  - heap = [(4, vertex:1), (8, vertex:3), (9, vertex:4)]
+
+Extract (4, vertex:1):
+  - Already processed (visited), skip
+
+Extract (8, vertex:3):
+  - Visit neighbors: 4 with weight (8)
+  - Update: dist[4] = min(9, 8+8) = 9 (no change)
+  - dist = [0, 3, 1, 8, 9]
+  - heap = [(9, vertex:4)]
+
+Extract (9, vertex:4):
+  - No unvisited neighbors
+  - All vertices processed
+
+Final shortest distances from vertex 0:
+  To vertex 0: 0
+  To vertex 1: 3 (path: 0→2→1)
+  To vertex 2: 1 (path: 0→2)
+  To vertex 3: 8 (path: 0→2→1→3)
+  To vertex 4: 9 (path: 0→2→4)
+```
+
+**Time Complexity:**
+- With binary heap: $O((V + E) \log V)$
+- With Fibonacci heap: $O(E + V \log V)$ (theoretical, rarely used in practice)
+
+**Space Complexity:** $O(V + E)$ for graph storage + $O(V)$ for distance array and heap
+
+**Java Implementation:**
+
+```java
+int[] dijkstra(List<Edge>[] graph, int source) {
+    int n = graph.length;
+    int[] dist = new int[n];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[source] = 0;
+
+    // Min-heap: (distance, node)
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+    pq.offer(new int[]{0, source});
+
+    boolean[] visited = new boolean[n];
+
+    while (!pq.isEmpty()) {
+        int[] curr = pq.poll();
+        int d = curr[0];
+        int node = curr[1];
+
+        if (visited[node]) continue; // Skip if already processed
+        visited[node] = true;
+
+        for (Edge edge : graph[node]) {
+            int newDist = dist[node] + edge.weight;
+            if (newDist < dist[edge.to]) {
+                dist[edge.to] = newDist;
+                pq.offer(new int[]{newDist, edge.to});
+            }
+        }
+    }
+
+    return dist;
+}
+```
+
+**When to Use:**
+- Non-negative edge weights only
+- Single-source shortest path
+- Need actual shortest distances (not just path existence)
+
+**Limitations:**
+- **Cannot handle negative weights** (greedy approach breaks down)
+- More complex than BFS for unweighted graphs
+
+##### Bellman-Ford Algorithm {#bellman-ford-algorithm}
+
+**Purpose:** Find shortest path from a **single source** to all other vertices, works with **negative edge weights**, and can **detect negative cycles**.
+
+**Key Insight:**
+
+Relax all edges repeatedly. After $V-1$ iterations, all shortest paths are found (since any simple path has at most $V-1$ edges). A $V^{th}$ iteration that still updates distances indicates a negative cycle.
+
+**Algorithm:**
+
+1. Initialize distances: `dist[source] = 0`, all others = $\infty$
+2. Repeat $V-1$ times:
+   - For each edge $(u, v, weight)$:
+     - If `dist[u] + weight < dist[v]`:
+       - Update `dist[v] = dist[u] + weight`
+3. Check for negative cycles:
+   - For each edge $(u, v, weight)$:
+     - If `dist[u] + weight < dist[v]`: negative cycle detected
+
+**Example:**
+
+Find shortest paths from node 0 with negative edge:
+
+```
+Graph:
+    1 --5-- 3
+   /|
+  4 |
+ /  -2
+0   |
+ \  1
+  1 |
+   \|
+    2
+
+Iteration 0: dist = [0, ∞, ∞, ∞]
+Iteration 1: dist = [0, 4, 1, ∞]
+Iteration 2: dist = [0, 2, 1, 7]  (updated: 1←2 via edge 2→1 with -2)
+Iteration 3: dist = [0, 2, 1, 7]  (no changes)
+```
+
+**Time Complexity:** $O(V \cdot E)$ - much slower than Dijkstra's
+
+**Space Complexity:** $O(V)$ for distance array
+
+**Java Implementation:**
+
+```java
+int[] bellmanFord(int n, int[][] edges, int source) {
+    int[] dist = new int[n];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[source] = 0;
+
+    // Relax all edges V-1 times
+    for (int i = 0; i < n - 1; i++) {
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int weight = edge[2];
+
+            if (dist[u] != Integer.MAX_VALUE && dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+            }
+        }
+    }
+
+    // Check for negative cycles
+    for (int[] edge : edges) {
+        int u = edge[0];
+        int v = edge[1];
+        int weight = edge[2];
+
+        if (dist[u] != Integer.MAX_VALUE && dist[u] + weight < dist[v]) {
+            throw new IllegalArgumentException("Graph contains negative cycle");
+        }
+    }
+
+    return dist;
+}
+```
+
+**When to Use:**
+- Graph has negative edge weights
+- Need to detect negative cycles
+- Graph is small (due to slower performance)
+
+**Comparison with Dijkstra's:**
+
+| Feature | Dijkstra's | Bellman-Ford |
+|---------|-----------|--------------|
+| Negative weights | ❌ No | ✅ Yes |
+| Negative cycle detection | ❌ No | ✅ Yes |
+| Time complexity | $O((V+E) \log V)$ | $O(V \cdot E)$ |
+| Implementation | Priority queue | Simple nested loops |
+| Best for | Dense graphs, non-negative weights | Negative weights, small graphs |
+
+##### Floyd-Warshall Algorithm {#floyd-warshall-algorithm}
+
+**Purpose:** Find shortest paths between **all pairs** of vertices. Works with negative weights but not negative cycles.
+
+**Key Insight:**
+
+Use dynamic programming with intermediate vertices. For each pair of vertices $(i, j)$, consider whether going through vertex $k$ provides a shorter path than the direct path.
+
+**Algorithm:**
+
+1. Initialize distance matrix:
+   - `dist[i][j] = weight` if edge exists
+   - `dist[i][i] = 0` for all vertices
+   - `dist[i][j] = ∞` otherwise
+2. For each intermediate vertex $k$ from 0 to $V-1$:
+   - For each source vertex $i$:
+     - For each destination vertex $j$:
+       - `dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])`
+
+**Example:**
+
+```
+Graph:
+0 --1--> 2
+|        ^
+3        |
+|        2
+v        |
+1 -------+
+
+Initial matrix:
+     0   1   2
+0 [  0   3   1 ]
+1 [  ∞   0   2 ]
+2 [  ∞   ∞   0 ]
+
+k=0: Consider paths through vertex 0
+     0   1   2
+0 [  0   3   1 ]
+1 [  ∞   0   2 ]
+2 [  ∞   ∞   0 ]
+
+k=1: Consider paths through vertex 1
+     0   1   2
+0 [  0   3   1 ]
+1 [  ∞   0   2 ]
+2 [  ∞   ∞   0 ]
+
+k=2: Consider paths through vertex 2
+     0   1   2
+0 [  0   3   1 ]
+1 [  ∞   0   2 ]
+2 [  ∞   ∞   0 ]
+
+Final: All-pairs shortest distances
+```
+
+**Time Complexity:** $O(V^3)$ - three nested loops
+
+**Space Complexity:** $O(V^2)$ for distance matrix
+
+**Java Implementation:**
+
+```java
+int[][] floydWarshall(int n, int[][] edges) {
+    int[][] dist = new int[n][n];
+
+    // Initialize
+    for (int i = 0; i < n; i++) {
+        Arrays.fill(dist[i], Integer.MAX_VALUE / 2); // Avoid overflow
+        dist[i][i] = 0;
+    }
+
+    for (int[] edge : edges) {
+        int u = edge[0];
+        int v = edge[1];
+        int weight = edge[2];
+        dist[u][v] = weight;
+    }
+
+    // Floyd-Warshall
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+            }
+        }
+    }
+
+    return dist;
+}
+```
+
+**When to Use:**
+- Need shortest paths between **all pairs** of vertices
+- Graph is small ($V \le 400$ typically)
+- Simple implementation needed
+
+**Comparison of Shortest Path Algorithms:**
+
+| Algorithm | Use Case | Negative Weights | Time | Space |
+|-----------|----------|------------------|------|-------|
+| BFS | Unweighted, single-source | N/A | $O(V+E)$ | $O(V)$ |
+| Dijkstra's | Weighted, single-source | ❌ No | $O((V+E) \log V)$ | $O(V)$ |
+| Bellman-Ford | Single-source, negative weights | ✅ Yes | $O(V \cdot E)$ | $O(V)$ |
+| Floyd-Warshall | All-pairs | ✅ Yes (no cycles) | $O(V^3)$ | $O(V^2)$ |
+
+#### Minimum Spanning Tree {#minimum-spanning-tree}
+
+A **Minimum Spanning Tree (MST)** is a subset of edges that:
+1. Connects all vertices (spanning tree)
+2. Has no cycles (tree property)
+3. Has minimum total edge weight
+
+**Properties:**
+- An MST has exactly $V - 1$ edges
+- Removing any edge disconnects the tree
+- Adding any edge creates a cycle
+- MSTs are not unique if edges have equal weights
+
+**Applications:**
+- Network design (minimize cable length)
+- Clustering algorithms
+- Approximation for Traveling Salesman Problem
+
+##### Prim's Algorithm {#prim-algorithm}
+
+**Purpose:** Build MST by greedily adding the **minimum weight edge** that connects a visited vertex to an unvisited vertex.
+
+**Key Insight:**
+
+Start from any vertex and grow the tree by repeatedly adding the cheapest edge that expands the tree to a new vertex. Similar to Dijkstra's but focuses on edge weights instead of path distances.
+
+**Algorithm:**
+
+1. Start with arbitrary vertex, mark as visited
+2. Use min-heap to track edges from visited vertices
+3. While heap not empty and not all vertices visited:
+   - Extract minimum weight edge
+   - If destination already visited, skip
+   - Add edge to MST
+   - Mark destination as visited
+   - Add all edges from destination to heap
+
+**Example:**
+
+```
+Graph:
+    1
+   /|\
+  4 2 5
+ /  |  \
+0   |   3
+ \  1   |
+  1 |   8
+   \|   |
+    2---4
+
+Step-by-step:
+Start: vertex 0, MST = []
+Heap: [(1,0→2), (4,0→1)]
+
+Pick (1,0→2): MST = [(0,2,1)], visited = {0,2}
+Heap: [(1,2→1), (4,0→1), (8,2→4)]
+
+Pick (1,2→1): MST = [(0,2,1), (2,1,1)], visited = {0,1,2}
+Heap: [(2,1→2), (4,0→1), (5,1→3), (8,2→4)]
+
+Pick (2,1→2): Skip (2 already visited)
+Heap: [(4,0→1), (5,1→3), (8,2→4)]
+
+Pick (4,0→1): Skip (1 already visited)
+Heap: [(5,1→3), (8,2→4)]
+
+Pick (5,1→3): MST = [(0,2,1), (2,1,1), (1,3,5)], visited = {0,1,2,3}
+Heap: [(8,2→4), (8,3→4)]
+
+Pick (8,2→4): MST = [(0,2,1), (2,1,1), (1,3,5), (2,4,8)]
+
+Total MST weight: 1 + 1 + 5 + 8 = 15
+```
+
+**Time Complexity:** $O((V + E) \log V)$ with binary heap
+
+**Space Complexity:** $O(V + E)$
+
+**Java Implementation:**
+
+```java
+class Edge {
+    int to, weight;
+    Edge(int to, int weight) {
+        this.to = to;
+        this.weight = weight;
+    }
+}
+
+int primMST(List<Edge>[] graph) {
+    int n = graph.length;
+    boolean[] visited = new boolean[n];
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]); // (weight, to)
+
+    int mstWeight = 0;
+    int edgesUsed = 0;
+
+    // Start from vertex 0
+    visited[0] = true;
+    for (Edge e : graph[0]) {
+        pq.offer(new int[]{e.weight, e.to});
+    }
+
+    while (!pq.isEmpty() && edgesUsed < n - 1) {
+        int[] curr = pq.poll();
+        int weight = curr[0];
+        int to = curr[1];
+
+        if (visited[to]) continue; // Skip if already in MST
+
+        visited[to] = true;
+        mstWeight += weight;
+        edgesUsed++;
+
+        for (Edge e : graph[to]) {
+            if (!visited[e.to]) {
+                pq.offer(new int[]{e.weight, e.to});
+            }
+        }
+    }
+
+    return edgesUsed == n - 1 ? mstWeight : -1; // -1 if graph not connected
+}
+```
+
+##### Kruskal's Algorithm {#kruskal-algorithm}
+
+**Purpose:** Build MST by sorting all edges by weight and greedily adding edges that don't create cycles.
+
+**Key Insight:**
+
+Process edges in ascending weight order. Use Union-Find to efficiently detect if adding an edge would create a cycle. If not, add it to the MST.
+
+**Algorithm:**
+
+1. Sort all edges by weight (ascending)
+2. Initialize Union-Find with each vertex as its own set
+3. For each edge $(u, v, weight)$ in sorted order:
+   - If $u$ and $v$ are in different sets (no cycle):
+     - Add edge to MST
+     - Union the sets
+   - Stop when MST has $V - 1$ edges
+
+**Example:**
+
+```
+Graph edges (sorted by weight):
+(0,2,1), (1,2,1), (0,1,4), (1,3,5), (2,4,8), (3,4,8)
+
+Process (0,2,1): Union(0,2) ✓ MST = [(0,2,1)]
+Process (1,2,1): Union(1,2) ✓ MST = [(0,2,1), (1,2,1)]
+Process (0,1,4): Skip (0,1 already connected via 2)
+Process (1,3,5): Union(1,3) ✓ MST = [(0,2,1), (1,2,1), (1,3,5)]
+Process (2,4,8): Union(2,4) ✓ MST = [(0,2,1), (1,2,1), (1,3,5), (2,4,8)]
+
+Total MST weight: 1 + 1 + 5 + 8 = 15
+```
+
+**Time Complexity:** $O(E \log E)$ for sorting + $O(E \cdot \alpha(V))$ for Union-Find $\approx O(E \log E)$
+
+**Space Complexity:** $O(V)$ for Union-Find
+
+**Java Implementation:**
+
+```java
+class UnionFind {
+    int[] parent, rank;
+
+    UnionFind(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;
+    }
+
+    int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    boolean union(int a, int b) {
+        int rootA = find(a), rootB = find(b);
+        if (rootA == rootB) return false;
+
+        if (rank[rootA] < rank[rootB]) parent[rootA] = rootB;
+        else if (rank[rootB] < rank[rootA]) parent[rootB] = rootA;
+        else { parent[rootB] = rootA; rank[rootA]++; }
+        return true;
+    }
+}
+
+int kruskalMST(int n, int[][] edges) {
+    // Sort edges by weight
+    Arrays.sort(edges, (a, b) -> a[2] - b[2]);
+
+    UnionFind uf = new UnionFind(n);
+    int mstWeight = 0;
+    int edgesUsed = 0;
+
+    for (int[] edge : edges) {
+        int u = edge[0];
+        int v = edge[1];
+        int weight = edge[2];
+
+        if (uf.union(u, v)) {
+            mstWeight += weight;
+            edgesUsed++;
+            if (edgesUsed == n - 1) break; // MST complete
+        }
+    }
+
+    return edgesUsed == n - 1 ? mstWeight : -1; // -1 if graph not connected
+}
+```
+
+**Prim's vs Kruskal's:**
+
+| Feature | Prim's | Kruskal's |
+|---------|--------|-----------|
+| Approach | Grow tree from vertex | Add edges in weight order |
+| Data structure | Priority queue | Union-Find |
+| Time complexity | $O((V+E) \log V)$ | $O(E \log E)$ |
+| Best for | Dense graphs ($E \approx V^2$) | Sparse graphs ($E \approx V$) |
+| Edge sorting | Not required | Required |
+| Parallelization | Harder | Easier |
+
+**When to Use:**
+- **Prim's**: Dense graphs, need to build tree incrementally
+- **Kruskal's**: Sparse graphs, already have sorted edges, easier to implement

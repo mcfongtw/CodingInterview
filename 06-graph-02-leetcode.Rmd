@@ -1992,4 +1992,228 @@ private void dfs(String email, Map<String, List<String>> graph,
 }
 ```
 
+## Network Delay Time {#lc-network-delay-time}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 743
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/network-delay-time/
+- **Tags**: NeetCode 150
+- **Techniques**: [Dijkstra's Algorithm](#dijkstra-algorithm), [Bellman-Ford Algorithm](#bellman-ford-algorithm), Weighted Graph, Shortest Path
+
+### Description
+
+You are given a network of `n` nodes, labeled from `1` to `n`. You are also given `times`, a list of travel times as directed edges `times[i] = (ui, vi, wi)`, where:
+- `ui` is the source node
+- `vi` is the target node
+- `wi` is the time it takes for a signal to travel from source to target
+
+Send a signal from a given node `k`. Return the **minimum time** it takes for all `n` nodes to receive the signal. If it is impossible for all nodes to receive the signal, return `-1`.
+
+### Examples
+
+**Example 1: All Nodes Reachable**
+```
+Input: times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2
+Output: 2
+
+Explanation:
+Send signal from node 2:
+  Node 2 → Node 1 (time 1)
+  Node 2 → Node 3 (time 1)
+  Node 3 → Node 4 (time 2 total: 2→3→4)
+All nodes receive signal by time 2
+```
+
+**Example 2: Single Edge**
+```
+Input: times = [[1,2,1]], n = 2, k = 1
+Output: 1
+
+Explanation:
+Node 1 sends signal to Node 2 in time 1
+```
+
+**Example 3: Unreachable Node**
+```
+Input: times = [[1,2,1]], n = 2, k = 2
+Output: -1
+
+Explanation:
+Signal starts at Node 2, but Node 1 is not reachable from Node 2
+```
+
+### Constraints
+
+- $1 \le k \le n \le 100$
+- $1 \le$ times.length $\le 6000$
+- times[i].length $= 3$
+- $1 \le u_i, v_i \le n$
+- $u_i \ne v_i$
+- $0 \le w_i \le 100$
+- All pairs $(u_i, v_i)$ are unique (no multiple edges)
+
+### Solution - Dijkstra's Algorithm
+
+#### Walkthrough
+
+This is a classic **single-source shortest path** problem in a weighted directed graph. The goal is to find the minimum time for a signal to propagate from source node `k` to all other nodes.
+
+**Key Insight:**
+
+The answer is the **maximum** of all shortest distances from `k` to every other node. Why? Because the signal propagates simultaneously to all reachable nodes, and we must wait for it to reach the **farthest** node. If any node is unreachable (distance remains $\infty$), return `-1`.
+
+**Algorithm Steps:**
+
+1. **Build weighted graph**: Create adjacency list using an `Edge` class to store destination and weight for each directed edge. Convert nodes from 1-indexed to 0-indexed for array access.
+
+2. **Initialize Dijkstra's**:
+   - `dist[source] = 0`, all others $= \infty$
+   - Min-heap with `(distance, node)` pairs, prioritized by distance
+   - `visited[]` array to prevent reprocessing nodes
+
+3. **Run Dijkstra's algorithm**:
+   - Extract minimum distance node from heap
+   - Skip if already visited (optimization: prevents duplicate work)
+   - Mark as visited
+   - For each neighbor: if `dist[node] + edge.weight < dist[neighbor]`, update distance and add to heap
+
+4. **Check result**:
+   - If any node has distance $= \infty$, it's unreachable → return `-1`
+   - Otherwise, return `max(dist[])` (time to reach farthest node)
+
+**Example Trace: `times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2`**
+
+```
+Graph (0-indexed: k=1, nodes 0-3):
+1 --(1)-> 0
+1 --(1)-> 2
+2 --(1)-> 3
+
+Initial: dist = [∞, 0, ∞, ∞], source = 1
+         heap = [(0, 1)]
+
+Extract (0, 1):
+  Mark visited[1] = true
+  Neighbors: 0 with weight (1), 2 with weight (1)
+  Update: dist[0] = 0+1 = 1, dist[2] = 0+1 = 1
+  dist = [1, 0, 1, ∞]
+  heap = [(1, 0), (1, 2)]
+
+Extract (1, 0):
+  Mark visited[0] = true
+  No unvisited neighbors
+  heap = [(1, 2)]
+
+Extract (1, 2):
+  Mark visited[2] = true
+  Neighbors: 3 with weight (1)
+  Update: dist[3] = 1+1 = 2
+  dist = [1, 0, 1, 2]
+  heap = [(2, 3)]
+
+Extract (2, 3):
+  Mark visited[3] = true
+  No unvisited neighbors
+
+Final distances: [1, 0, 1, 2]
+All finite → max = 2 ✓
+```
+
+**Why Dijkstra's Works:**
+
+- All edge weights are **non-negative** ($0 \le w_i \le 100$)
+- Greedy approach: once a node is processed (visited), its shortest path is final
+- No need to revisit nodes because we always process them in order of increasing distance
+
+#### Analysis
+
+- **Time Complexity**: O((V $+$ E) $\log$ V)
+  - Building graph: O(E) — iterate through all edges
+  - Dijkstra's with binary heap:
+    - Each vertex is added to heap once: O(V $\log$ V)
+    - Each edge causes at most one heap operation: O(E $\log$ V)
+    - Total: O((V $+$ E) $\log$ V)
+  - Finding maximum: O(V)
+  - Overall: O((V $+$ E) $\log$ V)
+
+- **Space Complexity**: O(V $+$ E)
+  - Adjacency list: O(E) — stores all edges
+  - Distance array: O(V)
+  - Visited array: O(V)
+  - Heap: O(V) in worst case (all nodes queued)
+  - Overall: O(V $+$ E)
+
+#### Code - Java
+
+```java
+class Solution {
+    class Edge {
+        int to;      // destination vertex
+        int weight;  // edge weight
+
+        Edge(int to, int weight) {
+            this.to = to;
+            this.weight = weight;
+        }
+    }
+
+    public int networkDelayTime(int[][] times, int n, int k) {
+        // Build adjacency list (convert to 0-indexed)
+        List<Edge>[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        for (int[] data : times) {
+            int u = data[0] - 1;  // Convert 1-indexed to 0-indexed
+            int v = data[1] - 1;
+            int weight = data[2];
+            graph[u].add(new Edge(v, weight));
+        }
+
+        // Initialize distances
+        int source = k - 1;  // Convert source to 0-indexed
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[source] = 0;
+
+        // Min-heap: (distance, node)
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        pq.offer(new int[]{0, source});
+
+        boolean[] visited = new boolean[n];
+
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int node = curr[1];
+
+            if (visited[node]) continue; // Skip if already processed
+            visited[node] = true;
+
+            for (Edge edge : graph[node]) {
+                int newDist = dist[node] + edge.weight;
+                if (newDist < dist[edge.to]) {
+                    dist[edge.to] = newDist;
+                    pq.offer(new int[]{newDist, edge.to});
+                }
+            }
+        }
+
+        // Find maximum distance (time to reach farthest node)
+        int max = Integer.MIN_VALUE;
+        for (int time : dist) {
+            if (time == Integer.MAX_VALUE) {
+                return -1; // Unreachable node exists
+            }
+            max = Math.max(time, max);
+        }
+
+        return max;
+    }
+}
+```
+
 
