@@ -2617,6 +2617,226 @@ func buildFreqArray(s string) []int {
 For the given constraints ($10^4$ characters), Solution 2 can be **100x faster** than Solution 1 in worst-case scenarios.
 
 
+## Valid Palindrome II {#lc-valid-palindrome-ii}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 680
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/valid-palindrome-ii/
+- **Tags**: Meta
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer), String
+
+### Description
+
+Given a string `s`, return `true` if the `s` can be palindrome after deleting **at most one** character from it.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "aba"
+Output: true
+Explanation: The string is already a palindrome.
+```
+
+**Example 2:**
+```
+Input: s = "abca"
+Output: true
+Explanation: You could delete the character 'c'.
+```
+
+**Example 3:**
+```
+Input: s = "abc"
+Output: false
+Explanation: No single deletion can make this a palindrome.
+```
+
+### Constraints
+
+- $1 \le$ s.length $\le$ $10^5$
+- `s` consists of lowercase English letters only
+
+### Solution - Two Pointers with One Skip Allowed
+
+#### Walkthrough
+
+This problem extends the classic palindrome check by allowing **at most one character deletion**. The solution uses a **two-pointer approach** with a key insight: when we find a mismatch, we try skipping either the left or right character and check if the remaining substring forms a palindrome.
+
+**Core Strategy:**
+
+1. **Start with standard palindrome check**: Use two pointers from both ends moving inward
+2. **On first mismatch**: We have two options:
+   - Skip the **left** character and check if `s[left+1...right]` is a palindrome
+   - Skip the **right** character and check if `s[left...right-1]` is a palindrome
+3. **Early termination**: If **either** skip option works, return `true` immediately
+4. **No redundant work**: The helper method validates the entire remaining substring, so no need to continue the main loop
+
+**Why This Works:**
+
+- If the string is already a palindrome, we never encounter a mismatch → return `true`
+- If we can make it a palindrome by removing one character, at least one of the two skip options will succeed
+- If both skip options fail, no single deletion can make it a palindrome → return `false`
+
+**Visual Example with `s = "abca"`:**
+
+```
+Initial: l=0, r=3
+
+Step 1: Compare s[0] vs s[3]
+  String: [a] b c [a]
+           ↑       ↑
+           l       r
+  'a' == 'a' ✓ → Continue
+  l=1, r=2
+
+Step 2: Compare s[1] vs s[2]
+  String: a [b] [c] a
+             ↑   ↑
+             l   r
+  'b' != 'c' ✗ → Found mismatch!
+
+  Try two options:
+
+  Option 1: Skip left (skip 'b')
+    Check isPalindrome(s, 2, 2) → substring "c"
+    l=2, r=2 → l >= r → return true ✓
+
+  Since Option 1 succeeded, return true immediately!
+
+Final result: true (delete 'b' or 'c' to make palindrome)
+```
+
+**Visual Example with `s = "abc"`:**
+
+```
+Initial: l=0, r=2
+
+Step 1: Compare s[0] vs s[2]
+  String: [a] b [c]
+           ↑     ↑
+           l     r
+  'a' != 'c' ✗ → Found mismatch!
+
+  Try two options:
+
+  Option 1: Skip left (skip 'a')
+    Check isPalindrome(s, 1, 2) → substring "bc"
+    l=1, r=2: 'b' != 'c' → return false ✗
+
+  Option 2: Skip right (skip 'c')
+    Check isPalindrome(s, 0, 1) → substring "ab"
+    l=0, r=1: 'a' != 'b' → return false ✗
+
+  Both options failed → return false
+
+Final result: false (no single deletion works)
+```
+
+**Visual Example with `s = "aba"`:**
+
+```
+Initial: l=0, r=2
+
+Step 1: Compare s[0] vs s[2]
+  String: [a] b [a]
+           ↑     ↑
+           l     r
+  'a' == 'a' ✓ → Continue
+  l=1, r=1
+
+Step 2: l >= r (pointers crossed)
+  Exit loop → return true
+
+Final result: true (already a palindrome, no deletion needed)
+```
+
+**Key Optimization:**
+
+The helper method `isPalindrome(String s, int l, int r)` uses **indices instead of creating substrings**. This avoids string allocation overhead and improves performance:
+- ✗ **Slower**: `isPalindrome(s.substring(l, r))` - Creates new string object
+- ✓ **Faster**: `isPalindrome(s, l, r)` - Uses indices on original string
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - **Best case**: O(n/2) ≈ O(n) when string is already a palindrome
+    - Single pass comparing characters from both ends
+    - No mismatch encountered
+  - **Worst case**: O(n/2) + O(n/2) ≈ O(n) when mismatch found near center
+    - Main loop: O(n/2) comparisons until first mismatch
+    - Helper check: O(n/2) comparisons to verify skip option
+    - Total: O(n/2 + n/2) = O(n)
+  - Each character is visited at most twice (once in main loop, once in helper)
+
+- **Space Complexity**: O(1)
+  - Only uses pointer variables (`l`, `r`)
+  - No extra data structures or substring allocation
+  - Recursive calls would add O(n) stack space, but this solution is iterative
+
+#### Implementation Steps
+
+1. **Initialize two pointers**:
+   - `l = 0` (left pointer at start)
+   - `r = s.length() - 1` (right pointer at end)
+
+2. **Main palindrome check loop**: While `l < r`
+   - Compare characters at `s.charAt(l)` and `s.charAt(r)`
+   - **If match**: Move pointers inward (`l++`, `r--`)
+   - **If mismatch**: Try both skip options
+
+3. **Handle mismatch** (only happens once):
+   - Try skipping left: `isPalindrome(s, l+1, r)`
+   - Try skipping right: `isPalindrome(s, l, r-1)`
+   - Return `true` if **either** option succeeds (using `||` short-circuit)
+   - Return `false` if **both** options fail
+
+4. **No mismatch encountered**: Return `true` (already palindrome)
+
+5. **Helper method `isPalindrome(String s, int l, int r)`**:
+   - Takes indices instead of substring for efficiency
+   - Standard two-pointer palindrome check
+   - Returns `true` if substring `s[l...r]` is palindrome
+
+#### Code - Java
+
+```java
+class Solution {
+    public boolean validPalindrome(String s) {
+        int l = 0, r = s.length() - 1;
+
+        while (l < r) {
+            if (s.charAt(l) != s.charAt(r)) {
+                // Found mismatch - try skipping either left OR right
+                // If EITHER option works, the string can be a palindrome
+                return isPalindrome(s, l+1, r) || isPalindrome(s, l, r-1);
+            }
+            l++;
+            r--;
+        }
+
+        return true;  // No mismatches found - already a palindrome
+    }
+
+    // Helper method to check if substring s[l...r] is palindrome
+    // Uses indices instead of creating substring for better performance
+    private boolean isPalindrome(String s, int l, int r) {
+        while (l < r) {
+            if (s.charAt(l) != s.charAt(r)) {
+                return false;
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+}
+```
+
+
 ## Sort Characters By Frequency {#lc-sort-characters-by-frequency}
 
 ### Problem Metadata
