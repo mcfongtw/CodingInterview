@@ -196,6 +196,54 @@ public int lengthOfLongestSubstring(String s) {
 }
 ```
 
+#### Code - Go
+
+```go
+type Set[T comparable] map[T]struct{}
+
+// NewSet creates a new set of type T.
+func NewSet[T comparable]() Set[T] {
+    return make(Set[T])
+}
+
+// Add inserts an element into the set.
+func (s Set[T]) Add(v T) {
+    s[v] = struct{}{}
+}
+
+// Remove deletes an element from the set.
+func (s Set[T]) Remove(v T) {
+    delete(s, v)
+}
+
+// Has checks if an element exists in the set.
+func (s Set[T]) Has(v T) bool {
+    _, ok := s[v]
+    return ok
+}
+
+func lengthOfLongestSubstring(s string) int {
+    seen := NewSet[byte]()
+    l := 0
+    result := 0
+
+    for r := range len(s) {
+        c := s[r]
+
+        for seen.Has(c) {
+            lChar := s[l]
+            seen.Remove(lChar)
+            l++
+        }
+
+        seen.Add(c)
+        result = max(result, r - l + 1)
+    }
+
+    return result
+}
+```
+
 
 ## String to Integer (atoi) {#lc-string-to-integer-atoi}
 
