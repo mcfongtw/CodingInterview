@@ -786,6 +786,226 @@ public int ladderLength(String beginWord, String endWord, List<String> wordList)
 ```
 
 
+## Longest Substring with At Most Two Distinct Characters {#lc-longest-substring-two-distinct}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 159
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters/
+- **Tags**: Adobe, Amazon, Facebook, Google, Microsoft
+- **Techniques**: [Sliding Window](glossary-of-algorithm.html#glossary-sliding-window), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer)
+
+### Description
+
+Given a string `s`, return the length of the longest substring that contains at most two distinct characters.
+
+**Note**: This is a premium LeetCode problem that requires a subscription to access.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "eceba"
+Output: 3
+Explanation: The substring is "ece" which has length 3.
+```
+
+**Example 2:**
+```
+Input: s = "ccaabbb"
+Output: 5
+Explanation: The substring is "aabbb" which has length 5.
+```
+
+### Constraints
+
+- $1 \le$ s.length $\le$ $10^4$
+- `s` consists of English letters
+
+### Solution - Sliding Window with Frequency Map
+
+#### Walkthrough
+
+This problem uses a **sliding window technique** combined with a **frequency map** to find the longest valid substring. The key insight is maintaining a window that always contains at most 2 distinct characters.
+
+**Core Concept - Window Validity:**
+
+- A window `[left, right]` is valid when it contains at most 2 distinct characters
+- We use a frequency map to track the count of each character in the current window
+- The number of distinct characters is simply `len(freq)`
+- When `len(freq) > 2`, the window becomes invalid and must shrink
+
+**Algorithm Approach:**
+
+1. **Maintain a sliding window** `[left, right]` using two pointers
+2. **Track character frequencies** in the current window using a hash map
+3. **Expand the window**: Move `right` pointer and add characters
+4. **Validate the window**: Check if `len(freq) <= 2`
+5. **Shrink when invalid**: Move `left` pointer forward when more than 2 distinct characters exist
+6. **Record maximum**: Track the largest valid window size encountered
+
+**Why Frequency Map (Not Just a Set)?**
+
+A common mistake is using a set to track distinct characters and trying to optimize by "skipping consecutive duplicates." This breaks the sliding window invariant because:
+
+- After removing all consecutive occurrences of a character, the set doesn't reflect what's actually left in the window
+- The frequency map ensures we always know exactly which characters are in `s[left:right+1]`
+- We must shrink **one character at a time** to maintain correctness
+
+**Visual Example with `s = "eceba"`:**
+
+```
+Initial: left = 0, right = 0, freq = {}, result = 0
+
+Step 1: right = 0, char = 'e'
+  Window: [e]
+  freq = {e:1}, distinct = 1
+  windowLen = 1
+  result = 1
+
+Step 2: right = 1, char = 'c'
+  Window: [ec]
+  freq = {e:1, c:1}, distinct = 2
+  windowLen = 2
+  result = 2
+
+Step 3: right = 2, char = 'e'
+  Window: [ece]
+  freq = {e:2, c:1}, distinct = 2
+  windowLen = 3
+  result = 3
+
+Step 4: right = 3, char = 'b' (3 distinct!)
+  Before shrink: Window [eceb], freq = {e:2, c:1, b:1}, distinct = 3 ✗
+
+  Shrink iteration 1:
+    Remove s[0]='e', freq[e]-- → freq = {e:1, c:1, b:1}, still 3 distinct
+    left = 1
+
+  Shrink iteration 2:
+    Remove s[1]='c', freq[c]-- → freq[c]=0, delete 'c' → freq = {e:1, b:1}
+    left = 2
+
+  Now: Window [eb], freq = {e:1, b:1}, distinct = 2 ✓
+  windowLen = 2
+  result = 3 (unchanged)
+
+Step 5: right = 4, char = 'a' (3 distinct!)
+  Before shrink: Window [eba], freq = {e:1, b:1, a:1}, distinct = 3 ✗
+
+  Shrink iteration:
+    Remove s[2]='e', freq[e]-- → freq[e]=0, delete 'e' → freq = {b:1, a:1}
+    left = 3
+
+  Now: Window [ba], freq = {b:1, a:1}, distinct = 2 ✓
+  windowLen = 2
+  result = 3 (unchanged)
+
+Final result: 3
+```
+
+**Example with `s = "ccaabbb"`:**
+
+```
+Step 1-2: Window "cc", freq = {c:2}, len = 2
+Step 3-4: Window "ccaa", freq = {c:2, a:2}, len = 4
+Step 5: char = 'b' (3 distinct!)
+  Shrink: Remove 'c' twice → Window "aab", freq = {a:2, b:1}, len = 3
+Step 6-7: Window "aabbb", freq = {a:2, b:3}, len = 5 ✓
+
+Final result: 5
+```
+
+**Key Takeaways:**
+
+1. The window `[left, right]` always contains at most 2 distinct characters (after shrinking)
+2. We shrink **one character at a time** to maintain the frequency map invariant
+3. `len(freq)` gives us the number of distinct characters efficiently
+4. We track the maximum window size seen throughout the process
+
+#### Analysis
+
+- **Time Complexity**: O(n) where n is the length of string `s`
+  - Single pass through the string with the right pointer: O(n)
+  - Each character is added to the window exactly once: O(n)
+  - Each character is removed from the window at most once: O(n)
+  - The inner shrinking loop amortizes to O(1) per right pointer iteration
+  - Total: O(n)
+
+- **Space Complexity**: O(1)
+  - Frequency map stores at most 3 entries at any time (temporarily when we detect 3 distinct characters before shrinking)
+  - Since the constraint is "at most 2 distinct characters," the map is bounded by a constant
+  - A few integer variables: O(1)
+  - Total: O(1)
+
+#### Implementation Steps
+
+1. **Initialize data structures:**
+   - Create frequency map `freq` (map[byte]int in Go, HashMap<Character, Integer> in Java)
+   - Initialize `left = 0` as the left pointer
+   - Initialize `result = 0` to store the maximum window length
+
+2. **Iterate with right pointer** from 0 to `s.length() - 1`:
+   - This pointer expands the window to the right
+
+3. **Add character to window:**
+   - Get character at position `right`: `s[right]`
+   - Increment its frequency: `freq[s[right]]++`
+
+4. **Check window validity:**
+   - Count distinct characters: `len(freq)` (Go) or `freq.size()` (Java)
+   - If more than 2 distinct characters, window is invalid
+
+5. **Shrink window while invalid:**
+   - While `len(freq) > 2`:
+     - Get character at position `left`: `s[left]`
+     - Decrement its frequency: `freq[s[left]]--`
+     - If frequency becomes 0, remove it from map: `delete(freq, s[left])`
+     - Move left pointer forward: `left++`
+
+6. **Update result:**
+   - After ensuring window is valid, update result: `result = max(result, right - left + 1)`
+
+7. **Return result** after completing the loop
+
+#### Code - Go
+
+```go
+func lengthOfLongestSubstringTwoDistinct(s string) int {
+    freq := make(map[byte]int)  // Track character frequencies
+    l := 0
+    result := 0
+
+    for r := 0; r < len(s); r++ {
+        c := s[r]
+
+        // Add current character to window
+        freq[c]++
+
+        // Shrink window while we have more than 2 distinct characters
+        for len(freq) > 2 {
+            lChar := s[l]
+            freq[lChar]--
+
+            // Remove from map if count becomes 0
+            if freq[lChar] == 0 {
+                delete(freq, lChar)
+            }
+
+            l++
+        }
+
+        // Update result
+        result = max(result, r - l + 1)
+    }
+
+    return result
+}
+```
+
+
 ## Design Add and Search Words Data Structure {#lc-design-add-search-words}
 
 ### Problem Metadata
