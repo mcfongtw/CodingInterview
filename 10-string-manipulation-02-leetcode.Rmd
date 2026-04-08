@@ -609,27 +609,70 @@ Use the first string as a baseline. For each character index, ensure all other s
 
 #### Implementation Steps
 
-1. Handle empty input.
-2. Iterate index `i` across the first string.
-3. For each `i`, compare `strs[j].charAt(i)` with `strs[0].charAt(i)`; return `strs[0].substring(0, i)` on mismatch.
-4. If no mismatch, return the entire first string.
+1. Use `index` to track current character position, starting at 0.
+2. While `index` is within the first string's length, read character `c` at that position.
+3. For each string, stop if `index` exceeds its length or the character doesn't match `c`.
+4. If any mismatch is found, break; otherwise advance `index`.
+5. Return `strs[0].substring(0, index)`.
 
 #### Code - Java
 
 ```java
-public String longestCommonPrefix(String[] strs) {
-    if (strs == null || strs.length == 0) {
-        return "";
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        int index = 0;
+
+        while(index < strs[0].length()) {
+            char c = strs[0].charAt(index);
+            boolean shouldStop = false;
+
+            for(String str : strs) {
+                //if the position already exceed the string length OR
+                //if the char at the position doesn't match
+                if(index >= str.length() || str.charAt(index) != c) {
+                    shouldStop = true;
+                    break;
+                }
+            }
+
+            if(shouldStop) {
+                break;
+            }
+            index++;
+        }
+
+        return strs[0].substring(0, index);
     }
-    for (int i = 0; i < strs[0].length(); i++) {
-        char c = strs[0].charAt(i);
-        for (int j = 1; j < strs.length; j++) {
-            if (i == strs[j].length() || strs[j].charAt(i) != c) {
-                return strs[0].substring(0, i);
+}
+```
+
+#### Code - Go
+
+```go
+func longestCommonPrefix(strs []string) string {
+    index := 0
+
+    for index < len(strs[0]) {
+        c := strs[0][index]
+        shouldStop := false
+
+        for _, str := range(strs) {
+            //if the position already exceed the string length OR
+            //if the char at the position doesn't match
+            if index >= len(str) || str[index] != c {
+                shouldStop = true
+                break
             }
         }
+
+        if shouldStop {
+            break
+        }
+
+        index++
     }
-    return strs[0];
+
+    return strs[0][0:index]
 }
 ```
 
@@ -3757,5 +3800,146 @@ class Solution {
 
         return result;
     }
+}
+```
+
+## Find the Length of the Longest Common Prefix {#lc-find-length-longest-common-prefix}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 3043
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/find-the-length-of-the-longest-common-prefix/
+- **Tags**:
+- **Techniques**: [Trie](glossary-of-algorithm.html#glossary-trie), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), String
+
+### Description
+
+You are given two arrays with **positive** integers `arr1` and `arr2`.
+
+A **prefix** of a positive integer is an integer formed by one or more of its digits, starting from its leftmost digit. For example, `123` is a prefix of the integer `12345`, while `234` is **not**.
+
+A **common prefix** of two integers `a` and `b` is an integer `c`, such that `c` is a prefix of both `a` and `b`. For example, `5655359` and `56554` have common prefixes `565` and `5655` while `1223` and `43456` do **not** have a common prefix.
+
+You need to find the **length** of the **longest common prefix** between all pairs of integers `(x, y)` such that `x` belongs to `arr1` and `y` belongs to `arr2`.
+
+Return *the length of the **longest** common prefix among all pairs*. *If no common prefix exists among them*, *return* `0`.
+
+### Examples
+
+```
+Input: arr1 = [1,10,100], arr2 = [1000]
+Output: 3
+Explanation: There are 3 pairs (arr1[i], arr2[j]):
+- The longest common prefix of (1, 1000) is 1.
+- The longest common prefix of (10, 1000) is 10.
+- The longest common prefix of (100, 1000) is 100.
+The longest common prefix is 100 with a length of 3.
+
+Input: arr1 = [1,2,3], arr2 = [4,4,4]
+Output: 0
+Explanation: There exists no common prefix for any pair (arr1[i], arr2[j]), hence we return 0.
+Note that common prefixes between elements of the same array do not count.
+```
+
+### Constraints
+
+- `1 <= arr1.length, arr2.length <= 5 * 10^4`
+- `1 <= arr1[i], arr2[i] <= 10^8`
+
+### Solution - Hash Set (Integer Prefixes)
+
+#### Walkthrough
+
+For every number in `arr1`, repeatedly divide by 10 to strip the last digit, adding each intermediate value to a `HashSet<Integer>`. This builds a set of all integer prefixes without any string conversion.
+
+Then for every number in `arr2`, do the same stripping from the right. The first match found is the longest possible prefix for that number (since we go from more digits to fewer), so we can break immediately and update the result.
+
+#### Analysis
+
+- **Time Complexity**: O((n + m) · D), where `n` and `m` are the lengths of `arr1` and `arr2`, and `D` is the max number of digits ($\le$ 9 for values up to $10^8$). Each number generates at most D integer prefixes via division. Since D is a small constant, this is effectively O(n + m).
+- **Space Complexity**: O(n · D) for the prefix set — up to D integer entries per `arr1` number.
+
+#### Implementation Steps
+
+1. For each number in `arr1`, while `num > 0`: add `num` to the set, then `num /= 10`.
+2. For each number in `arr2`, while `num > 0`: if `num` is in the set, update result with the digit count of `num` and break; otherwise `num /= 10`.
+3. Return the result.
+
+#### Code - Java
+
+```java
+class Solution {
+    public int longestCommonPrefix(int[] arr1, int[] arr2) {
+        Set<Integer> commonPrefixSet = new HashSet<>();
+
+        for(int num : arr1) {
+            while(num > 0) {
+                commonPrefixSet.add(num);
+                num /= 10;
+            }
+        }
+
+        int result = 0;
+
+        for(int num : arr2) {
+            while(num > 0) {
+                if(commonPrefixSet.contains(num)) {
+                    result = Math.max(result, String.valueOf(num).length());
+                    break;
+                }
+                num /= 10;
+            }
+        }
+
+        return result;
+    }
+}
+```
+
+#### Code - Go
+
+```go
+import (
+    "strconv"
+)
+
+type Set[T comparable] map[T]struct{}
+
+func NewSet[T comparable]() Set[T] {
+    return make(Set[T])
+}
+
+func (s Set[T]) Add(v T) {
+    s[v] = struct{}{}
+}
+
+func (s Set[T]) Has(v T) bool {
+    _, ok := s[v]
+    return ok
+}
+
+func longestCommonPrefix(arr1 []int, arr2 []int) int {
+    commonPrefixSet := NewSet[int]()
+    var result int
+
+    for _, num := range arr1 {
+        for num > 0 {
+            commonPrefixSet.Add(num)
+            num /= 10
+        }
+    }
+
+    for _, num := range arr2 {
+        for num > 0 {
+            if commonPrefixSet.Has(num) {
+                result = max(result, len(strconv.Itoa(num)))
+            }
+            num /= 10
+        }
+    }
+
+    return result
 }
 ```
