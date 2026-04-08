@@ -1005,6 +1005,39 @@ func lengthOfLongestSubstringTwoDistinct(s string) int {
 }
 ```
 
+#### Code - Java
+
+```java
+class Solution {
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        int result = 0;
+        int l = 0;
+        Map<Character, Integer> freqMap = new HashMap<>();
+
+        for (int r = 0; r < s.length(); r++) {
+            char rChar = s.charAt(r);
+            freqMap.put(rChar, freqMap.getOrDefault(rChar, 0) + 1);
+
+            // Shrink the window when more than 2 distinct characters
+            if (freqMap.size() > 2) {
+                char lChar = s.charAt(l);
+                int freq = freqMap.getOrDefault(lChar, 0);
+                freqMap.put(lChar, --freq);
+
+                if (freq <= 0) {
+                    freqMap.remove(lChar);
+                }
+                l++;
+            }
+
+            result = Math.max(result, r - l + 1);
+        }
+
+        return result;
+    }
+}
+```
+
 
 ## Design Add and Search Words Data Structure {#lc-design-add-search-words}
 
@@ -1512,6 +1545,137 @@ public class Codec {
 
             // Move to the next encoded string
             i = k;
+        }
+
+        return result;
+    }
+}
+```
+
+
+## Longest Substring with At Most K Distinct Characters {#lc-longest-substring-k-distinct}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 340
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
+- **Tags**: Adobe, Amazon, Facebook, Google, Microsoft
+- **Techniques**: [Sliding Window](glossary-of-algorithm.html#glossary-sliding-window), [Hash Table](glossary-of-algorithm.html#glossary-hash-table), [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer)
+
+### Description
+
+Given a string `s` and an integer `k`, return the length of the longest substring of `s` that contains at most `k` distinct characters.
+
+**Note**: This is a premium LeetCode problem that requires a subscription to access. This is the generalized version of [Longest Substring with At Most Two Distinct Characters](#lc-longest-substring-two-distinct) (LeetCode 159), where the fixed limit of 2 is replaced by a variable `k`.
+
+### Examples
+
+**Example 1:**
+```
+Input: s = "eceba", k = 2
+Output: 3
+Explanation: The substring is "ece" which has length 3.
+```
+
+**Example 2:**
+```
+Input: s = "aa", k = 1
+Output: 2
+Explanation: The substring is "aa" which has length 2.
+```
+
+### Constraints
+
+- $1 \le$ s.length $\le$ $5 \times 10^4$
+- $0 \le$ k $\le$ 50
+- `s` consists of English letters
+
+### Solution - Sliding Window with Frequency Map
+
+#### Walkthrough
+
+This is the generalized form of LeetCode 159. The only change is replacing the hard-coded constant `2` with the parameter `k`. All the same reasoning applies: maintain a sliding window `[left, right]` where the frequency map has at most `k` entries. When `freqMap.size() > k`, shrink the window from the left one character at a time.
+
+**Edge Case - k = 0:**
+
+When `k = 0`, no characters can be in the window, so the result is always `0`. The algorithm handles this naturally: after adding any character, `freqMap.size() > 0` triggers shrinking until the left pointer catches up to right, keeping the window empty.
+
+#### Analysis
+
+- **Time Complexity**: O(n) — each character is added and removed from the window at most once
+- **Space Complexity**: O(k) — the frequency map holds at most k+1 entries at any time
+
+#### Implementation Steps
+
+1. **Initialize data structures:** frequency map, `left = 0`, `result = 0`
+2. **Iterate with right pointer** from 0 to `s.length() - 1`
+3. **Add character:** increment `freqMap[s[right]]`
+4. **Shrink while invalid:** while `freqMap.size() > k`, decrement `freqMap[s[left]]`, remove if zero, advance `left`
+5. **Update result:** `result = max(result, right - left + 1)`
+6. **Return result**
+
+#### Code - Go
+
+```go
+func lengthOfLongestSubstringKDistinct(s string, k int) int {
+    freq := make(map[byte]int)
+    l := 0
+    result := 0
+
+    for r := 0; r < len(s); r++ {
+        c := s[r]
+
+        // Add current character to window
+        freq[c]++
+
+        // Shrink window while we have more than k distinct characters
+        for len(freq) > k {
+            lChar := s[l]
+            freq[lChar]--
+
+            if freq[lChar] == 0 {
+                delete(freq, lChar)
+            }
+
+            l++
+        }
+
+        // Update result
+        result = max(result, r-l+1)
+    }
+
+    return result
+}
+```
+
+#### Code - Java
+
+```java
+class Solution {
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        int result = 0;
+        int l = 0;
+        Map<Character, Integer> freqMap = new HashMap<>();
+
+        for (int r = 0; r < s.length(); r++) {
+            char rChar = s.charAt(r);
+            freqMap.put(rChar, freqMap.getOrDefault(rChar, 0) + 1);
+
+            // Shrink the window when more than k distinct characters
+            if (freqMap.size() > k) {
+                char lChar = s.charAt(l);
+                int freq = freqMap.getOrDefault(lChar, 0);
+                freqMap.put(lChar, --freq);
+
+                if (freq <= 0) {
+                    freqMap.remove(lChar);
+                }
+                l++;
+            }
+
+            result = Math.max(result, r - l + 1);
         }
 
         return result;
