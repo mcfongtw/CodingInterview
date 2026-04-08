@@ -25,38 +25,13 @@ public List<String> fixedSlidingWindow(String s, int k) {
 }
 ```
 
-**Optimized with Character Frequency:**
-```java
-public void fixedSlidingWindowOptimized(String s, int k) {
-    Map<Character, Integer> freq = new HashMap<>();
-
-    // Initialize first window
-    for (int i = 0; i < k; i++) {
-        freq.put(s.charAt(i), freq.getOrDefault(s.charAt(i), 0) + 1);
-    }
-
-    // Process first window
-    processWindow(freq);
-
-    // Slide window
-    for (int i = k; i < s.length(); i++) {
-        // Remove left character
-        char leftChar = s.charAt(i - k);
-        freq.put(leftChar, freq.get(leftChar) - 1);
-        if (freq.get(leftChar) == 0) freq.remove(leftChar);
-
-        // Add right character
-        char rightChar = s.charAt(i);
-        freq.put(rightChar, freq.getOrDefault(rightChar, 0) + 1);
-
-        // Process current window
-        processWindow(freq);
-    }
-}
-```
-
 **Time Complexity:** $O(n)$ - Each character added and removed once
 **Space Complexity:** $O(k)$ - Window state
+
+**Related Problems:**
+
+- [Find All Anagrams in a String](#lc-find-all-anagrams) - Fixed window of length `p`, frequency matching
+- [Permutation in String](#lc-permutation-in-string) - Fixed window of length `s1`, permutation check
 
 #### Variable-Size Sliding Window {#intro-string-sliding-window-variable}
 
@@ -96,63 +71,14 @@ public int variableSlidingWindow(String s) {
 }
 ```
 
-**Example: Longest Substring Without Repeating Characters**
-```java
-public int lengthOfLongestSubstring(String s) {
-    Map<Character, Integer> freq = new HashMap<>();
-    int left = 0, maxLength = 0;
-
-    for (int right = 0; right < s.length(); right++) {
-        char c = s.charAt(right);
-        freq.put(c, freq.getOrDefault(c, 0) + 1);
-
-        // Shrink while duplicate exists
-        while (freq.get(c) > 1) {
-            char leftChar = s.charAt(left);
-            freq.put(leftChar, freq.get(leftChar) - 1);
-            left++;
-        }
-
-        maxLength = Math.max(maxLength, right - left + 1);
-    }
-
-    return maxLength;
-}
-```
-
-**Example: Longest Substring with At Most K Distinct Characters**
-```java
-public int lengthOfLongestSubstringKDistinct(String s, int k) {
-    Map<Character, Integer> freq = new HashMap<>();
-    int left = 0, maxLength = 0;
-
-    for (int right = 0; right < s.length(); right++) {
-        char c = s.charAt(right);
-        freq.put(c, freq.getOrDefault(c, 0) + 1);
-
-        // Shrink while too many distinct characters
-        while (freq.size() > k) {
-            char leftChar = s.charAt(left);
-            freq.put(leftChar, freq.get(leftChar) - 1);
-            if (freq.get(leftChar) == 0) freq.remove(leftChar);
-            left++;
-        }
-
-        maxLength = Math.max(maxLength, right - left + 1);
-    }
-
-    return maxLength;
-}
-```
-
 **Related Problems:**
 
 - [Longest Substring Without Repeating Characters](#lc-longest-substring-unique) - Variable window, no duplicates
 - [Longest Substring with At Most Two Distinct Characters](#lc-longest-substring-two-distinct) - Variable window, at most 2 distinct (k=2 special case)
 - [Longest Substring with At Most K Distinct Characters](#lc-longest-substring-k-distinct) - Variable window, generalized k distinct
 - [Longest Repeating Character Replacement](#lc-longest-repeating-character-replacement) - Variable window with replacements
-- [Find All Anagrams in a String](#lc-find-all-anagrams) - Fixed window with frequency matching
 - [Number of Substrings Containing All Three Characters](#lc-substrings-all-three) - Variable window counting
+- [Max Unique Substring Length in a Session](#hr-max-unique-substring-session) - Variable window applied per session
 
 **Time Complexity:** $O(n)$ - Each character visited at most twice (once by right, once by left)
 **Space Complexity:** $O(k)$ - Where k is the character set size or window constraint
