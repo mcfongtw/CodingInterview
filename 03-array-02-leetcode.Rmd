@@ -4179,6 +4179,105 @@ public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
 
 
 
+## Valid Triangle Number {#lc-valid-triangle-number}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 611
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/valid-triangle-number/
+- **Tags**:
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer), [Sorting](glossary-of-algorithm.html#glossary-sorting), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Given an integer array `nums`, return the number of triplets chosen from the array that can make triangles if we take them as side lengths of a triangle.
+
+**Note:** This problem uses the same sort + two-pointer counting pattern as [3Sum Smaller](#lc-three-sum-smaller). See the [Three Sum Family](#intro-n-sum-family) comparison table in the chapter introduction.
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [2,2,3,4]
+Output: 3
+Explanation: Valid combinations are:
+2,3,4 (using the first 2), 2,3,4 (using the second 2), 2,2,3
+```
+
+**Example 2:**
+```
+Input: nums = [4,2,3,4]
+Output: 4
+```
+
+### Constraints
+
+- `1 <= nums.length <= 1000`
+- `0 <= nums[i] <= 1000`
+
+### Solution - Sort + Two Pointers
+
+#### Walkthrough
+
+**Key insight:** For a sorted triplet `a ≤ b ≤ c`, the triangle inequality reduces to a single check: `a + b > c`. The other two conditions (`a + c > b` and `b + c > a`) hold automatically because `c` is the largest side.
+
+**Strategy:** Fix `i` as the index of the largest side and run two pointers `left = 0`, `right = i - 1` on the subarray to its left:
+
+- If `nums[left] + nums[right] > nums[i]`: the condition holds. Since the array is sorted, every element between `left` and `right - 1` is also $\ge$ `nums[left]`, so all `right - left` pairs `(left, left+1, ..., right-1)` combined with `right` are also valid. Batch-count them and shrink `right--` to explore a smaller second side.
+- Else: the sum is too small; grow it with `left++`.
+
+**Why fix the largest (not smallest)?** The batch-count `count += right - left` works only when the fixed outer element is the largest. With `right` fixed, we know every left in `[left, right-1]` satisfies `nums[left'] ≥ nums[left]`, so they all beat the same `nums[i]`. Fixing the smallest instead breaks this monotonicity for the counting step.
+
+This mirrors [3Sum Smaller](#lc-three-sum-smaller) with the outer/inner loop roles swapped: Smaller fixes the smallest and counts pairs below a target sum; this problem fixes the largest and counts pairs above the triangle threshold.
+
+#### Analysis
+
+- **Time Complexity**: O(n^2) — outer loop O(n), inner two-pointer sweep O(n)
+- **Space Complexity**: O(1) auxiliary (sorting in-place)
+
+#### Implementation Steps
+
+1. Sort `nums` ascending so `nums[i]` is always the largest side in `[0..i]`.
+2. Initialize `count = 0`.
+3. For each `i` from `2` to `n - 1` (fixing the largest side `nums[i]`):
+   1. Set `left = 0`, `right = i - 1`.
+   2. While `left < right`:
+      - If `nums[left] + nums[right] > nums[i]`: all lefts `[left, right-1]` are valid with this `right` → `count += right - left`, then `right--`.
+      - Else: sum is too small → `left++`.
+4. Return `count`.
+
+#### Code - Java
+
+```java
+public int triangleNumber(int[] nums) {
+    Arrays.sort(nums);
+    int count = 0;
+
+    // traverse using LARGEST side: nums[i] is always the largest in [0..i]
+    for (int i = 2; i < nums.length; i++) {
+        int left = 0;
+        int right = i - 1;
+
+        while (left < right) {
+            // triangle principle: two smaller sides must beat the largest
+            if (nums[left] + nums[right] > nums[i]) {
+                // nums[left..right-1] are all >= nums[left], so every pair
+                // (left', right) with left <= left' < right is also valid
+                count += right - left;
+                right--;  // try a smaller right side
+            } else {
+                left++;   // sum too small; increase it by moving left up
+            }
+        }
+    }
+
+    return count;
+}
+```
+
+
 ## Binary Search {#lc-binary-search}
 
 ### Problem Metadata
