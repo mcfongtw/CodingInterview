@@ -697,6 +697,153 @@ func getKthEnd(preStart *ListNode, k int) *ListNode {
 ```
 
 
+## Rotate List {#lc-rotate-list}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 61
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/rotate-list/
+- **Techniques**: [Linked List](glossary-of-algorithm.html#glossary-linked-list), [Two Pointer](glossary-of-algorithm.html#glossary-two-pointer)
+
+### Description
+
+Given the head of a linked list, rotate the list to the right by `k` places.
+
+### Examples
+
+```
+Input: head = [1,2,3,4,5], k = 2
+Output: [4,5,1,2,3]
+
+Input: head = [0,1,2], k = 4
+Output: [2,0,1]
+```
+
+### Constraints
+
+- The number of nodes is in the range `[0, 500]`
+- `-100 <= Node.val <= 100`
+- `0 <= k <= 2 * 10^9`
+
+### Solution - Two Pointer with Gap
+
+#### Walkthrough
+
+Rotating right by `k` moves the last `k % n` nodes to the front. We use a two-pointer gap technique:
+
+1. Compute the list length `n` and reduce `k = k % n` to handle `k >= n`.
+2. Advance `fast` exactly `k` steps ahead of `slow`.
+3. Move both together until `fast.next == null` — now `slow` is the new tail, `fast` is the old tail.
+4. Reconnect: link the old tail to head (circular), set new head to `slow.next`, cut the circle.
+
+#### Analysis
+
+- **Time Complexity**: $O(n)$ — one pass to find length, one pass for two-pointer traversal
+- **Space Complexity**: $O(1)$ — only pointer variables
+
+#### Implementation Steps
+
+1. Return early if list is empty or `k == 0`.
+2. Traverse to compute `len`; reduce `k = k % len`.
+3. Advance `fast` k steps ahead — safe to do directly since `k < len` after modulo.
+4. Move `slow` and `fast` together until `fast.next == null`.
+5. Stitch: `fast.next = head`, `head = slow.next`, `slow.next = null`.
+
+#### Code - Java
+
+```java
+public ListNode rotateRight(ListNode head, int k) {
+    if (head == null || k == 0) {
+        return head;
+    }
+
+    // Step 1: compute list length
+    int len = 0;
+    ListNode curr = head;
+    while (curr != null) {
+        curr = curr.next;
+        len++;
+    }
+
+    // Step 2: reduce k — rotating by a multiple of len is a no-op
+    k = k % len;
+    if (k == 0) {
+        return head;
+    }
+
+    // Step 3: advance fast k steps ahead of slow
+    // k < len after modulo, so fast.next is guaranteed non-null here
+    ListNode fast = head;
+    ListNode slow = head;
+    for (int i = 0; i < k; i++) {
+        fast = fast.next;
+    }
+
+    // Step 4: move both until fast reaches the last node
+    // slow will be the new tail; fast will be the old tail
+    while (fast.next != null) {
+        slow = slow.next;
+        fast = fast.next;
+    }
+
+    // Step 5: reconnect — make circular, cut at new tail
+    fast.next = head;       // old tail -> original head (circular)
+    head = slow.next;       // new head = node after new tail
+    slow.next = null;       // cut the circle
+
+    return head;
+}
+```
+
+#### Code - Go
+
+```go
+func rotateRight(head *ListNode, k int) *ListNode {
+    if k == 0 || head == nil {
+        return head
+    }
+
+    // Step 1: compute list length
+    length := 0
+    curr := head
+    for curr != nil {
+        curr = curr.Next
+        length++
+    }
+
+    // Step 2: reduce k — rotating by a multiple of length is a no-op
+    k = k % length
+    if k == 0 {
+        return head
+    }
+
+    // Step 3: advance fast k steps ahead of slow
+    // k < length after modulo, so fast.Next is guaranteed non-nil here
+    fast := head
+    slow := head
+    for range k {
+        fast = fast.Next
+    }
+
+    // Step 4: move both until fast reaches the last node
+    // slow will be the new tail; fast will be the old tail
+    for fast.Next != nil {
+        fast = fast.Next
+        slow = slow.Next
+    }
+
+    // Step 5: reconnect — make circular, cut at new tail
+    fast.Next = head   // old tail -> original head (circular)
+    head = slow.Next   // new head = node after new tail
+    slow.Next = nil    // cut the circle
+
+    return head
+}
+```
+
+
 ## Remove Duplicates from Sorted List {#lc-remove-duplicates}
 
 ### Problem Metadata

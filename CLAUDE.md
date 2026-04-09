@@ -264,6 +264,28 @@ R Markdown requires a **blank line** between bold text (or any block element) an
 2. Always insert a blank line after any block element (headings, paragraphs) before tables
 3. This applies to both bullet lists (`-`) and numbered lists (`1.`)
 
+## Code Style Rules
+
+### Java and Go
+
+**Always use braces over one-line ternary expressions for conditionals.**
+
+❌ **WRONG** - ternary used for control flow:
+```java
+fast = (fast.next == null) ? head : fast.next;
+```
+
+✅ **CORRECT** - explicit if/else with braces:
+```java
+if (fast.next == null) {
+    fast = head;
+} else {
+    fast = fast.next;
+}
+```
+
+This applies to both Java and Go. Ternary expressions (`? :` in Java, not available in Go) are not allowed as a replacement for `if/else` blocks.
+
 ## Deployment
 
 Changes merged to master trigger GitHub Actions to deploy `docs/` to GitHub Pages. Run `build.sh` locally before committing to ensure the static site is up to date.
