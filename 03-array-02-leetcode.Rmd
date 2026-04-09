@@ -3230,6 +3230,107 @@ class Solution {
 ```
 
 
+## 3 Sum Smaller {#lc-three-sum-smaller}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 259
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/3sum-smaller/
+- **Tags**:
+- **Techniques**: [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer), [Sorting](glossary-of-algorithm.html#glossary-sorting), [Array](glossary-of-algorithm.html#glossary-array)
+
+### Description
+
+Given an array of `n` integers `nums` and an integer `target`, return the number of index triplets `i`, `j`, `k` with `0 <= i < j < k < n` that satisfy the condition `nums[i] + nums[j] + nums[k] < target`.
+
+**Note:** This problem is part of the [N Sum Family](#intro-n-sum-family) pattern. See the comparison table in the chapter introduction for a comprehensive comparison of all Two Sum, Three Sum, and Four Sum variants.
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [-2,0,1,3], target = 2
+Output: 2
+Explanation: Because there are two triplets which sums are less than 2:
+[-2,0,1], [-2,0,3]
+```
+
+**Example 2:**
+```
+Input: nums = [], target = 0
+Output: 0
+```
+
+**Example 3:**
+```
+Input: nums = [0], target = 0
+Output: 0
+```
+
+### Constraints
+
+- `n == nums.length`
+- `0 <= n <= 3500`
+- `-100 <= nums[i] <= 100`
+- `-100 <= target <= 100`
+
+### Solution - Sort + Two Pointers
+
+#### Walkthrough
+
+1. Sort the array so two-pointer sweeps over the interior become valid.
+2. Fix `i` as the first element. Run `left = i + 1` and `right = n - 1` inward.
+3. If `sum < target`: every element between `left+1` and `right` is $\le$ `nums[right]`, so all `right - left` pairs with the current `left` are valid. Add `right - left` to count and advance `left++`.
+4. If `sum >= target`: the sum is too large; shrink from the right with `right--`.
+
+#### Analysis
+
+- **Time Complexity**: O(n^2) — outer loop O(n), inner two-pointer sweep O(n)
+- **Space Complexity**: O(1) auxiliary (sorting in-place)
+
+#### Implementation Steps
+
+1. Sort `nums`.
+2. Initialize `count = 0`.
+3. For each `i` from `0` to `n - 3`:
+   1. Set `left = i + 1`, `right = n - 1`.
+   2. While `left < right`:
+      - Compute `sum = nums[i] + nums[left] + nums[right]`.
+      - If `sum < target`: `count += right - left`, then `left++`.
+      - Else: `right--`.
+4. Return `count`.
+
+#### Code - Java
+
+```java
+public int threeSumSmaller(int[] nums, int target) {
+    Arrays.sort(nums);
+    int count = 0;
+
+    for (int i = 0; i < nums.length - 2; i++) {
+        int left = i + 1;
+        int right = nums.length - 1;
+
+        while (left < right) {
+            int sum = nums[i] + nums[left] + nums[right];
+
+            if (sum < target) {
+                // every element between left+1 and right is <= nums[right]
+                count += right - left;
+                left++;
+            } else {
+                right--;
+            }
+        }
+    }
+
+    return count;
+}
+```
+
+
 ## Find the Duplicate Number {#lc-find-duplicate-number}
 
 ### Problem Metadata

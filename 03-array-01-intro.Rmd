@@ -58,14 +58,15 @@ for(int i = 0, j = 0; i < A.length; j < B.length;) {
 
 **Key differences and picks:** Sorting status drives the strategy (hash table for unsorted, two pointers for sorted). When output is just existence, hash set with early exit wins. BST input can use dual iterators for O(h) space, but DFS + HashSet stays simplest.
 
-#### Three Sum Family (LeetCode 15, 16)
+#### Three Sum Family (LeetCode 15, 16, 259)
 
 | Problem | Input/Constraints | Return | Preferred Approach | Time | Space | Notes |
 |---------|-------------------|--------|--------------------|------|-------|-------|
 | [3Sum](#lc-three-sum) | Unsorted array | All unique triplets summing to 0 | Sort + two pointers | O(n^2) | O(1) | Duplicate skipping on outer and inner pointers is key |
-| [3Sum Closest](#lc-three-sum) | Unsorted array | Closest sum to target (value only) | Sort + two pointers | O(n^2) | O(1) | Same loop as 3Sum but tracks best distance instead of unique sets |
+| [3Sum Closest](#lc-three-sum-closest) | Unsorted array | Closest sum to target (value only) | Sort + two pointers | O(n^2) | O(1) | Same loop as 3Sum but tracks best distance instead of unique sets |
+| [3Sum Smaller](#lc-three-sum-smaller) | Unsorted array | Count of triplets with sum < target | Sort + two pointers | O(n^2) | O(1) | When sum < target, count all pairs between pointers in O(1) instead of iterating |
 
-**Key differences and picks:** Both require sorting to enable the inner two-pointer sweep. 3Sum needs dedup to emit unique triplets; 3Sum Closest reuses the same sweep but optimizes for distance rather than uniqueness.
+**Key differences and picks:** All three require sorting to enable the inner two-pointer sweep. 3Sum needs dedup to emit unique triplets; 3Sum Closest tracks best distance; 3Sum Smaller exploits sorted order to count valid pairs in bulk when the sum is already below target.
 
 #### Four Sum Family (LeetCode 18, 454)
 
