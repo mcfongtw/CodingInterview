@@ -566,6 +566,434 @@ public int myAtoi(String s) {
 ```
 
 
+## Integer to Roman {#lc-integer-to-roman}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 12
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/integer-to-roman/
+- **Tags**:
+- **Techniques**: [Hash Table](#glossary-hash-table), [Simulation](#glossary-simulation)
+
+### Description
+
+Seven different symbols represent Roman numerals with the following values:
+
+| Symbol | Value |
+|--------|-------|
+| I      | 1     |
+| V      | 5     |
+| X      | 10    |
+| L      | 50    |
+| C      | 100   |
+| D      | 500   |
+| M      | 1000  |
+
+Roman numerals are formed by appending the conversions of decimal place values from highest to lowest. Converting a decimal place value into a Roman numeral has the following rules:
+
+- If the value does not start with 4 or 9, select the symbol of the maximal value that can be subtracted from the input, append that symbol to the result, subtract its value, and convert the remainder.
+- If the value starts with 4 or 9 use the **subtractive form** representing one symbol subtracted from the following symbol:
+  - 4 is `IV` (1 less than 5)
+  - 9 is `IX` (1 less than 10)
+  - 40 is `XL` (10 less than 50)
+  - 90 is `XC` (10 less than 100)
+  - 400 is `CD` (100 less than 500)
+  - 900 is `CM` (100 less than 1000)
+- Only powers of 10 (`I`, `X`, `C`, `M`) can be appended consecutively, up to at most 3 times. `V`, `L`, and `D` can never be appended consecutively.
+
+Given an integer, convert it to a Roman numeral.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: num = 3749
+Output: "MMMDCCXLIX"
+Explanation:
+3000 = MMM
+ 700 = DCC
+  40 = XL
+   9 = IX
+```
+
+**Example 2:**
+
+```
+Input: num = 58
+Output: "LVIII"
+Explanation:
+50 = L
+ 5 = V
+ 3 = III
+```
+
+**Example 3:**
+
+```
+Input: num = 1994
+Output: "MCMXCIV"
+Explanation:
+1000 = M
+ 900 = CM
+  90 = XC
+   4 = IV
+```
+
+### Constraints
+
+- $1 \le$ `num` $\le 3999$
+
+### Solution - Digit-by-Digit Decomposition
+
+#### Walkthrough
+
+Process the integer one decimal digit at a time from least significant to most significant. At each step, extract the last digit with `num % 10` and convert it to its Roman representation based on its decimal place (ones, tens, hundreds, thousands). Prepend the result to the output string, then remove the processed digit with `num / 10`.
+
+Each digit maps to Roman numerals by pattern:
+
+- **1–3**: repeat the base symbol for that place (I, X, C, M) `digit` times.
+- **4, 9**: direct lookup — these are the subtractive pairs (IV, XL, CD for 4; IX, XC, CM for 9).
+- **5**: direct lookup — V, L, D.
+- **6–8**: V/L/D symbol for that place, followed by 1–3 repetitions of the base symbol.
+
+**Trace on `1994`:**
+
+| digit | place | token | prepended result |
+|-------|-------|-------|-----------------|
+| 4 | 0 | IV    | "IV"      |
+| 9 | 1 | XC    | "XCIV"    |
+| 9 | 2 | CM    | "CMXCIV"  |
+| 1 | 3 | M     | "MCMXCIV" |
+
+#### Analysis
+
+| Complexity | Value |
+|------------|-------|
+| Time       | $O(1)$ — at most 4 digits for inputs $\le 3999$ |
+| Space      | $O(1)$ — output length is bounded by a constant |
+
+#### Implementation Steps
+
+1. Build a `Map<String, Integer>` with all 13 Roman tokens (7 single-character + 6 subtractive pairs).
+2. In `intToRoman`, loop while `num > 0`: extract last digit via `num % 10`, convert it with `convertRomanLetters(digit, place)`, prepend to result, divide `num` by 10, increment `place`.
+3. In `convertRomanLetters`, use a switch on `digit`:
+   - Cases 4, 5, 9: direct map lookup for `digit * 10^place`.
+   - Cases 6, 7, 8: recurse for 5 at same place, then recurse for `digit - 5` at same place.
+   - Default (0–3): loop `digit` times appending `getRomanLetterFromMap(10^place)`.
+4. `getRomanLetterFromMap` does a reverse lookup (value → key) over the map.
+
+#### Code - Java
+
+```java
+class Solution {
+    // All 13 valid Roman tokens: 7 single-character symbols + 6 subtractive pairs
+    private static final Map<String, Integer> MAP = new HashMap<>();
+
+    static {
+        MAP.put("I", 1);
+        MAP.put("IV", 4);
+        MAP.put("V", 5);
+        MAP.put("IX", 9);
+        MAP.put("X", 10);
+        MAP.put("XL", 40);
+        MAP.put("L", 50);
+        MAP.put("XC", 90);
+        MAP.put("C", 100);
+        MAP.put("CD", 400);
+        MAP.put("D", 500);
+        MAP.put("CM", 900);
+        MAP.put("M", 1000);
+    }
+
+    public String intToRoman(int num) {
+        String result = "";
+        // `place` tracks the current decimal position: 0 = ones, 1 = tens, 2 = hundreds, 3 = thousands
+        int place = 0;
+
+        while (num > 0) {
+            int digit = num % 10;
+
+            // Convert this digit at its decimal place and prepend (least significant first)
+            result = convertRomanLetters(digit, place) + result;
+
+            num = num / 10;
+            place++;
+        }
+
+        return result;
+    }
+
+    // Reverse lookup: find the Roman token whose value equals num
+    private static String getRomanLetterFromMap(int num) {
+        for (Map.Entry<String, Integer> entry : MAP.entrySet()) {
+            if (num == entry.getValue()) {
+                return entry.getKey();
+            }
+        }
+        return "";
+    }
+
+    // Convert a single digit (0–9) at the given decimal place to its Roman representation
+    private static String convertRomanLetters(int digit, int place) {
+        // Absolute value of this digit (e.g. digit=9, place=1 → 90)
+        int num = digit * Math.powExact(10, place);
+
+        String result = "";
+
+        switch (digit) {
+            // Subtractive pairs and 5: direct map lookup covers IV/V/IX, XL/L/XC, CD/D/CM
+            case 4:
+            case 5:
+            case 9:
+                return getRomanLetterFromMap(num);
+            // 6–8: V/L/D symbol for this place + 1–3 repetitions of the base symbol
+            case 6:
+            case 7:
+            case 8:
+                result += convertRomanLetters(5, place);
+                result += convertRomanLetters(digit - 5, place);
+                return result;
+            // 0–3: repeat the base symbol (I/X/C/M) `digit` times
+            default:
+                for (int i = 0; i < digit; i++) {
+                    result += getRomanLetterFromMap(Math.powExact(10, place));
+                }
+                return result;
+        }
+    }
+}
+```
+
+## Roman to Integer {#lc-roman-to-integer}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 13
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/roman-to-integer/
+- **Tags**:
+- **Techniques**: [Hash Table](#glossary-hash-table), [Simulation](#glossary-simulation)
+
+### Description
+
+Roman numerals are represented by seven different symbols:
+
+| Symbol | Value |
+|--------|-------|
+| I      | 1     |
+| V      | 5     |
+| X      | 10    |
+| L      | 50    |
+| C      | 100   |
+| D      | 500   |
+| M      | 1000  |
+
+Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not `IIII`. Instead, the number four is written as `IV`. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as `IX`.
+
+There are six instances where subtraction is used:
+
+- `I` can be placed before `V` (5) and `X` (10) to make 4 and 9.
+- `X` can be placed before `L` (50) and `C` (100) to make 40 and 90.
+- `C` can be placed before `D` (500) and `M` (1000) to make 400 and 900.
+
+Given a roman numeral, convert it to an integer.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: s = "III"
+Output: 3
+Explanation: III = 3.
+```
+
+**Example 2:**
+
+```
+Input: s = "LVIII"
+Output: 58
+Explanation: L = 50, V = 5, III = 3.
+```
+
+**Example 3:**
+
+```
+Input: s = "MCMXCIV"
+Output: 1994
+Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
+```
+
+### Constraints
+
+- $1 \le$ `s.length` $\le 15$
+- `s` contains only the characters `('I', 'V', 'X', 'L', 'C', 'D', 'M')`.
+- It is guaranteed that `s` is a valid roman numeral in the range `[1, 3999]`.
+
+### Solution - Enum Lookup with Subtraction Rule
+
+#### Walkthrough
+
+By reducing the enum to only the 7 single-character symbols, the subtraction pairs no longer need to be enumerated explicitly. Instead, the algorithm relies on the observation that a subtraction case always has a smaller-valued symbol immediately before a larger-valued symbol:
+
+1. At each position `i`, look up the current character's value.
+2. If a next character exists and its value is **greater** than the current value, **subtract** the current value (it is the smaller half of a subtraction pair).
+3. Otherwise, **add** the current value.
+4. The last character always falls into the add case (no next to compare).
+
+This removes the switch statement entirely and makes the loop body uniform.
+
+**Trace on `"MCMXCIV"`:**
+
+| i | c | curr | next | next > curr? | op | result |
+|---|---|------|------|--------------|----|--------|
+| 0 | M | 1000 | C=100  | no  | +1000 | 1000 |
+| 1 | C | 100  | M=1000 | yes | -100  | 900  |
+| 2 | M | 1000 | X=10   | no  | +1000 | 1900 |
+| 3 | X | 10   | C=100  | yes | -10   | 1890 |
+| 4 | C | 100  | I=1    | no  | +100  | 1990 |
+| 5 | I | 1    | V=5    | yes | -1    | 1989 |
+| 6 | V | 5    | —      | last| +5    | 1994 |
+
+#### Analysis
+
+| Complexity | Value |
+|------------|-------|
+| Time       | $O(n)$ — single pass; each character visited once |
+| Space      | $O(1)$ — enum is a compile-time constant |
+
+Compared to the two-character lookahead solution, this approach is simpler: the enum shrinks from 13 to 7 entries and the switch statement is replaced by a single conditional.
+
+#### Implementation Steps
+
+1. Define enum `Roman` with only the 7 single-character symbols and their values.
+2. Add a `value(char c)` overload for convenience.
+3. In `romanToInt`, iterate with index `i`:
+   - If `i+1 < s.length()` and `value(s[i+1]) > value(s[i])`, subtract `value(s[i])`.
+   - Otherwise, add `value(s[i])`.
+   - Increment `i` by 1 each iteration (always single-character steps).
+4. Return the accumulated result.
+
+#### Code - Java
+
+```java
+class Solution {
+    private enum Roman {
+        I("I", 1),
+        V("V", 5),
+        X("X", 10),
+        L("L", 50),
+        C("C", 100),
+        D("D", 500),
+        M("M", 1000),
+        ;
+
+        private final String str;
+        private final int val;
+
+        private Roman(String s, Integer v) {
+            str = s;
+            val = v;
+        }
+
+        public static int value(char c) {
+            return value(String.valueOf(c));
+        }
+
+        public static int value(String s) {
+            for (Roman roman : Roman.values()) {
+                if (roman.str.equals(s)) {
+                    return roman.val;
+                }
+            }
+            throw new IllegalArgumentException(s + " does NOT exist in enum!");
+        }
+    }
+
+    public int romanToInt(String s) {
+        int result = 0;
+        int i = 0;
+
+        while (i < s.length()) {
+            char c = s.charAt(i);
+            if ((i + 1) < s.length()) {
+                char nextC = s.charAt(i + 1);
+                if (Roman.value(nextC) > Roman.value(c)) {
+                    result -= Roman.value(c);
+                } else {
+                    result += Roman.value(c);
+                }
+            } else {
+                result += Roman.value(c);
+            }
+            i++;
+        }
+
+        return result;
+    }
+}
+```
+
+### Alternative Solution - HashMap with Subtraction Rule
+
+#### Walkthrough
+
+Instead of an enum, a `HashMap<Character, Integer>` maps each of the 7 Roman symbols to its value. The subtraction logic is identical to the enum solution: compare the current character's value against the next character's value. This approach trades the compile-time enum definition for a runtime map initialized in the constructor or as a static field.
+
+#### Analysis
+
+| Complexity | Value |
+|------------|-------|
+| Time       | $O(n)$ — single pass; `HashMap.get()` is $O(1)$ |
+| Space      | $O(1)$ — map holds exactly 7 fixed entries |
+
+#### Implementation Steps
+
+1. Initialize a `HashMap<Character, Integer>` with all 7 Roman symbol mappings.
+2. Iterate with index `i` from 0 to `s.length() - 1`:
+   - If `i+1 < s.length()` and `map.get(s[i+1]) > map.get(s[i])`, subtract `map.get(s[i])`.
+   - Otherwise, add `map.get(s[i])`.
+3. Return the accumulated result.
+
+#### Code - Java
+
+```java
+class Solution {
+    private static final Map<Character, Integer> MAP = new HashMap<>();
+
+    static {
+        MAP.put('I', 1);
+        MAP.put('V', 5);
+        MAP.put('X', 10);
+        MAP.put('L', 50);
+        MAP.put('C', 100);
+        MAP.put('D', 500);
+        MAP.put('M', 1000);
+    }
+
+    public int romanToInt(String s) {
+        int result = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            int curr = MAP.get(s.charAt(i));
+            int next = (i + 1 < s.length()) ? MAP.get(s.charAt(i + 1)) : 0;
+
+            if (next > curr) {
+                result -= curr;
+            } else {
+                result += curr;
+            }
+        }
+
+        return result;
+    }
+}
+```
+
 ## Longest Common Prefix {#lc-longest-common-prefix}
 
 ### Problem Metadata
