@@ -345,10 +345,46 @@ To find where two lists intersect:
 
 **Why it works:** Both traverse the same total distance: $L_1 + L_2$
 
+#### Parallel Traversal (Two Lists)
+
+**When to use**: Merging sorted lists, comparing sequences, simultaneous traversal of two separate structures.
+
+**How it works**: Each pointer tracks position in a different list, advancing independently based on a comparison condition.
+
+**Template**:
+
+```java
+ListNode p1 = list1, p2 = list2;
+while (p1 != null && p2 != null) {
+    if (p1.val <= p2.val) {
+        process(p1);
+        p1 = p1.next;
+    } else {
+        process(p2);
+        p2 = p2.next;
+    }
+}
+// Handle remaining nodes in either list
+```
+
+**Examples**:
+
+- **[Merge Two Sorted Lists](#lc-merge-two-sorted)**: Merge two sorted linked lists
+  - Compare current nodes from both lists; append smaller node to result, advance that pointer
+  - Time: O(m + n), Space: O(1)
+
+- **[Interval List Intersections](#lc-interval-list-intersections)**: Find overlapping intervals from two sorted lists
+  - Compare intervals from both lists; advance the pointer whose interval ends first
+  - Time: O(m + n), Space: O(1)
+
+**Complexity**: O(m + n) where m and n are the sizes of the two lists; O(1) extra space.
+
 **Related Problems:**
 
 - [Remove Nth Node From End](#lc-remove-nth-node) - Gap technique
 - [Intersection of Two Linked Lists](#lc-intersection-linked-lists) - Redirect technique
+- [Merge Two Sorted Lists](#lc-merge-two-sorted) - Parallel traversal
+- [Interval List Intersections](#lc-interval-list-intersections) - Parallel traversal
 
 ### Merge Techniques {#intro-linked-list-merge}
 
