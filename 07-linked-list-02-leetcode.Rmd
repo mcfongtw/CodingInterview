@@ -1807,29 +1807,84 @@ public boolean isPalindrome(ListNode head) {
 - **Platform**: LeetCode
 - **Problem ID**: 328
 - **Difficulty**: Medium
-- **URL**: https://leetcode.com/problems/odd-even-linked-lc-list/
+- **URL**: https://leetcode.com/problems/odd-even-linked-list/
+- **Tags**:
 - **Techniques**: [Linked List](glossary-of-algorithm.html#glossary-linked-list)
 
 ### Description
 
-Group odd-position nodes followed by even-position nodes.
+Given the head of a singly linked list, group all nodes with **odd indices** together followed by all nodes with **even indices**, and return the reordered list.
+
+The first node is considered odd-indexed, the second even-indexed, and so on. The relative order within each group must be preserved. You must solve it in $O(1)$ extra space and $O(n)$ time.
+
+### Examples
+
+```
+Input:  head = [1,2,3,4,5]
+Output: [1,3,5,2,4]
+
+Input:  head = [2,1,3,5,6,4,7]
+Output: [2,3,6,7,1,5,4]
+```
+
+### Constraints
+
+- The number of nodes is in the range `[0, 10^4]`
+- `-10^6 <= Node.val <= 10^6`
 
 ### Solution - Two Pointers
 
 #### Walkthrough
 
-Maintain two pointers `odd` and `even`, and a `evenHead`. Traverse the list, linking odd nodes to odd nodes and even nodes to even nodes. Finally, connect the tail of the odd list to `evenHead`.
+Maintain two pointers `odd` and `even` that each advance through their respective sub-lists. `evenHead` anchors the start of the even sub-list so it can be appended at the end.
+
+At each step, stitch `odd.next` to the next odd node and `even.next` to the next even node, advancing both pointers. When `even` runs out of nodes, connect `odd.next = evenHead`.
+
+**Visual trace for `[1,2,3,4,5]`:**
+
+```
+Initial:
+  odd=1, even=2, evenHead=2
+  1 → 2 → 3 → 4 → 5 → null
+
+Step 1:
+  odd.next = even.next (3)  →  1 → 3 → 4 → 5
+  odd = 3
+  even.next = odd.next (4)  →  2 → 4 → 5
+  even = 4
+
+Step 2:
+  odd.next = even.next (5)  →  1 → 3 → 5
+  odd = 5
+  even.next = odd.next (null) →  2 → 4 → null
+  even = null  →  loop exits
+
+Connect:
+  odd(5).next = evenHead(2)  →  1 → 3 → 5 → 2 → 4 → null
+```
 
 #### Analysis
 
-- **Time Complexity**: O(n)
-- **Space Complexity**: O(1)
+- **Time Complexity**: $O(n)$
+- **Space Complexity**: $O(1)$
+
+#### Implementation Steps
+
+1. Return `head` immediately if it is `null`.
+2. Initialize `odd = head`, `even = head.next`, `evenHead = even`.
+3. While `even != null` and `even.next != null`:
+   - `odd.next = even.next`; advance `odd = odd.next`
+   - `even.next = odd.next`; advance `even = even.next`
+4. Connect `odd.next = evenHead`.
+5. Return `head`.
 
 #### Code - Java
 
 ```java
 public ListNode oddEvenList(ListNode head) {
-    if (head == null) return null;
+    if (head == null) {
+        return null;
+    }
     ListNode odd = head;
     ListNode even = head.next;
     ListNode evenHead = even;
@@ -2197,6 +2252,131 @@ class Solution {
         lc-list2LastNode.next = r.next;
 
         return dummyHead.next;
+    }
+}
+```
+
+
+## Split a Circular Linked List {#lc-split-circular-linked-list}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 2674
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/split-a-circular-linked-list/
+- **Tags**:
+- **Techniques**: [Fast/Slow Pointer](glossary-of-algorithm.html#glossary-fast-slow-pointer), [Linked List](glossary-of-algorithm.html#glossary-linked-list), [In-Place Transformation](glossary-of-algorithm.html#glossary-in-place-transformation)
+
+### Description
+
+Given a **circular linked list** containing positive integers, split it into two circular linked lists. The first list should contain the first half of the nodes (exactly $\lceil \text{list.length} / 2 \rceil$ nodes) in their original order. The second list should contain the remaining nodes in their original order.
+
+A **circular linked list** is a linked list where the last node's `next` pointer points back to the first node.
+
+Return an array `answer` of length 2 where:
+
+- `answer[0]` is the circular linked list representing the **first half**
+- `answer[1]` is the circular linked list representing the **second half**
+
+### Examples
+
+```
+Input: nums = [1,5,7]
+Output: [[1,5],[7]]
+Explanation: The first half has ceil(3/2) = 2 nodes: [1,5]. The second half has 1 node: [7].
+
+Input: nums = [2,6,1,5]
+Output: [[2,6],[1,5]]
+Explanation: The first half has ceil(4/2) = 2 nodes: [2,6]. The second half has 2 nodes: [1,5].
+```
+
+### Constraints
+
+- Node count is in the range `[2, 10^5]`
+- `0 <= Node.val <= 10^9`
+- `LastNode.next == FirstNode` (circular property is guaranteed)
+
+### Solution - Fast/Slow Pointer Split
+
+#### Walkthrough
+
+Use the **fast and slow pointer** technique to locate the split point, then a second pass to find the original tail, and finally rewire both halves into independent circular lists.
+
+**Phase 1 — Find split point (slow = last node of first half):**
+
+Advance `slow` 1 step and `fast` 2 steps until `fast` is at or one step before the original tail. When the loop exits, `slow` is at the $\lceil n/2 \rceil$-th node (last node of the first half).
+
+**Phase 2 — Find original tail (fast = last node of second half):**
+
+After Phase 1, `fast` may not yet be at the tail (specifically when the list is even-length and the first loop exited via `fast.next.next == list`). The second `while(fast.next != list)` advances `fast` to the actual tail, unifying both odd and even cases cleanly.
+
+**Phase 3 — Rewire into two circular lists:**
+
+```
+Before:
+  list → ... → slow → second → ... → fast → (back to list)
+
+After:
+  first(=list) → ... → slow → (back to first)   ← first half
+  second        → ... → fast → (back to second)  ← second half
+```
+
+**Trace (n=4): `[2→6→1→5→(back to 2)]`**
+
+```
+Phase 1:
+  Start: slow=2, fast=2
+  Iter 1: slow=6, fast=1; fast.next.next=2=list → EXIT
+
+Phase 2:
+  fast.next=5 ≠ list → fast=5
+  fast.next=2 = list → EXIT
+
+Phase 3:
+  first=2, second=6.next=1
+  slow(6).next = first(2)    → first half:  2 → 6 → (back to 2)
+  fast(5).next = second(1)   → second half: 1 → 5 → (back to 1)
+```
+
+#### Analysis
+
+- **Time Complexity**: $O(n)$ — two partial passes, each traversing at most $n/2$ nodes
+- **Space Complexity**: $O(1)$ — only pointer variables
+
+#### Implementation Steps
+
+1. **Phase 1**: Advance `slow` 1 step, `fast` 2 steps while `fast.next != list` AND `fast.next.next != list`. `slow` lands at the split point.
+2. **Phase 2**: Advance `fast` step by step until `fast.next == list`. `fast` is now the original tail.
+3. Record `first = list` and `second = slow.next`.
+4. Close the first half: `slow.next = first`.
+5. Close the second half: `fast.next = second`.
+6. Return `[first, second]`.
+
+#### Code - Java
+
+```java
+class Solution {
+    public ListNode[] splitCircularLinkedList(ListNode list) {
+        ListNode slow = list, fast = list;
+
+        // Phase 1: find the split point (slow = last node of first half)
+        while (fast.next != list && fast.next.next != list) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Phase 2: advance fast to the original tail (handles even-length case)
+        while (fast.next != list) {
+            fast = fast.next;
+        }
+
+        ListNode first = list;
+        ListNode second = slow.next;
+        slow.next = first;
+        fast.next = second;
+
+        return new ListNode[]{first, second};
     }
 }
 ```
