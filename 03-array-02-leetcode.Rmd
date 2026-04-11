@@ -6256,6 +6256,102 @@ class Solution {
 ```
 
 
+## Transform Array by Parity {#lc-transform-array-by-parity}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 3467
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/transform-array-by-parity/
+- **Tags**:
+- **Techniques**: [Array](#glossary-array), Counting, [Insertion Sort](#sorting-insertion-sort)
+
+### Description
+
+You are given an integer array `nums`. Transform `nums` by performing the following operations in order:
+
+1. Replace each even number with `0`.
+2. Replace each odd number with `1`.
+3. Sort the modified array in non-decreasing order.
+
+Return the resulting array after performing these operations.
+
+### Examples
+
+**Example 1:**
+```
+Input: nums = [4, 3, 2, 1]
+Output: [0, 0, 1, 1]
+Explanation: Convert even numbers (4, 2) to 0 and odd numbers (3, 1) to 1, giving [0, 1, 0, 1]. After sorting: [0, 0, 1, 1].
+```
+
+**Example 2:**
+```
+Input: nums = [1, 5, 1, 4, 2]
+Output: [0, 0, 1, 1, 1]
+Explanation: Convert even numbers (4, 2) to 0 and odd numbers (1, 5, 1) to 1, giving [1, 1, 1, 0, 0]. After sorting: [0, 0, 1, 1, 1].
+```
+
+### Constraints
+
+- `1 <= nums.length <= 100`
+- `1 <= nums[i] <= 1000`
+
+### Solution - In-Place Insertion Sort on Binary Array
+
+#### Walkthrough
+
+Scan left-to-right, replacing each element with 0 (even) or 1 (odd) as we go. When a 0 is written at position `i`, the prefix `nums[0..i-1]` is already a sorted binary sequence (all 0s before all 1s). We bubble the new 0 leftward past every 1 it encounters until it reaches its correct position — identical to one pass of insertion sort.
+
+**Invariant**: After processing index `i`, the prefix `nums[0..i]` is a sorted binary array (all 0s before all 1s).
+
+- **Odd element** at `i`: write 1 — appending a 1 to the right of a sorted prefix preserves the invariant.
+- **Even element** at `i`: write 0 — bubble leftward past all 1s to restore the invariant.
+
+#### Analysis
+
+- **Time Complexity**: O(n^2) — in the worst case (all odds before all evens), each 0 bubbles through O(n) ones.
+- **Space Complexity**: O(1) — in-place transformation, no auxiliary array.
+- **Notes**: Once the inner scan hits a 0, all elements to its left are also 0 (sorted prefix), so a `break` there is a valid micro-optimization but does not affect correctness.
+
+#### Implementation Steps
+
+1. For each index `i` from 0 to `n-1`, read the original value before overwriting.
+2. If even: write `nums[i] = 0`, then scan leftward from `i-1`.
+   - While `nums[j] == 1`: swap `nums[j+1]` and `nums[j]`, decrement `j`.
+3. If odd: write `nums[i] = 1` and continue (1s naturally belong at the right of the sorted prefix).
+4. Return `nums`.
+
+### Java Code
+```java
+class Solution {
+    public int[] transformArray(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            if (num % 2 == 0) {
+                // Even → 0; bubble it left past all 1s to maintain sorted prefix
+                nums[i] = 0;
+                for (int j = i - 1; j >= 0; j--) {
+                    if (nums[j] == 1) {
+                        // Swap 0 with the 1 to its left
+                        int temp = nums[j + 1];
+                        nums[j + 1] = nums[j];
+                        nums[j] = temp;
+                    }
+                    // nums[j] == 0 means remaining prefix is all 0s; nothing left to swap
+                }
+            } else {
+                // Odd → 1; appending 1 preserves the sorted prefix invariant
+                nums[i] = 1;
+            }
+        }
+        return nums;
+    }
+}
+```
+
+
 ## Shortest Word Distance {#lc-shortest-word-distance}
 
 ### Problem Metadata
