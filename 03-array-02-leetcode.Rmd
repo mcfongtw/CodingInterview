@@ -4340,6 +4340,90 @@ public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
 
 
 
+## Assign Cookies {#lc-assign-cookies}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 455
+- **Difficulty**: Easy
+- **URL**: https://leetcode.com/problems/assign-cookies/
+- **Tags**:
+- **Techniques**: [Greedy](#intro-greedy-array-patterns), [Two Pointer](#intro-two-pointer-array), [Sorting](#glossary-sorting)
+
+### Description
+
+You are a wonderful parent and want to give some cookies to your children. You should give each child at most one cookie.
+
+Each child `i` has a greed factor `g[i]`, which is the minimum size of a cookie that the child will be content with. Each cookie `j` has a size `s[j]`. If `s[j] >= g[i]`, the child `i` will be content. Your goal is to maximize the number of your content children and return the maximum number.
+
+### Examples
+
+```
+Input: g = [1,2,3], s = [1,1]
+Output: 1
+Explanation: You have 3 children and 2 cookies. The greed factors are 1, 2 and 3 and cookie sizes are both 1. You can only make child 1 content. You need to output 1.
+```
+
+```
+Input: g = [1,2], s = [1,2,3]
+Output: 2
+Explanation: You have 2 children and 3 cookies. The greed factors are 1 and 2. You have 3 cookies and their sizes are big enough to gratify all children. You need to output 2.
+```
+
+### Constraints
+
+- `1 <= g.length <= 3 * 10^4`
+- `0 <= s.length <= 3 * 10^4`
+- `1 <= g[i], s[j] <= 2^31 - 1`
+
+### Solution - Greedy with Two Pointers
+
+#### Walkthrough
+
+Sort both arrays in ascending order. Iterate through cookies one by one. For each cookie, check if it satisfies the least greedy remaining child (the one at `index`). If the cookie is big enough, the child is fed and we advance to the next child. If not, the cookie is wasted and we try the next cookie for the same child.
+
+The greedy correctness argument: since both arrays are sorted ascending, the current child is always the easiest to satisfy among remaining children. Assigning the smallest sufficient cookie minimizes waste and leaves larger cookies for greedier children.
+
+#### Analysis
+
+- **Time Complexity**: O(n log n + m log m) — dominated by sorting both arrays; the scan is O(max(n, m))
+- **Space Complexity**: O(1)
+
+#### Implementation Steps
+
+1. Sort `g` (greed factors) and `s` (cookie sizes) in ascending order.
+2. Initialize `index = 0` pointing to the least greedy unsatisfied child.
+3. Iterate through each cookie in `s`:
+   - If `index >= g.length`, all children are fed — break early.
+   - If `cookie >= g[index]`, the child is satisfied: increment `numFed` and `index`.
+   - Otherwise, the cookie is too small — skip it and try the next cookie for the same child.
+4. Return `numFed`.
+
+#### Code - Java
+
+```java
+public int findContentChildren(int[] g, int[] s) {
+    int numFed = 0;
+    int index = 0;
+
+    Arrays.sort(g);
+    Arrays.sort(s);
+
+    for (int cookie : s) {
+        if (index >= g.length) {
+            break;
+        }
+        if (cookie >= g[index]) {
+            numFed++;
+            index++;
+        }
+    }
+
+    return numFed;
+}
+```
+
 ## Valid Triangle Number {#lc-valid-triangle-number}
 
 ### Problem Metadata
