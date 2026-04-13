@@ -304,3 +304,78 @@ while (left < right && nums[right] == nums[right-1]) right--;
 2. **Using `if` instead of `while`** when contracting a sliding window — one shrink is not always enough.
 
 3. **Off-by-one**: use `left < right` (not `<=`) for converging pointers so they do not cross.
+
+### Index as Hash (In-Place Array Encoding) {#intro-index-as-hash}
+
+When array values are bounded in a small range (e.g., `[1, n]` or `[0, n-1]`), each value can be mapped to a valid array index. This lets you use the array itself as an implicit hash map with **O(1) auxiliary space** — no separate data structure needed.
+
+The encoding trick depends on the problem's needs. Two common variants are:
+
+#### Variant 1: Sign Toggle (Duplicate Detection) {#intro-index-as-hash-sign}
+
+Map value `v` to index `v - 1` (for values in `[1, n]`). Use the **sign** of `nums[v - 1]` as a boolean visited flag:
+
+- Negate `nums[abs(v) - 1]` to mark that value `v` has been seen.
+- If the slot is already negative, `v` has been seen before — it is a **duplicate**.
+
+The two-pass variant toggles signs in pass 1 (parity counting) and reads results in pass 2:
+
+```java
+// Pass 1: toggle sign at index (abs(num)-1) for every element.
+// Seen once → index stays negative. Seen twice → index returns to positive.
+for (int num : nums) {
+    nums[Math.abs(num) - 1] *= -1;
+}
+
+// Pass 2: positive slot means value appeared twice.
+for (int num : nums) {
+    num = Math.abs(num);
+    if (nums[num - 1] > 0) {
+        result.add(num);
+        nums[num - 1] *= -1;   // prevent double-counting on second occurrence
+    }
+}
+```
+
+**Preconditions**: Values in `[1, n]`, input array mutation is allowed.
+
+**Examples**:
+
+- **[Find All Duplicates in an Array](#lc-find-all-duplicates)**: Two-pass sign toggle finds all values appearing twice — O(n) time, O(1) space
+
+#### Variant 2: Additive Offset (Frequency Counting) {#intro-index-as-hash-offset}
+
+Map value `v` to index `v % n` (for values in `[0, n-1]`). Add a large constant `k = n` to encode visit counts without destroying the original value:
+
+- `nums[nums[i] % n] += n` increments the count for value `nums[i] % n`.
+- After the pass, `nums[i] / n` gives the visit count for value `i`.
+
+```java
+int n = nums.length;
+// Encode counts: add n to nums[v] for each occurrence of value v.
+for (int i = 0; i < n; i++) {
+    nums[nums[i] % n] += n;
+}
+
+// Decode: nums[i] / n is the frequency of value i.
+for (int i = 0; i < n; i++) {
+    if (nums[i] / n > 1) {
+        result.add(i);
+    }
+}
+```
+
+**Preconditions**: Values in `[0, n-1]`, input array mutation is allowed, original values recoverable via `% n`.
+
+**Examples**:
+
+- **[Maximum Number of Repetitions](#fc-max-repetitions)**: Counts element frequencies in-place; finds the most frequent element — O(n) time, O(1) space
+
+#### When to Use Index as Hash
+
+| Check | Detail |
+|-------|--------|
+| Values bounded? | Must be in `[1, n]` or `[0, n-1]` (no out-of-bounds risk) |
+| Mutation allowed? | Input array is modified during the algorithm |
+| Goal | Duplicate detection → sign toggle; frequency counting → additive offset |
+| Trade-off | Avoids O(n) extra space but destroys original array |
