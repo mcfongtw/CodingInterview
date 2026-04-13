@@ -1510,6 +1510,212 @@ class Solution {
 ```
 
 
+## Largest Number {#lc-largest-number}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 179
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/largest-number/
+- **Tags**: Top 100 Liked
+- **Techniques**: [Sorting](#sorting-algorithms)
+
+### Description
+
+Given a list of non-negative integers `nums`, arrange them such that they form the largest number and return it as a string.
+
+**Note:** The result may be very large, so you need to return a string instead of an integer.
+
+### Examples
+
+```
+Input: nums = [10, 2]
+Output: "210"
+```
+
+```
+Input: nums = [3, 30, 34, 5, 9]
+Output: "9534330"
+```
+
+### Constraints
+
+- `1 <= nums.length <= 100`
+- `0 <= nums[i] <= 10^9`
+
+### Solution 1 - Custom Comparator Sort
+
+#### Walkthrough
+
+The key insight is defining the right ordering between any two numbers. When deciding whether number `a` should come before number `b`, compare the two concatenations `"ab"` vs `"ba"` as strings. Whichever is lexicographically larger determines the order.
+
+**Why concatenation comparison works:**
+
+Consider `a = 9` and `b = 34`:
+- `"9" + "34"` = `"934"` = 934
+- `"34" + "9"` = `"349"` = 349
+
+Since 934 > 349, 9 should come first → result: `"934"`.
+
+This comparator defines a total ordering across all numbers and can be directly used with `Arrays.sort`.
+
+**Edge case — all zeros:**
+
+If all numbers are `0`, the array sorts to all zeros (e.g., `[0, 0, 0]`). After joining we get `"000"`, which should be returned as `"0"`. Check if the first element after sorting is `"0"` to handle this.
+
+**Step-by-step for `[3, 30, 34, 5, 9]`:**
+
+1. Convert to strings: `["3", "30", "34", "5", "9"]`
+2. Sort with custom comparator (compare `b+a` vs `a+b` for descending order):
+   - `9` vs `5`: `"95"` > `"59"` → 9 before 5
+   - `5` vs `34`: `"534"` > `"345"` → 5 before 34
+   - `34` vs `3`: `"343"` > `"334"` → 34 before 3
+   - `3` vs `30`: `"330"` > `"303"` → 3 before 30
+   - Sorted: `["9", "5", "34", "3", "30"]`
+3. Join: `"9534330"`
+
+#### Analysis
+
+- **Time Complexity**: O(n log n · k) where k is the average number of digits (string comparison per pair is O(k))
+- **Space Complexity**: O(n) for the string array
+
+#### Implementation Steps
+
+1. Box `int[]` into `Integer[]` so `Arrays.sort` can accept a `Comparator`.
+2. Scan for the all-zeros edge case during the boxing pass; return `"0"` immediately if true.
+3. Implement `DigitComparator`: for two integers `n1` and `n2`, convert to strings `s1`/`s2` and return `(s2 + s1).compareTo(s1 + s2)` (negative means n1 goes first). Use string comparison — **not** `Double.valueOf` — to avoid floating-point precision loss on 18–20-digit concatenations.
+4. Sort the `Integer[]` with `DigitComparator`, then join and return.
+
+**Why string compareTo is safe here:** `s1+s2` and `s2+s1` always have the same length (`len(s1) + len(s2)`), so lexicographic order equals numeric order — no precision issues regardless of input size.
+
+#### Code - Java
+
+```java
+private static class DigitComparator implements Comparator<Integer> {
+    public int compare(Integer n1, Integer n2) {
+        if (n1.equals(n2)) {
+            return 0;
+        }
+
+        String s1 = String.valueOf(n1);
+        String s2 = String.valueOf(n2);
+
+        return (s2 + s1).compareTo(s1 + s2);
+    }
+}
+
+public String largestNumber(int[] nums) {
+    Integer[] array = new Integer[nums.length];
+    boolean isAll0s = true;
+    for (int i = 0; i < nums.length; i++) {
+        if (nums[i] != 0) {
+            isAll0s = false;
+        }
+        array[i] = nums[i];
+    }
+
+    if (isAll0s) {
+        return "0";
+    }
+
+    Arrays.sort(array, new DigitComparator());
+
+    StringBuilder sb = new StringBuilder();
+    for (int num : array) {
+        sb.append(num);
+    }
+
+    return sb.toString();
+}
+```
+
+### Solution 2 - Tiled Key Sort (No Comparator)
+
+#### Walkthrough
+
+Instead of defining how to compare two numbers, assign each number an explicit **sort key** so that Java's natural `String` ordering produces the correct result — no `Comparator` needed.
+
+**The tiled key:** Tile each number's string representation to exactly 10 characters (the maximum width of `10^9`). Numbers with higher tile values should appear earlier, so sort ascending and reverse.
+
+**Why tiling is equivalent to concatenation comparison:**
+
+Both `s1+s2` vs `s2+s1` and their tile values encode the same information. Tiling to a uniform length converts the comparison into a standard fixed-width string comparison.
+
+Example for `[3, 30, 34, 5, 9]`:
+
+| Number | Tile key (10 chars) |
+|--------|---------------------|
+| 9 | `9999999999` |
+| 5 | `5555555555` |
+| 34 | `3434343434` |
+| 3 | `3333333333` |
+| 30 | `3030303030` |
+
+Natural ascending order: `30... < 33... < 34... < 55... < 99...`
+
+Reversed (descending): `9, 5, 34, 3, 30` → `"9534330"` ✓
+
+**Encoding trick:** Concatenate each 10-char tile key with the original string into a single entry. `Arrays.sort` on the entries uses natural order (no `Comparator`). Iterate in reverse to extract originals in descending key order.
+
+#### Analysis
+
+- **Time Complexity**: O(n log n · k) — same as Solution 1
+- **Space Complexity**: O(n)
+
+#### Implementation Steps
+
+1. Convert each integer to its string, then tile it to 10 characters to form a sort key.
+2. Encode each entry as `tileKey + originalStr` (tile key occupies fixed first 10 chars).
+3. Call `Arrays.sort` with no comparator — natural ascending string order.
+4. Iterate entries in reverse (descending key order), extracting the substring after position 10.
+
+#### Code - Java
+
+```java
+public String largestNumber(int[] nums) {
+    String[] entries = new String[nums.length];
+    boolean isAll0s = true;
+
+    for (int i = 0; i < nums.length; i++) {
+        if (nums[i] != 0) {
+            isAll0s = false;
+        }
+        String s = String.valueOf(nums[i]);
+        StringBuilder key = new StringBuilder();
+        while (key.length() < 10) {
+            key.append(s);
+        }
+        entries[i] = key.substring(0, 10) + s;
+    }
+
+    if (isAll0s) {
+        return "0";
+    }
+
+    Arrays.sort(entries); // natural ascending order — no Comparator
+
+    StringBuilder sb = new StringBuilder();
+    for (int i = entries.length - 1; i >= 0; i--) {
+        sb.append(entries[i].substring(10)); // strip the 10-char key prefix
+    }
+
+    return sb.toString();
+}
+```
+
+### Comparison
+
+| | Solution 1 (Custom Comparator) | Solution 2 (Tiled Key Sort) |
+|-|---|----|
+| **Comparator** | Yes — `DigitComparator` class | None |
+| **Sort order** | Descending directly | Ascending + reverse iteration |
+| **Key insight** | Define pairwise order via `(s2+s1).compareTo(s1+s2)` | Create per-element key; rely on natural order |
+| **Time** | O(n log n · k) | O(n log n · k) |
+| **Space** | O(n) | O(n) |
+| **Pitfall** | Must use `String.compareTo`, not `Double.valueOf` | Encoding key must be fixed-width (10 chars) |
+
+
 ## Design Add and Search Words Data Structure {#lc-design-add-search-words}
 
 ### Problem Metadata
