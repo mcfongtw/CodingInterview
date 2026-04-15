@@ -2681,6 +2681,181 @@ public int maxProduct(int[] nums) {
 ```
 
 
+## Maximum Gap {#lc-maximum-gap}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 164
+- **Difficulty**: Hard
+- **URL**: https://leetcode.com/problems/maximum-gap/
+- **Tags**:
+- **Techniques**: [Bucket Sort](#sorting-bucket-sort), [Sorting](glossary-of-algorithm.html#glossary-sorting)
+
+### Description
+
+Given an integer array `nums`, return the **maximum difference** between two successive elements in its **sorted** form. If the array contains fewer than two elements, return `0`.
+
+You must write an algorithm that runs in **linear time** and uses **linear extra space**.
+
+### Examples
+
+**Example 1:**
+
+```
+Input: nums = [3,6,9,1]
+Output: 3
+Explanation: The sorted form of the array is [1,3,6,9], either
+             (3,6) or (6,9) are successive elements with a maximum
+             difference of 3.
+```
+
+**Example 2:**
+
+```
+Input: nums = [10]
+Output: 0
+Explanation: The array contains fewer than 2 elements, so return 0.
+```
+
+### Constraints
+
+- `1 <= nums.length <= 10^5`
+- `0 <= nums[i] <= 10^9`
+- Must run in **O(n) time** and **O(n) space**
+
+### Solution - Bucket Sort (Pigeonhole Principle)
+
+#### Walkthrough
+
+The linear-time constraint rules out comparison-based sorting (O(n log n)). The key insight comes from the **pigeonhole principle**:
+
+**Average gap reasoning:**
+
+For `n` elements spanning range `[min, max]`, the average gap between consecutive sorted elements is:
+
+$$\text{avgGap} = \frac{\text{max} - \text{min}}{n - 1}$$
+
+If we divide the range into `n-1` buckets each of width $\le$ `avgGap`, then by the pigeonhole principle at least one bucket must be **empty** — we have `n` elements but `n-1` buckets, with `min` and `max` locked at the endpoints.
+
+**Critical observation:** Because at least one bucket is empty, the maximum gap **cannot come from within a single bucket** (all values in a bucket differ by at most `bucketWidth` $\le$ `avgGap`). The maximum gap **must span across at least one bucket boundary**.
+
+Therefore: we only need to track each bucket's local `{min, max}` — not its full contents — and scan gaps between adjacent non-empty buckets.
+
+**Example walkthrough (`[3,6,9,1]`):**
+
+```
+min=1, max=9, n=4
+bucketWidth = max(1, 8/3) = 2
+bucketCount = 8/2 + 1 = 5
+
+Bucket 0 [1,2]: {1,1}   ← contains 1
+Bucket 1 [3,4]: {3,3}   ← contains 3
+Bucket 2 [5,6]: {6,6}   ← contains 6
+Bucket 3 [7,8]: empty   ← pigeonhole guarantee
+Bucket 4 [9,10]: {9,9}  ← contains 9
+
+Scan (tracking prevMax across non-empty buckets):
+  prevMax = 1 (bucket 0)
+  gap 0→1: 3 - 1 = 2,  prevMax = 3
+  gap 1→2: 6 - 3 = 3,  prevMax = 6
+  bucket 3: skip (empty)
+  gap 2→4: 9 - 6 = 3,  prevMax = 9
+
+maxGap = 3
+```
+
+#### Analysis
+
+- **Time Complexity**: O(n)
+  - Two passes to find `min`/`max`: O(n)
+  - One pass to fill buckets: O(n)
+  - One pass to scan bucket gaps: O(n) (bucketCount is bounded by n)
+  - No comparison-based sort — meets the linear-time requirement
+
+- **Space Complexity**: O(n)
+  - `bucketCount = (max - min) / bucketWidth + 1`. Since `bucketWidth` $\ge$ `(max-min)/(n-1)`, we have `bucketCount` $\le$ `n-1+1 = n`
+  - Each bucket stores only 2 integers `{min, max}`
+
+#### Implementation Steps
+
+**Edge cases (pre-check):**
+
+1. If `nums.length <= 1`, return `0`
+2. If `nums.length == 2`, return `|nums[0] - nums[1]|`
+3. After finding `min`/`max`: if `min == max` (all elements equal), return `0`
+
+**Bucket setup:**
+
+4. Compute `bucketWidth = max(1, (max - min) / (n - 1))` — floor division, minimum 1 to avoid divide-by-zero
+5. Compute `bucketCount = (max - min) / bucketWidth + 1`
+6. Initialize `bucketMinMax[bucketCount][2]` with `{MAX_VALUE, MIN_VALUE}` sentinels per bucket
+
+**Fill buckets:**
+
+7. For each `num`, compute `bucketIdx = (num - min) / bucketWidth`
+8. Update `bucketMinMax[bucketIdx]` with the local min and max
+
+**Scan gaps:**
+
+9. Initialize `prevMax = bucketMinMax[0][1]` (max of first bucket)
+10. Iterate `i` from 1 to `bucketCount - 1`:
+    - If bucket `i` is empty (`bucketMinMax[i][0] == MAX_VALUE`): skip
+    - Otherwise: `gap = bucketMinMax[i][0] - prevMax`, update `maxGap`, update `prevMax = bucketMinMax[i][1]`
+11. Return `maxGap`
+
+#### Code - Java
+
+```java
+public int maximumGap(int[] nums) {
+    if (nums.length <= 1) {
+        return 0;
+    }
+
+    if (nums.length == 2) {
+        return Math.abs(nums[0] - nums[1]);
+    }
+
+    int max = Integer.MIN_VALUE;
+    int min = Integer.MAX_VALUE;
+
+    for (int num : nums) {
+        max = Math.max(max, num);
+        min = Math.min(min, num);
+    }
+
+    if (min == max) {
+        return 0;
+    }
+
+    int bucketWidth = Math.max(1, (max - min) / (nums.length - 1));
+    int bucketCount = (max - min) / bucketWidth + 1;
+
+    int[][] bucketMinMax = new int[bucketCount][2];
+    for (int i = 0; i < bucketCount; i++) {
+        bucketMinMax[i] = new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE};
+    }
+
+    for (int num : nums) {
+        int bucketIdx = (num - min) / bucketWidth;
+        bucketMinMax[bucketIdx][0] = Math.min(bucketMinMax[bucketIdx][0], num);
+        bucketMinMax[bucketIdx][1] = Math.max(bucketMinMax[bucketIdx][1], num);
+    }
+
+    int maxGap = 0;
+    int prevMax = bucketMinMax[0][1];
+    for (int i = 1; i < bucketCount; i++) {
+        if (bucketMinMax[i][0] == Integer.MAX_VALUE) {
+            continue;
+        }
+        maxGap = Math.max(maxGap, bucketMinMax[i][0] - prevMax);
+        prevMax = bucketMinMax[i][1];
+    }
+
+    return maxGap;
+}
+```
+
 ## Two Sum II - Input Array Is Sorted {#lc-two-sum-ii-sorted}
 
 ### Problem Metadata

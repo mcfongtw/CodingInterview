@@ -874,20 +874,150 @@ private boolean dfs(List<List<Integer>> graph, int node,
 - Build order problems
 - Detecting cycles in directed graphs
 
+### Bucket Sort {#sorting-bucket-sort}
+
+#### The Pigeonhole Principle (Beginner's Guide)
+
+Imagine you have 10 letters to deliver to houses numbered 1 through 100. Before you start walking door to door, you sort them into 10 bins: bin 1 for houses 1–10, bin 2 for houses 11–20, and so on.
+
+Now you only need to walk each bin's small section in order — you never compare one letter to another across the whole pile. That is bucket sort in a nutshell.
+
+The **pigeonhole principle** is even simpler: if you have more pigeons than pigeonholes, at least one hole must hold more than one pigeon. Flip it around: if you have `n` pigeons and `n` holes, some holes can be empty. Bucket sort exploits the empty-hole guarantee to reason about **where the maximum gap must be**.
+
+#### How Bucket Sort Works
+
+**Step 1 — Find the range.** Scan the array once to get `min` and `max`.
+
+**Step 2 — Decide bucket width.** Divide the range into equal-width buckets:
+
+$$\text{bucketWidth} = \max\!\left(1,\; \left\lfloor\frac{\text{max} - \text{min}}{n - 1}\right\rfloor\right)$$
+
+The floor ensures the width is an integer; the $\max(1, \ldots)$ prevents division-by-zero when all elements are equal.
+
+**Step 3 — Assign each element.** Each value maps to a bucket by:
+
+$$\text{bucketIdx} = \left\lfloor\frac{\text{num} - \text{min}}{\text{bucketWidth}}\right\rfloor$$
+
+**Step 4 — Track only local min and max per bucket.** You do not need to store all values — just the smallest and largest that fell into each bucket.
+
+**Step 5 — Scan adjacent non-empty buckets.** The answer is the maximum of `currentBucket.min - prevNonEmptyBucket.max` across all pairs.
+
+#### Visual Example
+
+```
+Input: [3, 6, 9, 1]
+min=1, max=9, n=4
+
+bucketWidth = floor(8 / 3) = 2
+bucketCount = 8 / 2 + 1 = 5
+
+         [1,2]    [3,4]    [5,6]    [7,8]    [9,10]
+Bucket:    0        1        2        3         4
+           ↑        ↑        ↑        ↑         ↑
+Values:    1        3        6      (empty)      9
+         {1,1}   {3,3}    {6,6}               {9,9}
+
+Scan gaps (skip empty bucket 3):
+  1 → 3 : gap = 3  - 1 = 2
+  3 → 6 : gap = 6  - 3 = 3
+  6 → 9 : gap = 9  - 6 = 3   ← skip bucket 3, use prevMax=6
+
+maxGap = 3
+```
+
+#### Why the Max Gap Must Span Bucket Boundaries
+
+This is the key insight, not just an implementation detail.
+
+**Claim:** The maximum gap in the sorted array can never come from two values inside the same bucket.
+
+**Why?** All values within one bucket differ by at most `bucketWidth`. We chose `bucketWidth` so that:
+
+$$\text{bucketWidth} \le \frac{\text{max} - \text{min}}{n - 1} = \text{average gap}$$
+
+Any within-bucket gap is $\le$ `bucketWidth` $\le$ average gap. But the maximum gap must be $\ge$ average gap (by definition of "maximum"). So the maximum gap is always $\ge$ average gap $\ge$ any within-bucket gap.
+
+Therefore we only need to check gaps **between** buckets — and we can safely ignore what is inside each bucket beyond its local min and max.
+
+#### Template
+
+```java
+// 1. Find range
+int min = Arrays.stream(nums).min().getAsInt();
+int max = Arrays.stream(nums).max().getAsInt();
+
+if (min == max) return 0; // all elements equal
+
+// 2. Set up buckets
+int bucketWidth = Math.max(1, (max - min) / (nums.length - 1));
+int bucketCount = (max - min) / bucketWidth + 1;
+int[][] bucketMinMax = new int[bucketCount][2];
+for (int[] b : bucketMinMax) {
+    b[0] = Integer.MAX_VALUE;   // local min sentinel
+    b[1] = Integer.MIN_VALUE;   // local max sentinel
+}
+
+// 3. Fill buckets
+for (int num : nums) {
+    int idx = (num - min) / bucketWidth;
+    bucketMinMax[idx][0] = Math.min(bucketMinMax[idx][0], num);
+    bucketMinMax[idx][1] = Math.max(bucketMinMax[idx][1], num);
+}
+
+// 4. Scan adjacent non-empty bucket boundaries
+int maxGap = 0;
+int prevMax = bucketMinMax[0][1];
+for (int i = 1; i < bucketCount; i++) {
+    if (bucketMinMax[i][0] == Integer.MAX_VALUE) continue; // empty bucket
+    maxGap = Math.max(maxGap, bucketMinMax[i][0] - prevMax);
+    prevMax = bucketMinMax[i][1];
+}
+```
+
+#### Complexity
+
+| | Bucket Sort |
+|-|-------------|
+| **Time** | O(n) — two passes (fill + scan), no comparisons between elements |
+| **Space** | O(n) — at most n buckets, each holding 2 integers |
+| **Stable** | Depends on implementation (not relevant for gap problems) |
+| **In-place** | No — requires the bucket array |
+| **Requires** | Values in a bounded integer range |
+
+#### When to Use Bucket Sort
+
+- Problem asks for **O(n) time** on numeric data with a bounded range
+- Need to find **maximum/minimum gap** in sorted order without actually sorting
+- Values map cleanly to integer indices (e.g., `[0, n-1]` or `[min, max]`)
+
+**Examples:**
+
+- [Maximum Gap](#lc-maximum-gap) — find the largest gap between successive sorted elements in O(n)
+
+#### Common Pitfalls
+
+1. **Confusing bucket width with bucket count**: `bucketWidth` is the range each bucket covers; `bucketCount` is how many buckets you create. Using one where the other is needed causes `IndexOutOfBoundsException`.
+
+2. **Forgetting `Math.max(1, ...)`**: If `max - min < n - 1`, integer floor gives `bucketWidth = 0` → divide-by-zero.
+
+3. **Comparing against an empty previous bucket**: Always carry `prevMax` forward — only update it when you land on a non-empty bucket.
+
+4. **Assuming this works for floating-point with precision issues**: Bucket sort's index formula relies on exact integer arithmetic. For floats, use a comparison-based sort instead.
+
 ### When to Use Which Sorting Algorithm {#sorting-algorithm-selection}
 
 Choosing the right sorting algorithm depends on several factors: input size, data characteristics, memory constraints, and stability requirements.
 
 #### Decision Matrix
 
-| Factor | Bubble Sort | Insertion Sort | Merge Sort | Quick Sort |
-|--------|-------------|----------------|------------|------------|
-| **Time (Average)** | $O(n^2)$ | $O(n^2)$ | $O(n \log n)$ | $O(n \log n)$ |
-| **Time (Worst)** | $O(n^2)$ | $O(n^2)$ | $O(n \log n)$ | $O(n^2)$ |
-| **Space** | $O(1)$ | $O(1)$ | $O(n)$ | $O(\log n)$ |
-| **Stable** | Yes | Yes | Yes | No |
-| **In-place** | Yes | Yes | No | Yes |
-| **Adaptive** | Yes* | Yes | No | No |
+| Factor | Bubble Sort | Insertion Sort | Merge Sort | Quick Sort | Bucket Sort |
+|--------|-------------|----------------|------------|------------|-------------|
+| **Time (Average)** | $O(n^2)$ | $O(n^2)$ | $O(n \log n)$ | $O(n \log n)$ | $O(n)$ |
+| **Time (Worst)** | $O(n^2)$ | $O(n^2)$ | $O(n \log n)$ | $O(n^2)$ | $O(n)$ |
+| **Space** | $O(1)$ | $O(1)$ | $O(n)$ | $O(\log n)$ | $O(n)$ |
+| **Stable** | Yes | Yes | Yes | No | Depends |
+| **In-place** | Yes | Yes | No | Yes | No |
+| **Adaptive** | Yes* | Yes | No | No | No |
 
 *With early termination optimization
 
@@ -974,6 +1104,11 @@ Choosing the right sorting algorithm depends on several factors: input size, dat
 - Average-case performance is acceptable
 - Working with arrays (cache-friendly)
 - Memory is constrained
+
+**Use Bucket Sort when**:
+- O(n) time is required and values are bounded integers
+- Finding maximum/minimum gap without full sorting
+- Values map cleanly to array indices
 
 **Use Bubble Sort when**:
 - Educational purposes only
