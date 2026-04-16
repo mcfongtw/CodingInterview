@@ -4800,6 +4800,201 @@ public int triangleNumber(int[] nums) {
 ```
 
 
+## Find K Closest Elements {#lc-find-k-closest-elements}
+
+### Problem Metadata
+
+- **Platform**: LeetCode
+- **Problem ID**: 658
+- **Difficulty**: Medium
+- **URL**: https://leetcode.com/problems/find-k-closest-elements/
+- **Tags**:
+- **Techniques**: [Binary Search](#binary-search-strategy), [Two Pointers](glossary-of-algorithm.html#glossary-two-pointer), [Heap](glossary-of-algorithm.html#glossary-heap), [Sorting](glossary-of-algorithm.html#glossary-sorting), Custom Comparator
+
+### Description
+
+Given a sorted integer array `arr`, two integers `k` and `x`, return the `k` closest integers to `x` in the array. The result should also be sorted in ascending order.
+
+An integer `a` is closer to `x` than an integer `b` if:
+
+- `|a - x| < |b - x|`, or
+- `|a - x| == |b - x|` and `a < b`
+
+### Examples
+
+**Example 1:**
+```
+Input: arr = [1,2,3,4,5], k = 4, x = 3
+Output: [1,2,3,4]
+```
+
+**Example 2:**
+```
+Input: arr = [1,2,3,4,5], k = 4, x = -1
+Output: [1,2,3,4]
+```
+
+### Constraints
+
+- `1 <= k <= arr.length <= 10^4`
+- `arr` is sorted in ascending order
+- $-10^4 \le arr[i], x \le 10^4$
+
+### Solution 1 - Max Heap (Expand from Insertion Point)
+
+#### Walkthrough
+
+Find the rightmost index where $arr[index] \le x$ — this is the closest element to `x` from the left. Then expand outward using two pointers `l` (leftward) and `r` (rightward), feeding candidates into a **max-heap ordered by distance from x**.
+
+The heap always evicts the farthest element when it grows beyond `k`, so after scanning up to `k` elements from each side, exactly the `k` closest remain. The tie-breaking rule (prefer smaller value on equal distance) is enforced by the comparator: when distances are equal, the larger element gets higher priority in the heap and is evicted first.
+
+#### Analysis
+
+- **Time Complexity**: O(n + k log k) — O(n) linear scan to find insertion point, O(k log k) for heap operations (at most 2k insertions each costing O(log k)), O(k log k) for final sort
+- **Space Complexity**: O(k) for the heap
+
+#### Implementation Steps
+
+1. Walk `index` forward until `arr[index + 1] > x`, marking the last element $\le$ x.
+2. Set left pointer `l` to `index` (elements $\le$ x) and right pointer `r` to `index + 1` (elements $>$ x).
+3. Add up to `k` elements from the left into the max-heap; evict the farthest if size exceeds `k`.
+4. Add up to `k` elements from the right into the max-heap; evict the farthest if size exceeds `k`.
+5. Drain the heap into a list and sort ascending (heap order is by distance, not value).
+
+#### Code - Java
+
+```java
+class Solution {
+    private class DistanceComparator implements Comparator<Integer> {
+
+        private final int x;
+
+        public DistanceComparator(int x) {
+            this.x = x;
+        }
+
+        // Max-heap by distance: the element farthest from x sits at the top and is polled first.
+        // Tie-break: the larger value has higher priority so it gets evicted first,
+        // keeping the smaller value (per the problem's "prefer smaller" rule).
+        public int compare(Integer n1, Integer n2) {
+            int d1 = getDistance(n1, x);
+            int d2 = getDistance(n2, x);
+            if (d1 > d2) {
+                return -1;  // n1 is farther → higher priority → polled first
+            } else if (d1 == d2) {
+                return n2 - n1;  // equal distance: larger value → higher priority → evicted first
+            } else {
+                return 1;
+            }
+        }
+
+        private int getDistance(int n, int x) {
+            return Math.abs(x - n);
+        }
+    }
+
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        // Find the rightmost index where arr[index] <= x (the closest element from the left).
+        int index = 0;
+        while (index < arr.length - 1) {
+            if (arr[index + 1] > x) {
+                break;
+            }
+            index++;
+        }
+
+        // l scans leftward (elements <= x), r scans rightward (elements > x).
+        int l = index, r = index + 1;
+        PriorityQueue<Integer> queue = new PriorityQueue<>(new DistanceComparator(x));
+
+        // Collect up to k candidates from the left; evict the farthest if size exceeds k.
+        for (int i = 0; i < k && l >= 0; i++, l--) {
+            queue.add(arr[l]);
+            if (queue.size() > k) {
+                queue.poll();
+            }
+        }
+
+        // Collect up to k candidates from the right; evict the farthest if size exceeds k.
+        for (int i = 0; i < k && r < arr.length; i++, r++) {
+            queue.add(arr[r]);
+            if (queue.size() > k) {
+                queue.poll();
+            }
+        }
+
+        // Drain heap and sort: heap order is by distance, but output must be ascending by value.
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < k; i++) {
+            result.add(queue.poll());
+        }
+        Collections.sort(result);
+
+        return result;
+    }
+}
+```
+
+### Solution 2 - Binary Search on Window Start
+
+#### Walkthrough
+
+**Key insight:** In a sorted array, the k closest elements always form a **contiguous window**. So instead of picking elements one by one, we binary search for the optimal window start index.
+
+The search space for the window start is `[0, n - k]` (the last valid start that leaves room for k elements). For any candidate start `mid`, we look at the two elements just outside the candidate window: `arr[mid]` (left edge) and `arr[mid + k]` (right edge, one past the window). If `x - arr[mid] > arr[mid + k] - x`, the left edge is farther away than the right edge, so the window should slide right (`left = mid + 1`). Otherwise, the left edge is at least as close — keep it and shrink from the right (`right = mid`).
+
+When the loop ends, `left` is the optimal window start. Because `arr` is already sorted, slicing `arr[left..left+k-1]` gives a sorted result directly — no extra sort needed.
+
+#### Analysis
+
+- **Time Complexity**: O(log(n - k) + k) — O(log(n-k)) for binary search, O(k) to build the result list
+- **Space Complexity**: O(1) auxiliary (excluding output list)
+
+#### Implementation Steps
+
+1. Set left to 0 and right to `arr.length - k` (search space for window start).
+2. While left $<$ right:
+   - Compute `mid` as `left + (right - left) / 2`.
+   - If `x - arr[mid] > arr[mid + k] - x`: left edge is farther → slide window right (left becomes `mid + 1`).
+   - Else: left edge is at least as close → keep it, shrink from right (right becomes `mid`).
+3. Collect `arr[left..left+k-1]` into the result list (already sorted).
+
+#### Code - Java
+
+```java
+public List<Integer> findClosestElements(int[] arr, int k, int x) {
+    int left = 0;
+    int right = arr.length - k;  // last valid window start index
+
+    // Binary search for the leftmost position of the optimal k-element window.
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+
+        // Compare the two elements just outside the candidate window [mid, mid+k-1]:
+        //   arr[mid]   is the left edge (distance from x: x - arr[mid])
+        //   arr[mid+k] is one past the right edge (distance from x: arr[mid+k] - x)
+        if (x - arr[mid] > arr[mid + k] - x) {
+            // Left edge is strictly farther → slide the window right.
+            left = mid + 1;
+        } else {
+            // Left edge is at least as close (tie goes to smaller value per problem rule)
+            // → keep arr[mid], shrink the search from the right.
+            right = mid;
+        }
+    }
+
+    // left is now the start of the optimal window; collect k consecutive elements.
+    List<Integer> result = new ArrayList<>();
+    for (int i = left; i < left + k; i++) {
+        result.add(arr[i]);
+    }
+
+    // No sort needed: the window is already a contiguous slice of the sorted input.
+    return result;
+}
+```
+
+
 ## Binary Search {#lc-binary-search}
 
 ### Problem Metadata
