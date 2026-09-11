@@ -44,6 +44,7 @@ jobs:
             libmagick++-dev \
             libpoppler-cpp-dev \
             libcurl4-openssl-dev \
+            libuv1-dev \
             imagemagick \
             poppler-utils \
             pkg-config
@@ -58,19 +59,19 @@ jobs:
 
       - name: Install R packages (base)
         run: |
-          Rscript -e "install.packages(c('bookdown', 'knitr', 'rmarkdown', 'tinytex'), repos='https://cloud.r-project.org/', Ncpus=2)"
+          Rscript -e "options(warn=2); install.packages(c('bookdown', 'knitr', 'rmarkdown', 'tinytex'), repos='https://cloud.r-project.org/', Ncpus=2)"
 
       - name: Install magick with verbose output
         run: |
-          Rscript -e "Sys.setenv(PKG_CONFIG_PATH='/usr/lib/x86_64-linux-gnu/pkgconfig'); install.packages('magick', repos='https://cloud.r-project.org/', configure.vars='INCLUDE_DIR=/usr/include/ImageMagick-6 LIB_DIR=/usr/lib/x86_64-linux-gnu', INSTALL_opts='--no-test-load')"
+          Rscript -e "options(warn=2); Sys.setenv(PKG_CONFIG_PATH='/usr/lib/x86_64-linux-gnu/pkgconfig'); install.packages('magick', repos='https://cloud.r-project.org/', configure.vars='INCLUDE_DIR=/usr/include/ImageMagick-6 LIB_DIR=/usr/lib/x86_64-linux-gnu', INSTALL_opts='--no-test-load')"
 
       - name: Install pdftools
         run: |
-          Rscript -e "install.packages('pdftools', repos='https://cloud.r-project.org/')"
+          Rscript -e "options(warn=2); install.packages('pdftools', repos='https://cloud.r-project.org/')"
 
       - name: Install TinyTeX
         run: |
-          Rscript -e "tinytex::install_tinytex()"
+          Rscript -e "options(warn=2); tinytex::install_tinytex()"
           echo "$HOME/bin" >> $GITHUB_PATH
 
       - name: Install LaTeX packages (set mirror & update)
