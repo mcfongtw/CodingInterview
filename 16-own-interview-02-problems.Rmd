@@ -663,6 +663,218 @@ function grantTemporaryAccess(config: SecurityConfig) {
 function testFeatureFlagToggle() {
     const testConfig = new SecurityConfig();
     grantTemporaryAccess(testConfig);
-    console.assert(testConfig.allowGuestAccess === true);
 }
 ```
+
+## AST Linter & The Visitor Pattern {#interview-ast-linter}
+
+### Metadata
+
+- **Platform**: Interview
+- **Difficulty**: Medium / Hard
+- **Tags**: N-ary Tree, DFS, Design Patterns, Visitor Pattern
+- **Techniques**: [Depth-First Search](#glossary-dfs)
+
+### Problem Statement
+
+You are building a lightweight code linter. The source code has already been parsed into an Abstract Syntax Tree (AST). Each `Node` has a `type` (e.g., `"VariableDeclaration"`, `"FunctionCall"`) and an arbitrary number of `children` nodes.
+
+**Goal**: Write a function `findNodes(root, targetType)` that traverses the AST and returns a list of all nodes matching the `targetType`.
+
+### Core Idea
+
+This is a classic N-ary tree traversal. Because we need to explore all branches to find matching nodes, we can use Depth-First Search (DFS). We will implement this both recursively and iteratively.
+
+### Walkthrough & Implementation - Recursive vs. Iterative
+
+A strong candidate will quickly implement a recursive DFS. However, recursive solutions are vulnerable to Stack Overflow errors if the AST is extremely deep (e.g., deeply chained method calls like `obj.do().do().do()...`). 
+
+The interviewer should prompt the candidate to rewrite the solution iteratively using an explicit Stack, which moves the memory footprint from the call stack to the heap.
+
+```java
+class ASTNode {
+    String type;
+    List<ASTNode> children;
+    
+    public ASTNode(String type) {
+        this.type = type;
+        this.children = new ArrayList<>();
+    }
+}
+
+class Linter {
+    // 1. Recursive Approach
+    public List<ASTNode> findNodesRecursive(ASTNode root, String targetType) {
+        List<ASTNode> result = new ArrayList<>();
+        if (root == null) return result;
+        
+        if (root.type.equals(targetType)) {
+            result.add(root);
+        }
+        
+        for (ASTNode child : root.children) {
+            result.addAll(findNodesRecursive(child, targetType));
+        }
+        
+        return result;
+    }
+    
+    // 2. Iterative Approach (Heap-based Stack)
+    public List<ASTNode> findNodesIterative(ASTNode root, String targetType) {
+        List<ASTNode> result = new ArrayList<>();
+        if (root == null) return result;
+        
+        Stack<ASTNode> stack = new Stack<>();
+        stack.push(root);
+        
+        while (!stack.isEmpty()) {
+            ASTNode curr = stack.pop();
+            
+            if (curr.type.equals(targetType)) {
+                result.add(curr);
+            }
+            
+            // Push children in reverse order to maintain left-to-right traversal
+            for (int i = curr.children.size() - 1; i >= 0; i--) {
+                stack.push(curr.children.get(i));
+            }
+        }
+        
+        return result;
+    }
+}
+```
+
+```go
+type ASTNode struct {
+	Type     string
+	Children []*ASTNode
+}
+
+// 1. Recursive Approach
+func FindNodesRecursive(root *ASTNode, targetType string) []*ASTNode {
+	var result []*ASTNode
+	if root == nil {
+		return result
+	}
+
+	if root.Type == targetType {
+		result = append(result, root)
+	}
+
+	for _, child := range root.Children {
+		result = append(result, FindNodesRecursive(child, targetType)...)
+	}
+
+	return result
+}
+
+// 2. Iterative Approach (Heap-based Slice Stack)
+func FindNodesIterative(root *ASTNode, targetType string) []*ASTNode {
+	var result []*ASTNode
+	if root == nil {
+		return result
+	}
+
+	stack := []*ASTNode{root}
+
+	for len(stack) > 0 {
+		// Pop
+		curr := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+
+		if curr.Type == targetType {
+			result = append(result, curr)
+		}
+
+		// Push children in reverse order
+		for i := len(curr.Children) - 1; i >= 0; i-- {
+			stack = append(stack, curr.Children[i])
+		}
+	}
+
+	return result
+}
+```
+
+### Follow-up Questions
+
+| Follow-Up | Difficulty | Focus |
+|---|---|---|
+| 1. The "Many Strategies" Problem | Medium | System Design, Visitor Pattern, Code Duplication |
+| 2. Scoping and State | Hard | Pre-order vs Post-order hooks, Stack memory management |
+
+#### Follow-Up 1: The "Many Strategies" Problem (Architecture)
+
+**Scenario**: Your linter becomes wildly successful. You now have 50 different linting rules. One rule looks for unused variables, another looks for deprecated function calls, and another calculates cyclomatic complexity. 
+
+**Question**: If we write 50 different `findNodes`-style traversal functions, we are traversing the entire AST 50 times, and we are duplicating the tree-walking logic 50 times. How would you architect the system so that we only traverse the tree **exactly once**, but apply all 50 rules independently?
+
+**Expected Answer**: The candidate should pivot to the **Visitor Pattern** (or an event-driven Pub/Sub model). We write a single generic `traverse(root, visitors)` function. As the traverser visits each node, it triggers `visitor.visit(node)` on all registered plugins. This separates the *traversal logic* from the *business logic*.
+
+```java
+// The decoupled architecture
+interface ASTVisitor {
+    void visit(ASTNode node);
+}
+
+class TraversalEngine {
+    List<ASTVisitor> visitors = new ArrayList<>();
+    
+    public void register(ASTVisitor visitor) {
+        visitors.add(visitor);
+    }
+    
+    public void traverse(ASTNode root) {
+        if (root == null) return;
+        
+        // Broadcast to all plugins
+        for (ASTVisitor visitor : visitors) {
+            visitor.visit(root);
+        }
+        
+        for (ASTNode child : root.children) {
+            traverse(child);
+        }
+    }
+}
+```
+
+```go
+type ASTVisitor interface {
+	Visit(node *ASTNode)
+}
+
+type TraversalEngine struct {
+	visitors []ASTVisitor
+}
+
+func (e *TraversalEngine) Register(v ASTVisitor) {
+	e.visitors = append(e.visitors, v)
+}
+
+func (e *TraversalEngine) Traverse(root *ASTNode) {
+	if root == nil {
+		return
+	}
+
+	// Broadcast to all plugins
+	for _, v := range e.visitors {
+		v.Visit(root)
+	}
+
+	for _, child := range root.Children {
+		e.Traverse(child)
+	}
+}
+```
+
+#### Follow-Up 2: Scoping and State (Enter vs. Exit)
+
+**Scenario**: One of your plugins checks for variable shadowing (re-declaring a variable in a nested scope). To do this, the plugin needs to know what variables are currently in scope.
+
+**Question**: Standard DFS just "visits" a node once. How does your traversal algorithm need to change to support entering and exiting blocks of code (like `{ ... }`) so plugins can manage scope?
+
+**Expected Answer**: The traversal needs **Pre-order (Enter)** and **Post-order (Exit)** hooks. The `traverse` function should call `visitor.enterNode(node)`, then recursively visit children, and finally call `visitor.exitNode(node)`. 
+
+This allows the plugin to push a new scope (symbol table) onto its own stack when entering a `BlockStatement`, and pop it off when exiting, perfectly mirroring the AST's lexical scoping.
