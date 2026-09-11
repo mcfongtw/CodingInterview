@@ -209,6 +209,7 @@ case "$FORMAT" in
     mv _book/* docs/
     # Disable Jekyll processing on GitHub Pages
     touch docs/.nojekyll
+    echo "✨ Site successfully built and moved to docs/ (open docs/index.html to view)"
     ;;
   pdf)
     # For PDF, copy to docs/ (keep in _book/ too)
