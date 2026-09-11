@@ -881,8 +881,9 @@ func EvaluateFeatures(user User, features []FeatureConfig) map[string]bool {
 | Follow-Up | Difficulty | Focus |
 |---|---|---|
 | 1. The "Deny" Override | Easy | Business Logic, Precedence rules |
-| 2. The Global Admin | Easy | Short-circuiting, code efficiency |
-| 3. Performance at Scale | Medium | Caching, JWTs, System Design |
+| 2. Group Role Inheritance | Medium | Data modeling, set union operations |
+| 3. The Global Admin | Easy | Short-circuiting, code efficiency |
+| 4. Performance at Scale | Medium | Caching, JWTs, System Design |
 
 #### Follow-Up 1: The "Deny" Override (Precedence)
 
@@ -893,7 +894,98 @@ func EvaluateFeatures(user User, features []FeatureConfig) map[string]bool {
 **Expected Answer**: 
 Security best practices dictate that **Deny always overrides Allow**. The candidate must update their logic to check the `DeniedRoles` *first*. If a user possesses a denied role, the loop should instantly return `false` before even checking the allowed conditions.
 
-#### Follow-Up 2: The Global Admin (Short-circuiting)
+```java
+// Inside the evaluation loop for a feature:
+boolean isDenied = false;
+
+// 1. Check Deny FIRST
+for (String deniedRole : feature.deniedRoles) {
+    if (userRolesSet.contains(deniedRole)) {
+        isDenied = true;
+        break;
+    }
+}
+
+if (isDenied) {
+    results.put(feature.featureName, false);
+    continue; // Move to the next feature immediately
+}
+
+// 2. Check Allow ONLY if not denied
+boolean isEnabled = false;
+for (String allowedRole : feature.allowedRoles) {
+    if (userRolesSet.contains(allowedRole)) {
+        isEnabled = true;
+        break; 
+    }
+}
+```
+
+```go
+// Inside the evaluation loop for a feature:
+isDenied := false
+
+// 1. Check Deny FIRST
+for _, deniedRole := range feature.DeniedRoles {
+	if userRolesSet[deniedRole] {
+		isDenied = true
+		break
+	}
+}
+
+if isDenied {
+	results[feature.FeatureName] = false
+	continue // Move to the next feature immediately
+}
+
+// 2. Check Allow ONLY if not denied
+isEnabled := false
+for _, allowedRole := range feature.AllowedRoles {
+	if userRolesSet[allowedRole] {
+		isEnabled = true
+		break
+	}
+}
+```
+
+#### Follow-Up 2: Group Role Inheritance
+
+**Scenario**: We introduce a `Group` concept (e.g., "Beta Testers", "US Team"). A User can belong to multiple groups, and each Group has its own list of Roles.
+
+**Question**: "How do you adjust the algorithm so that a user's final effective roles are the union of their direct roles and the roles of all groups they belong to?"
+
+**Expected Answer**: 
+The candidate should realize this aggregation must happen *before* the evaluation loop. They should create a single `HashSet` representing the "effective roles". They initialize the set with the user's direct roles, then iterate through the user's groups, looking up each group's roles, and adding those roles to the same `HashSet`. Because it's a Set, duplicates are automatically handled, perfectly mirroring a mathematical Union operation.
+
+```java
+Set<String> effectiveRoles = new HashSet<>(user.roles);
+
+// Union operation: Add all roles from all groups the user belongs to
+for (Group group : user.groups) {
+    effectiveRoles.addAll(group.roles);
+}
+
+// Now proceed with the evaluation loop using `effectiveRoles` instead of user.roles
+```
+
+```go
+// Union operation: Add all roles from all groups the user belongs to
+effectiveRoles := make(map[string]bool)
+
+for _, role := range user.Roles {
+	effectiveRoles[role] = true
+}
+
+for _, group := range user.Groups {
+	for _, role := range group.Roles {
+		effectiveRoles[role] = true
+	}
+}
+
+// Now proceed with the evaluation loop using `effectiveRoles`
+```
+
+#### Follow-Up 3: The Global Admin (Short-circuiting)
 
 **Scenario**: We introduce a `"super_admin"` role. If a user has this role, they instantly have access to every feature, regardless of the individual feature configurations.
 
@@ -902,7 +994,41 @@ Security best practices dictate that **Deny always overrides Allow**. The candid
 **Expected Answer**: 
 At the very top of the function. The candidate should check if the user has `"super_admin"`. If so, they shouldn't even loop through the individual feature rules. They can just do a fast loop returning a map with all features set to `true` (Early Return).
 
-#### Follow-Up 3: Performance at Scale
+```java
+public Map<String, Boolean> evaluateFeatures(User user, List<FeatureConfig> features) {
+    Map<String, Boolean> results = new HashMap<>();
+    
+    // Short-circuit for Global Admin
+    if (user.roles.contains("super_admin")) {
+        for (FeatureConfig feature : features) {
+            results.put(feature.featureName, true);
+        }
+        return results; // Return immediately, saving compute
+    }
+    
+    // ... rest of the standard evaluation logic ...
+}
+```
+
+```go
+func EvaluateFeatures(user User, features []FeatureConfig) map[string]bool {
+	results := make(map[string]bool)
+
+	// Short-circuit for Global Admin
+	for _, role := range user.Roles {
+		if role == "super_admin" {
+			for _, feature := range features {
+				results[feature.FeatureName] = true
+			}
+			return results // Return immediately, saving compute
+		}
+	}
+
+	// ... rest of the standard evaluation logic ...
+}
+```
+
+#### Follow-Up 4: Performance at Scale
 
 **Scenario**: This `evaluateFeatures` function is being called on every single API request. We now have 10,000 features. The CPU load is getting too high.
 
