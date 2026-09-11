@@ -763,3 +763,150 @@ The DFS algorithm must be split into two alternating functions (`dfsService` and
 
 **Expected Answer**: 
 The candidate should realize that a true, unresolvable deadlock only exists if a cycle is comprised *entirely* of Hard dependencies. If a cycle contains even one Soft dependency, the orchestrator can ignore that edge and boot the cluster. The simplest algorithmic change is to just filter out/ignore Soft edges during the graph traversal, effectively treating them as if they don't exist.
+
+## Role-Based Feature Evaluator {#interview-feature-evaluator}
+
+### Metadata
+
+- **Platform**: Interview
+- **Difficulty**: Easy
+- **Tags**: Arrays, HashSets, Business Logic, RBAC
+- **Techniques**: Hash Sets, Early Returns
+
+### Problem Statement
+
+You are writing the core permissions engine for an application. 
+- You receive a `User` object that contains a list of `Roles` (e.g., `["editor", "viewer"]`).
+- You have a list of `FeatureConfig` objects. Each config has a `FeatureName` and a list of `AllowedRoles`.
+
+**The Rule**: A feature is enabled for a user if the user possesses at least one of the `AllowedRoles`.
+
+**Goal**: Write a function `evaluateFeatures(User, List<FeatureConfig>)` that returns a Map/Dictionary of `FeatureName -> Boolean` (true if enabled, false if disabled).
+
+### Core Idea
+
+This problem tests a candidate's ability to choose the right data structure. A naive approach uses nested loops to check if a user's roles exist in the feature's allowed roles, leading to $O(N \times M)$ complexity. 
+
+The optimal approach converts the user's roles into a `HashSet` once at the beginning of the function, allowing $O(1)$ constant-time lookups for every feature check.
+
+### Walkthrough & Implementation
+
+```java
+import java.util.*;
+
+class User {
+    String id;
+    List<String> roles;
+    
+    public User(String id, List<String> roles) {
+        this.id = id;
+        this.roles = roles;
+    }
+}
+
+class FeatureConfig {
+    String featureName;
+    List<String> allowedRoles;
+    
+    public FeatureConfig(String name, List<String> roles) {
+        this.featureName = name;
+        this.allowedRoles = roles;
+    }
+}
+
+class PermissionsEngine {
+    public Map<String, Boolean> evaluateFeatures(User user, List<FeatureConfig> features) {
+        Map<String, Boolean> results = new HashMap<>();
+        
+        // Convert user roles to a HashSet for O(1) lookups
+        Set<String> userRolesSet = new HashSet<>(user.roles);
+        
+        for (FeatureConfig feature : features) {
+            boolean isEnabled = false;
+            
+            for (String allowedRole : feature.allowedRoles) {
+                if (userRolesSet.contains(allowedRole)) {
+                    isEnabled = true;
+                    break; // No need to check other roles for this feature
+                }
+            }
+            
+            results.put(feature.featureName, isEnabled);
+        }
+        
+        return results;
+    }
+}
+```
+
+```go
+type User struct {
+	ID    string
+	Roles []string
+}
+
+type FeatureConfig struct {
+	FeatureName  string
+	AllowedRoles []string
+}
+
+func EvaluateFeatures(user User, features []FeatureConfig) map[string]bool {
+	results := make(map[string]bool)
+
+	// Convert user roles to a hash set for O(1) lookups
+	userRolesSet := make(map[string]bool)
+	for _, role := range user.Roles {
+		userRolesSet[role] = true
+	}
+
+	for _, feature := range features {
+		isEnabled := false
+		
+		for _, allowedRole := range feature.AllowedRoles {
+			if userRolesSet[allowedRole] {
+				isEnabled = true
+				break // No need to check other roles for this feature
+			}
+		}
+		
+		results[feature.FeatureName] = isEnabled
+	}
+
+	return results
+}
+```
+
+### Follow-up Questions
+
+| Follow-Up | Difficulty | Focus |
+|---|---|---|
+| 1. The "Deny" Override | Easy | Business Logic, Precedence rules |
+| 2. The Global Admin | Easy | Short-circuiting, code efficiency |
+| 3. Performance at Scale | Medium | Caching, JWTs, System Design |
+
+#### Follow-Up 1: The "Deny" Override (Precedence)
+
+**Scenario**: We need to explicitly ban certain problematic roles from a feature, even if they possess an allowed role. We add a `DeniedRoles` list to the `FeatureConfig`.
+
+**Question**: "How do you implement this, and what is the order of precedence between Allow and Deny?"
+
+**Expected Answer**: 
+Security best practices dictate that **Deny always overrides Allow**. The candidate must update their logic to check the `DeniedRoles` *first*. If a user possesses a denied role, the loop should instantly return `false` before even checking the allowed conditions.
+
+#### Follow-Up 2: The Global Admin (Short-circuiting)
+
+**Scenario**: We introduce a `"super_admin"` role. If a user has this role, they instantly have access to every feature, regardless of the individual feature configurations.
+
+**Question**: "Where do you place this logic to make the function as efficient as possible?"
+
+**Expected Answer**: 
+At the very top of the function. The candidate should check if the user has `"super_admin"`. If so, they shouldn't even loop through the individual feature rules. They can just do a fast loop returning a map with all features set to `true` (Early Return).
+
+#### Follow-Up 3: Performance at Scale
+
+**Scenario**: This `evaluateFeatures` function is being called on every single API request. We now have 10,000 features. The CPU load is getting too high.
+
+**Question**: "Without changing the core algorithm, how can we optimize this architecture so we don't have to calculate this on every request?"
+
+**Expected Answer**: 
+Caching! Since feature evaluations only depend on the user's Roles, we can evaluate it **once upon login**. We can then embed the resulting permissions map directly into the user's Session Storage, a distributed cache like Redis, or encrypt it inside their JWT (JSON Web Token) to be passed with every request.
