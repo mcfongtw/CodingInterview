@@ -25,39 +25,6 @@ Linear execution takes $O(N)$ calls, but appending the target test to halves of 
 
 The candidate should recognize that running tests one by one takes $O(N)$ executions. By splitting the tests in half and appending the `target_test`, they can eliminate half of the search space with each execution, reducing the time complexity to $O(\log N)$.
 
-```python
-def find_polluting_test(tests, run_tests):
-    """
-    Finds the single test that pollutes the state and causes the last test to fail.
-    
-    :param tests: List of all tests, where tests[-1] is the target test that fails.
-    :param run_tests: Function that takes a list of tests and returns True if pass, False if fail.
-    :return: The index of the state-polluting test.
-    """
-    target_test = tests[-1]
-    
-    # Search space excludes the target test itself
-    left = 0
-    right = len(tests) - 2
-    
-    while left < right:
-        mid = (left + right) // 2
-        
-        # Take the left half of our current search space
-        left_half = tests[left:mid + 1]
-        
-        # Run the left half + the target test
-        if not run_tests(left_half + [target_test]):
-            # The culprit is in the left half
-            right = mid
-        else:
-            # The left half passed, so the culprit must be in the right half
-            left = mid + 1
-            
-    # left and right converge on the single culprit
-    return left
-```
-
 ```java
 public int findPollutingTest(List<Integer> tests, Function<List<Integer>, Boolean> runTests) {
     int targetTest = tests.get(tests.size() - 1);
@@ -104,49 +71,9 @@ func FindPollutingTest(tests []int, runTests func([]int) bool) int {
 }
 ```
 
-```javascript
-function findPollutingTest(tests, runTests) {
-    const targetTest = tests[tests.length - 1];
-    let left = 0;
-    let right = tests.length - 2;
-
-    while (left < right) {
-        const mid = Math.floor((left + right) / 2);
-        
-        const testChunk = [...tests.slice(left, mid + 1), targetTest];
-
-        if (!runTests(testChunk)) {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-    return left;
-}
-```
-
 ### Walkthrough & Implementation - Recursive Solution
 
 While the iterative solution is preferred for $O(1)$ space, here is the equivalent recursive approach to demonstrate how to pass the search boundaries down the call stack.
-
-```python
-def find_polluting_test_recursive(tests, run_tests):
-    target_test = tests[-1]
-    
-    def search(left, right):
-        if left >= right:
-            return left
-            
-        mid = (left + right) // 2
-        left_half = tests[left:mid + 1]
-        
-        if not run_tests(left_half + [target_test]):
-            return search(left, mid)
-        else:
-            return search(mid + 1, right)
-            
-    return search(0, len(tests) - 2)
-```
 
 ```java
 public int findPollutingTestRecursive(List<Integer> tests, Function<List<Integer>, Boolean> runTests) {
@@ -196,28 +123,6 @@ func FindPollutingTestRecursive(tests []int, runTests func([]int) bool) int {
 }
 ```
 
-```javascript
-function findPollutingTestRecursive(tests, runTests) {
-    const targetTest = tests[tests.length - 1];
-    
-    const search = (left, right) => {
-        if (left >= right) {
-            return left;
-        }
-        
-        const mid = Math.floor((left + right) / 2);
-        const testChunk = [...tests.slice(left, mid + 1), targetTest];
-        
-        if (!runTests(testChunk)) {
-            return search(left, mid);
-        }
-        return search(mid + 1, right);
-    };
-    
-    return search(0, tests.length - 2);
-}
-```
-
 
 ### Follow-up Questions
 
@@ -244,36 +149,6 @@ function findPollutingTestRecursive(tests, runTests) {
 **Expected Answer**: They need to pivot from a standard Binary Search to a Divide and Conquer algorithm. They should test a segment of tests; if it passes, they can prune that entire branch. If it fails, they must recursively search both the left and right halves. 
 
 Time Complexity: This changes the execution count from $O(\log N)$ to $O(k \log N)$, where $k$ is the number of polluting tests.
-
-```python
-def find_all_polluting_tests(tests, run_tests):
-    target_test = tests[-1]
-    results = []
-    
-    def search(left, right):
-        # Base case: empty search space
-        if left > right:
-            return
-            
-        # Optimization: Test the whole current block. 
-        # If it passes, there are NO culprits in this block. Prune it.
-        if run_tests(tests[left:right + 1] + [target_test]):
-            return
-            
-        # If the block failed and it's only one test, we found a culprit
-        if left == right:
-            results.append(left)
-            return
-            
-        # Otherwise, split the block and search both halves
-        mid = (left + right) // 2
-        search(left, mid)
-        search(mid + 1, right)
-        
-    # Search all tests excluding the target test
-    search(0, len(tests) - 2)
-    return results
-```
 
 ```java
 public List<Integer> findAllPollutingTests(List<Integer> tests, Function<List<Integer>, Boolean> runTests) {
@@ -344,39 +219,6 @@ func FindAllPollutingTests(tests []int, runTests func([]int) bool) []int {
 }
 ```
 
-```javascript
-function findAllPollutingTests(tests, runTests) {
-    const targetTest = tests[tests.length - 1];
-    const results = [];
-    
-    const search = (left, right) => {
-        if (left > right) {
-            return;
-        }
-        
-        const testChunk = [...tests.slice(left, right + 1), targetTest];
-        
-        // Prune branch if it passes
-        if (runTests(testChunk)) {
-            return;
-        }
-        
-        // If it's a single test and it failed, we found a polluter
-        if (left === right) {
-            results.push(left);
-            return;
-        }
-        
-        const mid = Math.floor((left + right) / 2);
-        search(left, mid);
-        search(mid + 1, right);
-    };
-    
-    search(0, tests.length - 2);
-    return results;
-}
-```
-
 #### Follow-Up 3: The Flaky Polluter (Probabilistic)
 
 **Question**: "The polluting test introduces a race condition. When you run the culprit test followed by the target test, the target test only fails 60% of the time. If a chunk passes, it might just be a lucky run (false negative). How do you adjust your algorithm?"
@@ -384,30 +226,6 @@ function findAllPollutingTests(tests, runTests) {
 **Expected Answer**: Introduce a retry loop. Never retry failures (a single failure is definitive proof). Only retry passes to gain statistical confidence.
 
 **Probability Math**: To be $>99\%$ confident, the probability of $K$ consecutive false negatives is $0.40^K < 0.01$. This requires $K = 5$ retries.
-
-```python
-def find_flaky_test(tests, run_tests, retry_limit=5):
-    target = tests[-1]
-    left = 0
-    right = len(tests) - 2
-    
-    while left < right:
-        mid = (left + right) // 2
-        chunk = tests[left:mid + 1] + [target]
-        
-        chunk_failed = False
-        for _ in range(retry_limit):
-            if not run_tests(chunk):
-                chunk_failed = True
-                break # Definitive proof, stop retrying
-                
-        if chunk_failed:
-            right = mid
-        else:
-            left = mid + 1
-            
-    return left
-```
 
 ```java
 public int findFlakyTest(List<Integer> tests, Function<List<Integer>, Boolean> runTests, int retryLimit) {
@@ -469,35 +287,6 @@ func FindFlakyTest(tests []int, runTests func([]int) bool, retryLimit int) int {
 }
 ```
 
-```javascript
-function findFlakyTest(tests, runTests, retryLimit = 5) {
-    const target = tests[tests.length - 1];
-    let left = 0;
-    let right = tests.length - 2;
-
-    while (left < right) {
-        const mid = Math.floor((left + right) / 2);
-        
-        const chunk = [...tests.slice(left, mid + 1), target];
-
-        let chunkFailed = false;
-        for (let i = 0; i < retryLimit; i++) {
-            if (!runTests(chunk)) {
-                chunkFailed = true;
-                break;
-            }
-        }
-
-        if (chunkFailed) {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-    return left;
-}
-```
-
 #### Follow-Up 4: Applied Engineering (Subprocess vs. Thread)
 
 **Question**: "You are building this logic into a real CLI tool. To implement `run_tests(test_chunk)`, you need to execute a test runner (like Pytest, Jest, or Go test) programmatically. Would you execute the test runner by spawning a new **Thread** or by spawning a new **Subprocess**? Why?"
@@ -511,31 +300,6 @@ function findFlakyTest(tests, runTests, retryLimit = 5) {
 #### Follow-Up 5: Architecture & Unit-Testable Code
 
 **Question**: "Below is application code using a Singleton/Global State pattern. `test_feature_flag()` passes alone. `test_default_secure()` passes alone. Sequentially, the second fails. Why? Refactor the application code using Dependency Injection to fix this."
-
-```python
-# Flawed Singleton Approach
-class SecurityConfig:
-    _instance = None
-    
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance.allow_guest_access = False
-        return cls._instance
-
-def grant_temporary_access():
-    config = SecurityConfig()
-    config.allow_guest_access = True
-
-# Tests share global state
-def test_feature_flag_toggle():
-    grant_temporary_access()
-    assert SecurityConfig().allow_guest_access == True
-
-def test_default_secure():
-    # If run after test_feature_flag_toggle, this will fail!
-    assert SecurityConfig().allow_guest_access == False
-```
 
 ```java
 // Flawed Singleton Approach
@@ -589,47 +353,26 @@ func TestDefaultSecure(t *testing.T) {
 }
 ```
 
-```javascript
-// Flawed Global State Approach
-class SecurityConfig {
-    static instance = new SecurityConfig();
-    allowGuestAccess = false;
-}
-
-function grantTemporaryAccess() {
-    SecurityConfig.instance.allowGuestAccess = true;
-}
-
-// Tests share global state
-function testFeatureFlagToggle() {
-    grantTemporaryAccess();
-    console.assert(SecurityConfig.instance.allowGuestAccess === true);
-}
-
-function testDefaultSecure() {
-    // If run after testFeatureFlagToggle, this will fail!
-    console.assert(SecurityConfig.instance.allowGuestAccess === false);
-}
-```
-
 **The Flawed Concept**: The application relies on a static, globally shared instance of `SecurityConfig`. The first test mutates this instance, polluting the memory state for the second test.
 
 **The Refactor (Dependency Injection)**: The candidate must strip out the static instance logic and pass the configuration object into the functions that need it. Tests should inject a fresh config every time.
 
-```python
-# Refactor using Dependency Injection
-class SecurityConfig:
-    def __init__(self):
-        self.allow_guest_access = False
+```java
+// Refactor using Dependency Injection
+public class SecurityConfig {
+    public boolean allowGuestAccess = false;
+}
 
-def grant_temporary_access(config: SecurityConfig):
-    config.allow_guest_access = True
+public void grantTemporaryAccess(SecurityConfig config) {
+    config.allowGuestAccess = true;
+}
 
-# Tests now instantiate their own isolated state
-def test_feature_flag_toggle():
-    test_config = SecurityConfig()
-    grant_temporary_access(test_config)
-    assert test_config.allow_guest_access == True
+// Tests inject a fresh struct every time
+public void testFeatureFlagToggle() {
+    SecurityConfig testConfig = new SecurityConfig();
+    grantTemporaryAccess(testConfig);
+    assert testConfig.allowGuestAccess == true;
+}
 ```
 
 ```go
@@ -647,22 +390,6 @@ func TestFeatureFlagToggle(t *testing.T) {
     cfg := &SecurityConfig{AllowGuestAccess: false}
     GrantTemporaryAccess(cfg)
     // assert cfg.AllowGuestAccess == true
-}
-```
-
-```typescript
-class SecurityConfig {
-    allowGuestAccess = false;
-}
-
-function grantTemporaryAccess(config: SecurityConfig) {
-    config.allowGuestAccess = true;
-}
-
-// Tests create fresh objects
-function testFeatureFlagToggle() {
-    const testConfig = new SecurityConfig();
-    grantTemporaryAccess(testConfig);
 }
 ```
 
