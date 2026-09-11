@@ -605,3 +605,161 @@ func (e *TraversalEngine) Traverse(root *ASTNode) {
 **Expected Answer**: The traversal needs **Pre-order (Enter)** and **Post-order (Exit)** hooks. The `traverse` function should call `visitor.enterNode(node)`, then recursively visit children, and finally call `visitor.exitNode(node)`. 
 
 This allows the plugin to push a new scope (symbol table) onto its own stack when entering a `BlockStatement`, and pop it off when exiting, perfectly mirroring the AST's lexical scoping.
+
+## The Microservice Deadlock {#interview-microservice-deadlock}
+
+### Metadata
+
+- **Platform**: Interview
+- **Difficulty**: Hard
+- **Tags**: Graph, DFS, Cycle Detection
+- **Techniques**: [Depth-First Search](#glossary-dfs), [Topological Sort](#glossary-topological-sort)
+
+### Problem Statement
+
+You are building the orchestration engine for a cluster. Services can declare startup dependencies on other services (e.g., `AuthService` must start before `PaymentService`). 
+
+If a dependency chain loops back on itself (e.g., A $\to$ B $\to$ C $\to$ A), the cluster will deadlock indefinitely during startup. 
+
+**Goal**: Given a list of services and their dependencies, write a function that returns `true` if a deadlock (cycle) exists, and `false` if the cluster can start safely.
+
+### Core Idea
+
+A naive Depth-First Search (DFS) with a simple `visited` set will fail here. It might incorrectly flag "diamond dependencies" (A $\to$ B $\to$ D and A $\to$ C $\to$ D) as a cycle, or it might run infinitely. 
+
+The standard approach to directed graph cycle detection requires a **3-State DFS** (also known as vertex coloring). Nodes are marked as:
+- `0 (Unvisited)`: Not yet explored.
+- `1 (Visiting)`: Currently on the DFS recursion stack. If we encounter a `1` while traversing, we've found a cycle!
+- `2 (Safe/Visited)`: Fully explored, and no cycles exist downstream.
+
+### Walkthrough & Implementation
+
+The candidate should build an adjacency list representing the graph, then iterate through every node, launching a DFS if the node is unvisited. 
+
+```java
+public class DeadlockDetector {
+    // 0 = Unvisited, 1 = Visiting, 2 = Safe
+    public boolean hasDeadlock(int numServices, int[][] dependencies) {
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < numServices; i++) {
+            graph.add(new ArrayList<>());
+        }
+        
+        for (int[] dep : dependencies) {
+            int service = dep[0];
+            int dependsOn = dep[1];
+            graph.get(service).add(dependsOn);
+        }
+        
+        int[] state = new int[numServices];
+        
+        for (int i = 0; i < numServices; i++) {
+            if (state[i] == 0) {
+                if (dfs(i, graph, state)) {
+                    return true; // Cycle detected
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    private boolean dfs(int curr, List<List<Integer>> graph, int[] state) {
+        if (state[curr] == 1) return true;  // Hit a node currently on the stack -> Cycle!
+        if (state[curr] == 2) return false; // Already verified safe
+        
+        state[curr] = 1; // Mark as Visiting
+        
+        for (int neighbor : graph.get(curr)) {
+            if (dfs(neighbor, graph, state)) {
+                return true;
+            }
+        }
+        
+        state[curr] = 2; // Mark as Safe
+        return false;
+    }
+}
+```
+
+```go
+func HasDeadlock(numServices int, dependencies [][]int) bool {
+	graph := make([][]int, numServices)
+	for _, dep := range dependencies {
+		service, dependsOn := dep[0], dep[1]
+		graph[service] = append(graph[service], dependsOn)
+	}
+
+	// 0 = Unvisited, 1 = Visiting, 2 = Safe
+	state := make([]int, numServices)
+
+	var dfs func(curr int) bool
+	dfs = func(curr int) bool {
+		if state[curr] == 1 {
+			return true // Hit a node currently on the stack -> Cycle!
+		}
+		if state[curr] == 2 {
+			return false // Already verified safe
+		}
+
+		state[curr] = 1 // Mark as Visiting
+
+		for _, neighbor := range graph[curr] {
+			if dfs(neighbor) {
+				return true
+			}
+		}
+
+		state[curr] = 2 // Mark as Safe
+		return false
+	}
+
+	for i := 0; i < numServices; i++ {
+		if state[i] == 0 {
+			if dfs(i) {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+```
+
+### Follow-up Questions
+
+| Follow-Up | Difficulty | Focus |
+|---|---|---|
+| 1. Path Reconstruction | Medium | Stack manipulation, developer experience |
+| 2. Container Fallbacks | Hard | AND/OR Graphs, aggregations, boolean logic |
+| 3. Soft Dependencies | Easy/Medium | Cycle-breaking heuristics, graph filtering |
+
+#### Follow-Up 1: Path Reconstruction
+
+**Question**: "Just returning `true` isn't helpful for the engineers debugging the deadlock. Modify your algorithm to return the exact chain of dependencies that caused the loop (e.g., `[A, B, C, A]`)."
+
+**Expected Answer**: 
+The candidate needs to actively maintain the current path in an array or stack as they traverse down. When the cycle is hit (encountering state `1`), they can slice or copy the stack from the first occurrence of the looped node to the end, giving the exact cycle path.
+
+#### Follow-Up 2: Container Fallbacks (AND/OR Graphs)
+
+**Scenario**: A microservice is no longer just one block of code; it is composed of multiple containers for high availability (e.g., Service A has containers A.1 and A.2). 
+- A **Container** can only start if **ALL** of its dependencies start. 
+- A **Service** is considered "started" if **ANY** of its containers successfully start (acting as fallbacks).
+
+**Question**: "How does this change your deadlock detection? What if Container A.1 creates a dependency cycle, but Container A.2 does not?"
+
+**Expected Answer**: 
+This upgrades the problem from a standard Directed Graph to an **AND/OR Graph**. A global deadlock only occurs if a service is *completely* blocked from starting.
+- **Containers are AND nodes**: If *any* of a container's dependencies are deadlocked, the container is deadlocked.
+- **Services are OR nodes**: If *all* of a service's containers are deadlocked, the service is deadlocked. If even one container can start safely, the service is safe. 
+The DFS algorithm must be split into two alternating functions (`dfsService` and `dfsContainer`), using `&&` aggregations for Services and `||` aggregations for Containers.
+
+#### Follow-Up 3: Soft vs. Hard Dependencies
+
+**Scenario**: Sometimes cycles are unavoidable in legacy architectures, but not all dependencies are strictly required. Some are "Hard" (the service crashes without it), and some are "Soft" (the service boots with degraded features).
+
+**Question**: "Assume each dependency edge is marked with a boolean `is_hard_requirement`. How would you determine if the cluster can auto-heal by dropping a soft dependency to break the cycle?"
+
+**Expected Answer**: 
+The candidate should realize that a true, unresolvable deadlock only exists if a cycle is comprised *entirely* of Hard dependencies. If a cycle contains even one Soft dependency, the orchestrator can ignore that edge and boot the cluster. The simplest algorithmic change is to just filter out/ignore Soft edges during the graph traversal, effectively treating them as if they don't exist.
