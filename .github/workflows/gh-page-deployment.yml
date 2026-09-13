@@ -61,9 +61,9 @@ jobs:
         run: |
           Rscript -e "options(warn=2); install.packages(c('bookdown', 'knitr', 'rmarkdown', 'tinytex'), repos='https://cloud.r-project.org/', Ncpus=2)"
 
-      - name: Install magick with verbose output
+      - name: Install magick
         run: |
-          Rscript -e "options(warn=2); Sys.setenv(PKG_CONFIG_PATH='/usr/lib/x86_64-linux-gnu/pkgconfig'); install.packages('magick', repos='https://cloud.r-project.org/', configure.vars='INCLUDE_DIR=/usr/include/ImageMagick-6 LIB_DIR=/usr/lib/x86_64-linux-gnu', INSTALL_opts='--no-test-load')"
+          Rscript -e "options(warn=2); install.packages('magick', repos='https://cloud.r-project.org/')"
 
       - name: Install pdftools
         run: |
