@@ -30,31 +30,31 @@ The candidate should recognize that running tests one by one takes $O(N)$ execut
 [
   {
     "description": "Polluter is in the middle",
-    "input": ["testA", "testB", "testC", "testD", "target"],
+    "input": [{"name": "testA"}, {"name": "testB"}, {"name": "testC"}, {"name": "testD"}, {"name": "target"}],
     "polluter": "testC",
     "output": 2
   },
   {
     "description": "Polluter is the very first test",
-    "input": ["testA", "testB", "testC", "target"],
+    "input": [{"name": "testA"}, {"name": "testB"}, {"name": "testC"}, {"name": "target"}],
     "polluter": "testA",
     "output": 0
   },
   {
     "description": "Polluter is right before the target",
-    "input": ["testA", "testB", "target"],
+    "input": [{"name": "testA"}, {"name": "testB"}, {"name": "target"}],
     "polluter": "testB",
     "output": 1
   },
   {
     "description": "Minimum array size (1 test, 1 target)",
-    "input": ["testA", "target"],
+    "input": [{"name": "testA"}, {"name": "target"}],
     "polluter": "testA",
     "output": 0
   },
   {
     "description": "Large array, polluter near the end",
-    "input": ["t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "target"],
+    "input": [{"name": "t1"}, {"name": "t2"}, {"name": "t3"}, {"name": "t4"}, {"name": "t5"}, {"name": "t6"}, {"name": "t7"}, {"name": "t8"}, {"name": "target"}],
     "polluter": "t7",
     "output": 6
   }
@@ -62,15 +62,22 @@ The candidate should recognize that running tests one by one takes $O(N)$ execut
 ```
 
 ```java
-public int findPollutingTest(List<String> tests, Function<List<String>, Boolean> runTests) {
-    String targetTest = tests.get(tests.size() - 1);
+class TestCase {
+    String name;
+    TestCase interactingWith; // Null by default. Used in Follow-Up 3.
+    
+    public TestCase(String name) { this.name = name; }
+}
+
+public int findPollutingTest(List<TestCase> tests, Function<List<TestCase>, Boolean> runTests) {
+    TestCase targetTest = tests.get(tests.size() - 1);
     int left = 0;
     int right = tests.size() - 2;
 
     while (left < right) {
         int mid = left + (right - left) / 2;
         
-        List<String> testChunk = new ArrayList<>(tests.subList(left, mid + 1));
+        List<TestCase> testChunk = new ArrayList<>(tests.subList(left, mid + 1));
         testChunk.add(targetTest);
 
         if (!runTests.apply(testChunk)) {
@@ -84,7 +91,12 @@ public int findPollutingTest(List<String> tests, Function<List<String>, Boolean>
 ```
 
 ```go
-func FindPollutingTest(tests []string, runTests func([]string) bool) int {
+type TestCase struct {
+	Name            string
+	InteractingWith *TestCase // Nil by default. Used in Follow-Up 3.
+}
+
+func FindPollutingTest(tests []*TestCase, runTests func([]*TestCase) bool) int {
 	targetTest := tests[len(tests)-1]
 	left := 0
 	right := len(tests) - 2
@@ -93,7 +105,7 @@ func FindPollutingTest(tests []string, runTests func([]string) bool) int {
 		mid := left + (right-left)/2
 		
 		// Construct the test execution slice
-		testChunk := make([]string, 0, mid-left+2)
+		testChunk := make([]*TestCase, 0, mid-left+2)
 		testChunk = append(testChunk, tests[left:mid+1]...)
 		testChunk = append(testChunk, targetTest)
 
@@ -112,18 +124,18 @@ func FindPollutingTest(tests []string, runTests func([]string) bool) int {
 While the iterative solution is preferred for $O(1)$ space, here is the equivalent recursive approach to demonstrate how to pass the search boundaries down the call stack.
 
 ```java
-public int findPollutingTestRecursive(List<String> tests, Function<List<String>, Boolean> runTests) {
-    String targetTest = tests.get(tests.size() - 1);
+public int findPollutingTestRecursive(List<TestCase> tests, Function<List<TestCase>, Boolean> runTests) {
+    TestCase targetTest = tests.get(tests.size() - 1);
     return search(tests, targetTest, 0, tests.size() - 2, runTests);
 }
 
-private int search(List<String> tests, String targetTest, int left, int right, Function<List<String>, Boolean> runTests) {
+private int search(List<TestCase> tests, TestCase targetTest, int left, int right, Function<List<TestCase>, Boolean> runTests) {
     if (left >= right) {
         return left;
     }
     
     int mid = left + (right - left) / 2;
-    List<String> testChunk = new ArrayList<>(tests.subList(left, mid + 1));
+    List<TestCase> testChunk = new ArrayList<>(tests.subList(left, mid + 1));
     testChunk.add(targetTest);
     
     if (!runTests.apply(testChunk)) {
@@ -135,7 +147,7 @@ private int search(List<String> tests, String targetTest, int left, int right, F
 ```
 
 ```go
-func FindPollutingTestRecursive(tests []string, runTests func([]string) bool) int {
+func FindPollutingTestRecursive(tests []*TestCase, runTests func([]*TestCase) bool) int {
 	targetTest := tests[len(tests)-1]
 	
 	var search func(left, right int) int
@@ -145,7 +157,7 @@ func FindPollutingTestRecursive(tests []string, runTests func([]string) bool) in
 		}
 		
 		mid := left + (right-left)/2
-		testChunk := make([]string, 0, mid-left+2)
+		testChunk := make([]*TestCase, 0, mid-left+2)
 		testChunk = append(testChunk, tests[left:mid+1]...)
 		testChunk = append(testChunk, targetTest)
 		
@@ -196,31 +208,31 @@ func FindPollutingTestRecursive(tests []string, runTests func([]string) bool) in
 [
   {
     "description": "Two polluters separated by a passing test",
-    "input": ["testA", "testB", "testC", "testD", "target"],
+    "input": [{"name": "testA"}, {"name": "testB"}, {"name": "testC"}, {"name": "testD"}, {"name": "target"}],
     "polluters": ["testB", "testD"],
     "output": [1, 3]
   },
   {
     "description": "Adjacent polluters",
-    "input": ["t1", "t2", "t3", "t4", "target"],
+    "input": [{"name": "t1"}, {"name": "t2"}, {"name": "t3"}, {"name": "t4"}, {"name": "target"}],
     "polluters": ["t2", "t3"],
     "output": [1, 2]
   },
   {
     "description": "All tests are polluters (worst case O(N))",
-    "input": ["t1", "t2", "t3", "target"],
+    "input": [{"name": "t1"}, {"name": "t2"}, {"name": "t3"}, {"name": "target"}],
     "polluters": ["t1", "t2", "t3"],
     "output": [0, 1, 2]
   },
   {
     "description": "Only one polluter exists",
-    "input": ["t1", "t2", "t3", "target"],
+    "input": [{"name": "t1"}, {"name": "t2"}, {"name": "t3"}, {"name": "target"}],
     "polluters": ["t2"],
     "output": [1]
   },
   {
     "description": "Polluters at the absolute edges",
-    "input": ["t1", "t2", "t3", "t4", "target"],
+    "input": [{"name": "t1"}, {"name": "t2"}, {"name": "t3"}, {"name": "t4"}, {"name": "target"}],
     "polluters": ["t1", "t4"],
     "output": [0, 3]
   }
@@ -228,20 +240,20 @@ func FindPollutingTestRecursive(tests []string, runTests func([]string) bool) in
 ```
 
 ```java
-public List<Integer> findAllPollutingTests(List<String> tests, Function<List<String>, Boolean> runTests) {
-    String targetTest = tests.get(tests.size() - 1);
+public List<Integer> findAllPollutingTests(List<TestCase> tests, Function<List<TestCase>, Boolean> runTests) {
+    TestCase targetTest = tests.get(tests.size() - 1);
     List<Integer> results = new ArrayList<>();
     
     searchAll(tests, targetTest, 0, tests.size() - 2, runTests, results);
     return results;
 }
 
-private void searchAll(List<String> tests, String targetTest, int left, int right, Function<List<String>, Boolean> runTests, List<Integer> results) {
+private void searchAll(List<TestCase> tests, TestCase targetTest, int left, int right, Function<List<TestCase>, Boolean> runTests, List<Integer> results) {
     if (left > right) {
         return;
     }
     
-    List<String> testChunk = new ArrayList<>(tests.subList(left, right + 1));
+    List<TestCase> testChunk = new ArrayList<>(tests.subList(left, right + 1));
     testChunk.add(targetTest);
     
     // Prune branch if the entire block passes
@@ -263,7 +275,7 @@ private void searchAll(List<String> tests, String targetTest, int left, int righ
 ```
 
 ```go
-func FindAllPollutingTests(tests []string, runTests func([]string) bool) []int {
+func FindAllPollutingTests(tests []*TestCase, runTests func([]*TestCase) bool) []int {
 	target := tests[len(tests)-1]
 	var results []int
 
@@ -273,7 +285,7 @@ func FindAllPollutingTests(tests []string, runTests func([]string) bool) []int {
 			return
 		}
 
-		chunk := append(append([]string{}, tests[left:right+1]...), target)
+		chunk := append(append([]*TestCase{}, tests[left:right+1]...), target)
 		
 		// Prune branch if it passes
 		if runTests(chunk) {
@@ -309,13 +321,6 @@ Finding interacting polluters is an advanced problem in Software Engineering kno
 Instead of a simple string array, the environment is modeled with a `TestCase` object. The `runTests` lambda evaluates if interacting pairs are present.
 
 ```java
-class TestCase {
-    String name;
-    TestCase interactingWith; // Null if no interaction
-    
-    public TestCase(String name) { this.name = name; }
-}
-
 // 1. Setup the environment
 TestCase t1 = new TestCase("t1");
 TestCase t2 = new TestCase("t2");
@@ -412,11 +417,6 @@ private TestCase findSingle(List<TestCase> searchSpace, List<TestCase> helperSpa
 ```
 
 ```go
-type TestCase struct {
-	Name            string
-	InteractingWith *TestCase // Nil if no interaction
-}
-
 // Naive O(N^2) baseline for interacting pairs
 func FindInteractingPair(tests []*TestCase, runTests func([]*TestCase) bool) []*TestCase {
 	target := tests[len(tests)-1]
@@ -499,35 +499,35 @@ func findSingle(searchSpace []*TestCase, helperSpace []*TestCase, target *TestCa
 [
   {
     "description": "Flaky polluter, confirmed on 2nd retry",
-    "input": ["testA", "testB", "target"],
+    "input": [{"name": "testA"}, {"name": "testB"}, {"name": "target"}],
     "flaky_polluter": "testB",
     "behavior": "fails on retry 2",
     "output": 1
   },
   {
     "description": "Highly flaky polluter, confirmed on 5th retry",
-    "input": ["t1", "t2", "t3", "target"],
+    "input": [{"name": "t1"}, {"name": "t2"}, {"name": "t3"}, {"name": "target"}],
     "flaky_polluter": "t1",
     "behavior": "fails on retry 5",
     "output": 0
   },
   {
     "description": "Passes all 5 retries (False positive avoidance)",
-    "input": ["t1", "t2", "t3", "target"],
+    "input": [{"name": "t1"}, {"name": "t2"}, {"name": "t3"}, {"name": "target"}],
     "flaky_polluter": "t3",
     "behavior": "chunk without t3 passes all 5 retries",
     "output": 2
   },
   {
     "description": "Fails on 1st try (no retries needed)",
-    "input": ["t1", "t2", "target"],
+    "input": [{"name": "t1"}, {"name": "t2"}, {"name": "target"}],
     "flaky_polluter": "t1",
     "behavior": "fails instantly on retry 1",
     "output": 0
   },
   {
     "description": "Larger suite with a 10% failure rate (might require >5 retries in reality)",
-    "input": ["t1", "t2", "t3", "t4", "t5", "target"],
+    "input": [{"name": "t1"}, {"name": "t2"}, {"name": "t3"}, {"name": "t4"}, {"name": "t5"}, {"name": "target"}],
     "flaky_polluter": "t4",
     "behavior": "fails on retry 3",
     "output": 3
@@ -536,14 +536,14 @@ func findSingle(searchSpace []*TestCase, helperSpace []*TestCase, target *TestCa
 ```
 
 ```java
-public int findFlakyTest(List<String> tests, Function<List<String>, Boolean> runTests, int retryLimit) {
-    String target = tests.get(tests.size() - 1);
+public int findFlakyTest(List<TestCase> tests, Function<List<TestCase>, Boolean> runTests, int retryLimit) {
+    TestCase target = tests.get(tests.size() - 1);
     int left = 0;
     int right = tests.size() - 2;
 
     while (left < right) {
         int mid = left + (right - left) / 2;
-        List<String> chunk = new ArrayList<>(tests.subList(left, mid + 1));
+        List<TestCase> chunk = new ArrayList<>(tests.subList(left, mid + 1));
         chunk.add(target);
 
         boolean chunkFailed = false;
@@ -565,7 +565,7 @@ public int findFlakyTest(List<String> tests, Function<List<String>, Boolean> run
 ```
 
 ```go
-func FindFlakyTest(tests []string, runTests func([]string) bool, retryLimit int) int {
+func FindFlakyTest(tests []*TestCase, runTests func([]*TestCase) bool, retryLimit int) int {
 	target := tests[len(tests)-1]
 	left := 0
 	right := len(tests) - 2
@@ -573,7 +573,7 @@ func FindFlakyTest(tests []string, runTests func([]string) bool, retryLimit int)
 	for left < right {
 		mid := left + (right-left)/2
 		
-		chunk := make([]string, 0, mid-left+2)
+		chunk := make([]*TestCase, 0, mid-left+2)
 		chunk = append(chunk, tests[left:mid+1]...)
 		chunk = append(chunk, target)
 
