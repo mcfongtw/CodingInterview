@@ -791,6 +791,18 @@ The optimal approach converts the user's roles into a `HashSet` once at the begi
 
 ### Walkthrough & Implementation
 
+**Test Case**:
+```json
+Input: 
+  User: { "roles": ["viewer", "tester"] }
+  Features: [
+    { "name": "dashboard", "allowedRoles": ["admin", "viewer"] },
+    { "name": "delete_db", "allowedRoles": ["admin"] }
+  ]
+Output: 
+  { "dashboard": true, "delete_db": false }
+```
+
 ```java
 import java.util.*;
 
@@ -881,8 +893,8 @@ func EvaluateFeatures(user User, features []FeatureConfig) map[string]bool {
 | Follow-Up | Difficulty | Focus |
 |---|---|---|
 | 1. The "Deny" Override | Easy | Business Logic, Precedence rules |
-| 2. Group Role Inheritance | Medium | Data modeling, set union operations |
-| 3. The Global Admin | Easy | Short-circuiting, code efficiency |
+| 2. Class Design (Composition vs Inheritance) | Medium | Domain modeling, IAM design |
+| 3. Composite Roles | Hard | Tree/Graph Traversal, BFS/DFS |
 | 4. Performance at Scale | Medium | Caching, JWTs, System Design |
 
 #### Follow-Up 1: The "Deny" Override (Precedence)
@@ -894,119 +906,53 @@ func EvaluateFeatures(user User, features []FeatureConfig) map[string]bool {
 **Expected Answer**: 
 Security best practices dictate that **Deny always overrides Allow**. The candidate must update their logic to check the `DeniedRoles` *first*. If a user possesses a denied role, the loop should instantly return `false` before even checking the allowed conditions.
 
-```java
-// Inside the evaluation loop for a feature:
-boolean isDenied = false;
-
-// 1. Check Deny FIRST
-for (String deniedRole : feature.deniedRoles) {
-    if (userRolesSet.contains(deniedRole)) {
-        isDenied = true;
-        break;
-    }
-}
-
-if (isDenied) {
-    results.put(feature.featureName, false);
-    continue; // Move to the next feature immediately
-}
-
-// 2. Check Allow ONLY if not denied
-boolean isEnabled = false;
-for (String allowedRole : feature.allowedRoles) {
-    if (userRolesSet.contains(allowedRole)) {
-        isEnabled = true;
-        break; 
-    }
-}
+**Test Case**:
+```json
+Input: 
+  User: { "roles": ["viewer", "contractor"] }
+  Features: [
+    { "name": "dashboard", "allowedRoles": ["viewer"], "deniedRoles": ["contractor"] }
+  ]
+Output: 
+  { "dashboard": false } // Deny overrides Allow
 ```
-
-```go
-// Inside the evaluation loop for a feature:
-isDenied := false
-
-// 1. Check Deny FIRST
-for _, deniedRole := range feature.DeniedRoles {
-	if userRolesSet[deniedRole] {
-		isDenied = true
-		break
-	}
-}
-
-if isDenied {
-	results[feature.FeatureName] = false
-	continue // Move to the next feature immediately
-}
-
-// 2. Check Allow ONLY if not denied
-isEnabled := false
-for _, allowedRole := range feature.AllowedRoles {
-	if userRolesSet[allowedRole] {
-		isEnabled = true
-		break
-	}
-}
-```
-
-#### Follow-Up 2: Group Role Inheritance
-
-**Scenario**: We introduce a `Group` concept (e.g., "Beta Testers", "US Team"). A User can belong to multiple groups, and each Group has its own list of Roles.
-
-**Question**: "How do you adjust the algorithm so that a user's final effective roles are the union of their direct roles and the roles of all groups they belong to?"
-
-**Expected Answer**: 
-The candidate should realize this aggregation must happen *before* the evaluation loop. They should create a single `HashSet` representing the "effective roles". They initialize the set with the user's direct roles, then iterate through the user's groups, looking up each group's roles, and adding those roles to the same `HashSet`. Because it's a Set, duplicates are automatically handled, perfectly mirroring a mathematical Union operation.
 
 ```java
-Set<String> effectiveRoles = new HashSet<>(user.roles);
-
-// Union operation: Add all roles from all groups the user belongs to
-for (Group group : user.groups) {
-    effectiveRoles.addAll(group.roles);
-}
-
-// Now proceed with the evaluation loop using `effectiveRoles` instead of user.roles
-```
-
-```go
-// Union operation: Add all roles from all groups the user belongs to
-effectiveRoles := make(map[string]bool)
-
-for _, role := range user.Roles {
-	effectiveRoles[role] = true
-}
-
-for _, group := range user.Groups {
-	for _, role := range group.Roles {
-		effectiveRoles[role] = true
-	}
-}
-
-// Now proceed with the evaluation loop using `effectiveRoles`
-```
-
-#### Follow-Up 3: The Global Admin (Short-circuiting)
-
-**Scenario**: We introduce a `"super_admin"` role. If a user has this role, they instantly have access to every feature, regardless of the individual feature configurations.
-
-**Question**: "Where do you place this logic to make the function as efficient as possible?"
-
-**Expected Answer**: 
-At the very top of the function. The candidate should check if the user has `"super_admin"`. If so, they shouldn't even loop through the individual feature rules. They can just do a fast loop returning a map with all features set to `true` (Early Return).
-
-```java
-public Map<String, Boolean> evaluateFeatures(User user, List<FeatureConfig> features) {
-    Map<String, Boolean> results = new HashMap<>();
-    
-    // Short-circuit for Global Admin
-    if (user.roles.contains("super_admin")) {
+class PermissionsEngine {
+    public Map<String, Boolean> evaluateFeatures(User user, List<FeatureConfig> features) {
+        Map<String, Boolean> results = new HashMap<>();
+        Set<String> userRolesSet = new HashSet<>(user.roles);
+        
         for (FeatureConfig feature : features) {
-            results.put(feature.featureName, true);
+            boolean isDenied = false;
+            
+            // 1. Check Deny FIRST
+            for (String deniedRole : feature.deniedRoles) {
+                if (userRolesSet.contains(deniedRole)) {
+                    isDenied = true;
+                    break;
+                }
+            }
+            
+            if (isDenied) {
+                results.put(feature.featureName, false);
+                continue; // Move to the next feature immediately
+            }
+            
+            // 2. Check Allow ONLY if not denied
+            boolean isEnabled = false;
+            for (String allowedRole : feature.allowedRoles) {
+                if (userRolesSet.contains(allowedRole)) {
+                    isEnabled = true;
+                    break; 
+                }
+            }
+            
+            results.put(feature.featureName, isEnabled);
         }
-        return results; // Return immediately, saving compute
+        
+        return results;
     }
-    
-    // ... rest of the standard evaluation logic ...
 }
 ```
 
@@ -1014,25 +960,328 @@ public Map<String, Boolean> evaluateFeatures(User user, List<FeatureConfig> feat
 func EvaluateFeatures(user User, features []FeatureConfig) map[string]bool {
 	results := make(map[string]bool)
 
-	// Short-circuit for Global Admin
+	userRolesSet := make(map[string]bool)
 	for _, role := range user.Roles {
-		if role == "super_admin" {
-			for _, feature := range features {
-				results[feature.FeatureName] = true
-			}
-			return results // Return immediately, saving compute
-		}
+		userRolesSet[role] = true
 	}
 
-	// ... rest of the standard evaluation logic ...
+	for _, feature := range features {
+		isDenied := false
+		
+		// 1. Check Deny FIRST
+		for _, deniedRole := range feature.DeniedRoles {
+			if userRolesSet[deniedRole] {
+				isDenied = true
+				break
+			}
+		}
+		
+		if isDenied {
+			results[feature.FeatureName] = false
+			continue // Move to the next feature immediately
+		}
+		
+		// 2. Check Allow ONLY if not denied
+		isEnabled := false
+		for _, allowedRole := range feature.AllowedRoles {
+			if userRolesSet[allowedRole] {
+				isEnabled = true
+				break
+			}
+		}
+		
+		results[feature.FeatureName] = isEnabled
+	}
+
+	return results
+}
+```
+
+#### Follow-Up 2: System Architecture (Composition vs. Inheritance)
+
+**Scenario**: The business requirements have expanded. We are introducing the concept of **Groups** (e.g., "Beta Testers"). A Group has a set of `defaultRoles`. A `User` can belong to multiple groups, and their effective roles are a combination of their explicitly assigned roles and their groups' default roles. 
+
+Furthermore, we now have three distinct types of entities making API requests:
+1.  **Regular Users**: Standard humans.
+2.  **System Users (Bots)**: Automated services that need specific, hardcoded automation roles.
+3.  **Super Admins**: Users who inherently possess the highest privileges (e.g., the `"super_admin"` role).
+
+**Question**: "How would you design the class structures to support Groups? Furthermore, how would you model System Users and Super Admins within this system? Can you draw a class diagram?"
+
+**Expected Answer**: 
+A naive candidate will immediately jump to **Inheritance** (e.g., creating `class SystemUser extends User`, `class SuperAdmin extends User`, each overriding the `getRoles()` method). 
+
+The interviewer should guide them toward **Composition over Inheritance**. A strong candidate will realize that they don't need subclasses at all. Instead, they can model `SystemUsers` and `SuperAdmins` simply as **Groups**. 
+- A Group holds a `Set<String> defaultRoles`.
+- A User holds a `Set<String> explicitRoles` and a `Set<Group> groups`.
+
+To find a User's effective roles, the `User` class itself simply unions its explicit roles with the default roles of all its assigned groups. For example, a Super Admin is just a standard `User` who happens to belong to the "SuperAdmin" group (which grants the `"super_admin"` role).
+
+```mermaid
+classDiagram
+    class User {
+        -String id
+        -Set~String~ explicitRoles
+        -Set~Group~ groups
+        +Set~String~ getEffectiveRoles()
+    }
+    
+    class Group {
+        -String id
+        -Set~String~ defaultRoles
+    }
+
+    class FeatureConfig {
+        -String featureName
+        -Set~String~ allowedRoles
+        -Set~String~ deniedRoles
+    }
+
+    class PermissionsEngine {
+        +Map~String, Boolean~ evaluateFeatures(User user, List~FeatureConfig~ features)
+    }
+
+    User "*" --> "*" Group : belongs to
+    PermissionsEngine ..> User : evaluates
+    PermissionsEngine ..> FeatureConfig : against
+```
+
+**Implementation Details**:
+By pushing the role aggregation inside the `User` class, the `PermissionsEngine` remains perfectly clean and decoupled from user types.
+
+**Test Case**:
+```json
+Input: 
+  Groups: [
+    { "id": "beta_testers", "defaultRoles": ["beta_feature"] },
+    { "id": "super_admins", "defaultRoles": ["super_admin"] }
+  ]
+  Users: 
+    - RegularUser: { "explicitRoles": ["viewer"], "groups": ["beta_testers"] }
+    - SuperAdminUser: { "explicitRoles": [], "groups": ["super_admins"] }
+  Features: [
+    { "name": "new_ui", "allowedRoles": ["beta_feature"] },
+    { "name": "delete_db", "allowedRoles": ["admin"] }
+  ]
+
+Output:
+  RegularUser -> { "new_ui": true, "delete_db": false }
+  SuperAdminUser -> { "new_ui": true, "delete_db": true } // super_admin short-circuits to true
+```
+
+```java
+class User {
+    public String id;
+    public Set<String> explicitRoles;
+    public Set<Group> groups;
+
+    public Set<String> getEffectiveRoles() {
+        Set<String> effective = new HashSet<>(explicitRoles);
+        for (Group g : groups) {
+            effective.addAll(g.defaultRoles);
+        }
+        return effective;
+    }
+}
+
+class PermissionsEngine {
+    public Map<String, Boolean> evaluateFeatures(User user, List<FeatureConfig> features) {
+        Map<String, Boolean> results = new HashMap<>();
+        Set<String> roles = user.getEffectiveRoles(); // Evaluated once!
+
+        // SuperAdmin short-circuit
+        if (roles.contains("super_admin")) {
+            for (FeatureConfig f : features) results.put(f.featureName, true);
+            return results; 
+        }
+
+        for (FeatureConfig feature : features) {
+            // 1. Check Deny (using disjoint for clean Set intersection)
+            if (!Collections.disjoint(roles, feature.deniedRoles)) {
+                results.put(feature.featureName, false);
+                continue;
+            }
+
+            // 2. Check Allow
+            boolean isAllowed = !Collections.disjoint(roles, feature.allowedRoles);
+            results.put(feature.featureName, isAllowed);
+        }
+
+        return results;
+    }
+}
+```
+
+```go
+type Group struct {
+	ID           string
+	DefaultRoles []string
+}
+
+type User struct {
+	ID            string
+	ExplicitRoles []string
+	Groups        []Group
+}
+
+func (u *User) GetEffectiveRoles() map[string]bool {
+	effective := make(map[string]bool)
+	for _, role := range u.ExplicitRoles {
+		effective[role] = true
+	}
+	for _, g := range u.Groups {
+		for _, role := range g.DefaultRoles {
+			effective[role] = true
+		}
+	}
+	return effective
+}
+
+func EvaluateFeatures(user User, features []FeatureConfig) map[string]bool {
+	results := make(map[string]bool)
+	roles := user.GetEffectiveRoles() // Evaluated once!
+
+	// SuperAdmin short-circuit
+	if roles["super_admin"] {
+		for _, f := range features {
+			results[f.FeatureName] = true
+		}
+		return results
+	}
+
+	for _, feature := range features {
+		// 1. Check Deny
+		isDenied := false
+		for _, deniedRole := range feature.DeniedRoles {
+			if roles[deniedRole] {
+				isDenied = true
+				break
+			}
+		}
+		if isDenied {
+			results[feature.FeatureName] = false
+			continue
+		}
+
+		// 2. Check Allow
+		isAllowed := false
+		for _, allowedRole := range feature.AllowedRoles {
+			if roles[allowedRole] {
+				isAllowed = true
+				break
+			}
+		}
+		results[feature.FeatureName] = isAllowed
+	}
+
+	return results
+}
+```
+
+#### Follow-Up 3: Composite Roles (Graph Traversal)
+
+**Scenario**: We introduce the concept of "Composite Roles" (or Role Inheritance). A role can now implicitly include other roles. For example, the `admin` role includes the `editor` role, which includes the `viewer` role. If a user is granted `admin`, they should automatically have `editor` and `viewer` access.
+
+**Question**: "Assuming you have access to a `RoleMap` that dictates which roles inherit which, how do you resolve a user's true effective roles?"
+
+**Expected Answer**: 
+This tests whether the candidate realizes the data structure has morphed into a Tree or a Directed Acyclic Graph (DAG). The candidate must use Breadth-First Search (BFS) or Depth-First Search (DFS) to expand the base roles. Crucially, they must track `visited` roles to prevent infinite loops if there is a cyclic inheritance bug in the database (e.g., Role A includes Role B, and Role B includes Role A).
+
+> [!TIP]
+> **Interviewer Tip (The Inheritance Trap)**: If a candidate tries to implement this using Class Inheritance (e.g., `class Admin extends Editor`), you should gently push back. Roles are *data*, not *application behavior*. If a system admin changes role hierarchies in a dashboard tomorrow, you shouldn't have to recompile the Java backend. The DAG Graph traversal approach allows roles to be dynamic data loaded from a database.
+
+**Test Case**:
+```json
+Input:
+  Base Roles: ["admin"]
+  RoleGraph: {
+    "admin": ["editor"],
+    "editor": ["viewer", "commenter"]
+  }
+Output: 
+  ["admin", "editor", "viewer", "commenter"]
+```
+
+```java
+public Set<String> expandRoles(Set<String> baseRoles, Map<String, List<String>> roleGraph) {
+    Set<String> effectiveRoles = new HashSet<>();
+    Queue<String> queue = new LinkedList<>(baseRoles);
+    
+    // BFS Traversal
+    while (!queue.isEmpty()) {
+        String currentRole = queue.poll();
+        
+        // Track visited to prevent infinite cyclic loops
+        if (effectiveRoles.contains(currentRole)) {
+            continue;
+        }
+        
+        effectiveRoles.add(currentRole);
+        
+        // Enqueue child roles
+        List<String> inheritedRoles = roleGraph.get(currentRole);
+        if (inheritedRoles != null) {
+            queue.addAll(inheritedRoles);
+        }
+    }
+    
+    return effectiveRoles;
+}
+```
+
+```go
+func ExpandRoles(baseRoles []string, roleGraph map[string][]string) map[string]bool {
+	effectiveRoles := make(map[string]bool)
+	queue := append([]string{}, baseRoles...)
+	
+	// BFS Traversal
+	for len(queue) > 0 {
+		currentRole := queue[0]
+		queue = queue[1:] // pop
+		
+		// Track visited to prevent infinite cyclic loops
+		if effectiveRoles[currentRole] {
+			continue
+		}
+		
+		effectiveRoles[currentRole] = true
+		
+		// Enqueue child roles
+		if inheritedRoles, exists := roleGraph[currentRole]; exists {
+			queue = append(queue, inheritedRoles...)
+		}
+	}
+	
+	return effectiveRoles
 }
 ```
 
 #### Follow-Up 4: Performance at Scale
 
-**Scenario**: This `evaluateFeatures` function is being called on every single API request. We now have 10,000 features. The CPU load is getting too high.
+**Scenario**: This `evaluateFeatures` function is being called on every single API request for a massive application. We now have 10,000 features and complex group hierarchies. The CPU load is getting too high because the application evaluates the entire tree on every network call.
 
 **Question**: "Without changing the core algorithm, how can we optimize this architecture so we don't have to calculate this on every request?"
 
 **Expected Answer**: 
-Caching! Since feature evaluations only depend on the user's Roles, we can evaluate it **once upon login**. We can then embed the resulting permissions map directly into the user's Session Storage, a distributed cache like Redis, or encrypt it inside their JWT (JSON Web Token) to be passed with every request.
+This is a shift from data structures to System Design. The candidate should recognize that feature evaluations are generally static for the duration of a session. They only depend on the user's roles, which are known at login. 
+
+The optimization is **Caching at the edge or client**. We can evaluate the features exactly **once upon login**. We then embed the resulting Boolean permissions map directly into a signed JWT (JSON Web Token), or store it in a distributed cache like Redis keyed by a Session ID. Every subsequent API request simply reads the evaluated map without doing any graph traversal or loop checks.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Auth Service
+    participant API Gateway
+    participant Microservice
+    
+    Note over Client,Auth Service: 1. Expensive evaluation only happens once
+    Client->>Auth Service: Login(credentials)
+    Auth Service->>Auth Service: evaluateFeatures(user) (Traverse graph, evaluate 10k rules)
+    Auth Service->>Client: Returns JWT with embedded { "feature_a": true, "feature_b": false }
+    
+    Note over Client,Microservice: 2. Subsequent requests are O(1)
+    Client->>API Gateway: Request + JWT
+    API Gateway->>Microservice: Forward Request
+    Microservice->>Microservice: Read JWT feature map (No evaluation needed!)
+    Microservice->>Client: Response
+```
