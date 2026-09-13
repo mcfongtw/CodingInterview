@@ -612,7 +612,13 @@ func FindFlakyTest(tests []*TestCase, runTests func([]*TestCase) bool, retryLimi
 
 **Question (Zombie Processes)**: "After you kill it, you run `ps` and notice the child process is marked as `<defunct>`. What does this mean, and how do you get rid of it?"
 
-**Expected Answer**: A `<defunct>` process is a **Zombie Process**. It means the child process has actually terminated, but its parent process (our CLI tool) hasn't acknowledged it by reading its exit status (via the `wait()` system call). The zombie is kept in the OS process table so the parent can eventually read the exit code. To get rid of it, the parent process must call `wait()` (or handle the `SIGCHLD` signal), or the parent process itself must be killed (at which point the OS init system, like `systemd`, will inherit the zombie and reap it).
+```bash
+$ ps aux | grep pytest
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+candidate 10234 0.0  0.0      0     0 pts/1    Z+   14:20   0:00 [pytest] <defunct>
+```
+
+**Expected Answer**: A `<defunct>` process (often denoted by the `Z` or `Z+` state) is a **Zombie Process**. It means the child process has actually terminated, but its parent process (our CLI tool) hasn't acknowledged it by reading its exit status (via the `wait()` system call). The zombie is kept in the OS process table so the parent can eventually read the exit code. To get rid of it, the parent process must call `wait()` (or handle the `SIGCHLD` signal), or the parent process itself must be killed (at which point the OS init system, like `systemd`, will inherit the zombie and reap it).
 
 #### Follow-Up 6: Applied Engineering (Non-Deterministic CI/CD)
 
