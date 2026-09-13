@@ -180,8 +180,9 @@ func FindPollutingTestRecursive(tests []*TestCase, runTests func([]*TestCase) bo
 | 2. Multiple Polluters (OR) | Medium | Divide and Conquer algorithm, time complexity |
 | 3. Interacting Polluters (AND)| Hard | Advanced algorithm design, delta debugging concepts |
 | 4. The Flaky Polluter | Hard | Probabilistic thinking, retry logic, confidence intervals |
-| 5. Applied Engineering | Medium | Threads vs. Subprocesses, Memory Isolation |
-| 6. Unit-Testable Code | Medium | Writing unit-testable code, Dependency Injection |
+| 5. Applied Engineering | Medium | Subprocesses, OS Signals (kill), Zombie Processes |
+| 6. Applied Engineering | Medium | Non-Deterministic Execution, CI/CD, Randomization Seeds |
+| 7. Unit-Testable Code | Medium | Writing unit-testable code, Dependency Injection |
 
 #### Follow-Up 1: Iterative vs. Recursive Space Complexity
 
@@ -605,7 +606,23 @@ func FindFlakyTest(tests []*TestCase, runTests func([]*TestCase) bool, retryLimi
 2. **Executable Boundaries**: CLI test runners are designed as standalone executables. They expect to boot up their own environment, read environment variables, and tear down. You interact with them at the OS level, which requires a child process.
 3. **Parsing Results via Exit Codes**: By using a Subprocess, we don't have to parse brittle console output (`stdout`). We can simply read the standard OS exit code of the child process. If the subprocess exits with `0`, the test chunk passed. If it exits with a non-zero code (like `1`), the chunk failed.
 
-#### Follow-Up 6: Architecture & Unit-Testable Code
+**Question (Hanging Processes)**: "When you run these tests programmatically, you notice the test process sometimes hangs infinitely. How would you find the process and kill it in a Linux environment?"
+
+**Expected Answer**: The candidate should mention using tools like `ps aux | grep <test_runner_name>` or `pgrep <name>` to find the Process ID (PID). Once the PID is found, they would use `kill <PID>` (sends `SIGTERM` to allow graceful shutdown) or `kill -9 <PID>` (sends `SIGKILL` for an immediate forced kill).
+
+**Question (Zombie Processes)**: "After you kill it, you run `ps` and notice the child process is marked as `<defunct>`. What does this mean, and how do you get rid of it?"
+
+**Expected Answer**: A `<defunct>` process is a **Zombie Process**. It means the child process has actually terminated, but its parent process (our CLI tool) hasn't acknowledged it by reading its exit status (via the `wait()` system call). The zombie is kept in the OS process table so the parent can eventually read the exit code. To get rid of it, the parent process must call `wait()` (or handle the `SIGCHLD` signal), or the parent process itself must be killed (at which point the OS init system, like `systemd`, will inherit the zombie and reap it).
+
+#### Follow-Up 6: Applied Engineering (Non-Deterministic CI/CD)
+
+**Question**: "You deployed your CLI tool. A week later, another team member made a change to the Jenkins CI/CD pipeline. You notice that the execution order of the test suite keeps changing on every run. What could go wrong with our Test Finder tool, and why?"
+
+**Expected Answer**: The candidate should realize that if the test runner randomizes the execution order (a common practice to prevent the exact order-dependency bugs we are trying to fix), the polluter might run *before* the target test on some runs (causing a failure), and *after* the target test on others (causing a pass). This makes the bug non-deterministic (a Heisenbug) and breaks our Binary Search completely, as the algorithm relies on a strict, deterministic sequence.
+
+**Solution**: The candidate should suggest configuring the test runner to use a fixed **seed** for randomizing the order. Once a failing seed is found in Jenkins, that exact seed must be passed into our CLI tool so that the test runner executes the sequence deterministically while we perform the Binary Search.
+
+#### Follow-Up 7: Architecture & Unit-Testable Code
 
 **Question**: "Below is application code using a Singleton/Global State pattern. `test_feature_flag()` passes alone. `test_default_secure()` passes alone. Sequentially, the second fails. Why? Refactor the application code using Dependency Injection to fix this."
 
