@@ -25,16 +25,52 @@ Linear execution takes $O(N)$ calls, but appending the target test to halves of 
 
 The candidate should recognize that running tests one by one takes $O(N)$ executions. By splitting the tests in half and appending the `target_test`, they can eliminate half of the search space with each execution, reducing the time complexity to $O(\log N)$.
 
+**Test Cases**:
+```json
+[
+  {
+    "description": "Polluter is in the middle",
+    "input": ["testA", "testB", "testC", "testD", "target"],
+    "polluter": "testC",
+    "output": 2
+  },
+  {
+    "description": "Polluter is the very first test",
+    "input": ["testA", "testB", "testC", "target"],
+    "polluter": "testA",
+    "output": 0
+  },
+  {
+    "description": "Polluter is right before the target",
+    "input": ["testA", "testB", "target"],
+    "polluter": "testB",
+    "output": 1
+  },
+  {
+    "description": "Minimum array size (1 test, 1 target)",
+    "input": ["testA", "target"],
+    "polluter": "testA",
+    "output": 0
+  },
+  {
+    "description": "Large array, polluter near the end",
+    "input": ["t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "target"],
+    "polluter": "t7",
+    "output": 6
+  }
+]
+```
+
 ```java
-public int findPollutingTest(List<Integer> tests, Function<List<Integer>, Boolean> runTests) {
-    int targetTest = tests.get(tests.size() - 1);
+public int findPollutingTest(List<String> tests, Function<List<String>, Boolean> runTests) {
+    String targetTest = tests.get(tests.size() - 1);
     int left = 0;
     int right = tests.size() - 2;
 
     while (left < right) {
         int mid = left + (right - left) / 2;
         
-        List<Integer> testChunk = new ArrayList<>(tests.subList(left, mid + 1));
+        List<String> testChunk = new ArrayList<>(tests.subList(left, mid + 1));
         testChunk.add(targetTest);
 
         if (!runTests.apply(testChunk)) {
@@ -48,7 +84,7 @@ public int findPollutingTest(List<Integer> tests, Function<List<Integer>, Boolea
 ```
 
 ```go
-func FindPollutingTest(tests []int, runTests func([]int) bool) int {
+func FindPollutingTest(tests []string, runTests func([]string) bool) int {
 	targetTest := tests[len(tests)-1]
 	left := 0
 	right := len(tests) - 2
@@ -57,7 +93,7 @@ func FindPollutingTest(tests []int, runTests func([]int) bool) int {
 		mid := left + (right-left)/2
 		
 		// Construct the test execution slice
-		testChunk := make([]int, 0, mid-left+2)
+		testChunk := make([]string, 0, mid-left+2)
 		testChunk = append(testChunk, tests[left:mid+1]...)
 		testChunk = append(testChunk, targetTest)
 
@@ -76,18 +112,18 @@ func FindPollutingTest(tests []int, runTests func([]int) bool) int {
 While the iterative solution is preferred for $O(1)$ space, here is the equivalent recursive approach to demonstrate how to pass the search boundaries down the call stack.
 
 ```java
-public int findPollutingTestRecursive(List<Integer> tests, Function<List<Integer>, Boolean> runTests) {
-    int targetTest = tests.get(tests.size() - 1);
+public int findPollutingTestRecursive(List<String> tests, Function<List<String>, Boolean> runTests) {
+    String targetTest = tests.get(tests.size() - 1);
     return search(tests, targetTest, 0, tests.size() - 2, runTests);
 }
 
-private int search(List<Integer> tests, int targetTest, int left, int right, Function<List<Integer>, Boolean> runTests) {
+private int search(List<String> tests, String targetTest, int left, int right, Function<List<String>, Boolean> runTests) {
     if (left >= right) {
         return left;
     }
     
     int mid = left + (right - left) / 2;
-    List<Integer> testChunk = new ArrayList<>(tests.subList(left, mid + 1));
+    List<String> testChunk = new ArrayList<>(tests.subList(left, mid + 1));
     testChunk.add(targetTest);
     
     if (!runTests.apply(testChunk)) {
@@ -99,7 +135,7 @@ private int search(List<Integer> tests, int targetTest, int left, int right, Fun
 ```
 
 ```go
-func FindPollutingTestRecursive(tests []int, runTests func([]int) bool) int {
+func FindPollutingTestRecursive(tests []string, runTests func([]string) bool) int {
 	targetTest := tests[len(tests)-1]
 	
 	var search func(left, right int) int
@@ -109,7 +145,7 @@ func FindPollutingTestRecursive(tests []int, runTests func([]int) bool) int {
 		}
 		
 		mid := left + (right-left)/2
-		testChunk := make([]int, 0, mid-left+2)
+		testChunk := make([]string, 0, mid-left+2)
 		testChunk = append(testChunk, tests[left:mid+1]...)
 		testChunk = append(testChunk, targetTest)
 		
@@ -129,10 +165,11 @@ func FindPollutingTestRecursive(tests []int, runTests func([]int) bool) int {
 | Follow-Up | Difficulty | Focus |
 |---|---|---|
 | 1. Space Complexity | Easy | Recursive vs. Iterative tradeoffs, call stack limits |
-| 2. Multiple Polluting Tests | Medium | Divide and Conquer algorithm, time complexity |
-| 3. The Flaky Polluter | Hard | Probabilistic thinking, retry logic, confidence intervals |
-| 4. Applied Engineering | Medium | Threads vs. Subprocesses, Memory Isolation, OS exit codes |
-| 5. Unit-Testable Code | Medium | Writing unit-testable code, Dependency Injection |
+| 2. Multiple Polluters (OR) | Medium | Divide and Conquer algorithm, time complexity |
+| 3. Interacting Polluters (AND)| Hard | Advanced algorithm design, delta debugging concepts |
+| 4. The Flaky Polluter | Hard | Probabilistic thinking, retry logic, confidence intervals |
+| 5. Applied Engineering | Medium | Threads vs. Subprocesses, Memory Isolation |
+| 6. Unit-Testable Code | Medium | Writing unit-testable code, Dependency Injection |
 
 #### Follow-Up 1: Iterative vs. Recursive Space Complexity
 
@@ -142,29 +179,69 @@ func FindPollutingTestRecursive(tests []int, runTests func([]int) bool) int {
 
 **Bonus (Real-World Application)**: Ask if they would be worried about a Stack Overflow error with recursion here. A strong engineer will realize that because $\log_2(N)$ grows so slowly, even a suite of 1,000,000 tests would only result in a maximum call stack depth of ~20, meaning a stack overflow is practically impossible. For context, modern runtimes have significantly higher limits: Python defaults to 1,000, Java and JavaScript typically allow ~10,000 frames, and Go dynamically grows its stack to accommodate millions of frames.
 
-#### Follow-Up 2: Multiple Polluting Tests
+#### Follow-Up 2: Multiple Polluting Tests (Independent / OR)
 
 **Question**: "What if there are multiple independent tests that pollute the state? The standard binary search only guarantees finding one of them. How would you modify your approach to find ALL polluting tests efficiently?"
 
 **Expected Answer**: They need to pivot from a standard Binary Search to a Divide and Conquer algorithm. They should test a segment of tests; if it passes, they can prune that entire branch. If it fails, they must recursively search both the left and right halves. 
 
-Time Complexity: This changes the execution count from $O(\log N)$ to $O(k \log N)$, where $k$ is the number of polluting tests.
+> [!TIP]
+> **Interviewer Tip (Big-O)**: This is a great test of Big-O analysis. Candidates should realize the worst-case scenario (where *every* test is a polluter) degenerates to $O(N)$ because no branches can be pruned!
+
+> [!TIP]
+> **Interviewer Tip (The OR Assumption)**: A highly senior candidate might ask: *"Are the polluters independent? Does A OR B pollute it, or do A AND B have to run together?"* Ensure you tell them they are independent (OR). If they were AND, binary search would prune valid branches since neither half contains both A and B!
+
+**Test Cases**:
+```json
+[
+  {
+    "description": "Two polluters separated by a passing test",
+    "input": ["testA", "testB", "testC", "testD", "target"],
+    "polluters": ["testB", "testD"],
+    "output": [1, 3]
+  },
+  {
+    "description": "Adjacent polluters",
+    "input": ["t1", "t2", "t3", "t4", "target"],
+    "polluters": ["t2", "t3"],
+    "output": [1, 2]
+  },
+  {
+    "description": "All tests are polluters (worst case O(N))",
+    "input": ["t1", "t2", "t3", "target"],
+    "polluters": ["t1", "t2", "t3"],
+    "output": [0, 1, 2]
+  },
+  {
+    "description": "Only one polluter exists",
+    "input": ["t1", "t2", "t3", "target"],
+    "polluters": ["t2"],
+    "output": [1]
+  },
+  {
+    "description": "Polluters at the absolute edges",
+    "input": ["t1", "t2", "t3", "t4", "target"],
+    "polluters": ["t1", "t4"],
+    "output": [0, 3]
+  }
+]
+```
 
 ```java
-public List<Integer> findAllPollutingTests(List<Integer> tests, Function<List<Integer>, Boolean> runTests) {
-    int targetTest = tests.get(tests.size() - 1);
+public List<Integer> findAllPollutingTests(List<String> tests, Function<List<String>, Boolean> runTests) {
+    String targetTest = tests.get(tests.size() - 1);
     List<Integer> results = new ArrayList<>();
     
     searchAll(tests, targetTest, 0, tests.size() - 2, runTests, results);
     return results;
 }
 
-private void searchAll(List<Integer> tests, int targetTest, int left, int right, Function<List<Integer>, Boolean> runTests, List<Integer> results) {
+private void searchAll(List<String> tests, String targetTest, int left, int right, Function<List<String>, Boolean> runTests, List<Integer> results) {
     if (left > right) {
         return;
     }
     
-    List<Integer> testChunk = new ArrayList<>(tests.subList(left, right + 1));
+    List<String> testChunk = new ArrayList<>(tests.subList(left, right + 1));
     testChunk.add(targetTest);
     
     // Prune branch if the entire block passes
@@ -186,7 +263,7 @@ private void searchAll(List<Integer> tests, int targetTest, int left, int right,
 ```
 
 ```go
-func FindAllPollutingTests(tests []int, runTests func([]int) bool) []int {
+func FindAllPollutingTests(tests []string, runTests func([]string) bool) []int {
 	target := tests[len(tests)-1]
 	var results []int
 
@@ -196,7 +273,7 @@ func FindAllPollutingTests(tests []int, runTests func([]int) bool) []int {
 			return
 		}
 
-		chunk := append(append([]int{}, tests[left:right+1]...), target)
+		chunk := append(append([]string{}, tests[left:right+1]...), target)
 		
 		// Prune branch if it passes
 		if runTests(chunk) {
@@ -219,7 +296,16 @@ func FindAllPollutingTests(tests []int, runTests func([]int) bool) []int {
 }
 ```
 
-#### Follow-Up 3: The Flaky Polluter (Probabilistic)
+#### Follow-Up 3: Interacting Polluters (AND)
+
+**Question**: "What if the target test only fails if *both* Test A and Test B run before it? If A runs alone, the target passes. If B runs alone, the target passes. How does this break our algorithm, and how would you approach solving this?"
+
+**Expected Answer**: 
+The candidate should clearly explain that the previous Divide and Conquer algorithm relies on the fact that if a half contains *any* polluter, it will fail. If A and B are in opposite halves, both halves will pass! We would erroneously prune both branches and find zero polluters.
+
+Finding interacting polluters is an advanced problem in Software Engineering known as **Delta Debugging**. A naive solution requires $O(N^2)$ time to test every pair combination. A more sophisticated candidate might suggest a sliding window approach, or partitioning the array into overlapping chunks rather than strict halves, to gradually narrow down the combinations that trigger the failure. This is generally an open-ended architectural discussion rather than expecting a perfect optimal code solution.
+
+#### Follow-Up 4: The Flaky Polluter (Probabilistic)
 
 **Question**: "The polluting test introduces a race condition. When you run the culprit test followed by the target test, the target test only fails 60% of the time. If a chunk passes, it might just be a lucky run (false negative). How do you adjust your algorithm?"
 
@@ -227,15 +313,56 @@ func FindAllPollutingTests(tests []int, runTests func([]int) bool) []int {
 
 **Probability Math**: To be $>99\%$ confident, the probability of $K$ consecutive false negatives is $0.40^K < 0.01$. This requires $K = 5$ retries.
 
+**Test Cases**:
+```json
+[
+  {
+    "description": "Flaky polluter, confirmed on 2nd retry",
+    "input": ["testA", "testB", "target"],
+    "flaky_polluter": "testB",
+    "behavior": "fails on retry 2",
+    "output": 1
+  },
+  {
+    "description": "Highly flaky polluter, confirmed on 5th retry",
+    "input": ["t1", "t2", "t3", "target"],
+    "flaky_polluter": "t1",
+    "behavior": "fails on retry 5",
+    "output": 0
+  },
+  {
+    "description": "Passes all 5 retries (False positive avoidance)",
+    "input": ["t1", "t2", "t3", "target"],
+    "flaky_polluter": "t3",
+    "behavior": "chunk without t3 passes all 5 retries",
+    "output": 2
+  },
+  {
+    "description": "Fails on 1st try (no retries needed)",
+    "input": ["t1", "t2", "target"],
+    "flaky_polluter": "t1",
+    "behavior": "fails instantly on retry 1",
+    "output": 0
+  },
+  {
+    "description": "Larger suite with a 10% failure rate (might require >5 retries in reality)",
+    "input": ["t1", "t2", "t3", "t4", "t5", "target"],
+    "flaky_polluter": "t4",
+    "behavior": "fails on retry 3",
+    "output": 3
+  }
+]
+```
+
 ```java
-public int findFlakyTest(List<Integer> tests, Function<List<Integer>, Boolean> runTests, int retryLimit) {
-    int target = tests.get(tests.size() - 1);
+public int findFlakyTest(List<String> tests, Function<List<String>, Boolean> runTests, int retryLimit) {
+    String target = tests.get(tests.size() - 1);
     int left = 0;
     int right = tests.size() - 2;
 
     while (left < right) {
         int mid = left + (right - left) / 2;
-        List<Integer> chunk = new ArrayList<>(tests.subList(left, mid + 1));
+        List<String> chunk = new ArrayList<>(tests.subList(left, mid + 1));
         chunk.add(target);
 
         boolean chunkFailed = false;
@@ -257,7 +384,7 @@ public int findFlakyTest(List<Integer> tests, Function<List<Integer>, Boolean> r
 ```
 
 ```go
-func FindFlakyTest(tests []int, runTests func([]int) bool, retryLimit int) int {
+func FindFlakyTest(tests []string, runTests func([]string) bool, retryLimit int) int {
 	target := tests[len(tests)-1]
 	left := 0
 	right := len(tests) - 2
@@ -265,7 +392,7 @@ func FindFlakyTest(tests []int, runTests func([]int) bool, retryLimit int) int {
 	for left < right {
 		mid := left + (right-left)/2
 		
-		chunk := make([]int, 0, mid-left+2)
+		chunk := make([]string, 0, mid-left+2)
 		chunk = append(chunk, tests[left:mid+1]...)
 		chunk = append(chunk, target)
 
@@ -287,7 +414,7 @@ func FindFlakyTest(tests []int, runTests func([]int) bool, retryLimit int) int {
 }
 ```
 
-#### Follow-Up 4: Applied Engineering (Subprocess vs. Thread)
+#### Follow-Up 5: Applied Engineering (Subprocess vs. Thread)
 
 **Question**: "You are building this logic into a real CLI tool. To implement `run_tests(test_chunk)`, you need to execute a test runner (like Pytest, Jest, or Go test) programmatically. Would you execute the test runner by spawning a new **Thread** or by spawning a new **Subprocess**? Why?"
 
@@ -297,7 +424,7 @@ func FindFlakyTest(tests []int, runTests func([]int) bool, retryLimit int) int {
 2. **Executable Boundaries**: CLI test runners are designed as standalone executables. They expect to boot up their own environment, read environment variables, and tear down. You interact with them at the OS level, which requires a child process.
 3. **Parsing Results via Exit Codes**: By using a Subprocess, we don't have to parse brittle console output (`stdout`). We can simply read the standard OS exit code of the child process. If the subprocess exits with `0`, the test chunk passed. If it exits with a non-zero code (like `1`), the chunk failed.
 
-#### Follow-Up 5: Architecture & Unit-Testable Code
+#### Follow-Up 6: Architecture & Unit-Testable Code
 
 **Question**: "Below is application code using a Singleton/Global State pattern. `test_feature_flag()` passes alone. `test_default_secure()` passes alone. Sequentially, the second fails. Why? Refactor the application code using Dependency Injection to fix this."
 
@@ -417,6 +544,42 @@ This is a classic N-ary tree traversal. Because we need to explore all branches 
 A strong candidate will quickly implement a recursive DFS. However, recursive solutions are vulnerable to Stack Overflow errors if the AST is extremely deep (e.g., deeply chained method calls like `obj.do().do().do()...`). 
 
 The interviewer should prompt the candidate to rewrite the solution iteratively using an explicit Stack, which moves the memory footprint from the call stack to the heap.
+
+**Test Cases**:
+```json
+[
+  {
+    "description": "Standard nested matches",
+    "AST": "Program -> [FunctionCall(foo), VarDecl(x), FunctionCall(bar)]",
+    "TargetType": "FunctionCall",
+    "Output": ["FunctionCall(foo)", "FunctionCall(bar)"]
+  },
+  {
+    "description": "Root node itself is a match",
+    "AST": "VarDecl(x) -> [Literal(5)]",
+    "TargetType": "VarDecl",
+    "Output": ["VarDecl(x)"]
+  },
+  {
+    "description": "No matches exist in the tree",
+    "AST": "Program -> [VarDecl(x), Literal(5)]",
+    "TargetType": "FunctionCall",
+    "Output": []
+  },
+  {
+    "description": "Deeply nested single match",
+    "AST": "Program -> Block -> IfStmt -> Block -> FunctionCall(print)",
+    "TargetType": "FunctionCall",
+    "Output": ["FunctionCall(print)"]
+  },
+  {
+    "description": "Empty AST (null root)",
+    "AST": null,
+    "TargetType": "VarDecl",
+    "Output": []
+  }
+]
+```
 
 ```java
 class ASTNode {
@@ -539,6 +702,9 @@ func FindNodesIterative(root *ASTNode, targetType string) []*ASTNode {
 
 **Expected Answer**: The candidate should pivot to the **Visitor Pattern** (or an event-driven Pub/Sub model). We write a single generic `traverse(root, visitors)` function. As the traverser visits each node, it triggers `visitor.visit(node)` on all registered plugins. This separates the *traversal logic* from the *business logic*.
 
+> [!TIP]
+> **Interviewer Tip**: Look for candidates who understand the separation of concerns. The AST node shouldn't know about linting rules, and the linting rules shouldn't know how to navigate trees. The Visitor pattern acts as the perfect glue.
+
 ```java
 // The decoupled architecture
 interface ASTVisitor {
@@ -606,6 +772,9 @@ func (e *TraversalEngine) Traverse(root *ASTNode) {
 
 This allows the plugin to push a new scope (symbol table) onto its own stack when entering a `BlockStatement`, and pop it off when exiting, perfectly mirroring the AST's lexical scoping.
 
+> [!TIP]
+> **Interviewer Tip**: This is a very advanced compiler design concept. If they can articulate that a Stack data structure *inside* the plugin perfectly mirrors the call stack of the AST traversal, they are a highly senior engineer.
+
 ## The Microservice Deadlock {#interview-microservice-deadlock}
 
 ### Metadata
@@ -635,6 +804,42 @@ The standard approach to directed graph cycle detection requires a **3-State DFS
 ### Walkthrough & Implementation
 
 The candidate should build an adjacency list representing the graph, then iterate through every node, launching a DFS if the node is unvisited. 
+
+**Test Cases**:
+```json
+[
+  {
+    "description": "Simple distinct cycle",
+    "numServices": 4,
+    "dependencies": [[0, 1], [1, 2], [2, 0], [3, 2]],
+    "output": true
+  },
+  {
+    "description": "No cycles (DAG)",
+    "numServices": 4,
+    "dependencies": [[0, 1], [1, 2], [0, 2], [3, 2]],
+    "output": false
+  },
+  {
+    "description": "Diamond dependency (Not a cycle)",
+    "numServices": 4,
+    "dependencies": [[0, 1], [0, 2], [1, 3], [2, 3]],
+    "output": false
+  },
+  {
+    "description": "Disconnected graph with cycle in one component",
+    "numServices": 5,
+    "dependencies": [[0, 1], [2, 3], [3, 4], [4, 2]],
+    "output": true
+  },
+  {
+    "description": "Self-looping dependency",
+    "numServices": 2,
+    "dependencies": [[0, 0], [1, 0]],
+    "output": true
+  }
+]
+```
 
 ```java
 public class DeadlockDetector {
@@ -741,6 +946,37 @@ func HasDeadlock(numServices int, dependencies [][]int) bool {
 **Expected Answer**: 
 The candidate needs to actively maintain the current path in an array or stack as they traverse down. When the cycle is hit (encountering state `1`), they can slice or copy the stack from the first occurrence of the looped node to the end, giving the exact cycle path.
 
+**Test Cases**:
+```json
+[
+  {
+    "description": "Simple distinct cycle",
+    "dependencies": [[0, 1], [1, 2], [2, 0]],
+    "output": [0, 1, 2, 0]
+  },
+  {
+    "description": "Cycle deep in the graph (prefix path is ignored)",
+    "dependencies": [[0, 1], [1, 2], [2, 3], [3, 1]],
+    "output": [1, 2, 3, 1]
+  },
+  {
+    "description": "No cycle exists",
+    "dependencies": [[0, 1], [1, 2]],
+    "output": []
+  },
+  {
+    "description": "Disconnected graph cycle",
+    "dependencies": [[0, 1], [2, 3], [3, 2]],
+    "output": [2, 3, 2]
+  },
+  {
+    "description": "Self loop",
+    "dependencies": [[0, 1], [1, 1]],
+    "output": [1, 1]
+  }
+]
+```
+
 #### Follow-Up 2: Container Fallbacks (AND/OR Graphs)
 
 **Scenario**: A microservice is no longer just one block of code; it is composed of multiple containers for high availability (e.g., Service A has containers A.1 and A.2). 
@@ -755,6 +991,45 @@ This upgrades the problem from a standard Directed Graph to an **AND/OR Graph**.
 - **Services are OR nodes**: If *all* of a service's containers are deadlocked, the service is deadlocked. If even one container can start safely, the service is safe. 
 The DFS algorithm must be split into two alternating functions (`dfsService` and `dfsContainer`), using `&&` aggregations for Services and `||` aggregations for Containers.
 
+> [!TIP]
+> **Interviewer Tip**: This fundamentally shifts the problem from simple Cycle Detection into Boolean Satisfiability (SAT). It's a great test to see if a candidate can model complex logic domains.
+
+**Test Cases**:
+```json
+[
+  {
+    "description": "Fallback container prevents deadlock",
+    "services": {"A": ["A.1", "A.2"], "B": ["B.1"]},
+    "dependencies": {"A.1": ["B.1"], "B.1": ["A.1"], "A.2": []},
+    "output": false // A.2 saves Service A
+  },
+  {
+    "description": "Complete service deadlock",
+    "services": {"A": ["A.1", "A.2"], "B": ["B.1"]},
+    "dependencies": {"A.1": ["B.1"], "A.2": ["B.1"], "B.1": ["A.1"]},
+    "output": true // Both A.1 and A.2 are stuck on B.1, which is stuck on A.1
+  },
+  {
+    "description": "Deep fallback chain",
+    "services": {"A": ["A.1"], "B": ["B.1", "B.2"], "C": ["C.1"]},
+    "dependencies": {"A.1": ["B.1", "B.2"], "B.1": ["C.1"], "C.1": ["A.1"], "B.2": []},
+    "output": false // B.2 starts cleanly, meaning Service B starts, unblocking A.1
+  },
+  {
+    "description": "All containers deadlocked internally",
+    "services": {"A": ["A.1", "A.2"]},
+    "dependencies": {"A.1": ["A.2"], "A.2": ["A.1"]},
+    "output": true
+  },
+  {
+    "description": "No fallbacks, strict cycle",
+    "services": {"A": ["A.1"], "B": ["B.1"]},
+    "dependencies": {"A.1": ["B.1"], "B.1": ["A.1"]},
+    "output": true
+  }
+]
+```
+
 #### Follow-Up 3: Soft vs. Hard Dependencies
 
 **Scenario**: Sometimes cycles are unavoidable in legacy architectures, but not all dependencies are strictly required. Some are "Hard" (the service crashes without it), and some are "Soft" (the service boots with degraded features).
@@ -763,6 +1038,45 @@ The DFS algorithm must be split into two alternating functions (`dfsService` and
 
 **Expected Answer**: 
 The candidate should realize that a true, unresolvable deadlock only exists if a cycle is comprised *entirely* of Hard dependencies. If a cycle contains even one Soft dependency, the orchestrator can ignore that edge and boot the cluster. The simplest algorithmic change is to just filter out/ignore Soft edges during the graph traversal, effectively treating them as if they don't exist.
+
+**Test Cases**:
+```json
+[
+  {
+    "description": "Cycle broken by soft dependency",
+    "dependencies": [{"from": "A", "to": "B", "type": "hard"}, {"from": "B", "to": "A", "type": "soft"}],
+    "output": false
+  },
+  {
+    "description": "True deadlock (all hard edges)",
+    "dependencies": [{"from": "A", "to": "B", "type": "hard"}, {"from": "B", "to": "A", "type": "hard"}],
+    "output": true
+  },
+  {
+    "description": "Multiple cycles, one is all hard (deadlock)",
+    "dependencies": [
+      {"from": "A", "to": "B", "type": "hard"}, {"from": "B", "to": "A", "type": "soft"},
+      {"from": "C", "to": "D", "type": "hard"}, {"from": "D", "to": "C", "type": "hard"}
+    ],
+    "output": true
+  },
+  {
+    "description": "Graph with only soft edges",
+    "dependencies": [{"from": "A", "to": "B", "type": "soft"}, {"from": "B", "to": "A", "type": "soft"}],
+    "output": false
+  },
+  {
+    "description": "Soft edge exists, but hard cycle remains",
+    "dependencies": [
+      {"from": "A", "to": "B", "type": "hard"}, 
+      {"from": "B", "to": "C", "type": "hard"}, 
+      {"from": "C", "to": "A", "type": "hard"},
+      {"from": "C", "to": "D", "type": "soft"}
+    ],
+    "output": true // The A->B->C->A cycle is unbreakable
+  }
+]
+```
 
 ## Role-Based Feature Evaluator {#interview-feature-evaluator}
 
@@ -791,16 +1105,40 @@ The optimal approach converts the user's roles into a `HashSet` once at the begi
 
 ### Walkthrough & Implementation
 
-**Test Case**:
+**Test Cases**:
 ```json
-Input: 
-  User: { "roles": ["viewer", "tester"] }
-  Features: [
-    { "name": "dashboard", "allowedRoles": ["admin", "viewer"] },
-    { "name": "delete_db", "allowedRoles": ["admin"] }
-  ]
-Output: 
-  { "dashboard": true, "delete_db": false }
+[
+  {
+    "description": "User has exactly one of the allowed roles",
+    "user_roles": ["viewer", "tester"],
+    "feature_allowed": ["admin", "viewer"],
+    "output": true
+  },
+  {
+    "description": "User has none of the allowed roles",
+    "user_roles": ["tester"],
+    "feature_allowed": ["admin", "viewer"],
+    "output": false
+  },
+  {
+    "description": "User has multiple allowed roles",
+    "user_roles": ["admin", "viewer"],
+    "feature_allowed": ["admin", "viewer"],
+    "output": true
+  },
+  {
+    "description": "Feature allows everyone (no roles specified or empty array)",
+    "user_roles": ["viewer"],
+    "feature_allowed": [],
+    "output": false // Default deny if no allowed roles match
+  },
+  {
+    "description": "User has no roles",
+    "user_roles": [],
+    "feature_allowed": ["admin", "viewer"],
+    "output": false
+  }
+]
 ```
 
 ```java
@@ -906,15 +1244,45 @@ func EvaluateFeatures(user User, features []FeatureConfig) map[string]bool {
 **Expected Answer**: 
 Security best practices dictate that **Deny always overrides Allow**. The candidate must update their logic to check the `DeniedRoles` *first*. If a user possesses a denied role, the loop should instantly return `false` before even checking the allowed conditions.
 
-**Test Case**:
+**Test Cases**:
 ```json
-Input: 
-  User: { "roles": ["viewer", "contractor"] }
-  Features: [
-    { "name": "dashboard", "allowedRoles": ["viewer"], "deniedRoles": ["contractor"] }
-  ]
-Output: 
-  { "dashboard": false } // Deny overrides Allow
+[
+  {
+    "description": "Deny overrides Allow",
+    "user_roles": ["viewer", "contractor"],
+    "allowedRoles": ["viewer"],
+    "deniedRoles": ["contractor"],
+    "output": false
+  },
+  {
+    "description": "Not denied, is allowed",
+    "user_roles": ["viewer"],
+    "allowedRoles": ["viewer"],
+    "deniedRoles": ["contractor"],
+    "output": true
+  },
+  {
+    "description": "Denied, but not allowed anyway",
+    "user_roles": ["contractor"],
+    "allowedRoles": ["viewer"],
+    "deniedRoles": ["contractor"],
+    "output": false
+  },
+  {
+    "description": "Empty deny list, is allowed",
+    "user_roles": ["admin"],
+    "allowedRoles": ["admin"],
+    "deniedRoles": [],
+    "output": true
+  },
+  {
+    "description": "Both lists empty (default deny)",
+    "user_roles": ["admin"],
+    "allowedRoles": [],
+    "deniedRoles": [],
+    "output": false
+  }
+]
 ```
 
 ```java
@@ -1049,24 +1417,40 @@ classDiagram
 **Implementation Details**:
 By pushing the role aggregation inside the `User` class, the `PermissionsEngine` remains perfectly clean and decoupled from user types.
 
-**Test Case**:
+**Test Cases**:
 ```json
-Input: 
-  Groups: [
-    { "id": "beta_testers", "defaultRoles": ["beta_feature"] },
-    { "id": "super_admins", "defaultRoles": ["super_admin"] }
-  ]
-  Users: 
-    - RegularUser: { "explicitRoles": ["viewer"], "groups": ["beta_testers"] }
-    - SuperAdminUser: { "explicitRoles": [], "groups": ["super_admins"] }
-  Features: [
-    { "name": "new_ui", "allowedRoles": ["beta_feature"] },
-    { "name": "delete_db", "allowedRoles": ["admin"] }
-  ]
-
-Output:
-  RegularUser -> { "new_ui": true, "delete_db": false }
-  SuperAdminUser -> { "new_ui": true, "delete_db": true } // super_admin short-circuits to true
+[
+  {
+    "description": "User inherits allowed role from group",
+    "user": { "explicitRoles": [], "groups": [{"defaultRoles": ["beta_tester"]}] },
+    "feature": { "allowed": ["beta_tester"], "denied": [] },
+    "output": true
+  },
+  {
+    "description": "User has explicit allowed role, group has irrelevant roles",
+    "user": { "explicitRoles": ["admin"], "groups": [{"defaultRoles": ["viewer"]}] },
+    "feature": { "allowed": ["admin"], "denied": [] },
+    "output": true
+  },
+  {
+    "description": "User gets super_admin from group (short circuits)",
+    "user": { "explicitRoles": [], "groups": [{"defaultRoles": ["super_admin"]}] },
+    "feature": { "allowed": ["nobody"], "denied": ["super_admin"] }, // super_admin bypasses deny
+    "output": true
+  },
+  {
+    "description": "User gets super_admin explicitly",
+    "user": { "explicitRoles": ["super_admin"], "groups": [] },
+    "feature": { "allowed": [], "denied": [] },
+    "output": true
+  },
+  {
+    "description": "User inherits a role that gets denied by the feature",
+    "user": { "explicitRoles": ["viewer"], "groups": [{"defaultRoles": ["contractor"]}] },
+    "feature": { "allowed": ["viewer"], "denied": ["contractor"] },
+    "output": false
+  }
+]
 ```
 
 ```java
@@ -1190,16 +1574,40 @@ This tests whether the candidate realizes the data structure has morphed into a 
 > [!TIP]
 > **Interviewer Tip (The Inheritance Trap)**: If a candidate tries to implement this using Class Inheritance (e.g., `class Admin extends Editor`), you should gently push back. Roles are *data*, not *application behavior*. If a system admin changes role hierarchies in a dashboard tomorrow, you shouldn't have to recompile the Java backend. The DAG Graph traversal approach allows roles to be dynamic data loaded from a database.
 
-**Test Case**:
+**Test Cases**:
 ```json
-Input:
-  Base Roles: ["admin"]
-  RoleGraph: {
-    "admin": ["editor"],
-    "editor": ["viewer", "commenter"]
+[
+  {
+    "description": "Linear inheritance",
+    "baseRoles": ["admin"],
+    "roleGraph": { "admin": ["editor"], "editor": ["viewer"] },
+    "output": ["admin", "editor", "viewer"]
+  },
+  {
+    "description": "Multiple inheritance (branches)",
+    "baseRoles": ["admin"],
+    "roleGraph": { "admin": ["billing", "support"] },
+    "output": ["admin", "billing", "support"]
+  },
+  {
+    "description": "Cyclic inheritance (prevents infinite loop)",
+    "baseRoles": ["A"],
+    "roleGraph": { "A": ["B"], "B": ["A"] },
+    "output": ["A", "B"]
+  },
+  {
+    "description": "Empty base roles",
+    "baseRoles": [],
+    "roleGraph": { "admin": ["editor"] },
+    "output": []
+  },
+  {
+    "description": "Base role has no children (standalone role)",
+    "baseRoles": ["viewer"],
+    "roleGraph": { "admin": ["editor"] },
+    "output": ["viewer"]
   }
-Output: 
-  ["admin", "editor", "viewer", "commenter"]
+]
 ```
 
 ```java
