@@ -303,7 +303,84 @@ func FindAllPollutingTests(tests []string, runTests func([]string) bool) []int {
 **Expected Answer**: 
 The candidate should clearly explain that the previous Divide and Conquer algorithm relies on the fact that if a half contains *any* polluter, it will fail. If A and B are in opposite halves, both halves will pass! We would erroneously prune both branches and find zero polluters.
 
-Finding interacting polluters is an advanced problem in Software Engineering known as **Delta Debugging**. A naive solution requires $O(N^2)$ time to test every pair combination. A more sophisticated candidate might suggest a sliding window approach, or partitioning the array into overlapping chunks rather than strict halves, to gradually narrow down the combinations that trigger the failure. This is generally an open-ended architectural discussion rather than expecting a perfect optimal code solution.
+Finding interacting polluters is an advanced problem in Software Engineering known as **Delta Debugging**. While an optimal algorithm exists (which involves keeping one half constant while binary searching the other), a candidate should at least be able to implement the naive $O(N^2)$ pair-testing baseline to prove they can solve the problem logically.
+
+**Test Setup & Execution**:
+Instead of a simple string array, the environment is modeled with a `TestCase` object. The `runTests` lambda evaluates if interacting pairs are present.
+
+```java
+class TestCase {
+    String name;
+    TestCase interactingWith; // Null if no interaction
+    
+    public TestCase(String name) { this.name = name; }
+}
+
+// 1. Setup the environment
+TestCase t1 = new TestCase("t1");
+TestCase t2 = new TestCase("t2");
+TestCase t3 = new TestCase("t3");
+TestCase t4 = new TestCase("t4");
+TestCase target = new TestCase("target");
+
+// 2. Introduce the interaction effect (t2 and t3 must BOTH run to pollute the target)
+t2.interactingWith = t3;
+t3.interactingWith = t2;
+
+List<TestCase> testSuite = Arrays.asList(t1, t2, t3, t4, target);
+
+// 3. The Black-Box Test Runner
+Function<List<TestCase>, Boolean> runTests = (chunk) -> {
+    for (TestCase test : chunk) {
+        // If a test has an interacting partner, and BOTH are in the chunk, it fails the target
+        if (test.interactingWith != null && chunk.contains(test.interactingWith) && chunk.contains(target)) {
+            return false; 
+        }
+    }
+    return true;
+};
+```
+
+```java
+// Naive O(N^2) baseline for interacting pairs
+public List<TestCase> findInteractingPair(List<TestCase> tests, Function<List<TestCase>, Boolean> runTests) {
+    TestCase target = tests.get(tests.size() - 1);
+    int testCount = tests.size() - 1;
+    
+    for (int i = 0; i < testCount - 1; i++) {
+        for (int j = i + 1; j < testCount; j++) {
+            List<TestCase> chunk = Arrays.asList(tests.get(i), tests.get(j), target);
+            if (!runTests.apply(chunk)) {
+                return Arrays.asList(tests.get(i), tests.get(j)); // Found the interacting pair
+            }
+        }
+    }
+    return new ArrayList<>(); // No interacting pair found
+}
+```
+
+```go
+type TestCase struct {
+	Name            string
+	InteractingWith *TestCase // Nil if no interaction
+}
+
+// Naive O(N^2) baseline for interacting pairs
+func FindInteractingPair(tests []*TestCase, runTests func([]*TestCase) bool) []*TestCase {
+	target := tests[len(tests)-1]
+	testCount := len(tests) - 1
+
+	for i := 0; i < testCount-1; i++ {
+		for j := i + 1; j < testCount; j++ {
+			chunk := []*TestCase{tests[i], tests[j], target}
+			if !runTests(chunk) {
+				return []*TestCase{tests[i], tests[j]} // Found the interacting pair
+			}
+		}
+	}
+	return []*TestCase{} // No interacting pair found
+}
+```
 
 #### Follow-Up 4: The Flaky Polluter (Probabilistic)
 
