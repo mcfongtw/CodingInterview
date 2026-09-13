@@ -357,6 +357,58 @@ public List<TestCase> findInteractingPair(List<TestCase> tests, Function<List<Te
     }
     return new ArrayList<>(); // No interacting pair found
 }
+
+// Optimal O(log N) Delta Debugging
+public List<TestCase> findInteractingPairOptimal(List<TestCase> tests, Function<List<TestCase>, Boolean> runTests) {
+    TestCase target = tests.get(tests.size() - 1);
+    return searchPair(tests.subList(0, tests.size() - 1), target, runTests);
+}
+
+private List<TestCase> searchPair(List<TestCase> searchSpace, TestCase target, Function<List<TestCase>, Boolean> runTests) {
+    if (searchSpace.size() < 2) return new ArrayList<>();
+    
+    int mid = searchSpace.size() / 2;
+    List<TestCase> left = searchSpace.subList(0, mid);
+    List<TestCase> right = searchSpace.subList(mid, searchSpace.size());
+    
+    // Check if both are in Left
+    List<TestCase> leftTest = new ArrayList<>(left);
+    leftTest.add(target);
+    if (!runTests.apply(leftTest)) {
+        return searchPair(left, target, runTests);
+    }
+    
+    // Check if both are in Right
+    List<TestCase> rightTest = new ArrayList<>(right);
+    rightTest.add(target);
+    if (!runTests.apply(rightTest)) {
+        return searchPair(right, target, runTests);
+    }
+    
+    // If we reach here, they are split! One is in left, one is in right.
+    TestCase a = findSingle(left, right, target, runTests);
+    TestCase b = findSingle(right, Arrays.asList(a), target, runTests);
+    
+    return Arrays.asList(a, b);
+}
+
+// Binary search for a single polluter using a constant helper space
+private TestCase findSingle(List<TestCase> searchSpace, List<TestCase> helperSpace, TestCase target, Function<List<TestCase>, Boolean> runTests) {
+    if (searchSpace.size() == 1) return searchSpace.get(0);
+    
+    int mid = searchSpace.size() / 2;
+    List<TestCase> left = searchSpace.subList(0, mid);
+    
+    List<TestCase> chunk = new ArrayList<>(left);
+    chunk.addAll(helperSpace);
+    chunk.add(target);
+    
+    if (!runTests.apply(chunk)) {
+        return findSingle(left, helperSpace, target, runTests);
+    } else {
+        return findSingle(searchSpace.subList(mid, searchSpace.size()), helperSpace, target, runTests);
+    }
+}
 ```
 
 ```go
@@ -379,6 +431,58 @@ func FindInteractingPair(tests []*TestCase, runTests func([]*TestCase) bool) []*
 		}
 	}
 	return []*TestCase{} // No interacting pair found
+}
+
+// Optimal O(log N) Delta Debugging
+func FindInteractingPairOptimal(tests []*TestCase, runTests func([]*TestCase) bool) []*TestCase {
+	target := tests[len(tests)-1]
+	return searchPair(tests[:len(tests)-1], target, runTests)
+}
+
+func searchPair(searchSpace []*TestCase, target *TestCase, runTests func([]*TestCase) bool) []*TestCase {
+	if len(searchSpace) < 2 {
+		return nil
+	}
+
+	mid := len(searchSpace) / 2
+	left := searchSpace[:mid]
+	right := searchSpace[mid:]
+
+	// Check if both are in Left
+	leftTest := append(append([]*TestCase{}, left...), target)
+	if !runTests(leftTest) {
+		return searchPair(left, target, runTests)
+	}
+
+	// Check if both are in Right
+	rightTest := append(append([]*TestCase{}, right...), target)
+	if !runTests(rightTest) {
+		return searchPair(right, target, runTests)
+	}
+
+	// They are split!
+	a := findSingle(left, right, target, runTests)
+	b := findSingle(right, []*TestCase{a}, target, runTests)
+
+	return []*TestCase{a, b}
+}
+
+func findSingle(searchSpace []*TestCase, helperSpace []*TestCase, target *TestCase, runTests func([]*TestCase) bool) *TestCase {
+	if len(searchSpace) == 1 {
+		return searchSpace[0]
+	}
+
+	mid := len(searchSpace) / 2
+	left := searchSpace[:mid]
+
+	chunk := append([]*TestCase{}, left...)
+	chunk = append(chunk, helperSpace...)
+	chunk = append(chunk, target)
+
+	if !runTests(chunk) {
+		return findSingle(left, helperSpace, target, runTests)
+	}
+	return findSingle(searchSpace[mid:], helperSpace, target, runTests)
 }
 ```
 
