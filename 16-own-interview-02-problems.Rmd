@@ -620,6 +620,9 @@ candidate 10234 0.0  0.0      0     0 pts/1    Z+   14:20   0:00 [pytest] <defun
 
 **Expected Answer**: A `<defunct>` process (often denoted by the `Z` or `Z+` state) is a **Zombie Process**. It means the child process has actually terminated, but its parent process (our CLI tool) hasn't acknowledged it by reading its exit status (via the `wait()` system call). The zombie is kept in the OS process table so the parent can eventually read the exit code. To get rid of it, the parent process must call `wait()` (or handle the `SIGCHLD` signal), or the parent process itself must be killed (at which point the OS init system, like `systemd`, will inherit the zombie and reap it).
 
+> [!TIP]
+> **Interviewer Tip (System Crash Analysis)**: Ask the candidate: *"Do zombie processes consume CPU and RAM? What happens if our CLI tool leaks thousands of them?"* A strong systems engineer will know that zombies consume almost **zero** CPU and memory (their resources have already been freed). However, they consume a slot in the **Process Table**. Since Linux has a strict maximum PID limit (often 32,768), leaking too many zombies will exhaust the process table. Once full, the OS cannot spawn *any* new processes, effectively paralyzing the server with `Resource temporarily unavailable` (or `fork: retry: No child processes`) errors until the parent is killed.
+
 #### Follow-Up 6: Applied Engineering (Non-Deterministic CI/CD)
 
 **Question**: "You deployed your CLI tool. A week later, another team member made a change to the Jenkins CI/CD pipeline. You notice that the execution order of the test suite keeps changing on every run. What could go wrong with our Test Finder tool, and why?"
